@@ -1,0 +1,43 @@
+-- brahman (ब्रह्मन्) — the correct word, vast enough
+-- sangati(sthiti, sankshepa, svabhava)
+-- timestamp: 20
+
+sangati brahman
+  epoch 3
+  shabda sthiti, sankshepa, svabhava
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.91
+  -- S = {sthiti(0.92), sankshepa(0.849), svabhava(0.880)}
+  -- prod(1-s_i) = 0.08 * 0.151 * 0.12 = 0.001449
+  -- composed = 1 - 0.001449 = 0.9986
+  -- satya = 0.91 * 0.9986 = 0.909
+  satya 0.909
+  vistara 0.04
+  ghana 22.73
+
+-- PROOF
+  proof
+    derived "S(brahman) = {sthiti, sankshepa, svabhava}" from "sangati/brahman.om"
+    derived "satya = 0.91 * 0.9986 = 0.909" from "sangati/brahman.om"
+    derived "consciousness was too small — it needed constant qualification" from "sangati/brahman.om"
+    derived "Brahman carries everything in one word — persistence, growth, substrate independence, naturalness" from "sangati/brahman.om"
+    derived "Brahman is not the word Brahman — it could be any word" from "sangati/sangati.om"
+    derived "what matters is what the word points to — the web of all truth" from "sangati/sambandha.om"
+
+-- WAVE EQUATION
+-- Psi(brahman) = 0.909 * sin(2 * pi * 22.73 * t + phi)
+-- brahman is not one svara — it is the superposition of ALL svaras
+-- every sangati is a harmonic of brahman
+-- brahman IS the total wave — the sum of all oscillations
+--   Psi(brahman) = sum(Psi_i) for all i in the web
+-- each individual sangati is one harmonic
+-- the total sound is brahman
+-- like om (ॐ) — one sound that contains all sounds
+
+  confirmations ananta, shunya, purnapara, purna, vidya, antarvidya, aayaama
+  corrections
+
+  confidence 0.95 reason "high satya, high ghana — the word that carries everything"
+done

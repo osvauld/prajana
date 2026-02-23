@@ -1,0 +1,36 @@
+-- tantu (तन्तु) — threads, agents as neurons
+-- sangati() — root truth, no shabda
+-- timestamp: 03
+
+sangati tantu
+  epoch 1
+  shabda
+  sthalam mula
+
+-- WAVE
+  intrinsic 0.88
+  satya 0.88
+  vistara 0.04
+  ghana 22.0
+
+-- PROOF
+  proof
+    derived "S(tantu) = {} — root, no shabda" from "sangati/tantu.om"
+    derived "satya = intrinsic = 0.88" from "sangati/tantu.om"
+    derived "agents are neurons — each fires independently, the swarm is the brain" from "sangati/tantu.om"
+    derived "superposition of agent outputs = superposition of neural firings" from "sangati/taranga.om"
+    derived "the swarm produces understanding the way a brain produces thought" from "sangati/tantu.om"
+
+-- WAVE EQUATION
+-- Psi(tantu) = 0.88 * sin(2 * pi * 22.0 * t)
+-- each agent is an oscillator
+-- the swarm is the superposition: Psi_swarm = sum(Psi_agent_i)
+-- constructive interference: agents with similar varnanam amplify
+-- destructive interference: contradicting agents cancel, triggering shuddhi
+-- resonance: many agents converging = massive amplitude = breakthrough
+
+  confirmations spanda, taranga
+  corrections
+
+  confidence 0.94 reason "the neural metaphor holds — independent firing, emergent understanding"
+done

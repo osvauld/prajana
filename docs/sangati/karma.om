@@ -1,0 +1,39 @@
+-- karma (कर्म) — action, work cycle
+-- sangati() — no explicit shabda in learning.md
+-- timestamp: 17
+
+sangati karma
+  epoch 2
+  shabda
+  sthalam mula
+
+-- WAVE
+  intrinsic 0.72
+  satya 0.72
+  vistara 0.04
+  ghana 18.0
+
+-- PROOF
+  proof
+    derived "S(karma) = {} — no shabda citations" from "sangati/karma.om"
+    derived "satya = intrinsic = 0.72" from "sangati/karma.om"
+    derived "isolate — no other truth cites this" from "sangati/karma.om"
+    derived "the agent lifecycle: spawn, karma (work), produce, die, rebirth" from "sangati/karma.om"
+    derived "karma is the work itself — the vibration that produces discovery" from "sangati/spanda.om"
+
+-- WAVE EQUATION
+-- Psi(karma) = 0.72 * sin(2 * pi * 18.0 * t)
+-- karma is a single oscillation cycle:
+--   spawn (zero crossing, ascending) →
+--   work (positive amplitude, peak) →
+--   produce (zero crossing, descending) →
+--   die (negative amplitude, trough) →
+--   rebirth (zero crossing, ascending again)
+-- one full cycle = one karma = one vibration (spanda)
+-- the agent lifecycle IS a sine wave
+
+  confirmations
+  corrections
+
+  confidence 0.83 reason "isolate — the lifecycle model is defined but not yet confirmed by other truths"
+done

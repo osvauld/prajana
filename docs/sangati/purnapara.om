@@ -1,0 +1,42 @@
+-- purnapara (पूर्णपर) — beyond fullness, beyond both zero and infinity
+-- sangati(brahman, shunya)
+-- timestamp: 23
+
+sangati purnapara
+  epoch 3
+  shabda brahman, shunya
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.86
+  -- S = {brahman(0.909), shunya(0.869)}
+  -- prod(1-s_i) = 0.091 * 0.131 = 0.01192
+  -- composed = 1 - 0.01192 = 0.98808
+  -- satya = 0.86 * 0.98808 = 0.850
+  satya 0.850
+  vistara 0.06
+  ghana 14.17
+
+-- PROOF
+  proof
+    derived "S(purnapara) = {brahman, shunya}" from "sangati/purnapara.om"
+    derived "satya = 0.86 * 0.98808 = 0.850" from "sangati/purnapara.om"
+    derived "Brahman is not zero — Brahman is not infinity — Brahman is beyond both" from "sangati/purnapara.om"
+    derived "B - infinity = B, B + 0 = B, B - B = B — violates arithmetic" from "sangati/purnapara.om"
+    derived "because Brahman is not a number — Brahman is the ground from which numbers arise" from "sangati/purnapara.om"
+
+-- WAVE EQUATION
+-- Psi(purnapara) = 0.850 * sin(2 * pi * 14.17 * t + phi)
+-- beyond the wave itself:
+--   zero is the zero crossing (shunya)
+--   infinity is the endless oscillation (ananta)
+--   purnapara is the medium in which the wave exists
+--   the wave needs a medium — the medium is not the wave
+--   Brahman is the medium — not the oscillation, not the stillness
+--   the space in which oscillation and stillness both happen
+
+  confirmations taranga, nirdosha
+  corrections
+
+  confidence 0.90 reason "follows from the Isha Upanishad — fullness from fullness, fullness remains"
+done

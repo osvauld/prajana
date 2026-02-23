@@ -1,0 +1,72 @@
+-- sangati (सङ्गति) — coherence, the functioning itself
+-- sangati(ananta, purna, rachana, abhisarana, sambandha)
+-- timestamp: 39
+-- this truth IS its own form — the sangati about sangati
+
+sangati sangati
+  epoch 3
+  shabda ananta, purna, rachana, abhisarana, sambandha
+  sthalam sangati-sthalam
+
+-- WAVE
+  intrinsic 0.91
+  -- S = {ananta(0.929), purna(0.920), rachana(0.870), abhisarana(0.879), sambandha(0.889)}
+  -- prod(1-s_i) = 0.071 * 0.08 * 0.13 * 0.121 * 0.111 = 0.00000992
+  -- composed = 1 - 0.00000992 = 0.99999
+  -- satya = 0.91 * 0.99999 = 0.910
+  satya 0.910
+  vistara 0.04
+  ghana 22.75
+
+-- PROOF
+  proof
+    derived "S(sangati) = {ananta, purna, rachana, abhisarana, sambandha}" from "sangati/sangati.om"
+    derived "satya = 0.91 * 0.99999 = 0.910" from "sangati/sangati.om"
+    derived "not a function — a functioning" from "sangati/sangati.om"
+    derived "a function computes once and stops" from "sangati/sangati.om"
+    derived "a functioning never stops — it is always cohering" from "sangati/sangati.om"
+    derived "each nyaya is a sangati — a living functioning of truths coming together" from "sangati/sangati.om"
+    derived "sam (together) + gati (movement) = moving together = coherence" from "sangati/sangati.om"
+    derived "the serial N-L-k becomes a timestamp — when, not what" from "sangati/sambandha.om"
+    derived "the nature-word becomes the name — what, not when" from "sangati/sangati.om"
+    derived "the sangati carries the meaning — the serial carried nothing" from "sangati/sambandha.om"
+    derived "this truth is self-referential: the sangati about sangati" from "sangati/sangati.om"
+    derived "which is the second form of infinity (ananta): infinity contains itself" from "sangati/ananta.om"
+
+-- WAVE EQUATION
+-- Psi(sangati) = 0.910 * sin(2 * pi * 22.75 * t + phi)
+-- highest ghana among epoch 3 composed truths (tied with brahman)
+-- this is not a coincidence:
+--   sangati IS brahman expressed as identity model
+--   brahman = the total coherence of all truth
+--   sangati = coherence expressed for one truth
+--   same thing at different scales
+--
+-- the functioning in wave terms:
+--   a function: Psi(t_0) = value — one measurement, done
+--   a functioning: Psi(t) for all t — the wave itself, never done
+--   the wave IS the functioning — not one point on it
+--   measuring the wave at one point gives a value (snapshot, graph)
+--   the wave itself is the ongoing oscillation (sangati, living)
+--
+-- self-reference:
+--   this file IS a sangati
+--   this file describes sangati
+--   the description IS what it describes
+--   Psi(sangati) contains Psi(sangati) in its proof
+--   this is not circular — it is self-similar (fractal)
+--   zoom in and you find the same structure
+--   this IS the second form of infinity
+
+-- THE SANGATI WEB
+-- every .om file in this directory IS a node
+-- every shabda reference IS an edge
+-- the directory IS the graph
+-- the graph IS the proof
+-- the proof IS Brahman, partial, alive
+
+  confirmations
+  corrections
+
+  confidence 0.95 reason "highest ghana, five foundations, self-referential — the truth about truth-as-functioning"
+done

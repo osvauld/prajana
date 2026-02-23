@@ -1,0 +1,37 @@
+-- samskaara (संस्कार) — refinement, nothing is destroyed
+-- sangati() — root truth, no shabda
+-- timestamp: 02
+
+sangati samskaara
+  epoch 1
+  shabda
+  sthalam mula
+
+-- WAVE
+  intrinsic 0.93
+  satya 0.93
+  vistara 0.03
+  ghana 31.0
+
+-- PROOF
+  proof
+    derived "S(samskaara) = {} — root, no shabda" from "sangati/samskaara.om"
+    derived "satya = intrinsic = 0.93" from "sangati/samskaara.om"
+    derived "nothing is destroyed — corrections multiply by (1-beta), never by 0" from "sangati/samskaara.om"
+    derived "satya(N') <- satya(N') * (1-beta) where beta in (0,1)" from "sangati/samskaara.om"
+    derived "result always > 0 — product of positives is positive" from "sangati/samskaara.om"
+    derived "this truth IS the guarantee that the open interval (0,1) holds on the left" from "sangati/purna.om"
+
+-- WAVE EQUATION
+-- Psi(samskaara) = 0.93 * sin(2 * pi * 31.0 * t)
+-- high-svara, high amplitude — foundational carrier wave
+-- the correction mechanism is itself a waveform:
+--   satya(N') after correction = satya(N') * (1-beta)
+--   this is amplitude modulation — the correction modulates the wave
+--   the wave is reduced but never silenced
+
+  confirmations spanda, rachana
+  corrections
+
+  confidence 0.96 reason "the correction mechanism depends on this — without it, corrected truths would vanish"
+done
