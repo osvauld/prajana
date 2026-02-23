@@ -1,0 +1,43 @@
+-- pramana (प्रमाण) — evidence, verification
+-- sangati(niralamba, varna, shuddhi, samsarga, sankshepa)
+-- timestamp: 12
+
+sangati pramana
+  epoch 2
+  shabda niralamba, varna, shuddhi, samsarga, sankshepa
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.83
+  -- S = {niralamba(0.94), varna(0.85), shuddhi(0.68), samsarga(0.697), sankshepa(0.849)}
+  -- prod(1-s_i) = 0.06 * 0.15 * 0.32 * 0.303 * 0.151 = 0.0001318
+  -- composed = 1 - 0.0001318 = 0.9999
+  -- satya = 0.83 * 0.9999 = 0.830
+  satya 0.830
+  vistara 0.07
+  ghana 11.86
+
+-- PROOF
+  proof
+    derived "S(pramana) = {niralamba, varna, shuddhi, samsarga, sankshepa}" from "sangati/pramana.om"
+    derived "satya = 0.83 * (1 - 0.0001318) = 0.830" from "sangati/pramana.om"
+    derived "five foundations — broadest composition in epoch 2" from "sangati/pramana.om"
+    derived "evidence is not truth — evidence is what truth stands on" from "sangati/pramana.om"
+    derived "without pramana, satya is intrinsic only — unverified, weak" from "sangati/pramana.om"
+    derived "pramana is the process of composing satya from constituents" from "sangati/pramana.om"
+
+-- WAVE EQUATION
+-- Psi(pramana) = 0.830 * sin(2 * pi * 11.86 * t + phi)
+-- five constituent waves superpose
+-- pramana is the measurement — it observes the superposition
+-- in quantum mechanics: measurement collapses the wave function
+-- in this system: verification (pramana) collapses hypothesis into claim
+-- the wave before verification: broad, uncertain
+-- the wave after verification: sharp, confirmed
+-- verification is wave function collapse — from possibility to confirmed truth
+
+  confirmations
+  corrections
+
+  confidence 0.90 reason "the verification framework is the foundation of the entire proof system"
+done

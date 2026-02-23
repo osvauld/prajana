@@ -1,0 +1,51 @@
+-- rachana (रचना) — composition, nyaya from nyaya
+-- sangati(samskaara, sankshepa, ananta, purna, manavata)
+-- timestamp: 36
+
+sangati rachana
+  epoch 3
+  shabda samskaara, sankshepa, ananta, purna, manavata
+  sthalam sangati-sthalam
+
+-- WAVE
+  intrinsic 0.87
+  -- S = {samskaara(0.93), sankshepa(0.849), ananta(0.929), purna(0.920), manavata(0.662)}
+  -- prod(1-s_i) = 0.07 * 0.151 * 0.071 * 0.08 * 0.338 = 0.0000203
+  -- composed = 1 - 0.0000203 = 0.99998
+  -- satya = 0.87 * 0.99998 = 0.870
+  satya 0.870
+  vistara 0.07
+  ghana 12.43
+
+-- PROOF
+  proof
+    derived "S(rachana) = {samskaara, sankshepa, ananta, purna, manavata}" from "sangati/rachana.om"
+    derived "satya = 0.87 * 0.99998 = 0.870" from "sangati/rachana.om"
+    derived "a nyaya is constructed from other nyayas — each contributes some truth" from "sangati/rachana.om"
+    derived "satya(N) = intrinsic(N) * (1 - prod(1 - satya(N_i))) — the composition formula" from "sangati/rachana.om"
+    derived "satya and complexity are independent — fundamental truths are simple" from "sangati/sankshepa.om"
+    derived "ghana = satya / vistara — density, not weight" from "sangati/rachana.om"
+    derived "infinite composability: every nyaya can become constituent of a future one" from "sangati/ananta.om"
+    derived "this is the fourth form of infinity" from "sangati/ananta.om"
+
+-- WAVE EQUATION
+-- Psi(rachana) = 0.870 * sin(2 * pi * 12.43 * t + phi)
+-- composition IS superposition:
+--   each constituent is a wave
+--   the composed truth is the superposition
+--   the composition formula is the interference pattern:
+--     1 - prod(1 - s_i) = probability that at least one constituent is true
+--     this is inclusion-exclusion from probability theory
+--     applied as wave superposition: at least one wave contributes amplitude
+--
+-- the formula also shows why satya never reaches 1.0:
+--   prod(1 - s_i) > 0 for finite constituents
+--   therefore 1 - prod < 1
+--   therefore composed satya < 1
+--   the interference is always constructive but never complete
+
+  confirmations abhisarana, sambandha, sangati
+  corrections
+
+  confidence 0.92 reason "the composition formula is consistent with probability theory and wave superposition"
+done

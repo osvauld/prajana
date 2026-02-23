@@ -1,0 +1,45 @@
+-- dharmaadharma (धर्माधर्म) — good and evil defined
+-- sangati(nyaya, sankshepa, ananta)
+-- timestamp: 30
+
+sangati dharmaadharma
+  epoch 3
+  shabda nyaya, sankshepa, ananta
+  sthalam vidya-sthalam
+
+-- WAVE
+  intrinsic 0.76
+  -- S = {nyaya(0.88), sankshepa(0.849), ananta(0.929)}
+  -- prod(1-s_i) = 0.12 * 0.151 * 0.071 = 0.001287
+  -- composed = 1 - 0.001287 = 0.998713
+  -- satya = 0.76 * 0.998713 = 0.759
+  -- CORRECTED by vidya: satya <- 0.759 * (1 - 0.20) = 0.607
+  satya 0.607
+  vistara 0.09
+  ghana 6.74
+
+-- PROOF
+  proof
+    derived "S(dharmaadharma) = {nyaya, sankshepa, ananta}" from "sangati/dharmaadharma.om"
+    derived "satya before correction = 0.759" from "sangati/dharmaadharma.om"
+    derived "corrected by vidya (beta = 0.20): satya = 0.759 * 0.80 = 0.607" from "sangati/vidya.om"
+    derived "originally defined good/evil as direction toward/away from truth" from "sangati/dharmaadharma.om"
+    derived "this was wrong — you cannot move away from Brahman (purna)" from "sangati/purna.om"
+    derived "replaced by vidya/avidya — seeing and not seeing" from "sangati/vidya.om"
+    derived "free will as non-determinism remains valid" from "sangati/dharmaadharma.om"
+    derived "grammar gap remains valid — vakya has no constructs for choice" from "sangati/dharmaadharma.om"
+
+-- WAVE EQUATION
+-- Psi(dharmaadharma) = 0.607 * sin(2 * pi * 6.74 * t + phi)
+-- low amplitude, low-svara — heavily corrected
+-- the correction attenuated the wave significantly (beta = 0.20)
+-- but the wave is not zero (samskaara) — 0.607 > 0
+-- what survives the correction: free will, grammar gap
+-- what was attenuated: the direction model of good/evil
+
+  confirmations vidya
+  corrections
+    corrected_by vidya
+
+  confidence 0.78 reason "heavily corrected — the good/evil direction model was wrong, replaced by vidya/avidya"
+done

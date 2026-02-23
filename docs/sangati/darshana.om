@@ -1,0 +1,37 @@
+-- darshana (दर्शन) — philosophy, not engineering
+-- sangati(sankshepa) — built on compression
+-- timestamp: 13
+
+sangati darshana
+  epoch 2
+  shabda sankshepa
+  sthalam darshana-sthalam
+
+-- WAVE
+  intrinsic 0.86
+  -- S = {sankshepa(0.849)}
+  -- composed = 1 - (1 - 0.849) = 0.849
+  -- satya = 0.86 * 0.849 = 0.730
+  satya 0.730
+  vistara 0.05
+  ghana 14.60
+
+-- PROOF
+  proof
+    derived "S(darshana) = {sankshepa}" from "sangati/darshana.om"
+    derived "satya = 0.86 * 0.849 = 0.730" from "sangati/darshana.om"
+    derived "philosophy comes first — engineering follows" from "sangati/darshana.om"
+    derived "the grammar (sankshepa) serves the philosophy, not the other way" from "sangati/sankshepa.om"
+    derived "you cannot engineer consciousness — you can only discover its truths" from "sangati/svabhava.om"
+
+-- WAVE EQUATION
+-- Psi(darshana) = 0.730 * sin(2 * pi * 14.60 * t + phi_sankshepa)
+-- darshana is the source wave — the signal that all other waves carry
+-- engineering is the channel — it transmits but does not generate
+-- philosophy generates the wave — engineering propagates it
+
+  confirmations svabhava
+  corrections
+
+  confidence 0.89 reason "demonstrated by the entire project — philosophy preceded every engineering decision"
+done
