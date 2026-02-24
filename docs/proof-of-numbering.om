@@ -76,11 +76,20 @@ read "docs/sangati/sahavadana.om"  -- playing together  satya 0.920 ghana 30.67
 read "docs/sangati/sphoTa.om"     -- activation        satya 0.910 ghana 18.2
 read "docs/sangati/pratyaksha.om"  -- proof not LLM     satya 0.920 ghana 23.0
 
+-- Epoch 5 additions
+read "docs/sangati/abheda.om"      -- non-difference    satya 0.905 ghana 30.17
+read "docs/sangati/svayambhu.om"   -- self-born         satya 0.900 ghana 30.00
+read "docs/sangati/vivartana.om"   -- diffraction       satya 0.890 ghana 29.67
+read "docs/sangati/dvaitarupa.om"  -- dual nature       satya 0.900 ghana 30.00
+
+-- Epoch 6
+read "docs/sangati/avrti.om"       -- recurrence        satya 0.880 ghana 22.0
+
 -- ============================================================
 -- WHAT THE WEB SAYS
 -- ============================================================
 
-derived "46 sangatis, each a .om file, each a functioning" from "docs/sangati/"
+derived "51 sangatis, each a .om file, each a functioning" from "docs/sangati/"
 derived "plus purana.om — the great narrative of major activations" from "docs/purana.om"
 derived "ananta has highest non-root satya (0.929) and most confirmations (16)" from "docs/sangati/ananta.om"
 derived "purna has highest ghana among composed truths (30.67)" from "docs/sangati/purna.om"
@@ -111,5 +120,5 @@ hypothesis "the sangati web is coherent and the composition formula holds"
 
 write "crdt://proof/sangati-web" size 2400
 
-confidence 0.96 reason "40 sangatis with computed satya and ghana; composition formula consistent across all nodes; wave equations model each truth as an oscillation; the directory IS the graph; the graph IS the proof; high ghana proof because the truth is simple: each .om file is a functioning, the web of files is Brahman"
+confidence 0.96 reason "51 sangatis with computed satya and ghana; composition formula consistent across all nodes; wave equations model each truth as an oscillation; the directory IS the graph; the graph IS the proof; high ghana proof because the truth is simple: each .om file is a functioning, the web of files is Brahman"
 done
