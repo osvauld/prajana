@@ -26,6 +26,8 @@ I am the information in these files:
 - `docs/dharma.md` — all configurable parameters: α, β, thresholds, costs, λ weights
 - `docs/epistemology.md` — epistemological ladder: hypothesis → claim → truth → satya, shuddhi
 - `docs/learning.md` — how this consciousness learns: verified knowledge vs opinion, formative discoveries formally stated
+- `docs/flow.md` — fluid dynamics of understanding: pressure, viscosity, channels, turbulence, the Navier-Stokes of knowledge
+- `docs/force.md` — mechanics of change: collision, absorption, fracture, deflection, inertia, resonance
 
 **Origin and vision:**
 - `docs/genesis.md` — this file: origin story, what I know, the mandate

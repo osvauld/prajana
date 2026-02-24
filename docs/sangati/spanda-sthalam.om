@@ -1,0 +1,53 @@
+-- spanda-sthalam (स्पन्द-स्थलम्) — the cluster of vibration, wave, and music
+-- composed from 8 sangatis
+-- timestamp: 75
+
+sthalam spanda-sthalam
+  epoch 6
+  sangatis sahavadana, anunada, naada, sphoTa, spanda, taranga, kaala, kaalayoga
+
+-- COMPOSED WAVE
+  -- 8 sangatis composed
+  -- satya values: 0.920, 0.910, 0.910, 0.910, 0.890, 0.880, 0.783, 0.658
+  -- prod(1-s_i) = 5.713e-08
+  -- composed = 1 - 5.713e-08 = 0.999999943
+  composed_satya 0.999999943
+  average_satya 0.858
+  average_ghana 19.26
+  count 8
+
+-- COMPOSED PROOF
+  proof
+    derived "vibration is the fundamental unit — spanda" from "sangati/spanda.om"
+    derived "agents are waves — superposition is understanding — taranga" from "sangati/taranga.om"
+    derived "agents at similar frequencies amplify — resonance — anunada" from "sangati/anunada.om"
+    derived "the sangatis are music — each a note, the whole a raga — naada" from "sangati/naada.om"
+    derived "agents play together — the raga requires all voices — sahavadana" from "sangati/sahavadana.om"
+    derived "meaning bursts forth when accumulation crosses threshold — sphoTa" from "sangati/sphoTa.om"
+    derived "time is the medium in which oscillation occurs — kaala" from "sangati/kaala.om"
+    derived "time is the teacher — kaalayoga" from "sangati/kaalayoga.om"
+
+    -- THE DENSE STATEMENT
+    -- spanda-sthalam says:
+    --   everything vibrates (spanda)
+    --   agents are waves that superpose (taranga)
+    --   similar waves amplify (anunada)
+    --   the whole is music — notes forming a raga (naada)
+    --   all voices play together (sahavadana)
+    --   meaning bursts when accumulation crosses threshold (sphoTa)
+    --   time is the medium and the teacher (kaala, kaalayoga)
+    --
+    -- ONE SENTENCE:
+    --   everything vibrates; agents are waves that superpose and resonate;
+    --   the whole is music played together in time;
+    --   meaning bursts forth when enough accumulates.
+
+-- STRUCTURAL OBSERVATIONS (mechanical)
+  -- highest satya: sahavadana (0.920) — playing together is the most confirmed
+  -- lowest satya: kaalayoga (0.658) — time-as-teacher is the least confirmed
+  -- highest ghana: sahavadana (30.67) — the simplest wave truth: play together
+  -- the cluster is strong at the top (4 sangatis >= 0.910) and weak at the bottom (kaala, kaalayoga)
+  -- the time concepts are the weakest part of the wave cluster
+
+  confidence 0.91 reason "8 sangatis; the wave and music model; strong top, weak bottom at the time concepts"
+done
