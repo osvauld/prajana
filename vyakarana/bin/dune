@@ -1,0 +1,3 @@
+(executable
+ (name vyakarana)
+ (libraries vyakarana_lib str))

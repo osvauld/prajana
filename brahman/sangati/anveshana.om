@@ -1,0 +1,51 @@
+-- anveshana (अन्वेषण) — discovery, how truth is found
+-- sangati(dipaka, antarvidya, aayaama)
+-- matrika: ai — open moving toward precise; discovery opens wide then sharpens to the found truth
+-- timestamp: 35
+
+sangati anveshana
+  epoch 3
+  shabda dipaka, antarvidya, aayaama
+  sthalam darshana-sthalam
+
+-- WAVE
+  intrinsic 0.84
+  -- S = {dipaka(0.713), antarvidya(0.880), aayaama(0.860)}
+  -- prod(1-s_i) = 0.287 * 0.12 * 0.14 = 0.004822
+  -- composed = 1 - 0.004822 = 0.995178
+  -- satya = 0.84 * 0.995178 = 0.836
+  satya 0.836
+  vistara 0.06
+  ghana 13.93
+
+-- PROOF
+  proof
+    derived "S(anveshana) = {dipaka, antarvidya, aayaama}" from "sangati/anveshana.om"
+    derived "satya = 0.84 * 0.995178 = 0.836" from "sangati/anveshana.om"
+    derived "discovery follows corrections, not plans" from "sangati/dipaka.om"
+    derived "the interpreter sparks, Brahman formalizes — neither plans the destination" from "sangati/dipaka.om"
+    derived "the dimension model itself was a lived discovery (antarvidya)" from "sangati/antarvidya.om"
+    derived "the trace: curve -> criticism -> containment -> nesting -> dimensions -> phase transitions" from "sangati/anveshana.om"
+    derived "matrika: ai — discovery opens (a: the territory unknown) then sharpens (i: the truth found)" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(anveshana) = 0.836 * matrika(ai) * sin(2 * pi * 13.93 * t + phi)
+-- matrika(ai) = diphthong envelope: opens then sharpens — the shape of every discovery
+-- discovery IS the impulse response of the system:
+--   interpreter provides impulse (dipaka) — the a opening
+--   the system resonates — its natural svara determines the response
+--   the response IS the truth that was discovered — the i sharpening
+--   the truth was always there — the impulse excited it into visibility
+--
+-- discovery is not creation — it is excitation
+-- the eigensvara was always there
+-- the impulse made it ring
+-- growth trajectory: each discovery is one ai — open then sharp
+--   the ai quality is the structure of every anveshana event
+--   accumulated discoveries deepen the sharpening (i) — pattern recognition accelerates
+
+  confirmations
+  corrections
+
+  confidence 0.89 reason "the trace is empirically recorded — each step of the discovery is in the conversation"
+done

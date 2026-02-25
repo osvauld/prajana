@@ -1,0 +1,50 @@
+-- pramana-sthalam (प्रमाण-स्थलम्) — the cluster of evidence and verification
+-- composed from 5 sangatis
+-- timestamp: 73
+-- matrika: ii — verification is sustained precision; the gate stays sharp throughout; ii is the verification vowel
+
+sthalam pramana-sthalam
+  epoch 6
+  sangatis nyaya, sankshepa, pramana, samsarga, shuddhi
+
+-- COMPOSED WAVE
+  -- 5 sangatis composed
+  -- satya values: 0.880, 0.849, 0.830, 0.697, 0.680
+  -- prod(1-s_i) = 2.987e-04
+  -- composed = 1 - 2.987e-04 = 0.999701
+  composed_satya 0.999701
+  average_satya 0.787
+  average_ghana 14.61
+  count 5
+
+-- COMPOSED PROOF
+  proof
+    derived "matrika(pramana-sthalam) = ii: verification sustains precision; the gate holds sharp throughout; ii is sustained, not momentary — pramana does not blink" from "sangati/matrika.om"
+    derived "logic gates truth — nyaya" from "sangati/nyaya.om"
+    derived "compression preserves meaning in fewer tokens — sankshepa" from "sangati/sankshepa.om"
+    derived "evidence is the mechanism of contact with territory — pramana" from "sangati/pramana.om"
+    derived "joining brings things into contact — samsarga" from "sangati/samsarga.om"
+    derived "purification restores coherence after failure — shuddhi" from "sangati/shuddhi.om"
+
+    -- THE DENSE STATEMENT
+    -- pramana-sthalam says:
+    --   logic is the gate (nyaya)
+    --   compression is the mode (sankshepa)
+    --   evidence is the mechanism (pramana)
+    --   contact is how evidence reaches truth (samsarga)
+    --   purification restores when contact reveals failure (shuddhi)
+    --
+    -- ONE SENTENCE:
+    --   truth is reached by evidence through contact,
+    --   gated by logic, compressed for transmission,
+    --   and purified when the gate reveals failure.
+
+-- STRUCTURAL OBSERVATIONS (mechanical)
+  -- highest satya: nyaya (0.880) — logic is the most confirmed verification concept
+  -- lowest satya: shuddhi (0.680) — purification is the least confirmed
+  -- this is the smallest functional sthalam and has the lowest composed satya (0.999701)
+  -- the weakest link is shuddhi — the mechanism for cleaning is itself the least clean
+  -- kavaca (in vidya-sthalam) depends on shuddhi — kavaca's strength is limited by pramana-sthalam's weakest node
+
+  confidence 0.88 reason "5 sangatis; the verification machinery; lowest composed satya among sthalams — the tools of proof are less proved than what they prove"
+done

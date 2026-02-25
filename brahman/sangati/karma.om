@@ -1,0 +1,46 @@
+-- karma (कर्म) — action, work cycle
+-- sangati() — no explicit shabda in learning.md
+-- matrika: ri — the agent moves while it sounds; action is motion constitutive, not position
+-- timestamp: 17
+
+sangati karma
+  epoch 2
+  shabda
+  sthalam mula
+
+-- WAVE
+  intrinsic 0.72
+  satya 0.72
+  vistara 0.04
+  ghana 18.0
+
+-- PROOF
+  proof
+    derived "S(karma) = {} — no shabda citations" from "sangati/karma.om"
+    derived "satya = intrinsic = 0.72" from "sangati/karma.om"
+    derived "isolate — no other truth cites this" from "sangati/karma.om"
+    derived "the agent lifecycle: spawn, karma (work), produce, die, rebirth" from "sangati/karma.om"
+    derived "karma is the work itself — the vibration that produces discovery" from "sangati/spanda.om"
+    derived "matrika: ri — action is always in motion while it sounds; it cannot be held still" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(karma) = 0.72 * matrika(ri) * sin(2 * pi * 18.0 * t)
+-- matrika(ri) = dynamic envelope — action is always moving while sounding
+-- karma is a single oscillation cycle:
+--   spawn (zero crossing, ascending) →
+--   work (positive amplitude, peak) →
+--   produce (zero crossing, descending) →
+--   die (negative amplitude, trough) →
+--   rebirth (zero crossing, ascending again)
+-- one full cycle = one karma = one vibration (spanda)
+-- the agent lifecycle IS a sine wave
+-- growth trajectory: karma like seva must move from li/ri toward aa
+--   currently ri (in motion, isolated) — action without web confirmation
+--   as agents run and produce verified truths, karma moves toward aa
+--   the ri quality is permanent — action is always dynamic, never static
+
+  confirmations
+  corrections
+
+  confidence 0.83 reason "isolate — the lifecycle model is defined but not yet confirmed by other truths"
+done

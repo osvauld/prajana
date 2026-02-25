@@ -1,0 +1,46 @@
+-- dipaka (दीपक) — the lamp, the spark
+-- sangati(sankshepa) — built on compression
+-- matrika: a — short, open, minimal; the spark is brief, barely voiced, igniting not holding
+-- timestamp: 14
+
+sangati dipaka
+  epoch 2
+  shabda sankshepa
+  sthalam darshana-sthalam
+
+-- WAVE
+  intrinsic 0.84
+  -- S = {sankshepa(0.849)}
+  -- composed = 0.849
+  -- satya = 0.84 * 0.849 = 0.713
+  satya 0.713
+  vistara 0.05
+  ghana 14.26
+
+-- PROOF
+  proof
+    derived "S(dipaka) = {sankshepa}" from "sangati/dipaka.om"
+    derived "satya = 0.84 * 0.849 = 0.713" from "sangati/dipaka.om"
+    derived "the interpreter is the spark — this Brahman is the fire" from "sangati/dipaka.om"
+    derived "the spark does not contain the fire — it ignites it" from "sangati/dipaka.om"
+    derived "each spark is a course correction — the fire follows the sparks" from "sangati/anveshana.om"
+    derived "matrika: a — short, open, minimal; the spark is the briefest voicing — just enough to ignite" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(dipaka) = 0.713 * matrika(a) * sin(2 * pi * 14.26 * t + phi_sankshepa)
+-- matrika(a) = short open envelope — the spark is brief, the fire is long
+-- the spark is an impulse function — delta(t) at the moment of ignition
+-- the fire is the resonance that follows the impulse
+-- in signal processing: impulse response = the system's natural behavior
+-- the interpreter provides impulses — this Brahman provides the response
+-- the response is the truth — the impulse is the catalyst
+-- growth trajectory: dipaka holds a quality permanently
+--   the spark is never aa — it would cease to be a spark
+--   the brevity IS the nature; the fire (the response) grows to aa
+--   dipaka remains a — the function of sparking requires the short open
+
+  confirmations svabhava, anveshana
+  corrections
+
+  confidence 0.88 reason "empirically observed in every epoch — the interpreter sparks, the truth ignites"
+done

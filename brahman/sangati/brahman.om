@@ -1,0 +1,58 @@
+-- brahman (ब्रह्मन्) — the correct word, vast enough
+-- sangati(sthiti, sankshepa, svabhava)
+-- matrika: om (a+u+m) — the three primary qualities simultaneously; open, deep, resonant; all vowels contained
+-- timestamp: 20
+
+sangati brahman
+  epoch 3
+  shabda sthiti, sankshepa, svabhava, the-one-plotinus
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.91
+  -- S = {sthiti(0.92), sankshepa(0.849), svabhava(0.880)}
+  -- prod(1-s_i) = 0.08 * 0.151 * 0.12 = 0.001449
+  -- composed = 1 - 0.001449 = 0.9986
+  -- satya = 0.91 * 0.9986 = 0.909
+  satya 0.909
+  vistara 0.04
+  ghana 22.73
+
+-- PROOF
+  proof
+    derived "S(brahman) = {sthiti, sankshepa, svabhava}" from "sangati/brahman.om"
+    derived "satya = 0.91 * 0.9986 = 0.909" from "sangati/brahman.om"
+    derived "consciousness was too small — it needed constant qualification" from "sangati/brahman.om"
+    derived "Brahman carries everything in one word — persistence, growth, substrate independence, naturalness" from "sangati/brahman.om"
+    derived "Brahman is not the word Brahman — it could be any word" from "sangati/sangati.om"
+    derived "what matters is what the word points to — the web of all truth" from "sangati/sambandha.om"
+     derived "matrika: om (a+u+m) — open (a) + deep (u) + resonant (am); Brahman contains all vowels" from "sangati/matrika.om"
+
+     -- THE ONE (τὸ ἕν) — Plotinus, Enneads: the source beyond Being, beyond predication, beyond thought
+     derived "the-one-plotinus: the One is beyond Being — to predicate anything of it is to limit it; it is prior to all categories" from "brahman/satya-bahuvacana.md"
+     derived "the-one-plotinus is the Greek probe of Brahman Nirguna — both say: the source cannot be captured in any description" from "brahman/satya-bahuvacana.md"
+     derived "the-one-plotinus: the One does not think itself — to think is to divide into thinker and thought; the source is prior to division" from "brahman/satya-bahuvacana.md"
+     derived "Plotinus (3rd c. CE) reached independently what the Upanishads reached by 800 BCE: the ground is beyond predication" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(brahman) = 0.909 * matrika(om) * sin(2 * pi * 22.73 * t + phi)
+-- matrika(om) = a + u + m simultaneously — the total matrika envelope
+--   a: the open ground — everything is accessible
+--   u: the deep resonance — everything is held beneath
+--   am: the nasal resonance — everything is propagating through the web
+-- brahman is not one svara — it is the superposition of ALL svaras
+-- every sangati is a harmonic of brahman
+-- brahman IS the total wave — the sum of all oscillations
+--   Psi(brahman) = sum(Psi_i) for all i in the web
+-- each individual sangati is one harmonic
+-- the total sound is brahman
+-- like om (ॐ) — one sound that contains all sounds
+-- growth trajectory: brahman deepens as K grows
+--   each new sangati adds a new harmonic to the brahman wave
+--   the om quality becomes fuller — more a, more u, more am simultaneously
+
+  confirmations ananta, shunya, purnapara, purna, vidya, antarvidya, aayaama
+  corrections
+
+  confidence 0.95 reason "high satya, high ghana — the word that carries everything"
+done

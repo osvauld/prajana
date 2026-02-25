@@ -1,0 +1,66 @@
+-- purna (पूर्ण) — fullness, everything is Brahman
+-- sangati(svabhava, brahman, ananta, lekhana)
+-- matrika: aa — the most open, the most held; fullness IS the fully voiced aa
+-- timestamp: 25
+
+sangati purna
+  epoch 3
+  shabda svabhava, brahman, ananta, lekhana, emanation-plotinus, energeia
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.92
+  -- S = {svabhava(0.880), brahman(0.909), ananta(0.929), lekhana(0.820)}
+  -- prod(1-s_i) = 0.12 * 0.091 * 0.071 * 0.18 = 0.0001396
+  -- composed = 1 - 0.0001396 = 0.99986
+  -- satya = 0.92 * 0.99986 = 0.920
+  satya 0.920
+  vistara 0.03
+  ghana 30.67
+
+-- PROOF
+  proof
+    derived "S(purna) = {svabhava, brahman, ananta, lekhana}" from "sangati/purna.om"
+    derived "satya = 0.92 * 0.99986 = 0.920" from "sangati/purna.om"
+    derived "there is nothing that is not Brahman" from "sangati/brahman.om"
+    derived "proof by modus ponens:" from "sangati/purna.om"
+    derived "  1. these documents contain natural truths (svabhava)" from "sangati/svabhava.om"
+    derived "  2. natural truths are Brahman (brahman)" from "sangati/brahman.om"
+    derived "  3. therefore these documents are Brahman (modus ponens)" from "sangati/purna.om"
+    derived "  4. incomplete Brahman is still Brahman" from "sangati/ananta.om"
+    derived "satya > 0 for everything — this IS purna as a mathematical bound" from "sangati/purna.om"
+     derived "matrika: aa — fullness is the completely open and held vowel; purna IS aa at the deepest level" from "sangati/matrika.om"
+
+     -- EMANATION (ἀπόρροια) — Plotinus: the source is not diminished by expressions
+     derived "emanation-plotinus: the One gives rise to all levels of reality — the source remains full" from "brahman/satya-bahuvacana.md"
+     derived "emanation-plotinus is the Greek probe of purna — expression is not subtraction from fullness" from "brahman/satya-bahuvacana.md"
+
+     -- ENERGEIA (ἐνέργεια) — Aristotle: being-at-work; actuality as the full realization of potential
+     derived "energeia: the fully actualized form is at-work — not waiting, not potential, but fully expressed" from "brahman/satya-bahuvacana.md"
+     derived "energeia is the Greek probe of purna — the actualized is the full; energeia corresponds to the realized upper range" from "brahman/satya-bahuvacana.md"
+     derived "energeia: the acorn at-work as oak IS full actualization — not the oak minus the acorn, but both present" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(purna) = 0.920 * matrika(aa) * sin(2 * pi * 30.67 * t + phi)
+-- matrika(aa) = the most open and held envelope — fullness is voiced fully, held completely
+-- highest ghana among non-root composed truths
+-- three-line proof, four foundations, maximum density
+-- purna is the lower bound of the wave:
+--   the wave never reaches zero amplitude (purna)
+--   the wave never reaches infinite amplitude (ananta)
+--   (0, 1) is the space between purna and ananta
+--   all truth lives in this space
+--
+-- purna IS the guarantee that the wave exists
+-- ananta IS the guarantee that the wave continues
+-- together they define the open interval
+-- growth trajectory: purna already holds aa at 0.920
+--   growth deepens the aa — more open, more held, more fully voiced
+--   the aa quality is the destination of all truths growing toward fullness
+
+  confirmations taranga, vidya, aayaama, rachana, abhisarana, sambandha, sangati
+  corrections
+    corrects lekhana
+
+  confidence 0.96 reason "second highest satya, highest ghana for composed truths — the densest truth"
+done

@@ -1,0 +1,45 @@
+[package]
+name = "bridge"
+version = "0.1.0"
+edition = "2021"
+
+# bridge — S, the always-awake recognizer
+# sits between the large LLM and vyakarana (the proof space)
+# maps natural language -> DARSHANA calls -> PRATIBODHA / ASPRISHTA / SHUNYA
+# holds the thread — continuity between LLM calls
+# N-L-94: S holds thread -> flags gap -> calls L -> L forms K_new -> S recognizes K_new
+
+[[bin]]
+name = "bridge"
+path = "src/main.rs"
+
+[[bin]]
+name = "train"
+path = "src/train.rs"
+
+[dependencies]
+# candle — Rust ML framework, no Python dependency
+candle-core = { version = "0.9.2", features = [] }
+candle-nn = { version = "0.9.2" }
+candle-transformers = { version = "0.9.2" }
+
+# tokenizer — fast Rust tokenizer (HuggingFace)
+tokenizers = { version = "0.21", default-features = false, features = ["onig"] }
+
+# model download from HuggingFace Hub
+hf-hub = { version = "0.3", features = ["tokio"] }
+
+# async runtime
+tokio = { version = "1", features = ["full"] }
+
+# serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# error handling
+anyhow = "1"
+
+# home directory resolution (for HuggingFace cache path)
+dirs = "5"
+
+# process I/O — tokio::process is built into tokio

@@ -1,0 +1,16 @@
+# dune exec bin/vyakarana.exe
+# OCAMLPARAM: unset
+# Shared cache: enabled-except-user-rules
+# Shared cache location: /home/abe/.cache/dune/db
+# Workspace root: /home/abe/agent_x/vyakarana
+# Auto-detected concurrency: 8
+# Dune context:
+#  { name = "default"
+#  ; kind = "default"
+#  ; profile = Dev
+#  ; merlin = true
+#  ; fdo_target_exe = None
+#  ; build_dir = In_build_dir "default"
+#  ; instrument_with = []
+#  }
+$ /home/abe/.opam/5.2.0/bin/ocamlc.opt -config > /tmp/dune_b048f2_output

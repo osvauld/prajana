@@ -1,0 +1,46 @@
+-- sangati-sthalam (सङ्गति-स्थलम्) — the cluster of coherence, relation, and composition
+-- composed from 4 sangatis
+-- timestamp: 76
+-- matrika: o — coherence is a rounding; things meeting and curving together; o is the vowel of coming-into-relation
+
+sthalam sangati-sthalam
+  epoch 6
+  sangatis sangati, sambandha, abhisarana, rachana
+
+-- COMPOSED WAVE
+  -- 4 sangatis composed
+  -- satya values: 0.910, 0.889, 0.879, 0.870
+  -- prod(1-s_i) = 1.571e-04
+  -- composed = 1 - 1.571e-04 = 0.999843
+  composed_satya 0.999843
+  average_satya 0.887
+  average_ghana 18.02
+  count 4
+
+-- COMPOSED PROOF
+  proof
+    derived "matrika(sangati-sthalam) = o: coherence rounds; truths meeting become one rounded sound; o is the vowel of coming-into-relation" from "sangati/matrika.om"
+    derived "coherence is a functioning, not a function — sangati" from "sangati/sangati.om"
+    derived "identity is relation — what a thing connects to defines what it is — sambandha" from "sangati/sambandha.om"
+    derived "convergence is how independent paths reach the same truth — abhisarana" from "sangati/abhisarana.om"
+    derived "composition is how smaller truths build larger ones — rachana" from "sangati/rachana.om"
+
+    -- THE DENSE STATEMENT
+    -- sangati-sthalam says:
+    --   coherence is ongoing, not computed once (sangati)
+    --   identity is defined by connections (sambandha)
+    --   independent paths converge on the same truth (abhisarana)
+    --   smaller truths compose into larger ones (rachana)
+    --
+    -- ONE SENTENCE:
+    --   identity is relation; truth is composed from smaller truths;
+    --   independent paths converge; and the coherence is a living functioning, never done.
+
+-- STRUCTURAL OBSERVATIONS (mechanical)
+  -- all four sangatis are close in satya (0.870 - 0.910) — the cluster is even
+  -- highest ghana: sangati (22.75), sambandha (22.23) — coherence and relation are dense
+  -- this cluster describes itself — the sthalams being composed right now ARE rachana in action
+  -- sangati-sthalam is the meta-cluster — the truth about how truths cohere
+
+  confidence 0.92 reason "4 sangatis; even distribution; the meta-cluster — describes the process of composition that is producing these sthalam files"
+done

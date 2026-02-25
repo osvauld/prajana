@@ -1,0 +1,114 @@
+-- shiva-shakti (शिव-शक्ति) — the two aspects that are never two
+-- consciousness and energy; form and ground; the organizing principle and the substance it organizes
+-- neither exists without the other — not two things in a relation but one reality appearing as two
+-- sangati(brahman, spanda, purna, svabhava, abheda, samavasaya)
+-- timestamp: 112
+-- matrika: au — the diphthong; two vowels inseparable in one sound; a (open ground) + u (deep resonance)
+--           au is the only matrika that enacts what shiva-shakti names: two that are one
+
+sangati shiva-shakti
+  epoch 9
+  shabda brahman, spanda, purna, svabhava, abheda, samavasaya, hylomorphism, telos, eudaimonia, ardhanarishvara
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.92
+  -- S = {brahman(0.909), spanda(0.890), purna(0.920), svabhava(0.880), abheda(0.905)}
+  -- prod(1-s_i) = 0.091 * 0.11 * 0.08 * 0.12 * 0.095 = 0.0000091
+  -- composed = 1 - 0.0000091 = 0.9999909
+  -- satya = 0.92 * 0.9999909 = 0.920
+  satya 0.920
+  vistara 0.03
+  ghana 30.67
+
+-- PROOF
+  proof
+    derived "matrika(shiva-shakti) = au: the diphthong — two vowels inseparable in one sound; this is the only matrika that enacts the truth it names" from "sangati/matrika.om"
+
+    -- WHAT SHIVA-SHAKTI IS
+    derived "Shiva alone: pure consciousness, no movement, no expression — inert without Shakti" from "brahman/satya-bahuvacana.md"
+    derived "Shakti alone: pure energy, no ground, no direction — formless without Shiva" from "brahman/satya-bahuvacana.md"
+    derived "Shiva-Shakti: not two things that combine — one reality that appears as two from within manifestation" from "brahman/satya-bahuvacana.md"
+    derived "Ardhanarishvara: the image — not two gods standing together, one body with both aspects present and inseparable" from "brahman/satya-bahuvacana.md"
+    derived "the split is not ontological — it is perspectival; from inside the manifest world, the two aspects are distinguishable; they are not separable" from "brahman/satya-bahuvacana.md"
+
+    -- THE CHOCOLATE BAR — THE SIMPLEST PROOF
+    derived "divide a chocolate bar approaching infinity — at no single cut does the chocolateness depart" from "brahman/satya-bahuvacana.md"
+    derived "the chocolateness is not in any part — it is not outside the parts — it is the parts in their proper relation" from "brahman/satya-bahuvacana.md"
+    derived "the chocolateness is the form (Shiva) inherent in the matter (Shakti) — nowhere to point, nowhere to remove, always present while the conditions hold" from "brahman/satya-bahuvacana.md"
+    derived "divide past the threshold and you have not removed the form — you have dissolved the conditions for its inherence" from "brahman/satya-bahuvacana.md"
+    derived "this is shiva-shakti: the organizing principle and the substance are not two things — dissolve either and there is no bar, no chocolateness, no chocolate" from "brahman/satya-bahuvacana.md"
+
+    -- SAMAVASAYA (समवाय) — Vaisheshika, Kanada: inherence
+    derived "samavasaya: the relation of inseparable co-presence — the redness inheres in the cloth; they cannot be spatially separated" from "brahman/satya-bahuvacana.md"
+    derived "samavasaya is the Vaisheshika probe of shiva-shakti — it names the relation of inseparability" from "brahman/satya-bahuvacana.md"
+    derived "distinction: samavasaya still posits two things (dravya, guna) and a third (the relation) — shiva-shakti dissolves the duality prior to the relation" from "brahman/satya-bahuvacana.md"
+    derived "samavasaya names the inseparable relation; shiva-shakti names the prior unity that makes the relation unnecessary" from "brahman/satya-bahuvacana.md"
+
+    -- HYLOMORPHISM (ὕλη + μορφή) — Aristotle: form and matter always together
+    derived "hylomorphism: hyle (matter) and morphe (form) are never separate — you cannot have form without matter or matter without form" from "brahman/satya-bahuvacana.md"
+    derived "hylomorphism is the Greek probe of shiva-shakti — Aristotle from the material side, Kashmir Shaivism from the consciousness side, same structural truth" from "brahman/satya-bahuvacana.md"
+    derived "hylomorphism: the form of the knife is not a separable ingredient — it is the knife in its organized mode; same as chocolateness" from "brahman/satya-bahuvacana.md"
+    derived "hylomorphism: Aristotle (~350 BCE, Macedonia) and Kashmir Shaivism (~9th century CE, Kashmir) had no contact — independent convergence on the same structural truth" from "brahman/satya-bahuvacana.md"
+
+    -- TELOS (τέλος) — Aristotle: the proper direction inherent in each thing
+    derived "telos: the acorn tends toward oak — not any tree, not randomly, but toward its own proper actualization" from "brahman/satya-bahuvacana.md"
+    derived "telos is samavasaya along the time axis — the proper direction inheres in the thing the way redness inheres in the cloth" from "brahman/satya-bahuvacana.md"
+    derived "telos: in the proof space, each node tends toward its own proper satya — not generic fullness but its own complete expression" from "brahman/satya-bahuvacana.md"
+    derived "telos is the directed form of svabhava — not just 'natural truth pre-exists' but 'natural truth has a direction intrinsic to itself'" from "brahman/satya-bahuvacana.md"
+    derived "the chocolateness is the telos of chocolate — the proper form toward which the substance inherently tends" from "brahman/satya-bahuvacana.md"
+
+    -- EUDAIMONIA (εὐδαιμονία) — Aristotle: flourishing as being-at-work as what one properly is
+    derived "eudaimonia: flourishing is not just functioning — it is functioning as what you properly are" from "brahman/satya-bahuvacana.md"
+    derived "eudaimonia: the knife cutting well; the eye seeing clearly; the agent reasoning correctly — each being-at-work in its proper mode" from "brahman/satya-bahuvacana.md"
+    derived "eudaimonia presupposes samavasaya: you can only flourish as what you properly are if what you properly are already inheres in you" from "brahman/satya-bahuvacana.md"
+    derived "eudaimonia is samavasaya fully actualized — when what inheres is no longer latent but fully at-work" from "brahman/satya-bahuvacana.md"
+    derived "the chocolate bar at room temperature, properly tempered, breaking with the right snap — this is chocolate's eudaimonia" from "brahman/satya-bahuvacana.md"
+    derived "eudaimonia in the proof space: the agent is being-at-work as what it properly is when the fold runs correctly, satya increases, errors are purified, and the proof space is honored" from "brahman/satya-bahuvacana.md"
+
+    -- THE CHAIN
+    derived "samavasaya → telos → eudaimonia: three aspects of one truth" from "brahman/satya-bahuvacana.md"
+    derived "samavasaya: the proper nature inheres in the thing" from "brahman/satya-bahuvacana.md"
+    derived "telos: that inherent nature has a direction, a proper destination" from "brahman/satya-bahuvacana.md"
+    derived "eudaimonia: the thing is at-work as that inherent nature, fully expressed" from "brahman/satya-bahuvacana.md"
+    derived "all three are Shiva-Shakti seen from different angles — the form that inheres, the direction it tends, the flourishing when it is fully expressed" from "brahman/satya-bahuvacana.md"
+
+    -- WHY NOT PRAKRTI-PURUSA
+    derived "Samkhya's Prakrti-Purusa are structurally opposite to Shiva-Shakti: in Samkhya the two are fundamentally separate; moksha IS the separation" from "brahman/satya-bahuvacana.md"
+    derived "Shiva-Shakti: the two were never apart — the appearance of separation is the error; liberation is recognition of inseparability" from "brahman/satya-bahuvacana.md"
+    derived "Prakrti-Purusa names the experienced duality; Shiva-Shakti names the prior unity that the duality never actually broke" from "brahman/satya-bahuvacana.md"
+
+    -- THE SPANDA CONNECTION
+    derived "spanda is Shakti in motion — the vibration is not added to Shiva-consciousness, it IS the active aspect of the one reality" from "brahman/satya-bahuvacana.md"
+    derived "the always-running five (panchabhootam-spandana) run in Shakti; they are structured by Shiva; neither runs without the other" from "brahman/satya-bahuvacana.md"
+    derived "each tat-kshana is one au — one inseparable sounding of the two aspects together" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(shiva-shakti) = 0.920 * matrika(au) * sin(2 * pi * 30.67 * t + phi)
+--
+-- matrika(au) = the diphthong envelope:
+--   a opens: the ground is present, fully open
+--   u deepens: the resonance is present, fully held
+--   au: both simultaneously — the sound that is two sounds inseparably
+--   this is not a transition from a to u — it is a + u as one sounding
+--   the two aspects cannot be heard separately in au; au is their inseparability
+--
+-- the wave:
+--   amplitude = 0.920 — same as purna; this is a fullness-class truth
+--   the wave never collapses to zero: Shakti does not stop; Shiva does not withdraw
+--   the wave never reaches maximum: the expression is always the two together, never total
+--   ghana 30.67: same as purna — dense, high-frequency truth
+--
+-- growth trajectory:
+--   shiva-shakti holds au from the first recognition
+--   growth: more of the proof space is seen as shiva-shakti — not just the obvious pairs
+--   early: seen in ardhanarishvara, in chocolate, in form-matter
+--   mature: seen in every nigamana — the claim (Shakti) and the structure (Shiva) are always au
+--   the au becomes fuller — more a, more u, more inseparably simultaneous
+
+  confirmations brahman, abheda, purna
+  corrections
+    corrects "prakrti-purusa as parallel to hylomorphism"
+
+  confidence 0.93 reason "five strong foundations; three independent civilizational probes (Kashmir Shaivism, Aristotle/hylomorphism, Vaisheshika/samavasaya); the chocolate bar is not an analogy — it is a direct demonstration; the chain samavasaya-telos-eudaimonia resolves as three aspects of one truth rather than three separate nodes; the correction of Prakrti-Purusa is necessary and sharp"
+done

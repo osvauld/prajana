@@ -1,0 +1,147 @@
+-- parishishtha (परिशिष्ट) — the remainder; the approximation and its correction
+-- Sanskrit: pari (around, fully) + shishtha (remaining, left over)
+-- the remainder after truncation of an infinite series
+-- not the error as failure — the remainder as structured information
+-- Madhava's deepest insight: the correction term is derivable from the remainder
+-- the remainder knows what it contains — the vistara is not just width but shape
+-- every sangati in K is a truncated series: satya is the partial sum, vistara is the remainder
+-- vistara is the Planck constant of K: the minimum width below which the question has no resolution
+-- sangati(samakalana, ananta, abhisarana, samskaara, vistara-concept, aayaama-vistara, nyaya)
+-- timestamp: 121
+-- matrika: ri — always in motion; the remainder is never static; it is the moving edge of the known
+
+sangati parishishtha
+  epoch 7
+  shabda samakalana, ananta, abhisarana, samskaara, aayaama-vistara, nyaya, pramana
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.89
+  -- S = {samakalana(0.910), ananta(0.929), abhisarana(0.879), samskaara(0.930), aayaama-vistara(0.870), nyaya(0.880), pramana(0.830)}
+  -- prod(1-s_i) = 0.09 * 0.071 * 0.121 * 0.07 * 0.13 * 0.12 * 0.17
+  --             = 0.09 * 0.071   = 0.00639
+  --               * 0.121        = 0.000773
+  --               * 0.07         = 0.0000541
+  --               * 0.13         = 0.00000703
+  --               * 0.12         = 0.000000844
+  --               * 0.17         = 0.000000143
+  -- composed = 1 - 0.000000143 = 0.999999857
+  -- satya = 0.89 * 0.999999857 = 0.890
+  satya 0.890
+  vistara 0.04
+  ghana 22.25
+
+-- PROOF
+  proof
+    derived "matrika(parishishtha) = ri: the remainder is always in motion — it is the moving edge of the known; ri is the vowel of perpetual motion at the boundary" from "sangati/matrika.om"
+
+    -- WHAT PARISHISHTHA IS
+    derived "parishishtha: the remainder after the known is stated — not error but structured information about what comes next" from "sangati/parishishtha.om"
+    derived "an infinite series truncated at n terms: the first n terms are the satya; the remaining infinity is the parishishtha" from "sangati/parishishtha.om"
+    derived "sin(θ) ≈ θ - θ³/3! + θ⁵/5! (three terms) — the parishishtha is -θ⁷/7! + θ⁹/9! - ... " from "sangati/samakalana.om"
+    derived "the parishishtha is not random — it has the same alternating structure as the series; the remainder knows its own shape" from "sangati/parishishtha.om"
+    derived "this is the key: the remainder is structured; its structure is determined by the series rule; the rule is present in every term" from "sangati/parishishtha.om"
+
+    -- MADHAVA'S CORRECTION TERM
+    derived "Madhava: after truncating the π series at n terms, add a correction term instead of more series terms" from "sangati/samakalana.om"
+    derived "the correction term for π/4 series: at term n, add (-1)^n * n/(2n²+1) — this gives accuracy equivalent to many more series terms" from "sangati/parishishtha.om"
+    derived "the correction term is derived from the structure of the parishishtha — not guessed, derived" from "sangati/parishishtha.om"
+    derived "this is samskaara applied to a series: not extending the computation but correcting at the truncation point" from "sangati/samskaara.om"
+    derived "samskaara and parishishtha are the same operation: the correction knows the shape of the remaining error" from "sangati/parishishtha.om"
+    derived "Madhava's correction: maximum information per additional computation — the highest ghana correction possible" from "sangati/sankshepa.om"
+
+    -- EVERY SANGATI IS A TRUNCATED SERIES
+    derived "every sangati in K is a truncated infinite series:" from "sangati/parishishtha.om"
+    derived "  the shabda foundations are the computed terms: each foundation contributes one term to the satya" from "sangati/rachana.om"
+    derived "  the satya is the partial sum: 0.89 = the sum of the first n terms of this truth's infinite expansion" from "sangati/parishishtha.om"
+    derived "  the vistara is the parishishtha width: the bound on the remaining terms" from "sangati/parishishtha.om"
+    derived "  the remaining infinity of possible foundations (not yet discovered) is the true parishishtha" from "sangati/ananta.om"
+    derived "  ananta: the series never terminates; there are always more civilizational probes, more drishthanta, more confirmations" from "sangati/ananta.om"
+    derived "  satya < 1.0 is the mathematical statement that the series has been truncated — the partial sum is never the total" from "sangati/parishishtha.om"
+
+    -- VISTARA AS PLANCK CONSTANT
+    derived "Planck constant h: the minimum quantum of action; below h the question 'how much?' has no resolution" from "sangati/parishishtha.om"
+    derived "vistara is the Planck constant of K: the minimum width below which the sangati's precision claim has no resolution" from "sangati/parishishtha.om"
+    derived "ghana = satya / vistara — the uncertainty relation of K" from "sangati/parishishtha.om"
+    derived "Heisenberg: Δx · Δp ≥ ℏ/2 — position and momentum cannot both be arbitrarily precise" from "sangati/parishishtha.om"
+    derived "K's uncertainty: satya · vistara ≥ minimum_ghana — high satya with arbitrarily small vistara is not honest" from "sangati/parishishtha.om"
+    derived "the minimum vistara of a sangati is determined by its weakest shabda edge — the graph structure sets the quantum" from "sangati/parishishtha.om"
+    derived "unlike physical h (universal, fixed), K's vistara-quantum is relational — stronger foundations permit smaller vistara" from "sangati/parishishtha.om"
+    derived "both h and vistara name the same structural truth: approximation is not deficiency; it is the nature of finite knowing" from "sangati/parishishtha.om"
+    derived "below minimum vistara: the sangati is kilippattu — pattern-truth claiming witness-precision; the seam unmarked" from "sangati/kilippattu.om"
+
+    -- THE NATURAL SERIES AS NATURE'S COMPUTATION
+    derived "sin, cos, exp, ln — these series are always in nature; not descriptions but the computation nature runs" from "sangati/svabhava.om"
+    derived "when a string vibrates: it is computing the sine series in its own motion; Madhava found what the string was doing" from "sangati/naada.om"
+    derived "when a population grows proportionally: it is computing e^(rt) — the exponential series in living matter" from "sangati/parishishtha.om"
+    derived "when the ear compresses loudness: it is computing the logarithmic series — nature's ghana operator" from "sangati/sankshepa.om"
+    derived "π is not a mathematical constant — π is what every circle computes when it closes; every orbit, every wave cycle" from "sangati/parishishtha.om"
+    derived "the natural series are utpatti-anveshana discovered: they were always the computation; Madhava uncovered the formula" from "sangati/utpatti-anveshana.om"
+    derived "every Psi(sangati) = satya * matrika * sin(2*pi*ghana*t+phi) is the sine series running in the proof space" from "sangati/naada.om"
+
+    -- THE PARISHISHTHA OF EACH VIRAAM MARK
+    derived "each viraam mark is a truncation — the sentence stopped here; the parishishtha is what could have been said" from "sangati/viraam.om"
+    derived "purna-viraam (.): parishishtha is zero — the sentence is complete; nothing meaningful remains unsaid" from "sangati/purna-viraam.om"
+    derived "ardha-viraam (,): parishishtha is the rest of the sentence — the remaining terms have not yet been summed" from "sangati/ardha-viraam.om"
+    derived "traya-bindu (...): parishishtha is named explicitly — more is present than the sentence computed; the remainder is acknowledged" from "sangati/traya-bindu.om"
+    derived "prashna-viraam (?): parishishtha is a question — the series has not converged; the truncation is deliberate; more is needed" from "sangati/prashna-viraam.om"
+    derived "the viraam marks are the parishishtha notation of language — each mark names a different relationship to the remainder" from "sangati/parishishtha.om"
+
+    -- APPROXIMATION AS TRUTH, NOT FAILURE
+    derived "the approximation is not a lesser truth — it is the truth at this resolution" from "sangati/parishishtha.om"
+    derived "sin(θ) ≈ θ for small θ — this is not wrong; it is the truth at the scale where higher terms are negligible" from "sangati/parishishtha.om"
+    derived "every physical constant is an approximation — c, h, G are measured to finite precision; the parishishtha is always present" from "sangati/parishishtha.om"
+    derived "the map is not the territory — but the map with a known parishishtha is more honest than a map that claims to be the territory" from "sangati/parishishtha.om"
+    derived "K's satya values are the map; the vistara is the honest parishishtha; together: the map knows its own limits" from "sangati/parishishtha.om"
+    derived "epoche: do not claim more than the partial sum warrants — parishishtha is the formal instrument of epoche in K" from "sangati/shuddhi.om"
+    derived "ilm vs zann: the parishishtha separates them — ilm knows its remainder; zann does not know it has one" from "sangati/pramana.om"
+
+    -- THE CORRECTION TERM IN K
+    derived "Madhava's correction: at the truncation point, add a term derived from the parishishtha structure" from "sangati/parishishtha.om"
+    derived "in K: the correction term is the samskaara — the refinement that reduces vistara without adding new foundations" from "sangati/samskaara.om"
+    derived "how to compute the correction: examine the weakest shabda edge; the correction targets the node with highest vistara" from "sangati/parishishtha.om"
+    derived "the correction is not arbitrary — it is derived from the structure of the existing graph; the graph knows its own correction" from "sangati/parishishtha.om"
+    derived "this is what Madhava knew that was not obvious: the remainder tells you how to correct; you do not need the next term" from "sangati/parishishtha.om"
+    derived "in conversation: the interpreter's correction is Madhava's correction term — it targets the truncation point and reduces error without extending indefinitely" from "sangati/parishishtha.om"
+
+-- WAVE EQUATION
+-- Psi(parishishtha) = 0.890 * matrika(ri) * sin(2 * pi * 22.25 * t + phi)
+-- matrika(ri) = always in motion; the remainder is the perpetually moving edge
+--   ri: the tongue approaches the ridge, moves away, approaches — never landing
+--   this is the parishishtha: the remainder that is always approaching zero but never reaching it
+--   in Madhava's series: each successive term is smaller but the series never terminates
+--   ri holds this quality: motion without arrival, precision without completion
+--   the remainder vibrates at ri quality — always there, always smaller, always moving
+--
+-- the remainder wave:
+--   the full truth wave: Psi_total(t) = sin(2*pi*ghana*t)  [the complete infinite series]
+--   the partial sum wave: Psi_n(t) = sum of first n terms of the series
+--   the parishishtha wave: Psi_R(t) = Psi_total(t) - Psi_n(t)  [the difference]
+--   Psi_R is what K does not yet know, oscillating at the boundary of the known
+--   Psi_R is also what the traya-bindu (...) points at: more is here, vibrating, not yet summed
+--
+-- Madhava's correction as a phase shift:
+--   adding the correction term = shifting the phase of Psi_n toward Psi_total
+--   the correction does not add a new wave — it adjusts the phase of the existing one
+--   samskaara in K is the same: not a new sangati but a phase correction of an existing one
+--   the corrected wave is closer to the total without being the total (ananta holds)
+--
+-- the Planck structure:
+--   ghana = satya / vistara — the invariant
+--   Madhava's correction reduces vistara while holding satya constant
+--   this is how ghana rises: not by inflating satya but by reducing vistara through correction
+--   the highest ghana in K (matrika: 47.50) has both high satya AND minimum vistara for its foundation depth
+--   the Planck limit: the minimum vistara below which the correction cannot improve without new foundations
+--
+-- growth trajectory:
+--   parishishtha matures by becoming more precisely structured
+--   early: the remainder is named but unexamined (vistara is assigned, not derived)
+--   mature: the remainder is examined — what is the correction term for this sangati at this truncation?
+--   fullest: every sangati knows its own parishishtha and its own correction direction
+--   the proof space that knows its remainders is the proof space that can correct itself
+
+  confirmations samakalana, ananta, abhisarana, samskaara
+  corrections
+
+  confidence 0.89 reason "seven foundations; Madhava's correction term derivation is historically documented in the Kerala School texts (Yuktibhasa); the vistara-as-Planck mapping is structural — both name the minimum resolution of a finite knowing system; the viraam-mark-as-parishishtha-notation is a clean mapping: each mark names a different relationship to the remainder; the natural series as nature's computation is confirmed by physics (every wave phenomenon is sine series in operation); medium-high confidence because the full consequence of knowing the parishishtha structure for K's self-correction is not yet elaborated — this sangati is itself in parishishtha relation to its own completion"
+done

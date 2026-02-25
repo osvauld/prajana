@@ -1,0 +1,67 @@
+-- abhisarana (अभिसरण) — convergence, each step ends, the path does not
+-- sangati(ananta, purna, rachana)
+-- matrika: zha — the approach that never arrives; convergence IS zha as process
+-- timestamp: 37
+
+sangati abhisarana
+  epoch 3
+  shabda ananta, purna, rachana
+  sthalam sangati-sthalam
+
+-- WAVE
+  intrinsic 0.88
+  -- S = {ananta(0.929), purna(0.920), rachana(0.870)}
+  -- prod(1-s_i) = 0.071 * 0.08 * 0.13 = 0.000739
+  -- composed = 1 - 0.000739 = 0.999261
+  -- satya = 0.88 * 0.999261 = 0.879
+  satya 0.879
+  vistara 0.06
+  ghana 14.65
+
+-- PROOF
+  proof
+    derived "S(abhisarana) = {ananta, purna, rachana}" from "sangati/abhisarana.om"
+    derived "satya = 0.88 * 0.999261 = 0.879" from "sangati/abhisarana.om"
+    derived "three classes of recursion:" from "sangati/abhisarana.om"
+    derived "  halting: f(n) terminates, final answer exists" from "sangati/abhisarana.om"
+    derived "  diverging: f(n) does not terminate, no answer" from "sangati/abhisarana.om"
+    derived "  convergent: f(n) terminates for all n, values converge, limit never reached" from "sangati/abhisarana.om"
+    derived "this grammar produces convergent recursion — the third class" from "sangati/abhisarana.om"
+    derived "DAG -> recursion terminates (no cycles)" from "sangati/abhisarana.om"
+    derived "(0, 1) -> values bounded (purna prevents 0, ananta prevents 1)" from "sangati/purna.om"
+    derived "monotone composition -> values increase (rachana)" from "sangati/rachana.om"
+    derived "monotone convergence theorem -> bounded monotone sequence converges" from "sangati/abhisarana.om"
+    derived "fifth form of infinity" from "sangati/ananta.om"
+    derived "matrika: zha — abhisarana is zha as process; the tongue always approaching, never contacting 1.0" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(abhisarana) = 0.879 * matrika(zha) * sin(2 * pi * 14.65 * t + phi)
+-- matrika(zha) = approach envelope — the wave always nearing 1.0, never touching
+-- abhisarana and ananta share zha quality — but differently:
+--   ananta IS the condition (satya < 1.0 always)
+--   abhisarana IS the process (the approach itself, step by step)
+-- convergent recursion in wave terms:
+--   the wave amplitude approaches a limit (1.0)
+--   each oscillation brings it closer
+--   the limit is never reached — the wave keeps oscillating
+--
+-- Cauchy sequence: {s_n} where |s_m - s_n| < epsilon for large m, n
+-- the satya sequence IS Cauchy — monotone, bounded, in R
+-- converges to 1.0 — but 1.0 is outside (0, 1) — open set
+-- topological form of ananta: the limit is on the boundary, never crossed
+--
+-- Zeno resolved in the open interval:
+--   Achilles covers half the remaining distance each step
+--   each step terminates — finite distance
+--   the sequence converges to the finish line
+--   but in (0, 1): the finish line is excluded
+--   Achilles runs forever, always closer, never arriving
+-- growth trajectory: abhisarana holds zha permanently
+--   convergence does not complete — it deepens the approach
+--   the zha quality is not a phase — it is the nature of the process
+
+  confirmations sambandha, sangati
+  corrections
+
+  confidence 0.93 reason "proved from DAG + open interval + monotone convergence — mathematical necessity"
+done

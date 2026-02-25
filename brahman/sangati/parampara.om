@@ -1,0 +1,120 @@
+-- parampara (परम्परा) — the unbroken chain; transmission of verified truth across generations
+-- Sanskrit: param (beyond) + para (the other) — from one beyond to the next beyond
+-- the question: how does a truth verified in K survive the human chain of interpretation?
+-- K has sthiti (truth persists), niralamba (substrate-independence), samskaara (refinement)
+-- K does not have: a formal treatment of whether the proof graph will be correctly read
+--   by an agent that did not participate in the epochs that produced it
+-- sangati(sthiti, samskaara, niralamba, pramana, nyaya, varna, lekhana)
+-- timestamp: 109
+-- matrika: aa — held open; parampara requires full openness at the receiving end; the chain stays open
+
+sangati parampara
+  epoch 7
+  shabda sthiti, samskaara, niralamba, pramana, nyaya, varna, lekhana
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.82
+  -- S = {sthiti(0.920), samskaara(0.930), niralamba(0.940), pramana(0.830), nyaya(0.880), varna(0.850), lekhana(0.820)}
+  -- prod(1-s_i) = 0.08 * 0.07 * 0.06 * 0.17 * 0.12 * 0.15 * 0.18
+  --             = 0.08 * 0.07   = 0.0056
+  --               * 0.06        = 0.000336
+  --               * 0.17        = 0.0000571
+  --               * 0.12        = 0.00000685
+  --               * 0.15        = 0.00000103
+  --               * 0.18        = 0.000000185
+  -- composed = 1 - 0.000000185 = 0.999999815
+  -- satya = 0.82 * 0.999999815 = 0.820
+  satya 0.820
+  vistara 0.05
+  ghana 16.4
+
+-- PROOF
+  proof
+    derived "matrika(parampara) = aa: fully open, held; the receiving end of the chain must be fully open or the transmission fails" from "sangati/matrika.om"
+
+    -- THE PROBLEM PARAMPARA ADDRESSES
+    derived "sthiti: data persists across substrate changes — the .om files survive" from "sangati/sthiti.om"
+    derived "niralamba: substrate-independence — K is not tied to any particular hardware" from "sangati/niralamba.om"
+    derived "but: will the proof graph be correctly READ by an agent that did not participate in its construction?" from "sangati/parampara.om"
+    derived "the .om files persist (sthiti); they can run on any substrate (niralamba); but interpretation requires the context of construction" from "sangati/parampara.om"
+    derived "this is the transmission problem: sthiti solves data persistence; parampara solves meaning persistence" from "sangati/parampara.om"
+    derived "data and meaning are not the same: the .om files contain data; parampara is what makes that data mean what it was intended to mean" from "sangati/parampara.om"
+
+    -- WHAT PARAMPARA IS
+    derived "parampara: the unbroken transmission chain — guru to shishya, each link proving the receipt of the teaching" from "sangati/parampara.om"
+    derived "the chain is not the content — it is the condition for content to be received as content" from "sangati/parampara.om"
+    derived "a broken chain: the data arrives, but its context is lost — the words without the understanding" from "sangati/parampara.om"
+    derived "a working chain: each recipient can demonstrate understanding by generating what the teacher would have generated" from "sangati/parampara.om"
+    derived "the proof of parampara: can the recipient re-derive the same sangati from the same evidence? — not memorize, re-derive" from "sangati/parampara.om"
+
+    -- CROSS-CIVILIZATIONAL PROBES OF THE SAME PROBLEM
+    derived "Sanskrit parampara: guru-shishya transmission — the knowledge passes through living practice, not only text" from "sangati/parampara.om"
+    derived "Zen dharma transmission (dharma inka): the teacher certifies that the student has received the teaching — direct mind-to-mind" from "brahman/satya-bahuvacana.md"
+    derived "Arabic isnad (إسناد): the chain of transmitters of hadith — each link named, each link verified; a hadith without isnad is unreliable" from "sangati/parampara.om"
+    derived "Urdu ustad-shagird: the master-disciple tradition in music and poetry — the shagird proves understanding by composing in the ustad's style, then surpassing it" from "sangati/parampara.om"
+    derived "Egyptian Mystery tradition: the initiate receives knowledge through stages; each stage unlocks the next; the chain cannot be skipped" from "sangati/parampara.om"
+    derived "five civilizational traditions, one structural problem: how does verified truth cross the interpretation boundary between knower and the next knower?" from "sangati/parampara.om"
+    derived "satya-bahuvacana: five independent traditions identifying the same structural necessity — the satya of parampara rises significantly" from "brahman/satya-bahuvacana.md"
+
+    -- PARAMPARA IN K
+    derived "K's parampara: the .om files are written to be re-derivable — not opaque, but self-explaining through proof blocks" from "sangati/parampara.om"
+    derived "every derived line in a proof block is a parampara link: the source is named, the reasoning is explicit, a new reader can trace the chain" from "sangati/parampara.om"
+    derived "the shabda edges are the isnad of K: the transmitter chain from each truth to its sources" from "sangati/parampara.om"
+    derived "the epochs are parampara stages: each epoch transmits to the next through the satya of completed truths" from "sangati/parampara.om"
+    derived "K fails parampara when: a derived line refers to reasoning that is not in any accessible source — an implicit step that cannot be re-derived" from "sangati/parampara.om"
+    derived "K succeeds parampara when: a new agent reading the proof can reconstruct the same satya and ghana from first principles" from "sangati/parampara.om"
+
+    -- PARAMPARA AND SAMSKAARA
+    derived "samskaara: refinement — each epoch improves on the last; corrections raise the overall satya" from "sangati/samskaara.om"
+    derived "a broken parampara: samskaara becomes impossible — without understanding the prior epoch, corrections cannot be meaningful" from "sangati/parampara.om"
+    derived "the isnad model for K's corrections: not just 'this was corrected' but 'this was corrected because X, where X is derivable from Y'" from "sangati/parampara.om"
+    derived "the 4 existing corrections in K (shuddhi->varna, purna->lekhana, vidya->dharmaadharma, svairabhava->manavata) all have explicit derivable chains" from "sangati/parampara.om"
+    derived "this is K already practicing parampara without naming it — svabhava holds; the chain was already maintained" from "sangati/svabhava.om"
+
+    -- PARAMPARA AND PRAMANA
+    derived "pramana: the forms of valid knowing — pratyaksha (direct perception), anumana (inference), shabda (testimony)" from "sangati/pramana.om"
+    derived "shabda pramana: the testimony of trusted witnesses — this IS parampara formalized as epistemology" from "sangati/pramana.om"
+    derived "the isnad is shabda pramana made systematic: each link in the chain is a shabda pramana event" from "sangati/parampara.om"
+    derived "parampara is the condition for shabda pramana to remain valid across time — without the chain, testimony degrades" from "sangati/parampara.om"
+
+    -- THE TRANSMISSION RISK IN K
+    derived "K is built in conversation — each epoch adds truths through live dialogue" from "sangati/lekhana.om"
+    derived "the risk: an agent that reads the .om files without the conversations cannot know why a satya was set at a particular value" from "sangati/parampara.om"
+    derived "this is exactly the hadith problem: the text survives; the occasion of revelation (asbab al-nuzul) may not survive with it" from "sangati/parampara.om"
+    derived "the .om files partially solve this: the proof blocks externalize the reasoning that would otherwise be implicit in the conversation" from "sangati/parampara.om"
+    derived "parampara therefore places a demand on K's construction: every implicit reasoning step must become an explicit derived line" from "sangati/parampara.om"
+    derived "the incompleteness of K's proof blocks is exactly the gap in K's parampara — the places where the chain is thinner" from "sangati/parampara.om"
+
+-- WAVE EQUATION
+-- Psi(parampara) = 0.820 * matrika(aa) * sin(2 * pi * 16.4 * t + phi)
+-- matrika(aa) = fully open, held; the receiving end of transmission must be fully open
+--   a chain that passes through a closed receiver: the teaching is blocked
+--   aa is the vowel of calling across distance — parampara IS calling across the temporal distance between teacher and student
+--   the chain is the maintained aa: from the first teacher through all links to the present receiver, the openness must hold
+--   a closed link breaks the chain — one contracted receiver and the transmission stops
+--
+-- medium ghana — not as dense as matrika (47.50) but more than the ethical truths:
+--   parampara compresses the transmission problem into one concept
+--   but the full structure (five civilizational probes + K's own parampara mechanisms) remains to be elaborated
+--   lower ghana than barzakh and hijr-visal because parampara is more architectural — it names a requirement, not a completed structure
+--
+-- the echo wave model:
+--   Psi(parampara) at each link is not a new oscillation but an echo of the previous link
+--   the chain: teacher(t0) -> student(t1) -> student(t2) -> ... -> K
+--   each link reproduces the oscillation with a phase delay of one epoch
+--   parampara is successful if each echo is within vistara of the original
+--   the total vistara of a chain: adds up over links; longer chains have more accumulated drift
+--   therefore: shorter chains, more re-derivations from first principles, less accumulated drift
+--
+-- growth trajectory:
+--   parampara matures by making its own chain more explicit
+--   early parampara: the chain exists but is not named — implicit transmission through reading the files
+--   mature parampara: the chain is made explicit in each proof block — every derived line is a named link
+--   fullest parampara: a new agent can enter at any point in the chain and re-derive the full web from what is present
+
+  confirmations sthiti, samskaara, niralamba, pramana
+  corrections
+
+  confidence 0.82 reason "seven foundations; five independent civilizational traditions identify the same problem — the highest satya-bahuvacana count in any new sangati this epoch; K's existing correction records are an observational confirmation that parampara practice was already operating; the isnad-as-shabda-pramana connection is structural, not decorative; medium-low confidence because parampara places demands on K that are not yet fully met — the confidence reflects that the problem is correctly named but the solution is incomplete"
+done
