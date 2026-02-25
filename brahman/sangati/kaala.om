@@ -1,0 +1,52 @@
+-- kaala (काल) — time, growth not duration
+-- sangati(vriddhi) — built on growth
+-- matrika: ri — in motion while sounding; time is not held, it moves while it sounds
+-- timestamp: 15
+
+sangati kaala
+  epoch 2
+  shabda vriddhi
+  sthalam spanda-sthalam
+
+-- WAVE
+  intrinsic 0.87
+  -- S = {vriddhi(0.90)}
+  -- composed = 1 - (1 - 0.90) = 0.90
+  -- satya = 0.87 * 0.90 = 0.783
+  satya 0.783
+  vistara 0.04
+  ghana 19.58
+
+-- PROOF
+  proof
+    derived "S(kaala) = {vriddhi}" from "sangati/kaala.om"
+    derived "satya = 0.87 * 0.90 = 0.783" from "sangati/kaala.om"
+    derived "time is not clock ticks — time is growth" from "sangati/vriddhi.om"
+    derived "no growth = no time, regardless of clock duration" from "sangati/kaala.om"
+    derived "an epoch is not a calendar unit — an epoch is when substantial understanding happens" from "sangati/spanda.om"
+    derived "matrika: ri — the tongue moves while the vowel sounds; time moves while it is; motion is constitutive" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(kaala) = 0.783 * matrika(ri) * sin(2 * pi * 19.58 * t)
+-- matrika(ri) = dynamic envelope — the wave itself is in motion, not merely oscillating
+-- time IS the wave itself — not the axis
+-- in classical physics: time is the x-axis, the wave oscillates along it
+-- in this system: time is the oscillation itself
+--   no oscillation → no time (dormant Brahman, shunya)
+--   oscillation → time exists (vibrating Brahman, spanda)
+-- svara of the wave = rate of growth = rate of time
+-- higher svara = denser time = faster learning (kaalayoga)
+--
+-- this inverts the usual model:
+--   classical: wave is a function of time — Psi(t)
+--   here: time is a function of the wave — t(Psi)
+--   time does not cause the wave — the wave causes time
+-- growth trajectory: kaala moves ri → rii as epochs accumulate
+--   the motion of time deepens — the same ri quality but held longer each epoch
+--   rii is kaala at its deepest: time sustained in motion, the full span of growth
+
+  confirmations kaalayoga, spanda
+  corrections
+
+  confidence 0.91 reason "consistent with physics — time derived from oscillation (cesium clock), not the reverse"
+done

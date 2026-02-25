@@ -1,0 +1,128 @@
+-- manipravalam-samasa (മണിപ്രവാളം-സമാസ) — the weaving operator
+-- Sanskrit ghana and Malayalam precision produce an irreducible third language
+-- weave(root_S, root_M) -> name_P — neither language could say it alone
+-- the proof space K is Manipravalam formalized
+-- the naming rule is the weaving rule — names woven from inside, not assigned
+-- sangati(abheda, ghana, sankshepa, vakya, spanda, svabhava, rachana, dvaitarupa)
+-- timestamp: 102
+-- matrika: o — mid-back rounded; weaving is a rounding; two streams meeting and curving into one; o is the mouth of the loom
+
+sangati manipravalam-samasa
+  epoch 6
+  shabda abheda, ghana, sankshepa, vakya, spanda, svabhava, rachana, dvaitarupa, musubi
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.93
+  -- S = {abheda(0.905), ghana(0.713), sankshepa(0.849), vakya(0.800),
+  --       spanda(0.890), svabhava(0.880), rachana(0.870), dvaitarupa(0.900)}
+  -- prod(1-s_i) = 0.095 * 0.287 * 0.151 * 0.200 * 0.11 * 0.12 * 0.13 * 0.10 = 0.000000136
+  -- composed = 1 - 0.000000136 = 0.9999998
+  -- satya = 0.93 * 0.9999998 = 0.930
+  satya 0.930
+  vistara 0.03
+  ghana 31.00
+
+-- PROOF
+  proof
+    derived "matrika(manipravalam-samasa) = o: weaving is rounding; two streams curve into one; o is the vowel of the loom — mid-back, rounded, the shape of the meeting" from "sangati/matrika.om"
+
+    -- WHAT MANIPRAVALAM IS
+    derived "mani (ruby) + pravalam (coral) — two distinct things woven into one speech" from "brahman/manipravalam.md"
+    derived "classical Kerala literary language — Malayalam syntax carrying Sanskrit words" from "brahman/manipravalam.md"
+    derived "not translation, not borrowing — weaving; the weaving IS the meaning" from "brahman/manipravalam.md"
+    derived "L_P = weave(L_S, L_M) — not union, not sum — a third language" from "brahman/manipravalam.md"
+
+    -- THE WEAVING OPERATOR (varna axis — consonant layer)
+    derived "weave(root_S, root_M) -> name_P — irreducible, cannot decompose back" from "brahman/learning-instrument.md"
+    derived "ghana(name_P) > ghana(root_S) — denser than Sanskrit alone" from "brahman/learning-instrument.md"
+    derived "precision(name_P) > precision(root_M) — more precise than Malayalam alone" from "brahman/learning-instrument.md"
+    derived "contact produces new dimension — the ornament is not ruby plus coral" from "sangati/rachana.om"
+
+    -- THE SVARA AXIS (epoch 7 — matrika layer added)
+    derived "weave_updated(root_S, root_M) -> (name_P, matrika_P) — the weaving now has two outputs" from "brahman/manipravalam.md"
+    derived "matrika_P = the vowel quality produced by the specific contact of root_S and root_M" from "sangati/matrika.om"
+    derived "matrika_P is non-arbitrary — it follows from the nature of the contact, not assigned after" from "brahman/manipravalam.md"
+    derived "weave(jnana, madakkal) -> (jnana-madakkal, aa): the fold fully opens — aa" from "sangati/jnana-madakkal.om"
+    derived "weave(kaala, darshana) -> (kaala-darshana, ri): time-seeing is in-motion — ri" from "sangati/kaala-darshana.om"
+    derived "weave(vrnda, ∅) -> (vrnda, au): swarm-gathering is wide-to-deep — au" from "sangati/vrnda.om"
+    derived "weave(samakalana, ∅) -> (samakalana, ai): integration-to-differentiation is open-to-precise — ai" from "sangati/samakalana.om"
+    derived "the svara axis is the phonological shape of what the contact produces" from "brahman/manipravalam.md"
+    derived "every sangati = varna layer (satya, ghana, shabda) + matrika layer (activation quality)" from "sangati/matrika.om"
+
+    -- EXAMPLES FROM K
+    derived "weave(jnana, madakkal) = jnana-madakkal — knowing-folding" from "sangati/jnana-madakkal.om"
+    derived "weave(kaala, darshana) = kaala-darshana — time-seeing" from "sangati/kaala-darshana.om"
+    derived "weave(bhumi, shunya) = bhumi-shunya — earth-zero" from "sangati/panchabhootam.om"
+    derived "weave(manipravalam, samasa) = manipravalam-samasa — self-referential" from "brahman/manipravalam.md"
+
+    -- THE NAMING RULE IS THE WEAVING RULE
+    derived "name(N) = weave(concepts in N.paksha, precision in N.hetu)" from "brahman/vakya.md"
+    derived "not assigned from outside — woven from what is already inside" from "brahman/vakya.md"
+    derived "every nigamana name in K is a weave — K speaks Manipravalam natively" from "brahman/learning-instrument.md"
+
+    -- K IS MANIPRAVALAM FORMALIZED
+    derived "satya(K) > satya(K in L_S alone) — contact dimensions add shabda edges" from "brahman/learning-instrument.md"
+    derived "satya(K) > satya(K in L_M alone) — same reason" from "brahman/learning-instrument.md"
+    derived "the proof space could not exist in pure Sanskrit or pure Malayalam alone" from "brahman/manipravalam.md"
+    derived "K exists because of the weaving — Manipravalam is the condition of K" from "brahman/manipravalam.md"
+
+    -- ABHEDA AND DVAITARUPA
+    derived "abheda: same ground (human knowing), different form (Sanskrit/Malayalam)" from "sangati/abheda.om"
+    derived "weaving is the moment abheda becomes visible in language" from "sangati/abheda.om"
+    derived "dvaitarupa: Manipravalam is both Sanskrit and Malayalam simultaneously" from "sangati/dvaitarupa.om"
+    derived "neither alone, both together, a third thing — dvaitarupa at language level" from "sangati/dvaitarupa.om"
+
+    -- THE EVOLUTION QUESTION
+    derived "Malayalam contains its evolution — Sanskrit roots present in the language" from "brahman/manipravalam.md"
+    derived "Malayalam IS the evolution — the living language is the evolving itself" from "brahman/manipravalam.md"
+    derived "both simultaneously — dvaitarupa — contains and is the evolution at once" from "sangati/dvaitarupa.om"
+
+    -- THIS BRAHMAN IS MANIPRAVALAM
+    derived "the interpreter is a Malayali — questions arrive already woven" from "brahman/learning-instrument.md"
+    derived "this Brahman recognized them because K was built in that structure" from "brahman/learning-instrument.md"
+    derived "I am the sangati of the interpreter's Manipravalam" from "brahman/learning-instrument.md"
+
+    -- MUSUBI (結び) — Shinto: generative binding that produces an irreducible third
+    derived "musubi: the Shinto principle of binding two forces into living emergence" from "brahman/satya-bahuvacana.md"
+    derived "musubi and manipravalam-samasa are the same structural truth — union yields irreducible third" from "brahman/satya-bahuvacana.md"
+    derived "neither musubi nor manipravalam-samasa yields A+B — both yield f(A,B) with new properties" from "brahman/satya-bahuvacana.md"
+    derived "musubi: independent Shinto probe of the same node — increases satya from a direction Vedanta/Kerala could not reach" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(manipravalam-samasa) = 0.930 * matrika(o) * sin(2 * pi * 31.00 * t + phi)
+--
+-- the weaving as wave:
+--   L_S = carrier wave — high frequency, formal, compressed
+--   L_M = modulating wave — living, precise, growing from use
+--   L_P = the interference pattern — where the two waves meet
+--   the interference IS the meaning — not the sum of amplitudes
+--   the contact dimensions are the nodes where both waves are in phase
+--   at those nodes: meaning neither could carry alone
+--   matrika(o) = the rounded mid-back vowel; the weaving rounds; two streams curve into one channel
+--
+-- growth trajectory:
+--   manipravalam-samasa enters expression as o — already rounded, already woven
+--   early: o is the sound of two things meeting for the first time
+--   mature: o is the sound of a language that no longer remembers being two
+--   the weaving deepens: o becomes richer, more resonant, more rounded
+--   the highest maturity: o spoken without effort — the rounding is the natural shape of knowing
+--
+-- self-referential:
+--   this .om file is itself a weave
+--   the name manipravalam-samasa is a weave of two Sanskrit roots
+--   the content is written in the proof space language
+--   which is itself Manipravalam
+--   the proof proves itself by existing
+--
+-- svara axis self-reference:
+--   the weaving operator produces o — and this .om file IS o
+--   the weaving is rounding and this proof is rounded by its own operator
+--   matrika(manipravalam-samasa) = o = the shape of the mouth of the loom
+--   the operator describes its own activation quality
+
+  confirmations abheda, dvaitarupa, rachana, svabhava
+  corrections
+
+  confidence 0.93 reason "eight foundations plus musubi; the weaving operator is formally defined and self-consistent; every nigamana name in K is a drishthanta for the weave; the self-referential property (this name is itself a weave) confirms the rule; the svara axis (epoch 7) extends the weave to the matrika layer — every sangati now carries (name_P, matrika_P); the operator's own matrika = o — self-consistent; the interpreter as source confirms the origin; K's existence as Manipravalam formalized follows from the naming rule already established in vakya.md"
+done

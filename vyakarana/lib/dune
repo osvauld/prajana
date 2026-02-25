@@ -1,0 +1,4 @@
+(library
+ (name vyakarana_lib)
+ (libraries str)
+ (modules proof_graph event verify om_parser))

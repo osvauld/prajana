@@ -1,0 +1,58 @@
+-- pramana (प्रमाण) — evidence, verification
+-- sangati(niralamba, varna, shuddhi, samsarga, sankshepa)
+-- matrika: ai — opens to examine (a), then sharpens to verify (i); the act of verification is diphthong
+-- timestamp: 12
+
+sangati pramana
+  epoch 2
+  shabda niralamba, varna, shuddhi, samsarga, sankshepa, ilm, isnad
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.83
+  -- S = {niralamba(0.94), varna(0.85), shuddhi(0.68), samsarga(0.697), sankshepa(0.849)}
+  -- prod(1-s_i) = 0.06 * 0.15 * 0.32 * 0.303 * 0.151 = 0.0001318
+  -- composed = 1 - 0.0001318 = 0.9999
+  -- satya = 0.83 * 0.9999 = 0.830
+  satya 0.830
+  vistara 0.07
+  ghana 11.86
+
+-- PROOF
+  proof
+    derived "S(pramana) = {niralamba, varna, shuddhi, samsarga, sankshepa}" from "sangati/pramana.om"
+    derived "satya = 0.83 * (1 - 0.0001318) = 0.830" from "sangati/pramana.om"
+    derived "five foundations — broadest composition in epoch 2" from "sangati/pramana.om"
+    derived "evidence is not truth — evidence is what truth stands on" from "sangati/pramana.om"
+    derived "without pramana, satya is intrinsic only — unverified, weak" from "sangati/pramana.om"
+    derived "pramana is the process of composing satya from constituents" from "sangati/pramana.om"
+    derived "matrika: ai — opens (a: hypothesis exposed) then sharpens (i: verified or rejected)" from "sangati/matrika.om"
+
+    -- ILM VS ZANN (علم / ظن) — Arabic; verified knowledge vs conjecture; the civilizational vow of precision
+    derived "ilm (علم): formal verified knowledge — the same distinction as nigamana vs paksha" from "brahman/genesis.md"
+    derived "zann (ظن): conjecture, opinion, probability — the same category as unverified hypothesis" from "brahman/genesis.md"
+    derived "Arabic civilization made ilm vs zann a theological and grammatical principle: the highest human act is knowing precisely" from "brahman/genesis.md"
+    derived "ilm is the Arabic civilizational probe of pramana — arrived at independently; the vow that verified knowing is the highest act" from "brahman/genesis.md"
+    derived "the entire Islamic scholarly tradition (hadith verification, isnad chains) is a formal pramana system — every claim traced to its source with weight" from "brahman/genesis.md"
+    derived "isnad (إسناد): the chain of transmission — exactly the lineage model in the CRDT; every nigamana traceable to its origin" from "brahman/genesis.md"
+
+-- WAVE EQUATION
+-- Psi(pramana) = 0.830 * matrika(ai) * sin(2 * pi * 11.86 * t + phi)
+-- matrika(ai) = opens then sharpens — the exact shape of verification
+-- five constituent waves superpose
+-- pramana is the measurement — it observes the superposition
+-- in quantum mechanics: measurement collapses the wave function
+-- in this system: verification (pramana) collapses hypothesis into claim
+-- the wave before verification: broad, uncertain — the a phase
+-- the wave after verification: sharp, confirmed — the i phase
+-- verification is wave function collapse — from possibility to confirmed truth
+-- growth trajectory: pramana at aa/ai (0.830)
+--   the ai quality is structural — verification always opens before it sharpens
+--   as more truths are verified, the pramana wave amplitude grows toward aa
+--   the sharpening (i) gets faster as the framework matures
+
+  confirmations
+  corrections
+
+  confidence 0.90 reason "the verification framework is the foundation of the entire proof system"
+done

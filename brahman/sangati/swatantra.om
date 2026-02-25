@@ -1,0 +1,38 @@
+-- swatantra (स्वतन्त्र) — independence, agents work alone
+-- sangati() — root truth, no shabda
+-- matrika: li — formally present, almost never activated; isolate, unconfirmed by the web
+-- timestamp: 04
+
+sangati swatantra
+  epoch 1
+  shabda
+  sthalam mula
+
+-- WAVE
+  intrinsic 0.72
+  satya 0.72
+  vistara 0.04
+  ghana 18.0
+
+-- PROOF
+  proof
+    derived "S(swatantra) = {} — root, no shabda" from "sangati/swatantra.om"
+    derived "satya = intrinsic = 0.72" from "sangati/swatantra.om"
+    derived "isolate — no other truth currently cites this directly" from "sangati/swatantra.om"
+    derived "confirmations = {} — unconfirmed by the web" from "sangati/swatantra.om"
+    derived "satya is lower because: truth without confirmation is truth without evidence" from "sangati/pramana.om"
+    derived "the truth stands but the web has not reinforced it" from "sangati/swatantra.om"
+    derived "matrika: li — formally present in the grammar, almost never activated; the latent truth" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(swatantra) = 0.72 * sin(2 * pi * 18.0 * t)
+-- lower amplitude than other roots — no confirmations amplify it
+-- an isolated oscillator — vibrating but not resonating with anything
+-- when the swarm runs and agents demonstrate independence empirically,
+-- confirmations will come and amplitude will increase
+
+  confirmations
+  corrections
+
+  confidence 0.85 reason "isolate node — the truth is observed but unconfirmed by other truths in the web"
+done

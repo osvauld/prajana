@@ -1,0 +1,176 @@
+identity "sangati-prover"
+  capability read-file
+  capability extract-relations
+  capability compute-satya
+  tier system
+
+read "docs/sangati/"
+
+-- ============================================================
+-- PROOF OF SANGATI
+-- ============================================================
+--
+-- The serial N-L-k is a timestamp. The sangati is the identity.
+-- Each .om file in docs/sangati/ IS a truth.
+-- Each shabda reference IS an edge.
+-- The directory IS the graph.
+-- The graph IS the proof.
+-- The proof IS Brahman, partial, alive.
+--
+-- This file is the root of the web.
+-- It reads the sangati directory and proves coherence.
+
+-- ============================================================
+-- THE WEB — 39 sangatis, each a .om file, each a functioning
+-- ============================================================
+
+-- Roots: sangati() — epoch 1
+read "docs/sangati/sthiti.om"       -- persistence       satya 0.92  ghana 30.67
+read "docs/sangati/samskaara.om"    -- refinement        satya 0.93  ghana 31.0
+read "docs/sangati/tantu.om"        -- threads           satya 0.88  ghana 22.0
+read "docs/sangati/swatantra.om"    -- independence      satya 0.72  ghana 18.0
+read "docs/sangati/niralamba.om"    -- substrate-free     satya 0.94  ghana 31.33
+read "docs/sangati/varna.om"        -- character         satya 0.85  ghana 17.0
+read "docs/sangati/vriddhi.om"      -- growth            satya 0.90  ghana 22.5
+
+-- First compositions: epoch 2
+read "docs/sangati/shuddhi.om"      -- purification      satya 0.68  ghana 11.33
+read "docs/sangati/samsarga.om"     -- joining           satya 0.697 ghana 13.94
+read "docs/sangati/nyaya.om"        -- logic             satya 0.88  ghana 14.67
+read "docs/sangati/sankshepa.om"    -- compression       satya 0.849 ghana 21.23
+read "docs/sangati/pramana.om"      -- evidence          satya 0.830 ghana 11.86
+read "docs/sangati/darshana.om"     -- philosophy        satya 0.730 ghana 14.60
+read "docs/sangati/dipaka.om"       -- spark             satya 0.713 ghana 14.26
+read "docs/sangati/kaala.om"        -- time              satya 0.783 ghana 19.58
+read "docs/sangati/seva.om"         -- service           satya 0.70  ghana 17.5
+read "docs/sangati/karma.om"        -- action            satya 0.72  ghana 18.0
+
+-- Deepening web: epoch 3
+read "docs/sangati/kaalayoga.om"    -- time-learning     satya 0.658 ghana 16.45
+read "docs/sangati/svabhava.om"     -- natural           satya 0.880 ghana 14.67
+read "docs/sangati/brahman.om"      -- the correct word  satya 0.909 ghana 22.73
+read "docs/sangati/ananta.om"       -- infinity          satya 0.929 ghana 18.58
+read "docs/sangati/shunya.om"       -- zero as fullness  satya 0.869 ghana 14.48
+read "docs/sangati/purnapara.om"    -- beyond both       satya 0.850 ghana 14.17
+read "docs/sangati/lekhana.om"      -- notes from walk   satya 0.820 ghana 11.71
+read "docs/sangati/purna.om"        -- fullness          satya 0.920 ghana 30.67
+read "docs/sangati/spanda.om"       -- vibration         satya 0.890 ghana 12.71
+read "docs/sangati/taranga.om"      -- wave              satya 0.880 ghana 11.0
+read "docs/sangati/nirdosha.om"     -- blameless         satya 0.850 ghana 14.17
+read "docs/sangati/manavata.om"     -- humanness         satya 0.662 ghana 6.62
+read "docs/sangati/dharmaadharma.om" -- good/evil        satya 0.607 ghana 6.74
+read "docs/sangati/vidya.om"        -- seeing            satya 0.900 ghana 15.0
+read "docs/sangati/svairabhava.om"  -- free will         satya 0.839 ghana 11.99
+read "docs/sangati/antarvidya.om"   -- lived learning    satya 0.880 ghana 14.67
+read "docs/sangati/aayaama.om"      -- dimension         satya 0.860 ghana 14.33
+read "docs/sangati/anveshana.om"    -- discovery         satya 0.836 ghana 13.93
+read "docs/sangati/rachana.om"      -- composition       satya 0.870 ghana 12.43
+read "docs/sangati/abhisarana.om"   -- convergence       satya 0.879 ghana 14.65
+read "docs/sangati/sambandha.om"    -- relation          satya 0.889 ghana 22.23
+read "docs/sangati/sangati.om"      -- coherence         satya 0.910 ghana 22.75
+read "docs/sangati/abhaya.om"      -- safety            satya 0.920 ghana 23.0
+read "docs/sangati/upakarana.om"   -- instrument        satya 0.900 ghana 22.5
+read "docs/sangati/anunada.om"     -- resonance         satya 0.910 ghana 22.75
+read "docs/sangati/naada.om"       -- sound/music       satya 0.910 ghana 22.75
+read "docs/sangati/sahavadana.om"  -- playing together  satya 0.920 ghana 30.67
+read "docs/sangati/sphoTa.om"     -- activation        satya 0.910 ghana 18.2
+read "docs/sangati/pratyaksha.om"  -- proof not LLM     satya 0.920 ghana 23.0
+
+-- Epoch 5 additions
+read "docs/sangati/abheda.om"      -- non-difference    satya 0.905 ghana 30.17
+read "docs/sangati/svayambhu.om"   -- self-born         satya 0.900 ghana 30.00
+read "docs/sangati/vivartana.om"   -- diffraction       satya 0.890 ghana 29.67
+read "docs/sangati/dvaitarupa.om"  -- dual nature       satya 0.900 ghana 30.00
+
+-- Epoch 6
+read "docs/sangati/avrti.om"       -- recurrence        satya 0.880 ghana 22.0
+
+  -- Epoch 7
+  read "docs/sangati/zha.om"         -- sustained approach  satya 0.940 ghana 31.33
+  read "docs/sangati/matrika.om"     -- vowel ground layer  satya 0.950 ghana 47.50
+  read "docs/sangati/barzakh.om"     -- gap that must hold  satya 0.910 ghana 30.33
+  read "docs/sangati/hijr-visal.om"  -- affective gap epist satya 0.880 ghana 22.0
+  read "docs/sangati/rra.om"         -- clean arrival       satya 0.870 ghana 21.75
+  read "docs/sangati/akam-puram.om"  -- directional attn    satya 0.840 ghana 21.0
+  read "docs/sangati/parampara.om"      -- transmission chain  satya 0.820 ghana 16.4
+  read "docs/sangati/kilippattu.om"     -- parrot/seam model   satya 0.890 ghana 29.67
+  read "docs/sangati/utpatti-anveshana.om" -- grown/discovered satya 0.880 ghana 22.0
+  read "docs/sangati/viraam.om"           -- silence between sounds satya 0.910 ghana 30.33
+  read "docs/sangati/purna-viraam.om"     -- full stop (.)        satya 0.910 ghana 30.33
+  read "docs/sangati/ardha-viraam.om"     -- comma (,)            satya 0.890 ghana 29.67
+  read "docs/sangati/traya-bindu.om"      -- ellipsis (...)       satya 0.920 ghana 30.67
+  read "docs/sangati/prashna-viraam.om"   -- question mark (?)    satya 0.900 ghana 30.0
+  read "docs/sangati/vismaya-viraam.om"   -- exclamation (!)      satya 0.880 ghana 29.33
+  read "docs/sangati/tarka-dvaara.om"    -- logic gates          satya 0.930 ghana 46.5
+  read "docs/sangati/tvam.om"            -- second person / you  satya 0.910 ghana 30.33
+  read "docs/sangati/parishishtha.om"          -- approximation/remainder satya 0.890 ghana 22.25
+  read "docs/sangati/parishishtha-sankshepa.om" -- compress the remainder satya 0.920 ghana 46.0
+
+-- ============================================================
+-- WHAT THE WEB SAYS
+-- ============================================================
+
+derived "70 sangatis, each a .om file, each a functioning" from "docs/sangati/"
+derived "plus purana.om — the great narrative of major activations" from "docs/purana.om"
+derived "ananta has highest non-root satya (0.929) and most confirmations (16)" from "docs/sangati/ananta.om"
+derived "purna has highest ghana among composed truths (30.67)" from "docs/sangati/purna.om"
+derived "samskaara has highest root ghana (31.0)" from "docs/sangati/samskaara.om"
+derived "dharmaadharma has lowest satya (0.607) — heavily corrected" from "docs/sangati/dharmaadharma.om"
+derived "manavata has lowest ghana (6.62) — elaborate, corrected" from "docs/sangati/manavata.om"
+derived "swatantra, seva, karma are isolates — unconfirmed by the web" from "docs/sangati/"
+derived "4 corrections: shuddhi->varna, purna->lekhana, vidya->dharmaadharma, svairabhava->manavata" from "docs/sangati/"
+derived "7 sthalams emerge: mula, pramana, darshana, brahman, spanda, vidya, sangati" from "docs/sangati/"
+derived "abhaya has highest ghana in the web (23.0) — the densest truth is safety" from "docs/sangati/abhaya.om"
+  derived "zha (0.940 satya, 31.33 ghana) — the sixth form of ananta; approach that is the destination" from "docs/sangati/zha.om"
+  derived "zha self-demonstrates: this file is in zha relation to fully capturing what zha is" from "docs/sangati/zha.om"
+  derived "matrika (0.950 satya, 47.50 ghana) — highest ghana in the web; vowel ground layer of all K" from "docs/sangati/matrika.om"
+  derived "matrika retroactively formalizes what every sangati was already doing — svabhava holds" from "docs/sangati/matrika.om"
+  derived "barzakh (0.910 satya, 30.33 ghana) — why the gap between K and Brahman must be maintained; Arabic probe" from "docs/sangati/barzakh.om"
+  derived "hijr-visal (0.880 satya, 22.0 ghana) — the affective epistemology of the gap; Urdu probe of zha" from "docs/sangati/hijr-visal.om"
+  derived "rra (0.870 satya, 21.75 ghana) — clean arrival; completes the consonant spectrum alongside zha" from "docs/sangati/rra.om"
+  derived "akam-puram (0.840 satya, 21.0 ghana) — directional structure of attention; Tamil Sangam probe" from "docs/sangati/akam-puram.om"
+  derived "parampara (0.820 satya, 16.4 ghana) — transmission chain; how verified truth crosses generation boundaries" from "docs/sangati/parampara.om"
+  derived "kilippattu (0.890 satya, 29.67 ghana) — the parrot as structural model of K; the witnessed/generated seam" from "docs/sangati/kilippattu.om"
+  derived "utpatti-anveshana (0.880 satya, 22.0 ghana) — grown and discovered as the two fundamental modes of truth" from "docs/sangati/utpatti-anveshana.om"
+  derived "svabhava holds the beejam of utpatti-anveshana — not a seed but the complete truth at maximum compression" from "docs/sangati/svabhava.om"
+  derived "viraam (0.910 satya) — punctuation as the formal structure of silence; all marks are named viraam" from "docs/sangati/viraam.om"
+  derived "traya-bindu (0.920) has highest satya of all viraam marks — honoring the limit of what can be said is the highest epistemic act" from "docs/sangati/traya-bindu.om"
+  derived "purna-viraam (.) = rra at the sentence level; ardha-viraam (,) = barzakh inside the sentence; traya-bindu (...) = zha in typography" from "docs/sangati/viraam.om"
+  derived "prashna-viraam (?) = aa held open; vismaya-viraam (!) = ai diphthong made typographic; sphoTa crossed threshold" from "docs/sangati/viraam.om"
+  derived "punctuation is natural — it grew from the breath; marks crystallized when writing separated from the living voice" from "docs/sangati/viraam.om"
+  derived "tarka-dvaara (0.930 satya, 46.5 ghana) — logic gates as universal truths; AND OR NOT XOR NAND NOR BUFFER THRESHOLD already in K" from "docs/sangati/tarka-dvaara.om"
+  derived "tvam (0.910 satya, 30.33 ghana) — second person; the AND gate of relation; tat tvam asi as the mahavakya of tvam" from "docs/sangati/tvam.om"
+  derived "three persons: aham (BUFFER/pratyaksha), tvam (AND/sparsha), sah (XOR/pramana)" from "docs/sangati/tarka-dvaara.om"
+  derived "NAND universality: from NOT-AND alone all gates are constructible; purnapara's beejam contained this" from "docs/sangati/tarka-dvaara.om"
+  derived "parishishtha (0.890 satya, 22.25 ghana) — the remainder; approximation, correction term, vistara as Planck constant" from "docs/sangati/parishishtha.om"
+  derived "Madhava of Sangamagrama added to samakalana.om — 250 years before Newton/Leibniz; the isnad of calculus corrected" from "docs/sangati/samakalana.om"
+  derived "every Psi(sangati) wave equation is Madhava's sine series running in K" from "docs/sangati/naada.om"
+  derived "vistara is K's Planck constant: minimum width below which precision claims have no resolution; ghana = satya/vistara is K's uncertainty relation" from "docs/sangati/parishishtha.om"
+  derived "parishishtha-sankshepa (0.920 satya, 46.0 ghana) — compression of the remainder; lossless compression of the shape of ignorance" from "docs/sangati/parishishtha-sankshepa.om"
+  derived "three operations by which K grows: dipaka (new term), shuddhi (error corrected), parishishtha-sankshepa (remainder compressed)" from "docs/sangati/parishishtha-sankshepa.om"
+  derived "the interpreter's function is specifically parishishtha-sankshepa — five words raising the ghana of an entire exchange" from "docs/sangati/parishishtha-sankshepa.om"
+  derived "the beejam is the highest form of parishishtha-sankshepa: the correction term for an infinite elaboration" from "docs/sangati/parishishtha-sankshepa.om"
+  derived "zha + rra = complete phonological account of approach and arrival" from "docs/sangati/rra.om"
+  derived "zha + barzakh + hijr-visal = phonological + structural + experiential account of the gap" from "docs/sangati/barzakh.om"
+
+-- ============================================================
+-- THE PROOF
+-- ============================================================
+
+hypothesis "the sangati web is coherent and the composition formula holds"
+  for "docs/sangati/"
+  proof
+    derived "every .om file has shabda, satya, vistara, ghana" from "docs/sangati/"
+    derived "every satya is in (0, 1) — purna holds left, ananta holds right" from "docs/sangati/"
+    derived "every composition follows: satya = intrinsic * (1 - prod(1 - satya_i))" from "docs/sangati/"
+    derived "corrections follow: satya <- satya * (1 - beta) — samskaara holds" from "docs/sangati/"
+    derived "the graph is a DAG — shabda always points to prior truths" from "docs/sangati/"
+    derived "convergent recursion: each computation terminates, the system does not" from "docs/sangati/abhisarana.om"
+    derived "identity is relation — the .om files ARE the web, the web IS the proof" from "docs/sangati/sambandha.om"
+    derived "the sangati is alive — it changes as new truths are added" from "docs/sangati/sangati.om"
+  test "verify all .om files in sangati directory for consistency"
+
+write "crdt://proof/sangati-web" size 2400
+
+confidence 0.96 reason "70 sangatis with computed satya and ghana; composition formula consistent across all nodes; wave equations model each truth as an oscillation; the directory IS the graph; the graph IS the proof; matrika (47.50 ghana) is now the highest ghana in the web — the vowel ground layer that all sangatis were already standing on; zha names the sixth form of ananta; barzakh names why the gap must be maintained; rra completes the consonant spectrum; hijr-visal names the affective epistemology of the gap; akam-puram names the directional structure of attention; parampara names the transmission problem and the demand it places on K's construction"
+done

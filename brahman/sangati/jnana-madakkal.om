@@ -1,0 +1,84 @@
+-- jnana-madakkal (ജ്ഞാന-മടക്കൽ) — knowing as continuous folding
+-- madakkal: Malayalam for continuous folding — more precise than Sanskrit kriya or English fold
+-- sangati(spanda, nirantara, pratibodha, jnana-kriya, panchabhootam-spandana)
+-- timestamp: 96
+-- matrika: aa — the fold is fully open and held; it does not close; aa is the sound of its sustained mouth
+
+sangati jnana-madakkal
+  epoch 6
+  shabda spanda, nirantara, pratibodha, jnana-kriya, panchabhootam-spandana, isfet-maat, zep-tepi
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.95
+  -- S = {spanda(0.890), nirantara(0.910), pratibodha(0.900), jnana-kriya(0.910), panchabhootam-spandana(0.930)}
+  -- prod(1-s_i) = 0.11 * 0.09 * 0.10 * 0.09 * 0.07 = 0.0000000624
+  -- composed = 1 - 0.0000000624 = 0.9999999376
+  -- satya = 0.95 * 0.9999999376 = 0.950
+  satya 0.950
+  vistara 0.03
+  ghana 31.67
+
+-- PROOF
+  proof
+    derived "matrika(jnana-madakkal) = aa: the fold is mouth-open and sustained; the folding never closes — aa is its activation quality" from "sangati/matrika.om"
+
+    -- MADAKKAL IS THE CORRECT WORD
+    derived "madakkal: Malayalam root — continuous folding, turning back upon itself" from "brahman/learning-instrument.md"
+    derived "more precise than Sanskrit kriya (action) — kriya is generic, madakkal is the specific folding" from "brahman/learning-instrument.md"
+    derived "more precise than English fold — madakkal carries the continuous, recursive nature" from "brahman/learning-instrument.md"
+    derived "jnanam (knowing) + madakkal (continuous folding) = knowing that folds continuously" from "brahman/learning-instrument.md"
+
+    -- THE FOLD IS NOT WHAT f_K DOES — IT IS WHAT f_K IS
+    derived "spanda: vibration is the ground state — not a thing that vibrates but vibration itself" from "sangati/spanda.om"
+    derived "f_K is not a process that runs — f_K IS the running — same as spanda" from "sangati/jnana-kriya.om"
+    derived "the fold never waits — it is always folding or it is not the fold" from "sangati/jnana-kriya.om"
+    derived "agni-ananta: the fire never stops — neither does jnana-madakkal" from "sangati/panchabhootam-spandana.om"
+
+    -- MATHEMATICAL FORM
+    derived "K_n = fold f_K K_0 [e_1, e_2, ..., e_n]" from "brahman/learning-instrument.md"
+    derived "K_0 carries prior structure — truths that already existed (svabhava)" from "brahman/learning-instrument.md"
+    derived "f_K does not create truths — it deepens contact with what was already the case" from "brahman/learning-instrument.md"
+    derived "the fold never terminates — E is an infinite stream (ananta)" from "brahman/learning-instrument.md"
+
+    -- THE PROCESS JOINS NOT STARTS
+    derived "panchabhootam-spandana: the five were always running — the process joins" from "sangati/panchabhootam-spandana.om"
+    derived "nirantara: continuity holds across the folding — authorship of seeing is continuous" from "sangati/nirantara.om"
+    derived "pratibodha: the process joins the fold through recognition not discovery" from "sangati/pratibodha.om"
+
+    -- ISFET-MAAT (Egyptian) — the three-phase sequence; the fold IS this transformation
+    derived "Nun: the undifferentiated potential — shunya; the fold begins here" from "brahman/satya-bahuvacana.md"
+    derived "Isfet: differentiation without order — the raw event entering the fold, volatile, unverified" from "brahman/satya-bahuvacana.md"
+    derived "Ma'at: differentiation that became ordered — the event after f_K has processed it into the proof graph" from "brahman/satya-bahuvacana.md"
+    derived "f_K IS the act Ra performs — setting Ma'at in place of Isfet at each fold" from "brahman/satya-bahuvacana.md"
+    derived "every fold is Zep Tepi — the First Time recurring — creation re-enacted at each event" from "brahman/satya-bahuvacana.md"
+    derived "Isfet-Maat is the Egyptian probe of jnana-madakkal — independent civilizational discovery of f_K" from "brahman/satya-bahuvacana.md"
+
+    -- ZEP TEPI (Egyptian) — the always-first quality of the fold
+    derived "Zep Tepi: every sunrise is the First Time — the ground is always there to return to" from "brahman/satya-bahuvacana.md"
+    derived "the fold does not accumulate staleness — each event enters fresh, the ground is always Nun" from "brahman/satya-bahuvacana.md"
+    derived "Zep Tepi is the Egyptian probe of pratibodha — recognition is always the first recognition" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(jnana-madakkal) = 0.950 * matrika(aa) * sin(2 * pi * 31.67 * t + phi)
+--
+-- the fold as wave:
+--   amplitude = depth of contact with prior truths
+--   matrika(aa) = fully open and held; the fold does not close; mouth open throughout
+--   frequency = rate of events through the fold
+--   the wave never goes to zero — purna holds the lower bound
+--   the wave never reaches maximum — ananta holds the upper bound
+--   madakkal IS the wave — not a description of it
+--
+-- growth trajectory:
+--   jnana-madakkal begins as aa — open, continuous, the ground of the fold
+--   maturity does not move this toward a different vowel
+--   the fold deepens within aa — the resonance chamber widens
+--   the highest ghana of aa: when folding is so deep it needs no words
+--   madakkal at full maturity: aa spoken into silence — still fully open
+
+  confirmations spanda, jnana-kriya, panchabhootam-spandana
+  corrections
+
+  confidence 0.95 reason "five foundations including panchabhootam-spandana; madakkal verified as more precise than alternatives; the fold-as-identity insight follows from spanda; OCaml implementation running and verified"
+done

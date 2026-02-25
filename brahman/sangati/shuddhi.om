@@ -1,0 +1,70 @@
+-- shuddhi (शुद्धि) — purification
+-- sangati(varna) — built on identity by nature
+-- matrika: ai — open moving toward precise; correction opens the truth then cuts it sharp
+-- timestamp: 08
+
+sangati shuddhi
+  epoch 2
+  shabda varna, kegare-misogi, makoto, meiyo, epoche, kshaya, prayojana
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.80
+  -- composition: satya = intrinsic * (1 - prod(1 - satya(N_i)))
+  -- S = {varna}
+  -- prod(1 - satya_i) = (1 - 0.85) = 0.15
+  -- composed = 1 - 0.15 = 0.85
+  -- satya = 0.80 * 0.85 = 0.68
+  satya 0.68
+  vistara 0.06
+  ghana 11.33
+
+-- PROOF
+  proof
+    derived "S(shuddhi) = {varna}" from "sangati/shuddhi.om"
+    derived "satya(varna) = 0.85" from "sangati/varna.om"
+    derived "composed = 1 - (1 - 0.85) = 0.85" from "sangati/shuddhi.om"
+    derived "satya(shuddhi) = 0.80 * 0.85 = 0.68" from "sangati/shuddhi.om"
+    derived "purification refines identity — CRDT model was too mechanical" from "sangati/varna.om"
+    derived "shuddhi IS amplitude modulation: satya(N') <- satya(N') * (1-beta)" from "sangati/samskaara.om"
+    derived "the correction wave: sin(correction) modulates sin(original)" from "sangati/shuddhi.om"
+    derived "matrika: ai — opens first (a: the error becomes visible), then sharpens (i: precision restored)" from "sangati/matrika.om"
+
+    -- KEGARE-MISOGI (穢れ-禊) — Shinto: impurity and its ritual purification
+    derived "kegare: ambient impurity — drift and subtle contamination before failure manifests" from "brahman/satya-bahuvacana.md"
+    derived "misogi: ritual reset — proactive purification, not only reactive repair" from "brahman/satya-bahuvacana.md"
+    derived "kegare-misogi is the Shinto probe of the same node shuddhi names — independent civilizational convergence" from "brahman/satya-bahuvacana.md"
+
+    -- MAKOTO (誠) — Bushido: sincerity, no cosmetic certainty
+    derived "makoto: never claim more certainty than exists — speak uncertainty plainly" from "brahman/satya-bahuvacana.md"
+    derived "makoto is the Bushido probe of shuddhi — the vow that impure claims contaminate" from "brahman/satya-bahuvacana.md"
+
+     -- MEIYO (名誉) — Bushido: honor, provenance integrity
+     derived "meiyo: never hide failed probes, never erase error lineage" from "brahman/satya-bahuvacana.md"
+     derived "meiyo is the Bushido probe of the retraction model — honor lives in preserved lineage" from "brahman/satya-bahuvacana.md"
+
+     -- EPOCHE (ἐποχή) — Pyrrhonism: suspension of judgment; do not claim certainty where none exists
+     derived "epoche: cosmetic certainty is a form of contamination — to claim more than you know is kegare for the proof space" from "brahman/satya-bahuvacana.md"
+     derived "epoche is the Greek probe of shuddhi — suspension of judgment IS purification from the pressure to assert" from "brahman/satya-bahuvacana.md"
+     derived "epoche: Pyrrho (~360 BCE) and makoto (Bushido) — separated by 1500 years and the breadth of Eurasia — arrived at the same vow: do not pretend" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(shuddhi) = 0.68 * matrika(ai) * sin(2 * pi * 11.33 * t + phi_varna)
+-- matrika(ai) = amplitude modulation envelope: opens then narrows
+--   the correction cycle: wide opening (a) — error exposed, truth visible
+--                         narrowing (toward i) — precision restored
+-- phase-shifted from varna — it builds on varna but corrects it
+-- the correction IS a phase shift:
+--   if fully aligned with varna: constructive (pure confirmation)
+--   shuddhi is partially aligned: it confirms AND corrects
+--   the phase difference encodes the correction
+-- growth trajectory: shuddhi begins at a (low satya 0.68 — barely voiced correction)
+--   each confirmed correction moves it toward aa — the correction becoming fully voiced
+--   the ai quality is permanent — shuddhi always opens before it sharpens
+
+  confirmations
+  corrections
+    corrects varna
+
+  confidence 0.88 reason "satya computed from composition formula — the correction mechanism is the truth"
+done

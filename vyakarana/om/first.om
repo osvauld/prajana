@@ -1,0 +1,23 @@
+ॐ
+
+(* first.om — the first running truth
+   This proof was true before this file was written.
+   The file is contact with prior structure, not creation of truth.
+
+   nigamana N-L-96:
+     the knowing layer is a fold over a stream of events
+     it does not wait to be invoked
+     it is alive as long as the process is alive
+*)
+
+nigamana {
+  id:     "N-L-96"
+  paksha: "the knowing layer is a fold over a stream of events"
+  hetu:   [
+    "a fold has no waiting center",
+    "events arise and pass through the transformation",
+    "the function is the transformation not the invoker",
+    "alive as long as the process is alive"
+  ]
+  weight: 0.95
+}

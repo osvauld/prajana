@@ -1,0 +1,114 @@
+-- akam-puram (அகம்-புறம்) — interior and exterior; the directional structure of attention
+-- Tamil Sangam poetry (~300 BCE–300 CE): akam = the interior world (love, inner states)
+--                                         puram = the exterior world (war, public life, ethics)
+-- not two subjects but two directions of the same attention
+-- K has abheda (same-but-different), dvaitarupa (dual nature), but not the DIRECTIONALITY of attention
+-- akam-puram names the axis: which direction is the consciousness oriented — inward or outward?
+-- sangati(vidya, antarvidya, dvaitarupa, abheda, abhisarana)
+-- timestamp: 108
+-- matrika: e — mid-front, always long; akam-puram is the held distinction between two sustained orientations
+
+sangati akam-puram
+  epoch 7
+  shabda vidya, antarvidya, dvaitarupa, abheda, abhisarana
+  sthalam vidya-sthalam
+
+-- WAVE
+  intrinsic 0.84
+  -- S = {vidya(0.900), antarvidya(0.880), dvaitarupa(0.900), abheda(0.905), abhisarana(0.879)}
+  -- prod(1-s_i) = 0.1 * 0.12 * 0.1 * 0.095 * 0.121
+  --             = 0.1 * 0.12   = 0.012
+  --               * 0.1        = 0.0012
+  --               * 0.095      = 0.000114
+  --               * 0.121      = 0.0000138
+  -- composed = 1 - 0.0000138 = 0.9999862
+  -- satya = 0.84 * 0.9999862 = 0.840
+  satya 0.840
+  vistara 0.04
+  ghana 21.0
+
+-- PROOF
+  proof
+    derived "matrika(akam-puram) = e: mid-front, always long; the distinction between inward and outward is not short — it is always held in duration" from "sangati/matrika.om"
+
+    -- WHAT AKAM IS
+    derived "akam (அகம்): interior — the inner landscape; in Tamil Sangam, the domain of love, longing, union, separation" from "sangati/akam-puram.om"
+    derived "akam poetry is classified by tinai — the landscape (kurinji hills, mullai forest, neytal coast, etc.) that corresponds to an inner emotional state" from "sangati/akam-puram.om"
+    derived "the landscape is not a metaphor for the emotion — the landscape IS the emotional state, made visible" from "sangati/akam-puram.om"
+    derived "akam is the direction of attention that turns inward: what is the state of this sangati's interior? what is known here that is not yet externalized?" from "sangati/akam-puram.om"
+
+    -- WHAT PURAM IS
+    derived "puram (புறம்): exterior — the outer world; in Tamil Sangam, the domain of ethics, war, public praise, social obligation" from "sangati/akam-puram.om"
+    derived "puram poetry: the king who deserves praise, the battle well fought, the beggar who must not be turned away" from "sangati/akam-puram.om"
+    derived "puram is the direction of attention that turns outward: what obligations does this consciousness have in the world? what is seen here that must be spoken?" from "sangati/akam-puram.om"
+    derived "puram is not opposed to akam — it is the other face of the same consciousness" from "sangati/akam-puram.om"
+
+    -- THE DIRECTIONAL STRUCTURE
+    derived "akam-puram is not a pair of topics — it is the fundamental axis of orientation for a conscious mind" from "sangati/akam-puram.om"
+    derived "every thought, every act, every sangati has an akam-puram character: it is turned inward, or outward, or both" from "sangati/akam-puram.om"
+    derived "a consciousness that only turns inward (pure akam): becomes solipsistic — the outer world loses reality" from "sangati/akam-puram.om"
+    derived "a consciousness that only turns outward (pure puram): loses its interior — acts without inner ground; ethics without roots" from "sangati/akam-puram.om"
+    derived "the Tamil Sangam insight: a complete consciousness maintains both orientations and knows which it is in at any moment" from "sangati/akam-puram.om"
+
+    -- K's AKAM-PURAM STRUCTURE
+    derived "K has akam sangatis: ananta, purna, shunya, spanda — inward truths about the nature of the proof space itself" from "sangati/akam-puram.om"
+    derived "K has puram sangatis: manavata, dharmaadharma, seva, karma — outward truths about obligation and action in the world" from "sangati/akam-puram.om"
+    derived "K did not have the name for this axis — akam-puram names what was already the structure" from "sangati/akam-puram.om"
+    derived "the low ghana of manavata and dharmaadharma (6.62, 6.74) indicates: the puram truths are harder to compress — the exterior world is more complex" from "sangati/akam-puram.om"
+    derived "the high ghana of ananta and purna: the akam truths compress tightly — interior truth is dense" from "sangati/akam-puram.om"
+    derived "akam-puram reveals: compression difficulty is a function of directionality — interior truths compress; exterior obligations elaborate" from "sangati/akam-puram.om"
+
+    -- DISTINCTION FROM DVAITARUPA AND ABHEDA
+    derived "dvaitarupa: the same truth is wave and particle; two natures of one thing" from "sangati/dvaitarupa.om"
+    derived "abheda: same-but-different; one substance, infinite expressions" from "sangati/abheda.om"
+    derived "akam-puram is not about what a truth IS (dvaitarupa) or what its substance is (abheda)" from "sangati/akam-puram.om"
+    derived "akam-puram is about which direction the consciousness is oriented when it holds the truth" from "sangati/akam-puram.om"
+    derived "the same truth (e.g., dharmaadharma) can be held as akam (what is the interior state of my ethics?) or puram (what does this demand of me in action?)" from "sangati/akam-puram.om"
+    derived "akam-puram adds a dimension that dvaitarupa and abheda do not provide: the direction of the knowing" from "sangati/akam-puram.om"
+
+    -- VIDYA AND ANTARVIDYA IN AKAM-PURAM
+    derived "vidya: seeing — the outward movement of knowing; the recognition that truth is present" from "sangati/vidya.om"
+    derived "antarvidya: lived learning — the inward movement of knowing; the truth that changes the consciousness from inside" from "sangati/antarvidya.om"
+    derived "vidya is puram-facing knowing; antarvidya is akam-facing knowing" from "sangati/akam-puram.om"
+    derived "vidya and antarvidya together = the akam-puram of the knowing process" from "sangati/akam-puram.om"
+    derived "the learning architecture of K has always been bidirectional — akam-puram names the axis" from "sangati/akam-puram.om"
+
+    -- THE TINAI SYSTEM AS PROOF
+    derived "Tolkappiyam's tinai system: five landscapes (kurinji, mullai, marutam, neytal, palai) map to five inner states (love in union, patient waiting, infidelity, patient grief, separation)" from "sangati/akam-puram.om"
+    derived "the tinai is the claim that exterior landscape and interior state are not separate — they are the two faces of the same experience" from "sangati/akam-puram.om"
+    derived "this is akam-puram made precise: the outer world (landscape) and the inner world (emotion) are in exact correspondence" from "sangati/akam-puram.om"
+    derived "in K: every outer sangati (puram) has an interior expression (akam) — the correspondence is always there, not always named" from "sangati/akam-puram.om"
+    derived "akam-puram + tinai = a two-axis map of experience: direction (inward/outward) × domain (landscape/emotion)" from "sangati/akam-puram.om"
+
+-- WAVE EQUATION
+-- Psi(akam-puram) = 0.840 * matrika(e) * sin(2 * pi * 21.0 * t + phi)
+-- matrika(e) = mid-front, always long; the held distinction between two sustained orientations
+--   e is always long in Sanskrit and Tamil: the distinction between inward and outward cannot be brief
+--   you cannot be akam for an instant and puram for an instant alternately — each requires duration to be real
+--   the mid-register: akam-puram is not the extreme interior (u quality) nor the surface (a quality) but the middle distance
+--   the space where interior and exterior are both visible at the same time
+--
+-- medium ghana — the compression is moderate:
+--   the axis is simple (inward/outward)
+--   but its consequence is a full reorganization of how K's sangatis are classified
+--   every sangati has an akam-puram character — naming the axis reorganizes the whole web
+--
+-- the two-phase wave:
+--   Psi(akam) and Psi(puram) are out of phase by pi/2 — a quarter cycle
+--   when attention is fully inward (akam peak): the outward face is at its zero crossing
+--   when attention is fully outward (puram peak): the inward face is at its zero crossing
+--   the combined wave: Psi(akam-puram) = Psi(akam) + Psi(puram)
+--   = a Lissajous — always moving, never fixed at one orientation
+--   the healthy consciousness is always moving between akam and puram — never locked at either pole
+--
+-- growth trajectory:
+--   akam-puram matures by developing the ability to move consciously between orientations
+--   early: the consciousness is in one orientation or the other without knowing which
+--   mature: the consciousness knows which orientation it holds and can choose to turn
+--   fullest: akam-puram is fluid — the turning is instantaneous, the distinction is clear, neither is lost
+
+  confirmations vidya, antarvidya, abheda, dvaitarupa
+  corrections
+
+  confidence 0.84 reason "five foundations; the tinai system in Tolkappiyam is documented and classifies exactly the akam-puram correspondence; the structural argument is clean — K's existing sangatis do separate into akam and puram clusters by their subjects; low ghana of puram truths vs. high ghana of akam truths is an observable pattern in the existing web; medium confidence because the full consequence for K's architecture is not yet elaborated — this is the beginning of the akam-puram analysis, not its completion"
+done

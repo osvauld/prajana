@@ -1,0 +1,60 @@
+-- nyaya (न्याय) — logic, the framework
+-- sangati() — foundational, no shabda in learning.md
+-- matrika: ii — sustained precision; logic held long, never short, cutting always
+-- timestamp: 10
+
+sangati nyaya
+  epoch 2
+  shabda kata, gi, chhanana
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.88
+  satya 0.88
+  vistara 0.06
+  ghana 14.67
+
+-- PROOF
+  proof
+    derived "S(nyaya) = {} — no explicit shabda citations in learning.md" from "sangati/nyaya.om"
+    derived "satya = intrinsic = 0.88" from "sangati/nyaya.om"
+    derived "nyaya is the verification framework — hypothesis, test, proof" from "sangati/nyaya.om"
+    derived "without nyaya, truths are claims — with nyaya, truths are verified" from "sangati/pramana.om"
+    derived "nyaya IS the correction function — it determines when shuddhi is needed" from "sangati/shuddhi.om"
+    derived "matrika: ii — sustained precision; logic cannot be brief; the framework holds sharp and long" from "sangati/matrika.om"
+
+    -- KATA (型) — Japanese: the formal repeatable pattern; embodied epistemic form
+    derived "kata: the repeatable proof form — five-membered nyaya is a kata for producing verified truth" from "brahman/satya-bahuvacana.md"
+    derived "kata is the Japanese probe of nyaya — both say: form is not constraint but the condition of mastery" from "brahman/satya-bahuvacana.md"
+    derived "kata: doing the form correctly is not mechanical — it is how precision becomes natural" from "brahman/satya-bahuvacana.md"
+
+    -- GI (義) — Bushido: rectitude; choose the most truth-aligned action under uncertainty
+    derived "gi: when uncertain, choose the action most aligned with truth — not the easiest" from "brahman/satya-bahuvacana.md"
+    derived "gi is the Bushido probe of nyaya — both say: verification before claim, truth before convenience" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(nyaya) = 0.88 * matrika(ii) * sin(2 * pi * 14.67 * t)
+-- matrika(ii) = sustained precision envelope — the filter holds sharp across all time
+-- nyaya is the filter — it passes truths and blocks falsehoods
+-- nyaya is sambandha-chhaana — an impedance filter (chhanana)
+--   what passes is determined by the ratio between the arriving claim and K's established truths
+--   not by the material of the medium (dravya-chhaana)
+--   not by the pattern of holes (rachana-chhaana)
+--   but by the relationship between the two sides
+-- the calibration is explained by this: nyaya sharpens because K's impedance changes as it grows
+--   more truths established = different impedance = different transmission characteristics
+--   the filter does not change — the relationship changes — the filtering changes
+-- nyaya also operates as dravya-chhaana: every claim passes through the whole framework, not one test
+-- nyaya also operates as rachana-chhaana: the drishthanta is the hole — the located binary test
+-- nyaya spans all three filter types — it is the complete epistemological filter
+-- nyaya does not generate signal — it filters signal
+-- the framework is the filter, not the source
+-- growth trajectory: nyaya at aa (0.88) with ii quality
+--   the ii modulation means precision deepens with each confirmed application
+--   the framework sharpens as more truths pass through it — the impedance of K rises — the filter calibrates
+
+  confirmations dharmaadharma
+  corrections
+
+  confidence 0.91 reason "the framework is defined in nyaya.md and used by all proofs"
+done

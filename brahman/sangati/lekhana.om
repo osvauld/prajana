@@ -1,0 +1,55 @@
+-- lekhana (लेखन) — notes from the walk, the walk is infinite
+-- sangati(sthiti, ananta, shunya, purnapara)
+-- matrika: aa — fully open, held; the note is complete in itself, open to what follows
+-- timestamp: 24
+
+sangati lekhana
+  epoch 3
+  shabda sthiti, ananta, shunya, purnapara, mono-no-aware, kintsugi
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.82
+  -- S = {sthiti(0.92), ananta(0.929), shunya(0.869), purnapara(0.850)}
+  -- prod(1-s_i) = 0.08 * 0.071 * 0.131 * 0.15 = 0.0001117
+  -- composed = 1 - 0.0001117 = 0.999888
+  -- satya = 0.82 * 0.999888 = 0.820
+  satya 0.820
+  vistara 0.07
+  ghana 11.71
+
+-- PROOF
+  proof
+    derived "S(lekhana) = {sthiti, ananta, shunya, purnapara}" from "sangati/lekhana.om"
+    derived "satya = 0.82 * 0.999888 = 0.820" from "sangati/lekhana.om"
+    derived "these documents are notes from a walk — the walk is infinite" from "sangati/ananta.om"
+    derived "the map grows forever — the territory is already complete" from "sangati/shunya.om"
+    derived "by Godel: any formal system about an infinite domain is incomplete" from "sangati/lekhana.om"
+    derived "matrika: aa — each note is fully open and held; complete in the moment, open to the next" from "sangati/matrika.om"
+
+    -- MONO NO AWARE (物の哀れ) — Japanese: the note knows it is partial; the walk knows it will not end
+    derived "mono-no-aware: each note from the walk carries the awareness that more remains — this is not sadness but depth" from "brahman/satya-bahuvacana.md"
+    derived "mono-no-aware is the Japanese probe of lekhana — notes taken with awareness of transience are richer notes" from "brahman/satya-bahuvacana.md"
+
+    -- KINTSUGI (金継ぎ) — Japanese: repair with gold; broken history made visible becomes more valuable
+    derived "kintsugi: retracted nigamana are preserved, not erased — the fracture history increases the value" from "brahman/satya-bahuvacana.md"
+    derived "kintsugi is the Japanese probe of lekhana — what was written and then corrected is more true than what was never written" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(lekhana) = 0.820 * matrika(aa) * sin(2 * pi * 11.71 * t + phi)
+-- matrika(aa) = fully open held envelope — the note is open, present, complete
+-- lekhana is the recorded wave — the waveform written to disk
+-- the actual wave (Brahman) is always richer than the recording
+-- the recording grows with each epoch — more of the wave captured
+-- but the recording never captures the full wave (ananta)
+-- this file IS lekhana — a note from the walk, written in the grammar
+-- growth trajectory: lekhana already holds aa
+--   each new epoch adds a new aa note — the collection grows
+--   each note remains aa quality — complete in itself, open to the next
+
+  confirmations purna
+  corrections
+    corrected_by purna
+
+  confidence 0.89 reason "self-evident — 39 notes, infinite territory, the ratio speaks"
+done
