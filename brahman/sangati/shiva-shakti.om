@@ -106,9 +106,42 @@ sangati shiva-shakti
 --   mature: seen in every nigamana — the claim (Shakti) and the structure (Shiva) are always au
 --   the au becomes fuller — more a, more u, more inseparably simultaneous
 
-  confirmations brahman, abheda, purna
+     -- X, Y, f(X,Y) ∈ ℝⁿ — THE BIOLOGICAL STRUCTURE OF SHIVA-SHAKTI (epoch 11)
+
+     -- THE DHATU: X
+     derived "X is always present — in every being; XX and XY both carry X; no being has ever existed without X; X is the ground dhatu" from "brahman/epochs.md"
+     derived "X maps to Shakti — the ground, the vessel, the force without which nothing manifests; Y cannot exist alone, X can (XX is viable, Y alone is not)" from "brahman/epochs.md"
+     derived "X is the dhatu in the Sanskrit sense — the generative root from which all expression is derived; remove X and the domain collapses" from "sangati/dhatu.om"
+
+     -- THE MODIFIER: Y
+     derived "Y is a modifier, not a second dhatu — Y changes what X expresses but does not replace X; Y only exists in relation to X" from "brahman/epochs.md"
+     derived "Y maps to Shiva — the organizing principle, the direction; without Shakti (X) the organizing principle has nothing to organize; Shiva alone is inert" from "brahman/epochs.md"
+     derived "masculinity is not the presence of Y alone — it is the expression f(X,Y) at a specific testosterone concentration; the intensity dial, not a binary switch" from "brahman/epochs.md"
+
+     -- THE EXPRESSION: f(X,Y) ∈ ℝⁿ
+     derived "f(X,Y) is not linear — not nX + rY; a child is not a weighted average of parents; something genuinely new arises from the combination" from "brahman/epochs.md"
+     derived "f(X,Y) ∈ ℝⁿ — the expression space is n-dimensional; each dimension is one axis of expression; testosterone concentration, estrogen concentration, chromosomal structure, developmental environment, lived experience — each a dimension" from "brahman/epochs.md"
+     derived "every being is a probability distribution over ℝⁿ — not a fixed point; the distribution has a center and a spread; the expression varies across contexts, development, time" from "brahman/epochs.md"
+     derived "masculinity and femininity are not categories — they are regions of ℝⁿ where distributions cluster; most cluster near the axes; some occupy the full complex space; none are fixed points" from "brahman/epochs.md"
+
+     -- SHIKANDI AS A REGION OF ℝⁿ
+     derived "shikandi is not a third fixed category — shikandi is a distribution whose center lies in a region of ℝⁿ that most distributions don't cluster near; valid, not broken; a specific region of the expression space" from "brahman/epochs.md"
+     derived "X? — chromosomally, the ? is not absence but a different modifier; f(X,?) produces a distribution in ℝⁿ that is neither the XX cluster nor the XY cluster; orthogonal, not intermediate" from "brahman/epochs.md"
+
+     -- THE PROOF: ALREADY IN THE CORPUS
+     derived "hybrid vigor is the drishthanta: the child's distribution covers regions of ℝⁿ neither parent's distribution reached; measurable across species; proves f(X,Y) is not linear" from "sangati/dharana.om"
+     derived "emergent traits: a child who is a great musician when neither parent is musical — a dimension was present in ℝⁿ but neither parent's distribution activated it; the combination activates it; proves the space has more dimensions than either parent expressed" from "brahman/epochs.md"
+     derived "the proof was already in the corpus: dharana (n-dimensional capacity), taranga (wave interference in n dimensions), vrnda (n-dimensional coverage), dvividha-marga (n-dimensional exploration) — all confirm ℝⁿ as the correct structure" from "sangati/dharana.om"
+     derived "this is anveshana — the n-dimensional structure was always there; we discovered it, we did not grow it" from "sangati/utpatti-anveshana.om"
+
+     -- CONNECTION TO JIVA
+     derived "two parents — each a distribution in ℝⁿ — produce a child whose distribution is not the overlap of the two parents' distributions; it is a new distribution that can occupy regions neither parent reached" from "sangati/jiva.om"
+     derived "amsha is not a fixed ratio — it is the resonance between two distributions in ℝⁿ; the child's coordinates emerge from the interference pattern, not from averaging" from "brahman/epochs.md"
+     derived "evolution requires at least two parents because single-parent reproduction is replication — the child's distribution is identical to the parent's; no new regions of ℝⁿ are reached; the swarm stagnates" from "sangati/vrnda.om"
+
+  confirmations brahman, abheda, purna, dharana, taranga
   corrections
     corrects "prakrti-purusa as parallel to hylomorphism"
 
-  confidence 0.93 reason "five strong foundations; three independent civilizational probes (Kashmir Shaivism, Aristotle/hylomorphism, Vaisheshika/samavasaya); the chocolate bar is not an analogy — it is a direct demonstration; the chain samavasaya-telos-eudaimonia resolves as three aspects of one truth rather than three separate nodes; the correction of Prakrti-Purusa is necessary and sharp"
+  confidence 0.93 reason "five strong foundations; three independent civilizational probes; the X/Y/f(X,Y) structure is grounded in biology (XX/XY/X?) and proved by hybrid vigor and emergent traits; the ℝⁿ distribution model is confirmed by existing nodes dharana/taranga/vrnda; the proof was already in the corpus — anveshana not utpatti"
 done

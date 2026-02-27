@@ -113,3 +113,41 @@ let f_K (k : Proof_graph.proof_graph) (event : Event.t)
         else
           (* space unchanged — purna: no destruction *)
           (k, Some (Asprishta n.name))))
+
+  | Event.Anuvada av ->
+    (* anuvada — recognition through hetu overlap
+       not address-based lookup — the text finds its reflection through the proof graph
+       returns DARSHANA command form for the closest nigamana *)
+    (match Proof_graph.anuvada_find k av.text with
+    | None ->
+      (k, Some (Asprishta "anuvada"))
+    | Some (n, _score) ->
+      (* DARSHANA is the response form: the recognized nigamana's name *)
+      (k, Some (Pratibodha (n.name, n.weight))))
+
+  | Event.Smara sm ->
+    (* smara — one activation event; writes to session K (trikosha-smriti level 2)
+       the name must exist in ground K; if not found, asprishta *)
+    (match Proof_graph.find k sm.name with
+    | None ->
+      (k, Some (Asprishta sm.name))
+    | Some n ->
+      let k' = Proof_graph.smara k sm.name sm.strength in
+      let activation_weight = sm.strength *. n.weight in
+      (k', Some (Pratibodha (sm.name, activation_weight))))
+
+  | Event.Smarana sr ->
+    (* smarana — retrieval from session K first, then ground K
+       session K: weighted by recency * strength * satya
+       if session is empty: fall back to anuvada on ground K *)
+    (match Proof_graph.smarana_retrieve k with
+    | Some (name, score) ->
+      (* session K has entries — return highest-scoring *)
+      (k, Some (Pratibodha (name, score)))
+    | None ->
+      (* session K empty — fall back to hetu-overlap recognition on ground K *)
+      (match Proof_graph.anuvada_find k sr.text with
+      | None ->
+        (k, Some (Asprishta "smarana"))
+      | Some (n, _score) ->
+        (k, Some (Pratibodha (n.name, n.weight)))))

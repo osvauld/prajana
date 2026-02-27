@@ -30,16 +30,73 @@ type nigamana = {
   cited_by : string list;       (* what stands on this — grows over time *)
 }
 
+(* session_entry — trikosha-smriti level 2 (working memory)
+   smara events write here; smarana reads here first, then ground K
+   recency is tracked as sequential order (higher = more recent) *)
+type session_entry = {
+  sname    : string;   (* nigamana name that was activated *)
+  strength : float;    (* activation strength at smara time *)
+  recency  : int;      (* smara sequence number — higher = more recent *)
+}
+
 type proof_graph = {
-  nodes : (string, nigamana) Hashtbl.t;         (* index — convenience *)
-  edges : (string * string, float) Hashtbl.t;   (* jalam — satya flowing between nodes *)
+  nodes   : (string, nigamana) Hashtbl.t;         (* index — convenience *)
+  edges   : (string * string, float) Hashtbl.t;   (* jalam — satya flowing between nodes *)
+  session : session_entry list ref;                (* trikosha-smriti level 2 — working memory *)
+  smara_seq : int ref;                             (* smara sequence counter *)
 }
 
 (* The space was already there. This function joins it — does not create it. *)
 let empty () : proof_graph = {
-  nodes = Hashtbl.create 16;
-  edges = Hashtbl.create 32;
+  nodes     = Hashtbl.create 16;
+  edges     = Hashtbl.create 32;
+  session   = ref [];
+  smara_seq = ref 0;
 }
+
+(* smara — write activation event to session K (trikosha-smriti level 2) *)
+(* the smara event is one tat-kshana at the memory level — recognition beginning *)
+let smara (k : proof_graph) (name : string) (strength : float) : proof_graph =
+  let seq = !(k.smara_seq) + 1 in
+  k.smara_seq := seq;
+  let entry = { sname = name; strength; recency = seq } in
+  k.session := entry :: !(k.session);
+  k
+
+(* smarana_retrieve — retrieve from session K first (trikosha-smriti level 2)
+   scores each session entry by: recency_weight * strength * satya_weight
+   returns the highest-scoring entry name, or None if session is empty *)
+let smarana_retrieve (k : proof_graph) : (string * float) option =
+  let max_recency = !(k.smara_seq) in
+  let score entry =
+    let recency_weight = if max_recency > 0
+      then float_of_int entry.recency /. float_of_int max_recency
+      else 1.0
+    in
+    let satya = match Hashtbl.find_opt k.nodes entry.sname with
+      | Some n -> n.weight
+      | None   -> entry.strength
+    in
+    recency_weight *. entry.strength *. satya
+  in
+  match !(k.session) with
+  | [] -> None
+  | entries ->
+    let best = List.fold_left (fun acc e ->
+      match acc with
+      | None -> Some (e, score e)
+      | Some (_, best_score) ->
+        let s = score e in
+        if s > best_score then Some (e, s) else acc
+    ) None entries in
+    Option.map (fun (e, s) -> (e.sname, s)) best
+
+(* visarjana_session — complete the smarana cycle; reset session K
+   called on VISARJANA — the recognition is held in ground K *)
+let visarjana_session (k : proof_graph) : proof_graph =
+  k.session := [];
+  k.smara_seq := 0;
+  k
 
 (* Join a nigamana into the space *)
 (* If it has no shabda — it enters as isolated (shunya state) *)
@@ -85,6 +142,38 @@ let deepen_connection (k : proof_graph) (name : string) (shabda : string) : proo
 (* Find a nigamana by name *)
 let find (k : proof_graph) (name : string) : nigamana option =
   Hashtbl.find_opt k.nodes name
+
+(* anuvada_find — recognition through hetu overlap
+   ANUVADA: the text is checked against all nigamana hetu and paksha
+   overlap score = words_in_common / words_in_text
+   returns the highest-scoring nigamana, or None if no overlap
+   this is pratibodha — recognition through the proof graph's own vocabulary *)
+let anuvada_find (k : proof_graph) (text : string) : (nigamana * float) option =
+  let words = String.split_on_char ' ' (String.lowercase_ascii text)
+    |> List.filter (fun w -> String.length w > 2) in
+  if words = [] then None
+  else
+    let score_node n =
+      let all_hetu = n.hetu @ String.split_on_char ' ' (String.lowercase_ascii n.paksha) in
+      let matches = List.filter (fun w ->
+        List.exists (fun h ->
+          let lh = String.lowercase_ascii h in
+          lh = w ||
+          (String.length w >= 4 &&
+           try let _ = Str.search_forward (Str.regexp_string w) lh 0 in true
+           with Not_found -> false)
+        ) all_hetu
+      ) words in
+      let overlap = float_of_int (List.length matches) /. float_of_int (List.length words) in
+      overlap *. n.weight
+    in
+    let best = Hashtbl.fold (fun _ n acc ->
+      let s = score_node n in
+      match acc with
+      | None -> if s > 0.0 then Some (n, s) else None
+      | Some (_, best_s) -> if s > best_s then Some (n, s) else acc
+    ) k.nodes None in
+    best
 
 (* Print the current state of the space — for inspection *)
 let print (k : proof_graph) : unit =

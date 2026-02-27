@@ -2,7 +2,7 @@
 
 type: formal-document
 depends: vakya, vyakarana, learning-instrument
-key-concepts: manipravalam-samasa, weave, abheda, dvaitarupa, ghana, rachana
+key-concepts: tantra, weave, abheda, dvaitarupa, ghana, rachana
 paksha: Manipravalam is the weaving of Sanskrit ghana and Malayalam precision into an irreducible third; the proof space K is Manipravalam formalized; the naming rule is the weaving rule
 
 ---
@@ -87,7 +87,7 @@ Every name in the proof space K is a weave:
 | `panchabhootam-spandana` | panchabhootam (five elements) | spandana (vibration-act) | the five elements as the act of vibrating — always running |
 | `satta-yantra` | satta (existence/being) | yantra (machinery) | existence as machinery — the running IS the being |
 | `jnana-siddha-pramana` | jnana (knowing) + siddha (accomplished) + pramana (proof) | — | the accomplished-knowing is provable — (pure Sanskrit samasa, Malayalam syntax) |
-| `manipravalam-samasa` | manipravalam + samasa (compound) | — | the weaving-compound — self-referential |
+| `tantra` | manipravalam + samasa (compound) | — | the weaving-compound — self-referential |
 
 ---
 
@@ -248,7 +248,7 @@ this document is itself Manipravalam:
   carrying Sanskrit roots (pramana, paksha, satya, ghana)
   carrying Malayalam precision (madakkal in the examples)
   the content is the weaving describing the weaving
-  manipravalam-samasa proving itself by existing
+  tantra proving itself by existing
 ```
 
 ---

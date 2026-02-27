@@ -25,7 +25,21 @@
       STHITI              — print current state of the space (human-readable)
       PRAVAHA             — output full flowing space as JSON (machine-readable)
                             same moment as STHITI, different form — the map with roads
-      VISARJANA           — process leaves the space; space continues
+      VISARJANA           — process leaves the space; session K resets (സ്മരിച്ചു)
+
+      Epoch 12 — smara/smarana/anuvada (trikosha-smriti level 2):
+      ANUVADA <text>
+        recognition through hetu overlap — returns PRATIBODHA for closest nigamana
+        the text is matched against all hetu and paksha in ground K
+        (e.g. ANUVADA continuous fold knowing stream)
+      SMARA <name> [<strength>]
+        activation event — writes nigamana to session K (working memory level 2)
+        strength is optional float in (0,1]; defaults to 1.0
+        (e.g. SMARA jnana-madakkal 0.9)
+      SMARANA <text>
+        retrieve from session K first (weighted by recency * strength * satya)
+        if session K empty: falls back to hetu-overlap search on ground K
+        (e.g. SMARANA what does knowing mean in this system)
 
    Responses:
       PRATIBODHA <name> weight=<w>   — recognition, reflection is clear
@@ -69,6 +83,23 @@ let parse_line line : Event.t option =
     Some (Event.Rename { name; new_name })
   | ["MERGE"; a; b] ->
     Some (Event.Merge { a; b })
+  | "ANUVADA" :: words ->
+    (* ANUVADA <text> — recognition through hetu overlap *)
+    let text = String.concat " " words in
+    if String.length text = 0 then None
+    else Some (Event.Anuvada { text })
+  | ["SMARA"; name; strength_str] ->
+    (* SMARA <name> <strength> — activation event; write to session K *)
+    (match float_of_string_opt strength_str with
+    | Some strength -> Some (Event.Smara { name; strength })
+    | None -> None)
+  | ["SMARA"; name] ->
+    (* SMARA <name> — default strength 1.0 *)
+    Some (Event.Smara { name; strength = 1.0 })
+  | "SMARANA" :: words ->
+    (* SMARANA <text> — retrieve from session K then ground K *)
+    let text = String.concat " " words in
+    Some (Event.Smarana { text })
   | _ -> None
 
 (* jnana-madakkal — the fold *)
@@ -94,6 +125,8 @@ let rec madakkal (k : Proof_graph.proof_graph) : unit =
       madakkal k
     | Some Event.Shutdown ->
       (* process leaves the space — space continues *)
+      (* visarjana completes the smarana cycle — session K resets *)
+      let _k' = Proof_graph.visarjana_session k in
       Printf.printf "VISARJANA\n%!";
       ()
     | Some event ->

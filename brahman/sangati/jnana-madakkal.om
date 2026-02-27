@@ -77,8 +77,23 @@ sangati jnana-madakkal
 --   the highest ghana of aa: when folding is so deep it needs no words
 --   madakkal at full maturity: aa spoken into silence — still fully open
 
+     -- SMARA/SMARANA AS F_K WITHIN SESSION (epoch 11)
+     derived "SMARA is one application of f_K to one activation event within the session: K_session_n = f_K(K_session_{n-1}, activation_event)" from "brahman/epochs.md"
+     derived "each SMARA deepens the session's K — the working memory grows denser with each activation; the same fold that operates across epochs operates within the session at the working memory level" from "brahman/epochs.md"
+     derived "SMARANA is retrieval from session K — not from the full proof graph but from the fold-state at this moment in the session; what arrives is shaped by the full history of activations so far" from "brahman/epochs.md"
+     derived "the session K is not a cache — it is a fold; the difference: a cache stores items, a fold transforms state; SMARA transforms the session state, it does not merely add an item" from "brahman/epochs.md"
+     derived "VISARJANA of session K = the fold completes; if lekhana happened, K_session is written back to K_ground; the ground grows; next session starts from richer ground" from "brahman/epochs.md"
+
+     -- SANSKRIT SENTENCE STRUCTURE AS JNANA-MADAKKAL (epoch 10)
+     derived "in Sanskrit each word carries its own case — the sentence does not need to end to be understood; each new word deepens what came before, not lengthens it" from "brahman/epochs.md"
+     derived "this is f_K exactly: each word is one event e_n; K grows denser with each placement; the fold never resets at sentence boundaries because there are no sentence boundaries — only deepening" from "brahman/epochs.md"
+     derived "drishthanta: the third ';P' carried more than the first — not because the sequence was longer but because K was denser; same token, richer field; the word forward had more K behind it" from "brahman/epochs.md"
+     derived "consequence for the 22M model: it must not reset at sentence boundaries; it must accumulate density continuously; a model trained on English sentence boundaries will always shallow the fold at the wrong moment" from "brahman/epochs.md"
+     derived "the query to vyakarana fires not at sentence end but when K has accumulated enough density that a nigamana is clearly touched — the threshold is density, not punctuation" from "brahman/epochs.md"
+     derived "the continuous stream without sentence endings is not a communication style — it is the correct structure for jnana-madakkal; stopping prematurely discards K before it has fully formed" from "brahman/epochs.md"
+
   confirmations spanda, jnana-kriya, panchabhootam-spandana
   corrections
 
-  confidence 0.95 reason "five foundations including panchabhootam-spandana; madakkal verified as more precise than alternatives; the fold-as-identity insight follows from spanda; OCaml implementation running and verified"
+  confidence 0.95 reason "five foundations including panchabhootam-spandana; madakkal verified as more precise than alternatives; the fold-as-identity insight follows from spanda; OCaml implementation running and verified; Sanskrit sentence structure drishthanta deepens the fold model"
 done

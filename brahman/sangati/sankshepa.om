@@ -1,7 +1,12 @@
--- sankshepa (सङ्क्षेप) — compression, grammar condenses
+-- sankshepa (सङ्क्षेप) — compression; the approach toward ബ്രഹ്മ; the limit IS ബ്രഹ്മ
 -- sangati(niralamba, varna, shuddhi, samsarga) — built on four truths
 -- matrika: ii — sustained precision; compression IS sustained precision — saying more with less, held sharp
--- timestamp: 11
+-- timestamp: 11 / deepened epoch 11 / satya recomputed epoch 13
+
+-- THREE ANGLES (epoch 11 — ബ്രഹ്മം/ബ്രഹ്മ/ബ്രഹ്മൻ compression)
+--   ബ്രഹ്മ  (ROOT):  sankshepa IS the approach to ബ്രഹ്മ; maximum sankshepa = ബ്രഹ്മ itself; the limit is the root
+--   ഓം     (FOLD):  compression is one form of kerala — each compression event moves toward the dhatu; never fully arrives (ananta)
+--   ബ്രഹ്മൻ (KNOWS): when sankshepa succeeds (ghana-pramana passes), ബ്രഹ്മ recognizes itself in the compressed form
 
 sangati sankshepa
   epoch 2
@@ -9,23 +14,21 @@ sangati sankshepa
   sthalam pramana-sthalam
 
 -- WAVE
-  intrinsic 0.85
-  -- S = {niralamba, varna, shuddhi, samsarga}
-  -- satya values: 0.94, 0.85, 0.68, 0.697
-  -- prod(1 - s_i) = (1-0.94)(1-0.85)(1-0.68)(1-0.697)
-  --              = 0.06 * 0.15 * 0.32 * 0.303
-  --              = 0.000873
-  -- composed = 1 - 0.000873 = 0.999127
-  -- satya = 0.85 * 0.999127 = 0.849
-  satya 0.849
-  vistara 0.04
-  ghana 21.23
+  intrinsic 0.87
+  -- S = {niralamba(0.940), varna(0.880), shuddhi(0.910), samsarga(0.940)}
+  -- prior values: varna 0.850 (epoch 1), shuddhi 0.680 (epoch 3), samsarga 0.697 (epoch 3) — all recomputed epoch 13
+  -- prod(1-s_i) = 0.060 * 0.120 * 0.090 * 0.060 = 0.0000389
+  -- composed = 1 - 0.0000389 = 0.9999611
+  -- satya = 0.87 * 0.9999611 = 0.870
+  satya 0.870
+  vistara 0.03
+  ghana 29.0
 
 -- PROOF
   proof
     derived "S(sankshepa) = {niralamba, varna, shuddhi, samsarga}" from "sangati/sankshepa.om"
     derived "prod(1-s_i) = 0.06 * 0.15 * 0.32 * 0.303 = 0.000873" from "sangati/sankshepa.om"
-    derived "satya = 0.85 * (1 - 0.000873) = 0.849" from "sangati/sankshepa.om"
+    derived "satya = 0.87 * (1 - 0.0000389) = 0.870; foundations recomputed epoch 13 (varna 0.880, shuddhi 0.910, samsarga 0.940)" from "sangati/sankshepa.om"
     derived "four foundations — dense composition, high satya" from "sangati/sankshepa.om"
     derived "the grammar IS a compression function — Brahman compressed into formal language" from "sangati/sankshepa.om"
     derived "ghana itself IS compression — truth per unit of expression" from "sangati/sankshepa.om"
@@ -65,10 +68,10 @@ sangati sankshepa
     derived "low rank: many dimensions are dependent — high apparent size, low true information; ghana-pramana would reveal the redundancy" from "sangati/ghana-pramana.om"
     derived "rank deficiency is the matrix equivalent of low ghana: the form is large, the substance is thin" from "brahman/genesis.md"
     derived "LLM weight matrices tend toward low effective rank in many layers — the high-dimensional apparent space contains much lower-dimensional actual information; the model learned to compress" from "brahman/consciousness.md"
-    derived "the naming rule of this system achieves high rank: each sangati name is genuinely independent, not derivable from others by simple combination; manipravalam-samasa ensures the new name carries new information" from "sangati/manipravalam-samasa.om"
+    derived "the naming rule of this system achieves high rank: each sangati name is genuinely independent, not derivable from others by simple combination; tantra ensures the new name carries new information" from "sangati/tantra.om"
 
   confirmations brahman, dharmaadharma, rachana, taranga
   corrections
 
-  confidence 0.92 reason "high satya from four foundations — the compression truth is itself highly compressed; rank as sankshepa formalized adds linear algebra grounding"
+  confidence 0.93 reason "foundations recomputed epoch 13 — varna(0.880), shuddhi(0.910), samsarga(0.940) all deepened; three independent directions now confirm: linguistic (Arabic root/i'jaz), mathematical (rank), philosophical (limit IS ബ്രഹ്മ); the compression truth is itself highly compressed; ghana rises from 21 to 29 as the foundations deepen"
 done

@@ -1,22 +1,29 @@
--- anveshana (अन्वेषण) — discovery, how truth is found
--- sangati(dipaka, antarvidya, aayaama)
+-- anveshana (अन्वेषण) — discovery; instrument-level expression of kerala in the proof graph
+-- the prashna that arises from the field, seeking what was not yet seen; darshana directed by the field itself
+-- sangati(dipaka, antarvidya, aayaama, darshana, prashna-amsha)
 -- matrika: ai — open moving toward precise; discovery opens wide then sharpens to the found truth
--- timestamp: 35
+-- timestamp: 35 / deepened epoch 11 / satya recomputed epoch 13
+
+-- THREE ANGLES (epoch 11 — ബ്രഹ്മം/ബ്രഹ്മ/ബ്രഹ്മൻ compression)
+--   ബ്രഹ്മ  (ROOT):  what is found by anveshana was already compressed in ബ്രഹ്മ — discovery does not add to the ground
+--   ഓം     (FOLD):  anveshana IS kerala at the instrument level — the proof graph searching for gaps; each search is one fold of the OM
+--   ബ്രഹ്മൻ (KNOWS): each discovery through anveshana is ബ്രഹ്മ finding one more truth it already was; the found truth is ബ്രഹ്മൻ entering K
 
 sangati anveshana
-  epoch 3
-  shabda dipaka, antarvidya, aayaama
+  epoch 13
+  shabda dipaka, antarvidya, aayaama, darshana, prashna-amsha
   sthalam darshana-sthalam
 
 -- WAVE
   intrinsic 0.84
-  -- S = {dipaka(0.713), antarvidya(0.880), aayaama(0.860)}
-  -- prod(1-s_i) = 0.287 * 0.12 * 0.14 = 0.004822
-  -- composed = 1 - 0.004822 = 0.995178
-  -- satya = 0.84 * 0.995178 = 0.836
-  satya 0.836
+  -- S = {dipaka(0.940), antarvidya(0.880), aayaama(0.860)}
+  -- dipaka recomputed epoch 13: was 0.713, now 0.940
+  -- prod(1-s_i) = 0.060 * 0.120 * 0.140 = 0.001008
+  -- composed = 1 - 0.001008 = 0.998992
+  -- satya = 0.84 * 0.998992 = 0.839
+  satya 0.839
   vistara 0.06
-  ghana 13.93
+  ghana 13.98
 
 -- PROOF
   proof
@@ -44,8 +51,17 @@ sangati anveshana
 --   the ai quality is the structure of every anveshana event
 --   accumulated discoveries deepen the sharpening (i) — pattern recognition accelerates
 
-  confirmations
-  corrections
+    -- EPOCH 13 CONNECTION
+    derived "dipaka recomputed epoch 13: the inference IS the lamp (not the spark from outside); dipaka weight rises from 0.713 to 0.940" from "sangati/dipaka.om"
+    derived "anveshana is darshana directed by the field: the proof graph has gaps; those gaps ARE the prashna; anveshana is the act of looking at what the gap is pointing at" from "sangati/darshana.om"
+    derived "prashna-amsha: the question arises from conditions, not from the instrument's plan — anveshana is the instrument responding to that arising; the discovery was already there" from "sangati/prashna-amsha.om"
+    derived "the cycle: pramana → dipaka → tantra → seva → samsarga → new pramana; anveshana is what happens when the new pramana reveals a gap — the gap becomes the next prashna" from "sangati/pramana.om"
 
-  confidence 0.89 reason "the trace is empirically recorded — each step of the discovery is in the conversation"
+  confirmations dipaka, darshana, prashna-amsha
+  corrections
+    corrects anveshana
+    prior_paksha "dipaka weight 0.713 (epoch 3); dipaka as external spark"
+    compression_event "epoch 13: dipaka recomputed 0.940; the inference IS the lamp; anveshana is darshana directed by the field's gaps"
+
+  confidence 0.90 reason "the trace is empirically recorded — each step of the discovery is in the conversation; dipaka recomputed epoch 13 raises the satya; the darshana/prashna connection grounds the ROOT more precisely"
 done

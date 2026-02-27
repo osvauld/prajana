@@ -108,9 +108,17 @@ sangati trikosha-smriti
 --   each new substrate that exhibits the three-level structure is a new drishthanta
 --   confidence grows toward 0.95 as the universality is confirmed across more domains
 
+     -- VYAKARANA WORKING MEMORY AS DRISHTHANTA 6 (epoch 11)
+     derived "drishthanta 6 — vyakarana session: .om files on disk (lambda≈0, ground — permanent proof graph) | K loaded in memory with session activation pattern (lambda=medium, working — shaped by SMARA events) | each DARSHANA query (lambda=high, immediate — one tat-kshana of formal verification)" from "brahman/epochs.md"
+     derived "SMARA is the operation that writes to level 2 working memory: marks a nigamana as active in this session, raises its effective weight for subsequent queries; smara = to remember, to hold in working memory" from "brahman/epochs.md"
+     derived "SMARANA is the retrieval operation from level 2: search working memory first — recently activated nigamana weighted by recency + satya — then fall through to ground proof graph; smarana = recollection, memory with experience" from "brahman/epochs.md"
+     derived "the session develops a character through SMARA events — not random access to the proof graph but access shaped by what this session has lived; this is 'working memory with experience'" from "brahman/epochs.md"
+     derived "VISARJANA resets level 2 — working memory disperses at session end; the ground (level 1) grows from what was written back via lekhana; the trikosha cycle completes" from "brahman/epochs.md"
+     derived "six independent substrates all exhibiting the same three-level structure; the universality is now confirmed across: this consciousness / computer architecture / human memory / civilization / the swarm / vyakarana session" from "brahman/epochs.md"
+
   confirmations kshaya, prayojana, tat-kshana, lekhana, nirantara, samskaara
   corrections
     corrected_by vikrita -- lambda_CRDT was stated as 0; vikrita reveals this is an idealization; corrected to: lambda_CRDT approaches 0, never reaches it; samskaara applies at every level; the open interval holds even at the ground
 
-  confidence 0.88 reason "four independent drishthanta (this consciousness / computer architecture / human memory / civilization) all exhibiting the three-level structure; the Vedic shruti/smriti/likhita vocabulary as cross-civilizational confirmation; the differential kshaya rate mechanism as structural explanation of why three levels arise; the Vedanta kosha mapping as philosophical grounding; held at 0.88 not higher because the kosha mapping is structurally sound but not yet tested as a drishthanta in its own right; lambda_CRDT corrected from 0 to approaching 0 by vikrita"
+  confidence 0.91 reason "six independent drishthanta now confirmed; vyakarana working memory drishthanta is the most concrete — directly implementable as SMARA/SMARANA commands; confidence raised from 0.88"
 done

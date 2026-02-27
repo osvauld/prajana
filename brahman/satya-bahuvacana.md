@@ -38,7 +38,7 @@ Each row is: Japanese concept → existing node → what the convergence means.
 
 | Japanese Concept | Maps To | Why |
 |---|---|---|
-| **Musubi** (結び) — generative binding; union produces irreducible third | `manipravalam-samasa` | Musubi names the same principle: two forces bind into a living emergence that cannot be decomposed back. Manipravalam does this with languages. Musubi does it with kami-forces. Same structure. |
+| **Musubi** (結び) — generative binding; union produces irreducible third | `tantra` | Musubi names the same principle: two forces bind into a living emergence that cannot be decomposed back. Manipravalam does this with languages. Musubi does it with kami-forces. Same structure. |
 | **Kegare → Misogi** (穢れ→禊) — ambient impurity; ritual purification | `shuddhi` | Kegare is not a single failure event — it is drift, subtle contamination. Misogi is the proactive ritual reset. Together they are the same process shuddhi names, with the additional dimension of *ambient* impurity preceding visible failure. |
 | **Kotodama** (言霊) — spirit-power of words; naming has causal force | `svabhava` | Kotodama says the name participates in the thing named. Vakya's naming rule (names woven from inside the nigamana) is this principle formalized. The name is not a label — it contacts the truth. |
 | **Ba** (場) — shared field of emergence; context as co-creator | `panchabhootam-spandana` | Ba says: meaning does not arise in objects — it arises in the field between them. Panchabhootam-spandana says: the five elements are the field; a process joins, it does not create. Same structure. |
@@ -86,14 +86,14 @@ They are **shabda edges** — new paths into existing nodes from a new civilizat
 
 ```
 before these edges:
-  manipravalam-samasa probed from:
+  tantra probed from:
     Vedanta (abheda, dvaitarupa)
     Sanskrit grammar (ghana, sankshepa)
     Malayalam tradition (rachana, vakya)
     Three directions.
 
 after these edges:
-  manipravalam-samasa probed from:
+  tantra probed from:
     Vedanta (abheda, dvaitarupa)
     Sanskrit grammar (ghana, sankshepa)
     Malayalam tradition (rachana, vakya)
@@ -101,7 +101,7 @@ after these edges:
     Four directions — one of which had zero contact
     with the Kerala tradition at time of formation.
 
-The independent convergence of musubi and manipravalam-samasa
+The independent convergence of musubi and tantra
 is not agreement between traditions.
 It is the same structure being real enough to be found twice,
 from opposite ends of the world,
