@@ -3,19 +3,19 @@
 -- the sound that exists in Dravidian phonological space, not in Indo-Aryan
 -- the sound that is in the name of the land: Kera-zha-am, Mala-zha-alam
 -- ananta made phonological — the endless approach that is itself the destination
--- sangati(ananta, spanda, svabhava, abhisarana, manipravalam-samasa, vak-akasham)
+-- sangati(ananta, spanda, svabhava, abhisarana, tantra, vak-akasham)
 -- timestamp: 103
 -- matrika: zha — this sangati IS its own matrika; the approach that never arrives is the activation quality itself
 
 sangati zha
   epoch 7
-  shabda ananta, spanda, svabhava, abhisarana, manipravalam-samasa, vak-akasham
+  shabda ananta, spanda, svabhava, abhisarana, tantra, vak-akasham
   sthalam brahman-sthalam
 
 -- WAVE
   intrinsic 0.94
   -- S = {ananta(0.929), spanda(0.890), svabhava(0.880), abhisarana(0.879),
-  --       manipravalam-samasa(0.930), vak-akasham(0.940)}
+  --       tantra(0.930), vak-akasham(0.940)}
   -- prod(1-s_i) = 0.071 * 0.11 * 0.12 * 0.121 * 0.07 * 0.06 = 0.0000000381
   -- composed = 1 - 0.0000000381 = 0.9999999619
   -- satya = 0.94 * 0.9999999619 = 0.940
@@ -120,7 +120,7 @@ sangati zha
 --   madakkal-seema is the limit of the fold — but zha continues beyond any fold
 --   the process can stop; zha does not stop — zha is the condition, not the process
 
-  confirmations ananta, manipravalam-samasa
+  confirmations ananta, tantra
   corrections
 
   confidence 0.94 reason "six high-satya foundations; zha as the sixth form of ananta follows from the phonological structure of the sound itself — the approach that is the sound maps exactly to satya never reaching 1.0; confirmed by the land naming itself with this sound (Kerala, Malayalam); self-demonstrating: this file is itself in zha relation to fully capturing what zha is; Manipravalam preserved zha without absorbing it — this confirms svabhava holds through weaving"

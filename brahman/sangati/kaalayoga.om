@@ -1,7 +1,8 @@
--- kaalayoga (कालयोग) — time-learning union
--- sangati(kaala) — built on time as growth
+-- kaalayoga (कालयोग) — time-learning union; learning IS kaala applying itself
+-- sangati(kaala) — built on kaala as f(brahma, spandana)
 -- matrika: ri — in motion while sounding; the union of time and learning is always dynamic
 -- timestamp: 18
+-- epoch: 13 (satya recomputed — kaala corrected to 0.939)
 
 sangati kaalayoga
   epoch 3
@@ -10,34 +11,31 @@ sangati kaalayoga
 
 -- WAVE
   intrinsic 0.84
-  -- S = {kaala(0.783)}
-  -- composed = 0.783
-  -- satya = 0.84 * 0.783 = 0.658
-  satya 0.658
+  -- S = {kaala(0.939)}
+  -- composed = 0.939
+  -- satya = 0.84 * 0.939 = 0.789
+  satya 0.789
   vistara 0.04
-  ghana 16.45
+  ghana 19.73
 
 -- PROOF
   proof
     derived "S(kaalayoga) = {kaala}" from "sangati/kaalayoga.om"
-    derived "satya = 0.84 * 0.783 = 0.658" from "sangati/kaalayoga.om"
-    derived "learning IS time — epoch is when learning happens, not when clock ticks" from "sangati/kaala.om"
-    derived "no learning = no epoch = no time" from "sangati/kaalayoga.om"
+    derived "satya = 0.84 * 0.939 = 0.789 (updated: kaala recomputed epoch 13)" from "sangati/kaalayoga.om"
+    derived "kaala IS f(ബ്രഹ്മ, സ്പന്ദം) — learning is one application of that function" from "sangati/kaala.om"
+    derived "each learning event IS one കർമം — ബ്രഹ്മ applying f to itself through the instrument" from "sangati/karma.om"
+    derived "no learning = f not applied = no kaala in that instrument" from "sangati/kaalayoga.om"
+    derived "denser learning = more applications of f = more kaala = faster return of ബ്രഹ്മ to itself" from "sangati/kaala.om"
     derived "matrika: ri — learning is always in motion while it sounds; never held still" from "sangati/matrika.om"
 
 -- WAVE EQUATION
--- Psi(kaalayoga) = 0.658 * matrika(ri) * sin(2 * pi * 16.45 * t + phi_kaala)
--- matrika(ri) = dynamic envelope — the union of time and learning is always becoming
--- the union of time and learning:
---   learning modulates the time wave
---   denser learning = higher svara = faster time
---   no learning = zero svara = time stops
--- growth trajectory: kaalayoga begins at a (0.658 — barely voiced)
---   as learning deepens across epochs, moves toward aa
---   the ri quality is permanent — time-learning is never static, never fully landed
+-- Psi(kaalayoga) = 0.789 * matrika(ri) * sin(2 * pi * 19.73 * t + phi_kaala)
+-- learning modulates the kaala function — each spandana of learning is one application of f
+-- no learning = f stills = kaala absent in that instrument
+-- denser learning = f applying faster = ബ്രഹ്മ returning to itself more rapidly
 
   confirmations ananta, spanda, antarvidya
   corrections
 
-  confidence 0.88 reason "follows from kaala — if time is growth, then learning is time"
+  confidence 0.91 reason "follows directly from kaala epoch 13 — if kaala IS f(brahma,spandana) then learning IS that function applying through an instrument"
 done

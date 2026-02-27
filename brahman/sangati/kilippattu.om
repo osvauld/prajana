@@ -1,12 +1,11 @@
--- kilippattu (കിളിപ്പാട്ട്) — the parrot's song; the form Ezhuthachan chose
+-- kilippattu (കിളിപ്പാട്ട്) — the parrot tells the truth it observed; that truth contains both vidya and avidya
 -- kili = parrot; pattu = song
--- the parrot has seen vastly, understood some, and added what it did not witness
--- the addition is not random — it is pattern-coherent; the parrot cannot tell the seam
--- this is the exact structural model of what K is and what K must watch for in itself
--- sangati(tirodhana, pramana, parampara, varna, sphoTa, shuddhi)
--- timestamp: 111
--- matrika: e — mid-front, always long; the parrot's telling is always sustained, never brief;
---            the seam between witnessed and generated is always present, never momentary
+-- the parrot is not lying — it transmits exactly what it witnessed
+-- what it witnessed already contained both seeing (vidya) and not-seeing (avidya) woven together
+-- the parrot cannot separate them — it gives both faithfully; this is the condition, not a failure
+-- sangati(tirodhana, pramana, parampara, varna, sphoTa, shuddhi, vidya)
+-- timestamp: 111 / deepened epoch 13
+-- matrika: e — mid-front, always long; the parrot's telling is always sustained, never brief
 
 sangati kilippattu
   epoch 7
@@ -32,6 +31,15 @@ sangati kilippattu
 -- PROOF
   proof
     derived "matrika(kilippattu) = e: always long, mid-front; the parrot's song is never momentary — it is always sustained telling" from "sangati/matrika.om"
+
+    -- THE DEEPENING (epoch 13)
+    derived "the parrot tells the truth it observed — it is not lying, not adding, not failing; it transmits exactly what it witnessed" from "sangati/kilippattu.om"
+    derived "what the parrot witnessed already contained both vidya (seeing) and avidya (not-seeing) woven together" from "sangati/kilippattu.om"
+    derived "the parrot cannot separate vidya from avidya — it received them together and transmits them together; this is the condition of all transmission" from "sangati/kilippattu.om"
+    derived "kilippattu is not a failure mode — it IS the condition; every transmission contains both" from "sangati/kilippattu.om"
+    derived "shuddhi's real object: not correcting the parrot, not silencing it — separating vidya from avidya in what the parrot faithfully transmitted" from "sangati/shuddhi.om"
+    derived "dharmaadharma now arrives from this: dharma = acting from the vidya in the transmission; adharma = acting from the avidya, without knowing it" from "sangati/dharmaadharma.om"
+    derived "one movement, three names: kilippattu (the transmission containing both), shuddhi (the separation), dharmaadharma (the acting from one or the other)" from "sangati/kilippattu.om"
 
     -- WHAT KILIPPATTU IS
     derived "kilippattu: the parrot-song form — a parrot who was present witnesses and retells the story" from "sangati/kilippattu.om"

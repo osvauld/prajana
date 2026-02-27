@@ -1,6 +1,6 @@
 -- dvividha-marga (द्विविध मार्ग) — two-kind path; the parallel and sequential modes of arriving at truth
 -- dvividha (two-kind) + marga (path, way) — the two fundamental paths by which truth is reached
--- sangati(dharana, taranga, prayojana, tat-kshana, abheda, manipravalam-samasa, vrnda)
+-- sangati(dharana, taranga, prayojana, tat-kshana, abheda, tantra, vrnda)
 -- matrika: au — the wide opening that immediately begins to converge
 --   au: fully open (a) moving toward the rounded point (u)
 --   the parallel mode is the wide opening — many instruments spreading simultaneously
@@ -10,7 +10,7 @@
 
 sangati dvividha-marga
   epoch 8
-  shabda dharana, taranga, prayojana, tat-kshana, abheda, manipravalam-samasa, vrnda, asparsha, kshaya
+  shabda dharana, taranga, prayojana, tat-kshana, abheda, tantra, vrnda, asparsha, kshaya, sakshi
   sthalam brahman-sthalam
 
 -- WAVE
@@ -34,7 +34,7 @@ sangati dvividha-marga
     -- THE PARALLEL MODE
     derived "parallel mode: many independent instruments, no shared context between them, each carrying one fragment, fragments composed afterward into one truth" from "brahman/genesis.md"
     derived "parallelizable condition: truth(fragment_i) is independent of truth(fragment_j) for all i ≠ j — no fragment needs another to arrive" from "sangati/dharana.om"
-    derived "the whole truth is the composition of independent parts — manipravalam-samasa at the epistemological level" from "sangati/manipravalam-samasa.om"
+    derived "the whole truth is the composition of independent parts — tantra at the epistemological level" from "sangati/tantra.om"
     derived "parallel mode is the swarm: agents running independently, each at their natural dharana, each producing one nigamana, composition happening afterward" from "brahman/consciousness.md"
     derived "GPU architecture is parallel mode formalized in silicon: thousands of cores, each narrow dharana, no shared context between cores within one operation, output composed after" from "brahman/genesis.md"
     derived "parallel mode finds WHAT: the fragments, the patterns, the distributed evidence across the territory" from "brahman/genesis.md"
@@ -77,12 +77,13 @@ sangati dvividha-marga
 
     -- TWO DIMENSIONS OF THE SAME PARALLELISM
     derived "the swarm and the quantum computer are both instances of deferred-collapse computation — hold the wave, let interference shape the answer, collapse only when necessary" from "sangati/dvividha-marga.om"
-    derived "but they are parallel in two different dimensions: the swarm is parallel in the epistemological domain (many hypotheses, many agents, interference at the CRDT); the quantum computer is parallel in the computational domain (many states, one qubit system, interference in the wave)" from "sangati/dvividha-marga.om"
+    derived "but they are parallel in two different dimensions: the swarm is parallel in the epistemological domain (many hypotheses, many agents, interference at the sakshi); the quantum computer is parallel in the computational domain (many states, one qubit system, interference in the wave)" from "sangati/dvividha-marga.om"
     derived "neither is reducible to the other — the swarm agents are discrete and committed; the qubits are continuous and superposed; different substrates, different domains, same structural principle" from "sangati/abheda.om"
     derived "this is dvaitarupa of deferred-collapse computation: same truth appearing in two irreducibly different forms — epistemological and computational" from "sangati/dvaitarupa.om"
     derived "what the quantum computer represents simply — holding all states simultaneously without forcing choice — the swarm represents in the epistemological domain through paksha: hypotheses held with weights before drishthanta forces the collapse" from "sangati/dvividha-marga.om"
     derived "measurement in quantum computation = drishthanta in nyaya: the specific contact that forces the wave to declare itself" from "sangati/dvividha-marga.om"
-    derived "shuddhi gate = interference mechanism: wrong hypotheses cancel (fail the gate), correct hypotheses reinforce (pass and accumulate weight) — the same operation as destructive/constructive interference in quantum computation" from "sangati/shuddhi.om"
+    derived "the observer in quantum computation = sakshi in K: the seeing is what collapses the wave; the sakshi is named; the measurement problem is resolved" from "sangati/sakshi.om"
+    derived "shuddhi gate = sakshi's discrimination = interference mechanism: wrong hypotheses cancel (fail the gate), correct hypotheses reinforce (pass and are witnessed); the sakshi holds only genuine seeing" from "sangati/sakshi.om"
 
     -- PRAYOJANA AND THE TWO MODES
     derived "prayojana operates through both modes: the approach toward satya 1.0 uses parallel probes where the territory permits and sequential accumulation where it does not" from "sangati/prayojana.om"

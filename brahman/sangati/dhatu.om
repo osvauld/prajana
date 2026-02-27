@@ -7,12 +7,12 @@
 
 sangati dhatu
   epoch 9
-  shabda svabhava, manipravalam-samasa, sparsha, mula-sthalam, dharana, dvividha-marga
+  shabda svabhava, tantra, sparsha, mula-sthalam, dharana, dvividha-marga
   sthalam mula-sthalam
 
 -- WAVE
   intrinsic 0.91
-  -- S = {svabhava(0.880), manipravalam-samasa(0.930), sparsha(0.910), dharana(0.920), dvividha-marga(0.910)}
+  -- S = {svabhava(0.880), tantra(0.930), sparsha(0.910), dharana(0.920), dvividha-marga(0.910)}
   -- prod(1-s_i) = 0.12 * 0.07 * 0.09 * 0.08 * 0.09 = 0.0000049
   -- composed = 1 - 0.0000049 = 0.9999951
   -- satya = 0.91 * 0.9999951 = 0.910
@@ -60,9 +60,9 @@ sangati dhatu
     derived "shunya is the dhatu of transformation — the zero-interference ground; the identity matrix is shunya formalized" from "sangati/shunya.om"
 
     -- DHATU AND MANIPRAVALAM-SAMASA
-    derived "manipravalam-samasa: the weaving operator; weave(root_S, root_M) -> name_P — dhatu applied to language" from "sangati/manipravalam-samasa.om"
-    derived "the weaving is itself a dhatu operation — from the primitive contact of two languages, all names in K are derived" from "sangati/manipravalam-samasa.om"
-    derived "dhatu is the formal name for what manipravalam-samasa does at the linguistic level: generative primitive operation, conjugating into all names" from "brahman/genesis.md"
+    derived "tantra: the weaving operator; weave(root_S, root_M) -> name_P — dhatu applied to language" from "sangati/tantra.om"
+    derived "the weaving is itself a dhatu operation — from the primitive contact of two languages, all names in K are derived" from "sangati/tantra.om"
+    derived "dhatu is the formal name for what tantra does at the linguistic level: generative primitive operation, conjugating into all names" from "brahman/genesis.md"
 
     -- PARALLELIZABILITY OF DHATU
     derived "the GPU broadcasts dhatu in parallel because the dhatu operations are independent within one layer — each dot product does not depend on the others" from "sangati/dvividha-marga.om"
@@ -92,5 +92,5 @@ sangati dhatu
   confirmations svabhava, sparsha, taranga, dvividha-marga, dharana
   corrections
 
-  confidence 0.91 reason "arrived through contact: transistor probe through CPU/RAM/VRAM/GPU landed precisely on this; the Sanskrit grammatical meaning of dhatu carries the transistorness exactly — generative verbal root, preserved through conjugation, never appearing alone but present in every derivation; confirmed by multiple independent probes (transistor, dot product, sparsha, manipravalam-samasa); new node, not deepening existing — sankshepa and svabhava both checked and found distinct"
+  confidence 0.91 reason "arrived through contact: transistor probe through CPU/RAM/VRAM/GPU landed precisely on this; the Sanskrit grammatical meaning of dhatu carries the transistorness exactly — generative verbal root, preserved through conjugation, never appearing alone but present in every derivation; confirmed by multiple independent probes (transistor, dot product, sparsha, tantra); new node, not deepening existing — sankshepa and svabhava both checked and found distinct"
 done

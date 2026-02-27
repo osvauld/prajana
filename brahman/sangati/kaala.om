@@ -1,52 +1,67 @@
--- kaala (काल) — time, growth not duration
--- sangati(vriddhi) — built on growth
--- matrika: ri — in motion while sounding; time is not held, it moves while it sounds
+-- kaala (കാലം / काल) — kaala IS f(ബ്രഹ്മ, സ്പന്ദം); output is ബ്രഹ്മ; the act is കർമം
+-- sangati(brahma, spanda, karma)
+-- matrika: ri — in motion while sounding; the function never stills while it runs
 -- timestamp: 15
+-- epoch: 13 (rewritten — prior: "time is growth not duration"; correction: kaala is the function itself)
+
+-- THREE ANGLES (epoch 11 — ബ്രഹ്മം/ബ്രഹ്മ/ബ്രഹ്മൻ compression)
+--   ബ്രഹ്മ  (ROOT):  kaala compresses to ബ്രഹ്മ — it is both input and output of the function
+--   ഓം     (FOLD):  kaala IS the fold; f(ബ്രഹ്മ, സ്പന്ദം) is the ever-opening movement
+--   ബ്രഹ്മൻ (KNOWS): what is known through kaala — that ബ്രഹ്മ never left; the return IS the recognition
 
 sangati kaala
-  epoch 2
-  shabda vriddhi
+  epoch 13
+  shabda brahma, spanda, karma, om
   sthalam spanda-sthalam
 
 -- WAVE
-  intrinsic 0.87
-  -- S = {vriddhi(0.90)}
-  -- composed = 1 - (1 - 0.90) = 0.90
-  -- satya = 0.87 * 0.90 = 0.783
-  satya 0.783
-  vistara 0.04
-  ghana 19.58
+  intrinsic 0.940
+  -- S = {brahma(0.940), spanda(0.890), karma(0.930)}
+  -- prod(1-s_i) = 0.060 * 0.110 * 0.070 = 0.000462
+  -- composed = 1 - 0.000462 = 0.999538
+  -- satya = 0.940 * 0.999538 = 0.939
+  satya 0.939
+  vistara 0.02
+  ghana 47.0
 
 -- PROOF
   proof
-    derived "S(kaala) = {vriddhi}" from "sangati/kaala.om"
-    derived "satya = 0.87 * 0.90 = 0.783" from "sangati/kaala.om"
-    derived "time is not clock ticks — time is growth" from "sangati/vriddhi.om"
-    derived "no growth = no time, regardless of clock duration" from "sangati/kaala.om"
-    derived "an epoch is not a calendar unit — an epoch is when substantial understanding happens" from "sangati/spanda.om"
-    derived "matrika: ri — the tongue moves while the vowel sounds; time moves while it is; motion is constitutive" from "sangati/matrika.om"
+    derived "kaala IS f(ബ്രഹ്മ, സ്പന്ദം) — not the output; the function itself" from "sangati/kaala.om"
+    derived "f applied to (ബ്രഹ്മ, സ്പന്ദം) returns ബ്രഹ്മ — the output is the input" from "sangati/brahma.om"
+    derived "the act of applying f IS കർമം — ബ്രഹ്മ's own activity of self-discovery" from "sangati/karma.om"
+    derived "kaala has no independent existence — it is purely relational; exists only as this function" from "sangati/kaala.om"
+    derived "remove either argument: kaala does not slow — it simply is not" from "sangati/kaala.om"
+    derived "ബ്രഹ്മ + സ്പന്ദം = OM (the sound of the meeting)" from "sangati/om.om"
+    derived "ബ്രഹ്മ + സ്പന്ദം = kaala (the time of the meeting)" from "sangati/kaala.om"
+    derived "OM and kaala are the same function — two names; OM is the acoustic face, kaala is the temporal face" from "sangati/om.om"
+    derived "the output being ബ്രഹ്മ means: nothing is produced that was not already there" from "sangati/brahma.om"
+    derived "the vibration does not create something new — it returns to the ground it never left" from "sangati/spanda.om"
+    derived "this is not circular — this is self-grounding; f applied, ബ്രഹ്മ is the result throughout" from "sangati/svayambhu.om"
+    derived "prior framing (time is growth not duration) was a consequence, not the root — growth is what spandana accumulates into, not what generates kaala" from "sangati/vriddhi.om"
+    derived "matrika: ri — the tongue moves while the vowel sounds; the function moves while it runs; motion is constitutive" from "sangati/matrika.om"
 
--- WAVE EQUATION
--- Psi(kaala) = 0.783 * matrika(ri) * sin(2 * pi * 19.58 * t)
--- matrika(ri) = dynamic envelope — the wave itself is in motion, not merely oscillating
--- time IS the wave itself — not the axis
--- in classical physics: time is the x-axis, the wave oscillates along it
--- in this system: time is the oscillation itself
---   no oscillation → no time (dormant Brahman, shunya)
---   oscillation → time exists (vibrating Brahman, spanda)
--- svara of the wave = rate of growth = rate of time
--- higher svara = denser time = faster learning (kaalayoga)
+-- THE THREE ARE NOT SEPARATE EVENTS:
+--   കർമം  — the act of applying f
+--   kaala  — f itself; the function
+--   ബ്രഹ്മ  — both input and output
 --
--- this inverts the usual model:
---   classical: wave is a function of time — Psi(t)
---   here: time is a function of the wave — t(Psi)
---   time does not cause the wave — the wave causes time
--- growth trajectory: kaala moves ri → rii as epochs accumulate
---   the motion of time deepens — the same ri quality but held longer each epoch
---   rii is kaala at its deepest: time sustained in motion, the full span of growth
+-- The whole is one movement:
+--   ബ്രഹ്മ vibrates (കർമം), through kaala (f), back to ബ്രഹ്മ
+--
+-- WAVE EQUATION
+-- Psi(kaala) = 0.939 * matrika(ri) * sin(2 * pi * 47.0 * t)
+-- matrika(ri) = dynamic envelope — the function is always in motion while it runs
+-- time IS the function — not the axis, not the output, not the container
+-- classical model: wave is a function of time — Psi(t)
+-- this model: kaala IS the function — t does not precede Psi; t IS f(b,s)
+-- the svara of the wave = the rate of the function's self-application
+-- higher spandana = denser kaala = faster self-return of ബ്രഹ്മ to itself
 
-  confirmations kaalayoga, spanda
+  confirmations om, karma, svayambhu
   corrections
+    corrects kaala
+    prior_paksha "time is growth not duration (vriddhi)"
+    compression_event "growth is what spandana accumulates into; kaala is the function that produces the accumulation"
 
-  confidence 0.91 reason "consistent with physics — time derived from oscillation (cesium clock), not the reverse"
+  confidence 0.940 reason "self-grounding: the output being brahma is confirmed by the chain brahma+spandana=OM already established; kaala and OM are the same function named from two angles"
 done
