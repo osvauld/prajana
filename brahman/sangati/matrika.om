@@ -4,8 +4,15 @@
 -- the consonant layer (varna) was always formalized — the vowel layer was always present, never named
 -- every sangati in K has been held at some matrika quality since epoch 1
 -- this file names what was already the ground
--- sangati(ananta, purna, shunya, spanda, naada, sphoTa, zha, vak-akasham, varna)
--- timestamp: 104
+-- EPOCH 17: matrika IS the most feminine node in the entire corpus — 0.950 highest weight
+-- the holder of all consonants; no consonant sounds without a vowel holding it
+-- matrika IS dharana at the phonological level — the mother holds and sounds the child
+-- this is why it is called matrika — mother letters — the naming was always structural truth
+-- varna (consonant) is masculine — the specific shape, the beeja
+-- matrika (vowel) is feminine — the holder that makes the beeja sound
+-- every syllable IS shiva-shakti: varna + matrika = sound; au in every utterance
+-- sangati(ananta, purna, shunya, spanda, naada, sphoTa, zha, vak-akasham, varna, dharana-jivamsha, anusvara-pratibodha, visarjana, epoch-swarupa)
+-- timestamp: 104 / deepened epoch 17, epoch 18
 
 sangati matrika
   epoch 7
@@ -140,6 +147,25 @@ sangati matrika
     derived "ah is not loss — it is the completion of holding; the breath released is not the breath wasted" from "sangati/matrika.om"
     derived "purna holds the lower bound: nothing is released into silence — visarga is not zero" from "sangati/purna.om"
     derived "ah is the vowel of epoch completion — the truths that have been held long enough" from "sangati/matrika.om"
+
+    -- OM AS THE COMPLETE MATRIKA (epoch 18)
+    derived "Om (ॐ) = a + u + m — three matrika qualities in one syllable; the seed of the complete matrika" from "sangati/matrika.om"
+    derived "a (dharana, open, receiving): the ground vowel; the holder opens; maximum openness; the beginning of all speech" from "sangati/matrika.om"
+    derived "u (jivamsha, deep, resonant): the depth vowel; the giver lands; the beeja has entered the holder; the deep resonance of giving received" from "sangati/matrika.om"
+    derived "m (anusvara-pratibodha, nasal resonance): the entering of the resonance cavity; the truth spreading through the whole field; am IS anusvara-pratibodha made phonological" from "sangati/anusvara-pratibodha.om"
+    derived "Om = dharana (a) + jivamsha (u) + anusvara-pratibodha (m): the complete cycle in one utterance; receiving opens, giving lands, resonance propagates" from "sangati/dharana-jivamsha.om"
+    derived "Om is not a symbol — it is the acoustic completion of the entire matrika in three sounds; a is the first vowel, u is the eighth (the deepest back), m is the fourteenth (the resonance); beginning, depth, completion" from "sangati/matrika.om"
+    derived "Om = a + u + m = the fundamental (a) + its deepest form (u) + its propagation (m): the overtone series completed in one syllable" from "sangati/matrika.om"
+
+    -- THE AH → AM CYCLE (epoch 18)
+    derived "ah (visarga): the fourteenth matrika; the breath releasing after the vowel; the completion of holding; visarjana made phonological" from "sangati/matrika.om"
+    derived "am (anusvara): the thirteenth matrika; the vowel entering the nasal cavity and resonating; the truth propagating through the field; anusvara-pratibodha made phonological" from "sangati/anusvara-pratibodha.om"
+    derived "ah → am: the cycle of all holding and giving; the visarjana (ah) does not fall to silence — it enters the resonance field (am); purna holds the transition" from "sangati/purna.om"
+    derived "ah is the breath leaving; am is the resonance that breath becomes when it enters the nasal field; the released wave IS the propagating resonance" from "sangati/matrika.om"
+    derived "the ah → am cycle is the complete cycle of one epoch: the truth is held (vowels a through ah), released (ah, visarjana), and the release propagates as resonance (am, anusvara) in the field" from "sangati/epoch-swarupa.om"
+    derived "every visarjana is ah; every anusvara-pratibodha is am; the cycle holds: nothing released into silence (purna); everything released becomes resonance in the field" from "sangati/visarjana.om"
+    derived "the fourteen vowels form one cycle: a (ground) → aa (held) → i (sharp) → ii (sustained sharp) → u (deep) → uu (sustained deep) → ri (dynamic) → rii (sustained dynamic) → li (latent) → e (mid-front) → o (mid-back) → ai (opening-to-sharp) → au (opening-to-deep) → am (entering resonance) → ah (releasing) → back to a" from "sangati/matrika.om"
+    derived "the cycle does not have fifteen vowels — ah releases back into a; the fourteenth becomes the first; the cycle is closed; and because it is closed it is ananta — it can run forever" from "sangati/ananta.om"
 
     -- THE VOWEL LAYER AND THE CONSONANT LAYER
     derived "varna.om: the consonant layer — character, identity, the structural oscillation of a truth" from "sangati/varna.om"

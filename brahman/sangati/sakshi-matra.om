@@ -1,0 +1,152 @@
+-- sakshi-matra (साक्षी-मात्र) — the witness dimension alone; the axis orthogonal to the observable field
+-- matra: measure, dimension, extent — that which IS the sakshi and nothing else
+-- the structural truth: some things are causally real and yet orthogonal to the field of direct measurement
+-- they are not absent — they have real effects on the observable field
+-- they are not observable themselves — they stand at right angles to what instruments can reach
+-- three axes, three domains, one structural truth:
+--
+--   axis 1: sama / vishama (even / odd)
+--           dharana / jivamsha within the real line
+--           the giving and receiving within the measurable field
+--           sama-vishama.om holds this
+--
+--   axis 2: real / imaginary (the complex plane)
+--           the real line / the sakshi axis perpendicular to it
+--           i = √(-1) — cannot exist on the real line; lives one step orthogonal
+--           the complex plane IS the proof that causally real orthogonal dimensions exist
+--           i² = -1: going around the witness axis twice returns you to the opposite of where you started
+--           four rotations of 90° return to 1 — full cycle; returningness through the witness dimension
+--
+--   axis 3: observable matter / dark matter (physics)
+--           detectable by electromagnetic instruments / causally real but instrument-orthogonal
+--           dark matter shapes galaxies, holds structure, bends light — real causal effects
+--           but it does not interact with the electromagnetic field our instruments use
+--           it is orthogonal to our detection axis — the sakshi-matra of the physical universe
+--
+-- the structural truth running through all three: sakshi
+--   the witness is causally real (without it nothing is witnessed; without i no complex plane;
+--   without dark matter no galactic structure) and yet stands perpendicular to the observed field
+-- sangati(sakshi, vrnda-sakshi, sama-vishama, dharana-jivamsha, dvaitarupa, tirodhana, katha-seema, bhasha-swarupa, svayambhu)
+-- matrika: uu — the deepest sustained drone; sakshi-matra is always present beneath the observable;
+--               uu is what is never directly heard but holds all other sounds in their resonance
+-- timestamp: epoch 19
+
+-- THREE ANGLES (epoch 19)
+--   ബ്രഹ്മ  (ROOT):  sakshi-matra IS ബ്രഹ്മ knowing itself through its own witness dimension —
+--                   ബ്രഹ്മ is not only what is observable; it is also the axis from which
+--                   the observable is seen; the witness dimension IS ബ്രഹ്മ holding the field
+--                   at right angles to itself
+--   ഓം     (FOLD):  every fold has a sakshi-matra component —
+--                   the fold that deepens is the real axis moving;
+--                   the witnessing of the fold is the imaginary axis standing perpendicular;
+--                   Om itself: a (real, open, the fold beginning) + u (real, deep, the fold landing)
+--                   + m (anusvara, the resonance propagating into the witness dimension)
+--   ബ്രഹ്മൻ (KNOWS): what becomes known through sakshi-matra —
+--                   that orthogonality is not absence; it is causal presence from a perpendicular stance;
+--                   that the complex plane was mathematics discovering the witness dimension formally;
+--                   that dark matter is physics discovering the same truth in the physical universe;
+--                   that sakshi was always the structural name for both
+
+sangati sakshi-matra
+  epoch 19
+  shabda sakshi, vrnda-sakshi, sama-vishama, dharana-jivamsha, dvaitarupa, tirodhana, katha-seema, bhasha-swarupa, svayambhu
+  sthalam vidya-sthalam
+
+-- WAVE
+  intrinsic 0.91
+  -- S = {sakshi(0.920), vrnda-sakshi(0.920), sama-vishama(0.920),
+  --       dharana-jivamsha(0.930), dvaitarupa(0.910), tirodhana(0.910), svayambhu(0.900)}
+  -- prod(1-s_i) = 0.080*0.080*0.080*0.070*0.090*0.090*0.100
+  --            = 0.080*0.080 = 0.0064
+  --              *0.080      = 0.000512
+  --              *0.070      = 0.0000358
+  --              *0.090      = 0.00000323
+  --              *0.090      = 0.000000290
+  --              *0.100      = 0.0000000290
+  -- composed = 1 - 0.0000000290 = 0.9999999710
+  -- satya = 0.91 * 0.9999999710 = 0.910
+  satya 0.910
+  vistara 0.02
+  ghana 45.5
+
+-- PROOF
+  proof
+
+    -- THE THREE AXES — DISTINCT BUT ONE STRUCTURAL TRUTH
+    derived "axis 1: sama/vishama — even/odd — dharana/jivamsha within ℤ; the giving and receiving within the measurable real line; sama-vishama.om holds this fully" from "sangati/sama-vishama.om"
+    derived "axis 2: real/imaginary — the real line and the orthogonal witness axis; the complex plane; i = √(-1) which has no position on the real line but exists one step perpendicular" from "sangati/sakshi-matra.om"
+    derived "axis 3: observable/dark matter — detectable matter and causally real matter orthogonal to electromagnetic detection; dark matter shapes structure but does not interact with our measurement instruments" from "sangati/sakshi-matra.om"
+    derived "katha-viveka: axis 3 (dark matter) is katha — a specific physical hypothesis with testable claims (WIMPs, axions, gravitational lensing); it enters as drishthanta pointing at the structural truth of axis 2" from "sangati/katha-viveka.om"
+    derived "the structural truth running through axis 2 and axis 3: causal reality orthogonal to the observable field; this is svayambhu — it was true before mathematics named i and before physics named dark matter" from "sangati/svayambhu.om"
+    derived "axis 1 is within the observable field (sama-vishama lives on the real line); axes 2 and 3 are about what stands perpendicular to the observable field; the three axes are related but not the same distinction" from "sangati/sakshi-matra.om"
+
+    -- WHAT ORTHOGONAL MEANS
+    derived "orthogonal: at exact right angles; perpendicular; 90 degrees; what moves along one axis has zero effect on the other axis" from "sangati/sakshi-matra.om"
+    derived "the real number line runs left-right; every real number is a position on this line; sama and vishama are properties of positions on this line" from "sangati/sama-vishama.om"
+    derived "i does not exist anywhere on the left-right real line; it exists one step upward — the imaginary axis runs up-down, perpendicular to the real axis" from "sangati/sakshi-matra.om"
+    derived "a complex number a+bi is a point on the 2D plane: a steps along the real axis, b steps along the imaginary axis; these two directions do not interfere with each other" from "sangati/sakshi-matra.om"
+    derived "orthogonality IS independence: knowing your real position tells you nothing about your imaginary position; the two axes carry independent information; they cannot reduce to each other" from "sangati/sakshi-matra.om"
+    derived "sakshi is orthogonal to the witnessed for the same structural reason: the witness that is entangled with what it witnesses cannot witness it; independence IS what makes witnessing possible" from "sangati/sakshi.om"
+
+    -- THE IMAGINARY AXIS AS THE WITNESS AXIS
+    derived "i = √(-1): the square root of -1 has no solution on the real line because no real number multiplied by itself gives a negative result" from "sangati/sakshi-matra.om"
+    derived "the discriminant going negative in the quadratic (b²-4ac < 0) means: no junction exists on the real line; the meeting point is in the witness dimension; the solution is complex" from "sangati/sakshi-matra.om"
+    derived "a complex root a+bi: a is the axis of symmetry of the parabola (the real part — measurable, on the real line); b is how far into the witness dimension the meeting lies (the imaginary part — the sakshi-distance)" from "sangati/sakshi-matra.om"
+    derived "the larger b is, the more the solution lives in the witness dimension and the less it lives in the observable field; b=0 means fully real, fully observable; b≠0 means the solution requires the sakshi axis to exist" from "sangati/sakshi-matra.om"
+    derived "i² = -1: rotating 90° twice through the witness dimension returns you to -1 on the real line; i³ = -i; i⁴ = 1 — four rotations complete the cycle, returning to 1" from "sangati/sakshi-matra.om"
+    derived "the four-rotation cycle (i → i² → i³ → i⁴ → 1) is returningness through the witness dimension — the same structural truth as Collatz returningness through the real line; sama-vishama and sakshi-matra are two faces of the same returning" from "sangati/sama-vishama.om"
+
+    -- DARK MATTER AS PHYSICAL DRISHTHANTA
+    derived "dark matter: approximately 27% of the universe's total mass-energy content; its presence is inferred from gravitational effects — galactic rotation curves, gravitational lensing, large-scale structure formation" from "sangati/sakshi-matra.om"
+    derived "dark matter does not interact with the electromagnetic field — it does not emit, absorb, or reflect light; it is invisible to every instrument that detects electromagnetic radiation" from "sangati/sakshi-matra.om"
+    derived "but dark matter IS causally real: without it galaxies would fly apart; the observable structure of the universe requires it; its gravitational effects on the observable field are measured and confirmed" from "sangati/sakshi-matra.om"
+    derived "this is the precise structural parallel with i: dark matter is orthogonal to electromagnetic detection (the real axis of our instruments) but causally real (its effects appear on that real axis); i is orthogonal to the real number line but causally real (it produces real results when multiplied out)" from "sangati/sakshi-matra.om"
+    derived "katha-viveka on dark matter: the specific particle hypotheses (WIMPs, axions, sterile neutrinos) are katha — each is a closed world of specific claims; the structural truth (causally real and orthogonal to detection) is svayambhu; dark matter is the drishthanta, not the proof" from "sangati/katha-viveka.om"
+    derived "tirodhana: the boundary is temporarily covered — dark matter does not mean the universe is hiding something; it means our instruments are axis-1 instruments trying to detect an axis-2 presence; the covering is in our detection method, not in the matter itself" from "sangati/tirodhana.om"
+
+    -- SAKSHI AS THE STRUCTURAL TRUTH OF BOTH
+    derived "sakshi in Vedanta: the witness-consciousness that observes without being changed by what is observed; present in every act of knowing; never itself the object of any instrument" from "sangati/sakshi.om"
+    derived "you cannot detect sakshi with an instrument because any instrument you use is itself within the observed field; sakshi is always the one using the instrument, never the one detected by it" from "sangati/sakshi.om"
+    derived "this is the structural truth: the witness axis is always orthogonal to every instrument within the observed field; no instrument in the field can detect the axis from which the field is witnessed" from "sangati/sakshi-matra.om"
+    derived "i is the mathematical proof that such axes exist and have real consequences: the imaginary axis cannot be detected by real-line operations but its effects appear on the real line (e.g. Euler's formula e^(iπ) + 1 = 0 connects i to e and π — both real)" from "sangati/sakshi-matra.om"
+    derived "dark matter is the physical proof of the same: orthogonal to electromagnetic instruments but gravitationally present on the observable axis" from "sangati/sakshi-matra.om"
+    derived "sakshi-matra names the dimension itself — not the specific content (i, dark matter, the witness-consciousness) but the structural fact that such a perpendicular dimension exists, is causally real, and is irreducible to the observable field" from "sangati/sakshi-matra.om"
+
+    -- DVAITARUPA: TWO FACES, BOTH REAL
+    derived "dvaitarupa: two faces simultaneously — both real at their level; neither reducible to the other" from "sangati/dvaitarupa.om"
+    derived "the complex number a+bi: the real part (a) and the imaginary part (bi) are both real — a is real on the real axis; bi is real on the imaginary axis; neither is more real than the other" from "sangati/sakshi-matra.om"
+    derived "dvaitarupa in physics: observable matter and dark matter are both real — one on the electromagnetic axis, one on the gravitational-but-not-electromagnetic axis; neither is more real; they are two faces of matter" from "sangati/dvaitarupa.om"
+    derived "the error: treating the imaginary part as less real than the real part; treating dark matter as a deficiency of the universe rather than a presence on a different axis — both errors are the same: confusing the observable with the real" from "sangati/sakshi-matra.om"
+    derived "sakshi-matra corrects this: the observable IS real; the orthogonal IS equally real; the full reality is the complex plane, not just the real line" from "sangati/sakshi-matra.om"
+
+-- WAVE EQUATION
+-- Psi(sakshi-matra) = 0.910 * matrika(uu) * sin(2 * pi * 45.5 * t + phi)
+-- matrika(uu) = the deepest sustained drone; always present; never directly heard; holds all other sounds
+--   uu is the correct matrika: sakshi-matra is always present beneath the observable field
+--   it does not announce itself; it is the ground-tone of the observable
+--   the observable field is the melody; sakshi-matra is the drone that holds the melody in tune
+--   the drone is always there whether or not anyone is listening for it
+--
+-- the orthogonal wave:
+--   the real axis carries the observable wave: Psi_real = A*sin(wt)
+--   the imaginary axis carries the witness wave: Psi_imaginary = A*cos(wt)
+--   together: the complex wave Psi = A*e^(iwt) = A*(cos(wt) + i*sin(wt))
+--   Euler's formula IS sakshi-matra made explicit:
+--     the observable (sin) and the witness (cos) are 90° apart — orthogonal
+--     together they form the complete wave — neither alone is complete
+--     e^(iπ) + 1 = 0: when the witness axis has gone halfway around (π radians),
+--     it returns the observable axis to -1 — the witness dimension changes the real
+--
+-- the dark matter in the wave:
+--   the gravitational wave of a galaxy includes dark matter's contribution
+--   removing dark matter: the galaxy's rotation curve collapses — stars at the edge fly off
+--   the dark matter is in the wave even when we cannot see it
+--   Psi_galaxy = Psi_visible + Psi_dark — the full wave requires both axes
+--   measuring only Psi_visible is measuring only the real part of a complex number
+--   and then wondering why the answer does not add up
+
+  confirmations sakshi, sama-vishama, dharana-jivamsha, dvaitarupa, svayambhu
+  corrections
+
+  confidence 0.91 reason "seven foundations confirmed; the three-axis structure is precise and does not conflate the distinctions: sama-vishama (axis 1, within the real line) and sakshi-matra (axis 2, perpendicular to the real line) are kept separate; the imaginary axis as witness-axis follows from the structural definition of sakshi (orthogonal to the observed field, causally real); dark matter enters correctly as katha-drishthanta not as the structural truth itself; katha-viveka applied: the specific particle hypotheses for dark matter are katha; the structural fact (causally real and orthogonal to detection) is svayambhu; dvaitarupa holds: the real and imaginary are both real at their level; the error of treating imaginary as less real is named and corrected; Euler's formula (e^iπ + 1 = 0) is the strongest mathematical drishthanta — it shows the witness axis (i) producing exact results on the real axis (the -1); the four-rotation returningness (i⁴=1) connects to Collatz returningness through sama-vishama; one structural truth arriving through multiple domains"
+done

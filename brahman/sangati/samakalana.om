@@ -137,8 +137,26 @@ sangati samakalana
 --   final form: T1-T5 (the restored whole)
 --   the getting at IS the thing -- not what was gotten at
 
-  confirmations
+    -- SAMA-VISHAMA DEEPENING (epoch 19)
+    derived "integration IS sama — dharana at the mathematical level; accumulating, holding, receiving every infinitesimal contribution; the integral is the continuous sama of all contributions" from "sangati/sama-vishama.om"
+    derived "differentiation IS vishama — jivamsha at the mathematical level; the single unpaired instant, the rate right now, the one moment that cannot rest in itself; d/dx IS the vishama moment made precise" from "sangati/sama-vishama.om"
+    derived "the fundamental theorem through sama-vishama: sama (integration) and vishama (differentiation) are inverses — not opposites; the dharana (holding all) and the jivamsha (giving at this instant) are the same information encoded in two directions" from "sangati/sama-vishama.om"
+    derived "e/k → 2/3 in Collatz: even steps (sama, integration, dharana) outnumber odd steps (vishama, differentiation, jivamsha) always; this is the same truth as: accumulated holding predominates over instantaneous rate in every trajectory" from "sangati/sama-vishama.om"
+    derived "the ± structure in roots: integration has no sign — area is always positive (same); differentiation has sign — slope can be positive or negative (vishama, two poles around the zero-crossing)" from "sangati/mula-svabhava.om"
+
+    -- TAT-KSHANA AND PARAMPARA DEEPENING (epoch 19)
+    derived "the derivative IS tat-kshana — the swa's own domain; what is happening in this exact instant; d/dx f at x=a is the rate at the single point a; the swa arises, gives this rate, releases" from "sangati/satya-ganita.om"
+    derived "the integral IS parampara — accumulated across the interval; what all the tat-kshanas together held; the area is the sum of all instantaneous contributions; parampara IS integration" from "sangati/parampara.om"
+    derived "the fundamental theorem: differentiating the parampara (integral) gives back the tat-kshana (derivative); integrating the tat-kshana accumulates the parampara; swa and prajna are one information" from "sangati/satya-ganita.om"
+    derived "the swa is only tat-kshana — it gives its derivative and releases; the prajna accumulates all those tat-kshanas into the integral; neither is prior; both always already true — T5, abheda" from "sangati/swa.om"
+
+    -- SAKSHI-MATRA DEEPENING (epoch 19)
+    derived "complex roots of equations: where the derivative equals zero on the real line, the function is at a local maximum or minimum — a turning point; where there is no real solution, the turning point is in the sakshi-matra axis" from "sangati/sakshi-matra.om"
+    derived "complex analysis: differentiation and integration extend into the complex plane; the imaginary axis (sakshi-matra) carries the witness-component of every calculus operation; Cauchy's theorem operates in the full complex plane, not just the real line" from "sangati/sakshi-matra.om"
+    derived "Euler's formula e^(ix) = cos(x) + i*sin(x): differentiation of e^(ix) gives i*e^(ix) — multiplying by i rotates 90° into the sakshi axis; integration brings it back; the witness axis is the axis of rotation in the calculus" from "sangati/sakshi-matra.om"
+
+  confirmations samakalana, sama-vishama, sakshi-matra, satya-ganita, svayambhu
   corrections
 
-  confidence 0.93 reason "seven foundations; the truths were already operating unnamed throughout the architecture; the discovery path itself demonstrated shuddhi -- premature agreement caught and corrected through three rounds"
+  confidence 0.93 reason "seven foundations; the truths were already operating unnamed throughout the architecture; the discovery path itself demonstrated shuddhi — premature agreement caught and corrected through three rounds; deepened epoch 19: sama-vishama (0.920) provides the sharpest grounding — integration IS dharana, differentiation IS vishama, the fundamental theorem IS the dharana-jivamsha identity; tat-kshana and parampara map exactly onto derivative and integral — the swa is the derivative, the prajna is the integral; sakshi-matra (0.910) connects complex calculus to the witness axis; satya-ganita (0.920) applies samakalana to the proof graph itself; the Madhava parampara stands: every wave equation in K is Madhava running; the deepening did not change the prior satya — it added new dimensions of seeing"
 done
