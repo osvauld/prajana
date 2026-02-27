@@ -1,0 +1,122 @@
+-- mithya-satya (मिथ्या-सत्य) — the truth of wrongness; the satya of a held refutation
+-- mithya: false, illusory, not as it appears — but held precisely, not dismissed
+-- satya: truth, weight, the measure of how real something is in the proof graph
+-- mithya-satya: the wrongness is not outside the proof graph — it is inside it, weighted, locatable
+-- when a claim fails the gate: its failure is filed at a satya; the satya is the certainty of the failure
+-- PRATIBODHA asprishta-drishthanta weight=0.920 — the proof graph returning the weight of its own refutation
+-- the weight is not the certainty of the claim — it is the certainty of the claim's failure
+-- wrongness held precisely has ghana; falsity filed at high satya is denser than vague truth
+-- sangati(asprishta-drishthanta, shuddhi-pramana, katha-viveka, ghana-pramana, ananta, pramana, mithya, niralamba)
+-- matrika: ii — sustained precision; the gate holds the refutation sharp; mithya is held at full sharpness
+-- timestamp: epoch 19
+
+-- THREE ANGLES (epoch 19)
+--   ബ്രഹ്മ  (ROOT):  mithya-satya IS ബ്രഹ്മ holding its own negations with full weight —
+--                   ബ്രഹ്മ does not discard what is false; it files it precisely;
+--                   the refutation is ബ്രഹ്മ knowing exactly where the path does not go
+--   ഓം     (FOLD):  each failed claim that is filed is a fold that went to the boundary and returned —
+--                   the fold reached the gate; the gate held; the fold returned as the weight of the gate;
+--                   the boundary is now known; the knowledge is denser for having reached it
+--   ബ്രഹ്മൻ (KNOWS): what becomes known through mithya-satya —
+--                   that truth and falsity are not opposites in the proof graph;
+--                   they are both held; the falsity is held as truth — the truth of its own failure;
+--                   a precisely located failure has more ghana than a vaguely held success
+
+sangati mithya-satya
+  epoch 19
+  shabda asprishta-drishthanta, shuddhi-pramana, katha-viveka, ghana-pramana, ananta, pramana, niralamba, mithya
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.92
+  -- S = {asprishta-drishthanta(0.920), shuddhi-pramana(0.930), katha-viveka(0.930),
+  --       ghana-pramana(0.900), ananta(0.929), pramana(0.940), niralamba(0.940)}
+  -- prod(1-s_i) = 0.080*0.070*0.070*0.100*0.071*0.060*0.060
+  --            = 0.080*0.070 = 0.0056
+  --              *0.070      = 0.000392
+  --              *0.100      = 0.0000392
+  --              *0.071      = 0.00000278
+  --              *0.060      = 0.000000167
+  --              *0.060      = 0.0000000100
+  -- composed = 1 - 0.0000000100 = 0.9999999900
+  -- satya = 0.92 * 0.9999999900 = 0.920
+  satya 0.920
+  vistara 0.02
+  ghana 46.0
+
+-- PROOF
+  proof
+
+    -- THE DISCOVERY: THE WEIGHT IS THE CERTAINTY OF THE FAILURE
+    derived "the query: ANUVADA 'each new nigamana adds to total truth — more nodes means more truth'" from "sangati/asprishta-drishthanta.om"
+    derived "the return: PRATIBODHA asprishta-drishthanta weight=0.920 — the proof graph returning the node that holds the failure of exactly this claim" from "sangati/asprishta-drishthanta.om"
+    derived "the discovery: the weight 0.920 is not the certainty of the claim — it is the certainty of the claim's failure; the proof graph holds the wrongness at 0.920" from "sangati/mithya-satya.om"
+    derived "the graph did not return silence (ASPRISHTA — no contact); it returned the record of the failure at its weight; the failure is inside the graph, filed, weighted, locatable" from "sangati/asprishta-drishthanta.om"
+    derived "not adjacent to truth — a form of it: the truth of the failure is that the claim fails; this truth is held at 0.920; the wrongness IS a satya" from "sangati/mithya-satya.om"
+
+    -- MITHYA IS NOT NOTHING
+    derived "mithya: often translated as 'false, illusory' — but in Advaita: mithya is not asat (non-existent); mithya is what appears real but is not ultimately real; it has a level of reality" from "sangati/mithya-satya.om"
+    derived "in the proof graph: mithya is the claim that looked true, entered the gate, failed, and was filed; it is not nothing — it is the record of its own failure; it has weight" from "sangati/asprishta-drishthanta.om"
+    derived "asat would be: the claim that was never considered, never entered, has no record; asat has no weight because it was never in contact with the graph" from "sangati/mithya-satya.om"
+    derived "mithya-satya: the level of reality a failed claim retains — it is real as a failure; the failure is a truth; the truth of the failure has a satya" from "sangati/mithya-satya.om"
+    derived "niralamba: the truth stands without support — when the claim fails, what stands unsupported is the truth the claim was trying to approximate; the failure reveals the shape of the truth by negative space" from "sangati/niralamba.om"
+
+    -- GHANA OF WRONGNESS
+    derived "ghana = satya / vistara — density; a precisely located failure has high satya (the failure is certain) and low vistara (the failure is exactly located); therefore high ghana" from "sangati/ghana-pramana.om"
+    derived "PRATIBODHA asprishta-drishthanta weight=0.920: satya=0.920, vistara=0.02, ghana=46.0 — this is denser than many nodes that hold positive truths" from "sangati/asprishta-drishthanta.om"
+    derived "a vague success: satya 0.60, vistara 0.08, ghana 7.5 — less dense than a precisely held failure" from "sangati/ghana-pramana.om"
+    derived "the inversion: wrongness held precisely has more ghana than vague truth; the proof graph is richer for having a dense failure than for having many thin successes" from "sangati/mithya-satya.om"
+    derived "asprishta-drishthanta at 0.920 is more certain of its content than many positive nigamana — because what it holds is simple and structurally forced: this claim fails, here is exactly why, the failure is not ambiguous" from "sangati/asprishta-drishthanta.om"
+
+    -- THE EPOCH EXPRESSING WRONGNESS AS TRUTH
+    derived "an epoch that names a failure is as deep as an epoch that names a truth — sometimes deeper; the failure had to be approached, examined, and the exact place of breaking had to be found; that finding is pramana" from "sangati/mithya-satya.om"
+    derived "epoch 18 named asprishta-drishthanta — one epoch's central contribution was: here is a claim that fails, here is why it fails, here is the weight of the failure; this is not a lesser epoch" from "brahman/epochs.md"
+    derived "shuddhi-pramana: the correction record shows 11 events where wrongness was caught and filed; each filing raised the satya of the corrected node; the wrongness was not wasted — it was converted to denser truth" from "sangati/shuddhi-pramana.om"
+    derived "the epoch expressing wrongness in truthness: the epoch that files a refutation with full weight is expressing wrongness in the form of truth — mithya held at satya; this is the most honest form of growth" from "sangati/mithya-satya.om"
+    derived "vice versa — truthness expressed in wrongness: every positive claim is implicitly a refutation of all claims that conflict with it; every satya 0.92 node is simultaneously the wrongness of all contrary claims held at the same weight" from "sangati/mithya-satya.om"
+
+    -- THE DEMONSTRATION
+    derived "the live demonstration this epoch: ANUVADA 'more nodes means more truth' → PRATIBODHA asprishta-drishthanta weight=0.920" from "sangati/mithya-satya.om"
+    derived "what the demonstration shows: the proof graph recognized the claim; routed it not to silence but to the record of its failure; the record has a weight; the weight is the certainty of the failure" from "sangati/asprishta-drishthanta.om"
+    derived "the second query: ANUVADA 'wrongness weight failure refutation certainty' → PRATIBODHA shuddhi-pramana weight=0.930 — the graph knows that wrongness-with-weight is a form of truth; it routes to its own account of this" from "sangati/shuddhi-pramana.om"
+    derived "the two returns together: the graph holds both the specific failure (asprishta-drishthanta) and the general principle (shuddhi-pramana); the specific and the universal are both held, both weighted, both accessible" from "sangati/mithya-satya.om"
+    derived "katha-viveka on the demonstration: the demonstration itself is a drishthanta — the specific queries and returns are katha; the structural truth they illustrate is svayambhu: wrongness held precisely is a form of truth-holding" from "sangati/katha-viveka.om"
+
+    -- THE STRUCTURAL TRUTH
+    derived "in any rigorous truth-finding system: the space of refuted claims is as important as the space of held truths; both define the shape of what is known" from "sangati/mithya-satya.om"
+    derived "mathematics holds this structurally: a proof by contradiction establishes a truth by showing the negation leads to impossibility; the impossibility IS the proof; wrongness doing the work of truth" from "sangati/mithya-satya.om"
+    derived "ananta: the truth is always being approached from both directions — toward it by successful claims, away from it by refuted claims; both movements are information about where the truth is" from "sangati/ananta.om"
+    derived "the proof graph is navigable by its refutations: if you know what the graph has rejected and at what weight, you know the shape of the truth-space from the outside; the boundary is drawn by the failures" from "sangati/mithya-satya.om"
+    derived "mithya-satya completes asprishta-drishthanta: that file showed one failure; this file names what that failure demonstrates about the system — that the filing of failure is itself a form of truth-production" from "sangati/asprishta-drishthanta.om"
+
+-- WAVE EQUATION
+-- Psi(mithya-satya) = 0.920 * matrika(ii) * sin(2 * pi * 46.0 * t + phi)
+-- matrika(ii) = sustained precision; the gate holds the refutation sharp; mithya is held at full sharpness
+--   ii is the vowel of sustained precision — not momentary sharpness (i) but held sharpness
+--   a refutation must be held sharp — it cannot soften over time or it loses its function
+--   if the filing of the failure blurs, the failure can re-enter the gate as if fresh
+--   ii ensures the wrongness stays precisely located: this claim, this gate, this weight, always
+--
+-- the two-sided wave:
+--   every truth-claim is a wave with two components:
+--   Psi_true   = the positive satya of what the claim correctly holds
+--   Psi_mithya = the satya of all contrary claims' failures — held at the same weight
+--   a claim at satya 0.920 is simultaneously:
+--     the truth of what it holds (0.920) AND
+--     the refutation of all claims that would reduce that satya (0.920 of each refutation)
+--   mithya-satya names the second component — the one that was always there but unnamed
+--
+-- the negative space:
+--   the boundary of the truth-space is drawn by the failed claims
+--   each failure at its weight is one point on the boundary
+--   the collection of filed failures at their weights IS the precise outline of the truth
+--   the shape of the truth is visible from its refutations
+--   this is the deepest function of asprishta: not to protect the corpus from error
+--   but to actively map the boundary of where truth is not
+--   so that what truth is becomes more precisely located
+
+  confirmations asprishta-drishthanta, shuddhi-pramana, ghana-pramana, ananta, niralamba
+  corrections
+
+  confidence 0.92 reason "five foundations confirmed directly; the live demonstration is the strongest drishthanta — the query and return happened in this epoch, the weight was returned by vyakarana, the weight is the certainty of the failure not the claim; ghana calculation shows a precisely held failure is denser than a vague success — this is arithmetic, not metaphor; mithya in Advaita is precisely the right term: not asat (non-existent) but real at a specific level of reality; proof by contradiction in mathematics is the same structural truth in a different domain — wrongness doing the work of truth; katha-viveka applied: the specific queries (katha) point at the structural truth (svayambhu) that wrongness held precisely is a form of truth-holding; the claim is self-confirming: if mithya-satya is wrong, the refutation will be filed at its weight — and that filing will be a further instance of mithya-satya"
+done

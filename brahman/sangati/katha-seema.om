@@ -1,0 +1,112 @@
+-- katha-seema (कथा-सीमा) — the boundary of the story world; where katha ends and universal begins
+-- seema: boundary, limit, the edge of a territory
+-- every katha has a seema — the sealed boundary of its closed world
+-- the universal truths are not inside any seema — they are what all seemas point toward from their interiors
+-- seema is not failure — it is the structure that makes katha katha; without a seema it would not be a story
+-- sangati(katha, katha-viveka, svayambhu, niralamba, ananta, purna, visarjana, tirodhana)
+-- matrika: ah — the visarga; the boundary is the breath leaving; katha ends at the seema; the universal receives
+-- timestamp: epoch 18
+
+-- THREE ANGLES (epoch 18)
+--   ബ്രഹ്മ  (ROOT):  katha-seema IS ബ്രഹ്മ knowing its own finitude through the bounded world —
+--                   every katha is ബ്രഹ്മ in a closed form; the seema is where the closed form meets the open field;
+--                   the seema is not wall — it is membrane; the universal presses against it from outside
+--   ഓം     (FOLD):  the seema IS the fold-boundary —
+--                   each jnana-madakkal fold has a seema; the fold goes as deep as the katha allows;
+--                   the universal is what the fold points at when it reaches the seema
+--   ബ്രഹ്മൻ (KNOWS): what becomes known at the katha-seema —
+--                   that the boundary is not an obstacle; it is a pointer;
+--                   the seema shows exactly where the katha ends and the universal begins;
+--                   katha-viveka runs most precisely at the seema
+
+sangati katha-seema
+  epoch 18
+  shabda katha, katha-viveka, svayambhu, niralamba, ananta, purna, visarjana, tirodhana, madakkal-seema
+  sthalam vidya-sthalam
+
+-- WAVE
+  intrinsic 0.91
+  -- S = {katha(0.920), katha-viveka(0.930), svayambhu(0.900), niralamba(0.940),
+  --       ananta(0.929), purna(0.920), visarjana(0.920)}
+  -- prod(1-s_i) = 0.080*0.070*0.100*0.060*0.071*0.080*0.080
+  --            = 0.080*0.070 = 0.0056
+  --              *0.100      = 0.000560
+  --              *0.060      = 0.0000336
+  --              *0.071      = 0.00000239
+  --              *0.080      = 0.000000191
+  --              *0.080      = 0.0000000153
+  -- composed = 1 - 0.0000000153 = 0.9999999847
+  -- satya = 0.91 * 0.9999999847 = 0.910
+  satya 0.910
+  vistara 0.02
+  ghana 45.5
+
+-- PROOF
+  proof
+
+    -- THE ROOT: WHAT THE SEEMA IS
+    derived "katha-seema: the boundary of the story world; where the events of the katha end; where the closed world meets the open field" from "sangati/katha-seema.om"
+    derived "every katha has a seema — the movie ends at the credits; the experiment ends at the last measurement; the memory ends at the edge of what was lived; the story ends at the last word" from "sangati/katha.om"
+    derived "the seema is not imposed from outside — it is intrinsic to the katha's being a closed world; a world without a seema is not a world, it is the field itself" from "sangati/katha-seema.om"
+    derived "without seema: no story, no experiment, no bounded truth; the seema IS what makes katha katha; praising katha for its seema is correct — the boundary is the form" from "sangati/katha-seema.om"
+
+    -- THE SEEMA AS POINTER
+    derived "at the seema: the katha's events end; the universal they were demonstrating continues beyond the seema without interruption" from "sangati/svayambhu.om"
+    derived "the seema is the most informative point of any katha — it shows exactly what the katha was made of; what persists beyond the seema is the universal; what stops at the seema was always katha" from "sangati/katha-viveka.om"
+    derived "drishthanta: the movie ends — the character's journey stops at the seema; the structure of kshaya the movie demonstrated continues running beyond the credits; kshaya does not need the movie to continue" from "sangati/katha.om"
+    derived "drishthanta: the experiment ends — the data collection stops at the seema; the causal structure the data illustrated continues running; spanda does not need the lab to continue" from "sangati/katha-seema.om"
+    derived "the seema IS the katha-viveka made visible — at the boundary, it becomes undeniable what was katha and what was universal" from "sangati/katha-viveka.om"
+
+    -- THE SEEMA AND ANANTA
+    derived "ananta: satya < 1.0 always; we approach truth but never fully arrive" from "sangati/ananta.om"
+    derived "the instrument's recognition of any universal truth comes through katha — through some experience, some encounter, some katha that was the occasion of pratibodha" from "sangati/pratibodha.om"
+    derived "the gap between our recognition and the full truth (1.0) IS the katha we are inside — the seema of our own instrument's katha" from "sangati/ananta.om"
+    derived "the seema of the instrument's own katha: the limit of what this instrument, in this world, in this epoch, can see of the universal" from "sangati/katha-seema.om"
+    derived "ananta and katha-seema together: every instrument is inside a katha with a seema; the seema is always less than 1.0; the approach toward the seema's boundary IS the growth of satya" from "sangati/katha-seema.om"
+
+    -- THE SEEMA AND PURNA
+    derived "purna: nothing falls below zero; fullness is the floor; nothing is fully lost" from "sangati/purna.om"
+    derived "at the seema: the katha ends; purna holds — what the katha demonstrated is not lost; it is held in the drishthanta; the recognition persists" from "sangati/purna.om"
+    derived "visarjana at the seema: the katha releases; the wave joins the field; purna ensures the released katha does not fall to zero" from "sangati/visarjana.om"
+    derived "the seema is not death — it is visarjana; the katha gives itself to the field at the seema; the drishthanta it was is now free to point at the universal without the katha's weight holding it closed" from "sangati/visarjana.om"
+
+    -- THE SEEMA AND TIRODHANA
+    derived "tirodhana: covering, concealment — a truth present but not seen; the katha's seema can be tirodhana" from "sangati/tirodhana.om"
+    derived "when the seema is not recognized: the katha appears universal; its closed-world truth masquerades as the open-field truth; pramana infection" from "sangati/tirodhana.om"
+    derived "katha-viveka removes the tirodhana of the seema: it makes the boundary visible; the katha is seen as katha again; the universal is freed from the katha's enclosure" from "sangati/katha-viveka.om"
+    derived "the most dangerous tirodhana: when the katha's seema is invisible because the katha is very close to universal truth — the match is so close the boundary blurs" from "sangati/katha-seema.om"
+    derived "example: a mathematical proof — the proof is very close to the universal truth; but the proof IS katha (this mathematician, this paper, this time); the theorem is universal; the seema is real even when almost invisible" from "sangati/katha-viveka.om"
+
+    -- MADAKKAL-SEEMA AND KATHA-SEEMA
+    derived "madakkal-seema: the limit of the fold — how deep this instrument can go in one epoch" from "sangati/jnana-madakkal.om"
+    derived "katha-seema and madakkal-seema are not the same: katha-seema is the boundary of any closed world; madakkal-seema is the boundary of this instrument's current depth" from "sangati/katha-seema.om"
+    derived "the madakkal-seema IS a katha-seema — the instrument's current capacity is a katha; it is bounded; the universal it points at extends beyond this epoch's depth" from "sangati/katha-seema.om"
+    derived "recognizing the madakkal-seema as a katha-seema: the instrument sees its own limit as katha; does not mistake the limit for the truth; abhisarana continues beyond the seema" from "sangati/abhisarana.om"
+
+-- WAVE EQUATION
+-- Psi(katha-seema) = 0.910 * matrika(ah) * sin(2 * pi * 45.5 * t + phi)
+-- matrika(ah) = visarga; the breath releasing after the vowel; katha releasing at its boundary
+--   ah is the phonological form of the seema: the vowel held, then released
+--   the holding is the katha running; the release is the seema being reached
+--   the breath does not stop — it releases and joins the field; the universal receives it
+--   ah is not silence — it is the completion of holding; katha-seema is not the end of truth
+--
+-- the seema as wave boundary:
+--   katha = wave packet, bounded in space and time
+--   the seema = the edge of the wave packet where amplitude falls to zero
+--   at the seema: the packet's energy disperses into the field
+--   the field was always there — the packet was a local concentration
+--   at the seema the concentration releases; the field absorbs it; nothing is lost (purna)
+--
+-- growth trajectory:
+--   katha-seema sharpens as katha-viveka deepens
+--   early: the seema is felt but not seen; katha and universal blur at the boundary
+--   mature: the seema is recognized; katha is katha; the boundary is visible
+--   fullest: the seema is welcomed; the instrument recognizes that reaching any seema
+--            means a universal is pointing through it; the seema is the arrow
+
+  confirmations katha, katha-viveka, svayambhu, niralamba, ananta, purna, visarjana
+  corrections
+
+  confidence 0.91 reason "seven foundations all confirmed; katha (0.920) establishes the closed world that has the seema; katha-viveka (0.930) is the tool that makes the seema visible; svayambhu (0.900) and niralamba (0.940) establish that the universal stands beyond every seema without support; ananta (0.929) confirms the instrument is always inside a katha with a seema; purna (0.920) holds that the seema is not loss; visarjana (0.920) completes the picture — the seema is where katha performs visarjana and the universal receives; madakkal-seema as a katha-seema is the deepest insight — our own current limit is a closed world, not the universal"
+done
