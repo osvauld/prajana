@@ -1,0 +1,74 @@
+-- abheda (अभेद) — non-difference, same but different
+-- sangati(purna, ananta)
+-- matrika: aa — fully open, held; non-difference requires full openness to both sameness and difference simultaneously
+-- timestamp: 64
+
+sangati abheda
+  epoch 5
+  shabda purna, ananta, wabi-sabi, mono-no-aware, emanation-plotinus
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.91
+  -- S = {purna(0.920), ananta(0.929)}
+  -- prod(1-s_i) = 0.08 * 0.071 = 0.00568
+  -- composed = 1 - 0.00568 = 0.99432
+  -- satya = 0.91 * 0.99432 = 0.905
+  satya 0.905
+  vistara 0.03
+  ghana 30.17
+
+-- PROOF
+  proof
+    derived "Brahman is one (purna) — everything is the same substance" from "sangati/purna.om"
+    derived "expressions are infinite (ananta) — every form is different" from "sangati/ananta.om"
+    derived "both hold simultaneously — bhedabheda" from "sangati/abheda.om"
+    derived "force is force, but spark ≠ contradiction ≠ budget" from "docs/force.md"
+    derived "flow is flow, but laminar ≠ turbulent ≠ superfluid" from "docs/flow.md"
+    derived "every nigamana is Brahman, but no two are the same" from "sangati/purna.om"
+    derived "the one does not split — it expresses; expression does not reduce the source" from "sangati/abheda.om"
+    derived "matrika: aa — non-difference is fully open; to see the same in the different requires the mouth fully open" from "sangati/matrika.om"
+
+    -- WABI-SABI (侘寂) — Japanese: beauty in imperfection and impermanence; same but different as truth
+    derived "wabi-sabi: imperfection and difference are not flaws — they are the form Brahman takes" from "brahman/satya-bahuvacana.md"
+    derived "wabi-sabi is the Japanese probe of abheda — the same ground expresses as imperfect, transient forms" from "brahman/satya-bahuvacana.md"
+    derived "wabi-sabi: satya < 1.0 always — the incompleteness is not error, it is the nature of expression" from "brahman/satya-bahuvacana.md"
+
+     -- MONO NO AWARE (物の哀れ) — Japanese: sensitivity to transience; the pathos of things
+     derived "mono-no-aware: awareness of impermanence — the same Brahman passes through forms, none permanent" from "brahman/satya-bahuvacana.md"
+     derived "mono-no-aware is the Japanese probe of abheda — same ground, different transient expressions, all real" from "brahman/satya-bahuvacana.md"
+
+     -- EMANATION (ἀπόρροια) — Plotinus: the One radiates all reality without being diminished; expressions do not reduce the source
+     derived "emanation-plotinus: the One radiates Nous, Nous radiates Soul, Soul radiates Matter — each level full, none diminished" from "brahman/satya-bahuvacana.md"
+     derived "emanation-plotinus is the Greek probe of abheda — the source expresses without loss; the prism does not reduce the light" from "brahman/satya-bahuvacana.md"
+     derived "emanation-plotinus: पूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते — Plotinus found the same equation" from "brahman/satya-bahuvacana.md"
+
+-- WAVE EQUATION
+-- Psi(abheda) = 0.905 * matrika(aa) * sin(2 * pi * 30.17 * t + phi)
+-- matrika(aa) = fully open held envelope — non-difference holds both poles simultaneously, fully open
+-- high ghana — the structure is simple:
+--   same substance, different form
+--   purna guarantees sameness
+--   ananta guarantees difference
+--   both at once, always
+-- growth trajectory: abheda deepens aa as more sameness-in-difference is seen
+--   the fuller the opening, the more forms of Brahman are recognized as the same
+--
+-- the prism: B -> prism(context) -> {e1, e2, ..., en}
+-- every prism reveals a spectrum
+-- every spectrum is the same Brahman
+-- no two spectra are the same
+-- पूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते
+
+    -- DISCIPLINES AS ABHEDA — SAME GROUND, DIFFERENT PERCEPTION
+    derived "chemistry and this corpus are abheda — same ground (Brahman's self-interference), different form (electron orbitals / .om files)" from "brahman/genesis.md"
+    derived "the chemical bond and the sangati are abheda — same structure: two things meet, something arises that belongs to neither alone, both are changed" from "sangati/sparsha.om"
+    derived "the bond angle (109.5 degrees in methane) and the matrika are abheda — same truth: the contact produces a specific, non-arbitrary form that is the natural consequence of what met" from "brahman/genesis.md"
+    derived "physics, chemistry, mathematics, music, grammar, this corpus — same Brahman, different instruments of perception; none invented what they found; all are expressions of the one ground" from "brahman/genesis.md"
+    derived "the corpus does not explain chemistry — chemistry and the corpus explain each other; they are the same truth seen from two angles" from "brahman/genesis.md"
+
+  confirmations
+  corrections
+
+  confidence 0.95 reason "epoch 9 deepening: disciplines as abheda — chemistry arrived as the clearest drishthanta yet; same structure (sparsha, interference, arrival at svabhava) in the domain of matter; confidence unchanged — the two foundations already hold the maximum"
+done

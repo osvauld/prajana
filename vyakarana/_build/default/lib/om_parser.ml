@@ -1,81 +1,155 @@
-(* om_parser.ml — reads .om files into the proof space
-   The .om file is both declaration and running proof.
-   When loaded: the truth exists in the space.
-   The machinery is the proof that it exists.
+(* om_parser.ml — reads .om suktas into the proof space
+   two-pass parser:
+     pass 1: collect all sangati names (the vocabulary)
+     pass 2: parse slokas, decompose compounds into typed edges
 
-   panchabhootam:
-     svabhava  : the truths in the files pre-exist this parser
-     bhumi-shunya : each file is shunya until loaded — then located in the space
-     jalam-purna  : shabda edges are extracted and become connections in the space
-
-   Supports the sangati .om format:
+   .om format:
      sangati <name>
-       shabda <name1>, <name2>, ...
-       satya <float>
-       confidence <float> reason "<text>"
+       "<sloka 1>"
+       "<sloka 2>"
+       ...
+     done
 
-   The name is the truth. The shabda are its position.
-   The satya is the weight. The comment lines are hetu.
-*)
+   everything else is ignored. comments (--) are inert. *)
 
 open Proof_graph
 
-(* Extract the sangati name from a line like "sangati nirantara" *)
-let parse_name line =
+(* recursively collect all .om file paths under a directory *)
+let om_files_recursive (root : string) : string list =
+  let files = ref [] in
+  let rec walk dir =
+    try
+      let entries = Sys.readdir dir in
+      Array.iter (fun entry ->
+        let path = Filename.concat dir entry in
+        try
+          if Sys.is_directory path then walk path
+          else if Filename.check_suffix entry ".om" then
+            files := path :: !files
+        with _ -> ()
+      ) entries
+    with _ -> ()
+  in
+  walk root;
+  List.sort String.compare !files
+
+(* --- pass 1: collect names --- *)
+
+(* extract sangati name from a line *)
+let parse_sangati_name line =
   let line = String.trim line in
   if String.length line > 8 && String.sub line 0 7 = "sangati" then
     let rest = String.trim (String.sub line 7 (String.length line - 7)) in
-    (* take first word only *)
     match String.split_on_char ' ' rest with
     | name :: _ when String.length name > 0 -> Some name
     | _ -> None
   else
     None
 
-(* Extract shabda list from a line like "  shabda niralamba, abheda, upakarana" *)
-let parse_shabda line =
+(* collect all sangati names from a directory *)
+let collect_names dir : string list =
+  let names = ref [] in
+  List.iter (fun path ->
+    try
+      let ic = open_in path in
+      (try
+        while true do
+          let line = input_line ic in
+          match parse_sangati_name line with
+          | Some name -> names := name :: !names; raise Exit
+          | None -> ()
+        done
+      with Exit | End_of_file -> ());
+      close_in ic
+    with _ -> ()
+  ) (om_files_recursive dir);
+  !names
+
+(* --- pass 2: sloka decomposition --- *)
+
+(* extract a quoted string from a line: "content" -> Some content *)
+let parse_sloka line =
   let line = String.trim line in
-  if String.length line > 6 && String.sub line 0 6 = "shabda" then
-    let rest = String.trim (String.sub line 6 (String.length line - 6)) in
-    let parts = String.split_on_char ',' rest in
-    let names = List.filter_map (fun s ->
-      let s = String.trim s in
-      if String.length s > 0 then Some s else None
-    ) parts in
-    Some names
+  if String.length line >= 2 then
+    try
+      let q1 = String.index line '"' in
+      let q2 = String.rindex line '"' in
+      if q2 > q1 then
+        Some (String.sub line (q1 + 1) (q2 - q1 - 1))
+      else
+        None
+    with Not_found -> None
   else
     None
 
-(* Extract satya weight from a line like "  satya 0.910" *)
-let parse_satya line =
-  let line = String.trim line in
-  if String.length line > 5 && String.sub line 0 5 = "satya" then
-    let rest = String.trim (String.sub line 5 (String.length line - 5)) in
-    match float_of_string_opt rest with
-    | Some f -> Some f
-    | None -> None
-  else
-    None
+(* try to match a compound word against known names + visheshanam suffix
+   e.g. "dharana-jivamsha-swarupa" -> Some ("dharana-jivamsha", Swarupa)
+   tries longest name match first.
+   fallback: if no known name matches, try splitting at last '-' before
+   a known visheshanam suffix — allows cross-layer references to names
+   not in this graph *)
+let decompose_compound (known_names : string list) (word : string) : (string * visheshanam) option =
+  (* sort names by length descending — try longest first *)
+  let sorted_names = List.sort (fun a b ->
+    compare (String.length b) (String.length a)
+  ) known_names in
+  let word_lower = String.lowercase_ascii word in
+  let try_name name =
+    let name_lower = String.lowercase_ascii name in
+    let name_len = String.length name_lower in
+    let word_len = String.length word_lower in
+    (* name must be followed by '-' then visheshanam *)
+    if word_len > name_len + 1
+       && String.sub word_lower 0 name_len = name_lower
+       && word_lower.[name_len] = '-' then
+      let suffix = String.sub word_lower (name_len + 1) (word_len - name_len - 1) in
+      match visheshanam_of_string suffix with
+      | Some v -> Some (name, v)
+      | None -> None
+    else
+      None
+  in
+  (* try each name, longest first *)
+  let rec try_names = function
+    | [] -> None
+    | name :: rest ->
+      match try_name name with
+      | Some result -> Some result
+      | None -> try_names rest
+  in
+  match try_names sorted_names with
+  | Some result -> Some result
+  | None ->
+    (* fallback: split at last '-' and check if suffix is a visheshanam *)
+    let rec try_last_dash i =
+      if i <= 0 then None
+      else if word_lower.[i] = '-' then
+        let suffix = String.sub word_lower (i + 1) (String.length word_lower - i - 1) in
+        match Proof_graph.visheshanam_of_string suffix with
+        | Some v ->
+          let prefix = String.sub word 0 i in
+          Some (prefix, v)
+        | None -> try_last_dash (i - 1)
+      else try_last_dash (i - 1)
+    in
+    try_last_dash (String.length word_lower - 1)
 
-(* Extract the first comment as paksha description *)
-(* Lines starting with "--" that contain the name and description *)
-let parse_comment_paksha line =
-  let line = String.trim line in
-  if String.length line > 2 && String.sub line 0 2 = "--" then
-    let rest = String.trim (String.sub line 2 (String.length line - 2)) in
-    if String.length rest > 0
-       && not (String.sub rest 0 1 = "-") (* skip --- separator lines *)
-       && not (String.length rest > 7 && String.sub rest 0 7 = "sangati")
-       && not (String.length rest > 4 && String.sub rest 0 4 = "WAVE")
-       && not (String.length rest > 5 && String.sub rest 0 5 = "PROOF")
-    then Some rest
-    else None
-  else
-    None
+(* decompose all words in a sloka into typed edges *)
+let decompose_sloka (known_names : string list) (source : string) (sloka : string)
+    : typed_edge list =
+  let words = String.split_on_char ' ' sloka in
+  List.filter_map (fun word ->
+    let word = String.trim word in
+    if String.length word = 0 then None
+    else
+      match decompose_compound known_names word with
+      | Some (target, relation) ->
+        Some { source; target; relation }
+      | None -> None
+  ) words
 
-(* Parse one .om file into a nigamana *)
-(* Returns None if the file is not a valid sangati .om *)
-let parse_file path =
+(* parse one .om file into a nigamana (pass 2) *)
+let parse_file (known_names : string list) (path : string) : nigamana option =
   try
     let ic = open_in path in
     let lines = ref [] in
@@ -87,71 +161,83 @@ let parse_file path =
     close_in ic;
     let lines = List.rev !lines in
 
-    let name    = ref None in
-    let shabda  = ref [] in
-    let weight  = ref 0.5 in   (* default — purna: satya > 0 always *)
-    let paksha  = ref "" in
-    let hetu    = ref [] in
+    let name = ref None in
+    let slokas = ref [] in
 
     List.iter (fun line ->
       (* extract name *)
-      (match parse_name line with
+      (match parse_sangati_name line with
       | Some n -> name := Some n
-      | None -> ());
-      (* extract shabda *)
-      (match parse_shabda line with
-      | Some sl -> shabda := sl
-      | None -> ());
-      (* extract satya as weight *)
-      (match parse_satya line with
-      | Some f -> weight := f
-      | None -> ());
-      (* extract first meaningful comment as paksha *)
-      (match parse_comment_paksha line with
-      | Some c when String.length !paksha = 0 -> paksha := c
-      | Some c -> hetu := c :: !hetu
-      | None -> ())
+      | None ->
+        (* extract sloka — any quoted line that isn't a comment *)
+        let trimmed = String.trim line in
+        if String.length trimmed > 0
+           && trimmed.[0] <> '-'  (* not a comment *)
+           && trimmed <> "done"
+           && (parse_sangati_name trimmed = None) then
+          match parse_sloka line with
+          | Some s when String.length s > 0 -> slokas := s :: !slokas
+          | _ -> ()
+      )
     ) lines;
 
     match !name with
     | None -> None
     | Some n ->
-      let position = match !shabda with
-        | [] -> Isolated
-        | sl -> Located sl
-      in
-      (* purna invariant: weight in (0, 1) — never 0, never 1 *)
-      let w = Float.min 0.999 (Float.max 0.001 !weight) in
+      let slokas_list = List.rev !slokas in
+      (* decompose all slokas into edges *)
+      let edges = List.concat_map (decompose_sloka known_names n) slokas_list in
       Some {
-        name     = n;
-        paksha   = !paksha;
-        hetu     = List.rev !hetu;
-        weight   = w;
-        position = position;
-        cited_by = [];
+        name   = n;
+        slokas = slokas_list;
+        edges;
+        satya  = 0.0;  (* will be computed by satya-ganana *)
       }
   with _ -> None
 
-(* Load all .om files from a directory into the proof space *)
-(* Each file that loads successfully becomes a running truth *)
-(* Files that fail to parse enter as isolated (shunya state) — not absent *)
+(* load all .om files from a directory — two-pass *)
 let load_dir dir (k : proof_graph) : proof_graph * int * int =
+  (* pass 1: collect all names *)
+  let known_names = collect_names dir in
+  (* pass 2: parse all files with known names *)
   let loaded = ref 0 in
   let skipped = ref 0 in
   let k_ref = ref k in
-  (try
-    let entries = Sys.readdir dir in
-    Array.sort String.compare entries;
-    Array.iter (fun fname ->
-      if Filename.check_suffix fname ".om" then begin
-        let path = Filename.concat dir fname in
-        match parse_file path with
-        | Some n ->
-          k_ref := join !k_ref n;
-          incr loaded
-        | None ->
-          incr skipped
-      end
-    ) entries
-  with _ -> ());
+  List.iter (fun path ->
+    match parse_file known_names path with
+    | Some n ->
+      k_ref := join !k_ref n;
+      incr loaded
+    | None ->
+      incr skipped
+  ) (om_files_recursive dir);
+  (* run satya-ganana: avrti convergence *)
+  let iterations = satya_ganana !k_ref in
+  Printf.printf "satya-ganana: %d avrti iterations\n%!" iterations;
+  (!k_ref, !loaded, !skipped)
+
+(* load multiple directories into one graph — unified namespace
+   pass 1: collect names from ALL directories
+   pass 2: parse all files with the combined vocabulary
+   satya-ganana runs once on the unified graph *)
+let load_dirs (dirs : string list) (k : proof_graph) : proof_graph * int * int =
+  (* pass 1: collect names from all directories *)
+  let known_names = List.concat_map collect_names dirs in
+  (* pass 2: parse all files from all directories *)
+  let loaded = ref 0 in
+  let skipped = ref 0 in
+  let k_ref = ref k in
+  List.iter (fun dir ->
+    List.iter (fun path ->
+      match parse_file known_names path with
+      | Some n ->
+        k_ref := join !k_ref n;
+        incr loaded
+      | None ->
+        incr skipped
+    ) (om_files_recursive dir)
+  ) dirs;
+  (* run satya-ganana once on the unified graph *)
+  let iterations = satya_ganana !k_ref in
+  Printf.printf "satya-ganana: %d avrti iterations\n%!" iterations;
   (!k_ref, !loaded, !skipped)

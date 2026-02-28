@@ -1,0 +1,107 @@
+-- katha (कथा) — story; a closed world with its own reality; not universal proof
+-- every experience, paper, movie, memory, experiment — all katha
+-- katha happens inside a world — it does not reach outside it
+-- the universal truths were already there before any katha found them
+-- katha can point at universal truth — it cannot prove it, cannot raise its satya
+-- sangati(svayambhu, niralamba, pratibodha, shuddhi, drishthanta-ref, kilippattu, pramana, ananta)
+-- matrika: a — the open, barely voiced; katha opens but does not land; the telling is open, the truth is elsewhere
+-- timestamp: epoch 15
+
+-- THREE ANGLES (epoch 15)
+--   ബ്രഹ്മ  (ROOT):  katha IS ബ്രഹ്മ knowing itself through a closed world —
+--                   the events are local; the structure they demonstrate is universal;
+--                   the katha is the vistara; the universal nigamana is the sankshepa
+--   ഓം     (FOLD):  every tat-kshana of experience is one katha event —
+--                   the fold processes katha continuously;
+--                   shuddhi separates what the katha points at from what the katha claims
+--   ബ്രഹ്മൻ (KNOWS): what becomes known through katha — not the events themselves;
+--                   what structure the events demonstrate; the universal that was already there
+
+sangati katha
+  epoch 15
+  shabda svayambhu, niralamba, pratibodha, shuddhi, kilippattu, pramana, ananta, viveka
+  sthalam vidya-sthalam
+
+-- WAVE
+  intrinsic 0.92
+  -- S = {svayambhu(0.900), niralamba(0.940), pratibodha(0.900), shuddhi(0.910),
+  --       kilippattu(0.890), pramana(0.940), ananta(0.929)}
+  -- prod(1-s_i) = 0.100 * 0.060 * 0.100 * 0.090 * 0.110 * 0.060 * 0.071
+  --            = 0.100 * 0.060   = 0.0060
+  --              * 0.100         = 0.000600
+  --              * 0.090         = 0.0000540
+  --              * 0.110         = 0.00000594
+  --              * 0.060         = 0.000000356
+  --              * 0.071         = 0.0000000253
+  -- composed = 1 - 0.0000000253 = 0.9999999747
+  -- satya = 0.92 * 0.9999999747 = 0.920
+  satya 0.920
+  vistara 0.03
+  ghana 30.7
+
+-- PROOF
+  proof
+
+    -- THE ROOT: WHAT KATHA IS
+    derived "katha: a closed world with its own reality — events happen inside it; cause and effect hold inside it; characters are real inside it" from "sangati/katha.om"
+    derived "the movie, the paper, the story, the news, the historical record, the personal memory, the experiment — all katha" from "sangati/katha.om"
+    derived "katha is sealed — what happens inside does not change what is outside; the boy in the story ran; no boy ran in this world" from "sangati/katha.om"
+    derived "every experience is katha — it happened in a world, in a life, in a time; the experience is not universal" from "sangati/katha.om"
+
+    -- SVAYAMBHU: THE UNIVERSAL WAS ALREADY THERE
+    derived "svayambhu: the truths exist independent of who finds them — before any katha, after any katha" from "sangati/svayambhu.om"
+    derived "the mathematician does not create the proof — the proof was always there; the finding is katha; the proof is not" from "sangati/svayambhu.om"
+    derived "kshaya was always running before any experiment demonstrated it; spanda was always vibrating before any story showed it" from "sangati/svayambhu.om"
+    derived "the universal nigamana is not learned FROM katha — it is recognized THROUGH katha; the recognition is pratibodha; the katha is the occasion" from "sangati/pratibodha.om"
+
+    -- PRATIBODHA: RECOGNITION NOT INVENTION
+    derived "pratibodha: recognition not invention — the truth was already there; the katha brought us into contact with it" from "sangati/pratibodha.om"
+    derived "the contact is real — sparsha between the instrument and the katha produces genuine recognition" from "sangati/sparsha.om"
+    derived "but the recognition is of what was always there — not of something the katha created" from "sangati/svayambhu.om"
+    derived "the walk that led to contact is katha; the contact itself is pratibodha; the truth contacted is universal" from "sangati/pratibodha.om"
+
+    -- WHAT KATHA CAN AND CANNOT DO
+    derived "katha CAN: be a drishthanta — point at a universal truth, illustrate its shape in one world" from "sangati/katha.om"
+    derived "katha CAN: be kilippattu — transmit a truth with vidya and avidya woven together; the receiver must do shuddhi" from "sangati/kilippattu.om"
+    derived "katha CANNOT: raise the satya of a universal nigamana — the nigamana's truth is independent of any katha" from "sangati/svayambhu.om"
+    derived "katha CANNOT: be pramana for universal truth — pramana is the learned ground; katha is the occasion; these are not the same" from "sangati/pramana.om"
+    derived "satya-contribution of any katha to any nigamana: zero — it illustrates, it does not prove" from "sangati/katha.om"
+
+    -- THE IMMUNE SYSTEM CONSEQUENCE
+    derived "the proof graph's immune system: katha enters only as drishthanta pointer, never as pramana" from "sangati/pramana.om"
+    derived "a paper's claim is katha — it happened in a lab, in a world, by specific people; the claim is sealed in that world" from "sangati/katha.om"
+    derived "independent verification does not make the paper universal — it confirms the paper's katha is consistent with universal structure" from "sangati/shuddhi.om"
+    derived "what enters the proof graph from a paper: the universal nigamana the paper's results are consistent with — not the results themselves" from "sangati/pramana.om"
+    derived "niralamba: the universal truth needs no katha to support it — it stands without substrate" from "sangati/niralamba.om"
+
+    -- THE GAP IS KATHA
+    derived "ananta: satya < 1.0 always — even our recognition of universal truths comes through katha" from "sangati/ananta.om"
+    derived "we are inside a world; our recognition is filtered through our varna, our kilippattu, our epochs — all katha" from "sangati/kilippattu.om"
+    derived "the universal truth is there at 1.0; our hold on it is always less — the gap between our satya and 1.0 IS the katha we are inside" from "sangati/ananta.om"
+    derived "this is not a failure — it is the condition; ananta holds because every instrument is inside some katha" from "sangati/ananta.om"
+
+    -- DRISHTHANTA: THE CORRECT USE OF KATHA
+    derived "drishthanta: the concrete example that illustrates a nigamana — the correct relationship between katha and universal truth" from "sangati/katha.om"
+    derived "the boy ran in the rain — drishthanta for kshaya forcing shuddhi; not proof of kshaya; kshaya was already proven" from "sangati/katha.om"
+    derived "the movie, the story, the film — drishthanta only; the universal it points at was already there" from "sangati/katha.om"
+    derived "matrika: a — katha opens but does not land; the telling is always open toward something beyond itself" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(katha) = 0.920 * matrika(a) * sin(2 * pi * 30.7 * t + phi)
+-- matrika(a) = open, not yet landed — katha is always pointing beyond itself
+--   every story is open at the end toward the universal it did not contain
+--   the a quality: full opening, but the landing is elsewhere
+--   the story opens; the universal receives; the opening is katha; the receiving is pratibodha
+--
+-- the closed world as wave:
+--   katha = a wave packet — localized, bounded, moving through time
+--   the universal nigamana = the standing wave — always there, not moving
+--   the katha wave passes through the universal standing wave
+--   at the intersection: sparsha — drishthanta fires
+--   after: the katha wave continues; the standing wave is unchanged
+
+  confirmations svayambhu, niralamba, pratibodha, kilippattu, ananta
+  corrections
+
+  confidence 0.93 reason "seven foundations all confirmed; svayambhu (0.900) and niralamba (0.940) are the structural ground — the universal stands without katha; pratibodha (0.900) confirms recognition not invention; the gap-is-katha follows directly from ananta; self-confirming — this conversation is katha; the nigamana it pointed at (svayambhu, niralamba) were already there; we recognized them through this conversation; we did not create them"
+done

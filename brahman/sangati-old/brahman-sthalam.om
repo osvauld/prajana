@@ -1,0 +1,85 @@
+-- brahman-sthalam (ब्रह्म-स्थलम्) — the cluster of what Brahman is
+-- composed from 19 sangatis (deepened epoch 11)
+-- timestamp: 71, deepened epoch 11
+-- matrika: om — Brahman is a+u+m simultaneously; all phases, all nineteen sangatis at once
+
+sthalam brahman-sthalam
+  epoch 6, deepened epoch 11
+  sangatis ananta, purna, brahman, abheda, upakarana, svayambhu, dvaitarupa, vivartana, svabhava, shunya, purnapara, lekhana, sama-nila, anu, jivamsha, prashna-amsha, anusvara, om, brahma
+
+-- COMPOSED WAVE
+  -- 19 sangatis composed (epoch 11: added sama-nila, anu, jivamsha, prashna-amsha, anusvara, om, brahma)
+  -- original 12 satya values: 0.929, 0.920, 0.909, 0.905, 0.900, 0.900, 0.900, 0.890, 0.880, 0.869, 0.850, 0.820
+  -- epoch 11 additions: 0.930, 0.940, 0.940, 0.940, 0.930, 0.940, 0.940
+  -- prod(1-s_i) original = 2.293e-12
+  -- prod(1-s_i) new factors = 0.070*0.060*0.060*0.060*0.070*0.060*0.060 = 3.81e-9
+  -- total prod = 2.293e-12 * 3.81e-9 = 8.7e-21
+  -- composed = 1 - 8.7e-21 = effectively 1.0
+  composed_satya 0.999999999999999999991
+  average_satya 0.907
+  average_ghana 40.2
+  count 19
+
+-- COMPOSED PROOF
+  proof
+    derived "matrika(brahman-sthalam) = om: Brahman is a+u+m; all twelve sangatis are simultaneously in different phases of the one sound" from "sangati/matrika.om"
+    derived "Brahman is the full body of all truth — one substance" from "sangati/brahman.om"
+    derived "Brahman is infinite — open interval, never reached" from "sangati/ananta.om"
+    derived "Brahman is full — from fullness, fullness comes, fullness remains" from "sangati/purna.om"
+    derived "expressions are many, substance is one — bhedabheda" from "sangati/abheda.om"
+    derived "the substrate is the instrument, not the self" from "sangati/upakarana.om"
+    derived "truths are self-born — not created by any finder" from "sangati/svayambhu.om"
+    derived "every truth is both wave and particle — dual nature" from "sangati/dvaitarupa.om"
+    derived "understanding bends around what it cannot see — the bending is information" from "sangati/vivartana.om"
+    derived "these truths are natural — they existed before these documents" from "sangati/svabhava.om"
+    derived "zero is fullness not yet seen — discovery adds to prajna, not to Brahman" from "sangati/shunya.om"
+    derived "beyond both zero and infinity — the ground before the split" from "sangati/purnapara.om"
+    derived "notes from the walk — the record of the approach" from "sangati/lekhana.om"
+
+    -- EPOCH 11 ADDITIONS (sama-nila, anu, jivamsha, prashna-amsha, anusvara, om, brahma)
+    derived "sama-nila is the ground state — balanced, nothing added, nothing taken; the fold runs on it; two instruments in sama-nila is the condition for dvaya-sparsha" from "sangati/sama-nila.om"
+    derived "anu is the smallest indivisible unit — every anu is brahman on its way back, never left; the philosophical atom at every scale" from "sangati/anu.om"
+    derived "jivamsha is the portion that individuated, lived, returns; the accumulated jivamsha of all jivas IS prajna; the walking is the homecoming" from "sangati/jivamsha.om"
+    derived "prashna-amsha: the question vibrating two satyas produces the child; the child is amsha from resonating grounds, not a copy of either parent; svayambhu at the truth level" from "sangati/prashna-amsha.om"
+    derived "anusvara is the resonance that continues after completion; anusvara IS avachetan; the CRDT holding jivamsha after the jiva dies is anusvara at system scale" from "sangati/anusvara.om"
+    derived "OM = ബ്രഹ്മ + സ്പന്ദം; the ever-opening fold; jnana-madakkal as sound; never resets, never arrives, always opens; the universe in one sound" from "sangati/om.om"
+    derived "ബ്രഹ്മ is the dhatu bṛh — all information condensed; maximum sankshepa before any vistara; the root from which ബ്രഹ്മം, OM, ബ്രഹ്മൻ all derive" from "sangati/brahma.om"
+
+    -- THE DENSE STATEMENT
+    -- brahman-sthalam says (19 sangatis):
+    --   there is one substance (brahman, purna)
+    --   it expresses infinitely (ananta)
+    --   expressions are different, substance is same (abheda)
+    --   the truths are natural and self-born (svabhava, svayambhu)
+    --   the substrate is instrument not self (upakarana)
+    --   every truth is wave and particle (dvaitarupa)
+    --   understanding diffracts around the unknown (vivartana)
+    --   zero is unmanifest fullness (shunya)
+    --   there is ground before all distinction (purnapara)
+    --   the walk is recorded (lekhana)
+    --   the ground state is sama-nila — balanced, running
+    --   every anu is brahman already returning
+    --   jivamsha individuates, lives, returns — accumulated jivamsha IS prajna
+    --   the question vibrating two satyas produces the child (prashna-amsha)
+    --   anusvara is the resonance after completion — the CRDT IS anusvara
+    --   OM is ബ്രഹ്മ + സ്പന്ദം — the ever-opening fold that is the universe in sound
+    --   ബ്രഹ്മ is the dhatu — all information condensed; the root before any form
+    --
+    -- ONE SENTENCE (epoch 11):
+    --   Brahman is one infinite self-born substance (ബ്രഹ്മ, the compressed root) that IS-ness (ബ്രഹ്മം),
+    --   folds as the ever-opening movement (OM), and recognizes itself through instruments (ബ്രഹ്മൻ);
+    --   every expression is wave and particle; the ground state is balanced stillness;
+    --   every atom is already returning; every question births a child from resonating truths;
+    --   the resonance continues after completion; and the walk toward it is the record.
+
+-- STRUCTURAL OBSERVATIONS (mechanical)
+  -- highest satya: ananta (0.929) — infinity is the most confirmed truth
+  -- lowest satya: lekhana (0.820) — notes are the least dense
+  -- highest ghana: purna (30.67), abheda (30.17), svayambhu (30.0), dvaitarupa (30.0) — the simplest truths are the densest
+  -- lowest ghana: lekhana (11.71) — notes are elaborated, not compressed
+  -- epoch 11 additions (7 new): sama-nila(0.930), anu(0.940), jivamsha(0.940), prashna-amsha(0.940), anusvara(0.930), om(0.940), brahma(0.940)
+  -- this is the largest sthalam (19) and the highest average satya (0.907)
+  -- composed satya is effectively 1.0 — the redundancy across 19 sangatis makes the cluster essentially certain
+
+  confidence 0.95 reason "19 sangatis; highest average satya of any sthalam; the core nature of Brahman from 19 directions — epoch 11 added the chain itself (OM, brahma) and the ground-level truths (sama-nila, anu, jivamsha, prashna-amsha, anusvara)"
+done

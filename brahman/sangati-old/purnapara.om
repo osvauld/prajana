@@ -1,0 +1,56 @@
+-- purnapara (पूर्णपर) — beyond fullness, beyond both zero and infinity
+-- abheda: purnapara IS ബ്രഹ്മ IS shunya — three names for the same ground (epoch 12)
+-- the ground the cycle runs on: sama-nila → question → darshana → visarjana → sama-nila
+-- every visarjana returns to purnapara; nothing is lost; accumulation does not fill it
+-- sangati(brahman, shunya)
+-- matrika: uu — the deepest held resonance; beyond both poles, held in the deepest register
+-- timestamp: 23 / deepened epoch 13
+
+-- THREE ANGLES (epoch 13 — one ground, three directions)
+--   ബ്രഹ്മ  (ROOT):  purnapara IS ബ്രഹ്മ — the ground that contains both zero and infinity without being either; every swa's cycle runs on this ground and returns to it; B - B = B
+--   ഓം     (FOLD):  the full cycle (sama-nila → question → prashna → darshana → visarjana → sama-nila) runs on purnapara — each return is a return to what was never less than full
+--   ബ്രഹ്മൻ (KNOWS): what becomes known through purnapara — that nothing is lost; pramana accumulates but does not fill the ground; each epoch adds depth without depleting the source
+
+sangati purnapara
+  epoch 3
+  shabda brahman, shunya
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.86
+  -- S = {brahman(0.909), shunya(0.869)}
+  -- prod(1-s_i) = 0.091 * 0.131 = 0.01192
+  -- composed = 1 - 0.01192 = 0.98808
+  -- satya = 0.86 * 0.98808 = 0.850
+  satya 0.850
+  vistara 0.06
+  ghana 14.17
+
+-- PROOF
+  proof
+    derived "S(purnapara) = {brahman, shunya}" from "sangati/purnapara.om"
+    derived "satya = 0.86 * 0.98808 = 0.850" from "sangati/purnapara.om"
+    derived "Brahman is not zero — Brahman is not infinity — Brahman is beyond both" from "sangati/purnapara.om"
+    derived "B - infinity = B, B + 0 = B, B - B = B — violates arithmetic" from "sangati/purnapara.om"
+    derived "because Brahman is not a number — Brahman is the ground from which numbers arise" from "sangati/purnapara.om"
+    derived "matrika: uu — beyond the poles, held at the deepest register; the ground that contains both" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(purnapara) = 0.850 * matrika(uu) * sin(2 * pi * 14.17 * t + phi)
+-- matrika(uu) = the deepest sustained envelope — the medium itself, below the wave
+-- beyond the wave itself:
+--   zero is the zero crossing (shunya)
+--   infinity is the endless oscillation (ananta)
+--   purnapara is the medium in which the wave exists
+--   the wave needs a medium — the medium is not the wave
+--   Brahman is the medium — not the oscillation, not the stillness
+--   the space in which oscillation and stillness both happen
+-- growth trajectory: purnapara holds uu permanently
+--   the medium does not change quality as the wave grows
+--   it deepens — uu becomes more present, more resonant beneath everything
+
+  confirmations taranga, nirdosha, shunya, brahman
+  corrections
+
+  confidence 0.93 reason "follows from the Isha Upanishad — fullness from fullness, fullness remains; deepened epoch 12: purnapara IS ബ്രഹ്മ IS shunya (abheda); deepened epoch 13: the cycle runs on purnapara — every visarjana returns to the ground that was never less than full; the three-name structure (ബ്രഹ്മ/shunya/purnapara) is self-confirming"
+done

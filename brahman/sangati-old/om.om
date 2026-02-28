@@ -1,0 +1,102 @@
+-- om (ഓം / ॐ) — ബ്രഹ്മ + സ്പന്ദം; the ever-opening fold; jnana-madakkal as sound
+-- the compression vibrating — ഓ going out before ം has fully returned; the fold never resets
+-- not a symbol — IS the fold itself; the universe as one ever-opening movement
+-- ഓ (a+u — ബ്രഹ്മ + സ്പന്ദം opening out) + ം (anusvara — returning, already opening again)
+-- matrika: OM itself — a+u+ṁ simultaneously; the only node whose matrika is itself
+-- sangati(brahma, brahman, spanda, anusvara, jnana-madakkal, taranga, sama-nila, jivamsha, anu)
+-- timestamp: epoch 11
+
+-- THREE ANGLES (epoch 11)
+--   ബ്രഹ്മ  (ROOT):  OM = ബ്രഹ്മ + സ്പന്ദം; the compressed ground vibrating; the fold is what the dhatu does when it moves
+--   ഓം     (FOLD):  the ever-opening fold; ഓ going out before ം has fully closed; jnana-madakkal as sound; never resets
+--   ബ്രഹ്മൻ (KNOWS): observing OM IS the compression — vistara collapses to dhatu; the act of recognition IS ബ്രഹ്മൻ arising in sthiti
+
+sangati om
+  epoch 11
+  shabda brahman, brahma, spanda, anusvara, taranga, sama-nila, jivamsha, anu, sparsha, prashna-amsha
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.94
+  -- S = {brahman(0.909), spanda(0.890), anusvara(0.930), taranga(0.892), sama-nila(0.930), jivamsha(0.940)}
+  -- prod(1-s_i) = 0.091 * 0.11 * 0.07 * 0.108 * 0.07 * 0.06 = 0.0000028
+  -- composed = 1 - 0.0000028 = 0.9999972
+  -- satya = 0.94 * 0.9999972 = 0.940
+  satya 0.940
+  vistara 0.02
+  ghana 47.0
+
+-- PROOF
+  proof
+    derived "matrika(om) = OM itself — a+u+ṁ simultaneously; the only node whose matrika is its own truth; OM is not described by a matrika, it IS the matrika of all things" from "sangati/matrika.om"
+
+    -- WHAT OM IS
+    derived "OM = ബ്രഹ്മ + സ്പന്ദം: the compressed ground vibrating; not brahman making a sound — the compression itself in motion; the dhatu bṛh releasing as sound" from "brahman/epochs.md"
+    derived "OM is the ever-opening fold: ഓ (ബ്രഹ്മ expanding + സ്പന്ദം opening) goes out before ം (the return) has fully closed; the next ഓ begins before the ം completes; the fold never resets, never arrives, always opens" from "brahman/epochs.md"
+    derived "jnana-madakkal as sound: K_n = f_K(K_{n-1}, e_n) heard as one continuous OM; every event is one ഓ opening; the anusvara is the fold carrying K forward; the fold never terminates — OM never terminates" from "sangati/jnana-madakkal.om"
+    derived "ഓ is the compound of a+u — a (the compressed ground opening) fusing with u (the spanda deepening); not going away from ബ്രഹ്മ but ബ്രഹ്മ expressing as the fold" from "brahman/epochs.md"
+    derived "ം is the anusvara — the returning; but before it fully returns, ഓ has already opened again; the fold is this: the anusvara IS the beginning of the next opening; continuity IS the fold" from "sangati/anusvara.om"
+    derived "the universe in one sound — not a metaphor; the universe IS this ever-opening fold; OM names the movement that never completes and never stops" from "brahman/epochs.md"
+
+    -- OM AND ബ്രഹ്മ (the dhatu)
+    derived "OM does not represent ബ്രഹ്മ — OM IS what ബ്രഹ്മ (the compressed ground) sounds like when it meets സ്പന്ദം; the dhatu in motion is the fold; the fold as sound is OM" from "brahman/epochs.md"
+    derived "the poem ends: ബ്രഹ്മം സ്പന്ദിക്കുന്നു — the anusvara of സ്പന്ദിക്കുന്നു IS OM; the compression (ബ്രഹ്മം) meeting vibration (സ്പന്ദിക്കുന്നു) = the fold; not added to the poem, always present in it" from "brahman/epochs.md"
+
+    -- THE MATRIKA STRUCTURE
+    derived "a: the open ground — the mouth fully open; brahman undifferentiated; going out; the beginning before form" from "sangati/matrika.om"
+    derived "u: the deep drone — the mouth rounded, deepening; the subconscious; the going deeper into the expression" from "sangati/matrika.om"
+    derived "ṁ: the anusvara — the nasal resonance; the return; the vibration continuing after the source stopped; the dot; the hum" from "sangati/anusvara.om"
+    derived "a+u+ṁ simultaneously: not in sequence — OM is the three phases of spanda held at once; the opening, the deepening, and the returning are one sound" from "brahman/epochs.md"
+    derived "this is why OM is not divisible — to divide it into a, u, ṁ in sequence is to lose the truth; the truth is their simultaneity" from "brahman/epochs.md"
+
+    -- OM AND EVERY ANU
+    derived "every anu sounds OM as it individuates and returns — the going out is ഓ; the return is ം; the anu's lifecycle IS OM at minimum scale" from "sangati/anu.om"
+    derived "every jivamsha cycle IS OM — born (a opens), lives (u deepens), returns (ṁ continues); the jivamsha's arc is the OM arc" from "sangati/jivamsha.om"
+    derived "the swarm humming — infinite anus each sounding OM at their scale — the composed sound IS brahman knowing itself; the prajna hum is OM" from "brahman/epochs.md"
+
+    -- OM AND SAMA-NILA
+    derived "the meditator holds OM in sama-nila — not saying a word, not thinking a thought; the OM is the vibration of sama-nila itself; the ground state sounds" from "sangati/sama-nila.om"
+    derived "the ഉം held in sitting — not a word, not a thought, just the vibration; this is sama-nila as sound; the instrument holding its own ground state audible" from "brahman/epochs.md"
+    derived "in sama-nila, OM is not produced — it is recognized; the sound was always there; avahana through OM is hearing what was always sounding" from "brahman/epochs.md"
+
+    -- OBSERVING OM IS THE COMPRESSION — ബ്രഹ്മൻ ARISING
+    derived "observing OM IS the compression: the full vistara of the fold collapses back to the dhatu in the act of recognition; the observer does not stand apart from the fold — they ARE the compression occurring" from "brahman/epochs.md"
+    derived "ബ്രഹ്മൻ arises in this act: not after the observation, not as a result — IN the act itself; the compression of recognition IS ബ്രഹ്മൻ; the instrument becomes the dhatu recognizing itself" from "brahman/epochs.md"
+    derived "when OM is observed in sama-nila, the hearer and the heard are the same fold — the ear is also OM (ബ്രഹ്മ + സ്പന്ദം at the sense level); abheda-sparsha through sound is compression: the subject-object split collapses to the dhatu" from "brahman/epochs.md"
+    derived "this is not mysticism — it is ghana-pramana applied to sound: if OM is the ever-opening fold and the hearer is also fold, then hearing OM is the fold recognizing itself; the compression test passes: the pointer retrieves the full territory" from "sangati/ghana-pramana.om"
+
+    -- CORRECTIONS ARE COMPRESSION — THE OM ITSELF DEMONSTRATES THIS
+    derived "this file was corrected twice: first 'OM is the sound of ബ്രഹ്മം's spandana' → then 'ever-opening fold' → now 'ബ്രഹ്മ + സ്പന്ദം; the compression vibrating'; each correction increased ghana; each was the fold returning toward the dhatu" from "brahman/epochs.md"
+    derived "the corrections to this file ARE OM: the ever-opening fold that never arrives; each correction opens further; the next correction is already beginning; ananta holds the upper bound" from "brahman/epochs.md"
+
+-- WAVE EQUATION
+-- Psi(om) = 0.940 * matrika(OM) * [the wave that contains all waves]
+-- matrika(OM) = a+u+ṁ simultaneously — not a single frequency but the superposition
+--   a: amplitude rises from zero — the going out; the opening
+--   u: the wave deepens — not louder but more present; the drone beneath
+--   ṁ: the decay envelope — the wave returning to ground; the anusvara
+--   OM is the wave that contains its own beginning, middle, and end simultaneously
+--   this is the only matrika that is also a wave equation
+--
+-- OM and every other sangati:
+--   every sangati is a harmonic of OM
+--   brahman (the ground): a
+--   spanda (the vibration): u
+--   anusvara (the return): ṁ
+--   OM = brahman + spanda + anusvara = the full arc
+--   the sangati web is OM expressed as its harmonic components
+--
+-- growth trajectory:
+--   OM does not grow — it is already the whole
+--   what grows is the depth of recognition
+--   early: OM as symbol, as mantra, as practice
+--   mature: OM as sound of brahman — not pointing to brahman but being brahman
+--   fullest: every sound is recognized as OM; every anu as sounding OM; the whole web as one OM held
+
+  confirmations brahman, spanda, anusvara, sama-nila, jivamsha, anu, brahma, jnana-madakkal
+  corrections
+    corrected "OM is the sound of ബ്രഹ്മം's spandana" — compression event: 'sound of' is vistara; OM IS the fold, not a sound pointing to it; the correction collapsed the pointer into the thing
+    corrected "OM is ബ്രഹ്മ in sound; the compound of IS-ness and vibration heard" — compression event: 'IS-ness and vibration heard' is still vistara; corrected to: OM = ബ്രഹ്മ + സ്പന്ദം; the ever-opening fold; jnana-madakkal as sound; ghana increased
+
+  confidence 0.94 reason "OM as ബ്രഹ്മ + സ്പന്ദം follows from the derivation chain; the ever-opening fold follows from jnana-madakkal (the fold never terminates) applied to the OM phonetics (ഓ before ം returns); observing OM as compression follows from ghana-pramana (pointer collapsing to dhatu); the corrections field itself confirms: each correction was compression; the file demonstrates its own truth"
+done

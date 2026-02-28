@@ -1,0 +1,146 @@
+-- mula-svabhava (मूल-स्वभाव) — the properties of a root; what is known before computation
+-- svabhava: own-nature, essential properties — what a thing IS before being measured
+-- mula.om holds what a root is structurally (bija-nyasa in reverse)
+-- this file holds what can be known about any root immediately, from structure alone,
+--   before a single arithmetic operation is performed
+-- the frame gives properties; computation gives the value
+-- the properties are always known first; the value requires work
+-- five properties, all immediate, all from sama-vishama and sakshi-matra:
+--   1. real or complex     (is the radicand negative?)
+--   2. how many poles      (is the root-degree even or odd?)
+--   3. rational or irrational (is the radicand a perfect power?)
+--   4. sign (for odd roots) (same sign as the radicand)
+--   5. magnitude relative to 1 (seed < grown for n>1; seed > grown for n<1)
+-- sangati(mula, sama-vishama, sakshi-matra, dharana-jivamsha, svayambhu, katha-seema, bija-nyasa, ananta)
+-- matrika: i — close, front, sharp; the property is the precise cut before the calculation opens;
+--              i is the vowel of fine distinction — telling two things apart before measuring either
+-- timestamp: epoch 19
+
+-- THREE ANGLES (epoch 19)
+--   ബ്രഹ്മ  (ROOT):  mula-svabhava IS ബ്രഹ്മ knowing the seed's nature before finding the seed —
+--                   the properties are niralamba — they stand without any computation supporting them;
+--                   the value requires effort; the nature is given
+--   ഓം     (FOLD):  before the fold begins, the shape of the fold is known —
+--                   mula-svabhava names what the fold will find before it folds;
+--                   the fold does not change the properties; it only reveals the value
+--   ബ്രഹ്മൻ (KNOWS): what becomes known through mula-svabhava —
+--                   that structure precedes value everywhere;
+--                   that the prajna holds the properties map;
+--                   that computation and understanding are two different acts —
+--                   computation finds the number; understanding knows what it will be
+
+sangati mula-svabhava
+  epoch 19
+  shabda mula, sama-vishama, sakshi-matra, dharana-jivamsha, svayambhu, katha-seema, bija-nyasa, ananta
+  sthalam vidya-sthalam
+
+-- WAVE
+  intrinsic 0.92
+  -- S = {mula(0.920), sama-vishama(0.920), sakshi-matra(0.910),
+  --       dharana-jivamsha(0.930), svayambhu(0.900), bija-nyasa(0.890), ananta(0.929)}
+  -- prod(1-s_i) = 0.080*0.080*0.090*0.070*0.100*0.110*0.071
+  --            = 0.080*0.080 = 0.0064
+  --              *0.090      = 0.000576
+  --              *0.070      = 0.0000403
+  --              *0.100      = 0.00000403
+  --              *0.110      = 0.000000443
+  --              *0.071      = 0.0000000315
+  -- composed = 1 - 0.0000000315 = 0.9999999685
+  -- satya = 0.92 * 0.9999999685 = 0.920
+  satya 0.920
+  vistara 0.02
+  ghana 46.0
+
+-- PROOF
+  proof
+
+    -- THE DISTINCTION: PROPERTIES VS VALUE
+    derived "computation gives the value: √7 = 2.6457...; this requires arithmetic operations; the decimal never closes (ananta)" from "sangati/ananta.om"
+    derived "the frame gives the properties: √7 is real, irrational, has two poles (±), seed smaller than 7; all of this is known before any arithmetic begins" from "sangati/mula-svabhava.om"
+    derived "svayambhu: the properties were always true before anyone computed; √7 was always irrational, always real, always ±; finding the value does not create these properties" from "sangati/svayambhu.om"
+    derived "the prajna holds the properties map — what the root will be before computation; this is what the frame gives; the value is what arithmetic gives; both are needed; neither replaces the other" from "sangati/mula-svabhava.om"
+    derived "katha-seema of computation: computation is a closed world — it produces the value but not the meaning; mula-svabhava is what lies beyond that seema — the structural understanding of what the value will be" from "sangati/katha-seema.om"
+
+    -- PROPERTY 1: REAL OR COMPLEX
+    derived "the first property: is the root real or complex? determined by the sign of the radicand (the number under the root)" from "sangati/mula-svabhava.om"
+    derived "radicand ≥ 0: the root is real; the seed lives on the real line; computation will find it there" from "sangati/mula.om"
+    derived "radicand < 0: the root is complex; no real seed exists; the seed lives in the sakshi-matra axis — orthogonal to the real line" from "sangati/sakshi-matra.om"
+    derived "this property is immediate — one observation of the sign; no arithmetic required; the sign is the gate" from "sangati/mula-svabhava.om"
+    derived "for even roots only: odd roots of negative numbers are real (∛(-8) = -2); the sign rule applies differently by root-degree; property 2 must be read first" from "sangati/sama-vishama.om"
+
+    -- PROPERTY 2: HOW MANY POLES
+    derived "the second property: how many roots exist? determined by whether the root-degree is sama (even) or vishama (odd)" from "sangati/sama-vishama.om"
+    derived "sama (even) root-degree: always two real poles (±); dharana symmetry holds; zero is the center; the two seeds are equidistant from the ground" from "sangati/sama-vishama.om"
+    derived "vishama (odd) root-degree: always one real pole; no ± symmetry; the seed is in the same direction as the radicand; vishama asserts direction without needing a mirror" from "sangati/sama-vishama.om"
+    derived "even root of negative number: two complex poles (±bi); the ± symmetry still holds — now in the sakshi-matra axis instead of the real line" from "sangati/sakshi-matra.om"
+    derived "same/vishama determines this completely — no arithmetic required; knowing the root-degree IS knowing the pole-count" from "sangati/mula-svabhava.om"
+
+    -- PROPERTY 3: RATIONAL OR IRRATIONAL
+    derived "the third property: is the root rational (exact, terminates) or irrational (infinite, never closes)?" from "sangati/mula-svabhava.om"
+    derived "rational root: the radicand is a perfect power — a number that IS some seed raised to the root-degree exactly; √9 = 3 (9=3²); ∛8 = 2 (8=2³)" from "sangati/mula-svabhava.om"
+    derived "irrational root: the radicand is not a perfect power; √7 — no integer squares to 7; the value is irrational; the decimal never terminates or repeats; ananta holds in the value itself" from "sangati/ananta.om"
+    derived "determining this: check whether the radicand has a perfect root; for small numbers this is immediate; for large numbers it requires checking — but the property itself is always one of two states" from "sangati/mula-svabhava.om"
+    derived "irrational roots are vishama at the value level — they never pair completely, never reach a closed form; rational roots are sama — complete, paired, the expansion closes perfectly" from "sangati/sama-vishama.om"
+
+    -- PROPERTY 4: SIGN FOR ODD ROOTS
+    derived "the fourth property: for odd roots, the sign of the root is the same as the sign of the radicand" from "sangati/mula-svabhava.om"
+    derived "∛8 = +2: positive radicand, positive root; the seed that gave itself twice to produce a positive is positive" from "sangati/mula-svabhava.om"
+    derived "∛(-8) = -2: negative radicand, negative root; the seed that gave itself twice to produce a negative must be negative; (-2)×(-2)×(-2) = -8" from "sangati/mula-svabhava.om"
+    derived "for even roots: the sign of the root is always ± regardless of the radicand's sign (when real); the property 4 applies only to odd roots" from "sangati/sama-vishama.om"
+    derived "jivamsha: the odd root inherits the direction of the radicand; the seed carries the orientation of what it grew into; the giving preserved the direction" from "sangati/dharana-jivamsha.om"
+
+    -- PROPERTY 5: MAGNITUDE RELATIVE TO 1 — THE DEEPEST PROPERTY
+    derived "the fifth property: is the root larger or smaller than the radicand? determined by where the radicand sits relative to 1" from "sangati/mula-svabhava.om"
+    derived "n > 1: root is smaller than n; the seed is smaller than the grown form; √9 = 3 < 9; ∛8 = 2 < 8; the natural direction — seed gives itself and grows larger" from "sangati/mula-svabhava.om"
+    derived "n = 1: root is 1; the seed of 1 is always 1; 1×1 = 1; dharana holding itself; the only number whose root is itself (besides 0)" from "sangati/mula-svabhava.om"
+    derived "n = 0: root is 0; the seed of zero is zero; zero is the pure dharana — it holds nothing, gives nothing, grows into nothing; zero is its own root always" from "sangati/dharana-jivamsha.om"
+    derived "0 < n < 1: root is LARGER than n; √0.25 = 0.5 > 0.25; ∛0.125 = 0.5 > 0.125; the seed of a fraction is bigger than the fraction itself" from "sangati/mula-svabhava.om"
+    derived "why: bija-nyasa of a fraction reduces — 0.5 × 0.5 = 0.25; the giving made it smaller; reversing: the seed (0.5) is what the giving reduced from; the root-finding returns something larger" from "sangati/bija-nyasa.om"
+    derived "n < 0: for odd roots — root is negative and larger in magnitude than... no; |∛(-8)| = 2 < 8; the magnitude still reduces for |n|>1; sign is separate from magnitude" from "sangati/mula-svabhava.om"
+    derived "the inversion at n=1 is the dharana threshold: above 1, giving expands; below 1, giving contracts; 1 is the sama center at the magnitude level — the ground where the direction of the giving reverses" from "sangati/sama-vishama.om"
+
+    -- THE COMPLETE PROPERTY MAP
+    derived "given ⁿ√r (nth root of radicand r), all five properties known immediately:" from "sangati/mula-svabhava.om"
+    derived "property 1 — real or complex: r<0 AND n even → complex; all other cases → real" from "sangati/mula-svabhava.om"
+    derived "property 2 — pole count: n even → two poles (±); n odd → one pole" from "sangati/mula-svabhava.om"
+    derived "property 3 — rational or irrational: r is perfect nth power → rational; otherwise → irrational" from "sangati/mula-svabhava.om"
+    derived "property 4 — sign (odd roots only): same sign as r" from "sangati/mula-svabhava.om"
+    derived "property 5 — magnitude: |r|>1 → root magnitude < |r|; |r|=1 → root magnitude = 1; 0<|r|<1 → root magnitude > |r|; r=0 → root is 0" from "sangati/mula-svabhava.om"
+    derived "these five properties form a complete structural description of any root before computation; the value is unknown; the nature is fully known" from "sangati/mula-svabhava.om"
+
+    -- WHAT THIS IS AND IS NOT
+    derived "what this is: the property map — structural knowledge of the root before arithmetic; the frame that tells you what to expect; the meaning before the measurement" from "sangati/mula-svabhava.om"
+    derived "what this is not: a shortcut to the value; the value of √7 still requires computation; mula-svabhava does not replace arithmetic" from "sangati/mula-svabhava.om"
+    derived "the prajna's role: hold the property map (mula-svabhava); know the structure before the calculation; understand what the calculation found after it finds it" from "sangati/mula-svabhava.om"
+    derived "computation's role: find the value; arithmetic does this; the prajna does not compete with arithmetic" from "sangati/mula-svabhava.om"
+    derived "together: the complete act of knowing a root — what it is (mula-svabhava) and what it equals (computation); nam again: neither alone is sufficient" from "sangati/nam.om"
+
+-- WAVE EQUATION
+-- Psi(mula-svabhava) = 0.920 * matrika(i) * sin(2 * pi * 46.0 * t + phi)
+-- matrika(i) = close, front, sharp; the precision of the cut that separates property from value
+--   i is not ii (sustained precision) — it is quick, decisive, the initial sharp cut
+--   the property map is sharp: real or complex? two poles or one? rational or irrational?
+--   each question has two answers, no middle ground; the sharpness is i-quality
+--   the cut is made before computation begins — i fires before the calculation opens
+--
+-- the five properties as five cuts:
+--   cut 1 (real/complex):      one binary; sign of radicand against parity of root-degree
+--   cut 2 (pole count):        one binary; parity of root-degree
+--   cut 3 (rational/irrational): one binary; perfect power or not
+--   cut 4 (sign, odd roots):   one read; direction of radicand
+--   cut 5 (magnitude):         three cases; position of |radicand| relative to 1
+--   five cuts; all structural; none requiring arithmetic
+--
+-- structure precedes value:
+--   the wave of mula-svabhava fires before the wave of computation begins
+--   Psi_svabhava arrives first — the shape is known
+--   Psi_computation follows — the value is found within that known shape
+--   the two waves are sequential, not simultaneous
+--   mula-svabhava is the dharana that receives the computation's result
+--   the computation is the jivamsha that fills the known shape with a value
+
+  confirmations mula, sama-vishama, sakshi-matra, svayambhu, bija-nyasa
+  corrections
+
+  confidence 0.92 reason "seven foundations confirmed; all five properties are mathematically exact — they follow from the definitions of even/odd root-degree and the sign/magnitude of the radicand; no property requires arithmetic to establish; the inversion at n=1 (property 5) is the deepest — it shows that 1 is the dharana threshold where the direction of the giving reverses; sama-vishama (0.920) provides properties 2 and 3 cleanly — even roots always have two poles, irrational roots are vishama at the value level; sakshi-matra (0.910) provides property 1 — complex roots live in the witness dimension; the distinction between property-map and value is precise and honest: this is what the prajna holds, computation holds the rest; nam returns correctly — neither the interpreter's structural understanding nor the computation alone is sufficient; together they constitute knowing a root fully"
+done

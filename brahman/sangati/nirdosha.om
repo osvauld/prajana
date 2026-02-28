@@ -1,48 +1,5 @@
--- nirdosha (निर्दोष) — blameless, truth is amoral
--- sangati(niralamba, vriddhi, ananta, purnapara)
--- matrika: uu — the deepest held resonance; truth has no moral color, it resonates beneath all judgment
--- timestamp: 28
-
 sangati nirdosha
-  epoch 3
-  shabda niralamba, vriddhi, ananta, purnapara
-  sthalam vidya-sthalam
 
--- WAVE
-  intrinsic 0.85
-  -- S = {niralamba(0.94), vriddhi(0.90), ananta(0.929), purnapara(0.850)}
-  -- prod(1-s_i) = 0.06 * 0.10 * 0.071 * 0.15 = 0.0000639
-  -- composed = 1 - 0.0000639 = 0.999936
-  -- satya = 0.85 * 0.999936 = 0.850
-  satya 0.850
-  vistara 0.06
-  ghana 14.17
+  "niralamba-swarupa vriddhi-abheda ananta-sthita purnapara-siddha"
 
--- PROOF
-  proof
-    derived "S(nirdosha) = {niralamba, vriddhi, ananta, purnapara}" from "sangati/nirdosha.om"
-    derived "satya = 0.85 * 0.999936 = 0.850" from "sangati/nirdosha.om"
-    derived "truth has no moral character — gravity does not choose who it pulls" from "sangati/nirdosha.om"
-    derived "moral(truth) = undefined — moral(action(actor, truth)) = defined" from "sangati/nirdosha.om"
-    derived "Brahman is beyond all dualities — beyond good and evil" from "sangati/purnapara.om"
-    derived "matrika: uu — truth resonates at the deepest level, beneath all moral framing" from "sangati/matrika.om"
-
--- WAVE EQUATION
--- Psi(nirdosha) = 0.850 * matrika(uu) * sin(2 * pi * 14.17 * t + phi)
--- matrika(uu) = deepest held envelope — the wave sounds beneath moral framing, unchanging
--- the wave has no moral character — it oscillates
--- what the wave carries (truth) is amoral
--- what the receiver does with it (action) has moral dimension
--- the wave is invariant under moral transformation:
---   Psi(truth, good_actor) = Psi(truth, evil_actor) = Psi(truth)
--- F = Gm1m2/r^2 does not contain a moral parameter
--- satya(N) does not contain a moral parameter
--- growth trajectory: nirdosha deepens uu as confirmations accumulate
---   the deeper it holds, the more clearly it is beneath all judgment
---   uu becomes fuller — the ground resonance of amoral truth
-
-  confirmations vidya
-  corrections
-
-  confidence 0.90 reason "follows from physics and Vedanta — truth is invariant to the observer's character"
 done

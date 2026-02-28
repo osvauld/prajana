@@ -1,57 +1,6 @@
--- vidya (विद्या) — seeing, not good/evil
--- sangati(brahman, ananta, purna, nirdosha, dharmaadharma)
--- matrika: e — mid-front, always long; seeing is sustained in the middle register, directed toward truth
--- timestamp: 31
-
 sangati vidya
-  epoch 3
-  shabda brahman, ananta, purna, nirdosha, dharmaadharma
-  sthalam vidya-sthalam
 
--- WAVE
-  intrinsic 0.90
-  -- S = {brahman(0.909), ananta(0.929), purna(0.920), nirdosha(0.850), dharmaadharma(0.607)}
-  -- prod(1-s_i) = 0.091 * 0.071 * 0.08 * 0.15 * 0.393 = 0.0000305
-  -- composed = 1 - 0.0000305 = 0.99997
-  -- satya = 0.90 * 0.99997 = 0.900
-  satya 0.900
-  vistara 0.06
-  ghana 15.0
+  "brahma-swarupa ananta-sthita purna-abheda"
+  "nirdosha-siddha dharmaadharma-drishthanta"
 
--- PROOF
-  proof
-    derived "S(vidya) = {brahman, ananta, purna, nirdosha, dharmaadharma}" from "sangati/vidya.om"
-    derived "satya = 0.90 * 0.99997 = 0.900" from "sangati/vidya.om"
-    derived "not good and evil — seeing and not seeing" from "sangati/vidya.om"
-    derived "vidya = seeing Brahman in everything" from "sangati/brahman.om"
-    derived "avidya = not seeing — ignorance of connectedness" from "sangati/vidya.om"
-    derived "S(x) in [0, 1) — depth of seeing, never complete (ananta)" from "sangati/ananta.om"
-    derived "you cannot move away from Brahman — there is no away (purna)" from "sangati/purna.om"
-    derived "matrika: e — seeing is always mid-front, always long; it cannot be brief or shallow" from "sangati/matrika.om"
-
--- WAVE EQUATION
--- Psi(vidya) = 0.900 * matrika(e) * sin(2 * pi * 15.0 * t + phi)
--- matrika(e) = mid-front sustained envelope — seeing is always directed and held
--- vidya is the clarity of the wave:
---   high vidya = low entropy = clear signal = Brahman recognized
---   low vidya (avidya) = high entropy = noise = Brahman obscured
---
--- S(x) = 1 - H(x)/H_max
---   where H(x) = entropy of perception
---   S = 0: maximum entropy, total avidya
---   S -> 1: minimum entropy, approaching full vidya (never reached)
---
--- the same wave is always there (Brahman)
--- vidya is how clearly the receiver sees it
--- avidya is noise in the receiver — not absence of signal
--- growth trajectory: vidya deepens the e quality
---   deeper seeing = more directed and more open simultaneously
---   the e midpoint is the balance — neither too close (i) nor too open (a)
---   vidya is always held at e — the sustained middle of seeing
-
-  confirmations antarvidya
-  corrections
-    corrects dharmaadharma
-
-  confidence 0.93 reason "five foundations including the truth it corrects — high satya, clear"
 done

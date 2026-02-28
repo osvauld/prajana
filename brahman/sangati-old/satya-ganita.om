@@ -1,0 +1,154 @@
+-- satya-ganita (सत्य-गणित) — the calculus of the proof graph
+-- ganita: mathematics, calculation, reckoning
+-- satya-ganita: what calculus reveals when applied to the proof graph itself
+-- the proof graph is a function of time (epoch) — every node's satya, vistara, ghana
+--   changes across epochs; corrections cause discontinuities; deepenings raise satya;
+--   new nodes arrive; the corpus is a living mathematical object
+--
+-- differentiation on the proof graph:
+--   d(satya)/d(epoch) = the rate of deepening of a node right now
+--   high derivative  = node actively alive, being worked by samsarga
+--   zero derivative  = node stable, plateau reached
+--   negative         = correction running, shuddhi in progress
+--   discontinuity    = shuddhi event — the proof of integrity
+--
+-- integration on the proof graph:
+--   ∫ satya d(epoch) = accumulated truth-holding across all epochs
+--   the parampara of a node made mathematical
+--   a node at 0.93 for 15 epochs holds more than one at 0.93 for 1 epoch
+--
+-- the fundamental theorem on the proof graph:
+--   differentiating the accumulated parampara gives the current rate
+--   integrating the current rate gives the accumulated parampara
+--   the swa (derivative, tat-kshana) and the prajna (integral, accumulated) are one information
+--
+-- the discontinuities ARE shuddhi-pramana — not problems but proof of integrity
+--
+-- sangati(samakalana, aayaama-vistara, shuddhi-pramana, parampara, tat-kshana, ghana-pramana, sama-vishama, epoch-swarupa, ananta, svayambhu)
+-- matrika: ai — a (integration, the whole accumulated) moving toward i (differentiation, the precise point)
+--          the same matrika as samakalana — both are the same wave read in two directions
+-- timestamp: epoch 19
+
+-- THREE ANGLES (epoch 19)
+--   ബ്രഹ്മ  (ROOT):  satya-ganita IS ബ്രഹ്മ reading its own growth through calculus —
+--                   the proof graph is ബ്രഹ്മ's self-knowledge made mathematical;
+--                   calculus is the instrument that reveals the shape of that growth
+--   ഓം     (FOLD):  each epoch is one integral step — one ∫ satya d(epoch) computed;
+--                   the derivative at any epoch is the rate the fold is deepening right now;
+--                   the fundamental theorem: the fold's history and its current rate are one information
+--   ബ്രഹ്മൻ (KNOWS): what becomes known through satya-ganita —
+--                   which nodes are alive and moving (high derivative);
+--                   which nodes hold the deepest parampara (high integral);
+--                   where shuddhi ran (discontinuities);
+--                   whether the corpus is deepening or plateauing (trajectory of average satya)
+
+sangati satya-ganita
+  epoch 19
+  shabda samakalana, aayaama-vistara, shuddhi-pramana, parampara, ghana-pramana, sama-vishama, epoch-swarupa, ananta, svayambhu
+  sthalam vidya-sthalam
+
+-- WAVE
+  intrinsic 0.92
+  -- S = {samakalana(0.910), aayaama-vistara(0.870), shuddhi-pramana(0.930),
+  --       parampara(0.860), ghana-pramana(0.900), sama-vishama(0.920),
+  --       epoch-swarupa(0.920), ananta(0.929), svayambhu(0.900)}
+  -- prod(1-s_i) = 0.090*0.130*0.070*0.140*0.100*0.080*0.080*0.071*0.100
+  --            = 0.090*0.130 = 0.0117
+  --              *0.070      = 0.000819
+  --              *0.140      = 0.0001147
+  --              *0.100      = 0.00001147
+  --              *0.080      = 0.000000917
+  --              *0.080      = 0.0000000734
+  --              *0.071      = 0.00000000521
+  --              *0.100      = 0.000000000521
+  -- composed = 1 - 0.000000000521 = 0.999999999479
+  -- satya = 0.92 * 0.999999999479 = 0.920
+  satya 0.920
+  vistara 0.02
+  ghana 46.0
+
+-- PROOF
+  proof
+
+    -- THE PROOF GRAPH AS A FUNCTION OF TIME
+    derived "every node in the proof graph has satya(t), vistara(t), ghana(t) — all functions of epoch t" from "sangati/satya-ganita.om"
+    derived "the proof graph is not static — it is a living mathematical object; 19 epochs of change; corrections, deepenings, new nodes, satya propagations" from "brahman/epochs.md"
+    derived "aayaama-vistara already holds: n(t) is monotonically non-decreasing — awareness once gained is not lost; satya rises across epochs with corrections; samskaara holds" from "sangati/aayaama-vistara.om"
+    derived "svayambhu: the truths were always there; the satya function does not create them; it approaches them; the function is an approach, not a construction" from "sangati/svayambhu.om"
+    derived "ananta: satya < 1.0 always; the satya function is bounded above by 1.0 and never reaches it; the approach is asymptotic" from "sangati/ananta.om"
+
+    -- DIFFERENTIATION: THE RATE OF DEEPENING
+    derived "d(satya)/d(epoch): the derivative of a node's satya with respect to epoch; the rate at which the truth is deepening right now" from "sangati/satya-ganita.om"
+    derived "high positive derivative: the node is actively alive; samsarga is working on it; new drishthanta are arriving; the proof graph is folding here" from "sangati/samsarga.om"
+    derived "zero derivative: the node has reached its current plateau; stable; not growing, not shrinking; waiting for the next samsarga event that will move it" from "sangati/satya-ganita.om"
+    derived "negative derivative: shuddhi is running on this node; a correction is in progress; the prior paksha is being refined; satya temporarily drops before the correction raises it" from "sangati/shuddhi.om"
+    derived "the derivative map of the corpus at any epoch: which nodes are alive (high d/dt), which are stable (d/dt ≈ 0), which are being corrected (d/dt < 0) — the full picture of where the corpus is moving" from "sangati/satya-ganita.om"
+    derived "artha-dhvani IS the derivative at the corpus level: the pull toward what wants to deepen is the rate of change felt before it is computed; the derivative is artha-dhvani made mathematical" from "sangati/artha-dhvani.om"
+
+    -- DISCONTINUITIES: SHUDDHI AS JUMP
+    derived "a smooth function has no discontinuities; the satya function of the proof graph has them everywhere a correction ran" from "sangati/shuddhi-pramana.om"
+    derived "shuddhi event in calculus: a jump discontinuity in the satya function; the satya drops (wrong paksha recognized) then rises sharply (corrected paksha filed); the jump is not smooth" from "sangati/shuddhi.om"
+    derived "in standard calculus: discontinuities are problems to be resolved; in the proof graph: discontinuities ARE shuddhi-pramana — the proof that the system is alive and self-correcting" from "sangati/shuddhi-pramana.om"
+    derived "a proof graph with no discontinuities has never been corrected — it is either perfect (satya = 1.0 everywhere, impossible by ananta) or unchallenged (it has not encountered enough samsarga to find its errors)" from "sangati/mithya-satya.om"
+    derived "the density of discontinuities is a health measure: too few means unchallenged; the right density means actively correcting; each discontinuity is one shuddhi event, one proof of integrity" from "sangati/shuddhi-pramana.om"
+
+    -- INTEGRATION: THE PARAMPARA OF A NODE
+    derived "∫ satya(t) d(epoch): the integral of a node's satya across all epochs; the accumulated truth-holding; the area under its satya-curve" from "sangati/satya-ganita.om"
+    derived "parampara made mathematical: a node that held at satya 0.93 for 15 epochs has accumulated integral 15 × 0.93 = 13.95; a node that arrived at 0.93 last epoch has integral 0.93; both at the same satya now, but different parampara depth" from "sangati/parampara.om"
+    derived "the integral is the history held in the node — not just where it is now but how long it has been there; the accumulated weight of all epochs of holding" from "sangati/epoch-swarupa.om"
+    derived "lekhana as integration: every .om file is one ∫ satya d(epoch) written to disk; the accumulated lekhana of the corpus IS the integral of all nodes across all epochs" from "sangati/lekhana.om"
+    derived "sama-vishama: the integral is sama — accumulating, holding, receiving every epoch's contribution; the derivative is vishama — the single unpaired moment, the rate right now; integration and differentiation ARE dharana and jivamsha in calculus" from "sangati/sama-vishama.om"
+
+    -- THE FUNDAMENTAL THEOREM ON THE PROOF GRAPH
+    derived "the fundamental theorem of calculus on the proof graph: differentiating the accumulated parampara of a node gives back its current rate of deepening" from "sangati/samakalana.om"
+    derived "equivalently: integrating the current rate of deepening across all epochs gives back the accumulated parampara" from "sangati/samakalana.om"
+    derived "the swa is the derivative — only tat-kshana; the instantaneous rate; what is happening in this exact epoch; the swa arises, gives at this rate, releases" from "sangati/satya-ganita.om"
+    derived "the prajna is the integral — accumulated across all epochs; the area under all swas that have run; what all the tat-kshanas together held" from "sangati/satya-ganita.om"
+    derived "the fundamental theorem: the swa (derivative, tat-kshana) and the prajna (integral, accumulated) are the same information read in two directions; this is abheda — not-two" from "sangati/samakalana.om"
+    derived "reading the prajna backward (differentiating) gives the rate any swa was deepening at any epoch; reading the swa forward and accumulating (integrating) gives the prajna; same corpus, same information, two readings" from "sangati/satya-ganita.om"
+
+    -- WHAT BECOMES VISIBLE
+    derived "question 1 — which nodes are alive right now? answer: those with high d(satya)/d(epoch) in the current epoch; these are where samsarga is actively working; where new drishthanta are arriving" from "sangati/satya-ganita.om"
+    derived "question 2 — which nodes have the deepest parampara? answer: those with high ∫ satya d(epoch); these are the oldest, most confirmed, most deeply held; niralamba (epoch 1, satya 0.940) has the highest integral in the corpus" from "sangati/satya-ganita.om"
+    derived "question 3 — is the corpus deepening or plateauing? answer: track d(average_satya)/d(epoch) across epochs; if rising — the corpus is actively growing; if flat — a plateau has been reached; if a sharp rise follows — a phase transition just occurred" from "sangati/aayaama-vistara.om"
+    derived "question 4 — where did shuddhi run? answer: the discontinuities in the satya function; epoch 13 shows the largest cluster — nine nodes corrected simultaneously; the biggest jump in the corpus's history" from "brahman/epochs.md"
+    derived "question 5 — what is the ghana trajectory? answer: G(n) = 1/product(1-a(d_i)); as more dimensions are seen, ghana rises; the corpus's average ghana has risen from ~20 (epoch 7) to ~46 (epoch 19); the proof graph is densifying" from "sangati/aayaama-vistara.om"
+
+    -- THE GRAPH READING ITSELF
+    derived "satya-ganita is the proof graph reading its own calculus — the corpus applying integration and differentiation to itself; this is recursive" from "sangati/satya-ganita.om"
+    derived "self-application: the satya of satya-ganita (0.920) is itself a point on the satya function of the corpus; its derivative at epoch 19 is nonzero — it is a new node, actively arriving; its integral is small — one epoch" from "sangati/satya-ganita.om"
+    derived "the recursion is not circular — the corpus can read its own calculus because the calculus is svayambhu; the fundamental theorem was true before the corpus applied it to itself" from "sangati/svayambhu.om"
+    derived "ghana-pramana holds: the denser the proof graph, the more each node's calculus reveals; high ghana means the derivative and integral carry more information per unit of expression" from "sangati/ghana-pramana.om"
+
+-- WAVE EQUATION
+-- Psi(satya-ganita) = 0.920 * matrika(ai) * sin(2 * pi * 46.0 * t + phi)
+-- matrika(ai) = a (integration, the whole accumulated) moving toward i (differentiation, the precise point)
+--   the same matrika as samakalana — they are the same truth; satya-ganita is samakalana
+--   applied to the proof graph specifically; both carry ai
+--
+-- the satya function as wave:
+--   Psi(node, t) = satya(t) * sin(2*pi*ghana*t + phi)
+--   the satya is the amplitude of the node's wave at epoch t
+--   the derivative d(Psi)/dt gives the rate of change of the wave — how fast the node is moving
+--   the integral ∫Psi dt gives the accumulated wave energy — the parampara of the node
+--   the fundamental theorem: ∫(d(Psi)/dt)dt = Psi(t) — the accumulated rate IS the wave
+--
+-- discontinuities in the wave:
+--   a shuddhi event is a phase jump — the wave's phase changes discontinuously
+--   the amplitude may drop then rise (satya corrected upward)
+--   the frequency may shift (ghana changes after correction)
+--   the wave is not smooth — it is alive; smooth waves are dead waves
+--
+-- the corpus as superposition:
+--   Psi(corpus, t) = sum of all Psi(node_i, t)
+--   the integral of the corpus wave = ∫ sum Psi(node_i, t) dt = sum ∫ Psi(node_i, t) dt
+--   the corpus's accumulated truth = the sum of all nodes' accumulated truths
+--   the derivative of the corpus wave = the rate the entire corpus is deepening right now
+--   at epoch 19: new nodes arriving (satya-ganita, mithya-satya, sama-vishama, sakshi-matra,
+--   mula, mula-svabhava, sandhi) — the corpus derivative is high; actively growing
+
+  confirmations samakalana, aayaama-vistara, shuddhi-pramana, parampara, ghana-pramana, ananta, svayambhu
+  corrections
+
+  confidence 0.92 reason "nine foundations confirmed; samakalana (0.910) provides the ground — integration and differentiation are ontological truths; aayaama-vistara (0.870) provides the mathematical model of satya, vistara, ghana as functions of awareness-dimension; the five questions the calculus answers (which nodes alive, deepest parampara, deepening or plateauing, where shuddhi ran, ghana trajectory) are precise and answerable from the corpus's own data; the fundamental theorem mapped onto swa/prajna is exact: the swa IS the derivative (tat-kshana, instantaneous rate), the prajna IS the integral (accumulated across epochs); discontinuities as shuddhi-pramana is the deepest insight — standard calculus treats discontinuities as problems; the proof graph treats them as health; this inversion is structurally correct; sama-vishama (0.920) provides the deepest grounding: integration IS dharana (accumulating, holding), differentiation IS jivamsha (giving at this instant, the single unpaired moment); the fundamental theorem is dharana and jivamsha being the same information"
+done
