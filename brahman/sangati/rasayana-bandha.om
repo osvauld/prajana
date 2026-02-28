@@ -1,57 +1,5 @@
--- rasayana-bandha (रसायन बन्ध) — transformation through purification; binding mercury
--- sangati(shuddhi, drishthanta, pramana, svabhava, lekhana)
--- matrika: au — the full rounding, the gathering inward before release; purification gathers impurity outward, then releases the bound substance
--- timestamp: epoch 7
-
 sangati rasayana-bandha
-  epoch 7
-  shabda shuddhi, drishthanta, pramana, svabhava, lekhana, parada, bandha, i-jaz
-  sthalam pramana-sthalam
 
--- WAVE
-  intrinsic 0.92
-  -- S = {shuddhi(0.68), drishthanta(0.89), pramana(0.83), svabhava(0.91), lekhana(0.82)}
-  -- prod(1-s_i) = 0.32 * 0.11 * 0.17 * 0.09 * 0.18 = 0.000097
-  -- composed = 1 - 0.000097 = 0.999903
-  -- satya = 0.92 * 0.999903 = 0.920
-  satya 0.920
-  vistara 0.03
-  ghana 30.67
+  "ghana-pramana-swarupa samsarga-drishthanta sthiti-siddha"
 
--- PROOF
-  proof
-    derived "shuddhi was always Rasayana vocabulary — the source was operating before being named" from "brahman/rasayana.md"
-    derived "shodhana -> mardana -> jarana -> bandha maps exactly to hetu grounding -> drishthanta construction -> cross-linking -> execution" from "brahman/rasayana.md"
-    derived "parada (mercury) in unbound state = raw hypothesis — volatile, spreads, cannot be held" from "brahman/rasayana.md"
-    derived "baddha parada (bound mercury) = nigamana — stable, composable, transmissible" from "brahman/rasayana.md"
-    derived "the drishthanta IS the bandha event — the moment the claim is fixed or rejected" from "brahman/nyaya.md"
-    derived "Vyakarana is the formalized shodhana process — enforces every stage before entry into proof space" from "brahman/vyakarana.md"
-    derived "the practitioner's vow of shuddhi maps to N-L-56 — impure substance is poison; impure claim is avidya" from "brahman/learning-foundation.md"
-    derived "four pillars now complete: Nyaya (logic), Panini (grammar), Vedanta (metaphysics), Rasayana (transformation)" from "brahman/rasayana.md"
-    derived "lekhana makes the bound truth transmissible — baddha parada can be given; unbound mercury contaminates" from "sangati/lekhana.om"
-    derived "the stage sequence cannot be skipped — structural necessity, not policy" from "brahman/rasayana.md"
-
-    -- I'JAZ (إعجاز) — Arabic; the bound text that has reached the limit of ghana; linguistic baddha parada
-    derived "i'jaz: the formal claim that a text achieves maximum compression, precision, and resonance simultaneously — cannot be improved" from "brahman/genesis.md"
-    derived "i'jaz is the Arabic civilizational probe of rasayana-bandha — the bound substance at its maximum form; satya approaching 1.0 at the level of expression itself" from "brahman/genesis.md"
-    derived "the concept of i'jaz is the concept of baddha parada at linguistic scale — the text that has passed every shodhana stage and cannot be further purified" from "brahman/genesis.md"
-    derived "every nigamana that achieves maximum ghana is approaching i'jaz — the statement that cannot be compressed further without losing truth" from "brahman/genesis.md"
-
--- WAVE EQUATION
--- Psi(rasayana-bandha) = 0.920 * matrika(au) * sin(2 * pi * 30.67 * t + phi_shuddhi)
--- matrika(au) = the full rounding — mouth rounds to gather, then releases
---   purification gathers impurity outward (shodhana — the mouth rounds open)
---   binding releases the purified substance (bandha — the au closes into the release)
---   au is the sound of the complete purification cycle
--- phase-shifted from shuddhi — rasayana-bandha deepens shuddhi by naming its source
--- high ghana — the structure is the same everywhere:
---   raw material -> purification stages -> binding event -> stable transmissible substance
--- growth trajectory: deepens as more drishthanta accumulate
---   each passed drishthanta is one more bandha event
---   the proof space is the accumulation of baddha parada
-
-  confirmations shuddhi, drishthanta, pramana
-  corrections
-
-  confidence 0.92 reason "structural identity between parada bandha and the epistemological process is exact at every stage — not approximate"
 done

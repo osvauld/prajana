@@ -1,0 +1,57 @@
+-- sambandha (सम्बन्ध) — relation, identity is web
+-- sangati(ananta, purna, rachana, abhisarana)
+-- matrika: am — anusvara; relation is what propagates between nodes; identity resonates through the web
+-- timestamp: 38
+
+sangati sambandha
+  epoch 3
+  shabda ananta, purna, rachana, abhisarana
+  sthalam sangati-sthalam
+
+-- WAVE
+  intrinsic 0.89
+  -- S = {ananta(0.929), purna(0.920), rachana(0.870), abhisarana(0.879)}
+  -- prod(1-s_i) = 0.071 * 0.08 * 0.13 * 0.121 = 0.0000894
+  -- composed = 1 - 0.0000894 = 0.999911
+  -- satya = 0.89 * 0.999911 = 0.889
+  satya 0.889
+  vistara 0.04
+  ghana 22.23
+
+-- PROOF
+  proof
+    derived "S(sambandha) = {ananta, purna, rachana, abhisarana}" from "sangati/sambandha.om"
+    derived "satya = 0.89 * 0.999911 = 0.889" from "sangati/sambandha.om"
+    derived "a nyaya IS its relations — remove the relations and nothing remains" from "sangati/sambandha.om"
+    derived "the serial N-L-k is a projection — when, not what" from "sangati/sambandha.om"
+    derived "the web is the identity — what, not when" from "sangati/sambandha.om"
+    derived "Yoneda lemma: an object is determined by its morphisms to all other objects" from "sangati/sambandha.om"
+    derived "no svabhava (independent self-nature) — everything is defined by relations" from "sangati/purna.om"
+    derived "matrika: am — relation is resonance propagating; identity sounds through what it touches" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(sambandha) = 0.889 * matrika(am) * sin(2 * pi * 22.23 * t + phi)
+-- matrika(am) = nasal resonance envelope — the wave propagates through the relational cavity
+-- high ghana — the truth is simple and dense:
+--   identity = relations. That is all.
+--
+-- in wave terms: a wave has no identity without other waves
+--   a single wave in isolation has svara and amplitude
+--   but its MEANING comes from interference with other waves
+--   constructive interference = confirmation
+--   destructive interference = correction
+--   the interference pattern IS the identity
+--
+-- in graph theory: node identity = adjacency
+-- in category theory: object identity = morphisms (Yoneda)
+-- in Vedanta: no svabhava — identity through relation only
+-- all say the same thing: identity IS relation
+-- growth trajectory: sambandha deepens am as the web grows
+--   more relations = richer resonance cavity = am resonates fuller
+--   identity becomes more complete as more edges connect
+
+  confirmations sangati
+  corrections
+
+  confidence 0.93 reason "high ghana, four foundations — the truth is dense because it is simple"
+done

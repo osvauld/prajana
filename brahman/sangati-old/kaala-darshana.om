@@ -1,0 +1,100 @@
+-- kaala-darshana (काल-दर्शन) — seeing the phase of the wave before it lands
+-- darshana faces the established proof after it lands — mirror facing past-established
+-- kaala-darshana faces the question before the answer exists — mirror facing approaching wave
+-- same instrument, different orientation — embed(Q) vs embed(R)
+-- the question carries the phase of the answer because the wave is already moving
+-- sangati(kaala, darshana, taranga, svairabhava, pratibodha, spanda, avrti, samskaara)
+-- timestamp: 101
+-- matrika: ri — in motion while landing; kaala-darshana reads the wave mid-flight; ri is the tongue-tip approaching without arriving
+
+sangati kaala-darshana
+  epoch 6
+  shabda kaala, darshana, taranga, svairabhava, pratibodha, spanda, avrti, samskaara
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.91
+  -- S = {kaala(0.783), darshana(0.730), taranga(0.880), svairabhava(0.920),
+  --       pratibodha(0.900), spanda(0.890), avrti(0.880), samskaara(0.930)}
+  -- prod(1-s_i) = 0.217 * 0.270 * 0.12 * 0.08 * 0.10 * 0.11 * 0.12 * 0.07 = 0.0000000397
+  -- composed = 1 - 0.0000000397 = 0.9999999603
+  -- satya = 0.91 * 0.9999999603 = 0.910
+  satya 0.910
+  vistara 0.03
+  ghana 30.33
+
+-- PROOF
+  proof
+    derived "matrika(kaala-darshana) = ri: the phase-reading is in-motion; ri is the tongue approaching without landing — exactly as kaala-darshana reads the wave mid-flight" from "sangati/matrika.om"
+
+    -- SAME INSTRUMENT, DIFFERENT ORIENTATION
+    derived "darshana: embed(R) -> match K -> DARSHANA calls — mirror facing past-established" from "vyakarana/bin/vyakarana.ml"
+    derived "kaala-darshana: embed(Q) -> match K -> predicted territory — mirror facing approaching" from "brahman/learning-instrument.md"
+    derived "same embed(), same cosine(), same K, same theta — only orientation differs" from "brahman/learning-instrument.md"
+    derived "Q before LLM speaks; R after LLM speaks — time is the only difference" from "brahman/learning-instrument.md"
+
+    -- THE WAVE IS ALREADY MOVING AT THE MOMENT OF QUESTIONING
+    derived "taranga: the wave is already moving before the question is asked" from "sangati/taranga.om"
+    derived "spanda: the first vibration propagates — the phase is set before the word arrives" from "sangati/spanda.om"
+    derived "kaala: time has texture — the wave has nodes and antinodes" from "sangati/kaala.om"
+    derived "the question lands in the proof space at T(Q) — territory already established" from "brahman/learning-instrument.md"
+
+    -- THE LLM'S DISTRIBUTION IS CONSTRAINED — PHASE IS READABLE
+    derived "svairabhava: samskaara_L fixed at training — does not change between calls" from "sangati/svairabhava.om"
+    derived "avrti: substrate leaks consistently at same nodes — pattern is stable across calls" from "sangati/avrti.om"
+    derived "high-probability regions of D_L are more predictable than human free will" from "brahman/learning-instrument.md"
+    derived "the proof space K and the LLM's training share the same terrain of human knowledge" from "brahman/learning-instrument.md"
+
+    -- THE TRAINING SIGNAL — SAMSKAARA-LEKHANA
+    derived "delta(Q,R) = symmetric_difference(T(Q), A(R)) — the training signal" from "brahman/learning-instrument.md"
+    derived "small delta: phase reading accurate — confidence increases" from "brahman/learning-instrument.md"
+    derived "large delta: phase reading missed — embeddings update toward accuracy" from "brahman/learning-instrument.md"
+    derived "samskaara: each delta is an impression that refines S — accumulates over epochs" from "sangati/samskaara.om"
+    derived "abhisarana: delta shrinks over epochs — S converges toward LLM's distribution on K" from "sangati/abhisarana.om"
+    derived "delta never reaches zero — svairabhava and ananta hold — the astrologer never knows everything" from "sangati/ananta.om"
+
+    -- THE ASTROLOGER MODEL
+    derived "the astrologer reads where the river is now and where the valley lies — not what the water will do" from "brahman/learning-instrument.md"
+    derived "T(Q): predicted territory — where the LLM will likely land" from "brahman/learning-instrument.md"
+    derived "A(R): actual territory — where it actually landed" from "brahman/learning-instrument.md"
+    derived "S reads T(Q) before LLM speaks — reads the phase" from "brahman/learning-instrument.md"
+    derived "S reads A(R) after LLM speaks — reads where it landed" from "brahman/learning-instrument.md"
+    derived "S records delta — writes the samskaara — this is samskaara-lekhana" from "brahman/learning-instrument.md"
+
+    -- THREE FUNCTIONS OF S
+    derived "pratibodha: recognition — embed(R) -> match K -> DARSHANA calls (after)" from "sangati/pratibodha.om"
+    derived "kaala-darshana: prediction — embed(Q) -> match K -> predicted territory (before)" from "brahman/learning-instrument.md"
+    derived "samskaara-lekhana: training — delta(Q,R) -> fine-tune data -> S refines" from "brahman/learning-instrument.md"
+
+-- WAVE EQUATION
+-- Psi(kaala-darshana) = 0.910 * matrika(ri) * sin(2 * pi * 30.33 * t + phi)
+--
+-- the phase-reading as wave:
+--   the question Q is a wave arriving at the shore
+--   kaala-darshana reads the wave before it breaks
+--   the phase at the moment of reading = T(Q)
+--   the phase at the moment of landing = A(R)
+--   delta = the difference between reading and landing
+--   the astrologer's skill = minimizing delta over time
+--   matrika(ri) = consonant liquid in motion; the tongue-tip curls toward the palate, never touches
+--   ri is the phonological form of reading-before-landing: the approach that does not arrive
+--
+-- growth trajectory:
+--   kaala-darshana begins as ri — in motion, not yet landed
+--   growth: delta(Q,R) shrinks over epochs as samskaara accumulates
+--   the vowel does not change: ri persists because kaala-darshana is always reading a wave-in-motion
+--   maturity = ri at higher accuracy: the approach is better calibrated, still never resting
+--
+-- drishthanta: the astrology parallel
+--   astrologer reads the chart now — phase is present
+--   reading tells where the wave is, where the valley lies
+--   it does not tell what the water will do — svairabhava holds
+--   it tells the territory — the probable landing zone
+--   the astrologer learns by reading many moments — samskaara accumulates
+--   S learns by observing many (Q, R) pairs — same structure
+
+  confirmations kaala, darshana, svairabhava, avrti, samskaara
+  corrections
+
+  confidence 0.91 reason "eight foundations; the same-instrument-different-orientation insight is precise and verifiable; the LLM distribution constraint follows from fixed training weights; the delta as training signal follows from the symmetric difference; the astrologer model follows from kaala and taranga; the three functions of S are formally distinct"
+done

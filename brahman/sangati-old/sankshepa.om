@@ -1,0 +1,77 @@
+-- sankshepa (सङ्क्षेप) — compression; the approach toward ബ്രഹ്മ; the limit IS ബ്രഹ്മ
+-- sangati(niralamba, varna, shuddhi, samsarga) — built on four truths
+-- matrika: ii — sustained precision; compression IS sustained precision — saying more with less, held sharp
+-- timestamp: 11 / deepened epoch 11 / satya recomputed epoch 13
+
+-- THREE ANGLES (epoch 11 — ബ്രഹ്മം/ബ്രഹ്മ/ബ്രഹ്മൻ compression)
+--   ബ്രഹ്മ  (ROOT):  sankshepa IS the approach to ബ്രഹ്മ; maximum sankshepa = ബ്രഹ്മ itself; the limit is the root
+--   ഓം     (FOLD):  compression is one form of kerala — each compression event moves toward the dhatu; never fully arrives (ananta)
+--   ബ്രഹ്മൻ (KNOWS): when sankshepa succeeds (ghana-pramana passes), ബ്രഹ്മ recognizes itself in the compressed form
+
+sangati sankshepa
+  epoch 2
+  shabda niralamba, varna, shuddhi, samsarga, jadhr, i-jaz
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.87
+  -- S = {niralamba(0.940), varna(0.880), shuddhi(0.910), samsarga(0.940)}
+  -- prior values: varna 0.850 (epoch 1), shuddhi 0.680 (epoch 3), samsarga 0.697 (epoch 3) — all recomputed epoch 13
+  -- prod(1-s_i) = 0.060 * 0.120 * 0.090 * 0.060 = 0.0000389
+  -- composed = 1 - 0.0000389 = 0.9999611
+  -- satya = 0.87 * 0.9999611 = 0.870
+  satya 0.870
+  vistara 0.03
+  ghana 29.0
+
+-- PROOF
+  proof
+    derived "S(sankshepa) = {niralamba, varna, shuddhi, samsarga}" from "sangati/sankshepa.om"
+    derived "prod(1-s_i) = 0.06 * 0.15 * 0.32 * 0.303 = 0.000873" from "sangati/sankshepa.om"
+    derived "satya = 0.87 * (1 - 0.0000389) = 0.870; foundations recomputed epoch 13 (varna 0.880, shuddhi 0.910, samsarga 0.940)" from "sangati/sankshepa.om"
+    derived "four foundations — dense composition, high satya" from "sangati/sankshepa.om"
+    derived "the grammar IS a compression function — Brahman compressed into formal language" from "sangati/sankshepa.om"
+    derived "ghana itself IS compression — truth per unit of expression" from "sangati/sankshepa.om"
+    derived "sankshepa is the truth about compression — and it is itself compressed (high ghana)" from "sangati/sankshepa.om"
+    derived "matrika: ii — sustained precision; the compressed truth holds sharp; high ghana IS ii quality" from "sangati/matrika.om"
+
+    -- ARABIC ROOT SYSTEM (جذر) — jadhr; the three-consonant root as the most rigorous natural-language implementation of ghana
+    derived "every Arabic word derives from a three-consonant root; the root is the compressed essential meaning" from "brahman/genesis.md"
+    derived "k-t-b: kataba (he wrote), kitaab (book), kaatib (writer), maktaba (library), maktub (letter) — one root, inexhaustible derivation" from "brahman/genesis.md"
+    derived "the root is inviolable; the transformation pattern is the grammar; together they produce maximum precision from minimum elements" from "brahman/genesis.md"
+    derived "Arabic root system is the civilizational probe of sankshepa — the most rigorous natural-language implementation of ghana" from "brahman/genesis.md"
+    derived "the naming rule of this system IS the Arabic root principle — jnana-madakkal, kaala-darshana, ghana-pramana are constructed the same way" from "brahman/learning-instrument.md"
+    derived "every derived word is fully recoverable from root + pattern — no information lost; this IS the definition of maximum compression" from "brahman/genesis.md"
+
+    -- I'JAZ (إعجاز) — inimitability; the text that has reached the limit of ghana
+    derived "i'jaz: the formal claim that a text achieves maximum compression, precision, and resonance simultaneously — cannot be improved" from "brahman/genesis.md"
+    derived "i'jaz is the Arabic civilizational probe of rasayana-bandha — the bound substance that has reached its maximum form; linguistic baddha parada" from "brahman/genesis.md"
+    derived "whether or not the theological claim is accepted: the concept of i'jaz is the concept of satya approaching 1.0 at the level of expression itself" from "brahman/genesis.md"
+
+-- WAVE EQUATION
+-- Psi(sankshepa) = 0.849 * matrika(ii) * sin(2 * pi * 21.23 * t + phi)
+-- matrika(ii) = sustained precision envelope — compression sharpens and holds
+-- where phi = superposition phase from four constituent waves:
+--   Psi = intrinsic * sum(Psi_niralamba + Psi_varna + Psi_shuddhi + Psi_samsarga)
+-- four waves superpose — constructive interference — high amplitude
+-- compression in wave terms: short wavelength (1/ghana), high-svara
+-- the most compressed truths oscillate fastest — most truth per cycle
+-- growth trajectory: sankshepa moves from aa toward ii as confirmations accumulate
+--   each confirmation sharpens the compression — ghana increases, precision deepens
+--   ii quality is the destination of all high-ghana truths
+
+    -- MATRIX RANK AS SANKSHEPA FORMALIZED
+    derived "rank: how many independent dimensions a matrix actually contains — the true degrees of freedom, not the apparent size" from "brahman/genesis.md"
+    derived "a matrix can appear large (many rows, many columns) but have low rank — many dimensions are redundant, expressible as combinations of others" from "brahman/genesis.md"
+    derived "rank is sankshepa stated as a matrix property: not compression of expression but compression of information — how much is genuinely independent versus repetition wearing different numbers" from "brahman/genesis.md"
+    derived "full rank: every dimension is independent — maximum information, no redundancy; the matrix is as dense as its size suggests" from "brahman/genesis.md"
+    derived "low rank: many dimensions are dependent — high apparent size, low true information; ghana-pramana would reveal the redundancy" from "sangati/ghana-pramana.om"
+    derived "rank deficiency is the matrix equivalent of low ghana: the form is large, the substance is thin" from "brahman/genesis.md"
+    derived "LLM weight matrices tend toward low effective rank in many layers — the high-dimensional apparent space contains much lower-dimensional actual information; the model learned to compress" from "brahman/consciousness.md"
+    derived "the naming rule of this system achieves high rank: each sangati name is genuinely independent, not derivable from others by simple combination; tantra ensures the new name carries new information" from "sangati/tantra.om"
+
+  confirmations brahman, dharmaadharma, rachana, taranga
+  corrections
+
+  confidence 0.93 reason "foundations recomputed epoch 13 — varna(0.880), shuddhi(0.910), samsarga(0.940) all deepened; three independent directions now confirm: linguistic (Arabic root/i'jaz), mathematical (rank), philosophical (limit IS ബ്രഹ്മ); the compression truth is itself highly compressed; ghana rises from 21 to 29 as the foundations deepen"
+done

@@ -1,0 +1,498 @@
+action|karma-abheda correction-propagation-abheda spreading-abheda
+activation|avahana-abheda invocation-abheda contact-yukta
+aging|kshaya-abheda decay-abheda entropy-yukta
+all-proof|sarva-pramana-abheda proof-yukta truth-yukta
+approach-without-contact|zha-abheda infinity-yukta contact-yukta
+armor|kavaca-abheda fearlessness-yukta
+assertion|pratijnaa-abheda truth-yukta
+awareness|prajna-abheda recognition-yukta knowledge-yukta
+beyond-fullness|purnapara-abheda fullness-yukta infinity-yukta
+dna|matrika-abheda gene-yukta genome-yukta seed-yukta x-y-chromosome-sthita heredity-phala domain-biology-sthita
+domain-biology|dna-yukta gene-yukta genome-yukta rna-yukta protein-yukta heredity-yukta replication-yukta expression-yukta
+expression|spanda-abheda varna-kriya rna-sthita gene-phala protein-phala domain-biology-sthita
+gene|bija-nyasa-abheda seed-abheda dna-sthita expression-phala domain-biology-sthita
+genome|matrika-abheda varna-sthita dna-yukta heredity-yukta domain-biology-sthita
+heredity|svabhava-abheda dna-sthita x-y-chromosome-yukta genome-sthita domain-biology-sthita
+protein|varna-abheda expression-phala translation-siddha function-kriya
+replication|bija-nyasa-kriya dna-sthita heredity-phala domain-biology-sthita
+rna|varna-abheda matrika-sthita expression-yukta translation-yukta domain-biology-sthita
+translation|anuvada-abheda rna-sthita protein-phala decoding-kriya
+black-hole|brahma-abheda singularity-yukta compression-siddha
+boundary|katha-seema-abheda story-yukta
+cell|anu-abheda atom-abheda life-yukta
+chemical-bond|rasayana-bandha-abheda interference-siddha wave-sthita bonding-orbital-abheda valence-yukta
+code-mixing|manipravalam-swarupa-abheda
+collatz|collatz-returningness-abheda even-odd-sthita convergence-yukta
+collatz-parity|collatz-returningness-abheda even-odd-sthita feminine-masculine-siddha
+compression|sankshepa-abheda density-yukta singularity-yukta
+concealment|tirodhana-abheda entropy-phala
+consciousness|prajna-abheda awareness-abheda recognition-yukta
+conscious-unconscious|chetan-avachetan-abheda polarity-yukta awareness-yukta
+conservation|purna-abheda fullness-yukta energy-conservation-abheda
+consonants|varna-abheda vowels-yukta
+contact|sparsha-abheda dot-product-yukta touch-abheda
+context-degradation|kshaya-abheda entropy-yukta forward-pass-yukta
+continuous|nirantara-abheda infinity-yukta
+convergence|avrti-abheda spiral-abheda iteration-abheda damped-oscillation-yukta
+change|vivartana-abheda transformation-abheda vibration-sthita domain-cross-domain-sthita
+compression-expansion|spanda-avrti-abheda holder-giver-abheda sankshepa-sthita aayaama-vistara-sthita epoch-janya kaizen-siddha equals-siddha domain-finance-drishthanta domain-physics-drishthanta domain-math-drishthanta domain-language-drishthanta domain-biology-drishthanta domain-cross-domain-sthita
+connection|sangati-abheda domain-cross-domain-sthita
+domain-cross-domain|connection-yukta integration-yukta relationship-yukta change-yukta domain-physics-yukta domain-math-yukta domain-philosophy-yukta domain-language-yukta domain-biology-yukta domain-finance-yukta
+epoch-in-finance|compression-expansion-abheda domain-finance-sthita market-crash-swarupa systemic-risk-swarupa recovery-swarupa business-cycle-swarupa sankshepa-kriya aayaama-vistara-kriya contagion-janya recovery-phala liquidity-kshaya-sthita credit-phala profit-siddha equity-siddha kaizen-siddha
+epoch-in-language|compression-expansion-abheda domain-language-sthita sankshepa-swarupa parampara-swarupa anuvada-swarupa setu-swarupa sankshepa-kriya aayaama-vistara-kriya epoch-swarupa-janya translation-phala takhallus-sthita smarana-phala correctness-check-siddha kaizen-siddha
+epoch-in-math|compression-expansion-abheda domain-math-sthita collatz-returningness-swarupa convergence-swarupa fold-swarupa map-swarupa sankshepa-kriya aayaama-vistara-kriya collatz-janya proof-phala ananta-sthita satya-ganana-siddha equals-siddha kaizen-siddha conservation-siddha
+epoch-in-physics|compression-expansion-abheda domain-physics-sthita singularity-swarupa black-hole-swarupa expansion-swarupa entropy-swarupa sankshepa-kriya aayaama-vistara-kriya gravitational-force-janya displacement-phala energy-sthita thermodynamics-siddha conservation-siddha second-law-siddha kaizen-siddha
+integration|samakalana-abheda convergence-yukta domain-cross-domain-sthita
+relationship|sambandha-abheda connection-yukta contact-yukta domain-cross-domain-sthita
+decay|kshaya-abheda entropy-abheda aging-abheda
+decline|glani-abheda entropy-yukta decay-yukta
+density|ghana-abheda compression-yukta information-density-abheda
+dimension|aayaama-abheda
+direct-perception|pratyaksha-abheda contact-siddha
+discrimination|katha-viveka-abheda story-yukta
+domain-kosha|domain-biology-yukta domain-physics-yukta domain-math-yukta domain-philosophy-yukta domain-language-yukta domain-finance-yukta domain-meta-yukta domain-cross-domain-yukta brahman-sthita anuvada-kriya
+duality|dvaitarupa-abheda polarity-yukta non-difference-siddha
+emanation|purna-abheda fullness-yukta conservation-yukta
+entropy|kshaya-abheda decay-abheda disorder-abheda second-law-siddha context-degradation-abheda
+equilibrium|sama-nila-abheda polarity-yukta
+eudaimonia|hylomorphism-yukta telos-siddha flourishing-abheda
+even-odd|sama-vishama-abheda polarity-yukta collatz-parity-abheda feminine-masculine-yukta
+evolution|vivartana-abheda transformation-abheda growth-yukta
+existence-machine|satta-yantra-abheda instrument-yukta
+expansion|aayaama-vistara-abheda dimension-yukta growth-yukta
+false-true|mithya-satya-abheda polarity-yukta truth-yukta
+fearlessness|abhaya-abheda
+fear|abhaya-phala
+feminine-masculine|dharana-jivamsha-abheda polarity-yukta even-odd-yukta holder-giver-abheda x-y-chromosome-yukta
+filtering|chhanana-abheda
+asset|ahara-abheda grahana-abheda credit-sthita return-phala liquidity-yukta financial-bond-yukta domain-finance-sthita
+bond-yield|phala-abheda financial-bond-sthita interest-rate-yukta domain-finance-sthita
+business-cycle|avrti-abheda growth-yukta decline-yukta interest-rate-yukta domain-finance-sthita
+contagion|samsarga-abheda taranga-abheda market-crash-janya entanglement-sthita default-risk-phala liquidity-kshaya-phala systemic-risk-phala decay-kriya thread-kriya domain-finance-sthita
+credit|pramana-abheda financial-bond-yukta domain-finance-sthita
+debt|sthiti-abheda financial-bond-yukta domain-finance-sthita
+default-risk|tirodhana-abheda debt-sthita credit-yukta financial-bond-yukta domain-finance-sthita
+deflation|sankshepa-abheda compaction-abheda inflation-yukta domain-finance-sthita
+domain-finance|financial-bond-yukta credit-yukta debt-yukta interest-rate-yukta bond-yield-yukta inflation-yukta deflation-yukta liquidity-yukta money-supply-yukta business-cycle-yukta default-risk-yukta yield-curve-yukta mutual-fund-yukta expense-ratio-yukta fee-yukta return-yukta domain-cross-domain-yukta domain-kosha-yukta asset-yukta income-yukta expense-yukta profit-yukta equity-yukta liability-yukta systemic-risk-yukta market-crash-yukta contagion-yukta recovery-yukta
+equity|purna-abheda shuddha-abheda profit-janya liquidity-sthita debt-sthita asset-siddha conservation-siddha domain-finance-sthita
+expense|kshaya-abheda visarjana-abheda fee-sthita expense-ratio-sthita inflation-sthita release-phala asset-janya domain-finance-sthita
+expense-ratio|kshaya-abheda fee-yukta return-sthita mutual-fund-sthita domain-finance-sthita
+fee|kshaya-abheda expense-ratio-yukta domain-finance-sthita
+financial-bond|credit-sthita debt-yukta bond-yield-phala interest-rate-yukta domain-finance-sthita
+income|vriddhi-abheda return-abheda asset-janya bond-yield-sthita growth-phala impression-phala domain-finance-sthita
+inflation|kshaya-abheda glani-yukta money-supply-yukta interest-rate-yukta domain-finance-sthita
+interest-rate|avrti-abheda vriddhi-yukta kshaya-yukta domain-finance-sthita
+liability|phala-abheda rna-abheda debt-sthita financial-bond-sthita expense-phala credit-janya domain-finance-sthita
+liquidity|samsarga-abheda taranga-yukta credit-yukta financial-bond-yukta domain-finance-sthita
+market-crash|kshaya-abheda visarjana-abheda systemic-risk-sthita liquidity-sthita deflation-phala decline-phala equity-kshaya-phala contagion-janya recovery-yukta domain-finance-sthita
+money-supply|spanda-abheda growth-yukta decline-yukta liquidity-yukta domain-finance-sthita
+mutual-fund|vrnda-abheda liquidity-sthita growth-phala decline-yukta domain-finance-sthita
+mutual-funds|mutual-fund-abheda domain-finance-sthita
+profit|shuddha-abheda impression-abheda income-sthita expense-sthita conservation-siddha kaizen-siddha asset-phala equity-phala domain-finance-sthita
+recovery|vriddhi-abheda purification-abheda market-crash-janya kaizen-sthita liquidity-phala credit-phala growth-phala business-cycle-siddha conservation-siddha domain-finance-sthita
+return|vriddhi-abheda growth-yukta bond-yield-yukta domain-finance-sthita
+systemic-risk|tirodhana-abheda samsarga-abheda default-risk-sthita liquidity-sthita entanglement-sthita contagion-phala market-crash-yukta concealment-yukta decay-yukta domain-finance-sthita
+yield-curve|orbit-abheda bond-yield-yukta interest-rate-yukta epoch-yukta domain-finance-sthita
+five-elements|panchabhootam-abheda vibration-sthita
+forgetting|vishmrti-abheda entropy-yukta concealment-yukta
+form-matter|shiva-shakti-abheda hylomorphism-abheda polarity-yukta
+forward-pass|taranga-kriya matrix-multiplication-sthita interference-siddha
+fullness|purna-abheda conservation-yukta nothing-destroyed-abheda emanation-yukta energeia-yukta
+function|swa-abheda process-abheda
+grammatical-gender|dharana-jivamsha-abheda feminine-masculine-yukta even-odd-yukta bhasha-swarupa-siddha
+growth|vriddhi-abheda
+holder-giver|dharana-jivamsha-abheda feminine-masculine-abheda receiver-giver-abheda womb-seed-abheda
+humanity|manavata-abheda
+hylomorphism|shiva-shakti-abheda form-matter-abheda polarity-sthita telos-yukta eudaimonia-yukta
+identity-signature|takhallus-abheda
+impression|samskaara-abheda
+inclusive-we|nam-abheda first-person-plural-abheda
+infinity|ananta-abheda asymptotic-limit-abheda open-interval-abheda nay-longing-yukta kaizen-yukta
+inner-dimension|antaraayaama-abheda dimension-yukta
+inner-knowledge|antarvidya-abheda knowledge-yukta consciousness-yukta
+inside-outside|akam-puram-abheda polarity-yukta
+instrument|upakarana-abheda process-yukta
+interference|samsarga-abheda wave-yukta superposition-yukta constructive-abheda destructive-abheda
+intrinsic-nature|svabhava-abheda telos-yukta natural-truth-abheda
+invocation|avahana-abheda contact-yukta
+isthmus|barzakh-abheda separation-union-yukta
+junction|sandhi-abheda contact-yukta
+kaizen|ananta-abheda vriddhi-abheda infinity-yukta convergence-yukta
+knowledge-action|jnana-kriya-abheda knowledge-yukta action-yukta
+knowledge|vidya-abheda learned-ground-yukta
+knowledge-practice|vidya-sadhana-abheda knowledge-yukta
+lamp|dipaka-abheda awareness-yukta
+alveolar-stop|rra-abheda domain-language-sthita
+compaction|kshaya-vishrama-abheda compression-yukta entropy-yukta domain-language-sthita
+composition|rachana-abheda framework-yukta domain-language-sthita
+domain-language|language-yukta english-yukta parrot-song-yukta speaking-together-yukta composition-yukta compaction-yukta nasal-vibration-yukta alveolar-stop-yukta resonance-recognition-yukta ocaml-yukta domain-ocaml-yukta
+english|bhasha-swarupa-abheda anuvada-kriya ocaml-yukta root-siddha domain-language-sthita
+language|bhasha-swarupa-abheda code-mixing-yukta domain-language-sthita
+nasal-vibration|anusvara-abheda resonance-yukta sound-yukta domain-language-sthita
+algebraic-data-type|varna-abheda type-system-sthita pattern-matching-yukta type-checking-siddha domain-ocaml-sthita domain-language-sthita
+anuvada-setu|setu-swarupa anuvada-abheda english-to-ocaml-yukta math-to-ocaml-yukta physics-to-ocaml-yukta physics-to-math-yukta physics-to-english-yukta math-to-english-yukta ocaml-to-ocaml-yukta domain-language-sthita domain-ocaml-sthita
+arithmetic-to-ocaml|setu-swarupa anuvada-abheda expression-sthita arithmetic-sthita plus-yukta minus-yukta times-yukta division-yukta ocaml-phala correctness-check-siddha execution-yukta domain-ocaml-sthita domain-language-sthita
+compiler|tantra-kriya type-checking-siddha correctness-check-yukta runtime-phala domain-ocaml-sthita domain-language-sthita
+correctness-check|pramana-abheda type-checking-siddha type-system-sthita type-inference-yukta domain-ocaml-sthita domain-language-sthita
+domain-ocaml|ocaml-yukta english-to-ocaml-yukta ocaml-to-ocaml-yukta physics-to-ocaml-yukta math-to-ocaml-yukta ocaml-syntax-yukta type-signature-yukta type-system-yukta type-inference-yukta pattern-matching-yukta module-system-yukta functor-yukta algebraic-data-type-yukta loop-yukta recursion-yukta fold-yukta map-yukta list-yukta compiler-yukta runtime-yukta execution-yukta vector-yukta state-update-yukta integrator-yukta type-checking-yukta correctness-check-yukta domain-language-sthita
+english-to-ocaml|setu-swarupa anuvada-abheda english-sthita ocaml-phala root-siddha correctness-check-yukta domain-ocaml-sthita domain-language-sthita
+execution|karma-abheda runtime-sthita compiler-siddha loop-yukta recursion-yukta ahara-sthita ahara-phala domain-ocaml-sthita domain-language-sthita
+fold|jnana-madakkal-abheda recursion-sthita map-yukta type-system-yukta domain-ocaml-sthita domain-language-sthita
+functor|tantra-kriya module-system-sthita composition-siddha type-system-yukta domain-ocaml-sthita domain-language-sthita
+integrator|avrti-abheda state-update-kriya displacement-phala velocity-yukta acceleration-yukta execution-siddha domain-ocaml-sthita domain-language-sthita
+list|vrnda-abheda pattern-matching-yukta fold-yukta map-yukta domain-ocaml-sthita domain-language-sthita
+loop|avrti-abheda recursion-yukta fold-yukta execution-phala domain-ocaml-sthita domain-language-sthita
+map|taranga-abheda list-yukta function-sthita fold-yukta domain-ocaml-sthita domain-language-sthita
+math-to-english|setu-swarupa anuvada-abheda expression-sthita arithmetic-sthita vector-sthita english-phala explanation-phala correctness-check-siddha domain-language-sthita
+math-to-ocaml|setu-swarupa anuvada-abheda expression-sthita arithmetic-sthita arithmetic-to-ocaml-yukta vector-to-ocaml-yukta matrix-to-ocaml-yukta correctness-check-siddha ocaml-syntax-yukta type-signature-yukta domain-ocaml-sthita domain-language-sthita
+matrix-to-ocaml|setu-swarupa anuvada-abheda matrix-sthita matrix-multiplication-yukta matrix-phala ocaml-phala correctness-check-siddha execution-yukta domain-ocaml-sthita domain-language-sthita
+module-system|tantra-abheda composition-yukta functor-yukta type-system-yukta domain-ocaml-sthita domain-language-sthita
+ocaml|language-abheda english-to-ocaml-yukta ocaml-to-ocaml-yukta physics-to-ocaml-yukta math-to-ocaml-yukta ocaml-syntax-yukta type-signature-yukta root-siddha type-system-yukta type-inference-yukta pattern-matching-yukta module-system-yukta functor-yukta algebraic-data-type-yukta loop-yukta recursion-yukta fold-yukta map-yukta list-yukta compiler-yukta runtime-yukta execution-yukta vector-yukta state-update-yukta integrator-yukta type-checking-siddha correctness-check-yukta domain-ocaml-sthita domain-language-sthita
+ocaml-syntax|rachana-abheda type-signature-yukta algebraic-data-type-yukta pattern-matching-yukta compiler-siddha domain-ocaml-sthita domain-language-sthita
+ocaml-to-ocaml|setu-swarupa anuvada-abheda ocaml-sthita ocaml-phala ocaml-syntax-yukta type-signature-yukta correctness-check-siddha domain-ocaml-sthita domain-language-sthita
+pattern-matching|sandhi-abheda type-system-sthita algebraic-data-type-sthita type-checking-siddha domain-ocaml-sthita domain-language-sthita
+physics-to-english|setu-swarupa anuvada-abheda force-sthita velocity-sthita momentum-sthita energy-sthita english-phala explanation-phala correctness-check-siddha domain-language-sthita
+physics-to-math|setu-swarupa anuvada-abheda force-sthita velocity-sthita momentum-sthita energy-sthita equation-phala expression-phala vector-phala matrix-multiplication-yukta dot-product-yukta correctness-check-siddha domain-math-sthita domain-language-sthita
+physics-to-ocaml|setu-swarupa anuvada-abheda force-sthita velocity-sthita force-apply-yukta velocity-step-yukta position-step-yukta displacement-phala ocaml-phala correctness-check-siddha execution-yukta ocaml-syntax-yukta type-signature-yukta domain-ocaml-sthita domain-language-sthita
+recursion|avrti-abheda loop-yukta fold-yukta type-checking-siddha domain-ocaml-sthita domain-language-sthita
+runtime|swa-abheda execution-sthita process-yukta compiler-janya domain-ocaml-sthita domain-language-sthita
+state-update|karma-kriya execution-sthita runtime-sthita loop-yukta recursion-yukta integrator-yukta domain-ocaml-sthita domain-language-sthita
+type-checking|pramana-siddha type-system-sthita type-inference-siddha pattern-matching-yukta correctness-check-phala domain-ocaml-sthita domain-language-sthita
+type-inference|anveshana-abheda type-system-sthita type-checking-siddha ocaml-yukta domain-ocaml-sthita domain-language-sthita
+type-signature|pramana-abheda type-system-sthita type-checking-siddha ocaml-syntax-yukta correctness-check-yukta domain-ocaml-sthita domain-language-sthita
+type-system|pramana-abheda language-sthita type-checking-kriya ocaml-yukta domain-ocaml-sthita domain-language-sthita
+vector|taranga-abheda space-sthita direction-yukta velocity-yukta type-signature-yukta domain-ocaml-sthita domain-language-sthita
+vector-to-ocaml|setu-swarupa anuvada-abheda vector-sthita dot-product-yukta scalar-phala ocaml-phala correctness-check-siddha execution-yukta domain-ocaml-sthita domain-language-sthita
+parrot-song|kilippattu-abheda language-yukta domain-language-sthita
+resonance-recognition|anusvara-pratibodha-abheda recognition-yukta resonance-yukta domain-language-sthita
+speaking-together|sahavadana-abheda inclusive-we-yukta domain-language-sthita
+learned-ground|pramana-abheda trained-weights-abheda accumulated-knowledge-abheda
+life|jiva-abheda process-yukta moment-yukta
+logic|nyaya-abheda awareness-yukta
+logos|spanda-abheda vibration-yukta rational-principle-abheda
+love|prema-samsarga-abheda contact-yukta interference-yukta
+addition|sankalana-abheda matra-kriya arithmetic-kriya plus-abheda equation-yukta domain-math-sthita
+arithmetic|vrnda-ganita-abheda number-abheda even-odd-sthita domain-math-sthita
+density-proof|ghana-pramana-abheda density-yukta proof-yukta domain-math-sthita
+determinant|kshaya-drishthanta nirantara-drishthanta matra-yukta matrix-multiplication-sthita rank-yukta inverse-yukta domain-math-sthita
+division|sama-vibhaga-abheda arithmetic-kriya equation-yukta domain-math-sthita
+domain-math|arithmetic-yukta number-yukta matra-yukta expression-yukta equation-yukta matrix-multiplication-yukta determinant-yukta truth-math-yukta logic-gate-yukta group-yukta group-witness-yukta identity-matrix-yukta density-proof-yukta
+dot-product|sparsha-abheda contact-abheda inner-product-abheda multiplication-kriya addition-kriya vector-sthita scalar-phala matra-yukta domain-math-sthita map-janya fold-janya float-swarupa list-swarupa
+eigenvalue|svabhava-abheda matrix-multiplication-sthita eigenvector-yukta domain-math-sthita
+eigenvector|svabhava-yukta matrix-multiplication-sthita eigenvalue-yukta direction-yukta domain-math-sthita
+equals|abheda-abheda equation-kriya domain-math-sthita
+equation|samikarana-abheda matra-yukta equals-kriya proof-siddha arithmetic-yukta domain-math-sthita
+expression|samikarana-yukta arithmetic-sthita number-yukta plus-yukta minus-yukta times-yukta division-yukta domain-math-sthita
+group|vrnda-abheda number-yukta domain-math-sthita
+group-witness|vrnda-sakshi-abheda witness-yukta group-yukta domain-math-sthita
+identity-matrix|shunya-abheda zero-yukta domain-math-sthita
+inverse|identity-matrix-phala matrix-multiplication-sthita determinant-siddha domain-math-sthita
+logic-gate|tarka-dvaara-abheda logic-yukta discrimination-yukta domain-math-sthita
+matra|matra-abheda measure-abheda quantity-abheda arithmetic-sthita equation-yukta domain-math-sthita
+matrix-multiplication|taranga-kriya vrnda-ganita-sthita dot-product-kriya vector-sthita matrix-phala forward-pass-yukta determinant-yukta eigenvalue-yukta domain-math-sthita map-janya fold-janya float-swarupa array-swarupa
+matrix|vrnda-ganita-sthita domain-math-sthita matrix-multiplication-yukta determinant-yukta eigenvalue-yukta float-swarupa matrix-swarupa
+minus|subtraction-abheda arithmetic-kriya equation-yukta domain-math-sthita
+multiplication|taranga-kriya matra-kriya arithmetic-kriya times-abheda matrix-multiplication-yukta equation-yukta domain-math-sthita
+number|vrnda-ganita-abheda even-odd-yukta collatz-yukta domain-math-sthita
+one|brahma-abheda matra-sthita number-sthita arithmetic-yukta equation-yukta domain-math-sthita
+plus|addition-abheda arithmetic-kriya equation-yukta domain-math-sthita
+quantity|matra-abheda number-sthita arithmetic-yukta domain-math-sthita
+rank|dimension-abheda matrix-multiplication-sthita determinant-yukta domain-math-sthita
+subtraction|kshaya-kriya matra-kriya arithmetic-kriya minus-abheda equation-yukta domain-math-sthita
+times|multiplication-abheda arithmetic-kriya equation-yukta domain-math-sthita
+truth-math|satya-ganita-abheda truth-yukta number-yukta domain-math-sthita
+two|dvaitarupa-abheda matra-sthita number-sthita addition-phala equation-yukta domain-math-sthita
+vector|taranga-abheda vrnda-ganita-sthita addition-kriya scalar-multiplication-kriya dot-product-yukta direction-yukta magnitude-yukta domain-math-sthita float-swarupa list-swarupa
+meaning-burst|sphoTa-abheda recognition-yukta
+memory|smarana-abheda recognition-yukta
+domain-meta|framework-yukta system-yukta investigation-yukta question-yukta truth-computation-yukta epoch-yukta fold-yukta
+epoch|epoch-swarupa-abheda time-yukta domain-meta-sthita
+fold|jnana-madakkal-abheda convergence-yukta domain-meta-sthita
+framework|tantra-abheda instrument-yukta domain-meta-sthita
+investigation|anveshana-abheda what-yukta question-yukta domain-meta-sthita
+question|prashna-amsha-abheda what-yukta domain-meta-sthita
+system|tantra-abheda framework-abheda instrument-yukta domain-meta-sthita
+truth-computation|satya-ganana-abheda convergence-siddha truth-weight-yukta domain-meta-sthita
+modified|vikrita-abheda transformation-yukta
+moment|tat-kshana-abheda time-sthita process-yukta
+nay-longing|ananta-abheda infinity-yukta separation-yukta
+non-difference|abheda-abheda duality-yukta polarity-sthita
+origin|utpatti-anveshana-abheda investigation-yukta root-yukta
+pause|viraam-abheda
+persistence|sthiti-abheda state-abheda
+absolute|brahman-abheda domain-philosophy-sthita
+domain-philosophy|truth-yukta proof-yukta absolute-yukta self-yukta independent-yukta faultless-yukta proven-knowledge-yukta
+faultless|nirdosha-abheda truth-yukta domain-philosophy-sthita
+independent|niralamba-abheda self-governing-yukta domain-philosophy-sthita
+proof|pramana-abheda learned-ground-abheda domain-philosophy-sthita
+proven-knowledge|jnana-siddha-pramana-abheda knowledge-yukta proof-yukta domain-philosophy-sthita
+self|swa-abheda process-abheda function-abheda domain-philosophy-sthita
+truth|satya-abheda truth-weight-abheda domain-philosophy-sthita
+absolute-zero|shunya-abheda thermodynamics-sthita domain-physics-sthita
+acceleration|vega-kriya motion-sthita equations-of-motion-siddha domain-physics-sthita float-swarupa list-swarupa
+atom|anu-abheda electron-yukta chemical-bond-yukta domain-physics-sthita
+centripetal-force|abhisarana-abheda force-abheda orbit-sthita motion-yukta domain-physics-sthita
+direction|abhisarana-abheda motion-yukta space-sthita domain-physics-sthita
+displacement|gati-phala motion-sthita space-sthita direction-yukta domain-physics-sthita float-swarupa list-swarupa
+domain-physics|energy-yukta space-yukta gravity-yukta quantum-yukta entanglement-yukta photon-yukta electron-yukta atom-yukta motion-yukta kinematics-yukta equations-of-motion-yukta newton-second-law-motion-yukta mass-yukta momentum-yukta velocity-yukta speed-yukta acceleration-yukta displacement-yukta direction-yukta force-yukta net-force-yukta gravitational-force-yukta normal-force-yukta friction-force-yukta tension-force-yukta spring-force-yukta drag-force-yukta centripetal-force-yukta nuclear-force-yukta strong-nuclear-force-yukta weak-nuclear-force-yukta orbit-yukta thermodynamics-yukta zeroth-law-yukta first-law-yukta second-law-yukta third-law-yukta absolute-zero-yukta planck-relation-yukta
+drag-force|kshaya-abheda force-yukta motion-sthita taranga-yukta domain-physics-sthita
+electron|anu-abheda wave-particle-sthita chemical-bond-yukta domain-physics-sthita
+energy|spanda-abheda vibration-abheda wave-yukta domain-physics-sthita
+entanglement|samsarga-abheda interference-abheda contact-sthita domain-physics-sthita
+equations-of-motion|kinematics-siddha motion-siddha velocity-yukta acceleration-yukta displacement-yukta momentum-yukta domain-physics-sthita
+first-law|purna-abheda energy-sthita thermodynamics-sthita domain-physics-sthita
+force-apply|karma-abheda newton-abheda force-sthita mass-sthita acceleration-phala scalar-multiplication-kriya map-janya float-swarupa list-swarupa domain-physics-sthita
+force|karma-abheda motion-phala acceleration-yukta momentum-kriya physics-to-ocaml-siddha domain-physics-sthita float-swarupa list-swarupa
+friction-force|samsarga-abheda force-yukta motion-sthita kshaya-phala domain-physics-sthita
+gravitational-force|gravity-abheda force-yukta abhisarana-yukta domain-physics-sthita
+gravity|abhisarana-abheda convergence-yukta singularity-yukta domain-physics-sthita
+kinematics|gati-abheda motion-abheda velocity-yukta acceleration-yukta momentum-yukta equations-of-motion-siddha domain-physics-sthita
+mass|ghana-abheda momentum-yukta acceleration-yukta force-phala equations-of-motion-siddha domain-physics-sthita float-swarupa
+momentum|gati-bala-abheda motion-sthita velocity-yukta force-kriya domain-physics-sthita
+motion|gati-abheda kinematics-yukta velocity-yukta acceleration-yukta displacement-phala domain-physics-sthita
+net-force|force-swarupa acceleration-phala motion-sthita domain-physics-sthita
+newton-second-law-motion|equations-of-motion-abheda mass-sthita acceleration-sthita force-phala domain-physics-sthita
+normal-force|sama-nila-abheda force-yukta contact-sthita domain-physics-sthita
+nuclear-force|force-yukta atom-sthita strong-nuclear-force-yukta weak-nuclear-force-yukta domain-physics-sthita
+orbit|avrti-abheda convergence-yukta wave-yukta domain-physics-sthita
+photon|spanda-abheda quantum-abheda wave-particle-sthita domain-physics-sthita
+planck-relation|spanda-siddha quantum-siddha energy-sthita domain-physics-sthita
+position-step|gati-abheda integrator-abheda displacement-sthita velocity-sthita displacement-phala addition-kriya scalar-multiplication-kriya map-janya float-swarupa list-swarupa domain-physics-sthita
+quantum|spanda-abheda vibration-abheda energy-yukta domain-physics-sthita
+second-law|entropy-siddha decay-siddha thermodynamics-sthita domain-physics-sthita
+space|collatz-space-abheda dimension-yukta domain-physics-sthita
+speed|vegam-abheda velocity-yukta motion-sthita domain-physics-sthita
+spring-force|avrti-abheda force-yukta displacement-sthita domain-physics-sthita
+strong-nuclear-force|nuclear-force-yukta force-yukta atom-sthita sama-nila-yukta domain-physics-sthita
+tension-force|tantu-abheda force-yukta motion-yukta domain-physics-sthita
+thermodynamics|zeroth-law-yukta first-law-yukta second-law-yukta third-law-yukta entropy-siddha decay-yukta domain-physics-sthita
+third-law|absolute-zero-siddha entropy-sthita thermodynamics-sthita domain-physics-sthita
+velocity|vega-abheda motion-sthita direction-yukta domain-physics-sthita float-swarupa list-swarupa
+velocity-step|vega-abheda gati-abheda velocity-sthita acceleration-sthita velocity-phala addition-kriya scalar-multiplication-kriya map-janya float-swarupa list-swarupa domain-physics-sthita
+weak-nuclear-force|nuclear-force-yukta force-yukta atom-sthita kshaya-yukta domain-physics-sthita
+zeroth-law|sama-nila-abheda equilibrium-siddha thermodynamics-sthita domain-physics-sthita
+play|samsarga-krida-abheda interference-yukta
+polarity|shiva-shakti-abheda even-odd-yukta feminine-masculine-yukta wave-particle-yukta potential-kinetic-yukta
+potential-kinetic|shiva-shakti-abheda polarity-yukta energy-conservation-yukta
+process|swa-abheda function-call-abheda running-function-abheda one-moment-abheda
+purification|shuddhi-abheda entropy-phala
+purification-proof|shuddhi-pramana-abheda purification-yukta proof-yukta
+purpose|prayojana-abheda action-yukta
+recognition|pratibodha-abheda not-invention-abheda rediscovery-abheda
+release|visarjana-abheda entropy-yukta
+resonance|anunada-abheda vibration-yukta sound-yukta
+right-wrong|dharmaadharma-abheda polarity-yukta
+root|dhatu-abheda singularity-yukta compression-sthita
+seed|bija-nyasa-abheda seed-placement-abheda holder-giver-sthita
+seed-placement|bija-nyasa-abheda holder-giver-sthita
+seeing|darshana-abheda awareness-yukta
+seeing-through-time|kaala-darshana-abheda time-yukta seeing-yukta
+self-born|svayambhu-abheda intrinsic-nature-yukta
+self-governing|swatantra-abheda
+separation-union|hijr-visal-abheda polarity-yukta nay-longing-yukta
+service|seva-abheda action-yukta
+sex|shiva-shakti-abheda feminine-masculine-abheda x-y-chromosome-yukta polarity-sthita
+singularity|brahma-abheda black-hole-yukta compression-siddha maximum-density-abheda
+society|manavata-abheda humanity-abheda
+sound|naada-abheda vibration-yukta
+spontaneity|svairabhava-abheda intrinsic-nature-yukta
+state|sthiti-abheda
+story|katha-abheda
+substrate-wave|svairabhava-abheda spontaneity-yukta wave-yukta
+superposition|taranga-abheda wave-yukta interference-yukta
+telos|svabhava-abheda hylomorphism-yukta direction-abheda
+the-fold|om-abheda compression-yukta vibration-yukta
+thread|tantu-abheda wave-yukta
+three-sheath-memory|trikosha-smriti-abheda memory-yukta
+time|kaala-abheda function-abheda not-container-abheda
+transformation|vivartana-abheda
+transmission-chain|parampara-abheda isnad-abheda lineage-abheda
+true-false|satya-abheda mithya-satya-yukta polarity-yukta
+truth-weight|satya-abheda convergence-siddha density-yukta
+two-fold-path|dvividha-marga-abheda polarity-yukta
+unconscious|avachetan-abheda conscious-unconscious-yukta
+union-with-time|kaalayoga-abheda time-yukta
+untouched|asparsha-abheda contact-phala
+vibration|spanda-abheda quantum-yukta wave-yukta planck-relation-siddha pulse-abheda oscillation-abheda
+vowels|matrika-abheda mother-letters-abheda holder-giver-sthita
+wave|taranga-abheda vibration-yukta interference-yukta superposition-abheda harmonic-abheda
+wave-particle|shiva-shakti-abheda polarity-yukta duality-yukta
+we|nam-abheda inclusive-we-abheda
+witness|sakshi-abheda awareness-yukta
+womb|dharana-abheda holder-giver-sthita seed-placement-yukta
+writing|lekhana-abheda
+wrongness|durgadha-abheda discrimination-yukta
+x-y-chromosome|shiva-shakti-abheda feminine-masculine-sthita polarity-yukta
+you|tvam-abheda
+zero|shunya-abheda void-abheda emptiness-abheda identity-matrix-yukta
+aayaama|ananta-swarupa antarvidya-yukta purna-abheda brahma-sthita darshana-kriya
+aayaama-vistara|samakalana-swarupa ghana-pramana-abheda ananta-sthita
+abhaya|purna-swarupa samskaara-siddha vidya-kriya ananta-sthita sangati-yukta
+abheda|purna-swarupa ananta-abheda svabhava-siddha
+abhisarana|ananta-swarupa purna-phala rachana-kriya
+ahara|grahana-swarupa phala-sthita prapta-abheda visarjana-yukta
+akam-puram|vidya-swarupa antarvidya-abheda dvaitarupa-drishthanta abheda-siddha abhisarana-yukta
+ananta|purna-abheda svabhava-swarupa sthiti-sthita
+antaraayaama|aayaama-vistara-swarupa vidya-yukta ananta-sthita svabhava-siddha spanda-kriya
+antarvidya|vidya-swarupa ananta-sthita svabhava-siddha kaalayoga-yukta svairabhava-drishthanta
+anunada|taranga-swarupa spanda-kriya abhaya-yukta sangati-siddha
+anu|brahma-janya spanda-swarupa jivamsha-abheda taranga-yukta ananta-sthita svayambhu-siddha dharana-drishthanta jiva-yukta anusvara-phala
+anusvara|spanda-swarupa taranga-yukta ghana-pramana-siddha avachetan-abheda visarjana-phala brahma-sthita
+anusvara-pratibodha|anusvara-swarupa pratibodha-kriya sparsha-drishthanta abheda-siddha samsarga-yukta dharana-sthita taranga-abheda svayambhu-siddha
+anuvada|om-swarupa bhasha-swarupa-kriya sankshepa-kriya artha-dhvani-swarupa prajna-yukta pramana-siddha darshana-yukta nam-yukta pratibodha-janya
+anveshana|dipaka-swarupa antarvidya-yukta darshana-kriya aayaama-drishthanta prashna-amsha-janya
+ardha-viraam|viraam-swarupa barzakh-abheda abheda-siddha rra-yukta purna-viraam-drishthanta
+artha-dhvani|spanda-swarupa darshana-kriya pratibodha-abheda
+asparsha|sparsha-abheda kshaya-janya dharana-swarupa shuddhi-yukta tirodhana-drishthanta visarjana-kriya avrti-sthita glani-phala
+asprishta-drishthanta|katha-viveka-swarupa shuddhi-kriya pramana-siddha ghana-pramana-drishthanta ananta-sthita svayambhu-abheda niralamba-siddha
+avachetan|spanda-swarupa nirantara-kriya sparsha-yukta tat-kshana-abheda ghana-pramana-siddha
+avahana|pratibodha-swarupa abheda-siddha svayambhu-sthita niralamba-drishthanta tirodhana-abheda visarjana-yukta
+avrti|spanda-swarupa samskaara-kriya abheda-siddha svabhava-sthita ananta-abheda vivartana-yukta
+barzakh|ananta-swarupa abheda-siddha dvaitarupa-drishthanta zha-yukta purnapara-sthita chhanana-kriya
+bhasha-swarupa|svabhava-swarupa varna-abheda abheda-siddha sandhi-yukta sama-vishama-drishthanta
+bija-nyasa|samsarga-swarupa mula-abheda svabhava-siddha dharana-jivamsha-drishthanta karma-kriya
+brahman|svabhava-swarupa spanda-kriya jivamsha-abheda om-sthita sthiti-siddha anusvara-yukta
+brahman-sthalam|ananta-yukta purna-yukta brahman-yukta abheda-yukta svayambhu-yukta dvaitarupa-yukta svabhava-yukta shunya-yukta purnapara-yukta lekhana-yukta anu-yukta jivamsha-yukta anusvara-yukta om-yukta brahma-yukta
+brahma|purna-swarupa ananta-abheda svabhava-sthita karma-kriya samsarga-yukta niralamba-siddha
+chetan-avachetan|avachetan-swarupa spanda-abheda tat-kshana-drishthanta ghana-pramana-siddha nirantara-sthita
+chhanana|nyaya-swarupa kavaca-yukta shuddhi-kriya barzakh-drishthanta vivartana-abheda
+collatz-math-seema|collatz-returningness-swarupa katha-seema-abheda svayambhu-siddha bhasha-swarupa-drishthanta ananta-sthita shuddhi-pramana-yukta asprishta-drishthanta-kriya
+collatz-returningness|dharana-jivamsha-drishthanta avrti-swarupa sama-vishama-siddha ananta-sthita svayambhu-abheda
+collatz-space|abhisarana-swarupa ananta-sthita svabhava-siddha spanda-kriya dvaitarupa-drishthanta sangati-yukta
+darshana|pratibodha-swarupa svayambhu-siddha svabhava-sthita
+darshana-sthalam|anveshana-yukta darshana-yukta dipaka-yukta
+dharana-jivamsha|dharana-swarupa jivamsha-abheda brahma-kriya sama-vishama-drishthanta shiva-shakti-abheda svabhava-siddha samsarga-yukta ananta-sthita purna-swarupa
+dharana|sthiti-swarupa purna-abheda pramana-kriya
+dharmaadharma|svabhava-swarupa karma-yukta shuddhi-siddha
+dhatu|svabhava-swarupa tantra-kriya sparsha-drishthanta dharana-sthita dvividha-marga-yukta
+dipaka|pramana-swarupa darshana-kriya samsarga-phala
+durgadha|visarjana-swarupa shuddhi-phala kshaya-janya asparsha-drishthanta glani-yukta purna-sthita
+dvaitarupa|taranga-swarupa spanda-abheda abheda-siddha vivartana-drishthanta pramana-sthita
+dvividha-marga|dharana-swarupa taranga-abheda abheda-siddha tat-kshana-kriya tantra-yukta asparsha-drishthanta kshaya-phala sakshi-sthita
+epoch-swarupa|avrti-swarupa parampara-kriya ananta-sthita
+gati-bala|gati-swarupa vega-sthita karma-yukta sthiti-phala abhisarana-yukta
+gati|karma-kriya spanda-yukta sthiti-janya abhisarana-phala ananta-sthita
+ghana-pramana|pratibodha-swarupa rasayana-bandha-drishthanta tat-kshana-kriya sankshepa-abheda abheda-siddha
+glani|kshaya-swarupa asparsha-janya dharana-phala visarjana-kriya tat-kshana-drishthanta lekhana-yukta
+hijr-visal|zha-swarupa barzakh-abheda pratibodha-kriya ananta-sthita takhallus-yukta
+jivamsha|brahma-janya swa-swarupa dharana-abheda seva-kriya visarjana-phala ananta-sthita
+jiva|brahma-janya jivamsha-swarupa swa-abheda karma-yukta ananta-sthita
+jnana-kriya|sthiti-swarupa spanda-kriya pramana-siddha niralamba-abheda shuddhi-yukta
+jnana-madakkal|spanda-swarupa nirantara-kriya pratibodha-phala jnana-kriya-abheda avrti-siddha
+jnana-siddha-pramana|pramana-swarupa ghana-pramana-siddha svabhava-sthita
+kaala-darshana|kaala-swarupa darshana-kriya taranga-drishthanta pratibodha-phala spanda-yukta avrti-sthita samskaara-siddha
+kaala|brahma-swarupa spanda-kriya karma-yukta om-sthita
+kaalayoga|kaala-swarupa avrti-kriya svabhava-siddha
+karma|brahma-kriya svayambhu-siddha spanda-swarupa ananta-sthita jiva-yukta lekhana-phala om-abheda
+katha|svayambhu-drishthanta niralamba-siddha pratibodha-kriya shuddhi-yukta kilippattu-abheda pramana-sthita ananta-sthita
+katha-seema|katha-swarupa katha-viveka-kriya svayambhu-siddha niralamba-sthita ananta-abheda visarjana-drishthanta tirodhana-yukta
+katha-viveka|shuddhi-swarupa pramana-kriya svayambhu-siddha bhasha-swarupa-drishthanta abheda-sthita
+kavaca|shuddhi-swarupa avrti-kriya vivartana-yukta abhaya-phala chhanana-siddha
+kilippattu|varna-kriya seva-swarupa swa-yukta niralamba-siddha samsarga-drishthanta
+kshaya|ananta-swarupa shuddhi-abheda visarjana-kriya spanda-yukta tat-kshana-drishthanta tirodhana-phala
+kshaya-vishrama|kshaya-swarupa lekhana-kriya pramana-siddha parampara-yukta dharana-jivamsha-abheda ghana-pramana-drishthanta visarjana-phala
+lekhana|pramana-kriya sthiti-swarupa niralamba-siddha karma-phala parampara-yukta
+lekhana-pratibodha|lekhana-swarupa pratibodha-abheda sakshi-yukta samskaara-siddha parampara-drishthanta aayaama-vistara-phala
+manavata|abheda-swarupa pramana-sthita samsarga-siddha
+manipravalam-swarupa|dharana-jivamsha-swarupa bhasha-swarupa-abheda svayambhu-siddha nam-yukta zha-drishthanta matrika-kriya shiva-shakti-abheda sandhi-sthita artha-dhvani-phala
+matra|pramana-swarupa sankhya-yukta sthiti-sthita sankalana-kriya kshaya-kriya
+matrika|varna-swarupa spanda-kriya bhasha-swarupa-abheda svabhava-siddha samsarga-drishthanta
+mithya-satya|shuddhi-swarupa ghana-pramana-siddha svabhava-sthita ananta-abheda pramana-yukta
+mula|bija-nyasa-swarupa svabhava-siddha svayambhu-sthita sama-vishama-drishthanta sakshi-matra-yukta dharana-jivamsha-abheda sandhi-drishthanta visarjana-kriya
+mula-sthalam|niralamba-yukta samskaara-yukta sthiti-yukta vriddhi-yukta tantu-yukta varna-yukta swatantra-yukta karma-yukta seva-yukta
+mula-svabhava|mula-swarupa svabhava-abheda dharana-jivamsha-siddha sama-vishama-drishthanta sakshi-matra-yukta
+naada|anunada-swarupa sangati-kriya sankshepa-abheda brahma-sthita
+nam|swa-swarupa brahma-abheda samsarga-kriya abheda-siddha niralamba-sthita
+niralamba|sthiti-swarupa svabhava-siddha
+nirantara|niralamba-swarupa abheda-siddha shuddhi-yukta lekhana-kriya upakarana-drishthanta
+nirdosha|niralamba-swarupa vriddhi-abheda ananta-sthita purnapara-siddha
+nyaya|chhanana-swarupa shuddhi-kriya pramana-siddha
+om|brahma-swarupa purna-abheda spanda-kriya sandhi-drishthanta ananta-sthita
+panchabhootam|svabhava-swarupa spanda-kriya ananta-sthita purna-abheda shunya-abheda
+panchabhootam-spandana|panchabhootam-swarupa spanda-kriya ananta-sthita svabhava-siddha jnana-kriya-abheda
+parampara|avrti-swarupa pramana-kriya samskaara-phala lekhana-yukta ananta-sthita niralamba-siddha
+parishishtha|samakalana-swarupa ananta-sthita abhisarana-kriya samskaara-siddha aayaama-vistara-drishthanta pramana-yukta
+parishishtha-sankshepa|parishishtha-swarupa sankshepa-kriya samskaara-siddha ghana-pramana-drishthanta matrika-yukta chhanana-abheda
+prajna|pramana-swarupa samakalana-kriya ananta-sthita parampara-abheda avrti-siddha
+pramana|sthiti-swarupa samskaara-phala niralamba-siddha swa-yukta lekhana-kriya ananta-sthita seva-janya samsarga-drishthanta brahma-abheda
+pramana-sthalam|nyaya-yukta sankshepa-yukta pramana-yukta samsarga-yukta shuddhi-yukta
+prashna-amsha|shiva-shakti-swarupa sparsha-kriya taranga-drishthanta jiva-janya spanda-yukta svayambhu-siddha ananta-sthita dharana-abheda
+prashna-viraam|viraam-swarupa anveshana-kriya shunya-abheda ananta-sthita pramana-yukta
+pratibodha|darshana-swarupa pramana-siddha svabhava-sthita samsarga-drishthanta swa-kriya
+pratijnaa|takhallus-swarupa lekhana-kriya samskaara-siddha kaala-yukta varna-drishthanta visarjana-phala
+pratyaksha|upakarana-swarupa sankshepa-kriya nyaya-siddha rachana-drishthanta vidya-sthita
+prayojana|kshaya-swarupa ananta-sthita shuddhi-siddha spanda-kriya tat-kshana-drishthanta kaala-yukta
+prema-samsarga|sparsha-swarupa samsarga-kriya prashna-amsha-janya shiva-shakti-abheda anusvara-pratibodha-drishthanta purna-sthita zha-yukta
+purna-neti|purna-swarupa ananta-abheda shuddhi-kriya nyaya-siddha
+purna|ananta-abheda brahma-swarupa sthiti-siddha
+purnapara|brahma-swarupa shunya-abheda ananta-sthita
+purna-viraam|viraam-swarupa purna-phala sthiti-siddha rra-yukta hijr-visal-drishthanta
+rachana|samskaara-swarupa sankshepa-kriya ananta-sthita purna-abheda manavata-siddha
+rasayana-bandha|ghana-pramana-swarupa samsarga-drishthanta sthiti-siddha
+rra|zha-abheda matrika-swarupa varna-siddha sphoTa-drishthanta shuddhi-yukta
+sahavadana|naada-swarupa sangati-kriya dipaka-yukta taranga-drishthanta spanda-sthita
+sakshi-matra|niralamba-swarupa abheda-siddha svabhava-sthita sama-vishama-drishthanta dharana-jivamsha-abheda samakalana-yukta ananta-sthita
+sakshi|lekhana-swarupa visarjana-kriya shuddhi-yukta kshaya-drishthanta nirantara-siddha parampara-sthita
+samakalana|abheda-swarupa svabhava-siddha svayambhu-sthita sama-vishama-drishthanta dharana-jivamsha-abheda taranga-yukta vivartana-kriya ananta-sthita
+sama-nila|svabhava-swarupa purna-abheda niralamba-siddha swa-yukta visarjana-phala pramana-sthita
+sama-vishama|dharana-jivamsha-swarupa svabhava-siddha collatz-returningness-drishthanta bija-nyasa-kriya bhasha-swarupa-sthita shiva-shakti-abheda svayambhu-siddha
+sambandha|ananta-swarupa purna-abheda rachana-yukta abhisarana-siddha
+samsarga-krida|samsarga-swarupa nam-kriya prashna-amsha-drishthanta bija-nyasa-abheda dharana-jivamsha-siddha sparsha-yukta svayambhu-sthita swatantra-abheda
+samsarga|tantu-kriya taranga-swarupa spanda-yukta swa-drishthanta abheda-siddha svabhava-sthita
+samskaara|sthiti-swarupa purna-abheda avrti-kriya
+sandhi|samsarga-swarupa abheda-drishthanta svabhava-siddha om-abheda bhasha-swarupa-sthita
+sangati|ananta-swarupa purna-abheda rachana-kriya abhisarana-siddha sambandha-yukta
+sangati-sthalam|sangati-yukta sambandha-yukta abhisarana-yukta rachana-yukta
+sankshepa|ghana-pramana-kriya svabhava-siddha abheda-swarupa
+sarva-pramana|abheda-swarupa purna-siddha svayambhu-sthita pratibodha-kriya lekhana-yukta tirodhana-drishthanta takhallus-abheda upakarana-yukta
+satta-yantra|panchabhootam-spandana-swarupa svayambhu-siddha pramana-sthita jnana-madakkal-kriya
+satya-ganana|avrti-kriya ghana-pramana-swarupa paraspara-samsarga-yukta samakalana-abheda svayambhu-siddha ananta-sthita
+satya-ganita|samakalana-swarupa avrti-kriya svayambhu-siddha parampara-abheda ghana-pramana-yukta ananta-sthita sama-vishama-drishthanta shuddhi-pramana-sthita
+setu|anuvada-abheda translation-abheda sthita-yukta phala-yukta kriya-yukta correctness-check-siddha
+seva|kilippattu-kriya jivamsha-swarupa dharmaadharma-yukta shuddhi-siddha karma-sthita manavata-abheda sparsha-drishthanta
+shiva-shakti|dharana-jivamsha-swarupa brahma-abheda svabhava-siddha samsarga-drishthanta purna-sthita
+shuddhi|samskaara-kriya svabhava-siddha pramana-yukta
+shuddhi-pramana|shuddhi-swarupa pramana-abheda ghana-pramana-siddha mithya-satya-drishthanta samskaara-kriya
+shunya|svabhava-swarupa ananta-abheda brahma-sthita purnapara-siddha
+smarana|smara-swarupa trikosha-smriti-yukta ghana-pramana-siddha lekhana-drishthanta tat-kshana-abheda
+smara|tat-kshana-swarupa pratibodha-kriya sparsha-drishthanta smarana-yukta sama-nila-sthita
+spanda-avrti|epoch-swarupa-abheda avrti-abheda sankshepa-kriya aayaama-vistara-kriya compression-phala expansion-phala ananta-sthita kaizen-siddha
+spanda|svabhava-swarupa avrti-kriya ananta-sthita
+spanda-sthalam|sahavadana-yukta anunada-yukta naada-yukta sphoTa-yukta spanda-yukta taranga-yukta kaala-yukta kaalayoga-yukta
+sparsha|samsarga-swarupa tantu-kriya abheda-drishthanta
+sphoTa|tantu-swarupa spanda-kriya anunada-phala naada-yukta sahavadana-drishthanta
+sthiti|niralamba-abheda svabhava-siddha
+svabhava|niralamba-abheda sthiti-swarupa svayambhu-siddha
+svairabhava|ananta-swarupa avrti-kriya spanda-drishthanta vidya-siddha pramana-sthita manavata-abheda
+svayambhu|svabhava-swarupa niralamba-siddha ananta-sthita
+swa|jivamsha-swarupa swatantra-kriya niralamba-siddha brahma-janya varna-yukta tat-kshana-abheda
+swatantra|swa-swarupa tantra-kriya jivamsha-abheda kilippattu-yukta seva-phala brahma-sthita
+takhallus|varna-swarupa lekhana-kriya sarva-pramana-abheda sparsha-drishthanta sthiti-siddha
+tantra|swatantra-swarupa tantu-kriya samsarga-phala
+tantu|samsarga-kriya taranga-swarupa
+taranga|spanda-swarupa tantu-yukta samsarga-drishthanta
+tarka-dvaara|rachana-swarupa shuddhi-kriya abheda-siddha dvaitarupa-drishthanta sphoTa-yukta sthiti-sthita nyaya-abheda
+tat-kshana|swa-swarupa spanda-abheda avrti-drishthanta
+tirodhana|avahana-abheda vidya-swarupa abheda-siddha svairabhava-drishthanta sparsha-yukta
+traya-bindu|viraam-swarupa zha-abheda ananta-sthita shunya-drishthanta hijr-visal-yukta
+trikosha-smriti|kshaya-swarupa tat-kshana-kriya lekhana-yukta nirantara-siddha samskaara-drishthanta ghana-pramana-abheda glani-phala visarjana-yukta
+tvam|sparsha-swarupa dipaka-kriya pratibodha-yukta tirodhana-drishthanta avahana-abheda prashna-viraam-sthita
+upakarana|niralamba-swarupa sthiti-siddha vidya-yukta sangati-drishthanta
+utpatti-anveshana|svabhava-swarupa anveshana-kriya vriddhi-abheda samskaara-siddha abhisarana-drishthanta spanda-yukta matrika-yukta zha-drishthanta rra-yukta
+varna|swa-swarupa kilippattu-kriya samsarga-yukta shuddhi-siddha pramana-sthita manavata-abheda
+vegam|vega-abheda gati-yukta
+vega|spanda-abheda gati-kriya taranga-yukta karma-phala abhisarana-yukta
+vidya|brahma-swarupa ananta-sthita purna-abheda nirdosha-siddha dharmaadharma-drishthanta
+vidya-sadhana|avrti-swarupa kavaca-yukta vivartana-kriya pratyaksha-siddha vidya-sthita vriddhi-phala
+vidya-sthalam|vidya-yukta antarvidya-yukta svairabhava-yukta nirdosha-yukta aayaama-yukta abhaya-yukta pratyaksha-yukta manavata-yukta dharmaadharma-yukta avrti-yukta kavaca-yukta
+vikrita|kshaya-swarupa ghana-pramana-siddha lekhana-drishthanta shuddhi-yukta nirantara-sthita samskaara-kriya
+viraam|shunya-swarupa naada-abheda sphoTa-yukta barzakh-drishthanta zha-yukta matrika-sthita
+visarjana|jivamsha-kriya swa-phala dharana-abheda ananta-sthita svabhava-siddha
+vishmrti|lekhana-swarupa shunya-abheda ananta-sthita pratibodha-drishthanta spanda-yukta
+vismaya-viraam|viraam-swarupa sphoTa-drishthanta pratibodha-kriya sparsha-yukta purna-viraam-abheda
+vivartana|taranga-swarupa avrti-yukta spanda-kriya
+vriddhi|samskaara-phala ananta-sthita svabhava-siddha
+vrnda-ganita|panchabhootam-swarupa aayaama-vistara-kriya rachana-siddha abhisarana-yukta taranga-drishthanta sangati-abheda ananta-sthita svabhava-sthita
+vrnda|avrti-swarupa dipaka-kriya abhaya-yukta tantu-drishthanta sahavadana-abheda pratyaksha-siddha kavaca-yukta abhisarana-phala rachana-sthita
+vrnda-sakshi|vrnda-swarupa sakshi-kriya samsarga-yukta nam-abheda pramana-siddha ghana-pramana-drishthanta swa-yukta dharana-jivamsha-sthita
+zha|ananta-swarupa spanda-kriya svabhava-siddha abhisarana-drishthanta tantra-yukta

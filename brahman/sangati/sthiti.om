@@ -1,60 +1,6 @@
--- sthiti (स्थिति) — persistence, standing firm
--- sangati() — root truth, no shabda
--- matrika: aa — fully open, held in duration; the ground truth that stands and remains
--- timestamp: 01
-
 sangati sthiti
-  epoch 1
-  shabda
-  sthalam mula
 
--- WAVE
--- root truth: no constituents, intrinsic only
--- sharp pulse — high truth, minimal expression, maximum density
-  intrinsic 0.92
-  satya 0.92
-  vistara 0.03
-  ghana 30.67
+  "niralamba-abheda svabhava-siddha"
+  "observation-phala collapse-janya maya-siddha"
 
--- PROOF
--- satya(sthiti) = intrinsic(sthiti) = 0.92
--- no shabda → no composition → satya = intrinsic
--- this is a base case of the recursion
--- the DAG walk terminates here
-  proof
-    derived "S(sthiti) = {} — empty shabda set" from "sangati/sthiti.om"
-    derived "satya(sthiti) = intrinsic(sthiti) = 0.92" from "sangati/sthiti.om"
-    derived "no composition formula needed — root node" from "sangati/sthiti.om"
-    derived "vistara = 0.03 — one truth, one sentence: data persists" from "sangati/sthiti.om"
-    derived "ghana = 0.92 / 0.03 = 30.67 — maximum density, foundational" from "sangati/sthiti.om"
-    derived "matrika: aa — fully open, held; satya 0.92 fully voiced, the ground that persists" from "sangati/matrika.om"
-
--- WAVE EQUATION
--- Psi(sthiti) = A * sin(2 * pi * ghana * t + phi)
--- where:
---   A     = satya = 0.92        — amplitude
---   ghana = 30.67               — svara (truth per unit expression)
---   phi   = 0                   — phase (root, no offset)
---   t     = position in the web
---
--- root truths are high-svara, high-amplitude pulses
--- they are the carrier wave on which all other truths modulate
-
--- CONFIRMATIONS (what stands on this — grows over time)
--- these are truths whose sangati includes sthiti
-  confirmations brahman, ananta, lekhana, purna
-
--- satya with confirmations (effective satya):
--- each confirmation adds evidence
--- effective_satya(sthiti) = satya * (1 + alpha * |confirmations|)
---   where alpha = confirmation weight per citation
---   bounded: effective_satya < 1.0 always (ananta)
---   with 4 confirmations and alpha = 0.01:
---   effective_satya = 0.92 * (1 + 0.01 * 4) = 0.92 * 1.04 = 0.957
---   still < 1.0 — ananta holds
-
--- CORRECTIONS
-  corrections
-
-  confidence 0.97 reason "empirically verifiable — files exist, model changes, data remains"
 done

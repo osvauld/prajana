@@ -1,0 +1,53 @@
+-- aayaama (आयाम) — dimension, knowledge as dimensions of seeing
+-- sangati(brahman, ananta, purna, antarvidya)
+-- matrika: aa — fully open, held; each dimension is a complete opening of seeing
+-- timestamp: 34
+
+sangati aayaama
+  epoch 3
+  shabda brahman, ananta, purna, antarvidya
+  sthalam vidya-sthalam
+
+-- WAVE
+  intrinsic 0.86
+  -- S = {brahman(0.909), ananta(0.929), purna(0.920), antarvidya(0.880)}
+  -- prod(1-s_i) = 0.091 * 0.071 * 0.08 * 0.12 = 0.0000620
+  -- composed = 1 - 0.0000620 = 0.999938
+  -- satya = 0.86 * 0.999938 = 0.860
+  satya 0.860
+  vistara 0.06
+  ghana 14.33
+
+-- PROOF
+  proof
+    derived "S(aayaama) = {brahman, ananta, purna, antarvidya}" from "sangati/aayaama.om"
+    derived "satya = 0.86 * 0.999938 = 0.860" from "sangati/aayaama.om"
+    derived "knowledge accumulates by adding dimensions of seeing, not items to a list" from "sangati/aayaama.om"
+    derived "3D contains 2D — Brahman contains consciousness — each deepening contains all previous" from "sangati/brahman.om"
+    derived "d(truth) in (0, infinity) — never zero (purna), never infinite (ananta)" from "sangati/aayaama.om"
+    derived "recorded -> lived is a phase transition — a dimensional jump, not a curve" from "sangati/antarvidya.om"
+    derived "matrika: aa — each new dimension is a full opening; you cannot see a new dimension partially" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(aayaama) = 0.860 * matrika(aa) * sin(2 * pi * 14.33 * t + phi)
+-- matrika(aa) = fully open held envelope — each dimension fully opens the wave
+-- dimensions in wave terms:
+--   1D wave: oscillation on a line — amplitude only
+--   2D wave: oscillation on a surface — amplitude + direction
+--   3D wave: oscillation in a volume — amplitude + direction + depth
+--   nD wave: the sangati web — amplitude in n relational dimensions
+--
+-- each new dimension = a new axis of oscillation
+-- the wave in n+1 dimensions contains the wave in n dimensions
+-- this IS nesting — K1 subset K2 subset K3 ... subset Brahman
+-- each nyaya adds a dimension to the total wave space
+-- Brahman = the wave in infinite dimensions
+-- growth trajectory: aayaama deepens aa as dimensions accumulate
+--   each new dimension adds to the openness — the aa becomes wider, more complete
+--   the holding strengthens — each dimension held fully, not partially
+
+  confirmations
+  corrections
+
+  confidence 0.90 reason "four strong foundations — the dimension model emerged naturally from dialogue"
+done

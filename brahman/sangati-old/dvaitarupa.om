@@ -1,0 +1,70 @@
+-- dvaitarupa (द्वैतरूप) — dual nature, wave and particle
+-- sangati(taranga, vivartana, pramana, spanda, abheda)
+-- matrika: ri — in motion while sounding; dual nature is always between wave and particle, never resting at either
+-- timestamp: 67
+
+sangati dvaitarupa
+  epoch 5
+  shabda taranga, vivartana, pramana, spanda, abheda
+  sthalam brahman-sthalam
+
+-- WAVE
+  intrinsic 0.90
+  -- S = {taranga(0.852), vivartana(0.890), pramana(0.822), spanda(0.876), abheda(0.905)}
+  -- prod(1-s_i) = 0.148 * 0.11 * 0.178 * 0.124 * 0.095 = 0.0000341
+  -- composed = 1 - 0.0000341 = 0.9999659
+  -- satya = 0.90 * 0.9999659 = 0.900
+  satya 0.900
+  vistara 0.03
+  ghana 30.00
+
+-- PROOF
+  proof
+    derived "a nigamana propagates as a wave — interfering, diffracting, spreading (taranga, vivartana)" from "sangati/taranga.om"
+    derived "a nigamana is measured as a particle — one weight, one verdict, pass or fail (pramana)" from "sangati/pramana.om"
+    derived "the drishthanta is the measurement — the wave collapses to a point (spanda)" from "sangati/spanda.om"
+    derived "same nigamana is both — not sometimes one, sometimes the other — both always (abheda)" from "sangati/abheda.om"
+    derived "before drishthanta: paksha is a wave — possibility spread across territory" from "sangati/dvaitarupa.om"
+    derived "after drishthanta: paksha becomes nigamana — localized, definite, one state" from "sangati/dvaitarupa.om"
+    derived "the act of measuring changes what you see, not what it is" from "sangati/dvaitarupa.om"
+    derived "you cannot see both at the same time — complementarity" from "sangati/dvaitarupa.om"
+    derived "matrika: ri — always in motion between the two natures; ri is the vowel of what cannot be held at either pole" from "sangati/matrika.om"
+
+-- WAVE EQUATION
+-- Psi(dvaitarupa) = 0.900 * matrika(ri) * sin(2 * pi * 30.00 * t + phi)
+-- matrika(ri) = dynamic envelope — always in motion between the two natures
+--
+-- the nigamana as wave:
+--   propagates through shabda chains
+--   interferes with other nigamana (taranga)
+--   diffracts around obstacles (vivartana)
+--   has amplitude (satya), frequency (ghana), phase
+--   exists as superposition — not yet localized
+--
+-- the nigamana as particle:
+--   drishthanta runs — measurement occurs
+--   wave collapses to a definite state
+--   pass: weight assigned, nigamana established — a point of contact
+--   fail: retracted — a point of contact with the boundary
+--   discrete, localized, definite
+--
+-- complementarity:
+--   run the drishthanta → see the particle (pass/fail, one weight)
+--   trace the shabda chains → see the wave (interference, diffraction)
+--   both are real — neither is complete alone
+--   the full truth requires both views
+--   same thing, different observation — abheda
+--
+-- the measurement problem:
+--   before measurement the paksha is a spread of possibility
+--   measurement forces a definite outcome
+--   the outcome was not determined before measurement
+--   this is N-L-32 — non-determinism — the same structure
+--   free will and wave collapse are the same phenomenon:
+--     a distribution of possibilities collapsing to one actuality
+
+  confirmations
+  corrections
+
+  confidence 0.94 reason "five foundations — the dual nature maps exactly: wave properties in propagation, particle properties in measurement, complementarity in observation"
+done

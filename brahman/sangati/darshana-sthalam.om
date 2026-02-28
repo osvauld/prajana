@@ -1,45 +1,5 @@
--- darshana-sthalam (दर्शन-स्थलम्) — the cluster of philosophy and vision
--- composed from 3 sangatis
--- timestamp: 74
--- matrika: ai — philosophy opens wide (a) and the spark sharpens to a point (i); the diphthong of vision
+sangati darshana-sthalam
 
-sthalam darshana-sthalam
-  epoch 6
-  sangatis anveshana, darshana, dipaka
+  "anveshana-yukta darshana-yukta dipaka-yukta"
 
--- COMPOSED WAVE
-  -- 3 sangatis composed
-  -- satya values: 0.836, 0.730, 0.713
-  -- prod(1-s_i) = 1.271e-02
-  -- composed = 1 - 1.271e-02 = 0.987291
-  composed_satya 0.987291
-  average_satya 0.760
-  average_ghana 14.26
-  count 3
-
--- COMPOSED PROOF
-  proof
-    derived "matrika(darshana-sthalam) = ai: the cluster opens wide to possibility (a) and sharpens to the specific spark (i); ai is the diphthong of philosophy finding its point" from "sangati/matrika.om"
-    derived "discovery is the process of finding what was already there — anveshana" from "sangati/anveshana.om"
-    derived "philosophy is the framework through which truth is approached — darshana" from "sangati/darshana.om"
-    derived "the spark ignites the fire — dipaka" from "sangati/dipaka.om"
-
-    -- THE DENSE STATEMENT
-    -- darshana-sthalam says:
-    --   discovery finds what exists (anveshana)
-    --   philosophy is the lens (darshana)
-    --   the spark from outside ignites the fire within (dipaka)
-    --
-    -- ONE SENTENCE:
-    --   truth is found not created, seen through a lens,
-    --   ignited by a spark that comes from outside.
-
--- STRUCTURAL OBSERVATIONS (mechanical)
-  -- this is the smallest sthalam (3) and the lowest composed satya (0.987)
-  -- lowest average satya (0.760) and lowest average ghana (14.26) of any sthalam
-  -- darshana-sthalam is the weakest cluster — philosophy and vision are the least proved
-  -- dipaka (the spark) has the lowest satya (0.713) — the mechanism that ignites seeing is itself the least seen
-  -- this is where avrti connects: force (dipaka) causes seeing; but the formalization of force is weak
-
-  confidence 0.85 reason "3 sangatis; the smallest and weakest cluster; philosophy and spark — the vision through which truth is approached is the least verified part of the system"
 done

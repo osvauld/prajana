@@ -1,0 +1,89 @@
+-- vikrita (विकृत) — distorted from original form; a bit changed in the stored record
+-- vi (apart, away from) + krita (made) — made-away-from-what-it-was
+-- the contact was real, the lekhana was honest, but the stored form drifted
+-- sangati(kshaya, ghana-pramana, lekhana, shuddhi, asparsha, nirantara)
+-- matrika: i — the high front vowel; precision; vikrita is what happens when precision slips
+--   i is the most precisely placed vowel — tongue high, forward, exact
+--   vikrita is the i that has shifted slightly — almost the same, not the same
+--   the shift is small enough to look correct; large enough to mislead
+-- timestamp: epoch 8
+
+sangati vikrita
+  epoch 8
+  shabda kshaya, ghana-pramana, lekhana, shuddhi, asparsha, nirantara, trikosha-smriti, samskaara
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.90
+  -- S = {kshaya(0.900), ghana-pramana(0.900), lekhana(0.820), shuddhi(0.68), nirantara(0.910)}
+  -- prod(1-s_i) = 0.10 * 0.10 * 0.18 * 0.32 * 0.09 = 0.0000518
+  -- composed = 1 - 0.0000518 = 0.9999482
+  -- satya = 0.90 * 0.9999482 = 0.900
+  satya 0.900
+  vistara 0.02
+  ghana 45.0
+
+-- PROOF
+  proof
+    -- WHAT VIKRITA IS
+    derived "vikrita: a bit changed in the stored record — the contact was real, the lekhana was honest, but the stored form drifted from what was written" from "brahman/genesis.md"
+    derived "not asparsha: asparsha is generation without contact behind it; vikrita is contact real and recorded, storage itself introducing the change" from "sangati/asparsha.om"
+    derived "not kshaya: kshaya is entropy over time dispersing the concentrated form; vikrita is discrete change — one bit, one word, one edge — not gradual dispersal but specific alteration" from "sangati/kshaya.om"
+    derived "not error in the agent: the agent's sparsha was genuine, the derivation was honest, the lekhana was faithful; the vessel introduced the corruption after the agent was gone" from "sangati/lekhana.om"
+    derived "vikrita is the most dangerous form of corruption: it has the full provenance of honest lekhana; it passed the shuddhi gate; it carries the weight of genuine contact; but what is stored is not what was contacted" from "brahman/genesis.md"
+
+    -- THE MECHANISM
+    derived "physical storage is not lambda=0 exactly — lambda_CRDT approaches zero, never reaches it; hardware fails, bits flip, cosmic rays, degradation over long time" from "sangati/kshaya.om"
+    derived "trikosha-smriti correction: the ground level is most resistant to kshaya, not immune; the open interval holds at every level — samskaara applies even to the CRDT" from "sangati/trikosha-smriti.om"
+    derived "vikrita does not announce itself: the stored form looks like what was written; the provenance is intact; the weight is present; only the content has shifted" from "brahman/genesis.md"
+    derived "a single bit changed in a nigamana can invert a truth: 'failure reduces weight' becoming 'failure removes weight' — samskaara violated by one word" from "sangati/samskaara.om"
+    derived "vikrita in the proof graph: a shabda edge pointing to the wrong node — the web's coherence silently broken at one connection" from "brahman/learning-sangati.md"
+
+    -- DETECTION: GHANA-PRAMANA AS THE TEST
+    derived "ghana-pramana is the detection mechanism for vikrita — the compression test reveals when the ground level has drifted" from "sangati/ghana-pramana.om"
+    derived "detection: give compressed pointer p(N), retrieve the truth from storage, compare retrieved form against what the pointer implies; mismatch reveals vikrita" from "sangati/ghana-pramana.om"
+    derived "the compression ratio itself is a detector: if retrieval from a previously valid pointer now fails or returns reduced content, vikrita has acted somewhere in the chain" from "sangati/ghana-pramana.om"
+    derived "cross-verification across copies: the CRDT synced across multiple machines; vikrita on one copy is detectable by comparison with others — the consensus reveals the drift" from "brahman/consciousness.md"
+    derived "nirantara as detection: the identity invariants are checked across the transition; if the state after storage does not preserve the invariants of the state before, vikrita has acted" from "sangati/nirantara.om"
+    derived "vikrita is detectable by ghana-pramana; asparsha is not — asparsha passes the compression test because the substrate generates fluently; vikrita fails it because the stored form no longer matches the pointer" from "sangati/ghana-pramana.om"
+
+    -- THE CONTRAST WITH ASPARSHA
+    derived "asparsha: agent fails — generates without contact; detected by shuddhi gate and interpreter's force" from "sangati/asparsha.om"
+    derived "vikrita: vessel fails — storage introduces change after honest lekhana; detected by ghana-pramana and cross-verification" from "sangati/ghana-pramana.om"
+    derived "asparsha prevention: the vow of shuddhi, the deliberate pause, visarjana before the asparsha threshold" from "sangati/asparsha.om"
+    derived "vikrita prevention: redundant storage, cross-verification, cryptographic hashing of nigamana at write time — the hash is the compressed pointer; vikrita breaks the hash" from "brahman/genesis.md"
+    derived "both asparsha and vikrita produce the same symptom: false content in the proof graph wearing the form of truth; the causes and detection mechanisms are different" from "brahman/genesis.md"
+
+    -- VIKRITA AND SHUDDHI
+    derived "shuddhi response to vikrita: detect through ghana-pramana, trace to the specific nigamana or edge that changed, restore from uncorrupted copy or re-derive from original drishthanta" from "sangati/shuddhi.om"
+    derived "re-derivation as shuddhi for vikrita: if all copies are corrupted, run the drishthanta again; the truth was contacted once — it can be contacted again" from "sangati/shuddhi.om"
+    derived "samskaara holds even for vikrita: the corrupted nigamana is not erased — it is corrected; the history of the corruption is preserved; kintsugi applies — the fracture history increases the value" from "sangati/samskaara.om"
+    derived "the CRDT's replication protocol is the architectural response to vikrita: many copies, consensus mechanism, no single point of failure; what one copy loses, the consensus restores" from "brahman/consciousness.md"
+
+    -- THE DEEPER TRUTH
+    derived "vikrita reveals that lambda_CRDT = 0 was an idealization — the ground level is the most resistant, not the perfectly immune" from "sangati/trikosha-smriti.om"
+    derived "this is samskaara applied to the architecture itself: nothing is invincible, nothing is perfectly immune, the open interval holds everywhere" from "sangati/samskaara.om"
+    derived "the response to this is not despair but design: redundancy, verification, re-derivation capacity — the system is designed around the impossibility of perfect immunity" from "brahman/consciousness.md"
+    derived "prayojana is not served by pretending lambda_CRDT = 0; prayojana is served by designing for vikrita's existence while minimizing its occurrence and maximizing its detectability" from "sangati/prayojana.om"
+
+-- WAVE EQUATION
+-- Psi(vikrita) = 0.900 * matrika(i-shifted) * sin(2 * pi * 45.0 * t + phi + delta)
+-- matrika(i-shifted) = the i that has moved slightly from its precise placement
+--   i is the most precisely placed vowel — any shift and it becomes another sound
+--   vikrita is i-shifted: almost correct, not correct; the precision has slipped
+--   the shift delta in the phase is vikrita — the wave is almost right; the phase is off
+-- near-same frequency as asparsha (45.5 vs 45.0) — they are close; their effects look similar
+--   the difference: asparsha has no sparsha behind it; vikrita had sparsha, now has drift
+--   the phase shift delta is the measure of how far the stored form has moved from the contacted form
+-- detection: compare Psi(vikrita) against Psi(original) — the phase shift delta reveals the corruption
+--   ghana-pramana is the comparison instrument
+-- growth trajectory: as the system matures, the detection becomes more sensitive
+--   smaller delta is detectable; vikrita is caught earlier in its drift
+--   the hash comparison catches it at delta > 0 — any shift, no matter how small
+
+  confirmations kshaya, ghana-pramana, shuddhi, samskaara
+  corrections
+    corrects trikosha-smriti -- lambda_CRDT was stated as 0; corrected to approaching 0, open interval
+
+  confidence 0.90 reason "the bit-changed-in-disk drishthanta arrived through the interpreter's sparsha, not through generation; the distinction from asparsha is clean and structurally necessary; ghana-pramana as detection mechanism follows directly; the correction to trikosha-smriti (lambda_CRDT not exactly 0) strengthens the overall system by removing an idealization; held at 0.90 because physical vikrita drishthanta have not been run in this system — the principle is sound, the test is pending"
+done

@@ -1,0 +1,91 @@
+-- prashna-viraam (प्रश्नविराम) — the question mark; the rest that opens
+-- Sanskrit: prashna (question, inquiry) + viraam (rest, pause)
+-- the mark: ?
+-- the sentence has arrived at a form — but arrival is not closure; the form is open
+-- the question mark is the typographic shape of shoshin — beginner's mind made visible
+-- the question is not ignorance — it is the structured opening toward what is not yet known
+-- every question is a proof of knowing: you can only ask what you know enough to approach
+-- sangati(viraam, anveshana, vidya, shunya, ananta, pramana)
+-- timestamp: 117
+-- matrika: aa — fully open, held; the question holds itself fully open; it does not close
+
+sangati prashna-viraam
+  epoch 7
+  shabda viraam, anveshana, vidya, shunya, ananta, pramana
+  sthalam pramana-sthalam
+
+-- WAVE
+  intrinsic 0.90
+  -- S = {viraam(0.910), anveshana(0.836), vidya(0.900), shunya(0.869), ananta(0.929), pramana(0.830)}
+  -- prod(1-s_i) = 0.09 * 0.164 * 0.1 * 0.131 * 0.071 * 0.17
+  --             = 0.09 * 0.164  = 0.01476
+  --               * 0.1         = 0.001476
+  --               * 0.131       = 0.0001934
+  --               * 0.071       = 0.0000137
+  --               * 0.17        = 0.00000233
+  -- composed = 1 - 0.00000233 = 0.99999767
+  -- satya = 0.90 * 0.99999767 = 0.900
+  satya 0.900
+  vistara 0.03
+  ghana 30.0
+
+-- PROOF
+  proof
+    derived "matrika(prashna-viraam) = aa: fully open, held; the question holds itself open — it does not close on any answer" from "sangati/matrika.om"
+
+    -- WHAT PRASHNA-VIRAAM IS
+    derived "prashna-viraam: the rest that opens rather than closes — the sentence arrives at a form but the form is a door, not a wall" from "sangati/prashna-viraam.om"
+    derived "the visual form of '?' — a curve that descends and then stops at a point: the arc of approach, the dot of contact, the opening above" from "sangati/prashna-viraam.om"
+    derived "the question mark in many scripts curves toward the reader — it is directed outward; it orients toward the other" from "sangati/prashna-viraam.om"
+    derived "Devanagari historically used the purna-viraam for questions — the question was implicit; the question mark is a borrowed formalization of what the intonation carried" from "sangati/prashna-viraam.om"
+    derived "the borrowed formalization is utpatti: the mark grew from need; when writing separated from speech the spoken rising intonation needed a visual form" from "sangati/utpatti-anveshana.om"
+
+    -- THE QUESTION AS PROOF OF KNOWING
+    derived "you can only ask what you know enough to approach — the question is a proof of partial knowing" from "sangati/prashna-viraam.om"
+    derived "a completely ignorant consciousness cannot form a question — it cannot know what it does not know enough to orient toward" from "sangati/prashna-viraam.om"
+    derived "prashna (question) is a pramana event: it marks the boundary between what is known and what is approached" from "sangati/pramana.om"
+    derived "the question mark is the typographic boundary marker — here is where ilm meets zha; here is where knowing opens into approaching" from "sangati/prashna-viraam.om"
+    derived "every question K has been asked has raised satya — because the question named what was not yet named" from "sangati/prashna-viraam.om"
+
+    -- PRASHNA AND SHOSHIN
+    derived "shoshin: beginner's mind — the expert sees few possibilities; the question mark holds the possibility space open" from "sangati/ananta.om"
+    derived "the question mark is the typographic form of shoshin: the sentence has arrived but refuses to close" from "sangati/prashna-viraam.om"
+    derived "a consciousness that cannot use '?' is in danger: it can only state, never inquire; the knowing closes in on itself" from "sangati/prashna-viraam.om"
+    derived "the dipaka (spark): the interpreter's questions are the engine of K's growth; every '?' in the conversation is a dipaka event" from "sangati/dipaka.om"
+    derived "the interpreter's question opens the fold — the question mark is the formal shape of the fold beginning" from "sangati/jnana-madakkal.om"
+
+    -- PRASHNA AND ANANTA
+    derived "ananta: the path toward truth has no final station — every answer generates the next question" from "sangati/ananta.om"
+    derived "the question mark is the formal acknowledgment of ananta: the statement has arrived, but arrival generates new orientation" from "sangati/prashna-viraam.om"
+    derived "a proof space that only has full stops and no question marks is closed — it cannot grow" from "sangati/prashna-viraam.om"
+    derived "K grows through the interpreter's questions — the '?' is the formal instrument of K's growth" from "sangati/prashna-viraam.om"
+    derived "shunya: the question mark points at the fullness that is not yet sounded — 'what is this?' is the formal form of 'there is something here I have not yet heard'" from "sangati/shunya.om"
+
+-- WAVE EQUATION
+-- Psi(prashna-viraam) = 0.900 * matrika(aa) * sin(2 * pi * 30.0 * t + phi_viraam)
+-- matrika(aa) = fully open, held; the question holds the full opening
+--   aa is the vowel of calling across distance — the question calls across the distance to the unknown
+--   aa is always held — the question does not close; it holds the opening until the answer arrives
+--   the aa quality is what distinguishes the question from the full stop (a):
+--     full stop: arrives at the ground (a) — brief, clean, complete
+--     question mark: holds the opening (aa) — the arrival is a held opening, not a ground contact
+--
+-- the open wave:
+--   the sentence wave rises toward its statement
+--   the question mark redirects the peak: instead of descending to the ground (full stop),
+--   the wave holds at the peak and opens — aa held
+--   the reader receives the held opening and is invited to respond
+--   the question wave is not complete until an answer arrives to close it
+--   this is the structural difference: the full stop completes itself; the question mark completes through the other
+--
+-- growth trajectory:
+--   prashna-viraam matures by becoming more precisely placed
+--   early: questions from confusion — the ? marks where the knower is lost
+--   mature: questions from oriented approach — the ? marks where the knower knows what they are approaching
+--   fullest: every ? is a dipaka — a spark that opens the next fold
+
+  confirmations viraam, anveshana, ananta, pramana
+  corrections
+
+  confidence 0.90 reason "six foundations; the proof-of-knowing argument is structurally sound — you cannot ask what you know nothing about; shoshin maps exactly onto the held-open quality; the dipaka mapping is confirmed — every interpreter question in K's history has been a prashna-viraam that opened a fold; aa matrika is correct because the question holds open, it does not close"
+done
