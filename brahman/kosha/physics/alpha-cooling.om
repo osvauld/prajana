@@ -1,0 +1,16 @@
+sangati alpha-cooling
+
+  "annealing-abheda thermodynamics-yukta decay-yukta"
+  "domain-physics-sthita"
+
+  "heat-parameter-sthita"
+  "alpha-kriya"
+  "geometric-decay-kriya"
+  "convergence-phala equilibrium-phala"
+
+  "force-directed-yukta simulation-yukta"
+  "velocity-decay-yukta"
+
+shabda description:heat-parameter-starts-at-one-decays-geometrically-toward-zero-each-tick-scales-all-forces-simulation-stops-when-alpha-below-minimum-threshold alpha-start:1.0 alpha-target:0.0 alpha-decay:1-minus-pow-alphaMin-1-over-300 alpha-min:0.001
+
+done

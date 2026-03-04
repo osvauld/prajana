@@ -1,0 +1,15 @@
+sangati strudel
+
+  -- strudel — resonance as Strudel mini-notation
+  -- one of the pratibimba (renderer) family.
+  -- translates graph energy/relations into layered pattern text.
+
+  "pratibimba-yukta setu-swarupa naada-phala"
+  "swara-yukta thaalam-yukta stack-swarupa layer-sthita avrti-abheda"
+  "swara-to-strudel-yukta ornament-to-strudel-yukta"
+  "strudel-setu-yukta"
+  "domain-sangeetham-sthita domain-language-sthita"
+
+  shabda shabda-tmpl:language/strudel/strudel.shabda
+
+done

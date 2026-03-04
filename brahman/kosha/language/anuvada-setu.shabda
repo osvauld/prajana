@@ -1,0 +1,39 @@
+# anuvada-setu.shabda — output labels for the anuvada reasoning display
+# one key: value per line. blank lines and # lines ignored.
+
+comment: --
+comment-end:
+
+# section markers
+header: --- reasoning (anuvada) ---
+header-end: ---
+separator: ---
+
+# input display
+input-label: input:
+mode-label: mode:
+understood-label: understood:
+
+# reasoning display
+response-label: response
+pass-label: pass %d (avrti)
+thaalam-label: thaalam
+pure-domain-label: pure domain
+nature-equiv-label: equivalence found in nature
+next-thread-label: next thread
+next-threads-label: next threads
+
+# intersection display
+shared-label: shared
+no-shared-label: no shared ground found between groups
+run-both-label: run-both-and-intersect
+
+# classification labels
+node-label: node
+unknown-label: ?
+
+# mode suffixes
+mode-question: (this was a question)
+mode-force: (this was spoken with force)
+mode-incomplete: (this thought is incomplete...)
+mode-complete: (this is a complete statement)

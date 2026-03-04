@@ -1,0 +1,26 @@
+sangati graph-camera-interaction
+
+  "interaction-swarupa lifecycle-sthita event-loop-sthita"
+  "graph-camera-sthita graph-viz-state-sthita"
+  "graph-pointer-input-sthita"
+
+  "viveka-sthita"
+  "wheel-viveka zoom-kriya"
+  "right-drag-viveka orbit-kriya"
+  "left-drag-empty-viveka pan-kriya"
+  "key-viveka preset-top-kriya preset-bottom-kriya preset-front-kriya"
+
+  "mouse-wheel-ahara"
+  "mouse-delta-ahara mouse-down-ahara"
+  "right-button-ahara"
+  "key-1-ahara key-2-ahara key-3-ahara"
+
+  "graph-viz-setu-sthita"
+
+  "pan-phala zoom-phala orbit-phala preset-view-phala"
+
+  "graph-camera-prasarana"
+
+shabda viveka-driven-camera-control-wheel-zooms-right-drag-orbits-left-drag-empty-pans-keys-snap-to-preset-views-prasarana-mutates-cam-kshetra
+
+done

@@ -1,0 +1,11 @@
+sangati graph-viz-lua
+
+  "prayoga-kriya lua-phala"
+  "graph-viz-setu-yukta"
+  "graph-viz-state-yukta graph-camera-yukta"
+  "graph-screen-projection-yukta graph-spring-interaction-yukta"
+  "graph-update-yukta graph-render-yukta"
+
+shabda graph-viz-lua shabda-tmpl:graph-viz-lua.shabda
+
+done

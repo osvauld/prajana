@@ -1,0 +1,539 @@
+# graph-viz-lua.shabda
+# Lua code bodies for graph-viz, derived from session .om nodes.
+# Each key corresponds to a session node. Values are | multiline blocks.
+# Constants referenced as UPPERCASE are substituted by kebab-to-upper-snake rule (lua-scope.om).
+#
+# block-order derived from graph-viz-intent sthita edges via node-key-* in graph-viz-setu.
+# prayoga_lua.ml walks intent krama — no block-order key needed here.
+#
+# lua-globals: file-level constants emitted before all blocks
+lua-globals: local WIDTH, HEIGHT = SCREEN_WIDTH, SCREEN_HEIGHT\nlocal PANEL_W = PANEL_WIDTH
+#
+# lua-init: on_init lifecycle hook body
+lua-init: |
+  function on_init()
+    if engine:available() then
+      local g = engine:session(SESSION_ID)
+      if g and g.nodes then
+        seed_from_graph(g)
+      end
+    end
+  end
+#
+# lua-trampolines: on_update/on_draw wiring
+lua-trampolines: |
+  function on_update(dt) update(dt) end
+  function on_draw()      draw()     end
+
+# ── graph-viz-state (graph-viz-state.om) ──────────────────────────────────────
+lua-state: |
+  local state = {
+    t = 0.0,
+    frame = 0,
+    nodes = {}, edges = {},
+    node_index = {}, edge_seen = {},
+    hover = nil, sel = nil, dragging = nil,
+    query_text = '',
+    chat_lines = {},
+    activated = {},
+  }
+
+  local function clamp(x, lo, hi)
+    if x < lo then return lo elseif x > hi then return hi else return x end
+  end
+
+  -- physics simulation state (used by lua-physics and lua-seed)
+  local sim_alpha = 1.0
+  local node_degree = {}
+
+# ── graph-camera (graph-camera.om) ────────────────────────────────────────────
+lua-camera: |
+  local cam = {
+    dist       = CAM_DIST,
+    yaw        = 0.0,
+    pitch      = CAM_PITCH,
+    tx = 0.0, ty = 0.0, tz = 0.0,
+    fovy       = CAM_FOVY,
+    zoom_fac   = ZOOM_FACTOR,
+    zoom_min   = ZOOM_MIN,
+    zoom_max   = ZOOM_MAX,
+    pan_speed  = PAN_SPEED,
+    orbit_spd  = CAM_ORBIT_SPEED,
+    pitch_min  = CAM_PITCH_MIN,
+    pitch_max  = CAM_PITCH_MAX,
+  }
+
+  local function cam_pos()
+    local cp = math.cos(cam.pitch)
+    local sp = math.sin(cam.pitch)
+    local cy = math.cos(cam.yaw)
+    local sy = math.sin(cam.yaw)
+    return
+      cam.tx + cam.dist * cp * sy,
+      cam.ty + cam.dist * sp,
+      cam.tz + cam.dist * cp * cy
+  end
+
+  local function cam_axes()
+    local cy = math.cos(cam.yaw)
+    local sy = math.sin(cam.yaw)
+    local cp = math.cos(cam.pitch)
+    local sp = math.sin(cam.pitch)
+    local fx = -cp * sy
+    local fy = -sp
+    local fz = -cp * cy
+    local rx =  cy
+    local ry =  0.0
+    local rz = -sy
+    local ux = ry*fz - rz*fy
+    local uy = rz*fx - rx*fz
+    local uz = rx*fy - ry*fx
+    return rx,ry,rz, ux,uy,uz
+  end
+
+# ── graph-camera-interaction (graph-camera-interaction.om) ────────────────────
+# orbit-kriya: right-drag changes yaw+pitch
+# preset-top/bottom/front-kriya: keys 1/2/3 snap camera angle
+lua-camera-interaction: |
+  local function cam_orbit(ddx, ddy)
+    cam.yaw   = cam.yaw + ddx * cam.orbit_spd
+    cam.pitch = clamp(cam.pitch + ddy * cam.orbit_spd, cam.pitch_min, cam.pitch_max)
+  end
+
+  local function cam_preset_top()
+    cam.pitch = CAM_PRESET_TOP_PITCH
+    cam.yaw   = CAM_PRESET_TOP_YAW
+  end
+
+  local function cam_preset_bottom()
+    cam.pitch = CAM_PRESET_BOTTOM_PITCH
+    cam.yaw   = CAM_PRESET_BOTTOM_YAW
+  end
+
+  local function cam_preset_front()
+    cam.pitch = CAM_PRESET_FRONT_PITCH
+    cam.yaw   = CAM_PRESET_FRONT_YAW
+  end
+
+# ── graph-screen-projection (graph-hover-picking.om + graph-pointer-input.om) ─
+lua-screen-projection: |
+  local function screen_delta_to_world(sdx, sdy)
+    local rx,ry,rz, ux,uy,uz = cam_axes()
+    local s = cam.dist * DRAG_FORCE_SCALE
+    return
+      rx * sdx * s + ux * (-sdy) * s,
+      ry * sdx * s + uy * (-sdy) * s,
+      rz * sdx * s + uz * (-sdy) * s
+  end
+
+  local function pick_hover(mx, my)
+    -- guard: mouse in panel → no picking
+    if mx >= WIDTH - PANEL_W then return nil end
+    local cx, cy_c, cz = cam_pos()
+    local rx,ry,rz, ux,uy,uz = cam_axes()
+    local fcp = math.cos(cam.pitch)
+    local fsp = math.sin(cam.pitch)
+    local fsy = math.sin(cam.yaw)
+    local fcy = math.cos(cam.yaw)
+    local fx = -fcp * fsy
+    local fy = -fsp
+    local fz = -fcp * fcy
+    local tan_half = math.tan(math.rad(cam.fovy) * 0.5)
+    local vp_w = WIDTH - PANEL_W
+    local aspect = vp_w / HEIGHT
+    local best_i, best_d2 = nil, HOVER_PX_THRESHOLD * HOVER_PX_THRESHOLD
+    for i, n in ipairs(state.nodes) do
+      local wx = n.x - cx
+      local wy = n.y - cy_c
+      local wz = n.z - cz
+      local vx = wx*rx + wy*ry + wz*rz
+      local vy = wx*ux + wy*uy + wz*uz
+      local vz = wx*fx + wy*fy + wz*fz
+      if vz < -0.1 then
+        local sx = (-vx/(-vz)/(tan_half*aspect))*vp_w*0.5 + vp_w*0.5
+        local sy = (-vy/(-vz)/tan_half)*HEIGHT*0.5 + HEIGHT*0.5
+        local ddx, ddy = sx - mx, sy - my
+        local d2 = ddx*ddx + ddy*ddy
+        if d2 < best_d2 then best_d2 = d2; best_i = i end
+      end
+    end
+    return best_i
+  end
+
+# ── graph-seed-data (graph-seed-data.om) ─────────────────────────────────────
+# Nodes come from engine:graph() at on_init — no hardcoded positions.
+# color_of_node maps domain-* sthita edges to palette.
+# spiral_pos distributes nodes via golden-angle spiral in 3D.
+# seed_from_graph builds state.nodes, state.edges, state.node_index.
+lua-seed: |
+  -- domain → color table (derived from graph-viz-setu domain-color-* keys)
+  local DOMAIN_COLORS = {
+    ['domain-physics']    = DOMAIN_COLOR_PHYSICS,
+    ['domain-math']       = DOMAIN_COLOR_MATH,
+    ['domain-quantum']    = DOMAIN_COLOR_QUANTUM,
+    ['domain-fluid']      = DOMAIN_COLOR_FLUID,
+    ['domain-language']   = DOMAIN_COLOR_LANGUAGE,
+    ['domain-ocaml']      = DOMAIN_COLOR_OCAML,
+    ['domain-lua']        = DOMAIN_COLOR_LUA,
+    ['domain-biology']    = DOMAIN_COLOR_BIOLOGY,
+    ['domain-chemistry']  = DOMAIN_COLOR_CHEMISTRY,
+    ['domain-sangeetham'] = DOMAIN_COLOR_SANGEETHAM,
+    ['domain-finance']    = DOMAIN_COLOR_FINANCE,
+    ['domain-3d']         = DOMAIN_COLOR_3D,
+    ['domain-raylib']     = DOMAIN_COLOR_RAYLIB,
+  }
+
+  local function color_of_node(gn)
+    for _, e in ipairs(gn.edges or {}) do
+      if e.relation == 'sthita' then
+        local c = DOMAIN_COLORS[e.target]
+        if c then return c end
+      end
+    end
+    -- session graph nodes always amber
+    if string.sub(gn.name or '', 1, 6) == 'graph-' then return COLOR_CORE end
+    return COLOR_ENGINE
+  end
+
+  local function spiral_pos(i, n)
+    local golden = 2.39996322972865332
+    local r = GRAPH_SPIRAL_RADIUS * math.sqrt((i + 1) / n)
+    local theta = i * golden
+    return r * math.cos(theta), (i - n * 0.5) * GRAPH_SPIRAL_Y_SCALE, r * math.sin(theta)
+  end
+
+  local function seed_from_graph(g)
+    state.nodes = {}; state.edges = {}
+    state.node_index = {}; state.edge_seen = {}
+    local nodes_list = g.nodes or {}
+    local n = #nodes_list
+    for i, gn in ipairs(nodes_list) do
+      local x, y, z = spiral_pos(i - 1, n)
+      table.insert(state.nodes, {
+        id     = gn.name,
+        x = x, y = y, z = z,
+        vx = 0, vy = 0, vz = 0,
+        fx = 0, fy = 0, fz = 0,
+        satya  = gn.satya or 0.5,
+        energy = (gn.satya or 0.5) * 0.9,
+        color  = color_of_node(gn),
+      })
+      state.node_index[gn.name] = i
+    end
+    for i, gn in ipairs(nodes_list) do
+      for _, e in ipairs(gn.edges or {}) do
+        local j = state.node_index[e.target]
+        if j and j ~= i then
+          -- deduplicate undirected edges
+          local lo = math.min(i, j)
+          local hi = math.max(i, j)
+          local key = lo * 100000 + hi
+          if not state.edge_seen[key] then
+            state.edge_seen[key] = true
+            table.insert(state.edges, {a = i, b = j, rel = e.relation or ''})
+          end
+        end
+      end
+    end
+    state.edge_seen = nil  -- free dedup table
+    -- build degree table for d3 link strength (physics_step uses it)
+    build_degrees()
+    sim_alpha = 1.0
+  end
+
+# ── graph-spring-interaction (graph-spring-interaction.om) ────────────────────
+# physics: d3-force model — alpha cooling, distanceMax cutoff, velocity decay
+# repulsion: inverse-square, skipped beyond REPULSION_DIST_MAX (Barnes-Hut style cutoff)
+# bond: Hooke spring, degree-weighted strength, asymmetric bias (d3 link force)
+# center: weak pull toward origin (prevents drift)
+# integration: semi-implicit Euler, velocityDecay = LINEAR_DRAG per tick
+# alpha cooling: starts 1.0, decays by ALPHA_DECAY each tick, stops at ALPHA_MIN
+# throttled: only called every PHYSICS_EVERY frames from update()
+lua-physics: |
+  local function build_degrees()
+    node_degree = {}
+    for i = 1, #state.nodes do node_degree[i] = 0 end
+    for _, e in ipairs(state.edges) do
+      node_degree[e.a] = (node_degree[e.a] or 0) + 1
+      node_degree[e.b] = (node_degree[e.b] or 0) + 1
+    end
+  end
+
+  local function physics_step(dt)
+    -- alpha cooling: stop when settled (saves all CPU once graph is stable)
+    if sim_alpha < ALPHA_MIN then return end
+    sim_alpha = sim_alpha + (0 - sim_alpha) * ALPHA_DECAY
+
+    local nodes = state.nodes
+    local n = #nodes
+    -- clear forces
+    for i = 1, n do
+      local nd = nodes[i]
+      nd.fx, nd.fy, nd.fz = 0, 0, 0
+    end
+
+    -- repulsion (many-body) — inverse-square with distanceMax cutoff
+    -- O(n*k) where k = avg nodes within REPULSION_DIST_MAX; forces scaled by alpha
+    local rep_str  = REPULSION_STRENGTH
+    local rep_soft = REPULSION_SOFTENING
+    local rep_max2 = REPULSION_DIST_MAX * REPULSION_DIST_MAX
+    for i = 1, n do
+      local a = nodes[i]
+      for j = i + 1, n do
+        local b = nodes[j]
+        local dx = a.x - b.x
+        local dy = a.y - b.y
+        local dz = a.z - b.z
+        local d2 = dx*dx + dy*dy + dz*dz
+        if d2 < rep_max2 then
+          local ld2 = d2 + rep_soft
+          local f = rep_str * sim_alpha / ld2
+          a.fx = a.fx + dx * f;  a.fy = a.fy + dy * f;  a.fz = a.fz + dz * f
+          b.fx = b.fx - dx * f;  b.fy = b.fy - dy * f;  b.fz = b.fz - dz * f
+        end
+      end
+    end
+
+    -- link force (bond) — d3 style: degree-weighted strength, asymmetric bias
+    for _, e in ipairs(state.edges) do
+      local a, b = nodes[e.a], nodes[e.b]
+      local dx = b.x - a.x + b.vx - a.vx
+      local dy = b.y - a.y + b.vy - a.vy
+      local dz = b.z - a.z + b.vz - a.vz
+      local dist = math.sqrt(dx*dx + dy*dy + dz*dz + 0.0001)
+      -- d3 link strength = 1 / min(degree_a, degree_b)
+      local da = math.max(node_degree[e.a] or 1, 1)
+      local db = math.max(node_degree[e.b] or 1, 1)
+      local strength = 1.0 / math.min(da, db)
+      local l = (dist - BOND_REST_LENGTH) / dist * sim_alpha * strength
+      dx = dx * l;  dy = dy * l;  dz = dz * l
+      -- bias: fraction of correction applied to each end (proportional to degree)
+      local bias = da / (da + db)
+      b.fx = b.fx - dx * bias;      b.fy = b.fy - dy * bias;      b.fz = b.fz - dz * bias
+      a.fx = a.fx + dx * (1 - bias); a.fy = a.fy + dy * (1 - bias); a.fz = a.fz + dz * (1 - bias)
+    end
+
+    -- center force — weak pull toward origin to prevent drift
+    local center_str = CENTER_FORCE_STRENGTH * sim_alpha
+    for i = 1, n do
+      local nd = nodes[i]
+      nd.fx = nd.fx - nd.x * center_str
+      nd.fy = nd.fy - nd.y * center_str
+      nd.fz = nd.fz - nd.z * center_str
+    end
+
+    -- integrate: semi-implicit Euler + velocity decay (d3 velocityDecay)
+    for i = 1, n do
+      local nd = nodes[i]
+      nd.vx = (nd.vx + nd.fx) * LINEAR_DRAG
+      nd.vy = (nd.vy + nd.fy) * LINEAR_DRAG
+      nd.vz = (nd.vz + nd.fz) * LINEAR_DRAG
+      nd.x  = nd.x + nd.vx
+      nd.y  = nd.y + nd.vy
+      nd.z  = nd.z + nd.vz
+    end
+  end
+
+# ── graph-update (graph-drag-interaction.om + graph-camera-interaction.om
+#                + graph-click-query.om + graph-query-cycle.om) ────────────────
+lua-update: |
+  function update(dt)
+    state.t     = state.t + dt
+    state.frame = state.frame + 1
+
+    local mx, my   = input:mouse_pos()
+    local clicked  = input:mouse_clicked()
+    local down     = input:mouse_down()
+    local rdown    = input:mouse_right_down()
+    local ddx, ddy = input:mouse_delta()
+    local wheel    = input:mouse_wheel()
+
+    -- zoom (graph-camera-interaction.om: zoom-kriya)
+    if wheel ~= 0 then
+      cam.dist = clamp(cam.dist * (cam.zoom_fac ^ (-wheel)), cam.zoom_min, cam.zoom_max)
+    end
+
+    -- preset views (graph-camera-interaction.om: preset-top/bottom/front-kriya)
+    if input:key_pressed('1') then cam_preset_top()    end
+    if input:key_pressed('2') then cam_preset_bottom() end
+    if input:key_pressed('3') then cam_preset_front()  end
+
+    -- orbit (graph-camera-interaction.om: orbit-kriya, right-button-ahara)
+    if rdown and not down then
+      cam_orbit(ddx, ddy)
+    end
+
+    -- hover picking (graph-hover-picking.om)
+    state.hover = pick_hover(mx, my)
+
+    -- click → select + drag start (graph-drag-interaction.om: drag-start-kriya)
+    if clicked then
+      if state.hover then
+        state.dragging = state.hover
+        state.sel      = state.hover
+        -- click-query: fire engine query for selected node (graph-click-query.om)
+        if engine:available() then
+          local n = state.nodes[state.hover]
+          if n then
+            local r = engine:query(n.id)
+            if r and r.ok then
+              table.insert(state.chat_lines, {role='engine', text='['..n.id..'] '..r.answer})
+              state.activated = {}
+              for _, id in ipairs(r.activated or {}) do
+                state.activated[id] = true
+              end
+              -- trim chat log to last 40 lines
+              while #state.chat_lines > 40 do
+                table.remove(state.chat_lines, 1)
+              end
+            end
+          end
+        end
+      else
+        state.dragging = nil
+      end
+    end
+
+    -- left drag: node drag or camera pan (graph-drag-interaction.om)
+    if down and not rdown then
+      if state.dragging then
+        -- drag-step-kriya: pull node, propagate through bonds; reheat alpha so physics wakes
+        sim_alpha = math.max(sim_alpha, 0.3)
+        local fx, fy, fz = screen_delta_to_world(ddx, ddy)
+        local n = state.nodes[state.dragging]
+        n.vx = n.vx + fx;  n.vy = n.vy + fy;  n.vz = n.vz + fz
+        for _, e in ipairs(state.edges) do
+          local other = nil
+          if e.a == state.dragging then other = e.b
+          elseif e.b == state.dragging then other = e.a end
+          if other then
+            local nb = state.nodes[other]
+            nb.vx = nb.vx + fx * DRAG_COUPLING
+            nb.vy = nb.vy + fy * DRAG_COUPLING
+            nb.vz = nb.vz + fz * DRAG_COUPLING
+          end
+        end
+      else
+        -- pan-step-kriya
+        local rx, ry, rz, ux, uy, uz = cam_axes()
+        local ps = cam.dist * cam.pan_speed
+        cam.tx = cam.tx - (rx*ddx - ux*ddy) * ps
+        cam.ty = cam.ty - (ry*ddx - uy*ddy) * ps
+        cam.tz = cam.tz - (rz*ddx - uz*ddy) * ps
+      end
+    end
+
+    if not down then state.dragging = nil end
+
+    -- text input for chat query box (graph-click-query.om: chat-yukta)
+    local typed = input:chars()
+    if typed and #typed > 0 then
+      state.query_text = state.query_text .. typed
+    end
+    if input:key_pressed('backspace') and #state.query_text > 0 then
+      state.query_text = string.sub(state.query_text, 1, #state.query_text - 1)
+    end
+    -- submit query on Enter (graph-query-cycle.om)
+    if input:key_pressed('enter') and #state.query_text > 0 then
+      local q = state.query_text
+      state.query_text = ''
+      table.insert(state.chat_lines, {role='user', text=q})
+      if engine:available() then
+        local r = engine:query(q)
+        if r and r.ok then
+          table.insert(state.chat_lines, {role='engine', text=r.answer})
+          state.activated = {}
+          for _, id in ipairs(r.activated or {}) do
+            state.activated[id] = true
+          end
+        else
+          table.insert(state.chat_lines, {role='engine', text='(no response)'})
+        end
+      else
+        table.insert(state.chat_lines, {role='engine', text='(engine not available)'})
+      end
+      while #state.chat_lines > 40 do table.remove(state.chat_lines, 1) end
+    end
+
+    -- physics substep throttle (graph-spring-interaction.om: velocity-step-kriya)
+    if state.frame % PHYSICS_EVERY == 0 then
+      physics_step(dt * PHYSICS_EVERY)
+    end
+  end
+
+# ── graph-render (graph-edge-visual.om + graph-node-visual.om
+#                + graph-activity-glow.om + graph-delta-stream.om) ─────────────
+lua-draw: |
+  function draw()
+    canvas:rect(0, 0, WIDTH, HEIGHT, COLOR_BG)
+    local cx, cy, cz = cam_pos()
+    canvas:begin_3d(cx, cy, cz, cam.tx, cam.ty, cam.tz, cam.fovy)
+
+    -- reference grid (graph-container.om: viewport-yukta)
+    for gi = -8, 8 do
+      local gv = gi * 5.0
+      canvas:line3d(gv, -5.0, -40.0, gv, -5.0,  40.0, COLOR_GRID)
+      canvas:line3d(-40.0, -5.0, gv, 40.0, -5.0, gv,  COLOR_GRID)
+    end
+
+    -- edges (graph-edge-visual.om: cylinder-swarupa, glow-phala)
+    for _, e in ipairs(state.edges) do
+      local a, b   = state.nodes[e.a], state.nodes[e.b]
+      local is_sel = (state.sel == e.a or state.sel == e.b)
+      local is_act = state.activated[a.id] and state.activated[b.id]
+      local color  = is_act and COLOR_ACTIVE or (is_sel and COLOR_BOND_SEL or COLOR_BOND)
+      local r      = is_sel and BOND_TUBE_RADIUS_SELECTED or BOND_TUBE_RADIUS
+      canvas:cylinder3d(a.x,a.y,a.z, b.x,b.y,b.z, r, color)
+    end
+
+    -- nodes (graph-node-visual.om: sphere-swarupa, satya-yukta, energy-yukta)
+    for i, n in ipairs(state.nodes) do
+      local pulse = 1.0 + math.sin(state.t * PULSE_SPEED + n.energy * 6.28318) * PULSE_AMPLITUDE
+      local r     = clamp(n.satya * NODE_RADIUS_SCALE * pulse, NODE_RADIUS_MIN, NODE_RADIUS_MAX)
+      -- activity glow (graph-activity-glow.om: glow-kriya)
+      if state.activated[n.id] then
+        canvas:sphere(n.x, n.y, n.z, r * 1.6, COLOR_ACTIVE)
+      end
+      local col = (i == state.hover) and COLOR_HOVER or n.color
+      canvas:sphere(n.x, n.y, n.z, r, col)
+    end
+
+    canvas:end_3d()
+
+    -- side panel (graph-click-query.om: chat-yukta)
+    local px = WIDTH - PANEL_W
+    canvas:rect(px, 0, PANEL_W, HEIGHT, COLOR_PANEL)
+    canvas:text(px+16,  18, 'vyakarana graph',   20, COLOR_TEXT)
+    canvas:text(px+16,  42, #state.nodes..' nodes  '..#state.edges..' bonds', 12, COLOR_DIM)
+
+    -- selected node info
+    if state.sel then
+      local n = state.nodes[state.sel]
+      canvas:text(px+16, 68, n.id,  15, n.color)
+      canvas:text(px+16, 88, 'satya '..string.format('%.3f', n.satya), 12, COLOR_DIM)
+    end
+
+    -- chat log (query-turn-state.om: question-yukta, activated-nodes-yukta)
+    local chat_top = 116
+    local line_h   = 18
+    local max_lines = math.floor((HEIGHT - chat_top - 80) / line_h)
+    local start_i   = math.max(1, #state.chat_lines - max_lines + 1)
+    for li = start_i, #state.chat_lines do
+      local entry = state.chat_lines[li]
+      local col   = entry.role == 'user' and COLOR_TEXT or COLOR_DIM
+      local prefix = entry.role == 'user' and '> ' or '  '
+      local y = chat_top + (li - start_i) * line_h
+      -- wrap long lines crudely at ~40 chars
+      local text = prefix .. string.sub(entry.text, 1, 42)
+      canvas:text(px+12, y, text, 12, col)
+    end
+
+    -- query input box
+    local qy = HEIGHT - 68
+    canvas:rect(px+8, qy - 4, PANEL_W - 16, 24, COLOR_BG)
+    canvas:text(px+14, qy, '> '..state.query_text..'_', 14, COLOR_TEXT)
+
+    -- controls hint
+    canvas:text(px+12, HEIGHT-42, 'L-drag:pan/pull  R-drag:orbit', 11, COLOR_DIM)
+    canvas:text(px+12, HEIGHT-26, 'wheel:zoom  1:top 2:bot 3:front', 11, COLOR_DIM)
+  end

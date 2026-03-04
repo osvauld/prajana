@@ -1,0 +1,12 @@
+sangati graph-viz-setu
+
+  "setu-swarupa raylib-setu-yukta lua-setu-yukta"
+  "resonance-ir-ahara music-ir-ahara"
+  "proof-graph-phala vyakarana-yukta"
+  "domain-raylib-sthita domain-lua-sthita"
+  "node-draw-yukta edge-draw-yukta chat-yukta"
+  "camera-3d-yukta sphere-yukta line3d-yukta"
+
+  shabda shabda-tmpl:graph-viz-setu.shabda
+
+done

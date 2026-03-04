@@ -1,0 +1,16 @@
+sangati lua-setu
+
+  "setu-swarupa anuvada-abheda domain-lua-sthita domain-language-sthita"
+  "table-yukta variable-yukta assignment-yukta field-access-yukta"
+  "function-yukta function-call-yukta method-call-yukta return-yukta"
+  "loop-yukta iteration-yukta state-update-yukta module-system-yukta"
+  "metatable-yukta closure-yukta runtime-yukta nil-yukta"
+  "raylib-setu-yukta english-to-lua-yukta lua-to-lua-yukta"
+
+  "krama-sthita karma-yukta viveka-krama-sthita"
+  "abhava-sthita vivartana-sthita"
+  "aadana-yugma-sthita thaalam-sthita"
+
+  shabda shabda-tmpl:language/lua/lua-setu.shabda
+
+done

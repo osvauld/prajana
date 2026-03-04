@@ -1,0 +1,15 @@
+let order arr =
+  let n = Array.length arr in
+  let changed = ref true in
+  while !changed do
+    changed := false;
+    for i = 0 to n - 2 do
+      if arr.(i) > arr.(i + 1) then begin
+        let tmp = arr.(i) in
+        arr.(i) <- arr.(i + 1);
+        arr.(i + 1) <- tmp;
+        changed := true
+      end
+    done
+  done;
+  arr

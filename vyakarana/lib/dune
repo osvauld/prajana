@@ -1,3 +1,4 @@
 (library
  (name vyakarana_lib)
- (modules proof_graph event verify om_parser))
+ (libraries unix str)
+ (modules proof_graph event verify om_parser setu anuvada prayoga prayoga_ocaml prayoga_strudel prayoga_lua socket))
