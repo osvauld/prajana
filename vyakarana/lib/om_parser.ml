@@ -1,12 +1,17 @@
 (* om_parser.ml — reads .om suktas into the proof space
    two-pass parser:
-     pass 1: collect all sangati names (the vocabulary)
+     pass 1: collect all node names (the vocabulary)
      pass 2: parse slokas, decompose compounds into typed edges
 
    .om format:
-     sangati <name>
+     sangati <name>   -- universal structural truth (Sanskrit body only)
        "<sloka 1>"
        "<sloka 2>"
+       ...
+     done
+
+     kosha <name>     -- domain application (may reference sangati + other kosha)
+       "<sloka 1>"
        ...
      done
 
@@ -35,18 +40,30 @@ let om_files_recursive (root : string) : string list =
 
 (* --- pass 1: collect names --- *)
 
-(* extract sangati name from a line *)
-let parse_sangati_name line =
+(* extract layer and node name from a header line.
+   recognizes both:
+     sangati <name>  — universal structural truth
+     kosha <name>    — domain application
+   returns Some (layer_string, name) or None *)
+let parse_node_header line =
   let line = String.trim line in
-  if String.length line > 8 && String.sub line 0 7 = "sangati" then
-    let rest = String.trim (String.sub line 7 (String.length line - 7)) in
-    match String.split_on_char ' ' rest with
-    | name :: _ when String.length name > 0 -> Some name
-    | _ -> None
-  else
-    None
+  let try_prefix prefix =
+    let plen = String.length prefix in
+    if String.length line > plen + 1
+       && String.sub line 0 plen = prefix
+       && (line.[plen] = ' ' || line.[plen] = '\t') then
+      let rest = String.trim (String.sub line plen (String.length line - plen)) in
+      match String.split_on_char ' ' rest with
+      | name :: _ when String.length name > 0 -> Some (prefix, name)
+      | _ -> None
+    else
+      None
+  in
+  match try_prefix "sangati" with
+  | Some r -> Some r
+  | None   -> try_prefix "kosha"
 
-(* collect all sangati names from a directory *)
+(* collect all node names from a directory *)
 let collect_names dir : string list =
   let names = ref [] in
   List.iter (fun path ->
@@ -55,8 +72,8 @@ let collect_names dir : string list =
       (try
         while true do
           let line = input_line ic in
-          match parse_sangati_name line with
-          | Some name -> names := name :: !names; raise Exit
+          match parse_node_header line with
+          | Some (_layer, name) -> names := name :: !names; raise Exit
           | None -> ()
         done
       with Exit | End_of_file -> ());
@@ -162,19 +179,29 @@ let parse_file (known_names : string list) (path : string) : nigamana option =
     let lines = List.rev !lines in
 
     let name = ref None in
+    let layer = ref "sangati" in
     let slokas = ref [] in
+    let shabda_val = ref "" in
 
     List.iter (fun line ->
-      (* extract name *)
-      (match parse_sangati_name line with
-      | Some n -> name := Some n
+      (* extract name and layer *)
+      (match parse_node_header line with
+      | Some (lyr, n) -> name := Some n; layer := lyr
       | None ->
-        (* extract sloka — any quoted line that isn't a comment *)
+        (* extract shabda — unquoted line starting with "shabda " *)
         let trimmed = String.trim line in
+        let shabda_prefix = "shabda " in
+        let shabda_len = String.length shabda_prefix in
+        if String.length trimmed > shabda_len
+           && String.sub trimmed 0 shabda_len = shabda_prefix then
+          shabda_val := String.trim (String.sub trimmed shabda_len
+                          (String.length trimmed - shabda_len))
+        else
+        (* extract sloka — any quoted line that isn't a comment *)
         if String.length trimmed > 0
            && trimmed.[0] <> '-'  (* not a comment *)
            && trimmed <> "done"
-           && (parse_sangati_name trimmed = None) then
+           && (parse_node_header trimmed = None) then
           match parse_sloka line with
           | Some s when String.length s > 0 -> slokas := s :: !slokas
           | _ -> ()
@@ -189,14 +216,16 @@ let parse_file (known_names : string list) (path : string) : nigamana option =
       let edges = List.concat_map (decompose_sloka known_names n) slokas_list in
       Some {
         name   = n;
+        layer  = !layer;
         slokas = slokas_list;
         edges;
         satya  = 0.0;  (* will be computed by satya-ganana *)
+        shabda = !shabda_val;
       }
   with _ -> None
 
 (* load all .om files from a directory — two-pass *)
-let load_dir dir (k : proof_graph) : proof_graph * int * int =
+let load_dir ?(emit_meta = true) dir (k : proof_graph) : proof_graph * int * int =
   (* pass 1: collect all names *)
   let known_names = collect_names dir in
   (* pass 2: parse all files with known names *)
@@ -213,14 +242,15 @@ let load_dir dir (k : proof_graph) : proof_graph * int * int =
   ) (om_files_recursive dir);
   (* run satya-ganana: avrti convergence *)
   let iterations = satya_ganana !k_ref in
-  Printf.printf "satya-ganana: %d avrti iterations\n%!" iterations;
+  if emit_meta then
+    Printf.printf "truth-scoring (satya-ganana): %d spiral-passes (avrti)\n%!" iterations;
   (!k_ref, !loaded, !skipped)
 
 (* load multiple directories into one graph — unified namespace
    pass 1: collect names from ALL directories
    pass 2: parse all files with the combined vocabulary
    satya-ganana runs once on the unified graph *)
-let load_dirs (dirs : string list) (k : proof_graph) : proof_graph * int * int =
+let load_dirs ?(emit_meta = true) (dirs : string list) (k : proof_graph) : proof_graph * int * int =
   (* pass 1: collect names from all directories *)
   let known_names = List.concat_map collect_names dirs in
   (* pass 2: parse all files from all directories *)
@@ -237,7 +267,17 @@ let load_dirs (dirs : string list) (k : proof_graph) : proof_graph * int * int =
         incr skipped
     ) (om_files_recursive dir)
   ) dirs;
+  (* record kosha root — prefer a dir containing "kosha", else use last dir *)
+  let kosha_dir = List.fold_left (fun acc d ->
+    let base = Filename.basename d in
+    if base = "kosha" || (try let _ = Str.search_forward (Str.regexp_string "kosha") d 0 in true with Not_found -> false)
+    then d else acc
+  ) "" dirs in
+  let kosha_dir = if kosha_dir = "" then (match List.rev dirs with d :: _ -> d | [] -> "") else kosha_dir in
+  !k_ref.kosha_root := kosha_dir;
+  !k_ref.search_dirs := dirs;
   (* run satya-ganana once on the unified graph *)
   let iterations = satya_ganana !k_ref in
-  Printf.printf "satya-ganana: %d avrti iterations\n%!" iterations;
+  if emit_meta then
+    Printf.printf "truth-scoring (satya-ganana): %d spiral-passes (avrti)\n%!" iterations;
   (!k_ref, !loaded, !skipped)

@@ -1,0 +1,165 @@
+# lua-setu.shabda — Lua concept-to-form mappings
+# one key: value per line. blank lines and # lines ignored.
+
+comment: --
+comment-end:
+
+# ── naming convention ────────────────────────────────────────────────────────────
+# setu keys become Lua constants by kebab-to-upper-snake rule (lua-scope.om)
+const-naming:       kebab-to-upper-snake
+local-naming:       snake-case
+function-naming:    snake-case
+
+# ── scope rule ───────────────────────────────────────────────────────────────────
+scope-rule:         declaration-before-use
+hoisting:           none
+file-scope:         sequential
+
+# ── fundamental nature (krama, thaalam, viveka, abhava) ─────────────────────────
+# Lua is a karma-krama language — the function body is a krama of karma (statements).
+# Each statement leaves a samskaara on state. Niyama: left-to-right, top-to-bottom.
+# viveka (if/elseif/else) is a krama-router — it does NOT produce a value (not an expression).
+# Only nil and false are falsy — 0 and "" are truthy (viveka is minimal).
+# nil IS abhava — the situated absence. Absent keys return nil. Unset variables are nil.
+# Function body: krama of karmas. Parameters arrive as yugma (simultaneous tuple, not curried).
+# Multiple return values: simultaneous visarjana of a vrnda — unique to Lua.
+# Loop: avrti of a krama — the body-krama repeats, viveka decides at each cycle.
+# repeat-until: avrti-first-then-viveka — body executes before the condition is checked.
+function-body-nature:     krama-of-karmas
+function-body-unit:       statement-karma
+parameter-nature:         yugma-aadana-simultaneous
+return-nature:            explicit-return-keyword-visarjana
+multiple-return-nature:   simultaneous-vrnda-visarjana
+nil-nature:               abhava-situated-absence
+if-nature:                krama-router-not-expression
+loop-nature:              avrti-of-krama-viveka-at-each-cycle
+repeat-until-nature:      avrti-first-then-viveka
+binding-nature:           vivartana-yukta-local-can-mutate
+niyama:                   left-to-right-top-to-bottom
+
+# ── types ────────────────────────────────────────────────────────────────────────
+# Lua 5.1/5.2: one number type for both int and float (float64 internally)
+int:          0
+float:        0.0
+bool:         true
+string:       ""
+nil:          nil
+array:        {}
+list:         {}
+map:          {}
+record:       {}
+tuple:        {}
+
+# ── variable declaration ─────────────────────────────────────────────────────────
+# local = binding (first use in scope). No type annotation. No immutability.
+# Reassignment is mutation — same syntax as binding.
+variable-declare:   local x = value
+variable-int:       local x = 0
+variable-float:     local x = 0.0
+variable-bool:      local x = true
+variable-string:    local x = ""
+variable-nil:       local x = nil
+variable-table:     local x = {}
+variable-update:    x = new_value
+
+# ── collection literals ──────────────────────────────────────────────────────────
+array-literal:      {v1, v2, v3}
+array-access:       t[i]
+array-length:       #t
+array-append:       table.insert(t, v)
+array-iterate:      for i, v in ipairs(t) do ... end
+
+map-literal:        {k1=v1, k2=v2}
+map-access:         t.key
+map-set:            t.key = value
+map-has:            t.key ~= nil
+map-iterate:        for k, v in pairs(t) do ... end
+
+# ── callable ─────────────────────────────────────────────────────────────────────
+# Functions are first-class values. No type annotations on parameters.
+# Multiple return values are native.
+callable-declare:   local function name(p1, p2) ... end
+callable-anon:      function(p1, p2) ... end
+callable-call:      name(a1, a2)
+callable-method:    obj:method(a1)
+return-value:       return value
+return-multi:       return v1, v2
+parameter:          p
+argument:           value
+
+# ── scope ────────────────────────────────────────────────────────────────────────
+# Lua has lexical scope. 'local' creates a new binding in current block.
+# Without 'local', assignment goes to the nearest enclosing scope or global.
+# No hoisting — local function f() must appear before calls to f().
+scope-open:         do
+scope-close:        end
+local-keyword:      local
+global-assign:      x = value
+
+# ── loop ─────────────────────────────────────────────────────────────────────────
+loop-numeric:       for i = start, stop, step do ... end
+loop-generic:       for k, v in pairs(t) do ... end
+loop-ipairs:        for i, v in ipairs(t) do ... end
+loop-while:         while condition do ... end
+loop-repeat:        repeat ... until condition
+loop-break:         break
+
+# ── conditional ──────────────────────────────────────────────────────────────────
+# if is a statement in Lua, not an expression. No ternary operator.
+# Only nil and false are falsy — 0 and "" are truthy.
+conditional:        if cond then ... end
+conditional-else:   if cond then ... else ... end
+conditional-elseif: if c1 then ... elseif c2 then ... else ... end
+falsy-values:       nil false
+truthy-zero:        true
+
+# ── string operations ────────────────────────────────────────────────────────────
+string-concat:      s1 .. s2
+string-length:      #s
+string-sub:         string.sub(s, i, j)
+string-format:      string.format("%d %s", n, s)
+string-find:        string.find(s, pattern)
+
+# ── data structures (legacy keys kept for graph-viz emitter) ─────────────────────
+table:          {}
+sequence:       {}
+variable:       local
+assignment:     =
+field-access:   t.k
+index-access:   t[k]
+
+# ── functions (legacy keys) ──────────────────────────────────────────────────────
+function:       function()end
+function-call:  f()
+method-call:    obj:fn()
+closure:        local-fn
+coroutine:      coroutine.wrap
+
+# ── control flow (legacy keys) ───────────────────────────────────────────────────
+if:             if/then/end
+loop:           for/while
+iteration:      pairs/ipairs
+recursion:      function-self-call
+
+# ── state (legacy keys) ──────────────────────────────────────────────────────────
+state:          local-state={}
+state-update:   state.x=
+boolean:        true/false
+number:         0
+
+# ── module / runtime (legacy keys) ──────────────────────────────────────────────
+module:         return-M
+metatable:      setmetatable
+runtime:        update(s,dt)
+process:        function()end
+execution:      let()=
+
+# ── relation roles (for compose_from_setu) ──────────────────────────────────────
+action:  function(s)
+kriya:   function(s)
+phala:   return
+sthita:  s.field
+yukta:   arg=
+janya:   from
+swarupa: local
+abheda:  =

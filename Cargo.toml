@@ -1,6 +1,0 @@
-[workspace]
-members = [
-    "agent_x",
-    "bridge",
-]
-resolver = "2"

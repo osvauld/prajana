@@ -1,0 +1,29 @@
+# type.shabda — per-language type names for CS primitives and composites
+
+# ── Lua ─────────────────────────────────────────────────────────────────────────
+# Lua 5.1/5.2: one number type for both int and float (float64 internally)
+int-lua:      number
+float-lua:    number
+bool-lua:     boolean
+string-lua:   string
+nil-lua:      nil
+
+array-lua:    table
+list-lua:     table
+map-lua:      table
+record-lua:   table
+tuple-lua:    table
+
+# ── OCaml ────────────────────────────────────────────────────────────────────────
+# OCaml: static typed, inferred; 63-bit int on 64-bit; IEEE 754 float
+int-ocaml:    int
+float-ocaml:  float
+bool-ocaml:   bool
+string-ocaml: string
+unit-ocaml:   unit
+
+array-ocaml:  array
+list-ocaml:   list
+map-ocaml:    Hashtbl
+record-ocaml: record
+tuple-ocaml:  tuple

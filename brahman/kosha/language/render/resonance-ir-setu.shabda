@@ -1,0 +1,59 @@
+# resonance-ir-setu.shabda — mappings from graph concepts to resonance_ir fields
+# drives Raylib animation: node energy, edge flow, camera, accent pattern
+
+# timing (shared with music-ir)
+thaalam-bpm: 96
+ticks-per-beat: 24
+
+# node energy scaling — satya maps to energy (0.0-1.0)
+satya-to-energy: linear
+energy-min: 0.1
+energy-max: 1.0
+
+# focus threshold — nodes above this are marked focus:true
+focus-threshold: 0.75
+
+# relevance per relation — how much each relation type contributes to relevance score
+swarupa-relevance: 1.0
+abheda-relevance: 0.95
+yukta-relevance: 0.8
+sthita-relevance: 0.7
+kriya-relevance: 0.75
+phala-relevance: 0.8
+janya-relevance: 0.65
+siddha-relevance: 0.7
+drishthanta-relevance: 0.6
+
+# edge flow per relation — strength of connection in animation
+swarupa-flow: 0.95
+abheda-flow: 0.9
+yukta-flow: 0.75
+sthita-flow: 0.6
+kriya-flow: 0.7
+phala-flow: 0.8
+janya-flow: 0.65
+siddha-flow: 0.7
+drishthanta-flow: 0.55
+
+# edge direction bias — 1.0 = fully source→target, 0.5 = bidirectional
+swarupa-direction: 0.5
+abheda-direction: 0.5
+yukta-direction: 0.7
+sthita-direction: 0.8
+kriya-direction: 0.75
+phala-direction: 0.9
+janya-direction: 0.85
+siddha-direction: 0.7
+drishthanta-direction: 0.6
+
+# camera
+camera-breath: 0.25
+camera-zoom-bias: 0.12
+
+# event kinds emitted at pass boundaries
+pass-start-kind: focus_shift
+domain-cross-kind: domain_cross
+clarification-kind: needs_clarification
+
+# accent pattern per thaalam (8-beat adi default)
+adi-accent: 1.0 0.4 0.6 0.8 0.4 0.6 0.8 0.4

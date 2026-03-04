@@ -6,5 +6,7 @@ sangati setu-kosha
   "arithmetic-to-ocaml-yukta vector-to-ocaml-yukta matrix-to-ocaml-yukta"
   "physics-to-math-yukta physics-to-english-yukta math-to-english-yukta"
   "ocaml-to-ocaml-yukta matra-setu-yukta"
+  "ocaml-setu-yukta lua-setu-yukta raylib-setu-yukta"
+  "english-to-lua-yukta lua-to-lua-yukta"
 
 done

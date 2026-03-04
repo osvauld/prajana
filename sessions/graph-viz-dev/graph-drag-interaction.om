@@ -1,0 +1,24 @@
+sangati graph-drag-interaction
+
+  "interaction-swarupa lifecycle-sthita event-loop-sthita"
+  "graph-hover-picking-sthita graph-spring-interaction-sthita"
+  "graph-viz-state-sthita graph-pointer-input-sthita"
+  "viveka-sthita sambandha-yukta"
+
+  "hover-target-ahara"
+  "mouse-down-ahara mouse-delta-ahara mouse-up-ahara"
+
+  "node-viveka drag-start-kriya drag-step-kriya drag-end-kriya"
+  "empty-viveka pan-step-kriya"
+
+  "graph-viz-setu-sthita"
+
+  "dragged-node-phala"
+  "pan-delta-phala"
+
+  "graph-spring-interaction-prasarana"
+  "graph-camera-prasarana"
+
+shabda viveka-on-hover-target-node-drags-and-spring-propagates-empty-pans-camera-prasarana-to-spring-and-camera
+
+done

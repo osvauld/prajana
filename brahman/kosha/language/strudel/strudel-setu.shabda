@@ -1,0 +1,36 @@
+# strudel-setu.shabda — Strudel mini-notation syntax tokens
+# one key: value per line. blank lines and # lines ignored.
+
+comment: //
+comment-end:
+
+# structure tokens
+stack: stack()
+stack-open: stack(
+stack-close: )
+voice-separator: ,
+
+# note / pattern tokens
+note-wrapper: note("%s")
+voice: note().sound().gain().cpm()
+voice-method: .sound(%s).gain(%.1f).cpm(%d)
+pattern-rest: ~
+pattern-group: [%s]
+pattern-seq: %s
+pattern-slot-note: %s
+pattern-slot-rest: ~
+note-format: %s%d
+
+# timing
+beat-default: 8
+beat-fallback: 8
+
+# section markers
+section-open: --- strudel ---
+section-close: --- /strudel ---
+
+# emit header
+emit-header: graph->strudel
+
+# domain
+domain: sangeetham

@@ -1,0 +1,15 @@
+sangati music-ir
+
+  -- music-ir — resonance as backend-neutral timed events
+  -- one of the pratibimba (renderer) family.
+  -- translates graph energy/relations into structured timing + voice + event data.
+  -- consumed by Rust orchestrator, native audio, and Raylib playback.
+
+  "pratibimba-yukta setu-swarupa naada-phala"
+  "thaalam-yukta swara-yukta voice-yukta event-yukta"
+  "music-ir-setu-yukta"
+  "domain-sangeetham-sthita domain-language-sthita"
+
+  shabda shabda-tmpl:language/render/music-ir-setu.shabda
+
+done

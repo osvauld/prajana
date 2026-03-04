@@ -1,0 +1,25 @@
+sangati graph-mouse
+
+  "signal-swarupa input-device-swarupa"
+  "lifecycle-sthita event-loop-sthita"
+  "graph-viz-state-sthita"
+  "ahara-swarupa"
+
+  "screen-position-sthita"
+  "button-state-sthita"
+  "left-button-sthita right-button-sthita wheel-sthita"
+
+  "mouse-down-kriya mouse-up-kriya"
+  "mouse-move-kriya mouse-wheel-kriya"
+  "mouse-click-kriya"
+
+  "screen-x-phala screen-y-phala"
+  "delta-x-phala delta-y-phala"
+  "wheel-delta-phala"
+  "is-down-phala is-clicked-phala"
+
+  "graph-pointer-input-prasarana"
+
+shabda signal-source-that-emits-mouse-position-buttons-wheel-each-frame-prasarana-to-pointer-input
+
+done

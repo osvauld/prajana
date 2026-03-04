@@ -1,0 +1,11 @@
+sangati domain-fluid
+
+  "domain-physics-sthita domain-math-sthita"
+  "pressure-yukta density-yukta viscosity-yukta velocity-yukta"
+  "gradient-yukta divergence-yukta curl-yukta laplacian-yukta"
+  "continuity-yukta navier-stokes-yukta bernoulli-yukta"
+  "thermodynamics-yukta energy-yukta"
+
+shabda domain-fluid / the-study-of-how-continuous-media-move-deform-and-transmit-force
+
+done

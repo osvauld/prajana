@@ -1,0 +1,63 @@
+# strudel.shabda — voice role mappings per visheshanam relation
+# flat key format: <relation>-<field>: value
+# fields per relation: sound, octave, gain, speed
+
+# swarupa (identity) — strong, clear, piano, mid octave
+swarupa-sound: piano
+swarupa-octave: 4
+swarupa-gain: 0.8
+swarupa-speed: 1.0
+
+# abheda (non-different / same at root)
+abheda-sound: piano
+abheda-octave: 4
+abheda-gain: 0.7
+abheda-speed: 1.0
+
+# sthita (rests-on / foundation) — low, grounding
+sthita-sound: sawtooth
+sthita-octave: 3
+sthita-gain: 0.5
+sthita-speed: 0.5
+
+# janya (born-from / origin) — warm, triangular, low
+janya-sound: triangle
+janya-octave: 3
+janya-gain: 0.5
+janya-speed: 0.5
+
+# yukta (connects-to) — mid, square wave
+yukta-sound: square
+yukta-octave: 4
+yukta-gain: 0.4
+yukta-speed: 1.0
+
+# phala (produces / consequence) — bright, high, fast
+phala-sound: sine
+phala-octave: 5
+phala-gain: 0.6
+phala-speed: 2.0
+
+# kriya (acts-as) — metallic, percussive
+kriya-sound: metal
+kriya-octave: 4
+kriya-gain: 0.3
+kriya-speed: 1.5
+
+# siddha (proven-through) — sawtooth, mid
+siddha-sound: sawtooth
+siddha-octave: 4
+siddha-gain: 0.4
+siddha-speed: 1.0
+
+# drishthanta (demonstrated-by / evidence) — sine, high, fast
+drishthanta-sound: sine
+drishthanta-octave: 5
+drishthanta-gain: 0.3
+drishthanta-speed: 2.0
+
+# legacy pattern keys (used by thaalam rhythm layer)
+thaalam-pattern: hh~hh~
+akshara-pattern: hh*8~hh~hh~hh~hh
+vadi-sound: triangle
+melody-sound: piano
