@@ -1,4 +1,4 @@
-# dune exec bin/vyakarana.exe
+# dune exec bin/vyakarana.exe -- ../brahman/sangati ../brahman/kosha
 # OCAMLPARAM: unset
 # Shared cache: enabled-except-user-rules
 # Shared cache location: /home/abe/.cache/dune/db
@@ -13,4 +13,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /home/abe/.opam/5.2.0/bin/ocamlc.opt -config > /tmp/dune_2164a0_output
+$ /home/abe/.opam/5.2.0/bin/ocamlc.opt -config > /tmp/dune_403c22_output

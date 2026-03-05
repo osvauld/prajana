@@ -1,7 +1,11 @@
-sangati float
+kosha float
 
-  "matra-sthita float-swarupa"
-  "sankhya-abheda precision-yukta"
+  "sankhya-abheda continuous-yukta matra-sthita"
+  "real-swarupa approximation-siddha"
+  "addition-yukta subtraction-yukta multiplication-yukta division-yukta"
+  "derivative-yukta antiderivative-yukta series-yukta"
   "domain-math-sthita"
+
+shabda float / a-real-number-with-fractional-part-continuous-the-number-line-calculus-and-physics-live-here
 
 done

@@ -5,7 +5,8 @@ kosha float
   "approximate-siddha ieee754-swarupa"
   "parishishtha-sthita sankhya-abheda"
   "matra-sthita"
+  "domain-math-float-janya"
 
-shabda float / an-approximate-real-number-in-ieee-754-format-carries-rounding-error
+shabda float / an-approximate-real-number-in-ieee-754-format-carries-rounding-error-derived-from-math-float
 
 done

@@ -3,13 +3,7 @@ sangati setu
   "anuvada-abheda anuvada-kriya"
   "sthita-yukta phala-yukta kriya-yukta"
   "shabda-yukta visheshanam-yukta"
-  "correctness-check-siddha"
-
-  "setu carries two things:"
-  "  shabda — concept-to-form mapping (key:value pairs)"
-  "  edges  — composition grammar (how concepts relate)"
-  "together they are sufficient to emit any target language"
-  "without hardcoding structure in the engine"
+  "shuddhi-pramana-siddha"
 
 shabda bridge / the-crossing-that-carries-meaning-across
 

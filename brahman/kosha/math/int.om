@@ -1,7 +1,11 @@
-sangati int
+kosha int
 
-  "matra-sthita int-swarupa"
-  "sankhya-abheda discrete-yukta"
+  "sankhya-abheda discrete-yukta matra-sthita"
+  "sama-vishama-swarupa mula-sthita"
+  "addition-yukta subtraction-yukta multiplication-yukta division-yukta"
+  "factorial-yukta prime-yukta"
   "domain-math-sthita"
+
+shabda int / a-whole-number-no-fractional-part-discrete-countable-the-foundation-of-arithmetic
 
 done
