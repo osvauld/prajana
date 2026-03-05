@@ -4,7 +4,8 @@ kosha int
   "primitive-type-swarupa"
   "exact-siddha bounded-siddha"
   "sankhya-abheda sama-sthita"
+  "domain-math-int-janya"
 
-shabda int / an-exact-whole-number-with-no-fractional-part-and-fixed-bit-width
+shabda int / an-exact-whole-number-with-no-fractional-part-and-fixed-bit-width-derived-from-math-int
 
 done
