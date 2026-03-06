@@ -1,0 +1,14 @@
+tantra format-triples
+
+  inputs
+    triples  list
+    indent   string
+
+  let
+    lines  = map triples (fn t -> concat indent (format-triple t) "\n")
+    result = join lines ""
+
+  return
+    result  string
+
+done

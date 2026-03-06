@@ -1,0 +1,11 @@
+tantra gravity
+
+  inputs
+
+  let
+    g = 9.80665
+
+  return
+    g  float  metre-per-second-squared
+
+done

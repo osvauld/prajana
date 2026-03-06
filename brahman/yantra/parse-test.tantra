@@ -1,0 +1,15 @@
+-- parse-test: test multi-line let parsing
+
+tantra parse-test
+
+  inputs
+    sentence  string
+
+  let
+    words = split sentence " "
+    result = map words (fn w -> concat "x:" w)
+
+  return
+    result  string
+
+done

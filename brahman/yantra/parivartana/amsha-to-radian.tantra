@@ -1,0 +1,12 @@
+tantra degree-to-radian
+
+  inputs
+    angle  float  degree
+
+  let
+    result = mul angle (div pi 180.0)
+
+  return
+    result  float  radian
+
+done

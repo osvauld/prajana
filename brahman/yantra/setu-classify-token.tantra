@@ -1,0 +1,29 @@
+tantra setu-classify-token
+
+  -- setu input bridge: classify a single token using graph-native checks.
+  -- number/operator stay as engine primitives; this tantra handles
+  -- concept/grammar/unknown resolution.
+
+  inputs
+    word  string
+
+  let
+    g         = role word
+    has-g     = exists g
+    hit       = lookup word
+    has-hit   = exists hit
+    hit-name  = cond (has-hit) (name hit) otherwise ""
+
+    kind = cond (has-g) "grammar"
+      (has-hit) "concept"
+      otherwise "unknown"
+
+    resolved = cond (has-g) word
+      (has-hit) hit-name
+      otherwise word
+
+  return
+    kind      string
+    resolved  string
+
+done

@@ -97,30 +97,6 @@ module TripleKey = struct
 end
 module TripleSet = Set.Make(TripleKey)
 
-let next_thread_question (triple : anuvada_triple) : string =
-  let target = match triple.a_targets with
-    | t :: _ -> t
-    | [] -> "this" in
-  match triple.a_relation with
-  | Swarupa ->
-    Printf.sprintf "how is %s actually %s in your context?" triple.a_source target
-  | Abheda ->
-    Printf.sprintf "where do %s and %s start to differ?" triple.a_source target
-  | Drishthanta ->
-    Printf.sprintf "what concrete example shows %s through %s?" triple.a_source target
-  | Sthita ->
-    Printf.sprintf "what shifts in %s if %s changes?" triple.a_source target
-  | Yukta ->
-    Printf.sprintf "what is the bridge between %s and %s?" triple.a_source target
-  | Siddha ->
-    Printf.sprintf "what proof would make %s through %s undeniable?" triple.a_source target
-  | Kriya ->
-    Printf.sprintf "what action of %s as %s should we test next?" triple.a_source target
-  | Phala ->
-    Printf.sprintf "if %s produces %s, what comes right after?" triple.a_source target
-  | Janya ->
-    Printf.sprintf "what earlier cause gives rise to %s before %s?" triple.a_source target
-
 let walk_one_pass (k : proof_graph) (content_words : string list)
     (visited_nodes : (string, bool) Hashtbl.t) (pass_num : int)
     : anuvada_triple list * string list =
@@ -226,173 +202,42 @@ let sahaja_render (k : proof_graph) (name : string) : string =
   if gloss = name then name
   else Printf.sprintf "%s (%s)" gloss name
 
-(* render the spiral output *)
-let render_spiral ?(sahaja = false) ?(ag = fun key fallback -> let _ = key in fallback)
-    ?(context : string option = None)
-    (k : proof_graph) (content_words : string list)
-    (_grammar_words : (string * visheshanam) list) (mode : string option)
-    (max_passes : int) (thaalam : string option) : unit =
-  let max_passes = if max_passes < 1 then 1 else max_passes in
-  let (pass_groups, total_passes) = avrti_anuvada k content_words max_passes in
-  let total_triples = List.fold_left (fun acc (_, ts) ->
-    acc + List.length ts) 0 pass_groups in
-  Printf.printf "  %s (%d passes (avrti), %d connections)\n"
-    (ag "response-label" "response:") total_passes total_triples;
-  (match thaalam with
-  | Some t ->
-    (match thaalam_cycle k t with
-    | Some (label, beats) -> Printf.printf "  %s %s (%d beat cycle)\n" (ag "thaalam-label" "thaalam:") label beats
-    | None -> Printf.printf "  %s %s (unrecognized; using plain flow)\n" (ag "thaalam-label" "thaalam:") t)
-  | None -> ());
-  let beat_idx = ref 0 in
-  let next_prefix () =
-    match thaalam with
-    | None -> ""
-    | Some t ->
-      (match thaalam_cycle k t with
-      | None -> ""
-      | Some (_, beats) ->
-        beat_idx := (!beat_idx mod beats) + 1;
-        Printf.sprintf "[%d/%d] " !beat_idx beats)
+let render_pass_groups_simple ?(context : string option = None)
+    (k : proof_graph) (pass_groups : (int * anuvada_triple list) list) : string =
+  let buf = Buffer.create 512 in
+  let render_name raw = Setu.to_english ~context k raw in
+  let render_triple (t : anuvada_triple) =
+    let rel = english_of_visheshanam_from_graph k t.a_relation in
+    let tgts = String.concat ", " (List.map render_name t.a_targets_raw) in
+    Printf.sprintf "  %s %s %s.\n" (render_name t.a_source_raw) rel tgts
   in
-  let line_suffix =
-    match mode with
-    | Some "prashna-viraam" -> "?"
-    | Some "vismaya-viraam" -> "!"
-    | Some "traya-bindu" -> "..."
-    | _ -> "."
-  in
-  let render_name_raw (raw : string) : string =
-    if sahaja then sahaja_render k raw
-    else Setu.to_english ~context k raw
-  in
-  let sentence_of_source_raw (source_raw : string) (ts : anuvada_triple list) : string =
-    let rel_map : (visheshanam, string list) Hashtbl.t = Hashtbl.create 9 in
-    List.iter (fun t ->
-      let existing = match Hashtbl.find_opt rel_map t.a_relation with
-        | Some xs -> xs
-        | None -> [] in
-      Hashtbl.replace rel_map t.a_relation (existing @ t.a_targets_raw)
-    ) ts;
-    let relation_order =
-      [Swarupa; Abheda; Sthita; Yukta; Siddha; Kriya; Phala; Janya; Drishthanta] in
-    let clauses = List.filter_map (fun rel ->
-      match Hashtbl.find_opt rel_map rel with
-      | None -> None
-      | Some target_raws ->
-        let rendered = List.sort_uniq String.compare
-          (List.map render_name_raw target_raws) in
-        if rendered = [] then None
-        else Some (Printf.sprintf "%s %s"
-          (english_of_visheshanam_from_graph k rel)
-          (String.concat ", " rendered))
-    ) relation_order in
-    let source_rendered = render_name_raw source_raw in
-    if clauses = [] then source_rendered ^ line_suffix
-    else Printf.sprintf "%s %s%s" source_rendered (String.concat "; " clauses) line_suffix
-  in
-  let is_domain_name n =
-    String.length n >= 7 && String.sub n 0 7 = "domain-" in
-  let domains_of_node (name : string) : string list =
-    match Hashtbl.find_opt k.nodes name with
-    | None -> if is_domain_name name then [name] else []
-    | Some n ->
-      let from_edges = List.filter_map (fun e ->
-        if e.source = name && e.relation = Sthita && is_domain_name e.target
-        then Some e.target else None
-      ) n.edges in
-      let own = if is_domain_name name then [name] else [] in
-      List.sort_uniq String.compare (own @ from_edges)
-  in
-  let active_domains = List.sort_uniq String.compare
-    (List.concat_map domains_of_node content_words) in
-  let has_active_domains = active_domains <> [] in
-  let domain_member = Hashtbl.create 256 in
-  if has_active_domains then begin
-    Hashtbl.iter (fun name _ ->
-      let node_domains = domains_of_node name in
-      let in_domain = List.exists (fun d ->
-        List.mem d active_domains
-      ) node_domains in
-      if in_domain || List.mem name active_domains then
-        Hashtbl.replace domain_member name true
-    ) k.nodes
-  end;
-  let is_domain_member name =
-    if not has_active_domains then false
-    else Hashtbl.mem domain_member name || List.mem name active_domains
-  in
-  let render_triples (triples : anuvada_triple list) : unit =
-    let by_source_raw = Hashtbl.create 16 in
-    List.iter (fun t ->
-      let existing = match Hashtbl.find_opt by_source_raw t.a_source_raw with
-        | Some lst -> lst | None -> [] in
-      Hashtbl.replace by_source_raw t.a_source_raw (t :: existing)
-    ) triples;
-    let all_sources_raw = Hashtbl.fold (fun s _ acc -> s :: acc) by_source_raw [] in
-    let all_sources_raw = List.sort String.compare all_sources_raw in
-    List.iter (fun source_raw ->
-      match Hashtbl.find_opt by_source_raw source_raw with
-      | None -> ()
-      | Some ts ->
-        let sentence = sentence_of_source_raw source_raw (List.rev ts) in
-        Printf.printf "    %s%s\n" (next_prefix ()) sentence
-    ) all_sources_raw
-  in
-  List.iter (fun (pass_num, triples) ->
-    if total_passes > 1 then
-      Printf.printf "  -- %s --\n"
-        (let tmpl = ag "pass-label" "pass %d (avrti)" in
-         match String.split_on_char '%' tmpl with
-         | [pre; rest] when String.length rest > 0 && rest.[0] = 'd' ->
-           pre ^ string_of_int pass_num ^ String.sub rest 1 (String.length rest - 1)
-         | _ -> tmpl);
-    if has_active_domains then begin
-      let pure_domain = List.filter (fun t ->
-        is_domain_member t.a_source_raw
-        && List.for_all is_domain_member t.a_targets_raw
-      ) triples in
-      let nature_equiv = List.filter (fun t ->
-        (is_domain_member t.a_source_raw
-         && List.exists (fun raw -> not (is_domain_member raw)) t.a_targets_raw)
-        || not (is_domain_member t.a_source_raw)
-      ) triples in
-      if pure_domain <> [] then begin
-        Printf.printf "    %s\n" (ag "pure-domain-label" "pure domain:");
-        render_triples pure_domain
-      end;
-      if nature_equiv <> [] then begin
-        Printf.printf "    %s\n" (ag "nature-equiv-label" "equivalence found in nature:");
-        render_triples nature_equiv
-      end
-    end else
-      render_triples triples
+  List.iter (fun (_p, triples) ->
+    List.iter (fun t -> Buffer.add_string buf (render_triple t)) triples
   ) pass_groups;
-  let thread_candidates =
-    List.concat (List.map snd (List.rev pass_groups)) in
-  let max_threads = 3 in
-  let (thread_questions, _) = List.fold_left (fun (acc, seen) t ->
-    if List.length acc >= max_threads then (acc, seen)
-    else
-      let q = next_thread_question t in
-      if Hashtbl.mem seen q then (acc, seen)
-      else begin
-        Hashtbl.add seen q true;
-        (acc @ [q], seen)
-      end
-  ) ([], Hashtbl.create 16) thread_candidates in
-  (match thread_questions with
-  | [] -> ()
-  | [q] -> Printf.printf "  %s %s\n" (ag "next-thread-label" "next thread:") q
-  | qs ->
-    Printf.printf "  %s\n" (ag "next-threads-label" "next threads:");
-    List.iteri (fun i q -> Printf.printf "    %d) %s\n" (i + 1) q) qs);
-  (match mode with
-  | Some "prashna-viraam" -> Printf.printf "    %s\n" (ag "mode-question" "(this was a question)")
-  | Some "vismaya-viraam" -> Printf.printf "    %s\n" (ag "mode-force" "(this was spoken with force)")
-  | Some "traya-bindu"    -> Printf.printf "    %s\n" (ag "mode-incomplete" "(this thought is incomplete...)")
-  | Some "purna-viraam"   -> Printf.printf "    %s\n" (ag "mode-complete" "(this is a complete statement)")
-  | _ -> ())
+  Buffer.contents buf
+
+(* render darshana (node inspection) to a buffer *)
+let render_darshana_to_buf (k : proof_graph) (n : nigamana) (buf : Buffer.t) : unit =
+  let gloss = sahaja_gloss k n.name in
+  Buffer.add_string buf (Printf.sprintf "--- %s (%s) satya=%.4f ---\n" gloss n.name n.satya);
+  List.iter (fun s ->
+    Buffer.add_string buf (Printf.sprintf "  \"%s\"\n" s)
+  ) n.slokas;
+  let edges = Proof_graph.edges_of k n.name in
+  if edges <> [] then begin
+    Buffer.add_string buf "  edges:\n";
+    List.iter (fun e ->
+      let rel_str = Proof_graph.string_of_visheshanam e.Proof_graph.relation in
+      if e.Proof_graph.source = n.name then
+        Buffer.add_string buf (Printf.sprintf "    -> %s [%s]\n"
+          (sahaja_render k e.target) rel_str)
+      else
+        Buffer.add_string buf (Printf.sprintf "    <- %s [%s]\n"
+          (sahaja_render k e.source) rel_str)
+    ) edges
+  end;
+  let cited = Proof_graph.in_degree k n.name in
+  Buffer.add_string buf (Printf.sprintf "  cited_by: %d\n---" cited)
 
 (* --- ocaml code emission from graph structure --- *)
 
@@ -1266,176 +1111,6 @@ type query_result = {
   qr_confidence   : float;                               (* top node satya *)
 }
 
-(* render_spiral_to_buf — same logic as render_spiral but writes to a Buffer *)
-let render_spiral_to_buf ?(sahaja = false)
-    ?(ag = fun key fallback -> let _ = key in fallback)
-    ?(context : string option = None)
-    (k : proof_graph) (content_words : string list)
-    (_grammar_words : (string * visheshanam) list) (mode : string option)
-    (max_passes : int) (thaalam : string option) : string * (int * anuvada_triple list) list * string list =
-  let max_passes = if max_passes < 1 then 1 else max_passes in
-  let (pass_groups, total_passes) = avrti_anuvada k content_words max_passes in
-  let total_triples = List.fold_left (fun acc (_, ts) ->
-    acc + List.length ts) 0 pass_groups in
-  let buf = Buffer.create 512 in
-  let p s = Buffer.add_string buf s; Buffer.add_char buf '\n' in
-  let pf fmt = Printf.ksprintf (fun s -> Buffer.add_string buf s; Buffer.add_char buf '\n') fmt in
-  pf "  %s (%d passes (avrti), %d connections)"
-    (ag "response-label" "response:") total_passes total_triples;
-  (match thaalam with
-  | Some t ->
-    (match thaalam_cycle k t with
-    | Some (label, beats) -> pf "  %s %s (%d beat cycle)" (ag "thaalam-label" "thaalam:") label beats
-    | None -> pf "  %s %s (unrecognized; using plain flow)" (ag "thaalam-label" "thaalam:") t)
-  | None -> ());
-  let beat_idx = ref 0 in
-  let next_prefix () =
-    match thaalam with
-    | None -> ""
-    | Some t ->
-      (match thaalam_cycle k t with
-      | None -> ""
-      | Some (_, beats) ->
-        beat_idx := (!beat_idx mod beats) + 1;
-        Printf.sprintf "[%d/%d] " !beat_idx beats)
-  in
-  let line_suffix =
-    match mode with
-    | Some "prashna-viraam" -> "?"
-    | Some "vismaya-viraam" -> "!"
-    | Some "traya-bindu" -> "..."
-    | _ -> "."
-  in
-  let render_name_raw (raw : string) : string =
-    if sahaja then sahaja_render k raw
-    else Setu.to_english ~context k raw
-  in
-  let sentence_of_source_raw (source_raw : string) (ts : anuvada_triple list) : string =
-    let rel_map : (visheshanam, string list) Hashtbl.t = Hashtbl.create 9 in
-    List.iter (fun t ->
-      let existing = match Hashtbl.find_opt rel_map t.a_relation with
-        | Some xs -> xs | None -> [] in
-      Hashtbl.replace rel_map t.a_relation (existing @ t.a_targets_raw)
-    ) ts;
-    let relation_order =
-      [Swarupa; Abheda; Sthita; Yukta; Siddha; Kriya; Phala; Janya; Drishthanta] in
-    let clauses = List.filter_map (fun rel ->
-      match Hashtbl.find_opt rel_map rel with
-      | None -> None
-      | Some target_raws ->
-        let rendered = List.sort_uniq String.compare
-          (List.map render_name_raw target_raws) in
-        if rendered = [] then None
-        else Some (Printf.sprintf "%s %s"
-          (english_of_visheshanam_from_graph k rel)
-          (String.concat ", " rendered))
-    ) relation_order in
-    let source_rendered = render_name_raw source_raw in
-    if clauses = [] then source_rendered ^ line_suffix
-    else Printf.sprintf "%s %s%s" source_rendered (String.concat "; " clauses) line_suffix
-  in
-  let is_domain_name n =
-    String.length n >= 7 && String.sub n 0 7 = "domain-" in
-  let domains_of_node (name : string) : string list =
-    match Hashtbl.find_opt k.nodes name with
-    | None -> if is_domain_name name then [name] else []
-    | Some n ->
-      let from_edges = List.filter_map (fun e ->
-        if e.source = name && e.relation = Sthita && is_domain_name e.target
-        then Some e.target else None
-      ) n.edges in
-      let own = if is_domain_name name then [name] else [] in
-      List.sort_uniq String.compare (own @ from_edges)
-  in
-  let active_domains = List.sort_uniq String.compare
-    (List.concat_map domains_of_node content_words) in
-  let has_active_domains = active_domains <> [] in
-  let domain_member = Hashtbl.create 256 in
-  if has_active_domains then begin
-    Hashtbl.iter (fun name _ ->
-      let node_domains = domains_of_node name in
-      let in_domain = List.exists (fun d -> List.mem d active_domains) node_domains in
-      if in_domain || List.mem name active_domains then
-        Hashtbl.replace domain_member name true
-    ) k.nodes
-  end;
-  let is_domain_member name =
-    if not has_active_domains then false
-    else Hashtbl.mem domain_member name || List.mem name active_domains
-  in
-  let render_triples_buf (triples : anuvada_triple list) : unit =
-    let by_source_raw = Hashtbl.create 16 in
-    List.iter (fun t ->
-      let existing = match Hashtbl.find_opt by_source_raw t.a_source_raw with
-        | Some lst -> lst | None -> [] in
-      Hashtbl.replace by_source_raw t.a_source_raw (t :: existing)
-    ) triples;
-    let all_sources_raw = Hashtbl.fold (fun s _ acc -> s :: acc) by_source_raw [] in
-    let all_sources_raw = List.sort String.compare all_sources_raw in
-    List.iter (fun source_raw ->
-      match Hashtbl.find_opt by_source_raw source_raw with
-      | None -> ()
-      | Some ts ->
-        let sentence = sentence_of_source_raw source_raw (List.rev ts) in
-        pf "    %s%s" (next_prefix ()) sentence
-    ) all_sources_raw
-  in
-  List.iter (fun (pass_num, triples) ->
-    if total_passes > 1 then
-      pf "  -- %s --"
-        (let tmpl = ag "pass-label" "pass %d (avrti)" in
-         match String.split_on_char '%' tmpl with
-         | [pre; rest] when String.length rest > 0 && rest.[0] = 'd' ->
-           pre ^ string_of_int pass_num ^ String.sub rest 1 (String.length rest - 1)
-         | _ -> tmpl);
-    if has_active_domains then begin
-      let pure_domain = List.filter (fun t ->
-        is_domain_member t.a_source_raw
-        && List.for_all is_domain_member t.a_targets_raw
-      ) triples in
-      let nature_equiv = List.filter (fun t ->
-        (is_domain_member t.a_source_raw
-         && List.exists (fun raw -> not (is_domain_member raw)) t.a_targets_raw)
-        || not (is_domain_member t.a_source_raw)
-      ) triples in
-      if pure_domain <> [] then begin
-        p ("    " ^ ag "pure-domain-label" "pure domain:");
-        render_triples_buf pure_domain
-      end;
-      if nature_equiv <> [] then begin
-        p ("    " ^ ag "nature-equiv-label" "equivalence found in nature:");
-        render_triples_buf nature_equiv
-      end
-    end else
-      render_triples_buf triples
-  ) pass_groups;
-  let thread_candidates =
-    List.concat (List.map snd (List.rev pass_groups)) in
-  let max_threads = 3 in
-  let (thread_questions, _) = List.fold_left (fun (acc, seen) t ->
-    if List.length acc >= max_threads then (acc, seen)
-    else
-      let q = next_thread_question t in
-      if Hashtbl.mem seen q then (acc, seen)
-      else begin
-        Hashtbl.add seen q true;
-        (acc @ [q], seen)
-      end
-  ) ([], Hashtbl.create 16) thread_candidates in
-  (match thread_questions with
-  | [] -> ()
-  | [q] -> pf "  %s %s" (ag "next-thread-label" "next thread:") q
-  | qs ->
-    p ("  " ^ ag "next-threads-label" "next threads:");
-    List.iteri (fun i q -> pf "    %d) %s" (i + 1) q) qs);
-  (match mode with
-  | Some "prashna-viraam" -> p ("    " ^ ag "mode-question" "(this was a question)")
-  | Some "vismaya-viraam" -> p ("    " ^ ag "mode-force" "(this was spoken with force)")
-  | Some "traya-bindu"    -> p ("    " ^ ag "mode-incomplete" "(this thought is incomplete...)")
-  | Some "purna-viraam"   -> p ("    " ^ ag "mode-complete" "(this is a complete statement)")
-  | _ -> ());
-  (Buffer.contents buf, pass_groups, thread_questions)
-
 (* emit_strudel_to_string — same as emit_strudel_from_graph but returns string *)
 let emit_strudel_to_string (k : proof_graph) (content_words : string list)
     (thaalam : string option) : string =
@@ -1469,8 +1144,7 @@ let emit_strudel_to_string (k : proof_graph) (content_words : string list)
 let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
     ?(request_id = "anuvada") ?(session_id = "session") ?(turn_id = "turn")
     (k : proof_graph) (sentence : string) : query_result =
-  let as_ = Setu.read_shabda k "anuvada-setu" in
-  let ag key fallback = match Setu.shabda_get as_ key with Some v -> v | None -> fallback in
+  let _ = sahaja in
   let spaced_math_ops (s : string) : string =
     let buf = Buffer.create (String.length s * 2) in
     String.iter (fun c ->
@@ -1497,30 +1171,21 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
     if w = "'s" then w
     else begin
       let w = String.lowercase_ascii w in
-      let buf = Buffer.create (String.length w) in
-      String.iter (fun c ->
+      let len = String.length w in
+      let buf = Buffer.create len in
+      String.iteri (fun i c ->
         if (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
            || c = '-' || c = '+' || c = '*' || c = '/' || c = '=' then
           Buffer.add_char buf c
+        else if c = '.' then begin
+          (* preserve '.' between digits — floats like 9.8 *)
+          let prev_digit = i > 0 && w.[i-1] >= '0' && w.[i-1] <= '9' in
+          let next_digit = i < len - 1 && w.[i+1] >= '0' && w.[i+1] <= '9' in
+          if prev_digit && next_digit then Buffer.add_char buf c
+        end
       ) w;
       Buffer.contents buf
     end
-  in
-  let raw = String.trim sentence in
-  let sentence_end =
-    if String.length raw > 0 then
-      match raw.[String.length raw - 1] with
-      | '?' -> Some "prashna-viraam"
-      | '!' -> Some "vismaya-viraam"
-      | '.' -> Some "purna-viraam"
-      | _ -> None
-    else None
-  in
-  let sentence_end =
-    if String.length raw >= 3 &&
-       String.sub raw (String.length raw - 3) 3 = "..." then
-      Some "traya-bindu"
-    else sentence_end
   in
   let clean_words ws =
     let ws = List.map clean ws in
@@ -1531,12 +1196,9 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
   let content_words = List.filter_map (fun (_, role) ->
     match role with Setu.Content name -> Some name | _ -> None
   ) classified in
-  let grammar_words = List.filter_map (fun (w, role) ->
-    match role with Setu.Grammar v -> Some (w, v) | _ -> None
-  ) classified in
   (* extract context anchor: content word immediately following a Sthita ("in") token
      e.g. "polarity in wave" → context_anchor = Some "wave"
-          "shiva-shakti in dna" → context_anchor = Some "dna"
+           "shiva-shakti in dna" → context_anchor = Some "dna"
      works for any node, not just domains *)
   let context_anchor =
     let rec find_after_sthita = function
@@ -1553,18 +1215,16 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
     in
     find_after_sthita classified
   in
-  let (answer_buf, pass_groups, next_qs) =
-    if content_words <> [] then
-      render_spiral_to_buf ~sahaja ~ag ~context:context_anchor k content_words grammar_words sentence_end max_passes thaalam
-    else
-      ("", [], [])
-  in
   let (pass_groups_final, total_passes) =
     if content_words <> [] then
-      let (pg, tp) = avrti_anuvada k content_words max_passes in
-      ignore pass_groups; (pg, tp)
+      avrti_anuvada k content_words max_passes
     else
-      (pass_groups, 0)
+      ([], 0)
+  in
+  let answer_buf =
+    if content_words <> []
+    then render_pass_groups_simple ~context:context_anchor k pass_groups_final
+    else ""
   in
   let total_triples = List.fold_left (fun acc (_, ts) ->
     acc + List.length ts) 0 pass_groups_final in
@@ -1582,7 +1242,7 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
   ) 0.0 content_words in
   { qr_answer_text   = answer_buf
   ; qr_steps         = pass_groups_final
-  ; qr_next_qs       = next_qs
+  ; qr_next_qs       = []
   ; qr_content_words = content_words
   ; qr_thaalam       = thaalam
   ; qr_music_ir      = music_ir

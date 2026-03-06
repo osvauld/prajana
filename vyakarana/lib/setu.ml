@@ -19,7 +19,11 @@ let parse_shabda (s : string) : (string * string) list =
   else
     let is_key_char c =
       (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
-      (c >= '0' && c <= '9') || c = '-' || c = '_'
+      (c >= '0' && c <= '9') || c = '-' || c = '_' ||
+      (* symbols — the graph needs to know what these characters are *)
+      c = '+' || c = '*' || c = '/' || c = '=' ||
+      c = '.' || c = '?' || c = '!' || c = ',' || c = ';' ||
+      c = '\'' || c = '#' || c = '@' || c = '&' || c = '%'
     in
     let is_key_token tok =
       match String.split_on_char ':' tok with
@@ -49,10 +53,19 @@ let parse_shabda (s : string) : (string * string) list =
     ) tokens;
     if String.length !cur_key > 0 then
       groups := (!cur_key, List.rev !cur_vals) :: !groups;
-    List.filter_map (fun (k, vs) ->
+    let pairs = List.filter_map (fun (k, vs) ->
       let v = String.trim (String.concat " " vs) in
       if String.length v > 0 then Some (k, v) else None
-    ) (List.rev !groups)
+    ) (List.rev !groups) in
+    (* if no key:value pairs found, treat the text before '/' as the "name" key —
+       this handles inline shabda like: shabda bridge / the-crossing-that-carries-meaning-across *)
+    if pairs = [] then
+      let before_slash = match String.index_opt s '/' with
+        | Some i -> String.trim (String.sub s 0 i)
+        | None   -> String.trim s
+      in
+      if String.length before_slash > 0 then [("name", before_slash)] else []
+    else pairs
 
 (* parse_shabda_file: read a .shabda file — one "key: value" per line.
    blank lines and lines starting with # are ignored.
@@ -446,10 +459,20 @@ type token_role =
   | Article
   | Grammar of visheshanam
   | Content of string
+  | Number of float
+  | Operator of string
   | Unknown of string
 
 let classify_token (k : proof_graph) word =
   let w = String.lowercase_ascii word in
+  (* detect operators first *)
+  let is_op = w = "+" || w = "-" || w = "*" || w = "/" || w = "=" in
+  if is_op then Operator w
+  else
+  (* detect numbers: try float first (handles "9.8", "3.14"), then int *)
+  match float_of_string_opt w with
+  | Some f -> Number f
+  | None ->
   let is_number =
     match int_of_string_opt w with
     | Some _ -> true
@@ -552,6 +575,43 @@ let resolve_ocaml_forms (k : proof_graph) (seeds : string list) : (string * stri
   ) seeds
 
 (* --- walk: follow kriya/phala chains from seeds --- *)
+
+(* resolve_to_canonical: given a name (as written in a tantra file),
+   find the canonical graph node name.
+   1. If the name is already a graph node, return it as-is.
+   2. Search all nodes' shabda fields for the name → return that node's name.
+   3. Otherwise return the name unchanged. *)
+let resolve_to_canonical (k : proof_graph) (name : string) : string =
+  (* 1. direct node lookup *)
+  match Hashtbl.find_opt k.nodes name with
+  | Some _ -> name
+  | None ->
+    (* 2. search shabda fields for this name *)
+    let shabda_hit = Hashtbl.fold (fun node_name n acc ->
+      match acc with
+      | Some _ -> acc
+      | None ->
+        let raw = String.lowercase_ascii (String.trim n.shabda) in
+        if raw = "" then None
+        else
+          (* shabda format: "key:val key:val ..." or just words before '/' *)
+          let before_slash = match String.index_opt raw '/' with
+            | Some i -> String.sub raw 0 i
+            | None -> raw
+          in
+          (* tokenize: split on spaces/commas, check if any token = name *)
+          let tokens = String.split_on_char ',' before_slash
+            |> List.map String.trim
+            |> List.concat_map (fun t -> String.split_on_char ' ' t)
+            |> List.map String.trim
+            |> List.filter (fun t -> String.length t > 0)
+          in
+          if List.mem (String.lowercase_ascii name) tokens then Some node_name
+          else None
+    ) k.nodes None in
+    match shabda_hit with
+    | Some canonical -> canonical
+    | None -> name
 
 let rec walk_chain (k : proof_graph) (name : string) (depth : int) (visited : string list) : string list =
   if depth = 0 || List.mem name visited then visited

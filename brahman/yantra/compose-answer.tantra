@@ -1,0 +1,103 @@
+tantra compose-answer
+
+  -- morphism: graph structure -> English sentences
+  -- flow: classify seeds -> rank outgoing edges by intent -> compose
+
+  inputs
+    seeds       list
+    nearby      list
+    intents     list
+
+  let
+    -- select primary intent for this answer pass
+    intent = cond (gt (length intents) 0) (nth intents 0) otherwise "identity"
+
+    -- seed's own domain
+    seed-doms   = flatten (map seeds (fn s -> domain-of s))
+    seed-dom    = cond (gt (length seed-doms) 0) (nth seed-doms 0) otherwise ""
+    top-dom-label = cond (neq seed-dom "")
+      (cond (gt (string-length seed-dom) 7) (nth (split seed-dom "domain-") 0) otherwise seed-dom)
+      otherwise ""
+
+    -- fallback: if seeds have no domain, infer from nearby frequency
+    all-doms    = flatten (map nearby (fn n -> domain-of n))
+    uniq-doms   = filter (unique all-doms) (fn d -> neq d "")
+    dom-scores  = map uniq-doms (fn d -> pair d (length (filter all-doms (fn x -> eq x d))))
+    sorted-doms = sort-desc dom-scores
+    nearby-dom  = cond (gt (length sorted-doms) 0) (nth (nth sorted-doms 0) 0) otherwise ""
+    nearby-label = cond (neq nearby-dom "")
+      (cond (gt (string-length nearby-dom) 7) (nth (split nearby-dom "domain-") 0) otherwise nearby-dom)
+      otherwise ""
+    domain-label = cond (neq top-dom-label "") top-dom-label otherwise nearby-label
+
+    seed-sentences = map seeds (fn s ->
+      let eng = to-english s
+      let out-edges = filter (edges s) (fn e -> eq (nth e 0) s)
+      let ranked = rank-triples-by-intent intent out-edges
+      let clauses = map ranked (fn e ->
+        let rel = nth e 1
+        let tgt = to-english (nth e 2)
+        in cond
+          (eq rel "swarupa") (concat "is " tgt)
+          (eq rel "abheda") (concat "the same as " tgt)
+          (eq rel "sthita") (concat "resting on " tgt)
+          (eq rel "drishthanta") (concat "demonstrating " tgt)
+          (eq rel "yukta") (concat "with " tgt)
+          (eq rel "janya") (concat "arising from " tgt)
+          (eq rel "kriya") (concat "through " tgt)
+          (eq rel "phala") (concat "yielding " tgt)
+          otherwise (concat (to-english-relation rel) " " tgt))
+      let clean-clauses = unique (filter clauses (fn c -> neq c ""))
+      in cond (gt (length clean-clauses) 0)
+        (concat eng " " (join clean-clauses ", ") ".")
+        otherwise (concat eng "."))
+
+    root-targets = unique (flatten (map seeds (fn s ->
+      let out-edges = filter (edges s) (fn e -> eq (nth e 0) s)
+      in map (filter out-edges (fn e -> or (eq (nth e 1) "swarupa") (eq (nth e 1) "abheda")))
+        (fn e -> nth e 2))))
+
+    root-sentences = map root-targets (fn r ->
+      let eng = to-english r
+      let out-edges = filter (edges r) (fn e -> eq (nth e 0) r)
+      let ranked = rank-triples-by-intent intent out-edges
+      let clauses = map ranked (fn e ->
+        let rel = nth e 1
+        let tgt = to-english (nth e 2)
+        in cond
+          (eq rel "swarupa") (concat "is " tgt)
+          (eq rel "abheda") (concat "the same as " tgt)
+          (eq rel "sthita") (concat "resting on " tgt)
+          (eq rel "drishthanta") (concat "demonstrating " tgt)
+          (eq rel "yukta") (concat "with " tgt)
+          (eq rel "janya") (concat "arising from " tgt)
+          (eq rel "kriya") (concat "through " tgt)
+          (eq rel "phala") (concat "yielding " tgt)
+          otherwise (concat (to-english-relation rel) " " tgt))
+      let clean-clauses = unique (filter clauses (fn c -> neq c ""))
+      in cond (gt (length clean-clauses) 0)
+        (concat "  " eng " " (join clean-clauses ", ") ".")
+        otherwise (concat "  " eng "."))
+
+    iccha-with    = unique (filter nearby (fn n -> eq (iccha-status n) "sthita"))
+    iccha-without = unique (filter nearby (fn n -> eq (iccha-status n) "rahita"))
+    has-iccha     = and (gt (length iccha-with) 0) (gt (length iccha-without) 0)
+    iccha-line    = cond (has-iccha)
+      (concat "directed-will (iccha) present in "
+        (join (map iccha-with (fn n -> to-english n)) ", ")
+        "; absent in "
+        (join (map iccha-without (fn n -> to-english n)) ", ")
+        ".")
+      otherwise ""
+
+    domain-line = cond (neq domain-label "") (concat "in " domain-label ":\n") otherwise ""
+    seed-block  = join seed-sentences "\n"
+    root-block  = cond (gt (length root-sentences) 0) (concat "\n" (join root-sentences "\n")) otherwise ""
+    iccha-block = cond (neq iccha-line "") (concat "\n" iccha-line) otherwise ""
+
+    result = concat domain-line seed-block root-block iccha-block
+
+  return
+    result  string
+
+done

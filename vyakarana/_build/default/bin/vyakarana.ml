@@ -171,6 +171,10 @@ let parse_line line : Event.t option =
         | _ -> (None, instruction_raw)
       in
       Some (Event.Prayoga { instruction; input; domain = domain_hint })
+    | "EVAL" when first_space < String.length line ->
+      let rest = String.trim (String.sub line (first_space + 1)
+        (String.length line - first_space - 1)) in
+      Some (Event.Yantra { sentence = "EVAL:" ^ rest })
     | "SANSKRIT" when first_space < String.length line ->
       let rest = String.trim (String.sub line (first_space + 1)
         (String.length line - first_space - 1)) in
@@ -199,7 +203,8 @@ let parse_line line : Event.t option =
         None
 
 (* stdin/stdout interactive loop *)
-let rec madakkal (k : Proof_graph.proof_graph) (session_flags : Anuvada.output_flags) (emit_only : bool) : unit =
+let rec madakkal (k : Proof_graph.proof_graph) (yantra_idx : Yantra.tantra_index)
+    (yantra_session : Yantra.session) (session_flags : Anuvada.output_flags) (emit_only : bool) : unit =
   match input_line stdin with
   | exception End_of_file -> ()
   | line ->
@@ -207,29 +212,111 @@ let rec madakkal (k : Proof_graph.proof_graph) (session_flags : Anuvada.output_f
     (match parse_line line with
     | None when String.length line > 0 ->
       Printf.printf "unknown command: %s\n  try a node name, a sentence, or --help\n%!" line;
-      madakkal k session_flags emit_only
-    | None -> madakkal k session_flags emit_only
+      madakkal k yantra_idx yantra_session session_flags emit_only
+    | None -> madakkal k yantra_idx yantra_session session_flags emit_only
     | Some Event.Visarjana ->
       Printf.printf "released (visarjana).\n%!";
       ()
     | Some Event.Sthiti ->
       Anuvada.print k;
-      madakkal k session_flags emit_only
+      madakkal k yantra_idx yantra_session session_flags emit_only
     | Some Event.Pravaha ->
       Anuvada.pravaha k;
-      madakkal k session_flags emit_only
+      madakkal k yantra_idx yantra_session session_flags emit_only
     | Some (Event.Prayoga p) ->
       Prayoga.run ~emit_meta:(not emit_only) k ~instruction:p.instruction ~input:p.input ~domain_hint:p.domain;
-      madakkal k session_flags emit_only
-    | Some event ->
-      let (k', result) = Verify.f_K ~flags:session_flags k event in
-      (match result with
-      | None -> ()
-      | Some (Verify.Pratibodha (name, w)) ->
-        Printf.printf "recognised (pratibodha): %s satya=%.4f\n%!" name w
-      | Some (Verify.Asprishta name) ->
-        Printf.printf "not-found (asprishta): %s\n%!" name);
-      madakkal k' session_flags emit_only)
+      madakkal k yantra_idx yantra_session session_flags emit_only
+    | Some (Event.Yantra y) ->
+      (* explicit yantra event *)
+      if String.length y.sentence > 5 && String.sub y.sentence 0 5 = "EVAL:" then begin
+        (* EVAL mode: evaluate expression directly with the internal evaluator *)
+        let expr_str = String.trim (String.sub y.sentence 5 (String.length y.sentence - 5)) in
+        (* try as tantra-name arg1 arg2 ...
+           handles quoted strings: EVAL parse-test "force when mass" *)
+        let parse_eval_args (s : string) : string list =
+          let len = String.length s in
+          let buf = Buffer.create 16 in
+          let args = ref [] in
+          let i = ref 0 in
+          let flush () =
+            if Buffer.length buf > 0 then begin
+              args := Buffer.contents buf :: !args;
+              Buffer.clear buf
+            end
+          in
+          while !i < len do
+            match s.[!i] with
+            | ' ' | '\t' -> flush (); incr i
+            | '"' ->
+              flush (); incr i;
+              while !i < len && s.[!i] <> '"' do
+                Buffer.add_char buf s.[!i]; incr i
+              done;
+              if !i < len then incr i;
+              args := Buffer.contents buf :: !args;
+              Buffer.clear buf
+            | c -> Buffer.add_char buf c; incr i
+          done;
+          flush ();
+          List.rev !args
+        in
+        let parts = parse_eval_args expr_str in
+        match parts with
+        | tantra_name :: args ->
+          (match Hashtbl.find_opt yantra_idx.by_name tantra_name with
+           | Some t ->
+             let input_values = List.mapi (fun i arg ->
+               let inp = if i < List.length t.t_inputs then
+                 (List.nth t.t_inputs i).tp_name else Printf.sprintf "arg%d" i in
+               let v = match float_of_string_opt arg with
+                 | Some f -> Yantra.VFloat f
+                 | None -> Yantra.VString arg
+               in
+               (inp, v)
+             ) args in
+             (* add tantra index to env *)
+             let tnames = List.map (fun t -> Yantra.VString t.Yantra.t_name)
+               !(yantra_idx.all_tantras) in
+             let input_values = ("_tantra_index", Yantra.VList tnames) :: input_values in
+             let result = Yantra.eval_tantra ~idx:yantra_idx ~session:yantra_session k t input_values in
+             Printf.printf "%s\n%!" (Yantra.as_string result)
+           | None ->
+             (* evaluate as a raw expression *)
+             let expr = Yantra.parse_expr_string expr_str in
+             let env = Yantra.new_env () in
+             let tnames = List.map (fun t -> Yantra.VString t.Yantra.t_name)
+               !(yantra_idx.all_tantras) in
+             Hashtbl.replace env "_tantra_index" (Yantra.VList tnames);
+             (* set eval context so pipeline ops (extract-bindings, resolve-tantra, etc.) work *)
+             Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
+             let result = Yantra.eval k env expr in
+             Yantra.eval_ctx := None;
+             Printf.printf "%s\n%!" (Yantra.as_string result))
+        | [] -> Printf.printf "eval: empty expression\n%!"
+      end else
+        (match Yantra.run k yantra_idx yantra_session y.sentence with
+         | Some r -> Yantra.print_result r
+         | None -> Printf.printf "yantra: could not compute\n%!");
+      madakkal k yantra_idx yantra_session session_flags emit_only
+    | Some (Event.Anuvada a) ->
+      (* try yantra computation first *)
+      (match Yantra.run k yantra_idx yantra_session a.sentence with
+       | Some r ->
+         Yantra.print_result r
+       | None ->
+         (* try anuvada tantra for reasoning *)
+         match Yantra.run_tantra_by_name k yantra_idx yantra_session
+                 "anuvada" [("sentence", Yantra.VString a.sentence)] with
+         | Some r -> Yantra.print_result r
+         | None -> ());
+      madakkal k yantra_idx yantra_session session_flags emit_only
+    | Some (Event.Darshana d) ->
+      (* try darshana tantra for node inspection *)
+      (match Yantra.run_tantra_by_name k yantra_idx yantra_session
+               "darshana" [("r-name", Yantra.VString d.name)] with
+       | Some r -> Yantra.print_result r
+       | None -> Printf.printf "not found: %s\n%!" d.name);
+      madakkal k yantra_idx yantra_session session_flags emit_only)
 
 let () =
   let (socket_path, session_flags, quiet_startup, emit_only, dirs) = parse_argv () in
@@ -247,10 +334,19 @@ let () =
           (String.concat ", " dirs);
       Om_parser.load_dirs ~emit_meta:(not quiet_startup) dirs k0
   in
+  (* build yantra tantra index from loaded dirs — pass graph so tantras register as nodes *)
+  let yantra_idx = Yantra.build_index ~graph:k0 dirs in
+  (* set the graph ref for legacy invert_expr calls *)
+  Yantra._graph_ref := Some k0;
+  let tantra_count = List.length !(yantra_idx.all_tantras) in
+  let constant_count = Hashtbl.length yantra_idx.constants in
   if not quiet_startup then begin
     Printf.printf "knowledge-nodes (suktas): %d loaded, %d skipped\n%!" loaded skipped;
+    if tantra_count > 0 then
+      Printf.printf "tantras (yantra): %d loaded, %d constants\n%!" tantra_count constant_count;
     Printf.printf "space (akasham) ready.\n%!"
   end;
+  let yantra_session = Yantra.new_session () in
   match socket_path with
   | Some path -> Socket.serve k0 path
-  | None      -> madakkal k0 session_flags emit_only
+  | None      -> madakkal k0 yantra_idx yantra_session session_flags emit_only

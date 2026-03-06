@@ -1,5 +1,5 @@
 (* event.ml — what moves through the proof space
-   five events. the LLM does the semantic work.
+   six events. the LLM does the semantic work.
    vyakarana holds the structure. *)
 
 type t =
@@ -15,6 +15,9 @@ type t =
       input       : string;     (* what to run it on — sequence, string, etc. *)
       domain      : string option; (* optional: force emit domain *)
     }  (* execution: read the question, recognise, act, emit *)
+  | Yantra    of {
+      sentence : string;        (* the computation query *)
+    }  (* compute: find tantra, emit OCaml, execute, return result *)
   | Sthiti                           (* show full graph, human-readable *)
   | Pravaha                          (* show full graph as JSON *)
   | Visarjana                        (* end session *)

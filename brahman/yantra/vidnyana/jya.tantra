@@ -1,0 +1,12 @@
+tantra sine
+
+  inputs
+    angle  float
+
+  let
+    result = sin angle
+
+  return
+    result  float
+
+done

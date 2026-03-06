@@ -1,0 +1,13 @@
+tantra electric-field-force
+
+  inputs
+    force   float  newton
+    charge  float  coulomb
+
+  let
+    e = div force charge
+
+  return
+    e  float  newton-per-coulomb
+
+done

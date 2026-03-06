@@ -1,0 +1,13 @@
+tantra power
+
+  inputs
+    base      float
+    exponent  float
+
+  let
+    result = power base exponent
+
+  return
+    result  float
+
+done

@@ -105,51 +105,35 @@ let parse_sloka line =
    fallback: if no known name matches, try splitting at last '-' before
    a known visheshanam suffix — allows cross-layer references to names
    not in this graph *)
-let decompose_compound (known_names : string list) (word : string) : (string * visheshanam) option =
-  (* sort names by length descending — try longest first *)
-  let sorted_names = List.sort (fun a b ->
-    compare (String.length b) (String.length a)
-  ) known_names in
+(* pre-sorted names cache — sort once, reuse across all decompositions *)
+let _sorted_names_cache : (string list * string list) ref = ref ([], [])
+
+let get_sorted_names (known_names : string list) : string list =
+  let (cached_input, cached_sorted) = !_sorted_names_cache in
+  if cached_input == known_names then cached_sorted  (* physical equality = same list *)
+  else begin
+    let sorted = List.sort (fun a b ->
+      compare (String.length b) (String.length a)
+    ) known_names in
+    _sorted_names_cache := (known_names, sorted);
+    sorted
+  end
+
+let decompose_compound (_known_names : string list) (word : string) : (string * visheshanam) option =
   let word_lower = String.lowercase_ascii word in
-  let try_name name =
-    let name_lower = String.lowercase_ascii name in
-    let name_len = String.length name_lower in
-    let word_len = String.length word_lower in
-    (* name must be followed by '-' then visheshanam *)
-    if word_len > name_len + 1
-       && String.sub word_lower 0 name_len = name_lower
-       && word_lower.[name_len] = '-' then
-      let suffix = String.sub word_lower (name_len + 1) (word_len - name_len - 1) in
-      match visheshanam_of_string suffix with
-      | Some v -> Some (name, v)
-      | None -> None
-    else
-      None
+  (* fast path: split at each '-' from the right and check suffix as visheshanam *)
+  let rec try_last_dash i =
+    if i <= 0 then None
+    else if word_lower.[i] = '-' then
+      let suffix = String.sub word_lower (i + 1) (String.length word_lower - i - 1) in
+      match Proof_graph.visheshanam_of_string suffix with
+      | Some v ->
+        let prefix = String.sub word 0 i in
+        Some (prefix, v)
+      | None -> try_last_dash (i - 1)
+    else try_last_dash (i - 1)
   in
-  (* try each name, longest first *)
-  let rec try_names = function
-    | [] -> None
-    | name :: rest ->
-      match try_name name with
-      | Some result -> Some result
-      | None -> try_names rest
-  in
-  match try_names sorted_names with
-  | Some result -> Some result
-  | None ->
-    (* fallback: split at last '-' and check if suffix is a visheshanam *)
-    let rec try_last_dash i =
-      if i <= 0 then None
-      else if word_lower.[i] = '-' then
-        let suffix = String.sub word_lower (i + 1) (String.length word_lower - i - 1) in
-        match Proof_graph.visheshanam_of_string suffix with
-        | Some v ->
-          let prefix = String.sub word 0 i in
-          Some (prefix, v)
-        | None -> try_last_dash (i - 1)
-      else try_last_dash (i - 1)
-    in
-    try_last_dash (String.length word_lower - 1)
+  try_last_dash (String.length word_lower - 1)
 
 (* decompose all words in a sloka into typed edges *)
 let decompose_sloka (known_names : string list) (source : string) (sloka : string)
@@ -257,16 +241,15 @@ let load_dirs ?(emit_meta = true) (dirs : string list) (k : proof_graph) : proof
   let loaded = ref 0 in
   let skipped = ref 0 in
   let k_ref = ref k in
-  List.iter (fun dir ->
-    List.iter (fun path ->
-      match parse_file known_names path with
-      | Some n ->
-        k_ref := join !k_ref n;
-        incr loaded
-      | None ->
-        incr skipped
-    ) (om_files_recursive dir)
-  ) dirs;
+  let all_files = List.concat_map om_files_recursive dirs in
+  List.iter (fun path ->
+    match parse_file known_names path with
+    | Some n ->
+      k_ref := join !k_ref n;
+      incr loaded
+    | None ->
+      incr skipped
+  ) all_files;
   (* record kosha root — prefer a dir containing "kosha", else use last dir *)
   let kosha_dir = List.fold_left (fun acc d ->
     let base = Filename.basename d in

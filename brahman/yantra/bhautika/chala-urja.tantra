@@ -1,0 +1,13 @@
+tantra kinetic-energy
+
+  inputs
+    mass      float  kilogram
+    velocity  float  metre-per-second
+
+  let
+    ke = mul (mul 0.5 mass) (power velocity 2.0)
+
+  return
+    ke  float  joule
+
+done

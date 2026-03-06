@@ -1,0 +1,13 @@
+tantra wave-speed
+
+  inputs
+    frequency   float  hertz
+    wavelength  float  metre
+
+  let
+    v = mul frequency wavelength
+
+  return
+    v  float  metre-per-second
+
+done

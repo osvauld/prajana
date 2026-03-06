@@ -6,6 +6,6 @@ kosha abs
   "norm-yukta max-yukta min-yukta"
   "domain-math-sthita"
 
-shabda abs / absolute-value-the-magnitude-without-sign-how-far-from-zero-regardless-of-direction
+shabda eval:abs arity:1
 
 done

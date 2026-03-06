@@ -1,0 +1,12 @@
+tantra negation
+
+  inputs
+    a  float
+
+  let
+    result = neg a
+
+  return
+    result  float
+
+done

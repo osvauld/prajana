@@ -8,6 +8,6 @@ kosha power
   "polynomial-yukta derivative-yukta"
   "domain-math-sthita"
 
-shabda power / x-to-the-n-one-multiplied-by-itself-n-times-mula-shakti-becoming-many-through-itself
+  shabda eval:power arity:2 pratipaksha-0:power pratipaksha-0-compound:true
 
 done

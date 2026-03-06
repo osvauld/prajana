@@ -1,0 +1,14 @@
+tantra work
+
+  inputs
+    force         float  newton
+    displacement  float  metre
+    angle         float  radian
+
+  let
+    w = mul (mul force displacement) (cos angle)
+
+  return
+    w  float  joule
+
+done

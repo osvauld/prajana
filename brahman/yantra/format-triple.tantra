@@ -1,0 +1,16 @@
+tantra format-triple
+
+  inputs
+    t  list
+
+  let
+    src    = to-english (nth t 0)
+    rel    = to-english-relation (nth t 1)
+    tgts   = map (nth t 2) (fn tgt -> to-english tgt)
+    tgt-s  = join tgts ", "
+    result = concat src " " rel " " tgt-s "."
+
+  return
+    result  string
+
+done

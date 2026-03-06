@@ -1,0 +1,11 @@
+tantra e-constant
+
+  inputs
+
+  let
+    e = 2.71828182845904523536
+
+  return
+    e  float
+
+done

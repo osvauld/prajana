@@ -1,0 +1,14 @@
+tantra escape-velocity
+
+  inputs
+    mass    float  kilogram
+    radius  float  metre
+
+  let
+    G  = 6.67430e-11
+    v  = sqrt (div (mul (mul 2.0 G) mass) radius)
+
+  return
+    v  float  metre-per-second
+
+done

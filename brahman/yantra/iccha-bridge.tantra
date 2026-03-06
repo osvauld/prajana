@@ -1,0 +1,20 @@
+tantra iccha-bridge
+
+  inputs
+    nodes  list
+
+  let
+    with-iccha    = unique (filter nodes (fn n -> eq (iccha-status n) "sthita"))
+    without-iccha = unique (filter nodes (fn n -> eq (iccha-status n) "rahita"))
+    has-both      = and (gt (length with-iccha) 0) (gt (length without-iccha) 0)
+    with-str      = join (map with-iccha (fn n -> to-english n)) ", "
+    without-str   = join (map without-iccha (fn n -> to-english n)) ", "
+    result        = cond (has-both)
+                       (concat "  iccha (directed-will) present in: " with-str
+                               "; absent in: " without-str ".\n")
+                       otherwise ""
+
+  return
+    result  string
+
+done

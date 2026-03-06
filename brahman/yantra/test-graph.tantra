@@ -1,0 +1,15 @@
+tantra test-graph
+
+  inputs
+    word  string
+
+  let
+    node = lookup word
+    found = exists node
+    abhedas = walk node "abheda"
+
+  return
+    found   string
+    abhedas string
+
+done

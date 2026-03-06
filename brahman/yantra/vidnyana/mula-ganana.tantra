@@ -1,0 +1,12 @@
+tantra sqrt
+
+  inputs
+    value  float
+
+  let
+    result = sqrt value
+
+  return
+    result  float
+
+done

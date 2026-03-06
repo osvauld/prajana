@@ -5,4 +5,6 @@ sangati sine
   "cosine-yukta phase-yukta frequency-yukta"
   "domain-physics-sthita domain-math-sthita"
 
+  shabda eval:sin arity:1 pratipaksha-0:asin
+
 done

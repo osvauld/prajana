@@ -1,0 +1,12 @@
+tantra abs
+
+  inputs
+    a  float
+
+  let
+    result = abs a
+
+  return
+    result  float
+
+done

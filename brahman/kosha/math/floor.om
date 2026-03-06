@@ -6,6 +6,6 @@ kosha floor
   "abs-yukta real-sthita"
   "domain-math-sthita"
 
-shabda floor / the-largest-integer-not-exceeding-x-round-down-to-the-lower-boundary
+shabda eval:floor arity:1
 
 done

@@ -1,0 +1,14 @@
+tantra torque
+
+  inputs
+    force   float  newton
+    radius  float  metre
+    angle   float  radian
+
+  let
+    tau = mul (mul force radius) (sin angle)
+
+  return
+    tau  float  newton-metre
+
+done

@@ -1,0 +1,13 @@
+tantra division
+
+  inputs
+    a  float
+    b  float
+
+  let
+    result = div a b
+
+  return
+    result  float
+
+done

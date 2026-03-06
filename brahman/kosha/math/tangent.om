@@ -7,6 +7,6 @@ kosha tangent
   "viparita-abheda derivative-drishthanta"
   "domain-math-sthita"
 
-shabda tangent / the-line-that-touches-once-and-departs
+shabda eval:tan arity:1 pratipaksha-0:atan
 
 done

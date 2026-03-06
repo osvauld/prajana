@@ -1,0 +1,12 @@
+tantra tangent
+
+  inputs
+    angle  float
+
+  let
+    result = tan angle
+
+  return
+    result  float
+
+done

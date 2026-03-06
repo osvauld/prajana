@@ -1,5 +1,8 @@
 sangati addition
 
   "sankalana-abheda matra-kriya arithmetic-kriya plus-abheda equation-yukta domain-math-sthita"
+  "subtraction-pratipaksha"
+
+  shabda eval:add arity:2 pratipaksha-0:sub pratipaksha-1:sub
 
 done

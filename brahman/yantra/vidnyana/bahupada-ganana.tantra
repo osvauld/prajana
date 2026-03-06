@@ -1,0 +1,13 @@
+tantra polynomial-eval
+
+  inputs
+    coefficients  float-list
+    x             float
+
+  let
+    result = horner coefficients x
+
+  return
+    result  float
+
+done

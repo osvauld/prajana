@@ -6,6 +6,6 @@ kosha max
   "abs-yukta min-inverse"
   "domain-math-sthita"
 
-shabda max / the-greater-of-two-values-viveka-that-selects-the-higher-bound
+shabda eval:max arity:2
 
 done

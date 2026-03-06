@@ -13,6 +13,7 @@ let f_K ?(flags = Anuvada.flags_default) (k : Proof_graph.proof_graph) (event : 
   | Event.Pravaha -> (k, None)
   | Event.Visarjana -> (k, None)
   | Event.Prayoga _ -> (k, None)  (* handled directly in main loop *)
+  | Event.Yantra _ -> (k, None)   (* handled directly in main loop *)
   | Event.Anuvada a ->
     let max_passes = match a.max_passes with
       | Some n -> n

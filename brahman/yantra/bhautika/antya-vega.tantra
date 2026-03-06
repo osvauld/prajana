@@ -1,0 +1,15 @@
+tantra final-velocity
+
+  inputs
+    initial-velocity  float  metre-per-second
+    acceleration      float  metre-per-second-squared
+    time              float  second
+
+  let
+    at = mul acceleration time
+    v  = add initial-velocity at
+
+  return
+    v  float  metre-per-second
+
+done

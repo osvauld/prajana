@@ -1,0 +1,13 @@
+tantra multiplication
+
+  inputs
+    a  float
+    b  float
+
+  let
+    result = mul a b
+
+  return
+    result  float
+
+done

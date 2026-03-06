@@ -1,0 +1,55 @@
+tantra anuvada-ganana
+
+  -- the meta-tantra: orchestrates the full parsing pipeline.
+  -- takes a natural language sentence, classifies words using graph knowledge,
+  -- resolves which tantra to use, and executes it.
+
+  inputs
+    sentence  string
+
+  let
+    -- step 1: split sentence into words
+    words = tokenise sentence
+
+    -- step 2: classify each word via graph knowledge
+    tokens = classify-all words
+
+    -- step 3: join adjacent words into bigrams where graph has a compound
+    joined = join-bigrams tokens
+
+    -- step 4: match token sequence against sentence patterns (graph-driven)
+    -- returns "stored" format for assignments, extraction format for queries
+    extraction = match-sentence-patterns joined
+
+    -- step 4b: detect stored (assignment) vs query case
+    stored-flag = eq (nth extraction 0) "stored"
+
+    -- step 5: get the target (first element of extraction list) for query case
+    raw-target = cond (stored-flag) "" otherwise (nth extraction 0)
+
+    -- step 5b: if target is empty, find an operator concept or symbol
+    concept-target = first-match joined (fn tok -> cond (and (eq (nth tok 1) "concept") (is-tantra (nth tok 2))) (nth tok 2) otherwise _none)
+
+    -- step 5c: if no concept, try operator symbol via graph
+    op-target = first-match joined (fn tok -> cond (eq (nth tok 1) "operator") (shabda "chihna-ganaka" (nth tok 2)) otherwise _none)
+
+    -- step 5d: pick the right target
+    target = cond (stored-flag) "" (neq raw-target "") raw-target (exists concept-target) concept-target (exists op-target) op-target otherwise ""
+
+    -- step 6: resolve which tantra to use (only meaningful for query case)
+    resolution = resolve-tantra target extraction
+
+    -- step 7: execute the resolved tantra, getting raw result data [kind;name;value;unit;attr]
+    raw-result = invoke-tantra resolution
+
+    -- step 8: pick stored extraction or computed result
+    final-result = cond (stored-flag) extraction otherwise raw-result
+
+    -- step 9: format the response using format-response tantra
+    -- returns "" for errors (falls through to anuvada reasoning)
+    result = cond (eq (nth final-result 0) "error") "" otherwise (format-response final-result)
+
+  return
+    result  string
+
+done

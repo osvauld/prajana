@@ -1,0 +1,9 @@
+kosha chihna-ganaka
+
+  "chihna-swarupa domain-cs-sthita language-sthita"
+  "ganaka-kriya expression-yukta"
+
+  -- maps operator symbols to their tantra (computation) names
+  shabda +:addition -:subtraction *:multiplication /:division
+
+done

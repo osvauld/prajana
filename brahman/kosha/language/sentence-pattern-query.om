@@ -1,0 +1,14 @@
+kosha sentence-pattern-query
+
+  "sentence-pattern-swarupa domain-language-sthita"
+  "return-value-phala expression-phala"
+  "drishthanta-sthita"
+
+  -- pattern: query-verb concept when bindings  (e.g. "find force when mass is 10")
+  -- pattern: drishthanta concept               (e.g. "what is force")
+  -- pattern: concept when bindings             (e.g. "force when mass is 10")
+  -- result: target (the concept to compute) + bindings (the known values)
+
+  shabda pattern:query-concept-when-bindings pattern:drishthanta-concept pattern:concept-when-bindings role:query result:target-and-bindings
+
+done

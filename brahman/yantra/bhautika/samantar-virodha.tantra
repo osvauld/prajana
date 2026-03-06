@@ -1,0 +1,13 @@
+tantra parallel-resistance
+
+  inputs
+    r1  float  ohm
+    r2  float  ohm
+
+  let
+    total = div (mul r1 r2) (add r1 r2)
+
+  return
+    total  float  ohm
+
+done

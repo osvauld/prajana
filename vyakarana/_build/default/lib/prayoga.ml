@@ -5,7 +5,6 @@
      swara-to-strudel   — swara names → Strudel pitch letters
      ornament-to-strudel — ornament concepts → Strudel syntax magnitudes
      strudel             — synth names, rhythm patterns
-     ocaml-setu          — OCaml setu construct strings
      codon-table         — 64 codon → amino-acid mappings
      transcription       — T→U substitution rule
 
@@ -30,9 +29,6 @@ type prayoga_context = {
 let compose_music (k : proof_graph) seeds walk input =
   Prayoga_strudel.compose_music k seeds walk input
 
-(* --- ocaml delegated --- *)
-let compose_computation seeds walk input =
-  Prayoga_ocaml.compose_computation seeds walk input
 
 (* --- compose_biology: read codon table and transcription rule from graph --- *)
 
@@ -154,14 +150,13 @@ let relation_role (r : visheshanam) : string =
   | Drishthanta -> "eg"
   | Siddha      -> "via"
   | Janya       -> "from"
+  | Pratipaksha -> "inverts"
 
 let dedupe lst =
   List.fold_left (fun acc x ->
     if List.mem x acc then acc else acc @ [x]
   ) [] lst
 
-let compose_graph_viz_from_setu (k : proof_graph) (input : string) : unit =
-  Prayoga_lua.compose_graph_viz_from_setu k input
 
 let compose_from_setu (k : proof_graph) (setu_node : string) (_seeds : string list) (walk : string list) (input : string) : unit =
   let setu_map = Setu.read_shabda k setu_node in
@@ -232,7 +227,7 @@ let run ?(emit_meta = true) (k : proof_graph) ~(instruction : string) ~(input : 
                      else if domain = "music" || domain = "sangeetham" then "" else " *)" in
 
   let ocaml_forms = match domain with
-    | "computation" | "biology" -> Setu.resolve_ocaml_forms k seeds
+    | "biology" -> Setu.resolve_ocaml_forms k seeds
     | _ -> [] in
 
   let ctx = { instruction; input; seeds; recognised; ocaml_forms; walk_path; domain } in
@@ -249,10 +244,8 @@ let run ?(emit_meta = true) (k : proof_graph) ~(instruction : string) ~(input : 
   end;
 
   (match domain with
-  | "computation" -> compose_computation ctx.seeds ctx.walk_path ctx.input
   | "biology"     -> compose_biology k ctx.seeds ctx.walk_path ctx.input
   | "music" | "sangeetham" -> compose_music k ctx.seeds ctx.walk_path ctx.input
-  | "graph-viz" -> compose_graph_viz_from_setu k ctx.input
   | _ ->
     (* generic: try <domain>-setu node *)
     (match find k setu_node_name with

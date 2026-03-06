@@ -1,0 +1,12 @@
+tantra kmph-to-mps
+
+  inputs
+    speed  float  kilometre-per-hour
+
+  let
+    result = div speed 3.6
+
+  return
+    result  float  metre-per-second
+
+done
