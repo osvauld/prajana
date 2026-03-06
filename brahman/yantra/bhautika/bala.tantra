@@ -1,0 +1,13 @@
+tantra force
+
+  inputs
+    mass          float  kilogram
+    acceleration  float  metre-per-second-squared
+
+  let
+    f = mul mass acceleration
+
+  return
+    f  float  newton
+
+done

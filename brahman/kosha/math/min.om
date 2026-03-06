@@ -6,6 +6,6 @@ kosha min
   "abs-yukta max-inverse"
   "domain-math-sthita"
 
-shabda min / the-lesser-of-two-values-viveka-that-selects-the-lower-bound
+shabda eval:min arity:2
 
 done

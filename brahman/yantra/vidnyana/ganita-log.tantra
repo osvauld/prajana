@@ -1,0 +1,12 @@
+tantra logarithm
+
+  inputs
+    value  float
+
+  let
+    result = log value
+
+  return
+    result  float
+
+done

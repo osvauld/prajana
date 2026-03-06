@@ -5,6 +5,6 @@ kosha ceil
   "float-yukta int-yukta floor-inverse"
   "domain-math-sthita"
 
-shabda ceil / the-smallest-integer-not-less-than-x-round-up-to-the-upper-boundary
+shabda eval:ceil arity:1
 
 done

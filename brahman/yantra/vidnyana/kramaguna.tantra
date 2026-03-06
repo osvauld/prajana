@@ -1,0 +1,12 @@
+tantra factorial
+
+  inputs
+    n  int
+
+  let
+    result = factorial n
+
+  return
+    result  int
+
+done

@@ -1,0 +1,14 @@
+tantra heat-transfer
+
+  inputs
+    mass           float  kilogram
+    specific-heat  float  joule-per-kilogram-kelvin
+    temperature-change  float  kelvin
+
+  let
+    q = mul (mul mass specific-heat) temperature-change
+
+  return
+    q  float  joule
+
+done

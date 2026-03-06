@@ -1,0 +1,16 @@
+tantra snell-law
+
+  inputs
+    n1     float
+    angle1 float  radian
+    n2     float
+
+  let
+    sin1    = sin angle1
+    sin2    = div (mul n1 sin1) n2
+    angle2  = asin sin2
+
+  return
+    angle2  float  radian
+
+done

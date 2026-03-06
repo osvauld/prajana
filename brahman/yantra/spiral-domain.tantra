@@ -1,0 +1,24 @@
+tantra spiral-domain
+
+  inputs
+    domain-seeds   list
+    context-seeds  list
+    depth          int
+
+  let
+    triples     = avrti domain-seeds 1
+    fmt-shallow = format-triples triples "    "
+    fmt-deep    = format-triples-primary triples "      "
+    formatted   = cond (eq depth 0) fmt-shallow otherwise fmt-deep
+    all-targets = flatten (map triples (fn t -> nth t 2))
+    scored      = map all-targets (fn n -> pair n (context-score n context-seeds))
+    high-scored = filter scored (fn sp -> gt (nth sp 1) 1)
+    next-seeds  = map high-scored (fn sp -> nth sp 0)
+    can-deepen  = and (eq depth 0) (gt (length next-seeds) 0)
+    deeper      = cond (can-deepen) (spiral-domain next-seeds context-seeds 1) otherwise ""
+    result      = concat formatted deeper
+
+  return
+    result  string
+
+done

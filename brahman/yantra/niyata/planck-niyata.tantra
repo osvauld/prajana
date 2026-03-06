@@ -1,0 +1,11 @@
+tantra planck-constant
+
+  inputs
+
+  let
+    h = 6.62607015e-34
+
+  return
+    h  float  joule-second
+
+done

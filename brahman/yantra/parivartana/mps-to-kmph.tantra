@@ -1,0 +1,12 @@
+tantra mps-to-kmph
+
+  inputs
+    speed  float  metre-per-second
+
+  let
+    result = mul speed 3.6
+
+  return
+    result  float  kilometre-per-hour
+
+done

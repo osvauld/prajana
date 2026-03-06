@@ -1,0 +1,39 @@
+tantra format-response
+
+  -- formats a raw result VList into a natural language string.
+  -- input schema: [r-kind, r-name, r-value, r-unit, r-attr]
+  -- r-kind: "result" | "stored" | "error"
+
+  inputs
+    result-data list
+
+  let
+    r-kind  = nth result-data 0
+    r-name  = nth result-data 1
+    r-value = nth result-data 2
+    r-unit  = nth result-data 3
+    r-attr  = nth result-data 4
+
+    -- append unit with leading space when non-empty
+    unit-part  = cond (eq r-unit "") "" otherwise (concat " " r-unit)
+    val-str    = to-string r-value
+
+    -- natural language result line
+    result-line = cond
+      (eq r-kind "error")  (concat "cannot compute " r-name ".")
+      (eq r-name "result") (concat val-str unit-part ".")
+      (eq r-kind "stored") (concat r-name " is " val-str unit-part " (remembered).")
+      otherwise            (concat r-name " is " val-str unit-part ".")
+
+    -- attribution sentence (omitted for errors or when empty)
+    attrib-line = cond
+      (eq r-kind "error")   ""
+      (eq r-attr "")        ""
+      otherwise (concat " computed by " r-attr ".")
+
+    output = concat result-line attrib-line
+
+  return
+    output string
+
+done

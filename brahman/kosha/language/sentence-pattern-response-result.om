@@ -1,0 +1,14 @@
+kosha sentence-pattern-response-result
+
+  "sentence-pattern-swarupa domain-language-sthita"
+  "return-value-sthita expression-phala"
+  "visarjana-swarupa"
+
+  -- output pattern for computed results
+  -- format: "name = value unit" (e.g. "force = 98 newton")
+  -- format: "value" when name is "result" (e.g. "8" for "3 plus 5")
+  -- attribution: "tantra: name" (e.g. "tantra: force")
+
+  shabda format:name-equals-value-unit format:bare-value attribution:tantra-name role:response-result
+
+done

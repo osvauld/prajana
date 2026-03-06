@@ -1,0 +1,13 @@
+tantra power-from-resistance
+
+  inputs
+    current     float  ampere
+    resistance  float  ohm
+
+  let
+    p = mul (power current 2.0) resistance
+
+  return
+    p  float  watt
+
+done

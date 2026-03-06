@@ -1,0 +1,13 @@
+tantra potential-energy
+
+  inputs
+    mass    float  kilogram
+    height  float  metre
+
+  let
+    pe = mul (mul mass gravity) height
+
+  return
+    pe  float  joule
+
+done

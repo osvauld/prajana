@@ -1,0 +1,13 @@
+tantra capacitor-charge
+
+  inputs
+    capacitance  float  farad
+    voltage      float  volt
+
+  let
+    q = mul capacitance voltage
+
+  return
+    q  float  coulomb
+
+done

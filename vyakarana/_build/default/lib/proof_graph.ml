@@ -14,6 +14,7 @@ type visheshanam =
   | Kriya         (* function — X acts as Y *)
   | Phala         (* consequence — X results from Y *)
   | Janya         (* origin — X born from Y *)
+  | Pratipaksha   (* inverse — X undoes Y *)
 
 (* typed edge between two nodes *)
 type typed_edge = {
@@ -51,6 +52,8 @@ let visheshanam_of_string s =
   | "kriya"       -> Some Kriya
   | "phala"       -> Some Phala
   | "janya"       -> Some Janya
+  | "pratipaksha" -> Some Pratipaksha
+  | "inverse"     -> Some Pratipaksha
   | _             -> None
 
 let string_of_visheshanam = function
@@ -63,6 +66,7 @@ let string_of_visheshanam = function
   | Kriya       -> "kriya"
   | Phala       -> "phala"
   | Janya       -> "janya"
+  | Pratipaksha -> "pratipaksha"
 
 
 (* the space was already there *)
@@ -163,11 +167,37 @@ let avrti_step (k : proof_graph) (name : string) (current : float) : float =
 
 (* run satya-ganana: iterate until convergence *)
 let satya_ganana (k : proof_graph) : int =
+  (* build in-edges index: target → list of unique sources *)
+  let in_edges : (string, string list) Hashtbl.t = Hashtbl.create (Hashtbl.length k.nodes) in
+  List.iter (fun e ->
+    let prev = match Hashtbl.find_opt in_edges e.target with Some l -> l | None -> [] in
+    if not (List.mem e.source prev) then
+      Hashtbl.replace in_edges e.target (e.source :: prev)
+  ) !(k.all_edges);
   (* pass 1: set raw satya for all nodes *)
   Hashtbl.iter (fun _ n ->
     let raw = raw_satya n in
     Hashtbl.replace k.nodes n.name { n with satya = raw }
   ) k.nodes;
+  (* avrti_step using pre-built index *)
+  let avrti_step_indexed name current =
+    let in_nbrs = match Hashtbl.find_opt in_edges name with Some l -> l | None -> [] in
+    let in_deg = float_of_int (List.length in_nbrs) in
+    let citation_boost = in_deg /. (1.0 +. in_deg) in
+    if in_nbrs = [] then
+      0.7 *. current +. 0.3 *. citation_boost
+    else begin
+      let nbr_satya_sum = List.fold_left (fun acc nb ->
+        match Hashtbl.find_opt k.nodes nb with
+        | Some n -> acc +. n.satya
+        | None   -> acc
+      ) 0.0 in_nbrs in
+      let nbr_count = float_of_int (List.length in_nbrs) in
+      let nbr_avg = nbr_satya_sum /. nbr_count in
+      let blended = 0.6 *. current +. 0.4 *. nbr_avg in
+      0.7 *. blended +. 0.3 *. citation_boost
+    end
+  in
   (* pass 2+: avrti — iterate until convergence *)
   let max_iterations = 100 in
   let threshold = 0.001 in
@@ -176,16 +206,13 @@ let satya_ganana (k : proof_graph) : int =
   while not !converged && !iterations < max_iterations do
     incr iterations;
     let max_delta = ref 0.0 in
-    (* collect updates first, then apply — avoid order-dependence *)
     let updates = Hashtbl.fold (fun name n acc ->
-      let new_satya = avrti_step k name n.satya in
-      (* clamp to (0.001, 0.999) — ananta holds *)
+      let new_satya = avrti_step_indexed name n.satya in
       let clamped = Float.min 0.999 (Float.max 0.001 new_satya) in
       let delta = Float.abs (clamped -. n.satya) in
       if delta > !max_delta then max_delta := delta;
       (name, clamped) :: acc
     ) k.nodes [] in
-    (* apply updates *)
     List.iter (fun (name, new_satya) ->
       match Hashtbl.find_opt k.nodes name with
       | Some n -> Hashtbl.replace k.nodes name { n with satya = new_satya }

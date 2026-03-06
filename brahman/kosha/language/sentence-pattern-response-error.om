@@ -1,0 +1,12 @@
+kosha sentence-pattern-response-error
+
+  "sentence-pattern-swarupa domain-language-sthita"
+  "pratipaksha-swarupa"
+
+  -- output pattern for error responses
+  -- format: "cannot compute name: reason" (e.g. "cannot compute force: missing mass")
+  -- format: "unknown concept: name" (e.g. "unknown concept: blarg")
+
+  shabda format:cannot-compute-reason format:unknown-concept role:response-error
+
+done

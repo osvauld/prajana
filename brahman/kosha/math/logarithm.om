@@ -1,11 +1,12 @@
 sangati logarithm
 
-  "vibhajana-swarupa e-yukta inverse-abheda"
+  "vibhajana-swarupa e-yukta"
   "vriddhi-kshaya-kriya ghana-rahita-phala samikarana-yukta"
   "number-yukta expression-yukta domain-math-sthita"
   "avrti-drishthanta vibhajana-drishthanta"
   "O-nlogn-yukta sort-siddha"
+  "power-pratipaksha"
 
-  shabda vibhajana, vriddhi, kshaya, inverse, avrti, e
+  shabda eval:log arity:1 pratipaksha-0:exp
 
 done

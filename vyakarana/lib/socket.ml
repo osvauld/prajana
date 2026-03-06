@@ -302,6 +302,10 @@ let handle_client (k : proof_graph) (ic : in_channel) (oc : out_channel) : unit 
                     ~session_id:ses_id
                     ~turn_id:trn_id
                     k clean_q in
+                  (* echo answer to terminal so human sees it alongside LLM *)
+                  if String.length r.Anuvada.qr_answer_text > 0 then
+                    Printf.printf "[socket] %s\n  %s\n%!"
+                      q r.Anuvada.qr_answer_text;
                   ok_response req_id ses_id trn_id r flags
                 with exn ->
                   error_response req_id ses_id trn_id

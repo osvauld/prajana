@@ -1,0 +1,20 @@
+tantra projectile
+
+  inputs
+    initial-velocity  float  metre-per-second
+    angle             float  radian
+    time              float  second
+
+  let
+    vx = mul initial-velocity (cos angle)
+    vy = sub (mul initial-velocity (sin angle)) (mul gravity time)
+    x  = mul vx time
+    y  = sub (mul (mul initial-velocity (sin angle)) time) (mul (mul 0.5 gravity) (power time 2.0))
+
+  return
+    x   float  metre
+    y   float  metre
+    vx  float  metre-per-second
+    vy  float  metre-per-second
+
+done

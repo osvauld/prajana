@@ -1,0 +1,11 @@
+tantra speed-of-light
+
+  inputs
+
+  let
+    c = 299792458.0
+
+  return
+    c  float  metre-per-second
+
+done

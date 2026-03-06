@@ -1,0 +1,13 @@
+tantra momentum
+
+  inputs
+    mass      float  kilogram
+    velocity  float  metre-per-second
+
+  let
+    p = mul mass velocity
+
+  return
+    p  float  kilogram-metre-per-second
+
+done

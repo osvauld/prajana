@@ -1,0 +1,13 @@
+tantra subtraction
+
+  inputs
+    a  float
+    b  float
+
+  let
+    result = sub a b
+
+  return
+    result  float
+
+done

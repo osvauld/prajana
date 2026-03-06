@@ -1,0 +1,13 @@
+tantra electrical-energy
+
+  inputs
+    power  float  watt
+    time   float  second
+
+  let
+    e = mul power time
+
+  return
+    e  float  joule
+
+done

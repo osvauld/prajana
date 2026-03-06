@@ -1,0 +1,13 @@
+tantra format-triples-primary
+
+  inputs
+    triples  list
+    indent   string
+
+  let
+    result = format-triples triples indent
+
+  return
+    result  string
+
+done

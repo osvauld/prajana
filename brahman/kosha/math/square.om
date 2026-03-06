@@ -3,7 +3,8 @@ sangati square
   "multiplication-swarupa svayam-yukta vivartana-kriya"
   "kshetra-abheda dviguna-phala samikarana-yukta"
   "number-yukta expression-yukta domain-math-sthita"
+  "square-root-pratipaksha"
 
-  shabda svayam, kshetra, dviguna, vivartana, multiplication
+  shabda eval:square arity:1 pratipaksha-0:sqrt
 
 done

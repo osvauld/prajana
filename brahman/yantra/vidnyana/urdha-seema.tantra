@@ -1,0 +1,12 @@
+tantra ceil
+
+  inputs
+    value  float
+
+  let
+    result = ceil value
+
+  return
+    result  float
+
+done

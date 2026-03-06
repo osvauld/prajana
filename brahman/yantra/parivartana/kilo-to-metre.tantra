@@ -1,0 +1,12 @@
+tantra kilometre-to-metre
+
+  inputs
+    distance  float  kilometre
+
+  let
+    result = mul distance 1000.0
+
+  return
+    result  float  metre
+
+done

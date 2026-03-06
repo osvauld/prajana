@@ -12,12 +12,6 @@ module Om_parser = Vyakarana_lib__Om_parser
 (** @canonical Vyakarana_lib.Prayoga *)
 module Prayoga = Vyakarana_lib__Prayoga
 
-(** @canonical Vyakarana_lib.Prayoga_lua *)
-module Prayoga_lua = Vyakarana_lib__Prayoga_lua
-
-(** @canonical Vyakarana_lib.Prayoga_ocaml *)
-module Prayoga_ocaml = Vyakarana_lib__Prayoga_ocaml
-
 (** @canonical Vyakarana_lib.Prayoga_strudel *)
 module Prayoga_strudel = Vyakarana_lib__Prayoga_strudel
 
@@ -32,3 +26,6 @@ module Socket = Vyakarana_lib__Socket
 
 (** @canonical Vyakarana_lib.Verify *)
 module Verify = Vyakarana_lib__Verify
+
+(** @canonical Vyakarana_lib.Yantra *)
+module Yantra = Vyakarana_lib__Yantra

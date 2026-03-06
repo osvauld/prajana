@@ -1,0 +1,12 @@
+kosha sentence-pattern-conjunction
+
+  "sentence-pattern-swarupa domain-language-sthita"
+  "binding-yukta yukta-kriya"
+
+  -- pattern: "and" / "," joining two bindings (e.g. "mass is 10 and time is 5")
+  -- pattern: "," as separator (e.g. "mass is 10, time is 5")
+  -- result: multiple bindings joined into one set
+
+  shabda pattern:and-join pattern:comma-join role:conjunction result:binding-set
+
+done

@@ -1,0 +1,12 @@
+tantra floor
+
+  inputs
+    value  float
+
+  let
+    result = floor value
+
+  return
+    result  float
+
+done

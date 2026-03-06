@@ -1,0 +1,18 @@
+tantra rank-triples-by-intent
+
+  inputs
+    intent   string
+    triples  list
+
+  let
+    aadya = filter triples (fn t -> eq (firstness-of-triple intent t) "aadya")
+    anantara = filter triples (fn t -> eq (firstness-of-triple intent t) "anantara")
+    apara = filter triples (fn t -> eq (firstness-of-triple intent t) "apara")
+    anuvritta = filter triples (fn t -> eq (firstness-of-triple intent t) "anuvritta")
+
+    ranked = append aadya (append anantara (append apara anuvritta))
+
+  return
+    ranked  list
+
+done
