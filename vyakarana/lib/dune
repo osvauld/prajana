@@ -1,4 +1,26 @@
 (library
  (name vyakarana_lib)
  (libraries unix str)
- (modules proof_graph event verify om_parser setu anuvada prayoga prayoga_strudel socket yantra))
+ (modules
+   proof_graph
+   event
+   verify
+   om_parser
+   setu_shabda
+   setu
+   setu_classify
+   anuvada
+   prayoga
+   prayoga_strudel
+   socket
+   yantra_types
+   yantra_bigram
+   yantra_parser
+   yantra_inverter
+   yantra_index
+   yantra_resolver
+   yantra_ops
+   yantra_eval_primitives
+   yantra_pipeline_ops
+   yantra_eval
+   yantra))

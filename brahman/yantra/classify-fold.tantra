@@ -1,0 +1,27 @@
+tantra classify-fold
+
+  -- classify a list of raw word strings into typed token triples [word, kind, resolved].
+  -- replaces the old classify-all + join-bigrams two-step pipeline.
+  --
+  -- step 1: classify each word individually.
+  --   words in english-modifiers (kinetic, initial, electrical, ...) are tagged
+  --   as "modifier" — they are held for compound resolution.
+  --   all other words go through the normal classify op (number / operator /
+  --   grammar / concept / unknown via setu-classify-token).
+  --
+  -- step 2: run classify-fold-resolve (avrti — iterative compound resolution).
+  --   fold-pairs walks adjacent tokens and asks the graph whether combining
+  --   the resolved names produces a known node or alias.
+  --   repeats until no more merges occur (the list stops shrinking).
+
+  inputs
+    words  list
+
+  let
+    tokens = map words (fn w -> cond (exists (shabda "english-modifiers" w)) [w, "modifier", w] otherwise (classify w))
+    result = classify-fold-resolve tokens
+
+  return
+    result  list
+
+done

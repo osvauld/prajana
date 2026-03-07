@@ -1,0 +1,8 @@
+kosha op-class-relation
+
+  "yantra-swarupa sambandha-swarupa"
+  "dvi-ahara-swarupa satya-phala"
+
+shabda parse-arity:2 invariant:predicate returns:bool
+
+done

@@ -21,6 +21,12 @@ module Proof_graph = Vyakarana_lib__Proof_graph
 (** @canonical Vyakarana_lib.Setu *)
 module Setu = Vyakarana_lib__Setu
 
+(** @canonical Vyakarana_lib.Setu_classify *)
+module Setu_classify = Vyakarana_lib__Setu_classify
+
+(** @canonical Vyakarana_lib.Setu_shabda *)
+module Setu_shabda = Vyakarana_lib__Setu_shabda
+
 (** @canonical Vyakarana_lib.Socket *)
 module Socket = Vyakarana_lib__Socket
 
@@ -29,3 +35,33 @@ module Verify = Vyakarana_lib__Verify
 
 (** @canonical Vyakarana_lib.Yantra *)
 module Yantra = Vyakarana_lib__Yantra
+
+(** @canonical Vyakarana_lib.Yantra_bigram *)
+module Yantra_bigram = Vyakarana_lib__Yantra_bigram
+
+(** @canonical Vyakarana_lib.Yantra_eval *)
+module Yantra_eval = Vyakarana_lib__Yantra_eval
+
+(** @canonical Vyakarana_lib.Yantra_eval_primitives *)
+module Yantra_eval_primitives = Vyakarana_lib__Yantra_eval_primitives
+
+(** @canonical Vyakarana_lib.Yantra_index *)
+module Yantra_index = Vyakarana_lib__Yantra_index
+
+(** @canonical Vyakarana_lib.Yantra_inverter *)
+module Yantra_inverter = Vyakarana_lib__Yantra_inverter
+
+(** @canonical Vyakarana_lib.Yantra_ops *)
+module Yantra_ops = Vyakarana_lib__Yantra_ops
+
+(** @canonical Vyakarana_lib.Yantra_parser *)
+module Yantra_parser = Vyakarana_lib__Yantra_parser
+
+(** @canonical Vyakarana_lib.Yantra_pipeline_ops *)
+module Yantra_pipeline_ops = Vyakarana_lib__Yantra_pipeline_ops
+
+(** @canonical Vyakarana_lib.Yantra_resolver *)
+module Yantra_resolver = Vyakarana_lib__Yantra_resolver
+
+(** @canonical Vyakarana_lib.Yantra_types *)
+module Yantra_types = Vyakarana_lib__Yantra_types

@@ -3,6 +3,12 @@ tantra anuvada-ganana
   -- the meta-tantra: orchestrates the full parsing pipeline.
   -- takes a natural language sentence, classifies words using graph knowledge,
   -- resolves which tantra to use, and executes it.
+  --
+  -- pipeline: tokenise → classify-fold → yantra-plan-extraction →
+  --           yantra-plan-resolution → execute-plan → format-response
+  --
+  -- fallback: when computation yields nothing, the same classified tokens
+  --           are passed to anuvada for conceptual answer composition.
 
   inputs
     sentence  string
@@ -11,43 +17,55 @@ tantra anuvada-ganana
     -- step 1: split sentence into words
     words = tokenise sentence
 
-    -- step 2: classify each word via graph knowledge
-    tokens = classify-all words
+    -- step 2: classify and join bigrams (graph-driven compound resolution)
+    joined = classify-fold words
 
-    -- step 3: join adjacent words into bigrams where graph has a compound
-    joined = join-bigrams tokens
+    -- step 2b: detect query intents from sentence (used by both paths)
+    intents = query-intents sentence
 
-    -- step 4: match token sequence against sentence patterns (graph-driven)
-    -- returns "stored" format for assignments, extraction format for queries
-    extraction = match-sentence-patterns joined
+    -- step 3: extract target and bindings from classified tokens
+    extraction = yantra-plan-extraction joined
 
-    -- step 4b: detect stored (assignment) vs query case
+    -- step 3b: detect stored (assignment) vs query case
     stored-flag = eq (nth extraction 0) "stored"
 
-    -- step 5: get the target (first element of extraction list) for query case
+    -- step 4: get the target for query case
     raw-target = cond (stored-flag) "" otherwise (nth extraction 0)
 
-    -- step 5b: if target is empty, find an operator concept or symbol
+    -- step 4b: if target is empty, find an operator concept or symbol
     concept-target = first-match joined (fn tok -> cond (and (eq (nth tok 1) "concept") (is-tantra (nth tok 2))) (nth tok 2) otherwise _none)
 
-    -- step 5c: if no concept, try operator symbol via graph
+    -- step 4c: if no concept, try operator symbol via graph
     op-target = first-match joined (fn tok -> cond (eq (nth tok 1) "operator") (shabda "chihna-ganaka" (nth tok 2)) otherwise _none)
 
-    -- step 5d: pick the right target
+    -- step 4d: pick the right target
     target = cond (stored-flag) "" (neq raw-target "") raw-target (exists concept-target) concept-target (exists op-target) op-target otherwise ""
 
-    -- step 6: resolve which tantra to use (only meaningful for query case)
-    resolution = resolve-tantra target extraction
+    -- step 5: resolve which tantra to use via policy planner
+    plan = yantra-plan-resolution target extraction joined
 
-    -- step 7: execute the resolved tantra, getting raw result data [kind;name;value;unit;attr]
-    raw-result = invoke-tantra resolution
+    -- step 6: execute the plan, getting raw result data [kind;name;value;unit;attr]
+    raw-result = execute-plan plan
 
-    -- step 8: pick stored extraction or computed result
+    -- step 7: pick stored extraction or computed result
     final-result = cond (stored-flag) extraction otherwise raw-result
 
-    -- step 9: format the response using format-response tantra
-    -- returns "" for errors (falls through to anuvada reasoning)
-    result = cond (eq (nth final-result 0) "error") "" otherwise (format-response final-result)
+    -- step 8: format the response using format-response tantra
+    formatted = format-response final-result
+
+    -- step 8b: distinguish real partial-input errors from "no target found" noise
+    -- "exists but" in the reason means a tantra was found but inputs are missing → show error
+    -- but suppress that error when intent is "identity" (definitional query: "what is X")
+    -- in that case fall through to anuvada for a conceptual graph answer
+    error-reason = nth final-result 1
+    is-missing-input-error = and (eq (nth final-result 0) "error") (gt (length (split error-reason "exists but")) 1)
+    has-identity-intent = gt (length (filter intents (fn i -> eq i "identity"))) 0
+    is-real-error = and is-missing-input-error (not has-identity-intent)
+    is-any-error = eq (nth final-result 0) "error"
+    computed = cond (is-real-error) formatted (and (neq formatted "") (not is-any-error)) formatted otherwise ""
+
+    -- step 9: if computation yielded nothing, compose conceptual answer via anuvada
+    result = cond (neq computed "") computed otherwise (anuvada joined intents)
 
   return
     result  string

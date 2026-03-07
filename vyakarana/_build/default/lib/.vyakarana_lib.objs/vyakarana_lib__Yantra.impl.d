@@ -1,1 +1,1 @@
-lib/yantra.ml: Anuvada Array Buffer Filename Float Fun Hashtbl List Option Printexc Printf Proof_graph Queue Seq Setu Str String Sys
+lib/yantra.ml: Buffer Hashtbl List Printf Proof_graph Setu String Yantra_bigram Yantra_eval Yantra_eval_primitives Yantra_index Yantra_parser Yantra_resolver Yantra_types

@@ -224,10 +224,9 @@ let load_dir ?(emit_meta = true) dir (k : proof_graph) : proof_graph * int * int
     | None ->
       incr skipped
   ) (om_files_recursive dir);
-  (* run satya-ganana: avrti convergence *)
-  let iterations = satya_ganana !k_ref in
-  if emit_meta then
-    Printf.printf "truth-scoring (satya-ganana): %d spiral-passes (avrti)\n%!" iterations;
+  (* set raw_satya as structural prior on every node *)
+  Proof_graph.init_satya !k_ref;
+  ignore emit_meta;
   (!k_ref, !loaded, !skipped)
 
 (* load multiple directories into one graph — unified namespace
@@ -259,8 +258,7 @@ let load_dirs ?(emit_meta = true) (dirs : string list) (k : proof_graph) : proof
   let kosha_dir = if kosha_dir = "" then (match List.rev dirs with d :: _ -> d | [] -> "") else kosha_dir in
   !k_ref.kosha_root := kosha_dir;
   !k_ref.search_dirs := dirs;
-  (* run satya-ganana once on the unified graph *)
-  let iterations = satya_ganana !k_ref in
-  if emit_meta then
-    Printf.printf "truth-scoring (satya-ganana): %d spiral-passes (avrti)\n%!" iterations;
+  (* set raw_satya as structural prior on every node *)
+  Proof_graph.init_satya !k_ref;
+  ignore emit_meta;
   (!k_ref, !loaded, !skipped)

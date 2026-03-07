@@ -30,7 +30,7 @@ tantra query-intents
     has-parampara = gt (length (filter words (fn w -> eq w "parampara"))) 0
     has-samskaara = gt (length (filter words (fn w -> eq w "samskaara"))) 0
 
-    i-identity = cond (or has-what has-is)
+    i-identity = cond (and has-what has-is)
       (split "identity" ",")
       otherwise (split "" ",")
 
@@ -51,7 +51,7 @@ tantra query-intents
       otherwise (split "" ",")
 
     intents0 = append i-identity (append i-origin (append i-process (append i-consequence i-transmission)))
-    intents = cond (gt (length intents0) 0) intents0 otherwise (split "identity" ",")
+    intents = intents0
 
   return
     intents  list

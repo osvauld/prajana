@@ -1,0 +1,16 @@
+kosha english-modifiers
+
+  "domain-language-sthita yantra-english-sthita"
+  "visheshanam-swarupa pada-yukta"
+  "artha-yukta compound-phala"
+
+  -- adjective/qualifier words that are incomplete alone.
+  -- meaning arrives only when combined with the next concept.
+  -- fold rule: hold this word, combine with the following concept node.
+  -- e.g. "kinetic" + "energy" → kinetic-energy
+  --      "initial" + "velocity" → initial-velocity
+  --      "electrical" + "energy" → electrical-energy
+
+  shabda kinetic:modifier initial:modifier final:modifier electrical:modifier angular:modifier potential:modifier universal:modifier coulomb:modifier total:modifier net:modifier average:modifier relative:modifier terminal:modifier escape:modifier orbital:modifier linear:modifier rotational:modifier thermal:modifier internal:modifier maximum:modifier minimum:modifier centripetal:modifier
+
+done

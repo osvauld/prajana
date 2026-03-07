@@ -1,34 +1,41 @@
 tantra anuvada
 
+  -- conceptual answer composition.
+  -- takes already-classified joined tokens (from classify-fold),
+  -- extracts concept seeds, walks graph edges, composes English answer.
+  --
+  -- pipeline: joined → seeds → nearby → compose-answer → result
+  --
+  -- called by anuvada-ganana when the computational pipeline yields nothing.
+
   inputs
-    sentence  string
+    joined   list
+    intents  list
 
   let
-    intents     = query-intents sentence
-    has-process = gt (length (filter intents (fn i -> eq i "process"))) 0
-    raw-words   = tokenise sentence
-    lower-words = map raw-words (fn w -> lower w)
-    has-work    = gt (length (filter lower-words (fn w -> eq w "work"))) 0
-    -- context shift: try joining adjacent words before classifying
-    words       = try-bigram raw-words
-    tokens      = classify-all words
+    -- extract concept seeds from classified tokens
+    content      = filter joined (fn t -> eq (nth t 1) "concept")
+    seeds0       = map content (fn t -> nth t 2)
 
-    joined      = join-bigrams tokens
-    content     = filter joined (fn t -> eq (nth t 1) "concept")
-    seeds0      = map content (fn t -> nth t 2)
+    -- gate: if process+work present and multiple seeds, focus on primary
+    has-process  = gt (length (filter intents (fn i -> eq i "process"))) 0
+    has-work     = gt (length (filter joined (fn t -> eq (nth t 2) "work"))) 0
     primary-seed = cond (gt (length seeds0) 0) (split (nth seeds0 0) ",") otherwise (split "" ",")
-    should-gate = and has-process has-work (gt (length seeds0) 1)
-    seeds       = cond (should-gate) primary-seed otherwise seeds0
-    abheda-exp  = flatten (map seeds (fn s -> abheda-of s))
-    all-seeds   = append seeds abheda-exp
+    should-gate  = and has-process has-work (gt (length seeds0) 1)
+    seeds        = cond (should-gate) primary-seed otherwise seeds0
 
+    -- expand seeds via abheda equivalences
+    abheda-exp   = flatten (map seeds (fn s -> abheda-of s))
+    all-seeds    = append seeds abheda-exp
+
+    -- score nearby nodes by context proximity
     all-incoming = flatten (map all-seeds (fn s -> incoming-to s))
     incoming-src = map all-incoming (fn e -> nth e 0)
     scored-in    = map incoming-src (fn n -> pair n (context-score n all-seeds))
     top-scored   = sort-desc scored-in
     nearby-nodes = unique (map top-scored (fn sp -> nth sp 0))
 
-    -- concise answer: compose from leaf to root via morphism
+    -- compose answer from graph structure
     result = cond (gt (length seeds) 0)
       (compose-answer seeds nearby-nodes intents)
       otherwise "asprista"

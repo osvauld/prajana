@@ -1,0 +1,30 @@
+tantra yantra-plan-extraction
+
+  -- policy-facing extraction stage.
+  -- minimal version for debugging
+
+  inputs
+    joined  list
+
+  let
+    binding-triples = fold-triples joined (fn a b c -> cond (and (eq (nth a 1) "concept") (or (eq (nth b 2) "is") (eq (nth b 2) "=")) (eq (nth c 1) "number")) (pair "binding" (bind (nth a 2) (nth c 2))) (and (eq (nth a 1) "unknown") (or (eq (nth b 2) "is") (eq (nth b 2) "=")) (eq (nth c 1) "number")) (pair "binding" (bind (nth a 0) (nth c 2))) otherwise _none)
+    target-triples = fold-triples joined (fn a b c -> cond (and (or (eq (nth a 2) "what") (eq (nth a 2) "when")) (eq (nth b 2) "is") (eq (nth c 1) "concept")) (pair "target" (nth c 2)) (and (has (nth a 2) "kriya-yantra") (eq (nth b 1) "concept")) (pair "target" (nth b 2)) otherwise _none)
+    binding-items = filter binding-triples (fn item -> eq (nth item 0) "binding")
+    bindings = map binding-items (fn item -> nth item 1)
+    target-items = filter target-triples (fn item -> eq (nth item 0) "target")
+    explicit-target = cond (gt (length target-items) 0) (nth (nth target-items 0) 1) otherwise ""
+    bound-names = map bindings (fn b -> nth b 0)
+    lone-candidates = filter joined (fn tok -> cond (not (eq (nth tok 1) "concept")) false (first-match bound-names (fn name -> cond (eq name (nth tok 2)) true otherwise false)) false otherwise true)
+    fallback-target = first-match lone-candidates (fn tok -> cond (is-tantra (nth tok 2)) (nth tok 2) otherwise _none)
+    target = cond (neq explicit-target "") explicit-target (exists fallback-target) fallback-target otherwise ""
+    session = session-bindings _none
+    session-extra = filter session (fn sb -> not (first-match bound-names (fn name -> cond (eq name (nth sb 0)) name otherwise _none)))
+    all-bindings = append bindings session-extra
+    is-assignment = and (eq target "") (gt (length bindings) 0)
+    _stored = cond (is-assignment) (remember-bindings bindings) otherwise _none
+    extraction = cond (is-assignment) _stored (neq target "") (append (append target all-bindings) _none) otherwise _none
+
+  return
+    extraction  list
+
+done
