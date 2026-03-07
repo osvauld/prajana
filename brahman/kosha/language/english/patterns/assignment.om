@@ -1,0 +1,13 @@
+kosha sentence-pattern-assignment
+
+  "sentence-pattern-swarupa domain-language-sthita"
+  "assignment-abheda binding-phala"
+  "identifier-sthita value-sthita"
+
+  -- pattern: concept swarupa number  (e.g. "mass is 10")
+  -- pattern: concept = number        (e.g. "mass = 10")
+  -- result: binding (name = concept, value = number)
+
+  shabda pattern:concept-swarupa-number pattern:concept-equals-number role:assignment result:binding
+
+done

@@ -1,0 +1,7 @@
+kosha op-resolve-chain
+
+  "op-class-pipeline-kriya"
+
+shabda name:resolve-chain parse-arity:3
+
+done

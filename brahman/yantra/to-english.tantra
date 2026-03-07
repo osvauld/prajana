@@ -16,7 +16,7 @@ tantra to-english
     known  = exists hit
     own    = shabda node "name"
     result = cond (neq own "") own
-      (known node)
+      (known) node
       otherwise "asprista"
 
   return

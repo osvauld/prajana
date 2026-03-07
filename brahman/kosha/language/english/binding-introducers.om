@@ -1,0 +1,15 @@
+kosha english-binding-introducers
+
+  "domain-language-sthita yantra-english-sthita"
+  "grammar-swarupa ahara-yukta"
+  "yantra-plan-extraction-yukta binding-phala"
+
+  -- words that signal: what follows is a set of known values (bindings).
+  -- in "force when mass is 10 and acceleration is 2":
+  --   "when" is the boundary between target and bindings.
+  -- the fold transitions from target-collection mode to binding-collection mode
+  -- when one of these words is observed.
+
+  shabda when:binding-start given:binding-start if:binding-start assuming:binding-start where:binding-start suppose:binding-start supposing:binding-start provided:binding-start knowing:binding-start with:binding-start
+
+done

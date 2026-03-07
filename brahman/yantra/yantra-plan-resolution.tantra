@@ -1,0 +1,89 @@
+tantra yantra-plan-resolution
+
+  -- policy-facing resolution stage.
+  -- output is a structured pair-record plan.
+  -- planner selects strategy in tantra from runtime candidate primitives.
+
+  inputs
+    target      string
+    extraction  list
+    joined      list
+
+  let
+    -- planner policy defaults from graph (string-based config values)
+    cfg-chain-depth    = to-number (shabda "yantra-policy" "chain-depth-limit")
+    cfg-chain-branch   = to-number (shabda "yantra-policy" "chain-branch-limit")
+    cfg-candidate-max  = to-number (shabda "yantra-policy" "candidate-limit")
+    cfg-prefer-direct  = eq (shabda "yantra-policy" "prefer-direct") "true"
+    cfg-prefer-inverse = eq (shabda "yantra-policy" "prefer-inverse") "true"
+    cfg-prefer-chain   = eq (shabda "yantra-policy" "prefer-chain") "true"
+    cfg-allow-inverse  = eq (shabda "yantra-policy" "allow-inverse") "true"
+    cfg-allow-chain    = eq (shabda "yantra-policy" "allow-chain") "true"
+
+    -- placeholder hook to mark joined as intentionally part of planning context.
+    _planner-context-size = length joined
+
+    direct-cands = resolve-direct target extraction
+    inverse-cands-all = resolve-inverse target extraction
+    inverse-cands = cond (cfg-allow-inverse) inverse-cands-all otherwise _none
+    chain-steps-all = resolve-chain target extraction cfg-chain-depth
+    chain-steps = cond (cfg-allow-chain) chain-steps-all otherwise _none
+
+    has-direct = gt (length direct-cands) 0
+    has-inverse = gt (length inverse-cands) 0
+    has-chain = gt (length chain-steps) 0
+
+    mode = cond
+      (and cfg-prefer-direct has-direct) "direct"
+      (and cfg-prefer-inverse has-inverse) "inverse"
+      (and cfg-prefer-chain has-chain) "chain"
+      (has-direct) "direct"
+      (has-inverse) "inverse"
+      (has-chain) "chain"
+      otherwise "error"
+
+    steps = cond
+      (eq mode "direct") (nth direct-cands 0)
+      (eq mode "inverse") (nth inverse-cands 0)
+      (eq mode "chain") chain-steps
+      otherwise _none
+
+    r-reason = cond (eq mode "error") (resolve-reason target extraction) otherwise ""
+
+    p-mode            = pair "mode" mode
+    p-target          = pair "target" target
+    p-steps           = pair "steps" steps
+    p-reason          = pair "reason" r-reason
+    p-chain-depth     = pair "chain-depth-limit" cfg-chain-depth
+    p-chain-branch    = pair "chain-branch-limit" cfg-chain-branch
+    p-candidate-max   = pair "candidate-limit" cfg-candidate-max
+    p-prefer-direct   = pair "prefer-direct" cfg-prefer-direct
+    p-prefer-inverse  = pair "prefer-inverse" cfg-prefer-inverse
+    p-prefer-chain    = pair "prefer-chain" cfg-prefer-chain
+    p-allow-inverse   = pair "allow-inverse" cfg-allow-inverse
+    p-allow-chain     = pair "allow-chain" cfg-allow-chain
+
+    plan = append
+      (append
+        (append
+          (append
+            (append
+              (append
+                (append
+                  (append
+                    (append
+                      (append p-mode p-target)
+                      p-steps)
+                    p-chain-depth)
+                  p-chain-branch)
+                p-candidate-max)
+              p-prefer-direct)
+            p-prefer-inverse)
+          p-prefer-chain)
+        p-allow-inverse)
+      (append p-allow-chain p-reason)
+
+  return
+    plan  list
+
+done

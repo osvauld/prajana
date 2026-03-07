@@ -333,7 +333,9 @@ let context_proximity (k : proof_graph) (candidate : string) (context : string) 
   ) 0 cn in
   direct_bonus + (shared * 300)
 
-let to_english ?(context : string option = None) (k : proof_graph) (name : string) : string =
+let to_english ?(context : string option = None)
+               ?(ppr : (string, float) Hashtbl.t option = None)
+               (k : proof_graph) (name : string) : string =
   let english_names = Hashtbl.fold (fun source n acc ->
     let has_abheda = List.exists (fun e ->
       e.target = name && e.relation = Abheda
@@ -366,7 +368,14 @@ let to_english ?(context : string option = None) (k : proof_graph) (name : strin
         | None -> 0
         | Some ctx -> context_proximity k candidate ctx
       in
-      ratio + len_bonus - sloka_penalty - structure_penalty + context_bonus
+      let ppr_bonus = match ppr with
+        | None -> 0
+        | Some tbl ->
+          (match Hashtbl.find_opt tbl candidate with
+           | Some s -> int_of_float (s *. 500.0)
+           | None   -> 0)
+      in
+      ratio + len_bonus - sloka_penalty - structure_penalty + context_bonus + ppr_bonus
   in
   let pick_best names =
     match names with

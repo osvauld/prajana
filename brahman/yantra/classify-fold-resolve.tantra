@@ -1,0 +1,27 @@
+tantra classify-fold-resolve
+
+  -- avrti (iterative compound resolution) over classified token triples.
+  -- called by classify-fold after initial per-word classification.
+  -- calls itself recursively when merges occur — the deepening return.
+  --
+  -- fold-pairs walks adjacent tokens. for each pair (a, b):
+  --   if a is a modifier/concept/unknown, try compound a-resolved "-" b-resolved
+  --   check graph (lookup) and aliases (shabda "aliases").
+  --   if compound is found: merge into one concept token.
+  --   if not: keep a, retry from b.
+  --
+  -- when the list shrinks (a merge happened), apply again (avrti).
+  -- when stable, return.
+
+  inputs
+    tokens  list
+
+  let
+    merged = fold-pairs tokens (fn a b -> cond (and (or (eq (nth a 1) "modifier") (eq (nth a 1) "concept") (eq (nth a 1) "unknown")) (or (exists (lookup (concat (nth a 2) "-" (nth b 2)))) (exists (shabda "aliases" (concat (nth a 2) "-" (nth b 2)))))) [concat (nth a 0) " " (nth b 0), "concept", cond (exists (lookup (concat (nth a 2) "-" (nth b 2)))) (name (lookup (concat (nth a 2) "-" (nth b 2)))) otherwise (shabda "aliases" (concat (nth a 2) "-" (nth b 2)))] otherwise _none)
+    changed = neq (length merged) (length tokens)
+    result = cond (changed) (classify-fold-resolve merged) otherwise merged
+
+  return
+    result  list
+
+done

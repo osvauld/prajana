@@ -1,0 +1,25 @@
+kosha english-prepositions
+
+  "domain-language-sthita yantra-english-sthita"
+  "sambandha-swarupa pada-yukta"
+  "artha-yukta"
+
+  -- structural words that connect concepts and indicate relationships.
+  -- these carry positional/relational meaning between the words around them.
+  -- e.g. "speed of light" → light is the context/domain of speed
+  --      "angle at impact" → impact is the point/instant of angle
+  --      "force between charges" → charges are the objects; force is the relation
+  --      "distance from source" → source is the reference point of distance
+  --
+  -- fold rule: a preposition connects the preceding concept to the following one.
+  -- "of" → possession / domain membership (sthita)
+  -- "at" → point of observation / instantiation
+  -- "between" → two objects in relation
+  -- "from" → origin / reference (janya)
+  -- "to" / "into" → direction / target (phala)
+  -- "through" → medium / path (kriya)
+  -- "across" → span / extent
+
+  shabda of:sthita at:sthita between:yukta from:janya to:phala into:phala through:kriya across:kriya upon:sthita against:viparita along:kriya toward:phala within:sthita above:yukta below:yukta beyond:yukta
+
+done
