@@ -379,7 +379,10 @@ let () =
               Proof_graph.register_vish_props v { existing with Proof_graph.vp_satya_weight = w })
          | _ -> ()
        ) (Yantra.as_list result));
-   (* set the graph ref for legacy invert_expr calls *)
+   (* materialize CSR adjacency for cache-friendly PPR SpMV.
+     called after entropy weights are finalized so out_rel_count × weights is correct. *)
+  Proof_graph.materialize_csr k0;
+  (* set the graph ref for legacy invert_expr calls *)
   Yantra._graph_ref := Some k0;
   let tantra_count = List.length !(yantra_idx.all_tantras) in
   let constant_count = Hashtbl.length yantra_idx.constants in

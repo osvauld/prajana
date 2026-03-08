@@ -476,6 +476,40 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
          VBool (List.exists (fun v -> as_string v = tname) names)
        | _ -> VBool false)
 
+  (* ppr: seed-pairs × target × binding-names → [(name, score)] sorted descending.
+     calls the CSR-backed run_ppr. seed-pairs is a list of [VList[VString,VFloat]
+     or VBinding(name,weight)]. binding-names is a list of VString.
+     returns VList of VBinding(name, score) sorted by score descending. *)
+  | "ppr" ->
+    let seeds_v    = as_list (e_eval k e (List.nth args 0)) in
+    let target     = as_string (e_eval k e (List.nth args 1)) in
+    let bindings_v = as_list (e_eval k e (List.nth args 2)) in
+    let seed_nodes = List.filter_map (fun v ->
+      match v with
+      | VList [VString nm; w]  -> Some (nm, as_float w)
+      | VBinding (nm, w)        -> Some (nm, w)
+      | VPair (nm, w)           -> Some (nm, as_float w)
+      | _                       -> None
+    ) seeds_v in
+    let binding_names = List.filter_map (fun v ->
+      match v with
+      | VString s    -> Some s
+      | VBinding (s,_) -> Some s
+      | _              -> None
+    ) bindings_v in
+    let scores = Proof_graph.run_ppr k ~seed_nodes ~target ~binding_names in
+    let pairs = Hashtbl.fold (fun name score acc -> (name, score) :: acc) scores [] in
+    let sorted = List.sort (fun (_, a) (_, b) -> Float.compare b a) pairs in
+    Some (VList (List.map (fun (nm, s) -> VBinding (nm, s)) sorted))
+
+  (* graph-node-count: () → float — number of nodes in the proof graph *)
+  | "graph-node-count" ->
+    Some (VFloat (float_of_int (Hashtbl.length k.nodes)))
+
+  (* graph-edge-count: () → float — number of edges in the proof graph *)
+  | "graph-edge-count" ->
+    Some (VFloat (float_of_int (List.length !(k.all_edges))))
+
   | _ -> None
 
 (* ---- eval_call: primitive operation dispatch ---- *)

@@ -2,7 +2,11 @@
    nodes are nigamana. edges are typed by visheshanam.
    satya is set from local structure at load time (raw_satya / init_satya).
    query-time PPR (run_ppr) produces a posterior score landscape per query.
-   the graph holds the truths. the LLM interprets them. *)
+   the graph holds the truths. the LLM interprets them.
+
+   PPR uses a CSR (Compressed Sparse Row) representation of the incoming-edge
+   adjacency, materialized once after build_index by materialize_csr.
+   per-query cost: O(N×10) conductance derivation + O(E×iters) SpMV, zero allocation. *)
 
 (* visheshanam — edge types from Sanskrit grammar *)
 type visheshanam =
@@ -34,11 +38,42 @@ type nigamana = {
   shabda : string;            (* key:value mapping data — target-domain rendering *)
 }
 
+(* ---- visheshanam ↔ integer index (0-9) ---- *)
+(* fixed mapping, matches the 10-element conductance/weight arrays *)
+
+let visheshanam_to_idx = function
+  | Swarupa -> 0 | Abheda -> 1 | Drishthanta -> 2 | Sthita -> 3 | Yukta -> 4
+  | Siddha -> 5  | Kriya -> 6  | Phala -> 7        | Janya -> 8  | Pratipaksha -> 9
+
+let num_relations = 10
+
+(* ---- CSR adjacency — materialized once at startup ---- *)
+(* represents the incoming-edge adjacency of the proof graph in Compressed Sparse Row form.
+   this is the transpose of the usual adjacency: for PPR we walk incoming edges.
+   algebraically: A^T where A[u,v] = conductance(rel(u,v)) / out_cond(u).
+   equivalent to matrix-multiplication (map-janya fold-janya dot-product-kriya)
+   over the sparse graph tensor. *)
+type csr_adjacency = {
+  csr_n             : int;                       (* node count N *)
+  csr_nnz           : int;                       (* edge count E = |all_edges| *)
+  csr_node_to_idx   : (string, int) Hashtbl.t;   (* name → row index 0..N-1 *)
+  csr_idx_to_node   : string array;              (* row index → name, length N *)
+  csr_in_row_ptr    : int array;                 (* length N+1; row i spans [ptr[i], ptr[i+1]) *)
+  csr_in_col_idx    : int array;                 (* length E; source node index per incoming edge *)
+  csr_in_rel_idx    : int array;                 (* length E; relation type 0-9 per incoming edge *)
+  (* out_rel_count.(u * num_relations + r) = # outgoing edges of type r from node u.
+     used per-query to derive out_cond[u] = Σ_r count[u,r] × weights[r] in O(N×10). *)
+  csr_out_rel_count : int array;                 (* length N × num_relations *)
+  csr_node_satya    : float array;               (* length N; raw_satya per node for PPR init *)
+}
+
+(* ---- proof_graph ---- *)
 type proof_graph = {
   nodes       : (string, nigamana) Hashtbl.t;
   all_edges   : typed_edge list ref;
   kosha_root  : string ref;   (* base path for resolving shabda-tmpl files *)
   search_dirs : string list ref; (* all loaded dirs — searched for shabda-tmpl files *)
+  csr         : csr_adjacency option ref;  (* None until materialize_csr is called *)
 }
 
 (* ---- visheshanam properties (populated from .om files at startup) ---- *)
@@ -115,6 +150,7 @@ let empty () : proof_graph = {
   all_edges   = ref [];
   kosha_root  = ref "";
   search_dirs = ref [];
+  csr         = ref None;
 }
 
 (* join a nigamana into the space — merge edges, never overwrite *)
@@ -258,32 +294,108 @@ let compute_visheshanam_entropy_weights (k : proof_graph) : unit =
     register_vish_props rel { existing with vp_satya_weight = w }
   ) raw_pairs
 
-(* ---- PPR engine: structure-driven Personalized PageRank ---- *)
+(* ---- CSR materialization ---- *)
 
-(* compute_seed_conductances: derive per-relation conductance from seed neighbourhood.
-   seed_edge_freq(relation) = count(relation in edges of seed nodes) / total_seed_edges
-   conductance(relation) = vp_satya_weight(relation) × (1 + seed_edge_freq(relation))
-   Seed-heavy relations get a contextual boost — no hardcoded question-type table. *)
-let compute_seed_conductances (k : proof_graph) (seed_nodes : (string * float) list)
-    : visheshanam -> float =
-  let freq : (visheshanam, int) Hashtbl.t = Hashtbl.create 16 in
-  let total = ref 0 in
-  List.iter (fun (name, _weight) ->
+(* materialize_csr: build CSR arrays from the frozen all_edges list.
+   called once after build_index + compute_visheshanam_entropy_weights.
+   after this call, !(k.csr) = Some csr and run_ppr uses the CSR path.
+
+   pass 1: assign integer indices to all nodes in k.nodes.
+   pass 2: count incoming edges per target node → in_counts[N].
+   pass 3: prefix-sum in_counts → in_row_ptr[N+1].
+   pass 4: fill in_col_idx and in_rel_idx; accumulate out_rel_count.
+   pass 5: fill node_satya from each node's satya field.
+   assert invariants: ptr[0]=0, ptr[N]=E, all indices in bounds.
+   print stats. *)
+let materialize_csr (k : proof_graph) : unit =
+  let edges = !(k.all_edges) in
+  let n = Hashtbl.length k.nodes in
+  let nnz = List.length edges in
+
+  (* pass 1: assign indices to nodes — deterministic order via sorted names *)
+  let node_to_idx : (string, int) Hashtbl.t = Hashtbl.create (n * 2) in
+  let idx_to_node : string array = Array.make n "" in
+  let sorted_names =
+    Hashtbl.fold (fun name _ acc -> name :: acc) k.nodes []
+    |> List.sort String.compare
+  in
+  List.iteri (fun i name ->
+    Hashtbl.replace node_to_idx name i;
+    idx_to_node.(i) <- name
+  ) sorted_names;
+
+  (* pass 2: count incoming edges per target node *)
+  let in_counts = Array.make n 0 in
+  List.iter (fun (e : typed_edge) ->
+    match Hashtbl.find_opt node_to_idx e.target with
+    | Some ti -> in_counts.(ti) <- in_counts.(ti) + 1
+    | None    -> ()   (* target not in graph — skip *)
+  ) edges;
+
+  (* pass 3: prefix-sum → in_row_ptr *)
+  let in_row_ptr = Array.make (n + 1) 0 in
+  for i = 0 to n - 1 do
+    in_row_ptr.(i + 1) <- in_row_ptr.(i) + in_counts.(i)
+  done;
+  (* in_row_ptr.(n) should equal the number of edges whose target is in the graph *)
+  let actual_nnz = in_row_ptr.(n) in
+
+  (* pass 4: fill CSR arrays using insertion pointers *)
+  let in_col_idx    = Array.make actual_nnz 0 in
+  let in_rel_idx    = Array.make actual_nnz 0 in
+  let out_rel_count = Array.make (n * num_relations) 0 in
+  let insert_ptr    = Array.copy in_row_ptr in  (* insertion cursors per row *)
+  List.iter (fun (e : typed_edge) ->
+    let ri = visheshanam_to_idx e.relation in
+    (* incoming edge: fills the target's row in the CSR *)
+    (match Hashtbl.find_opt node_to_idx e.target with
+     | Some ti ->
+       let pos = insert_ptr.(ti) in
+       in_col_idx.(pos) <- (match Hashtbl.find_opt node_to_idx e.source with
+         | Some si -> si
+         | None    -> 0);  (* source not in graph: use index 0 as sentinel, weight ~0 *)
+       in_rel_idx.(pos) <- ri;
+       insert_ptr.(ti) <- pos + 1
+     | None -> ());
+    (* outgoing edge: accumulate out_rel_count for the source *)
+    (match Hashtbl.find_opt node_to_idx e.source with
+     | Some si -> out_rel_count.(si * num_relations + ri) <- out_rel_count.(si * num_relations + ri) + 1
+     | None    -> ())
+  ) edges;
+
+  (* pass 5: fill node_satya *)
+  let node_satya = Array.make n 0.0 in
+  Array.iteri (fun i name ->
     match Hashtbl.find_opt k.nodes name with
-    | None -> ()
-    | Some n ->
-      List.iter (fun e ->
-        let prev = match Hashtbl.find_opt freq e.relation with Some c -> c | None -> 0 in
-        Hashtbl.replace freq e.relation (prev + 1);
-        incr total
-      ) n.edges
-  ) seed_nodes;
-  let total_f = float_of_int (max 1 !total) in
-  fun rel ->
-    let base_weight = (vish_props_of rel).vp_satya_weight in
-    let count = match Hashtbl.find_opt freq rel with Some c -> c | None -> 0 in
-    let seed_freq = float_of_int count /. total_f in
-    base_weight *. (1.0 +. seed_freq)
+    | Some nd -> node_satya.(i) <- nd.satya
+    | None    -> ()
+  ) idx_to_node;
+
+  (* assertions *)
+  assert (in_row_ptr.(0) = 0);
+  assert (in_row_ptr.(n) = actual_nnz);
+  Array.iter (fun idx -> assert (idx >= 0 && idx < n)) in_col_idx;
+  Array.iter (fun r   -> assert (r   >= 0 && r   < num_relations)) in_rel_idx;
+
+  let csr = {
+    csr_n             = n;
+    csr_nnz           = actual_nnz;
+    csr_node_to_idx   = node_to_idx;
+    csr_idx_to_node   = idx_to_node;
+    csr_in_row_ptr    = in_row_ptr;
+    csr_in_col_idx    = in_col_idx;
+    csr_in_rel_idx    = in_rel_idx;
+    csr_out_rel_count = out_rel_count;
+    csr_node_satya    = node_satya;
+  } in
+  k.csr := Some csr;
+  let density = if n > 0 then
+    float_of_int actual_nnz /. (float_of_int n *. float_of_int n *. float_of_int num_relations) *. 100.0
+  else 0.0 in
+  Printf.printf "csr: materialized %d nodes, %d edges (of %d total), density %.4f%%\n%!"
+    n actual_nnz nnz density
+
+(* ---- PPR engine: structure-driven Personalized PageRank ---- *)
 
 (* compute_depth_affinity: derive BFS-vs-PPR blend from query graph structure.
    Three signals:
@@ -326,25 +438,68 @@ let compute_depth_affinity (k : proof_graph) (target : string)
   if product <= 0.0 then 0.0
   else Float.min 1.0 (product ** (1.0 /. 3.0))
 
-(* run_ppr: query-time Personalized PageRank.
-   Produces a posterior score table focused on the query (target + binding_names).
+(* run_ppr: query-time Personalized PageRank using precomputed CSR adjacency.
    Algorithm:
-     1. Derive per-relation conductances from seed neighbourhood.
-     2. Normalise seed to sum 1.
-     3. Build out-conductance index.
-     4. Iterate: p_new(v) = α×seed(v) + (1-α)×Σ_{u→v} p(u)×cond(u→v)/out_cond(u)
-     5. Stop at max_delta < 0.001 or 50 iterations.
-   alpha = 0.30 (restart probability — the only hardcoded constant, mathematical).
-   Returns (string, float) Hashtbl.t: posterior PPR score per node. *)
+     1. Derive per-relation conductances from seed neighbourhood (O(|seed_edges|)).
+     2. Derive per-node out_cond from out_rel_count × weights (O(N×10)).
+     3. Normalize seed to float array[N] (O(N)).
+     4. Initialize score vector from seed (O(N)).
+     5. Iterate SpMV: p_new[v] = α×seed[v] + (1-α)×Σ_{u→v} p[u]×w[r]/out_cond[u]
+        until max_delta < 0.001 or 50 iterations.
+     6. Build result Hashtbl from score array (O(N)).
+   alpha = 0.30 (restart probability).
+   Requires materialize_csr to have been called; raises Failure otherwise. *)
 let run_ppr (k : proof_graph)
     ~(seed_nodes : (string * float) list)
     ~(target : string)
     ~(binding_names : string list)
     : (string, float) Hashtbl.t =
+  let csr = match !(k.csr) with
+    | Some c -> c
+    | None   -> failwith "run_ppr: CSR not materialized — call Proof_graph.materialize_csr after build_index"
+  in
+  let n     = csr.csr_n in
   let alpha = 0.30 in
-  (* 1. structure-derived conductances *)
-  let conductance = compute_seed_conductances k seed_nodes in
-  (* 2. normalise seed to sum 1 *)
+
+  (* 1. derive per-relation conductances from seed neighbourhood.
+        seed_edge_freq(r) = # edges of type r touching seed nodes / total seed edges
+        weights[r] = vp_satya_weight(r) × (1 + seed_edge_freq(r)) *)
+  let freq  = Array.make num_relations 0 in
+  let total_seed_edges = ref 0 in
+  List.iter (fun (name, _) ->
+    match Hashtbl.find_opt k.nodes name with
+    | None -> ()
+    | Some nd ->
+      List.iter (fun e ->
+        let r = visheshanam_to_idx e.relation in
+        freq.(r) <- freq.(r) + 1;
+        incr total_seed_edges
+      ) nd.edges
+  ) seed_nodes;
+  let total_f = float_of_int (max 1 !total_seed_edges) in
+  let weights = Array.init num_relations (fun r ->
+    (* reconstruct visheshanam from index for vish_props lookup *)
+    let vish = match r with
+      | 0 -> Swarupa | 1 -> Abheda | 2 -> Drishthanta | 3 -> Sthita | 4 -> Yukta
+      | 5 -> Siddha  | 6 -> Kriya  | 7 -> Phala        | 8 -> Janya  | _ -> Pratipaksha
+    in
+    let base = (vish_props_of vish).vp_satya_weight in
+    base *. (1.0 +. float_of_int freq.(r) /. total_f)
+  ) in
+
+  (* 2. derive per-node out_cond from precomputed out_rel_count × weights.
+        out_cond[u] = Σ_r out_rel_count[u,r] × weights[r]
+        O(N × num_relations) with sequential array access — cache-friendly. *)
+  let out_cond = Array.make n 1.0 in
+  for u = 0 to n - 1 do
+    let oc = ref 0.0 in
+    for r = 0 to num_relations - 1 do
+      oc := !oc +. float_of_int csr.csr_out_rel_count.(u * num_relations + r) *. weights.(r)
+    done;
+    out_cond.(u) <- if !oc <= 0.0 then 1.0 else !oc
+  done;
+
+  (* 3. normalize seed to sum 1 → seed_norm Hashtbl for name lookup *)
   let seed_sum = List.fold_left (fun acc (_, w) -> acc +. w) 0.0 seed_nodes in
   let seed_sum = if seed_sum <= 0.0 then 1.0 else seed_sum in
   let seed_norm : (string, float) Hashtbl.t = Hashtbl.create 16 in
@@ -352,69 +507,61 @@ let run_ppr (k : proof_graph)
     let prev = match Hashtbl.find_opt seed_norm name with Some v -> v | None -> 0.0 in
     Hashtbl.replace seed_norm name (prev +. w /. seed_sum)
   ) seed_nodes;
-  (* 3. build out-conductance index: source → total conductance leaving it *)
-  let out_cond : (string, float) Hashtbl.t = Hashtbl.create (Hashtbl.length k.nodes) in
-  List.iter (fun e ->
-    let c = conductance e.relation in
-    let prev = match Hashtbl.find_opt out_cond e.source with Some v -> v | None -> 0.0 in
-    Hashtbl.replace out_cond e.source (prev +. c)
-  ) !(k.all_edges);
-  (* 4. build in-edges index: target → list of (source, relation) *)
-  let in_edges : (string, (string * visheshanam) list) Hashtbl.t =
-    Hashtbl.create (Hashtbl.length k.nodes) in
-  List.iter (fun e ->
-    let prev = match Hashtbl.find_opt in_edges e.target with Some l -> l | None -> [] in
-    Hashtbl.replace in_edges e.target ((e.source, e.relation) :: prev)
-  ) !(k.all_edges);
-  (* 5. initialise scores *)
-  let scores : (string, float) Hashtbl.t = Hashtbl.create (Hashtbl.length k.nodes) in
-  Hashtbl.iter (fun name n ->
-    let init = match Hashtbl.find_opt seed_norm name with
+
+  (* 4. initialize score and seed arrays over N nodes *)
+  let seed_arr  = Array.make n 0.0 in
+  let scores    = Array.make n 0.0 in
+  for i = 0 to n - 1 do
+    let name = csr.csr_idx_to_node.(i) in
+    let sv = match Hashtbl.find_opt seed_norm name with
       | Some s -> s
-      | None   -> n.satya *. 0.01
+      | None   -> csr.csr_node_satya.(i) *. 0.01
     in
-    Hashtbl.replace scores name init
-  ) k.nodes;
-  (* also seed any seed nodes not yet in the graph *)
-  List.iter (fun (name, _) ->
-    if not (Hashtbl.mem scores name) then
-      Hashtbl.replace scores name
-        (match Hashtbl.find_opt seed_norm name with Some s -> s | None -> 0.0)
-  ) seed_nodes;
-  (* 6. iterate *)
-  let max_iterations = 50 in
-  let threshold = 0.001 in
-  let converged = ref false in
-  let iter = ref 0 in
-  while not !converged && !iter < max_iterations do
+    seed_arr.(i) <- sv;
+    scores.(i)   <- sv
+  done;
+
+  (* 5. SpMV iteration loop — zero allocation per iteration.
+        inner loop: for each incoming edge (u→v), accumulate p[u]×w[r]/out_cond[u].
+        sequential reads on in_col_idx and in_rel_idx → cache-friendly.
+        weights[10] stays in registers or L1. *)
+  let new_scores   = Array.make n 0.0 in
+  let max_iters    = 50 in
+  let threshold    = 0.001 in
+  let converged    = ref false in
+  let iter         = ref 0 in
+  while not !converged && !iter < max_iters do
     incr iter;
     let max_delta = ref 0.0 in
-    let new_scores : (string, float) Hashtbl.t = Hashtbl.create (Hashtbl.length scores) in
-    Hashtbl.iter (fun name _ ->
-      let seed_v = match Hashtbl.find_opt seed_norm name with Some s -> s | None -> 0.0 in
-      (* sum incoming flow *)
-      let incoming = match Hashtbl.find_opt in_edges name with
-        | None -> 0.0
-        | Some ins ->
-          List.fold_left (fun acc (src, rel) ->
-            let p_src = match Hashtbl.find_opt scores src with Some v -> v | None -> 0.0 in
-            let c = conductance rel in
-            let oc = match Hashtbl.find_opt out_cond src with Some v -> v | None -> 1.0 in
-            acc +. p_src *. c /. (if oc <= 0.0 then 1.0 else oc)
-          ) 0.0 ins
-      in
-      let new_v = alpha *. seed_v +. (1.0 -. alpha) *. incoming in
-      let old_v = match Hashtbl.find_opt scores name with Some v -> v | None -> 0.0 in
-      let delta = Float.abs (new_v -. old_v) in
+    for v = 0 to n - 1 do
+      let incoming = ref 0.0 in
+      let row_start = csr.csr_in_row_ptr.(v) in
+      let row_end   = csr.csr_in_row_ptr.(v + 1) in
+      let e = ref row_start in
+      while !e < row_end do
+        let u  = csr.csr_in_col_idx.(!e) in
+        let r  = csr.csr_in_rel_idx.(!e) in
+        incoming := !incoming +. scores.(u) *. weights.(r) /. out_cond.(u);
+        incr e
+      done;
+      let nv = alpha *. seed_arr.(v) +. (1.0 -. alpha) *. !incoming in
+      let delta = Float.abs (nv -. scores.(v)) in
       if delta > !max_delta then max_delta := delta;
-      Hashtbl.replace new_scores name new_v
-    ) scores;
-    Hashtbl.iter (fun name v -> Hashtbl.replace scores name v) new_scores;
+      new_scores.(v) <- nv
+    done;
+    Array.blit new_scores 0 scores 0 n;
     if !max_delta < threshold then converged := true
   done;
-  (* expose depth_affinity for callers via the target node — not stored in graph *)
+
+  (* 6. build result Hashtbl from score array *)
+  let result : (string, float) Hashtbl.t = Hashtbl.create n in
+  for i = 0 to n - 1 do
+    Hashtbl.replace result csr.csr_idx_to_node.(i) scores.(i)
+  done;
+
+  (* depth_affinity computation — unchanged, reads k.nodes and k.all_edges *)
   ignore (compute_depth_affinity k target binding_names);
-  scores
+  result
 
 (* depth_affinity exposed separately for beam search in yantra_resolver *)
 let query_depth_affinity (k : proof_graph) (target : string)
