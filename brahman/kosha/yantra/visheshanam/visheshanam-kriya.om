@@ -3,6 +3,6 @@ kosha visheshanam-kriya
   "kriya — the action; morphism; function application; multiplicative composition"
   "yantra-sthita domain-yantra-sthita"
 
-shabda antisymmetric:yes composable:yes ring-op:mul satya-weight:0.80
+shabda antisymmetric:yes composable:yes ring-op:mul
 
 done

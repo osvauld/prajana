@@ -62,6 +62,19 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
   | "lower" ->
     Some (VString (String.lowercase_ascii (as_string (e_eval k e (List.nth args 0)))))
 
+  (* starts-with: string × prefix → bool *)
+  | "starts-with" ->
+    let s   = as_string (e_eval k e (List.nth args 0)) in
+    let pre = as_string (e_eval k e (List.nth args 1)) in
+    let n = String.length pre in
+    Some (VBool (String.length s >= n && String.sub s 0 n = pre))
+
+  (* member: value × list → bool — O(n) membership test *)
+  | "member" ->
+    let needle = as_string (e_eval k e (List.nth args 0)) in
+    let lst    = as_list (e_eval k e (List.nth args 1)) in
+    Some (VBool (List.exists (fun v -> as_string v = needle) lst))
+
   (* ---- list operations ---- *)
 
   | "map" ->
@@ -168,7 +181,31 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
        in
        process lst;
        Some (VList (List.rev !results))
-     | _ -> Some (VList []))
+      | _ -> Some (VList []))
+
+  (* reduce: list × init × fn → scalar
+     general fold: carry accumulator through every element.
+     fold-pairs and fold-triples are specialisations of this.
+     reduce list init (fn acc x -> ...) *)
+  | "reduce" ->
+    let lst     = as_list (e_eval k e (List.nth args 0)) in
+    let init    = e_eval k e (List.nth args 1) in
+    let fn_val  = e_eval k e (List.nth args 2) in
+    (match fn_val with
+     | VFn (params, body, captured) ->
+       let env_copy c =
+         let e2 = Hashtbl.create (Hashtbl.length c) in
+         Hashtbl.iter (fun k v -> Hashtbl.replace e2 k v) c; e2
+       in
+       let acc = List.fold_left (fun acc item ->
+         let local = env_copy captured in
+         (match params with
+          | [pa; pb] -> Hashtbl.replace local pa acc; Hashtbl.replace local pb item
+          | _ -> ());
+         e_eval k local body
+       ) init lst in
+       Some acc
+     | _ -> Some init)
 
   | "length" ->
     let lst = as_list (e_eval k e (List.nth args 0)) in
@@ -213,6 +250,28 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
       else (Hashtbl.replace seen key true; true)
     ) lst in
     Some (VList unique)
+
+  (* sum: list of floats → float — reduces a list by addition *)
+  | "sum" ->
+    let lst = as_list (e_eval k e (List.nth args 0)) in
+    let total = List.fold_left (fun acc v -> acc +. as_float v) 0.0 lst in
+    Some (VFloat total)
+
+  (* frequencies: list → [[value, count], ...] — count occurrences using hash table, O(n) *)
+  | "frequencies" ->
+    let lst = as_list (e_eval k e (List.nth args 0)) in
+    let counts : (string, int) Hashtbl.t = Hashtbl.create 64 in
+    let order = ref [] in
+    List.iter (fun v ->
+      let key = as_string v in
+      if not (Hashtbl.mem counts key) then order := key :: !order;
+      let prev = match Hashtbl.find_opt counts key with Some c -> c | None -> 0 in
+      Hashtbl.replace counts key (prev + 1)
+    ) lst;
+    let pairs = List.rev_map (fun key ->
+      VList [VString key; VFloat (float_of_int (Hashtbl.find counts key))]
+    ) !order in
+    Some (VList pairs)
 
   (* ---- boolean / comparison operations ---- *)
 

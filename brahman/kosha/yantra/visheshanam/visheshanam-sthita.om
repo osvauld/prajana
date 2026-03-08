@@ -3,6 +3,6 @@ kosha visheshanam-sthita
   "sthita — the standing-in; dependency; partial order"
   "yantra-sthita domain-yantra-sthita"
 
-shabda antisymmetric:yes transitive:yes composable:yes satya-weight:0.80
+shabda antisymmetric:yes transitive:yes composable:yes
 
 done

@@ -1,0 +1,68 @@
+tantra visheshanam-entropy-weights
+
+  -- computes vp_satya_weight for each of the 10 visheshanam relation types
+  -- from the Shannon entropy of their target distributions across all graph edges.
+  --
+  -- formula:
+  --   for each relation r:
+  --     p_r(v) = count(edges of type r -> v) / count(all edges of type r)
+  --     H_r    = -sum_v  p_r(v) * log(p_r(v))        (natural log)
+  --     H_max  = log(unique targets of r)              (entropy ceiling for r)
+  --     w_raw  = 1 - H_r / H_max
+  --
+  --   then rescale all w_raw into [0.5, 0.95]:
+  --     w_min  = reduce raw-floats (first raw) (fn acc x -> min acc x)
+  --     w_max  = reduce raw-floats (first raw) (fn acc x -> max acc x)
+  --     w_r    = 0.5 + (w_raw - w_min) / (w_max - w_min) * 0.45
+  --
+  -- low entropy  -> concentrated targets -> strong inference -> high w_r
+  -- high entropy -> spread targets       -> weak inference  -> low w_r
+  --
+  -- startup tantra — called once after the graph is fully loaded.
+  -- returns list of [relation-name, weight] pairs for OCaml to register.
+
+  inputs
+    relations  list   -- the 10 relation name strings to compute for
+
+  let
+    -- get all edges in the graph as [source, relation, target] triples
+    all = all-edges
+
+    -- pass 1: compute [rel, w_raw] for each relation
+    -- frequencies returns [[target, count], ...] in O(n) via hash table
+    raw-pairs = map relations (fn rel ->
+      let rel-edges = filter all (fn e -> eq (nth e 1) rel)
+      let targets   = map rel-edges (fn e -> nth e 2)
+      let n-total   = length targets
+      let w-raw = cond (eq n-total 0) 0.0
+        otherwise
+          let freq-pairs = frequencies targets
+          let n-unique   = length freq-pairs
+          let h-max = cond (gt n-unique 1) (log n-unique) otherwise 1.0
+          let contribs = map freq-pairs (fn fp ->
+            let p = div (nth fp 1) n-total
+            in cond (gt p 0.0) (mul (neg p) (log p)) otherwise 0.0)
+          let h-r = sum contribs
+          in sub 1.0 (div h-r h-max)
+      in [rel, w-raw])
+
+    -- pass 2: rescale w_raw into [0.5, 0.95] using reduce for min/max
+    raw-floats = map raw-pairs (fn rp -> nth rp 1)
+    w-first    = nth raw-floats 0
+    w-min      = reduce raw-floats w-first (fn acc x -> min acc x)
+    w-max      = reduce raw-floats w-first (fn acc x -> max acc x)
+    w-range    = sub w-max w-min
+
+    -- rescale each pair: [rel, w_final]
+    weights = map raw-pairs (fn rp ->
+      let rel   = nth rp 0
+      let w-raw = nth rp 1
+      let w = cond (gt w-range 0.0)
+        (add 0.5 (mul (div (sub w-raw w-min) w-range) 0.45))
+        otherwise 0.70
+      in [rel, w])
+
+  return
+    weights  list
+
+done

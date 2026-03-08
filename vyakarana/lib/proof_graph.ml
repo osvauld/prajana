@@ -190,6 +190,74 @@ let init_satya (k : proof_graph) : unit =
     Hashtbl.replace k.nodes n.name { n with satya = r }
   ) k.nodes
 
+(* compute_visheshanam_entropy_weights: derive vp_satya_weight for each relation type
+   from the Shannon entropy of its target distribution across all edges in the graph.
+
+    For each relation r:
+      p_r(v) = count(edges of type r with target v) / count(all edges of type r)
+      H_r    = -Σ_v p_r(v) × ln(p_r(v))
+      H_max  = ln(unique targets of r)
+      w_raw  = 1 - H_r / H_max
+
+    Then rescale all w_raw into [0.5, 0.95]:
+      w_r = 0.5 + (w_raw - w_min) / (w_max - w_min) × 0.45
+
+    Low entropy  → concentrated targets → strong inference → high w_r
+    High entropy → spread targets       → weak inference  → low w_r
+
+    Must be called after apply_relation_axioms (so symmetry edges are counted)
+    and after the graph is fully loaded. Reads all_edges, writes into vish_props table. *)
+let compute_visheshanam_entropy_weights (k : proof_graph) : unit =
+  (* count targets per relation type across all edges *)
+  let target_counts : (visheshanam, (string, int) Hashtbl.t) Hashtbl.t =
+    Hashtbl.create 16 in
+  let total_per_rel : (visheshanam, int) Hashtbl.t = Hashtbl.create 16 in
+  List.iter (fun (e : typed_edge) ->
+    let tbl = match Hashtbl.find_opt target_counts e.relation with
+      | Some t -> t
+      | None ->
+        let t = Hashtbl.create 64 in
+        Hashtbl.replace target_counts e.relation t; t
+    in
+    let prev = match Hashtbl.find_opt tbl e.target with Some c -> c | None -> 0 in
+    Hashtbl.replace tbl e.target (prev + 1);
+    let pt = match Hashtbl.find_opt total_per_rel e.relation with Some c -> c | None -> 0 in
+    Hashtbl.replace total_per_rel e.relation (pt + 1)
+  ) !(k.all_edges);
+  (* compute raw entropy weight for each visheshanam *)
+  let all_rels = [ Swarupa; Abheda; Drishthanta; Sthita; Yukta;
+                   Siddha; Kriya; Phala; Janya; Pratipaksha ] in
+  let raw_pairs = List.map (fun rel ->
+    let w_raw = match Hashtbl.find_opt target_counts rel with
+      | None -> 0.0
+      | Some tbl ->
+        let total = float_of_int
+          (match Hashtbl.find_opt total_per_rel rel with Some c -> c | None -> 1) in
+        let n_unique = float_of_int (Hashtbl.length tbl) in
+        let h_rel_max = if n_unique > 1.0 then log n_unique else 1.0 in
+        let h = Hashtbl.fold (fun _ count acc ->
+          let p = float_of_int count /. total in
+          acc -. p *. log p
+        ) tbl 0.0 in
+        (* normalise against this relation's own unique-target entropy ceiling,
+           not against log|V| — measures concentration relative to actual reach *)
+        1.0 -. (h /. h_rel_max)
+    in
+    (rel, w_raw)
+  ) all_rels in
+  (* rescale all w_raw into [0.5, 0.95] *)
+  let raw_weights = List.map snd raw_pairs in
+  let w_min = List.fold_left Float.min Float.max_float raw_weights in
+  let w_max = List.fold_left Float.max Float.min_float raw_weights in
+  let range = w_max -. w_min in
+  List.iter (fun (rel, w_raw) ->
+    let w = if range > 1e-9
+            then 0.5 +. ((w_raw -. w_min) /. range) *. 0.45
+            else 0.70 in
+    let existing = vish_props_of rel in
+    register_vish_props rel { existing with vp_satya_weight = w }
+  ) raw_pairs
+
 (* ---- PPR engine: structure-driven Personalized PageRank ---- *)
 
 (* compute_seed_conductances: derive per-relation conductance from seed neighbourhood.

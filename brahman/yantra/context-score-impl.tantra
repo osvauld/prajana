@@ -1,0 +1,20 @@
+tantra context-score-impl
+
+  -- counts how many edges of a node touch any seed node.
+  -- score = number of edges where source or target is in the seed set.
+  -- previously an OCaml primitive; now expressed over the edge set.
+
+  inputs
+    n      string
+    seeds  list
+
+  let
+    n-edges  = edges n
+    touching = filter n-edges (fn eg ->
+      or (member (nth eg 0) seeds) (member (nth eg 2) seeds))
+    result = length touching
+
+  return
+    result  float
+
+done

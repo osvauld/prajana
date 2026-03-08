@@ -1,0 +1,12 @@
+kosha op-reduce
+
+  "op-class-higher-order-kriya"
+  "krama-swarupa parampara-abheda"
+
+shabda name:reduce parse-arity:3 arg0:list arg1:init arg2:fn
+
+  -- general fold: carry accumulator through every element of list.
+  -- fold-pairs and fold-triples are specialisations of this.
+  -- reduce list init (fn acc x -> ...)
+
+done

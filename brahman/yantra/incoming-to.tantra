@@ -1,0 +1,17 @@
+tantra incoming-to
+
+  -- returns all incoming typed edges to a node as [source, relation, target] triples.
+  -- uses edges (all edges touching the node) filtered to those where node is target.
+  -- previously an OCaml primitive; now expressed over the edge set.
+
+  inputs
+    n  string
+
+  let
+    all-node-edges = edges n
+    result = filter all-node-edges (fn eg -> and (eq (nth eg 2) n) (neq (nth eg 0) n))
+
+  return
+    result  list
+
+done

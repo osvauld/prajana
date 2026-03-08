@@ -1,7 +1,11 @@
 kosha op-fold-pairs
 
   "op-class-higher-order-kriya"
+  "reduce-drishthanta"
 
 shabda name:fold-pairs
+
+  -- sliding window reduce over adjacent pairs.
+  -- specialisation of reduce where window=2, no explicit init.
 
 done
