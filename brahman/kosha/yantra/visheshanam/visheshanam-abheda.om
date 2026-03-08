@@ -3,7 +3,9 @@ kosha visheshanam-abheda
   "abheda — non-difference; equivalence class; quotient type"
   "yantra-sthita domain-yantra-sthita"
   "visheshanam-swarupa-yukta"
+  "equivalence-relation-abheda quotient-abheda"
+  "ring-sthita group-sthita"
 
-shabda symmetric:yes transitive:yes congruence:yes composable:yes
+shabda symmetric:yes transitive:yes congruence:yes composable:yes / the-equivalence-relation-that-identifies-nodes-at-some-level-symmetric-and-transitive-forming-quotient-classes-in-the-graph
 
 done

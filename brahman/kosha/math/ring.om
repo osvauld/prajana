@@ -3,6 +3,8 @@ sangati ring
   "group-sthita monoid-yukta domain-math-sthita"
   "addition-kriya multiplication-kriya"
   "distributivity-siddha"
+  "identity-element-yukta commutativity-yukta"
+  "ideal-janya graded-ring-janya quotient-janya"
   "int-drishthanta polynomial-drishthanta"
 
 done

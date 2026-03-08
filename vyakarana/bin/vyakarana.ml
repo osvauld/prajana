@@ -187,6 +187,14 @@ let parse_line line : Event.t option =
         Some (Event.Anuvada { sentence = rest; max_passes = None; thaalam = None; sahaja = false })
       else
         Some (Event.Darshana { name = rest; sahaja = false })
+    | "DARSHANA" | "INSPECT" when first_space < String.length line ->
+      let rest = String.trim (String.sub line (first_space + 1)
+        (String.length line - first_space - 1)) in
+      Some (Event.Darshana { name = rest; sahaja = true })
+    | "REASON" | "ANUVADA" when first_space < String.length line ->
+      let rest = String.trim (String.sub line (first_space + 1)
+        (String.length line - first_space - 1)) in
+      Some (Event.Anuvada { sentence = rest; max_passes = None; thaalam = None; sahaja = true })
     | _ ->
       let has_space = String.contains line ' ' in
       let has_sentence_punct =

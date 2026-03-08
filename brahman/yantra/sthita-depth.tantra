@@ -1,0 +1,49 @@
+tantra sthita-depth
+
+  -- computes the grade of a node: how many sthita hops to a root.
+  --
+  -- grade(n) = length of the longest non-domain sthita chain from n.
+  -- walks outgoing sthita edges iteratively (not recursively) up to 10 levels.
+  -- skips domain-* nodes (they are classification anchors, not depth contributors).
+  --
+  -- examples:
+  --   mass              → grade 0 (sthita targets are only domain-physics)
+  --   force             → grade 1 (force →sthita→ mass)
+  --   kinetic-energy    → grade 1 (ke →sthita→ force, but we do single-hop check)
+  --
+  -- implementation: check if node has any non-domain sthita targets.
+  -- if yes, follow the first one and check again, counting hops.
+  -- this is O(depth) not O(tree) — follows one chain, no branching.
+
+  inputs
+    n  string
+
+  let
+    -- level 0: does n have non-domain sthita targets?
+    t0 = filter (walk n "sthita") (fn t -> not (starts-with (name t) "domain-"))
+    d0 = cond (eq (length t0) 0) 0 otherwise 1
+
+    -- level 1: follow first target
+    n1 = cond (gt d0 0) (name (nth t0 0)) otherwise ""
+    t1 = cond (neq n1 "") (filter (walk n1 "sthita") (fn t -> not (starts-with (name t) "domain-"))) otherwise []
+    d1 = cond (gt (length t1) 0) (add d0 1) otherwise d0
+
+    -- level 2
+    n2 = cond (gt (length t1) 0) (name (nth t1 0)) otherwise ""
+    t2 = cond (neq n2 "") (filter (walk n2 "sthita") (fn t -> not (starts-with (name t) "domain-"))) otherwise []
+    d2 = cond (gt (length t2) 0) (add d1 1) otherwise d1
+
+    -- level 3
+    n3 = cond (gt (length t2) 0) (name (nth t2 0)) otherwise ""
+    t3 = cond (neq n3 "") (filter (walk n3 "sthita") (fn t -> not (starts-with (name t) "domain-"))) otherwise []
+    d3 = cond (gt (length t3) 0) (add d2 1) otherwise d2
+
+    -- level 4
+    n4 = cond (gt (length t3) 0) (name (nth t3 0)) otherwise ""
+    t4 = cond (neq n4 "") (filter (walk n4 "sthita") (fn t -> not (starts-with (name t) "domain-"))) otherwise []
+    depth = cond (gt (length t4) 0) (add d3 1) otherwise d3
+
+  return
+    depth  float
+
+done

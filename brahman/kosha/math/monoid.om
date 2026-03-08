@@ -1,6 +1,6 @@
 sangati monoid
 
-  "group-sthita associativity-yukta identity-yukta domain-math-sthita"
+  "group-sthita associativity-yukta identity-element-yukta domain-math-sthita"
   "addition-drishthanta multiplication-drishthanta"
   "op-class-monoid-abheda"
 

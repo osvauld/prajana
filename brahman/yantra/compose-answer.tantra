@@ -1,13 +1,20 @@
 tantra compose-answer
 
-  -- morphism: graph structure -> English sentences
-  -- flow: classify seeds -> visheshanam-projection (algebra) -> compose
+  -- morphism: proof-graph tensor → English sentences.
+  -- this tantra is the output morphism of the reasoning pipeline:
+  --   graph structure → projected edge set → relation clauses → natural language.
   --
-  -- the projection layer (visheshanam-projection) applies:
-  --   closure  — domain filter
-  --   projection — tier-based basis selection
-  --   norm     — satya × edge-weight salience
-  --   convergence — stable edge set
+  -- pipeline per seed node:
+  --   1. domain inference: find seed's domain(s) via sthita edges or incoming domain-* links
+  --   2. visheshanam-projection: apply the 3-stage algebra (closure → tier projection → norm)
+  --      to select intent-relevant edges from the seed's outgoing edge set
+  --   3. clause composition: map each projected edge to English via relation-specific templates
+  --      (swarupa→"is", abheda→"the same as", sthita→"resting on", yukta→"with", etc.)
+  --   4. root expansion: follow swarupa/abheda targets one level deeper, project their edges too
+  --   5. iccha detection: classify nearby nodes as iccha-present or iccha-absent
+  --   6. assembly: domain header + seed sentences + root sentences + iccha line
+  --
+  -- the relation→English mapping is configurable via shabda on the anuvada-setu node.
 
   inputs
     seeds       list
@@ -42,6 +49,27 @@ tantra compose-answer
       otherwise (split "" ",")
 
     -- seed sentences: project edges through the visheshanam algebra, then compose
+    rel-swarupa = cond (neq (shabda "anuvada-setu" "rel-swarupa") "") (shabda "anuvada-setu" "rel-swarupa") otherwise "is"
+    rel-abheda = cond (neq (shabda "anuvada-setu" "rel-abheda") "") (shabda "anuvada-setu" "rel-abheda") otherwise "the same as"
+    rel-sthita = cond (neq (shabda "anuvada-setu" "rel-sthita") "") (shabda "anuvada-setu" "rel-sthita") otherwise "resting on"
+    rel-drishthanta = cond (neq (shabda "anuvada-setu" "rel-drishthanta") "") (shabda "anuvada-setu" "rel-drishthanta") otherwise "demonstrating"
+    rel-yukta = cond (neq (shabda "anuvada-setu" "rel-yukta") "") (shabda "anuvada-setu" "rel-yukta") otherwise "with"
+    rel-janya = cond (neq (shabda "anuvada-setu" "rel-janya") "") (shabda "anuvada-setu" "rel-janya") otherwise "arising from"
+    rel-kriya = cond (neq (shabda "anuvada-setu" "rel-kriya") "") (shabda "anuvada-setu" "rel-kriya") otherwise "through"
+    rel-phala = cond (neq (shabda "anuvada-setu" "rel-phala") "") (shabda "anuvada-setu" "rel-phala") otherwise "yielding"
+    rel-siddha = cond (neq (shabda "anuvada-setu" "rel-siddha") "") (shabda "anuvada-setu" "rel-siddha") otherwise "proven-through"
+    rel-pratipaksha = cond (neq (shabda "anuvada-setu" "rel-pratipaksha") "") (shabda "anuvada-setu" "rel-pratipaksha") otherwise "pratipaksha"
+
+    iccha-prefix = cond (neq (shabda "anuvada-setu" "iccha-present-prefix") "")
+      (shabda "anuvada-setu" "iccha-present-prefix")
+      otherwise "directed-will (iccha) present in"
+    iccha-absent-connector = cond (neq (shabda "anuvada-setu" "iccha-absent-connector") "")
+      (shabda "anuvada-setu" "iccha-absent-connector")
+      otherwise "; absent in"
+    domain-header-prefix = cond (neq (shabda "anuvada-setu" "domain-header-prefix") "")
+      (shabda "anuvada-setu" "domain-header-prefix")
+      otherwise "in"
+
     seed-sentences = map seeds (fn s ->
       let eng = to-english s
       let out-edges = filter (edges s) (fn e -> eq (nth e 0) s)
@@ -50,16 +78,16 @@ tantra compose-answer
         let rel = nth e 1
         let tgt = to-english (nth e 2)
         in cond
-          (eq rel "swarupa") (concat "is " tgt)
-          (eq rel "abheda") (concat "the same as " tgt)
-          (eq rel "sthita") (concat "resting on " tgt)
-          (eq rel "drishthanta") (concat "demonstrating " tgt)
-          (eq rel "yukta") (concat "with " tgt)
-          (eq rel "janya") (concat "arising from " tgt)
-          (eq rel "kriya") (concat "through " tgt)
-          (eq rel "phala") (concat "yielding " tgt)
-          (eq rel "siddha") (concat "proven-through " tgt)
-          (eq rel "pratipaksha") (concat "pratipaksha " tgt)
+          (eq rel "swarupa") (concat rel-swarupa " " tgt)
+          (eq rel "abheda") (concat rel-abheda " " tgt)
+          (eq rel "sthita") (concat rel-sthita " " tgt)
+          (eq rel "drishthanta") (concat rel-drishthanta " " tgt)
+          (eq rel "yukta") (concat rel-yukta " " tgt)
+          (eq rel "janya") (concat rel-janya " " tgt)
+          (eq rel "kriya") (concat rel-kriya " " tgt)
+          (eq rel "phala") (concat rel-phala " " tgt)
+          (eq rel "siddha") (concat rel-siddha " " tgt)
+          (eq rel "pratipaksha") (concat rel-pratipaksha " " tgt)
           otherwise (concat (to-english-relation rel) " " tgt))
       -- deduplicate after rendering (catches duplicates from different node IDs → same English)
       let clean-clauses = unique (filter clauses (fn c -> neq c ""))
@@ -84,16 +112,16 @@ tantra compose-answer
         let rel = nth e 1
         let tgt = to-english (nth e 2)
         in cond
-          (eq rel "swarupa") (concat "is " tgt)
-          (eq rel "abheda") (concat "the same as " tgt)
-          (eq rel "sthita") (concat "resting on " tgt)
-          (eq rel "drishthanta") (concat "demonstrating " tgt)
-          (eq rel "yukta") (concat "with " tgt)
-          (eq rel "janya") (concat "arising from " tgt)
-          (eq rel "kriya") (concat "through " tgt)
-          (eq rel "phala") (concat "yielding " tgt)
-          (eq rel "siddha") (concat "proven-through " tgt)
-          (eq rel "pratipaksha") (concat "pratipaksha " tgt)
+          (eq rel "swarupa") (concat rel-swarupa " " tgt)
+          (eq rel "abheda") (concat rel-abheda " " tgt)
+          (eq rel "sthita") (concat rel-sthita " " tgt)
+          (eq rel "drishthanta") (concat rel-drishthanta " " tgt)
+          (eq rel "yukta") (concat rel-yukta " " tgt)
+          (eq rel "janya") (concat rel-janya " " tgt)
+          (eq rel "kriya") (concat rel-kriya " " tgt)
+          (eq rel "phala") (concat rel-phala " " tgt)
+          (eq rel "siddha") (concat rel-siddha " " tgt)
+          (eq rel "pratipaksha") (concat rel-pratipaksha " " tgt)
           otherwise (concat (to-english-relation rel) " " tgt))
       let clean-clauses = unique (filter clauses (fn c -> neq c ""))
       in cond (gt (length clean-clauses) 0)
@@ -104,14 +132,15 @@ tantra compose-answer
     iccha-without = unique (filter nearby (fn n -> eq (iccha-status n) "rahita"))
     has-iccha     = and (gt (length iccha-with) 0) (gt (length iccha-without) 0)
     iccha-line    = cond (has-iccha)
-      (concat "directed-will (iccha) present in "
+      (concat iccha-prefix " "
         (join (map iccha-with (fn n -> to-english n)) ", ")
-        "; absent in "
+        iccha-absent-connector
+        " "
         (join (map iccha-without (fn n -> to-english n)) ", ")
         ".")
       otherwise ""
 
-    domain-line = cond (neq domain-label "") (concat "in " domain-label ":\n") otherwise ""
+    domain-line = cond (neq domain-label "") (concat domain-header-prefix " " domain-label ":\n") otherwise ""
     seed-block  = join seed-sentences "\n"
     root-block  = cond (gt (length root-sentences) 0) (concat "\n" (join root-sentences "\n")) otherwise ""
     iccha-block = cond (neq iccha-line "") (concat "\n" iccha-line) otherwise ""

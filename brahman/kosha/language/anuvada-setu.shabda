@@ -32,6 +32,34 @@ run-both-label: run-both-and-intersect
 node-label: node
 unknown-label: ?
 
+# relation phrases used by compose-answer
+rel-swarupa: is
+rel-abheda: the same as
+rel-sthita: resting on
+rel-drishthanta: demonstrating
+rel-yukta: with
+rel-janya: arising from
+rel-kriya: through
+rel-phala: yielding
+rel-siddha: proven-through
+rel-pratipaksha: pratipaksha
+
+# iccha bridge narrative
+iccha-present-prefix: directed-will (iccha) present in
+iccha-absent-connector: ; absent in
+iccha-present-prefix-alt: iccha (directed-will) present in:
+iccha-absent-connector-alt: ; absent in:
+
+# format-response output templates
+error-prefix: cannot compute
+result-is: is
+stored-suffix: (remembered).
+attribution-prefix: computed by
+domain-header-prefix: in
+
+# fallback token for unresolved output
+no-answer-label: asprista
+
 # mode suffixes
 mode-question: (this was a question)
 mode-force: (this was spoken with force)

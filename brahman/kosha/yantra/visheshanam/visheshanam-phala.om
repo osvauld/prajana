@@ -2,7 +2,9 @@ kosha visheshanam-phala
 
   "phala — the fruit; function codomain; return type"
   "yantra-sthita domain-yantra-sthita"
+  "visheshanam-janya-pratipaksha"
+  "ring-sthita"
 
-shabda antisymmetric:yes dual:janya
+shabda antisymmetric:yes dual:janya / the-result-edge-dual-to-janya-where-A-phala-B-means-B-is-the-output-of-A-and-A-janya-B-means-A-arises-from-B
 
 done

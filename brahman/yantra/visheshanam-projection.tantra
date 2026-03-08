@@ -2,17 +2,29 @@ tantra visheshanam-projection
 
   -- visheshanam algebra: project an edge set onto the intent-relevant subspace.
   --
-  -- mathematical backing (from brahman/kosha/math):
-  --   closure (group axiom)  — edges must stay within the seed domain subgroup
-  --   projection (aneka-eka) — tier as basis; anuvritta has zero coefficient → dropped
-  --   norm (matra-swarupa)   — node-satya filters structurally empty targets
-  --   vector-space (basis)   — each relation type is an independent axis, not a linear rank
+  -- this tantra implements a three-stage filter on the 10-dimensional edge space:
   --
-  -- tiers (from firstness-of-triple, intent-dependent):
-  --   aadya     — primary basis vectors: always keep
-  --   anantara  — secondary basis: always keep
-  --   apara     — mid-frequency: keep targets with structural content (satya > 0)
-  --   anuvritta — noise floor: always drop (zero coefficient in intent basis)
+  -- stage 1 — closure (group axiom from brahman/kosha/math/closure.om):
+  --   restrict to edges whose target shares a domain with the seed.
+  --   this enforces the group axiom: operations stay within the domain subgroup.
+  --   when seed has no domain, pass all edges through (open closure).
+  --
+  -- stage 2 — projection (from brahman/kosha/math/projection.om):
+  --   each edge's relation type is an independent axis in the visheshanam ring.
+  --   firstness-of-triple assigns a tier per (intent, relation) pair:
+  --     aadya     — coefficient 1.0: primary basis vectors, always kept
+  --     anantara  — coefficient 1.0: secondary basis, always kept
+  --     apara     — coefficient conditional: kept only if target has structural content
+  --     anuvritta — coefficient 0.0: noise floor, always dropped
+  --   the tier assignment changes with intent: identity promotes swarupa/abheda,
+  --   process promotes kriya/yukta, consequence promotes phala/kriya, etc.
+  --
+  -- stage 3 — norm (from brahman/kosha/math/norm.om):
+  --   within the apara tier, filter by node-satya > 0.
+  --   node-satya measures structural content: slokas, edges, type diversity.
+  --   this removes targets that are empty references (no content behind the name).
+  --
+  -- output: the projected edge set, ordered aadya + anantara + filtered-apara.
 
   inputs
     triples       list

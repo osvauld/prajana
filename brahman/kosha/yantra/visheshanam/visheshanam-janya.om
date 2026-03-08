@@ -2,7 +2,9 @@ kosha visheshanam-janya
 
   "janya — the born-from; generator; left adjoint"
   "yantra-sthita domain-yantra-sthita"
+  "visheshanam-phala-pratipaksha"
+  "ring-sthita"
 
-shabda antisymmetric:yes dual:phala
+shabda antisymmetric:yes dual:phala / the-generator-edge-dual-to-phala-where-A-janya-B-means-A-arises-from-B-reversed-by-axiom-expansion-into-B-phala-A
 
 done
