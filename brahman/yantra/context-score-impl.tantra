@@ -1,8 +1,14 @@
 tantra context-score-impl
 
-  -- counts how many edges of a node touch any seed node.
-  -- score = number of edges where source or target is in the seed set.
-  -- previously an OCaml primitive; now expressed over the edge set.
+  -- context-score: measures how connected a node is to the active seed set.
+  -- score(n, S) = |{ e ∈ edges(n) : e.source ∈ S ∨ e.target ∈ S }|
+  --
+  -- this is a local connectivity measure — the number of typed edges
+  -- touching node n that also touch any node in the seed set S.
+  -- used by spiral-domain and anuvada to rank nearby nodes by relevance.
+  -- higher score = more edges shared with the query context.
+  --
+  -- previously an OCaml primitive; now expressed as a graph walk over the edge set.
 
   inputs
     n      string

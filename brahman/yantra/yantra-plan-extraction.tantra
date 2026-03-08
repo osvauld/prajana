@@ -7,7 +7,9 @@ tantra yantra-plan-extraction
     joined  list
 
   let
-    binding-triples = fold-triples joined (fn a b c -> cond (and (eq (nth a 1) "concept") (or (eq (nth b 2) "is") (eq (nth b 2) "=")) (eq (nth c 1) "number")) (pair "binding" (bind (nth a 2) (nth c 2))) (and (eq (nth a 1) "unknown") (or (eq (nth b 2) "is") (eq (nth b 2) "=")) (eq (nth c 1) "number")) (pair "binding" (bind (nth a 0) (nth c 2))) otherwise _none)
+    -- resolve unknown tokens through alias table before binding:
+    -- try exact case first (R→resistance), then lowercase (f→force)
+    binding-triples = fold-triples joined (fn a b c -> cond (and (eq (nth a 1) "concept") (or (eq (nth b 2) "is") (eq (nth b 2) "=")) (eq (nth c 1) "number")) (pair "binding" (bind (nth a 2) (nth c 2))) (and (eq (nth a 1) "unknown") (or (eq (nth b 2) "is") (eq (nth b 2) "=")) (eq (nth c 1) "number")) (let alias-exact = shabda "aliases" (nth a 0) in let alias-lower = shabda "aliases" (lower (nth a 0)) in let alias = cond (neq alias-exact "") alias-exact (neq alias-lower "") alias-lower otherwise "" in let resolved-name = cond (neq alias "") alias otherwise (nth a 0) in pair "binding" (bind resolved-name (nth c 2))) otherwise _none)
     target-triples = fold-triples joined (fn a b c -> cond (and (or (eq (nth a 2) "what") (eq (nth a 2) "when")) (eq (nth b 2) "is") (eq (nth c 1) "concept")) (pair "target" (nth c 2)) (and (has (nth a 2) "kriya-yantra") (eq (nth b 1) "concept")) (pair "target" (nth b 2)) otherwise _none)
     binding-items = filter binding-triples (fn item -> eq (nth item 0) "binding")
     bindings = map binding-items (fn item -> nth item 1)

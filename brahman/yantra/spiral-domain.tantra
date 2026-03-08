@@ -1,5 +1,15 @@
 tantra spiral-domain
 
+  -- context-guided graph walk with depth expansion.
+  --
+  -- walks outgoing edges from domain seeds, formats them, then scores
+  -- all reachable targets by weighted context-score against the context seeds.
+  -- targets scoring above the threshold are used as seeds for a deeper pass.
+  --
+  -- upgrade: uses weighted-context-score instead of flat context-score,
+  -- so relation type and node depth influence which branches to expand.
+  -- threshold raised to 1.5 to compensate for the weighted scoring range.
+
   inputs
     domain-seeds   list
     context-seeds  list
@@ -11,8 +21,8 @@ tantra spiral-domain
     fmt-deep    = format-triples-primary triples "      "
     formatted   = cond (eq depth 0) fmt-shallow otherwise fmt-deep
     all-targets = flatten (map triples (fn t -> nth t 2))
-    scored      = map all-targets (fn n -> pair n (context-score n context-seeds))
-    high-scored = filter scored (fn sp -> gt (nth sp 1) 1)
+    scored      = map all-targets (fn n -> pair n (weighted-context-score n context-seeds))
+    high-scored = filter scored (fn sp -> gt (nth sp 1) 1.5)
     next-seeds  = map high-scored (fn sp -> nth sp 0)
     can-deepen  = and (eq depth 0) (gt (length next-seeds) 0)
     deeper      = cond (can-deepen) (spiral-domain next-seeds context-seeds 1) otherwise ""

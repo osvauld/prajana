@@ -2,7 +2,8 @@ kosha visheshanam-drishthanta
 
   "drishthanta — the seen-example; witness; proof term"
   "yantra-sthita domain-yantra-sthita"
+  "ring-sthita"
 
-shabda antisymmetric:yes
+shabda antisymmetric:yes / the-witness-edge-A-drishthanta-B-means-B-is-a-concrete-example-of-A-antisymmetric-and-grounding-abstract-structure-to-observable-instance
 
 done

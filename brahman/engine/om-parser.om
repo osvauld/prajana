@@ -2,9 +2,10 @@ sangati om-parser
 
   "nigamana-janya proof-graph-kriya"
   "dvi-krama-swarupa sangati-ahara visheshanam-janya"
-  "shabda-yukta slokas-yukta"
+  "shabda-yukta slokas-yukta layer-yukta"
   "kosha-sthita satya-ganana-phala"
+  "axiom-expansion-kriya"
 
-shabda two-pass-reader / the-parser-that-builds-the-proof-space-from-om-files
+shabda two-pass-reader / pass-one-reads-all-om-files-building-nodes-with-slokas-shabda-and-raw-edges-pass-two-applies-axiom-expansion-adding-symmetric-and-transitive-closure-edges-from-visheshanam-properties
 
 done

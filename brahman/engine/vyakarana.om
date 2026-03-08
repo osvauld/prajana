@@ -1,12 +1,15 @@
 sangati vyakarana
 
-  "proof-graph-swarupa ocaml-swarupa"
-  "satya-ganana-kriya anuvada-kriya prayoga-kriya"
-  "om-parser-yukta setu-yukta socket-yukta"
+  "proof-graph-swarupa tensor-swarupa ocaml-swarupa"
+  "satya-ganana-kriya anuvada-kriya prayoga-kriya avrti-kriya"
+  "om-parser-yukta setu-yukta socket-yukta session-yukta"
   "nigamana-janya visheshanam-yukta shabda-yukta"
-  "avrti-siddha kosha-sthita"
-  "domain-computation-sthita"
+  "ring-sthita graded-ring-sthita"
+  "beam-search-kriya ppr-kriya"
+  "direct-solve-kriya inverse-solve-kriya chain-solve-kriya"
+  "kosha-sthita domain-computation-sthita"
+  "avrti-siddha"
 
-shabda grammar-engine / the-proof-space-that-holds-and-reasons-over-what-is-true
+shabda grammar-engine / the-proof-space-that-holds-and-reasons-over-what-is-true-a-sparse-tensor-of-typed-edges-walked-by-beam-search-and-personalized-pagerank
 
 done

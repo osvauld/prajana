@@ -1,0 +1,29 @@
+tantra to-malayalam
+
+  -- setu: shabda-to-artha bridge, Malayalam output direction.
+  -- given a node name, return Malayalam rendering if available.
+  -- fallback chain:
+  --   1) node's "malayalam-name" shabda key
+  --   2) node's default English name via to-english
+  --   3) anuvada-setu-malayalam no-answer-label
+
+  inputs
+    node  string
+
+  let
+    own-ml = shabda node "malayalam-name"
+    eng = to-english node
+    eng-unknown = cond (neq (shabda "anuvada-setu" "no-answer-label") "")
+      (shabda "anuvada-setu" "no-answer-label")
+      otherwise "asprista"
+    fallback = cond (neq (shabda "anuvada-setu-malayalam" "no-answer-label") "")
+      (shabda "anuvada-setu-malayalam" "no-answer-label")
+      otherwise "അസ്പൃഷ്ടം"
+    result = cond (neq own-ml "") own-ml
+      (and (neq eng "") (neq eng eng-unknown)) eng
+      otherwise fallback
+
+  return
+    result  string
+
+done

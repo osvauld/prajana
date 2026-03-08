@@ -3,20 +3,27 @@ tantra visheshanam-entropy-weights
   -- computes vp_satya_weight for each of the 10 visheshanam relation types
   -- from the Shannon entropy of their target distributions across all graph edges.
   --
+  -- this assigns each axis of the visheshanam ring a scalar weight reflecting
+  -- how concentrated (informative) its target distribution is.
+  --
   -- formula:
-  --   for each relation r:
-  --     p_r(v) = count(edges of type r -> v) / count(all edges of type r)
-  --     H_r    = -sum_v  p_r(v) * log(p_r(v))        (natural log)
-  --     H_max  = log(unique targets of r)              (entropy ceiling for r)
-  --     w_raw  = 1 - H_r / H_max
+  --   for each relation r in {swarupa, abheda, sthita, yukta, kriya,
+  --                           phala, janya, siddha, drishthanta, pratipaksha}:
+  --     p_r(v) = count(edges of type r → v) / count(all edges of type r)
+  --     H_r    = -sum_v  p_r(v) * ln(p_r(v))          (Shannon entropy)
+  --     H_max  = ln(unique targets of r)               (maximum entropy for r)
+  --     w_raw  = 1 - H_r / H_max                      (normalised concentration)
   --
-  --   then rescale all w_raw into [0.5, 0.95]:
-  --     w_min  = reduce raw-floats (first raw) (fn acc x -> min acc x)
-  --     w_max  = reduce raw-floats (first raw) (fn acc x -> max acc x)
-  --     w_r    = 0.5 + (w_raw - w_min) / (w_max - w_min) * 0.45
+  --   then affine rescale all w_raw into [0.50, 0.95]:
+  --     w_r = 0.50 + (w_raw - min(w_raw)) / (max(w_raw) - min(w_raw)) * 0.45
   --
-  -- low entropy  -> concentrated targets -> strong inference -> high w_r
-  -- high entropy -> spread targets       -> weak inference  -> low w_r
+  -- interpretation:
+  --   low entropy  → concentrated targets → strong inference → high w_r
+  --   high entropy → spread targets       → weak inference  → low w_r
+  --
+  -- measured values (1252 nodes, 13164 edges):
+  --   sthita=0.95  kriya=0.70  yukta=0.60  janya=0.58
+  --   swarupa=0.55  abheda=0.53  (others in [0.50, 0.65])
   --
   -- startup tantra — called once after the graph is fully loaded.
   -- returns list of [relation-name, weight] pairs for OCaml to register.

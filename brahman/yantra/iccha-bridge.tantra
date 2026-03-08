@@ -9,9 +9,15 @@ tantra iccha-bridge
     has-both      = and (gt (length with-iccha) 0) (gt (length without-iccha) 0)
     with-str      = join (map with-iccha (fn n -> to-english n)) ", "
     without-str   = join (map without-iccha (fn n -> to-english n)) ", "
+    iccha-prefix = cond (neq (shabda "anuvada-setu" "iccha-present-prefix-alt") "")
+      (shabda "anuvada-setu" "iccha-present-prefix-alt")
+      otherwise "iccha (directed-will) present in:"
+    iccha-absent-connector = cond (neq (shabda "anuvada-setu" "iccha-absent-connector-alt") "")
+      (shabda "anuvada-setu" "iccha-absent-connector-alt")
+      otherwise "; absent in:"
     result        = cond (has-both)
-                       (concat "  iccha (directed-will) present in: " with-str
-                               "; absent in: " without-str ".\n")
+                       (concat "  " iccha-prefix " " with-str
+                               iccha-absent-connector " " without-str ".\n")
                        otherwise ""
 
   return

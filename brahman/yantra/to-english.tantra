@@ -15,9 +15,12 @@ tantra to-english
     hit    = lookup node
     known  = exists hit
     own    = shabda node "name"
+    fallback = cond (neq (shabda "anuvada-setu" "no-answer-label") "")
+      (shabda "anuvada-setu" "no-answer-label")
+      otherwise "asprista"
     result = cond (neq own "") own
       (known) node
-      otherwise "asprista"
+      otherwise fallback
 
   return
     result  string

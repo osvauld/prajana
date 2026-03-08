@@ -1,14 +1,23 @@
 tantra anuvada-ganana
 
-  -- the meta-tantra: orchestrates the full parsing pipeline.
-  -- takes a natural language sentence, classifies words using graph knowledge,
-  -- resolves which tantra to use, and executes it.
+  -- the meta-tantra: orchestrates the full query-to-answer pipeline.
   --
-  -- pipeline: tokenise → classify-fold → yantra-plan-extraction →
-  --           yantra-plan-resolution → execute-plan → format-response
+  -- pipeline (9 steps):
+  --   1. tokenise: string → word list
+  --   2. classify-fold: word list → typed token triples [word, kind, resolved]
+  --      (graph-driven compound resolution via iterative bigram folding)
+  --   3. query-intents: sentence → intent list (identity|origin|process|consequence|transmission)
+  --   4. yantra-plan-extraction: tokens → target + bindings (or stored assignment)
+  --   5. yantra-plan-resolution: target → plan (mode: direct|inverse|chain, steps, config)
+  --   6. execute-plan: plan → raw result [kind, name, value, unit, attr]
+  --   7. format-response: raw result → natural language string
+  --   8. error gating: suppress "tantra exists but missing input" when intent is identity
+  --   9. fallback: if computation yields nothing, compose conceptual answer via anuvada
+  --      (graph walk through visheshanam-projection algebra)
   --
-  -- fallback: when computation yields nothing, the same classified tokens
-  --           are passed to anuvada for conceptual answer composition.
+  -- the computational path (steps 4-7) resolves tantras as equations.
+  -- the conceptual path (step 9) walks the proof-graph tensor via typed edges.
+  -- both paths use the same classified tokens and intent detection.
 
   inputs
     sentence  string
@@ -55,12 +64,15 @@ tantra anuvada-ganana
 
     -- step 8b: distinguish real partial-input errors from "no target found" noise
     -- "exists but" in the reason means a tantra was found but inputs are missing → show error
-    -- but suppress that error when intent is "identity" (definitional query: "what is X")
-    -- in that case fall through to anuvada for a conceptual graph answer
+    -- but suppress that error when intent is "identity" AND no session bindings exist
+    -- (pure definitional query: "what is X" with no stored values → fall to anuvada)
+    -- when session bindings exist, the user is computing, so show the error even with identity intent
     error-reason = nth final-result 1
     is-missing-input-error = and (eq (nth final-result 0) "error") (gt (length (split error-reason "exists but")) 1)
     has-identity-intent = gt (length (filter intents (fn i -> eq i "identity"))) 0
-    is-real-error = and is-missing-input-error (not has-identity-intent)
+    has-session-bindings = gt (length (session-bindings _none)) 0
+    is-pure-identity = and has-identity-intent (not has-session-bindings)
+    is-real-error = and is-missing-input-error (not is-pure-identity)
     is-any-error = eq (nth final-result 0) "error"
     computed = cond (is-real-error) formatted (and (neq formatted "") (not is-any-error)) formatted otherwise ""
 

@@ -2,7 +2,9 @@ kosha visheshanam-kriya
 
   "kriya — the action; morphism; function application; multiplicative composition"
   "yantra-sthita domain-yantra-sthita"
+  "multiplication-abheda composition-abheda morphism-abheda"
+  "ring-sthita identity-element-yukta"
 
-shabda antisymmetric:yes composable:yes ring-op:mul
+shabda antisymmetric:yes composable:yes ring-op:mul / the-multiplicative-operation-of-the-visheshanam-ring-composing-relations-sequentially-non-commutative-with-swarupa-as-its-identity-element
 
 done

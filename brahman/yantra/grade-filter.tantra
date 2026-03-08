@@ -1,0 +1,35 @@
+tantra grade-filter
+
+  -- filters and sorts a list of node names by their sthita-depth grade.
+  --
+  -- mode "below": keep nodes with grade <= threshold (foundations and near)
+  -- mode "above": keep nodes with grade >= threshold (derived concepts)
+  -- mode "exact": keep nodes with grade == threshold (single layer)
+  -- mode "all":   keep all, sorted ascending by grade
+  --
+  -- this exposes the filtration R_0 ⊂ R_1 ⊂ R_2 ⊂ ... to tantras.
+  -- grade 0 = sangati foundations (mass, set, shunya, spanda, ...)
+  -- grade 1 = first derivations (force, group, closure, ...)
+  -- grade 2+ = higher derivations (kinetic-energy, field, quotient, ...)
+
+  inputs
+    nodes      list
+    mode       string
+    threshold  float
+
+  let
+    graded = map nodes (fn n -> pair n (sthita-depth n))
+
+    filtered = cond
+      (eq mode "below") (filter graded (fn g -> le (nth g 1) threshold))
+      (eq mode "above") (filter graded (fn g -> ge (nth g 1) threshold))
+      (eq mode "exact") (filter graded (fn g -> eq (nth g 1) threshold))
+      otherwise graded
+
+    sorted = sort-desc (map filtered (fn g -> pair (nth g 0) (neg (nth g 1))))
+    result = map sorted (fn s -> nth s 0)
+
+  return
+    result  list
+
+done

@@ -1,8 +1,10 @@
 sangati group
 
-  "set-swarupa closure-yukta identity-yukta inverse-yukta associativity-yukta domain-math-sthita"
+  "set-swarupa closure-yukta identity-element-yukta inverse-element-yukta associativity-yukta domain-math-sthita"
   "dharma-anvaya-swarupa shakha-yukta"
+  "commutativity-yukta"
+  "quotient-janya kernel-janya"
 
-  shabda set, closure, associativity, identity-matrix, inverse, subgroup, homomorphism, group-witness
+  shabda set, closure, associativity, identity-element, inverse-element, subgroup, homomorphism, group-witness, commutativity
 
 done

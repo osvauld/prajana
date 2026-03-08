@@ -41,6 +41,40 @@ $$
 W \xrightarrow{\text{classify-fold}} T=\{(\text{raw},\text{class},\text{canonical})\}
 $$
 
+The runtime classifier used by `classify` + `setu-classify-token` is a deterministic piecewise map.
+For each token $w$:
+
+$$
+\operatorname{cls}(w)=
+\begin{cases}
+(w,\text{number},\operatorname{float}(w)), & w\in\mathbb{R}\text{ (parseable)}\\
+(w,\text{operator},w), & w\in\{+, -, *, /, =\}\\
+(w,\text{grammar},w), & \operatorname{role}(w)\neq\varnothing\\
+(w,\text{concept},\operatorname{name}(\operatorname{lookup}(w))), & \operatorname{lookup}(w)\neq\varnothing\\
+(w,\text{unknown},w), & \text{otherwise}
+\end{cases}
+$$
+
+After per-token classification, compound resolution (`classify-fold-resolve`) repeatedly merges adjacent pairs.
+For adjacent $a,b$ with resolved names $a_2,b_2$, define candidate $c=a_2\texttt{-}b_2$:
+
+$$
+\operatorname{merge}(a,b)=
+\begin{cases}
+(a_0\!\!\texttt{ }\!b_0,\text{concept},\operatorname{name}(\operatorname{lookup}(c))), & \operatorname{lookup}(c)\neq\varnothing\\
+(a_0\!\!\texttt{ }\!b_0,\text{concept},\operatorname{alias}(c)), & \operatorname{alias}(c)\neq\varnothing\\
+\varnothing, & \text{otherwise}
+\end{cases}
+$$
+
+with left-token gate $a_1\in\{\text{modifier},\text{concept},\text{unknown}\}$.
+Fold repeats until list length stabilizes:
+
+$$
+T^{(k+1)}=\operatorname{foldPairs}(T^{(k)}),\qquad
+\text{stop when }|T^{(k+1)}|=|T^{(k)}|
+$$
+
 Classes include:
 
 - `concept`
@@ -65,6 +99,53 @@ where:
 - $I$ = intents (`identity`, `origin`, `process`, `consequence`, `transmission`).
 
 Intent extraction is lexical-rule based in tantra and then used as a structural switch for ranking/projection.
+
+Let indicator $\mathbf{1}[\cdot]$ be 1 when condition is true, else 0. For token set $W$:
+
+$$
+\mathbf{1}_{identity}=\mathbf{1}[\text{"what"}\in W]\cdot\mathbf{1}[\text{"is"}\in W]
+$$
+
+$$
+\mathbf{1}_{origin}=\mathbf{1}[\text{"from"}\in W\ \vee\ \text{"born"}\in W\ \vee\ \text{"origin"}\in W]
+$$
+
+$$
+\mathbf{1}_{process}=\mathbf{1}[\text{"how"}\in W\ \vee\ \text{"process"}\in W\ \vee\ \text{"becoming"}\in W]
+$$
+
+$$
+\mathbf{1}_{consequence}=\mathbf{1}[\text{"result"}\in W\ \vee\ \text{"consequence"}\in W\ \vee\ \text{"phala"}\in W]
+$$
+
+$$
+\mathbf{1}_{transmission}=\mathbf{1}[\text{any of }\{\text{inherit,inherits,left,leave,continue,continuity,parampara,samskaara}\}\in W]
+$$
+
+and $I$ is the ordered list of intents whose indicators are 1.
+
+Extraction rules in `yantra-plan-extraction` are explicit pattern predicates on triples of classified tokens.
+For ordered triples $(a,b,c)$ from $T$:
+
+$$
+\operatorname{bind}(a,b,c)=
+\begin{cases}
+(a_2, c_2), & a_1=\text{concept}\land b_2\in\{\text{"is"},\text{"="}\}\land c_1=\text{number}\\
+(a_0, c_2), & a_1=\text{unknown}\land b_2\in\{\text{"is"},\text{"="}\}\land c_1=\text{number}\\
+\varnothing, & \text{otherwise}
+\end{cases}
+$$
+
+$$
+\operatorname{target}(a,b,c)=
+\begin{cases}
+c_2, & a_2\in\{\text{"what"},\text{"when"}\}\land b_2=\text{"is"}\land c_1=\text{concept}\\
+b_2, & \operatorname{has}(a_2,\text{"kriya-yantra"})\land b_1=\text{concept}\\
+\varnothing, & \text{otherwise}
+\end{cases}
+$$
+
+If no explicit target is found, fallback chooses first concept token that is a tantra, then operator-to-tantra map (`chihna-ganaka`).
 
 ## 3. Node prior (structural satya)
 
@@ -175,6 +256,36 @@ $$
 
 where $\Pi_{I,D}$ is intent+domain projection.
 
+The branch gate is not generic "error vs success"; it follows `anuvada-ganana` predicates:
+
+$$
+\text{missingInput}(q)=\mathbf{1}[\text{kind}=\text{error}]\cdot
+\mathbf{1}[\text{"exists but"}\subset \text{reason}]
+$$
+
+$$
+\text{hasIdentity}(q)=\mathbf{1}[\text{identity}\in I(q)]
+$$
+
+$$
+\text{computeShown}(q)=
+\begin{cases}
+1,& \text{missingInput}(q)=1 \land \text{hasIdentity}(q)=0\\
+1,& \text{formatted}\neq\varnothing \land \text{kind}\neq\text{error}\\
+0,& \text{otherwise}
+\end{cases}
+$$
+
+and final output is:
+
+$$
+y(q)=
+\begin{cases}
+\text{formatted}(q),& \text{computeShown}(q)=1\\
+\text{anuvada}(q),& \text{computeShown}(q)=0
+\end{cases}
+$$
+
 ## 8. Conceptual projection operator
 
 For conceptual branch, outgoing triples are filtered by:
@@ -198,6 +309,14 @@ $$
 
 with $\widetilde{E}_{apara}$ constrained by `node-satya(target) > 0`, and `anuvritta` dropped.
 
+For neighborhood ordering in conceptual mode, `anuvada` uses `context-score-impl`:
+
+$$
+\operatorname{ctx}(n,S)=\left|\{e\in \operatorname{edges}(n)\mid e.source\in S\ \vee\ e.target\in S\}\right|
+$$
+
+Nearby list is ranked by descending $\operatorname{ctx}(n,S)$ with uniqueness filter.
+
 ## 9. Deterministic language composition
 
 Projected triples are rendered by relation-specific clause mappings:
@@ -209,6 +328,21 @@ Projected triples are rendered by relation-specific clause mappings:
 - `kriya` -> `through`
 - `phala` -> `yielding`
 - `janya` -> `arising from`
+
+If projected edge is $e=(u,r,v)$ and lexical map is $\lambda(r)$ from shabda setu,
+single-clause rendering is:
+
+$$
+\operatorname{clause}(e)=\lambda(r)\ \operatorname{eng}(v)
+$$
+
+with ordered concatenation:
+
+$$
+\operatorname{sentence}(u)=\operatorname{eng}(u)\ \texttt{" "}\operatorname{join}(\operatorname{unique}(\{\lambda(r_i)\operatorname{eng}(v_i)\}),\texttt{", "})\texttt{"."}
+$$
+
+`compose-answer` also prepends domain header and optional iccha clause via shabda templates, preserving deterministic output for fixed graph+templates.
 
 This is explicit string algebra in tantra, not probabilistic decoding.
 

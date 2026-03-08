@@ -2,7 +2,10 @@ kosha visheshanam-sthita
 
   "sthita — the standing-in; dependency; partial order"
   "yantra-sthita domain-yantra-sthita"
+  "partial-order-abheda filtration-janya lattice-janya"
+  "graded-ring-janya"
+  "ring-sthita"
 
-shabda antisymmetric:yes transitive:yes composable:yes
+shabda antisymmetric:yes transitive:yes composable:yes / the-dependency-edge-that-forms-a-partial-order-on-nodes-its-chains-encode-the-depth-filtration-from-sangati-foundations-to-kosha-derived-concepts
 
 done

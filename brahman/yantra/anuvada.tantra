@@ -28,17 +28,22 @@ tantra anuvada
     abheda-exp   = flatten (map seeds (fn s -> abheda-of s))
     all-seeds    = append seeds abheda-exp
 
-    -- score nearby nodes by context proximity
+    -- score nearby nodes by weighted context proximity
+    -- uses relation weights and depth decay instead of flat edge count
     all-incoming = flatten (map all-seeds (fn s -> incoming-to s))
-    incoming-src = map all-incoming (fn e -> nth e 0)
-    scored-in    = map incoming-src (fn n -> pair n (context-score n all-seeds))
+    incoming-src = unique (map all-incoming (fn e -> nth e 0))
+    scored-in    = map incoming-src (fn n -> pair n (weighted-context-score n all-seeds))
     top-scored   = sort-desc scored-in
-    nearby-nodes = unique (map top-scored (fn sp -> nth sp 0))
+    nearby-nodes = map top-scored (fn sp -> nth sp 0)
+
+    fallback = cond (neq (shabda "anuvada-setu" "no-answer-label") "")
+      (shabda "anuvada-setu" "no-answer-label")
+      otherwise "asprista"
 
     -- compose answer from graph structure
     result = cond (gt (length seeds) 0)
       (compose-answer seeds nearby-nodes intents)
-      otherwise "asprista"
+      otherwise fallback
 
   return
     result  string

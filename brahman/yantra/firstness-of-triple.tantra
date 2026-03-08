@@ -1,5 +1,19 @@
 tantra firstness-of-triple
 
+  -- assigns a tier (basis coefficient) to each (intent, relation-type) pair.
+  -- this is the intent-dependent projection matrix for the visheshanam ring:
+  -- each intent selects which relation axes are primary (aadya), secondary
+  -- (anantara), conditional (apara), or zero (anuvritta).
+  --
+  -- the 5 intents × 10 relations form a 5×10 coefficient table.
+  -- used by visheshanam-projection to select the relevant subspace.
+  --
+  -- tiers:
+  --   aadya     = primary basis vector   (always kept, coefficient 1.0)
+  --   anantara  = secondary basis        (always kept, coefficient 1.0)
+  --   apara     = conditional basis      (kept if target has satya > 0)
+  --   anuvritta = zero coefficient       (always dropped)
+
   inputs
     intent  string
     triple  list

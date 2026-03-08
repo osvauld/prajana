@@ -2,7 +2,8 @@ kosha visheshanam-siddha
 
   "siddha — the established; entailment; proof certification"
   "yantra-sthita domain-yantra-sthita"
+  "ring-sthita"
 
-shabda antisymmetric:yes
+shabda antisymmetric:yes / the-entailment-edge-A-siddha-B-means-A-is-proven-or-certified-through-B-antisymmetric-and-not-composable
 
 done

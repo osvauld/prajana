@@ -1,0 +1,41 @@
+tantra weighted-context-score
+
+  -- scores a node's relevance to a seed set using relation weights and depth decay.
+  --
+  -- flat context-score counts edges equally. this version weighs each edge
+  -- by its relation type's Shannon entropy weight (from visheshanam-entropy-weights)
+  -- and applies a depth decay so nodes closer to the query surface score higher.
+  --
+  -- score(n, S) = sum over edges e touching n and S of:
+  --   edge-weight(e.relation) * decay^(sthita-depth(n))
+  --
+  -- decay = 0.7 (each layer of derivation reduces contribution by 30%)
+  --
+  -- this replaces the flat integer count with a float that reflects
+  -- both the informativeness of the relation and the depth of the node.
+
+  inputs
+    n      string
+    seeds  list
+
+  let
+    decay = 0.7
+    depth = sthita-depth n
+    depth-factor = power decay depth
+
+    n-edges = edges n
+    touching = filter n-edges (fn eg ->
+      or (member (nth eg 0) seeds) (member (nth eg 2) seeds))
+
+    weighted = map touching (fn eg ->
+      let rel = nth eg 1
+      let w = edge-weight rel
+      in mul w depth-factor)
+
+    result = cond (eq (length weighted) 0) 0.0
+      otherwise (reduce weighted 0.0 (fn acc x -> add acc x))
+
+  return
+    result  float
+
+done
