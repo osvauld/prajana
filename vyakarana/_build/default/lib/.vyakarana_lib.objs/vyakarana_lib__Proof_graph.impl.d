@@ -1,1 +1,1 @@
-lib/proof_graph.ml: Float Hashtbl List String
+lib/proof_graph.ml: Array Float Hashtbl List Printf String
