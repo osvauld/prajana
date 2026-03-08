@@ -336,7 +336,42 @@ let () =
   in
   (* build yantra tantra index from loaded dirs — pass graph so tantras register as nodes *)
   let yantra_idx = Yantra.build_index ~graph:k0 dirs in
-  (* set the graph ref for legacy invert_expr calls *)
+  (* derive vp_satya_weight for each relation type from the visheshanam-entropy-weights tantra.
+     the tantra computes Shannon entropy of each relation's target distribution across all edges.
+     this runs after build_index so the tantra is loaded and all symmetry edges are present. *)
+   (let rel_names = ["swarupa";"abheda";"drishthanta";"sthita";"yukta";
+                    "siddha";"kriya";"phala";"janya";"pratipaksha"] in
+    match Hashtbl.find_opt yantra_idx.by_name "visheshanam-entropy-weights" with
+     | None ->
+       (* tantra not loaded — fall back to OCaml computation *)
+       Proof_graph.compute_visheshanam_entropy_weights k0
+     | Some t ->
+       let session = Yantra.new_session () in
+       let input = [("relations", Yantra.VList (List.map (fun s -> Yantra.VString s) rel_names))] in
+       let result = try Yantra.eval_tantra ~idx:yantra_idx ~session k0 t input
+         with _exn ->
+           Proof_graph.compute_visheshanam_entropy_weights k0;
+           Yantra.VNone in
+       (* result: list of [rel-name, weight] pairs, fully rescaled by the tantra.
+          just unwrap and register. *)
+       let rec unwrap v =
+         match v with
+         | Yantra.VList [single] -> unwrap single
+         | Yantra.VList items    -> items
+         | other                 -> [other]
+       in
+       List.iter (fun item ->
+         match unwrap item with
+         | [Yantra.VString rel_str; weight_v] ->
+           (match Proof_graph.visheshanam_of_string rel_str with
+            | None -> ()
+            | Some v ->
+              let w = Yantra.as_float weight_v in
+              let existing = Proof_graph.vish_props_of v in
+              Proof_graph.register_vish_props v { existing with Proof_graph.vp_satya_weight = w })
+         | _ -> ()
+       ) (Yantra.as_list result));
+   (* set the graph ref for legacy invert_expr calls *)
   Yantra._graph_ref := Some k0;
   let tantra_count = List.length !(yantra_idx.all_tantras) in
   let constant_count = Hashtbl.length yantra_idx.constants in

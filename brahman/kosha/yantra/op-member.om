@@ -1,0 +1,9 @@
+kosha op-member
+
+  "op-class-relation-kriya"
+
+shabda name:member parse-arity:2 arg0:value arg1:list
+
+  -- list membership test. member value list → bool. O(n).
+
+done

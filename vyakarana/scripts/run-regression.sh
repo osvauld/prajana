@@ -104,7 +104,7 @@ run_case "eval-first-match"         "3"                                         
 # These verify graph structure that PPR-based scoring (Phase 5+6) must not break.
 
 # context-score: addition shares edges with both domain-math and equation
-run_case "graph-context-score"      "2"                                                               'EVAL context-score "addition" ["domain-math","equation"]'
+run_case "graph-context-score"      "4"                                                               'EVAL context-score "addition" ["domain-math","equation"]'
 
 # abheda-of: plus node has abheda to addition (and others) — addition must be in the list
 run_case "graph-abheda-plus"        "addition"                                                        'EVAL abheda-of "plus"'

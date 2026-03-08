@@ -165,6 +165,15 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
              VString edge.target]
     ) edges))
 
+  (* all-edges: () → [(source, relation, target)] for every edge in the graph.
+     used by visheshanam-entropy-weights tantra to compute relation conductances. *)
+  | "all-edges" ->
+    Some (VList (List.map (fun (edge : Proof_graph.typed_edge) ->
+      VList [VString edge.source;
+             VString (Proof_graph.string_of_visheshanam edge.relation);
+             VString edge.target]
+    ) !(k.all_edges)))
+
   (* to-english: node-name → English name
      dispatches to to-english.tantra if loaded; falls back to shabda "name" field,
      then node name if node exists, otherwise returns "asprista". *)
@@ -208,61 +217,96 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      | Some v -> VString (Anuvada.english_of_visheshanam_from_graph k v)
      | None -> VString rel_str)
 
-  (* incoming-to: node-name -> incoming typed edges [source, relation, target] *)
+  (* incoming-to: node-name -> incoming typed edges [source, relation, target].
+     delegates to incoming-to.tantra when loaded; OCaml fallback otherwise. *)
   | "incoming-to" ->
     let name = as_string (e_eval k e (List.nth args 0)) in
-    let edges = Proof_graph.edges_of k name in
-    let incoming = List.filter_map (fun edge ->
-      if edge.Proof_graph.target = name && edge.Proof_graph.source <> name then
-        Some (VList [ VString edge.Proof_graph.source;
-                      VString (Proof_graph.string_of_visheshanam edge.Proof_graph.relation);
-                      VString edge.Proof_graph.target ])
-      else
-        None
-    ) edges in
-    Some (VList incoming)
+    (match !eval_ctx with
+     | Some ctx when Hashtbl.mem ctx.ctx_index.by_name "incoming-to" ->
+       let t = Hashtbl.find ctx.ctx_index.by_name "incoming-to" in
+       Some (!_eval_tantra_ref k t [("n", VString name)])
+     | _ ->
+       let edges = Proof_graph.edges_of k name in
+       let incoming = List.filter_map (fun edge ->
+         if edge.Proof_graph.target = name && edge.Proof_graph.source <> name then
+           Some (VList [ VString edge.Proof_graph.source;
+                         VString (Proof_graph.string_of_visheshanam edge.Proof_graph.relation);
+                         VString edge.Proof_graph.target ])
+         else
+           None
+       ) edges in
+       Some (VList incoming))
 
-  (* domain-of: node-name -> list of domain-* names linked to this node *)
+  (* domain-of: node-name -> list of domain-* names linked to this node.
+     delegates to domain-of.tantra when loaded; OCaml fallback otherwise. *)
   | "domain-of" ->
     let name = as_string (e_eval k e (List.nth args 0)) in
-    let is_domain_name n =
-      String.length n >= 7 && String.sub n 0 7 = "domain-"
-    in
-    let own = if is_domain_name name then [name] else [] in
-    let domains =
-      match Hashtbl.find_opt k.nodes name with
-      | None -> own
-      | Some n ->
-        let from_outgoing = List.filter_map (fun edge ->
-          if edge.Proof_graph.source = name
-             && edge.Proof_graph.relation = Proof_graph.Sthita
-             && is_domain_name edge.Proof_graph.target
-          then Some edge.Proof_graph.target
-          else None
-        ) n.edges in
-        let from_incoming = List.filter_map (fun edge ->
-          if edge.Proof_graph.target = name && is_domain_name edge.Proof_graph.source
-          then Some edge.Proof_graph.source
-          else None
-        ) (Proof_graph.edges_of k name) in
-        List.sort_uniq String.compare (own @ from_outgoing @ from_incoming)
-    in
-    Some (VList (List.map (fun d -> VString d) domains))
+    (match !eval_ctx with
+     | Some ctx when Hashtbl.mem ctx.ctx_index.by_name "domain-of" ->
+       let t = Hashtbl.find ctx.ctx_index.by_name "domain-of" in
+       Some (!_eval_tantra_ref k t [("n", VString name)])
+     | _ ->
+       let is_domain_name n =
+         String.length n >= 7 && String.sub n 0 7 = "domain-"
+       in
+       let own = if is_domain_name name then [name] else [] in
+       let domains =
+         match Hashtbl.find_opt k.nodes name with
+         | None -> own
+         | Some n ->
+           let from_outgoing = List.filter_map (fun edge ->
+             if edge.Proof_graph.source = name
+                && edge.Proof_graph.relation = Proof_graph.Sthita
+                && is_domain_name edge.Proof_graph.target
+             then Some edge.Proof_graph.target
+             else None
+           ) n.edges in
+           let from_incoming = List.filter_map (fun edge ->
+             if edge.Proof_graph.target = name && is_domain_name edge.Proof_graph.source
+             then Some edge.Proof_graph.source
+             else None
+           ) (Proof_graph.edges_of k name) in
+           List.sort_uniq String.compare (own @ from_outgoing @ from_incoming)
+       in
+       Some (VList (List.map (fun d -> VString d) domains)))
 
-  (* context-score: node-name x [seed-names] -> edge connectivity score *)
+  (* context-score: node-name x [seed-names] -> edge connectivity score.
+     delegates to context-score.tantra when loaded; OCaml fallback otherwise. *)
   | "context-score" ->
     let name = as_string (e_eval k e (List.nth args 0)) in
-    let seeds = List.map as_string (as_list (e_eval k e (List.nth args 1))) in
-    let seed_set = Hashtbl.create 16 in
-    List.iter (fun s -> Hashtbl.replace seed_set s true) seeds;
-    let edges = Proof_graph.edges_of k name in
-    let score = List.fold_left (fun acc edge ->
-      if Hashtbl.mem seed_set edge.Proof_graph.source
-         || Hashtbl.mem seed_set edge.Proof_graph.target
-      then acc + 1
-      else acc
-    ) 0 edges in
-    Some (VFloat (Float.of_int score))
+    let seeds_v = e_eval k e (List.nth args 1) in
+    (match !eval_ctx with
+      | Some ctx when Hashtbl.mem ctx.ctx_index.by_name "context-score-impl" ->
+        let t = Hashtbl.find ctx.ctx_index.by_name "context-score-impl" in
+        Some (!_eval_tantra_ref k t [("n", VString name); ("seeds", seeds_v)])
+     | _ ->
+       let seeds = List.map as_string (as_list seeds_v) in
+       let seed_set = Hashtbl.create 16 in
+       List.iter (fun s -> Hashtbl.replace seed_set s true) seeds;
+       let edges = Proof_graph.edges_of k name in
+       let score = List.fold_left (fun acc edge ->
+         if Hashtbl.mem seed_set edge.Proof_graph.source
+            || Hashtbl.mem seed_set edge.Proof_graph.target
+         then acc + 1
+         else acc
+       ) 0 edges in
+       Some (VFloat (Float.of_int score)))
+
+  (* node-satya: node-name -> float — structural importance score *)
+  | "node-satya" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    let satya = match Hashtbl.find_opt k.nodes name with
+      | Some n -> n.Proof_graph.satya
+      | None   -> 0.0 in
+    Some (VFloat satya)
+
+  (* edge-weight: relation-name-string -> float — vp_satya_weight conductance *)
+  | "edge-weight" ->
+    let rel_str = as_string (e_eval k e (List.nth args 0)) in
+    let w = match Proof_graph.visheshanam_of_string rel_str with
+      | Some v -> (Proof_graph.vish_props_of v).vp_satya_weight
+      | None   -> 0.0 in
+    Some (VFloat w)
 
   (* iccha-status: node-name -> "sthita" | "rahita" | "none" *)
   | "iccha-status" ->
@@ -293,21 +337,27 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     in
     Some (VString (if has_sthita then "sthita" else if has_rahita then "rahita" else "none"))
 
-  (* abheda-of: node-name -> outgoing abheda targets *)
+  (* abheda-of: node-name -> outgoing abheda targets.
+     delegates to abheda-of.tantra when loaded; OCaml fallback otherwise. *)
   | "abheda-of" ->
     let name = as_string (e_eval k e (List.nth args 0)) in
-    let targets =
-      match Hashtbl.find_opt k.nodes name with
-      | None -> []
-      | Some n ->
-        List.filter_map (fun edge ->
-          if edge.Proof_graph.source = name
-             && edge.Proof_graph.relation = Proof_graph.Abheda
-          then Some edge.Proof_graph.target
-          else None
-        ) n.edges
-    in
-    Some (VList (List.map (fun t -> VString t) (List.sort_uniq String.compare targets)))
+    (match !eval_ctx with
+     | Some ctx when Hashtbl.mem ctx.ctx_index.by_name "abheda-of" ->
+       let t = Hashtbl.find ctx.ctx_index.by_name "abheda-of" in
+       Some (!_eval_tantra_ref k t [("n", VString name)])
+     | _ ->
+       let targets =
+         match Hashtbl.find_opt k.nodes name with
+         | None -> []
+         | Some n ->
+           List.filter_map (fun edge ->
+             if edge.Proof_graph.source = name
+                && edge.Proof_graph.relation = Proof_graph.Abheda
+             then Some edge.Proof_graph.target
+             else None
+           ) n.edges
+       in
+       Some (VList (List.map (fun t -> VString t) (List.sort_uniq String.compare targets))))
 
   (* avrti: seed-names × max-passes -> flat triples [source-raw, relation-name, [target-raws]] *)
   | "avrti" ->

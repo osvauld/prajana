@@ -199,7 +199,13 @@ let () =
   _eval_chain_ref := eval;
   _eval_tantra_chain_ref := (fun k t inputs -> eval_tantra k t inputs);
   _eval_pure_op_raw := eval_pure_op;
-  _eval_pipeline_op_raw := eval_pipeline_op
+  _eval_pipeline_op_raw := eval_pipeline_op;
+  (* register arities for built-in primitives not derived from graph nodes *)
+  Yantra_parser.register_graph_op_arity "all-edges"    (-1);  (* variadic → Call("all-edges",[]) *)
+  Yantra_parser.register_graph_op_arity "sum"           1;   (* sum [list] *)
+  Yantra_parser.register_graph_op_arity "frequencies"   1;   (* frequencies [list] → [[val,count],...] *)
+  Yantra_parser.register_graph_op_arity "starts-with"   2;   (* starts-with string prefix → bool *)
+  Yantra_parser.register_graph_op_arity "member"        2    (* member value list → bool *)
 
 (* ---- run anuvada-ganana: the meta-tantra pipeline ---- *)
 let run_anuvada_ganana (k : proof_graph) (idx : tantra_index) (session : session)

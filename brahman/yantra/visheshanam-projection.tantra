@@ -1,0 +1,52 @@
+tantra visheshanam-projection
+
+  -- visheshanam algebra: project an edge set onto the intent-relevant subspace.
+  --
+  -- mathematical backing (from brahman/kosha/math):
+  --   closure (group axiom)  — edges must stay within the seed domain subgroup
+  --   projection (aneka-eka) — tier as basis; anuvritta has zero coefficient → dropped
+  --   norm (matra-swarupa)   — node-satya filters structurally empty targets
+  --   vector-space (basis)   — each relation type is an independent axis, not a linear rank
+  --
+  -- tiers (from firstness-of-triple, intent-dependent):
+  --   aadya     — primary basis vectors: always keep
+  --   anantara  — secondary basis: always keep
+  --   apara     — mid-frequency: keep targets with structural content (satya > 0)
+  --   anuvritta — noise floor: always drop (zero coefficient in intent basis)
+
+  inputs
+    triples       list
+    intent        string
+    seed-domains  list
+
+  let
+    -- step 1: closure — restrict to edges whose target shares any seed domain
+    -- group axiom: operations must stay within the domain subgroup
+    has-domains = gt (length (filter seed-domains (fn d -> neq d ""))) 0
+
+    domain-filtered = cond (has-domains)
+      (filter triples (fn e ->
+        let tgt = nth e 2
+        let tgt-doms = domain-of tgt
+        in gt (length (filter tgt-doms (fn d ->
+          gt (length (filter seed-domains (fn sd -> eq sd d))) 0))) 0))
+      otherwise triples
+
+    -- step 2: projection — assign tier via firstness-of-triple
+    -- each tier is a subspace; anuvritta has zero coefficient → not collected
+    aadya     = filter domain-filtered (fn t -> eq (firstness-of-triple intent t) "aadya")
+    anantara  = filter domain-filtered (fn t -> eq (firstness-of-triple intent t) "anantara")
+    apara-raw = filter domain-filtered (fn t -> eq (firstness-of-triple intent t) "apara")
+
+    -- step 3: norm — within apara, keep only targets with structural content
+    -- node-satya > 0 means the node has slokas, edges, type diversity
+    -- this is not a linear sort — each relation type is an independent axis
+    apara = filter apara-raw (fn t -> gt (node-satya (nth t 2)) 0)
+
+    -- step 4: assemble — aadya + anantara (full basis) + filtered apara
+    projected = append aadya (append anantara apara)
+
+  return
+    projected  list
+
+done

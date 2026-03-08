@@ -1,7 +1,13 @@
 tantra compose-answer
 
   -- morphism: graph structure -> English sentences
-  -- flow: classify seeds -> rank outgoing edges by intent -> compose
+  -- flow: classify seeds -> visheshanam-projection (algebra) -> compose
+  --
+  -- the projection layer (visheshanam-projection) applies:
+  --   closure  — domain filter
+  --   projection — tier-based basis selection
+  --   norm     — satya × edge-weight salience
+  --   convergence — stable edge set
 
   inputs
     seeds       list
@@ -30,11 +36,17 @@ tantra compose-answer
       otherwise ""
     domain-label = cond (neq top-dom-label "") top-dom-label otherwise nearby-label
 
+    -- effective domains for projection (all seed domains, or inferred)
+    eff-domains = cond (gt (length seed-doms) 0) seed-doms
+      (neq nearby-dom "") (split nearby-dom ",")
+      otherwise (split "" ",")
+
+    -- seed sentences: project edges through the visheshanam algebra, then compose
     seed-sentences = map seeds (fn s ->
       let eng = to-english s
       let out-edges = filter (edges s) (fn e -> eq (nth e 0) s)
-      let ranked = rank-triples-by-intent intent out-edges
-      let clauses = map ranked (fn e ->
+      let projected = visheshanam-projection out-edges intent eff-domains
+      let clauses = map projected (fn e ->
         let rel = nth e 1
         let tgt = to-english (nth e 2)
         in cond
@@ -46,22 +58,29 @@ tantra compose-answer
           (eq rel "janya") (concat "arising from " tgt)
           (eq rel "kriya") (concat "through " tgt)
           (eq rel "phala") (concat "yielding " tgt)
+          (eq rel "siddha") (concat "proven-through " tgt)
+          (eq rel "pratipaksha") (concat "pratipaksha " tgt)
           otherwise (concat (to-english-relation rel) " " tgt))
+      -- deduplicate after rendering (catches duplicates from different node IDs → same English)
       let clean-clauses = unique (filter clauses (fn c -> neq c ""))
       in cond (gt (length clean-clauses) 0)
         (concat eng " " (join clean-clauses ", ") ".")
         otherwise (concat eng "."))
 
+    -- root-targets: extract swarupa/abheda targets from the projected seed edges
+    -- (these are already domain-filtered by the projection)
     root-targets = unique (flatten (map seeds (fn s ->
       let out-edges = filter (edges s) (fn e -> eq (nth e 0) s)
-      in map (filter out-edges (fn e -> or (eq (nth e 1) "swarupa") (eq (nth e 1) "abheda")))
+      let projected = visheshanam-projection out-edges intent eff-domains
+      in map (filter projected (fn e -> or (eq (nth e 1) "swarupa") (eq (nth e 1) "abheda")))
         (fn e -> nth e 2))))
 
+    -- root sentences: same projection applied to each root-target's edges
     root-sentences = map root-targets (fn r ->
       let eng = to-english r
       let out-edges = filter (edges r) (fn e -> eq (nth e 0) r)
-      let ranked = rank-triples-by-intent intent out-edges
-      let clauses = map ranked (fn e ->
+      let projected = visheshanam-projection out-edges intent eff-domains
+      let clauses = map projected (fn e ->
         let rel = nth e 1
         let tgt = to-english (nth e 2)
         in cond
@@ -73,6 +92,8 @@ tantra compose-answer
           (eq rel "janya") (concat "arising from " tgt)
           (eq rel "kriya") (concat "through " tgt)
           (eq rel "phala") (concat "yielding " tgt)
+          (eq rel "siddha") (concat "proven-through " tgt)
+          (eq rel "pratipaksha") (concat "pratipaksha " tgt)
           otherwise (concat (to-english-relation rel) " " tgt))
       let clean-clauses = unique (filter clauses (fn c -> neq c ""))
       in cond (gt (length clean-clauses) 0)

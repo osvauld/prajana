@@ -220,11 +220,6 @@ let scan_visheshanam_properties (k : proof_graph) : unit =
     | Some "yes" -> true
     | _          -> false
   in
-  let parse_float_opt pairs key =
-    match List.assoc_opt key pairs with
-    | Some s -> float_of_string_opt s
-    | None   -> None
-  in
   let parse_ring_op pairs =
     match List.assoc_opt "ring-op" pairs with
     | Some "add" -> `Add
@@ -263,10 +258,8 @@ let scan_visheshanam_properties (k : proof_graph) : unit =
         vp_composable    = parse_bool  pairs "composable";
         vp_dual          = parse_dual  pairs;
         vp_ring_op       = parse_ring_op pairs;
-        vp_satya_weight  =
-          (match parse_float_opt pairs "satya-weight" with
-           | Some w -> w
-           | None   -> Proof_graph.default_vish_props.vp_satya_weight);
+        vp_satya_weight  = Proof_graph.default_vish_props.vp_satya_weight;
+        (* entropy-derived weight computed later by compute_visheshanam_entropy_weights *)
       } in
       Proof_graph.register_vish_props vish props
   ) vish_names
@@ -370,9 +363,9 @@ let build_index ?(graph : proof_graph option) (dirs : string list) : tantra_inde
      List.iter (fun (name, added, present) ->
        Printf.printf "  %-20s %d added / %d already present\n" (name ^ ":") added present
      ) summary;
-     (* pass 1c: set raw_satya as structural prior on every node.
-        no iteration — PPR handles neighbour influence per query at runtime. *)
-     Proof_graph.init_satya k);
+      (* pass 1c: set raw_satya as structural prior on every node.
+         no iteration — PPR handles neighbour influence per query at runtime. *)
+      Proof_graph.init_satya k);
   (* pass 2: pre-scan all tantra arities so the parser knows them *)
   pre_scan_arities tantra_dirs;
   (* pass 3: full parse and registration *)
