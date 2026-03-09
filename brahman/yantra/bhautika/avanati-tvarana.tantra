@@ -1,0 +1,13 @@
+tantra incline-acceleration
+
+  inputs
+    angle                 float  radian
+    friction-coefficient  float  dimensionless
+
+  let
+    a = mul gravity (sub (sin angle) (mul friction-coefficient (cos angle)))
+
+  return
+    a  float  metre-per-second-squared
+
+done

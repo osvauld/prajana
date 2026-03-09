@@ -1,0 +1,13 @@
+tantra projectile-range
+
+  inputs
+    initial-velocity  float  metre-per-second
+    angle             float  radian
+
+  let
+    R = div (mul (power initial-velocity 2.0) (sin (mul 2.0 angle))) gravity
+
+  return
+    R  float  metre
+
+done

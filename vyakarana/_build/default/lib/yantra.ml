@@ -65,7 +65,7 @@ let classify_for_yantra (k : proof_graph) (word : string) : ytoken =
     | Setu.Operator op -> YOperator op
     | Setu.Content name -> YConcept name
     | Setu.Grammar v   -> YGrammar v
-    | Setu.Article      -> YGrammar Sthita
+    | Setu.Article      -> YGrammar sthita
     | Setu.Unknown w    ->
       match Hashtbl.find_opt alias_cache w with
       | Some full -> YConcept full
@@ -124,7 +124,7 @@ let is_question_word w =
   w = "find" || w = "solve" || w = "calculate" || w = "compute" ||
   w = "determine" || w = "evaluate"
 
-let is_question_grammar v = v = Drishthanta
+let is_question_grammar v = v = Proof_graph.drishthanta
 
 let extract_bindings (k : proof_graph) (idx : tantra_index) (session : session)
     (tokens : (string * ytoken) list) : extraction =
@@ -134,14 +134,17 @@ let extract_bindings (k : proof_graph) (idx : tantra_index) (session : session)
 
   let rec walk = function
     | [] -> ()
-    | (_, YConcept c) :: (_, YGrammar Swarupa) :: (_, YNumber n) :: rest
+    | (_, YConcept c) :: (_, YGrammar v) :: (_, YNumber n) :: rest
+      when v = Proof_graph.swarupa ->
+      bindings := make_binding c n :: !bindings;
+      walk rest
     | (_, YConcept c) :: (_, YOperator "=") :: (_, YNumber n) :: rest ->
-      bindings := { b_name = c; b_value = n; b_unit = None } :: !bindings;
+      bindings := make_binding c n :: !bindings;
       walk rest
     | (w, YUnknown _) :: (_, YOperator "=") :: (_, YNumber n) :: rest
     | (w, YGrammar _) :: (_, YOperator "=") :: (_, YNumber n) :: rest ->
       let resolved = resolve_alias k w in
-      bindings := { b_name = resolved; b_value = n; b_unit = None } :: !bindings;
+      bindings := make_binding resolved n :: !bindings;
       walk rest
     | (_, YConcept c) :: (_, YNumber n) :: rest ->
       let is_op_concept =
@@ -159,11 +162,10 @@ let extract_bindings (k : proof_graph) (idx : tantra_index) (session : session)
       if is_op_concept then begin
         unbound_concepts := c :: !unbound_concepts;
         let idx_n = List.length !bindings in
-        bindings := { b_name = Printf.sprintf "arg%d" idx_n;
-                      b_value = n; b_unit = None } :: !bindings;
+        bindings := make_binding (Printf.sprintf "arg%d" idx_n) n :: !bindings;
         walk rest
       end else begin
-        bindings := { b_name = c; b_value = n; b_unit = None } :: !bindings;
+        bindings := make_binding c n :: !bindings;
         walk rest
       end
     | (_, YConcept c) :: (w, YGrammar v) :: rest
@@ -191,8 +193,7 @@ let extract_bindings (k : proof_graph) (idx : tantra_index) (session : session)
     | (_, YOperator _) :: rest -> walk rest
     | (_, YNumber n) :: rest ->
       let idx_n = List.length !bindings in
-      bindings := { b_name = Printf.sprintf "arg%d" idx_n;
-                    b_value = n; b_unit = None } :: !bindings;
+      bindings := make_binding (Printf.sprintf "arg%d" idx_n) n :: !bindings;
       walk rest
     | (_, YUnknown _) :: rest -> walk rest
   in
@@ -303,19 +304,27 @@ let run (k : proof_graph) (idx : tantra_index) (session : session)
                 (match t.t_returns with
                  | [ret] ->
                    let v = as_float result in
-                   final_bindings := { b_name = ret.tp_name; b_value = v;
-                                       b_unit = ret.tp_unit } :: !final_bindings;
-                   if t.t_name <> ret.tp_name then
-                     final_bindings := { b_name = t.t_name; b_value = v;
-                                         b_unit = ret.tp_unit } :: !final_bindings
-                 | rets ->
-                   let values = as_list result in
-                   List.iteri (fun i ret ->
-                     let v = if i < List.length values
-                             then as_float (List.nth values i) else 0.0 in
-                     final_bindings := { b_name = ret.tp_name; b_value = v;
-                                         b_unit = ret.tp_unit } :: !final_bindings
-                   ) rets);
+                    let ts = Unix.gettimeofday () in
+                    final_bindings := { b_name = ret.tp_name; b_value = v;
+                                        b_unit = ret.tp_unit;
+                                        b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                                        b_confidence = 1.0; b_ttl = None } :: !final_bindings;
+                    if t.t_name <> ret.tp_name then
+                      final_bindings := { b_name = t.t_name; b_value = v;
+                                          b_unit = ret.tp_unit;
+                                          b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                                          b_confidence = 1.0; b_ttl = None } :: !final_bindings
+                  | rets ->
+                    let ts = Unix.gettimeofday () in
+                    let values = as_list result in
+                    List.iteri (fun i ret ->
+                      let v = if i < List.length values
+                              then as_float (List.nth values i) else 0.0 in
+                      final_bindings := { b_name = ret.tp_name; b_value = v;
+                                          b_unit = ret.tp_unit;
+                                          b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                                          b_confidence = 1.0; b_ttl = None } :: !final_bindings
+                    ) rets);
                 tantra_names := t.t_name :: !tantra_names
               | CInverse (t, _tgt, _plan, _kv) ->
                 tantra_names := (t.t_name ^ "(inv)") :: !tantra_names

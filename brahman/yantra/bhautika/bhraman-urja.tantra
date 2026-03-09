@@ -1,0 +1,13 @@
+tantra rotational-kinetic-energy
+
+  inputs
+    moment-of-inertia  float  kilogram-metre-squared
+    angular-velocity   float  radian-per-second
+
+  let
+    ke = mul (mul 0.5 moment-of-inertia) (power angular-velocity 2.0)
+
+  return
+    ke  float  joule
+
+done

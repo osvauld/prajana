@@ -256,7 +256,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
          | Some n ->
            let from_outgoing = List.filter_map (fun edge ->
              if edge.Proof_graph.source = name
-                && edge.Proof_graph.relation = Proof_graph.Sthita
+                 && edge.Proof_graph.relation = Proof_graph.sthita
                 && is_domain_name edge.Proof_graph.target
              then Some edge.Proof_graph.target
              else None
@@ -318,7 +318,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
         List.exists (fun edge ->
           edge.Proof_graph.source = name
           && edge.Proof_graph.target = "iccha"
-          && edge.Proof_graph.relation = Proof_graph.Sthita
+          && edge.Proof_graph.relation = Proof_graph.sthita
         ) n.edges
     in
     let has_rahita =
@@ -352,7 +352,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
          | Some n ->
            List.filter_map (fun edge ->
              if edge.Proof_graph.source = name
-                && edge.Proof_graph.relation = Proof_graph.Abheda
+                 && edge.Proof_graph.relation = Proof_graph.abheda
              then Some edge.Proof_graph.target
              else None
            ) n.edges

@@ -17,6 +17,9 @@ open Yantra_inverter
 open Yantra_resolver
 open Yantra_eval_primitives
 
+(* helper: binding with default metadata (used for transient search/query bindings) *)
+let _transient_binding n f = make_binding n f
+
 let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
     (k : proof_graph) (e : env) (op : string) (args : expr list) : value option =
   match op with
@@ -66,8 +69,11 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
      | None ->
        Some (VList [VString "error"; VString "missing eval context"; VFloat 0.0; VString ""; VString ""])
      | Some ctx ->
+       let now = Unix.gettimeofday () in
        let bindings = List.filter_map (function
-         | VBinding (n, f) -> Some { b_name = n; b_value = f; b_unit = None }
+         | VBinding (n, f) -> Some { b_name = n; b_value = f; b_unit = None;
+                                     b_timestamp = now; b_source = "user";
+                                     b_confidence = 1.0; b_ttl = None }
          | _ -> None
        ) items in
        List.iter (fun b ->
@@ -90,7 +96,7 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
      | Some ctx ->
        let bindings = List.filter_map (fun v ->
          match v with
-         | VBinding (n, f) -> Some { b_name = n; b_value = f; b_unit = None }
+         | VBinding (n, f) -> Some (_transient_binding n f)
          | _ -> None
        ) bindings_v in
        let target = match !_resolve_concept_to_tantra_ref k ctx.ctx_index target with
@@ -138,7 +144,7 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
      | Some ctx ->
        let bindings = List.filter_map (fun v ->
          match v with
-         | VBinding (n, f) -> Some { b_name = n; b_value = f; b_unit = None }
+         | VBinding (n, f) -> Some (_transient_binding n f)
          | _ -> None
        ) bindings_v in
        let target = match !_resolve_concept_to_tantra_ref k ctx.ctx_index target with
@@ -233,7 +239,7 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
      | Some ctx ->
        let bindings = List.filter_map (fun v ->
          match v with
-         | VBinding (n, f) -> Some { b_name = n; b_value = f; b_unit = None }
+         | VBinding (n, f) -> Some (_transient_binding n f)
          | _ -> None
        ) bindings_v in
        let target = match !_resolve_concept_to_tantra_ref k ctx.ctx_index target with
@@ -278,7 +284,7 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
      | Some ctx ->
        let bindings = List.filter_map (fun v ->
          match v with
-         | VBinding (n, f) -> Some { b_name = n; b_value = f; b_unit = None }
+         | VBinding (n, f) -> Some (_transient_binding n f)
          | _ -> None
        ) bindings_v in
        let target = match !_resolve_concept_to_tantra_ref k ctx.ctx_index target with
@@ -326,16 +332,22 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
                     internal return variable names (e.g. "ke" for kinetic-energy)
                     are not stored to prevent stale values from polluting
                     subsequent chain resolutions. *)
-                 ctx.ctx_session.bindings <-
-                   { b_name = t.t_name; b_value = f; b_unit = ret.tp_unit }
+                  let ts = Unix.gettimeofday () in
+                  ctx.ctx_session.bindings <-
+                   { b_name = t.t_name; b_value = f; b_unit = ret.tp_unit;
+                     b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                     b_confidence = 1.0; b_ttl = None }
                    :: List.filter (fun b -> b.b_name <> t.t_name) ctx.ctx_session.bindings
                | rets ->
+                 let ts = Unix.gettimeofday () in
                  let values = as_list result in
                  List.iteri (fun i ret ->
                    let v = if i < List.length values then List.nth values i else VNone in
                    let f = as_float v in
                    ctx.ctx_session.bindings <-
-                     { b_name = ret.tp_name; b_value = f; b_unit = ret.tp_unit }
+                     { b_name = ret.tp_name; b_value = f; b_unit = ret.tp_unit;
+                       b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                       b_confidence = 1.0; b_ttl = None }
                      :: List.filter (fun b -> b.b_name <> ret.tp_name) ctx.ctx_session.bindings
                  ) rets);
               step_names := t.t_name :: !step_names
@@ -377,8 +389,10 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
                  let unit_opt = match List.find_opt (fun inp -> inp.tp_name = target_inp_name) t.t_inputs with
                    | Some inp -> inp.tp_unit
                    | None -> None in
-                 ctx.ctx_session.bindings <-
-                   { b_name = tgt; b_value = f; b_unit = unit_opt }
+                  ctx.ctx_session.bindings <-
+                   { b_name = tgt; b_value = f; b_unit = unit_opt;
+                     b_timestamp = Unix.gettimeofday (); b_source = "tantra:" ^ t.t_name;
+                     b_confidence = 1.0; b_ttl = None }
                    :: List.filter (fun b -> b.b_name <> tgt) ctx.ctx_session.bindings
                | None -> ());
               step_names := t.t_name :: !step_names

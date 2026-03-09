@@ -1,0 +1,13 @@
+tantra spring-energy
+
+  inputs
+    spring-constant  float  newton-per-metre
+    amplitude        float  metre
+
+  let
+    E = mul (mul 0.5 spring-constant) (power amplitude 2.0)
+
+  return
+    E  float  joule
+
+done

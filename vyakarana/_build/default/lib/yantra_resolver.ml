@@ -440,24 +440,31 @@ and chain_resolve ?(max_depth = 4) ?(beam_width = 8) (k : proof_graph) (idx : ta
                     let new_bindings = match t.t_returns with
                       | [ret] ->
                         let v = as_float result in
-                        let base = [{ b_name = ret.tp_name; b_value = v; b_unit = ret.tp_unit }] in
+                        let ts = Unix.gettimeofday () in
+                        let mk n u = { b_name = n; b_value = v; b_unit = u;
+                                       b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                                       b_confidence = 1.0; b_ttl = None } in
+                        let base = [mk ret.tp_name ret.tp_unit] in
                         let aliases = ref base in
                         if t.t_name <> ret.tp_name then
-                          aliases := { b_name = t.t_name; b_value = v; b_unit = ret.tp_unit } :: !aliases;
+                          aliases := mk t.t_name ret.tp_unit :: !aliases;
                         if ret.tp_canonical <> ret.tp_name && ret.tp_canonical <> t.t_name then
-                          aliases := { b_name = ret.tp_canonical; b_value = v; b_unit = ret.tp_unit } :: !aliases;
+                          aliases := mk ret.tp_canonical ret.tp_unit :: !aliases;
                         (match String.rindex_opt t.t_name '-' with
                          | Some i ->
                            let last = String.sub t.t_name (i+1) (String.length t.t_name - i - 1) in
                            if last <> ret.tp_name && last <> t.t_name then
-                             aliases := { b_name = last; b_value = v; b_unit = ret.tp_unit } :: !aliases
+                             aliases := mk last ret.tp_unit :: !aliases
                          | None -> ());
                         !aliases
                       | rets ->
+                        let ts = Unix.gettimeofday () in
                         let values = as_list result in
                         List.mapi (fun i ret ->
                           let v = if i < List.length values then List.nth values i else VNone in
-                          { b_name = ret.tp_name; b_value = as_float v; b_unit = ret.tp_unit }
+                          { b_name = ret.tp_name; b_value = as_float v; b_unit = ret.tp_unit;
+                            b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                            b_confidence = 1.0; b_ttl = None }
                         ) rets
                     in
                     let step_s = ppr_score t.t_name in
@@ -531,11 +538,14 @@ and chain_resolve ?(max_depth = 4) ?(beam_width = 8) (k : proof_graph) (idx : ta
                               | Some v -> as_float v | None -> 0.0 in
                             let new_b = { b_name = missing_inp.tp_name;
                                           b_value = result_v;
-                                          b_unit = missing_inp.tp_unit } in
-                             (* inverse step: PPR score weighted by Pratipaksha vp_satya_weight,
+                                          b_unit = missing_inp.tp_unit;
+                                          b_timestamp = Unix.gettimeofday ();
+                                          b_source = "tantra:" ^ t.t_name;
+                                          b_confidence = 1.0; b_ttl = None } in
+                             (* inverse step: PPR score weighted by pratipaksha vp_satya_weight,
                                 then blended with depth preference via depth_affinity. *)
                              let pratipaksha_w =
-                               (Proof_graph.vish_props_of Proof_graph.Pratipaksha).Proof_graph.vp_satya_weight in
+                                (Proof_graph.vish_props_of Proof_graph.pratipaksha).Proof_graph.vp_satya_weight in
                              let step_s = ppr_score t.t_name *. pratipaksha_w in
                              let new_depth = depth + 1 in
                              let new_score = blend_score step_s new_depth in

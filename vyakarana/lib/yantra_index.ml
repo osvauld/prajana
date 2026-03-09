@@ -48,10 +48,10 @@ let resolve_tantra_params (k : proof_graph) (t : tantra) : tantra =
 
 let register_tantra_in_graph (k : proof_graph) (t : tantra) : unit =
   let input_edges = List.map (fun inp ->
-    { source = t.t_name; target = inp.tp_name; relation = Sthita }
+    { source = t.t_name; target = inp.tp_name; relation = sthita }
   ) t.t_inputs in
   let output_edges = List.map (fun ret ->
-    { source = t.t_name; target = ret.tp_name; relation = Phala }
+    { source = t.t_name; target = ret.tp_name; relation = phala }
   ) t.t_returns in
   let all_edges = input_edges @ output_edges in
   let node : nigamana = {
@@ -61,7 +61,7 @@ let register_tantra_in_graph (k : proof_graph) (t : tantra) : unit =
   (* only add if no existing node (don't overwrite sangati/kosha nodes) *)
   match Proof_graph.find k t.t_name with
   | Some existing ->
-    (* merge edges: add Sthita/Phala edges from tantra to existing node *)
+    (* merge edges: add sthita/phala edges from tantra to existing node *)
     let new_edges = List.filter (fun e ->
       not (List.exists (fun ex ->
         ex.source = e.source && ex.target = e.target && ex.relation = e.relation
@@ -196,7 +196,7 @@ let scan_graph_op_arities (k : proof_graph) : unit =
             match acc with
             | Some _ -> acc
             | None ->
-              if e.source = node_name && e.relation = Proof_graph.Kriya then
+              if e.source = node_name && e.relation = Proof_graph.kriya then
                 Proof_graph.find k e.target
               else None
           ) None n.edges
@@ -231,18 +231,12 @@ let scan_visheshanam_properties (k : proof_graph) : unit =
     | Some s -> Proof_graph.visheshanam_of_string s
     | None   -> None
   in
-  let vish_names = [
-    ("visheshanam-swarupa",     Proof_graph.Swarupa);
-    ("visheshanam-abheda",      Proof_graph.Abheda);
-    ("visheshanam-pratipaksha", Proof_graph.Pratipaksha);
-    ("visheshanam-phala",       Proof_graph.Phala);
-    ("visheshanam-janya",       Proof_graph.Janya);
-    ("visheshanam-yukta",       Proof_graph.Yukta);
-    ("visheshanam-sthita",      Proof_graph.Sthita);
-    ("visheshanam-kriya",       Proof_graph.Kriya);
-    ("visheshanam-siddha",      Proof_graph.Siddha);
-    ("visheshanam-drishthanta", Proof_graph.Drishthanta);
-  ] in
+  (* build the list dynamically from the dimension registry — covers core 10 + any dynamic dims *)
+  let ndims = Proof_graph.dimension_count () in
+  let vish_names = List.init ndims (fun idx ->
+    let name = Proof_graph.string_of_visheshanam idx in
+    ("visheshanam-" ^ name, idx)
+  ) in
   List.iter (fun (node_name, vish) ->
     match Proof_graph.find k node_name with
     | None -> ()

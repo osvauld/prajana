@@ -82,8 +82,6 @@ let collect_names dir : string list =
   ) (om_files_recursive dir);
   !names
 
-(* --- pass 2: sloka decomposition --- *)
-
 (* extract a quoted string from a line: "content" -> Some content *)
 let parse_sloka line =
   let line = String.trim line in
@@ -98,6 +96,79 @@ let parse_sloka line =
     with Not_found -> None
   else
     None
+
+(* --- pass 1.5: compile dynamic dimensions ---
+   reads the visheshanam-ring node to discover which concepts are dimensions.
+   the ring reaches down to structural truths (sangati nodes) — those nodes
+   stay pure, the ring declares membership.
+   must run after collect_names and before sloka decomposition. *)
+
+let collect_dynamic_dims_from_ring (files : string list) (known_names : string list)
+    : string list =
+  (* find and parse the visheshanam-ring node *)
+  let ring_slokas = ref [] in
+  List.iter (fun path ->
+    try
+      let ic = open_in path in
+      let is_ring = ref false in
+      (try
+        while true do
+          let line = input_line ic in
+          (match parse_node_header line with
+           | Some (_layer, name) when name = "visheshanam-ring" -> is_ring := true
+           | Some _ -> is_ring := false
+           | None ->
+             if !is_ring then
+               match parse_sloka line with
+               | Some s -> ring_slokas := s :: !ring_slokas
+               | None -> ())
+        done
+      with End_of_file -> ());
+      close_in ic
+    with _ -> ()
+  ) files;
+  (* extract dimension members: any "X-yukta" compound in the ring's slokas
+     where X is a known node name and X is NOT already a core dimension (0-9).
+     the ring claims members via yukta edges.
+     skip visheshanam-* prefixed targets — those are graph edges to the
+     existing ring member NODES, not new dimension declarations. *)
+  let dims = ref [] in
+  let is_visheshanam_prefixed s =
+    String.length s > 12 && String.sub s 0 12 = "visheshanam-" in
+  List.iter (fun sloka ->
+    let words = String.split_on_char ' ' sloka in
+    List.iter (fun word ->
+      let word = String.trim word in
+      if String.length word > 0 then
+        (* decompose: try splitting at last '-' to find a yukta suffix *)
+        let rec try_split i =
+          if i <= 0 then ()
+          else if word.[i] = '-' then begin
+            let suffix = String.sub word (i + 1) (String.length word - i - 1) in
+            if suffix = "yukta" then begin
+              let target = String.sub word 0 i in
+              (* register if: known node, not already a core dim, not a visheshanam-* node ref *)
+              if List.mem target known_names
+                 && Proof_graph.visheshanam_of_string target = None
+                 && not (is_visheshanam_prefixed target) then
+                dims := target :: !dims
+            end else
+              try_split (i - 1)
+          end else
+            try_split (i - 1)
+        in
+        try_split (String.length word - 1)
+    ) words
+  ) !ring_slokas;
+  List.sort_uniq String.compare !dims
+
+(* register discovered dimensions into the proof_graph registry *)
+let register_dynamic_dims (dim_names : string list) : unit =
+  List.iter (fun name ->
+    ignore (Proof_graph.register_dimension name)
+  ) dim_names
+
+(* --- pass 2: sloka decomposition --- *)
 
 (* try to match a compound word against known names + visheshanam suffix
    e.g. "dharana-jivamsha-swarupa" -> Some ("dharana-jivamsha", Swarupa)
@@ -208,10 +279,14 @@ let parse_file (known_names : string list) (path : string) : nigamana option =
       }
   with _ -> None
 
-(* load all .om files from a directory — two-pass *)
+(* load all .om files from a directory — three-pass *)
 let load_dir ?(emit_meta = true) dir (k : proof_graph) : proof_graph * int * int =
   (* pass 1: collect all names *)
   let known_names = collect_names dir in
+  (* pass 1.5: discover dynamic dimensions from the visheshanam-ring node *)
+  let all_files = om_files_recursive dir in
+  let dyn_dims = collect_dynamic_dims_from_ring all_files known_names in
+  register_dynamic_dims dyn_dims;
   (* pass 2: parse all files with known names *)
   let loaded = ref 0 in
   let skipped = ref 0 in
@@ -230,12 +305,17 @@ let load_dir ?(emit_meta = true) dir (k : proof_graph) : proof_graph * int * int
   (!k_ref, !loaded, !skipped)
 
 (* load multiple directories into one graph — unified namespace
-   pass 1: collect names from ALL directories
-   pass 2: parse all files with the combined vocabulary
+   pass 1:   collect names from ALL directories
+   pass 1.5: discover dynamic dimensions (visheshanam-swarupa) and register them
+   pass 2:   parse all files with the combined vocabulary + dynamic dims
    satya-ganana runs once on the unified graph *)
 let load_dirs ?(emit_meta = true) (dirs : string list) (k : proof_graph) : proof_graph * int * int =
   (* pass 1: collect names from all directories *)
   let known_names = List.concat_map collect_names dirs in
+  (* pass 1.5: discover dynamic dimensions from the visheshanam-ring node *)
+  let all_files = List.concat_map om_files_recursive dirs in
+  let dyn_dims = collect_dynamic_dims_from_ring all_files known_names in
+  register_dynamic_dims dyn_dims;
   (* pass 2: parse all files from all directories *)
   let loaded = ref 0 in
   let skipped = ref 0 in

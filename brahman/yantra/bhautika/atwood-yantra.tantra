@@ -1,0 +1,16 @@
+tantra atwood-machine
+
+  inputs
+    mass    float  kilogram
+    mass-2  float  kilogram
+
+  let
+    total      = add mass mass-2
+    a          = div (mul (sub mass-2 mass) gravity) total
+    tension    = div (mul (mul 2.0 (mul mass mass-2)) gravity) total
+
+  return
+    a        float  metre-per-second-squared
+    tension  float  newton
+
+done

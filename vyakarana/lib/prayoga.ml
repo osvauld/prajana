@@ -140,17 +140,17 @@ let form_of (setu_map : (string * string) list) (concept : string) : string opti
     List.assoc_opt stripped setu_map
 
 let relation_role (r : visheshanam) : string =
-  match r with
-  | Swarupa     -> "is"
-  | Kriya       -> "does"
-  | Sthita      -> "on"
-  | Phala       -> "produces"
-  | Yukta       -> "with"
-  | Abheda      -> "="
-  | Drishthanta -> "eg"
-  | Siddha      -> "via"
-  | Janya       -> "from"
-  | Pratipaksha -> "inverts"
+  if r = swarupa then "is"
+  else if r = kriya then "does"
+  else if r = sthita then "on"
+  else if r = phala then "produces"
+  else if r = yukta then "with"
+  else if r = abheda then "="
+  else if r = drishthanta then "eg"
+  else if r = siddha then "via"
+  else if r = janya then "from"
+  else if r = pratipaksha then "inverts"
+  else string_of_visheshanam r
 
 let dedupe lst =
   List.fold_left (fun acc x ->

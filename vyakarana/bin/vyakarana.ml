@@ -390,6 +390,9 @@ let () =
     Printf.printf "knowledge-nodes (suktas): %d loaded, %d skipped\n%!" loaded skipped;
     if tantra_count > 0 then
       Printf.printf "tantras (yantra): %d loaded, %d constants\n%!" tantra_count constant_count;
+    let ndims = Proof_graph.dimension_count () in
+    if ndims > 10 then
+      Printf.printf "dimensions (visheshanam): %d (10 core + %d dynamic)\n%!" ndims (ndims - 10);
     Printf.printf "space (akasham) ready.\n%!"
   end;
   let yantra_session = Yantra.new_session () in
