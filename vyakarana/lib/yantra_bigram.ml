@@ -4,12 +4,10 @@
 
    dependency: Proof_graph. *)
 
-open Proof_graph
-
 (* yantra-specific token type — wraps a classified word *)
 type ytoken =
   | YConcept  of string
   | YNumber   of float
   | YOperator of string
-  | YGrammar  of visheshanam
+  | YGrammar  of Proof_graph.visheshanam  (* dimension index *)
   | YUnknown  of string

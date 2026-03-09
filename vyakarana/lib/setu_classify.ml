@@ -61,7 +61,7 @@ let english_number_word (k : proof_graph) (n : string) : string option =
 
 type token_role =
   | Article
-  | Grammar of visheshanam
+  | Grammar of int  (* visheshanam dimension index *)
   | Content of string
   | Number of float
   | Operator of string
@@ -90,7 +90,7 @@ let classify_token (k : proof_graph) word =
     load_english_token_roles k;
     match Hashtbl.find_opt english_token_roles_cache w with
     | Some "article" -> Article
-    | Some "sthita" -> Grammar Sthita
+    | Some "sthita" -> Grammar Proof_graph.sthita
     | Some role ->
       (match grammar_of_english k role with
        | Some v -> Grammar v

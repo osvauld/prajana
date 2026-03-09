@@ -1,0 +1,14 @@
+tantra shm-max-velocity
+
+  inputs
+    amplitude        float  metre
+    spring-constant  float  newton-per-metre
+    mass             float  kilogram
+
+  let
+    v-max = mul amplitude (sqrt (div spring-constant mass))
+
+  return
+    v-max  float  metre-per-second
+
+done

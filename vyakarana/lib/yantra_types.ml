@@ -52,9 +52,13 @@ type tantra_index = {
 }
 
 type binding = {
-  b_name  : string;   (* concept name: "mass", "force", "kaala" *)
-  b_value : float;
-  b_unit  : string option;
+  b_name       : string;        (* concept name: "mass", "force", "kaala" *)
+  b_value      : float;
+  b_unit       : string option;
+  b_timestamp  : float;         (* Unix.gettimeofday() at write time *)
+  b_source     : string;        (* "user" | "tantra:<name>" | "imu" | "inferred" | "problem-sentence-N" *)
+  b_confidence : float;         (* 0.0–1.0, default 1.0 *)
+  b_ttl        : float option;  (* seconds until stale; None = permanent *)
 }
 
 type session = {
@@ -75,6 +79,12 @@ type yantra_result = {
 (* placed here so they are available to all downstream modules without
    creating a circular dependency. yantra_resolver.ml used to define
    these but they logically belong with the value type. *)
+
+(* convenience constructor — fills new metadata fields with defaults *)
+let make_binding ?(unit_=None) ?(source="user") ?(confidence=1.0) ?(ttl=None) name value : binding =
+  { b_name = name; b_value = value; b_unit = unit_;
+    b_timestamp = Unix.gettimeofday (); b_source = source;
+    b_confidence = confidence; b_ttl = ttl }
 
 let new_env () : env = Hashtbl.create 16
 

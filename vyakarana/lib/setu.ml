@@ -193,7 +193,7 @@ let detect_domain (k : proof_graph) (seeds : string list) : string =
     | None -> None
     | Some n ->
       List.find_map (fun e ->
-        if e.source = n.name && e.relation = Sthita then
+        if e.source = n.name && e.relation = sthita then
           domain_of_edge_target e.target
         else None
       ) n.edges
@@ -208,42 +208,42 @@ let kriya_of (k : proof_graph) (name : string) : string list =
   match Hashtbl.find_opt k.nodes name with
   | None -> []
   | Some n -> List.filter_map (fun e ->
-      if e.source = name && e.relation = Kriya then Some e.target else None
+      if e.source = name && e.relation = Proof_graph.kriya then Some e.target else None
     ) n.edges
 
 let swarupa_of (k : proof_graph) (name : string) : string list =
   match Hashtbl.find_opt k.nodes name with
   | None -> []
   | Some n -> List.filter_map (fun e ->
-      if e.source = name && e.relation = Swarupa then Some e.target else None
+      if e.source = name && e.relation = Proof_graph.swarupa then Some e.target else None
     ) n.edges
 
 let yukta_of (k : proof_graph) (name : string) : string list =
   match Hashtbl.find_opt k.nodes name with
   | None -> []
   | Some n -> List.filter_map (fun e ->
-      if e.source = name && e.relation = Yukta then Some e.target else None
+      if e.source = name && e.relation = Proof_graph.yukta then Some e.target else None
     ) n.edges
 
 let janya_of (k : proof_graph) (name : string) : string list =
   match Hashtbl.find_opt k.nodes name with
   | None -> []
   | Some n -> List.filter_map (fun e ->
-      if e.source = name && e.relation = Janya then Some e.target else None
+      if e.source = name && e.relation = Proof_graph.janya then Some e.target else None
     ) n.edges
 
 let has_domain_sthita (k : proof_graph) (name : string) (domain : string) : bool =
   match Hashtbl.find_opt k.nodes name with
   | None -> false
   | Some n -> List.exists (fun e ->
-      e.source = name && e.relation = Sthita && e.target = domain
+      e.source = name && e.relation = Proof_graph.sthita && e.target = domain
     ) n.edges
 
 let is_setu (k : proof_graph) (name : string) : bool =
   match Hashtbl.find_opt k.nodes name with
   | None -> false
   | Some n -> List.exists (fun e ->
-      e.source = name && e.relation = Swarupa && e.target = "setu"
+      e.source = name && e.relation = Proof_graph.swarupa && e.target = "setu"
     ) n.edges
 
 let infer_inputs (k : proof_graph) (node_name : string) : string list =
@@ -251,7 +251,7 @@ let infer_inputs (k : proof_graph) (node_name : string) : string list =
   | None -> []
   | Some n ->
     List.filter_map (fun e ->
-      if e.source = node_name && e.relation = Sthita then
+      if e.source = node_name && e.relation = Proof_graph.sthita then
         let t = e.target in
         let is_domain = String.length t >= 7 && String.sub t 0 7 = "domain-" in
         if is_domain then None else Some t
@@ -264,7 +264,7 @@ let infer_outputs (k : proof_graph) (node_name : string) : string list =
   | None -> []
   | Some n ->
     List.filter_map (fun e ->
-      if e.source = node_name && e.relation = Phala then
+      if e.source = node_name && e.relation = Proof_graph.phala then
         let t = e.target in
         let is_domain = String.length t >= 7 && String.sub t 0 7 = "domain-" in
         if is_domain then None else Some t
@@ -297,11 +297,11 @@ let resolve (k : proof_graph) (name : string) : string list =
   | None -> [name]
   | Some n ->
     let abheda_targets = List.filter_map (fun e ->
-      if e.source = name && e.relation = Abheda then Some e.target
+      if e.source = name && e.relation = Proof_graph.abheda then Some e.target
       else None
     ) n.edges in
     let abheda_sources = List.filter_map (fun e ->
-      if e.target = name && e.relation = Abheda then Some e.source
+      if e.target = name && e.relation = Proof_graph.abheda then Some e.source
       else None
     ) !(k.all_edges) in
     name :: abheda_targets @ abheda_sources
@@ -338,7 +338,7 @@ let to_english ?(context : string option = None)
                (k : proof_graph) (name : string) : string =
   let english_names = Hashtbl.fold (fun source n acc ->
     let has_abheda = List.exists (fun e ->
-      e.target = name && e.relation = Abheda
+      e.target = name && e.relation = abheda
     ) n.edges in
     if has_abheda && source <> name then source :: acc
     else acc
@@ -349,13 +349,13 @@ let to_english ?(context : string option = None)
     | Some n ->
       let total_edges = List.length n.edges in
       let abheda_edges = List.length (List.filter (fun e ->
-        e.relation = Abheda
+        e.relation = abheda
       ) n.edges) in
       let non_abheda_out = List.length (List.filter (fun e ->
-        e.relation <> Abheda
+        e.relation <> abheda
       ) n.edges) in
       let non_abheda_in = List.length (List.filter (fun e ->
-        e.target = candidate && e.relation <> Abheda
+        e.target = candidate && e.relation <> abheda
       ) !(k.all_edges)) in
       let ratio = if total_edges > 0
         then (abheda_edges * 1000) / total_edges
@@ -389,13 +389,13 @@ let to_english ?(context : string option = None)
     if direct <> None then []
     else Hashtbl.fold (fun candidate n acc ->
       let abheda_targets = List.filter_map (fun e ->
-        if e.relation = Abheda then Some e.target else None
+        if e.relation = abheda then Some e.target else None
       ) n.edges in
       let matches_bridge = List.exists (fun mid ->
         match Hashtbl.find_opt k.nodes mid with
         | None -> false
         | Some mid_n ->
-          List.exists (fun e -> e.relation = Abheda && e.target = name) mid_n.edges
+          List.exists (fun e -> e.relation = abheda && e.target = name) mid_n.edges
       ) abheda_targets in
       if matches_bridge && candidate <> name then candidate :: acc else acc
     ) k.nodes []
@@ -466,7 +466,7 @@ let english_number_word (k : proof_graph) (n : string) : string option =
 
 type token_role =
   | Article
-  | Grammar of visheshanam
+  | Grammar of int  (* visheshanam dimension index *)
   | Content of string
   | Number of float
   | Operator of string
@@ -495,7 +495,7 @@ let classify_token (k : proof_graph) word =
     load_english_token_roles k;
     match Hashtbl.find_opt english_token_roles_cache w with
     | Some "article" -> Article
-    | Some "sthita" -> Grammar Sthita
+    | Some "sthita" -> Grammar Proof_graph.sthita
     | Some role ->
       (match grammar_of_english k role with
        | Some v -> Grammar v
@@ -556,15 +556,15 @@ let rec find_setu_form (k : proof_graph) (name : string) (depth : int) (visited 
     let is_ocaml_node = match find k name with
       | None -> false
       | Some n -> List.exists (fun e ->
-          e.source = name && e.relation = Sthita
-          && (e.target = "domain-ocaml" || e.target = "domain-language")
+          e.source = name && e.relation = sthita
+           && (e.target = "domain-ocaml" || e.target = "domain-language")
         ) n.edges
     in
     if is_ocaml_node then Some name
     else begin
       let next = List.filter_map (fun e ->
         if e.source = name &&
-           (e.relation = Abheda || e.relation = Kriya || e.relation = Swarupa || e.relation = Yukta)
+           (e.relation = abheda || e.relation = kriya || e.relation = swarupa || e.relation = yukta)
         then Some e.target
         else None
       ) !(k.all_edges) in
@@ -631,6 +631,6 @@ let rec walk_chain (k : proof_graph) (name : string) (depth : int) (visited : st
     | Some n ->
       let next = List.filter_map (fun e ->
         if e.source = name &&
-           (e.relation = Kriya || e.relation = Phala || e.relation = Swarupa || e.relation = Abheda)
+           (e.relation = kriya || e.relation = phala || e.relation = swarupa || e.relation = abheda)
         then Some e.target else None) n.edges in
       List.fold_left (fun acc t -> walk_chain k t (depth - 1) acc) visited next

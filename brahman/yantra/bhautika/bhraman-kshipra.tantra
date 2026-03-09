@@ -1,0 +1,13 @@
+tantra angular-acceleration
+
+  inputs
+    torque             float  newton-metre
+    moment-of-inertia  float  kilogram-metre-squared
+
+  let
+    alpha = div torque moment-of-inertia
+
+  return
+    alpha  float  radian-per-second-squared
+
+done

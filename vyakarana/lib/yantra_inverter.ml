@@ -62,7 +62,7 @@ let graph_invert (k : proof_graph) (op : string) (arg_pos : int)
      | None -> None
      | Some n ->
        let inv_node = List.find_map (fun edge ->
-         if edge.source = node_name && edge.relation = Pratipaksha then
+         if edge.source = node_name && edge.relation = pratipaksha then
            Some edge.target
          else None
        ) n.edges in

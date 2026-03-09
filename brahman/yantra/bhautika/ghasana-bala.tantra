@@ -1,0 +1,13 @@
+tantra friction-force
+
+  inputs
+    friction-coefficient  float  dimensionless
+    force                 float  newton
+
+  let
+    f = mul friction-coefficient force
+
+  return
+    f  float  newton
+
+done

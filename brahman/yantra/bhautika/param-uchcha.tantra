@@ -1,0 +1,13 @@
+tantra max-height
+
+  inputs
+    initial-velocity  float  metre-per-second
+    angle             float  radian
+
+  let
+    h = div (mul (power initial-velocity 2.0) (power (sin angle) 2.0)) (mul 2.0 gravity)
+
+  return
+    h  float  metre
+
+done

@@ -264,7 +264,7 @@ let classify_math_op (k : proof_graph) (target : string) : math_op_kind option =
   | None -> None
   | Some target_node ->
     let kriya_targets = List.filter_map (fun e ->
-      if e.source = target && e.relation = Kriya then Some e.target else None
+      if e.source = target && e.relation = kriya then Some e.target else None
     ) target_node.edges in
     let name = String.lowercase_ascii target in
     if name = "dot-product" || name = "matrix-multiplication" then
@@ -283,7 +283,7 @@ let yukta_operators (k : proof_graph) (node_name : string)
   | None -> []
   | Some n ->
     List.filter_map (fun e ->
-      if e.source = node_name && e.relation = Yukta then
+      if e.source = node_name && e.relation = yukta then
         match classify_math_op k e.target with
         | Some kind -> Some (e.target, kind)
         | None -> None
@@ -427,7 +427,7 @@ let emit_bridge_program (k : proof_graph) (bridge_name : string) : unit =
     let root = match Hashtbl.find_opt k.nodes bridge_name with
       | None -> bridge_name
       | Some n -> (match List.filter_map (fun e ->
-          if e.source = bridge_name && e.relation = Abheda then Some e.target
+          if e.source = bridge_name && e.relation = abheda then Some e.target
           else None) n.edges with r :: _ -> r | [] -> bridge_name)
     in
     p "(* %s — root: %s *)\n" bridge_name root;
@@ -483,7 +483,7 @@ let emit_bridge_program (k : proof_graph) (bridge_name : string) : unit =
         | Some sym -> Some (op, ocaml_constructor_of_operator k op, sym)
       ) arithmetic_ops in
       let arity = if List.exists (fun e ->
-        e.source = input_concept && e.relation = Yukta && e.target = "number"
+        e.source = input_concept && e.relation = yukta && e.target = "number"
       ) (match Hashtbl.find_opt k.nodes input_concept with
          | Some n -> n.edges | None -> [])
       then 2 else 2 in
@@ -523,17 +523,17 @@ let emit_bridge_program (k : proof_graph) (bridge_name : string) : unit =
     let has_exec = match Hashtbl.find_opt k.nodes bridge_name with
       | None -> false
       | Some n -> List.exists (fun e ->
-          e.source = bridge_name && e.relation = Yukta && e.target = "execution"
+          e.source = bridge_name && e.relation = yukta && e.target = "execution"
         ) n.edges
     in
     if has_exec then begin
       let exec_edges = match Hashtbl.find_opt k.nodes "execution" with
         | None -> [] | Some en -> en.edges in
       let needs_in  = List.exists (fun e ->
-        e.source = "execution" && e.relation = Sthita && e.target = "ahara"
+        e.source = "execution" && e.relation = sthita && e.target = "ahara"
       ) exec_edges in
       let needs_out = List.exists (fun e ->
-        e.source = "execution" && e.relation = Phala && e.target = "ahara"
+        e.source = "execution" && e.relation = phala && e.target = "ahara"
       ) exec_edges in
       p "let () =\n";
       let has_structural = structural_ops <> [] in
@@ -773,7 +773,7 @@ let build_voices (k : proof_graph) (name : string) : renderer_voice list =
         Hashtbl.replace groups e.relation (existing @ [e.target])
       end
     ) n.edges;
-    let relation_order = [Swarupa; Abheda; Sthita; Janya; Yukta; Phala; Kriya; Siddha; Drishthanta] in
+    let relation_order = [swarupa; abheda; sthita; janya; yukta; phala; kriya; siddha; drishthanta] in
     List.filter_map (fun rel ->
       match Hashtbl.find_opt groups rel with
       | None -> None
@@ -1203,7 +1203,7 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
   let context_anchor =
     let rec find_after_sthita = function
       | [] -> None
-      | (_, Setu.Grammar Sthita) :: (w, role) :: _ ->
+      | (_, Setu.Grammar v) :: (w, role) :: _ when v = sthita ->
         (match role with
          | Setu.Content name -> Some name
          | Setu.Unknown _ ->

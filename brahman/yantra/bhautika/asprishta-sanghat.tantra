@@ -1,0 +1,14 @@
+tantra inelastic-collision-velocity
+
+  inputs
+    mass      float  kilogram
+    velocity  float  metre-per-second
+    mass-2    float  kilogram
+
+  let
+    v-final = div (mul mass velocity) (add mass mass-2)
+
+  return
+    v-final  float  metre-per-second
+
+done

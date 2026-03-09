@@ -8,18 +8,64 @@
    adjacency, materialized once after build_index by materialize_csr.
    per-query cost: O(N×10) conductance derivation + O(E×iters) SpMV, zero allocation. *)
 
-(* visheshanam — edge types from Sanskrit grammar *)
-type visheshanam =
-  | Swarupa       (* identity — X IS Y *)
-  | Abheda        (* non-different — X = Y at some level *)
-  | Drishthanta   (* evidence — X demonstrated by Y *)
-  | Sthita        (* foundation — X stands on Y *)
-  | Yukta         (* connection — X joined with Y *)
-  | Siddha        (* proof — X established by Y *)
-  | Kriya         (* function — X acts as Y *)
-  | Phala         (* consequence — X results from Y *)
-  | Janya         (* origin — X born from Y *)
-  | Pratipaksha   (* inverse — X undoes Y *)
+(* visheshanam — edge dimension.
+   now an integer index. core 10 are constants 0-9 (backward-compatible).
+   dynamic dimensions (discovered from visheshanam-swarupa edges at startup,
+   or registered by tantras at runtime) get indices >= 10.
+   the registry is append-only — indices never change once assigned. *)
+type visheshanam = int
+
+(* core 10 — these are the constants the rest of the codebase uses *)
+let swarupa      = 0   (* identity — X IS Y *)
+let abheda       = 1   (* non-different — X = Y at some level *)
+let drishthanta  = 2   (* evidence — X demonstrated by Y *)
+let sthita       = 3   (* foundation — X stands on Y *)
+let yukta        = 4   (* connection — X joined with Y *)
+let siddha       = 5   (* proof — X established by Y *)
+let kriya        = 6   (* function — X acts as Y *)
+let phala        = 7   (* consequence — X results from Y *)
+let janya        = 8   (* origin — X born from Y *)
+let pratipaksha  = 9   (* inverse — X undoes Y *)
+
+(* ---- dynamic dimension registry (append-only) ---- *)
+let _dim_name_to_idx : (string, int) Hashtbl.t = Hashtbl.create 32
+let _dim_idx_to_name : (int, string) Hashtbl.t = Hashtbl.create 32
+let _dim_next_idx = ref 10  (* next available index; core 0-9 are pre-assigned *)
+
+(* initialize the core 10 in the registry *)
+let () =
+  (* canonical names: go into both forward and reverse tables *)
+  List.iter (fun (name, idx) ->
+    Hashtbl.replace _dim_name_to_idx name idx;
+    Hashtbl.replace _dim_idx_to_name idx name
+  ) [
+    ("swarupa", 0); ("abheda", 1); ("drishthanta", 2); ("sthita", 3); ("yukta", 4);
+    ("siddha", 5); ("kriya", 6); ("phala", 7); ("janya", 8); ("pratipaksha", 9);
+  ];
+  (* aliases: forward lookup only — never overwrite the canonical reverse mapping *)
+  List.iter (fun (alias, idx) ->
+    Hashtbl.replace _dim_name_to_idx alias idx
+  ) [
+    ("inverse", 9);
+  ]
+
+(* register a new dimension. returns its index. idempotent — if already registered,
+   returns the existing index. called by compile phase and by tantras at runtime. *)
+let register_dimension (name : string) : int =
+  let name = String.lowercase_ascii name in
+  match Hashtbl.find_opt _dim_name_to_idx name with
+  | Some idx -> idx
+  | None ->
+    let idx = !_dim_next_idx in
+    incr _dim_next_idx;
+    Hashtbl.replace _dim_name_to_idx name idx;
+    (* only set canonical reverse mapping if not already taken *)
+    if not (Hashtbl.mem _dim_idx_to_name idx) then
+      Hashtbl.replace _dim_idx_to_name idx name;
+    idx
+
+(* how many dimensions exist right now (core + dynamic) *)
+let dimension_count () : int = !_dim_next_idx
 
 (* typed edge between two nodes *)
 type typed_edge = {
@@ -38,14 +84,14 @@ type nigamana = {
   shabda : string;            (* key:value mapping data — target-domain rendering *)
 }
 
-(* ---- visheshanam ↔ integer index (0-9) ---- *)
-(* fixed mapping, matches the 10-element conductance/weight arrays *)
+(* ---- visheshanam ↔ integer index ---- *)
+(* identity now — visheshanam IS the index. kept for call-site compat. *)
 
-let visheshanam_to_idx = function
-  | Swarupa -> 0 | Abheda -> 1 | Drishthanta -> 2 | Sthita -> 3 | Yukta -> 4
-  | Siddha -> 5  | Kriya -> 6  | Phala -> 7        | Janya -> 8  | Pratipaksha -> 9
+let visheshanam_to_idx (v : visheshanam) : int = v
 
-let num_relations = 10
+(* num_relations: returns current dimension count. call sites that used the
+   old constant `num_relations` now call `num_relations ()`. *)
+let num_relations () : int = dimension_count ()
 
 (* ---- CSR adjacency — materialized once at startup ---- *)
 (* represents the incoming-edge adjacency of the proof graph in Compressed Sparse Row form.
@@ -60,10 +106,11 @@ type csr_adjacency = {
   csr_idx_to_node   : string array;              (* row index → name, length N *)
   csr_in_row_ptr    : int array;                 (* length N+1; row i spans [ptr[i], ptr[i+1]) *)
   csr_in_col_idx    : int array;                 (* length E; source node index per incoming edge *)
-  csr_in_rel_idx    : int array;                 (* length E; relation type 0-9 per incoming edge *)
-  (* out_rel_count.(u * num_relations + r) = # outgoing edges of type r from node u.
-     used per-query to derive out_cond[u] = Σ_r count[u,r] × weights[r] in O(N×10). *)
-  csr_out_rel_count : int array;                 (* length N × num_relations *)
+  csr_in_rel_idx    : int array;                 (* length E; relation dim index per incoming edge *)
+   (* out_rel_count.(u * num_dims + r) = # outgoing edges of type r from node u.
+      used per-query to derive out_cond[u] = Σ_r count[u,r] × weights[r] in O(N×D). *)
+   csr_out_rel_count : int array;                 (* length N × dimension_count *)
+   csr_num_dims      : int;                       (* dimension_count at materialization time *)
   csr_node_satya    : float array;               (* length N; raw_satya per node for PPR init *)
 }
 
@@ -86,7 +133,7 @@ type vish_props = {
   vp_involutive    : bool;
   vp_congruence    : bool;
   vp_composable    : bool;
-  vp_dual          : visheshanam option;
+  vp_dual          : int option;  (* dimension index of the dual, if any *)
   vp_ring_op       : [`Add | `Mul | `None];
   vp_satya_weight  : float;   (* edge conductance in PPR — loaded from .om files *)
 }
@@ -105,7 +152,7 @@ let default_vish_props : vish_props = {
 }
 
 (* module-level mutable table — populated once by scan_visheshanam_properties *)
-let _visheshanam_props : (visheshanam, vish_props) Hashtbl.t = Hashtbl.create 16
+let _visheshanam_props : (int, vish_props) Hashtbl.t = Hashtbl.create 16
 
 let register_vish_props (v : visheshanam) (p : vish_props) : unit =
   Hashtbl.replace _visheshanam_props v p
@@ -115,33 +162,14 @@ let vish_props_of (v : visheshanam) : vish_props =
   | Some p -> p
   | None   -> default_vish_props
 
-(* visheshanam string conversion *)
-let visheshanam_of_string s =
-  match String.lowercase_ascii s with
-  | "swarupa"     -> Some Swarupa
-  | "abheda"      -> Some Abheda
-  | "drishthanta" -> Some Drishthanta
-  | "sthita"      -> Some Sthita
-  | "yukta"       -> Some Yukta
-  | "siddha"      -> Some Siddha
-  | "kriya"       -> Some Kriya
-  | "phala"       -> Some Phala
-  | "janya"       -> Some Janya
-  | "pratipaksha" -> Some Pratipaksha
-  | "inverse"     -> Some Pratipaksha
-  | _             -> None
+(* visheshanam string conversion — checks core 10 + dynamic registry *)
+let visheshanam_of_string (s : string) : visheshanam option =
+  Hashtbl.find_opt _dim_name_to_idx (String.lowercase_ascii s)
 
-let string_of_visheshanam = function
-  | Swarupa     -> "swarupa"
-  | Abheda      -> "abheda"
-  | Drishthanta -> "drishthanta"
-  | Sthita      -> "sthita"
-  | Yukta       -> "yukta"
-  | Siddha      -> "siddha"
-  | Kriya       -> "kriya"
-  | Phala       -> "phala"
-  | Janya       -> "janya"
-  | Pratipaksha -> "pratipaksha"
+let string_of_visheshanam (v : visheshanam) : string =
+  match Hashtbl.find_opt _dim_idx_to_name v with
+  | Some name -> name
+  | None -> Printf.sprintf "dim-%d" v
 
 
 (* the space was already there *)
@@ -245,9 +273,9 @@ let init_satya (k : proof_graph) : unit =
     and after the graph is fully loaded. Reads all_edges, writes into vish_props table. *)
 let compute_visheshanam_entropy_weights (k : proof_graph) : unit =
   (* count targets per relation type across all edges *)
-  let target_counts : (visheshanam, (string, int) Hashtbl.t) Hashtbl.t =
+  let target_counts : (int, (string, int) Hashtbl.t) Hashtbl.t =
     Hashtbl.create 16 in
-  let total_per_rel : (visheshanam, int) Hashtbl.t = Hashtbl.create 16 in
+  let total_per_rel : (int, int) Hashtbl.t = Hashtbl.create 16 in
   List.iter (fun (e : typed_edge) ->
     let tbl = match Hashtbl.find_opt target_counts e.relation with
       | Some t -> t
@@ -260,9 +288,9 @@ let compute_visheshanam_entropy_weights (k : proof_graph) : unit =
     let pt = match Hashtbl.find_opt total_per_rel e.relation with Some c -> c | None -> 0 in
     Hashtbl.replace total_per_rel e.relation (pt + 1)
   ) !(k.all_edges);
-  (* compute raw entropy weight for each visheshanam *)
-  let all_rels = [ Swarupa; Abheda; Drishthanta; Sthita; Yukta;
-                   Siddha; Kriya; Phala; Janya; Pratipaksha ] in
+  (* compute raw entropy weight for each registered dimension *)
+  let ndims = dimension_count () in
+  let all_rels = List.init ndims (fun i -> i) in
   let raw_pairs = List.map (fun rel ->
     let w_raw = match Hashtbl.find_opt target_counts rel with
       | None -> 0.0
@@ -341,9 +369,10 @@ let materialize_csr (k : proof_graph) : unit =
   let actual_nnz = in_row_ptr.(n) in
 
   (* pass 4: fill CSR arrays using insertion pointers *)
+  let ndims = num_relations () in
   let in_col_idx    = Array.make actual_nnz 0 in
   let in_rel_idx    = Array.make actual_nnz 0 in
-  let out_rel_count = Array.make (n * num_relations) 0 in
+  let out_rel_count = Array.make (n * ndims) 0 in
   let insert_ptr    = Array.copy in_row_ptr in  (* insertion cursors per row *)
   List.iter (fun (e : typed_edge) ->
     let ri = visheshanam_to_idx e.relation in
@@ -359,7 +388,7 @@ let materialize_csr (k : proof_graph) : unit =
      | None -> ());
     (* outgoing edge: accumulate out_rel_count for the source *)
     (match Hashtbl.find_opt node_to_idx e.source with
-     | Some si -> out_rel_count.(si * num_relations + ri) <- out_rel_count.(si * num_relations + ri) + 1
+     | Some si -> out_rel_count.(si * ndims + ri) <- out_rel_count.(si * ndims + ri) + 1
      | None    -> ())
   ) edges;
 
@@ -375,7 +404,7 @@ let materialize_csr (k : proof_graph) : unit =
   assert (in_row_ptr.(0) = 0);
   assert (in_row_ptr.(n) = actual_nnz);
   Array.iter (fun idx -> assert (idx >= 0 && idx < n)) in_col_idx;
-  Array.iter (fun r   -> assert (r   >= 0 && r   < num_relations)) in_rel_idx;
+  Array.iter (fun r   -> assert (r   >= 0 && r   < ndims)) in_rel_idx;
 
   let csr = {
     csr_n             = n;
@@ -387,10 +416,11 @@ let materialize_csr (k : proof_graph) : unit =
     csr_in_rel_idx    = in_rel_idx;
     csr_out_rel_count = out_rel_count;
     csr_node_satya    = node_satya;
+    csr_num_dims      = ndims;
   } in
   k.csr := Some csr;
   let density = if n > 0 then
-    float_of_int actual_nnz /. (float_of_int n *. float_of_int n *. float_of_int num_relations) *. 100.0
+    float_of_int actual_nnz /. (float_of_int n *. float_of_int n *. float_of_int ndims) *. 100.0
   else 0.0 in
   Printf.printf "csr: materialized %d nodes, %d edges (of %d total), density %.4f%%\n%!"
     n actual_nnz nnz density
@@ -427,7 +457,7 @@ let compute_depth_affinity (k : proof_graph) (target : string)
   let link_ratio = Float.min 1.0 link_ratio in
   (* computational_ratio: fraction of target edges that are Sthita/Phala/Kriya *)
   let comp_edges = List.length (List.filter (fun e ->
-    e.relation = Sthita || e.relation = Phala || e.relation = Kriya
+    e.relation = sthita || e.relation = phala || e.relation = kriya
   ) target_edges) in
   let computational_ratio =
     if n_target_edges = 0.0 then 0.0
@@ -459,12 +489,13 @@ let run_ppr (k : proof_graph)
     | None   -> failwith "run_ppr: CSR not materialized — call Proof_graph.materialize_csr after build_index"
   in
   let n     = csr.csr_n in
+  let ndims = csr.csr_num_dims in
   let alpha = 0.30 in
 
   (* 1. derive per-relation conductances from seed neighbourhood.
         seed_edge_freq(r) = # edges of type r touching seed nodes / total seed edges
         weights[r] = vp_satya_weight(r) × (1 + seed_edge_freq(r)) *)
-  let freq  = Array.make num_relations 0 in
+  let freq  = Array.make ndims 0 in
   let total_seed_edges = ref 0 in
   List.iter (fun (name, _) ->
     match Hashtbl.find_opt k.nodes name with
@@ -477,24 +508,20 @@ let run_ppr (k : proof_graph)
       ) nd.edges
   ) seed_nodes;
   let total_f = float_of_int (max 1 !total_seed_edges) in
-  let weights = Array.init num_relations (fun r ->
-    (* reconstruct visheshanam from index for vish_props lookup *)
-    let vish = match r with
-      | 0 -> Swarupa | 1 -> Abheda | 2 -> Drishthanta | 3 -> Sthita | 4 -> Yukta
-      | 5 -> Siddha  | 6 -> Kriya  | 7 -> Phala        | 8 -> Janya  | _ -> Pratipaksha
-    in
-    let base = (vish_props_of vish).vp_satya_weight in
+  let weights = Array.init ndims (fun r ->
+    (* dimension index IS the visheshanam — look up props directly *)
+    let base = (vish_props_of r).vp_satya_weight in
     base *. (1.0 +. float_of_int freq.(r) /. total_f)
   ) in
 
   (* 2. derive per-node out_cond from precomputed out_rel_count × weights.
         out_cond[u] = Σ_r out_rel_count[u,r] × weights[r]
-        O(N × num_relations) with sequential array access — cache-friendly. *)
+        O(N × D) with sequential array access — cache-friendly. *)
   let out_cond = Array.make n 1.0 in
   for u = 0 to n - 1 do
     let oc = ref 0.0 in
-    for r = 0 to num_relations - 1 do
-      oc := !oc +. float_of_int csr.csr_out_rel_count.(u * num_relations + r) *. weights.(r)
+    for r = 0 to ndims - 1 do
+      oc := !oc +. float_of_int csr.csr_out_rel_count.(u * ndims + r) *. weights.(r)
     done;
     out_cond.(u) <- if !oc <= 0.0 then 1.0 else !oc
   done;
