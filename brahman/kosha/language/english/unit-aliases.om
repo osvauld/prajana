@@ -8,6 +8,6 @@ kosha unit-aliases
   "setu-swarupa english-sthita matra-abheda domain-language-sthita"
   "matra-aayaama-abheda scene-extract-yukta"
 
-shabda shabda-tmpl:language/english/unit-aliases.shabda
+  shabda shabda-tmpl:language/english/unit-aliases.shabda
 
 done

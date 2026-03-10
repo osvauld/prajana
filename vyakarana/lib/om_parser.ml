@@ -329,15 +329,25 @@ let load_dirs ?(emit_meta = true) (dirs : string list) (k : proof_graph) : proof
     | None ->
       incr skipped
   ) all_files;
-  (* record kosha root — prefer a dir containing "kosha", else use last dir *)
+  (* record kosha root — prefer a dir containing "kosha", else use last dir.
+     also expand search_dirs: for any dir passed, if it contains a "kosha"
+     subdirectory, add that subdir too — so that shabda-tmpl paths like
+     "language/english/unit-aliases.shabda" resolve whether the user passes
+     "brahman/" or "brahman/kosha" explicitly. *)
+  let expand_dir d =
+    let sub = Filename.concat d "kosha" in
+    if Sys.file_exists sub && Sys.is_directory sub then [d; sub]
+    else [d]
+  in
+  let expanded_dirs = List.concat_map expand_dir dirs in
   let kosha_dir = List.fold_left (fun acc d ->
     let base = Filename.basename d in
     if base = "kosha" || (try let _ = Str.search_forward (Str.regexp_string "kosha") d 0 in true with Not_found -> false)
     then d else acc
-  ) "" dirs in
-  let kosha_dir = if kosha_dir = "" then (match List.rev dirs with d :: _ -> d | [] -> "") else kosha_dir in
+  ) "" expanded_dirs in
+  let kosha_dir = if kosha_dir = "" then (match List.rev expanded_dirs with d :: _ -> d | [] -> "") else kosha_dir in
   !k_ref.kosha_root := kosha_dir;
-  !k_ref.search_dirs := dirs;
+  !k_ref.search_dirs := expanded_dirs;
   (* set raw_satya as structural prior on every node *)
   Proof_graph.init_satya !k_ref;
   ignore emit_meta;

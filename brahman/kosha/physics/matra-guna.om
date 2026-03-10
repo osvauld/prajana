@@ -10,6 +10,6 @@ kosha matra-guna
   "guna-swarupa sankhya-yukta"
   "yantra-sthita"
 
-shabda shabda-tmpl:physics/matra-guna.shabda
+  shabda shabda-tmpl:physics/matra-guna.shabda
 
 done

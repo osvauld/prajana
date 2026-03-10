@@ -1,0 +1,23 @@
+tantra path-energy-ndof
+
+  -- Path energy: E = sum_i ( tau_i * |delta_theta_i| )
+  -- The total mechanical work done moving all joints from start to target.
+  -- This quantity is invariant to speed (svabhava of the trajectory):
+  --   P = E / T  =>  choosing T determines P, not the path itself.
+  -- References om concept: path-energy (kosha/physics/path-energy.om)
+
+  inputs
+    n-joints  float
+    torques   list   -- N*m per joint (gravity-load or rated)
+    deltas    list   -- |delta_theta_i| in radians per joint
+
+  let
+    energy = reduce (range n-joints) 0 (fn acc i ->
+      let tq = nth torques i
+      let di = nth deltas i
+      add acc (mul tq di))
+
+  return
+    energy  float   -- joules
+
+done

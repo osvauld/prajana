@@ -1,0 +1,58 @@
+tantra goal-detect
+
+  -- Detects the optimisation goal from a natural-language sentence.
+  -- Uses classify-fold so all modifiers (minimize, fastest, etc.) are
+  -- tagged as seema via the om graph — punctuation stripped by tokenise.
+  -- Only looks for specific opt-directive tokens to avoid false matches
+  -- on quantity modifiers like "max joint speed" (max classifies as seema
+  -- but is not an optimisation directive).
+  --
+  -- Returns one of: "balanced" | "minimize-time" | "minimize-power"
+
+  inputs
+    sentence  string
+
+  let
+    sent-tokens    = classify-fold (map (tokenise sentence) (fn w -> lower w))
+    sent-words     = map sent-tokens (fn t -> nth t 0)
+
+    opt-directives = split "minimize,maximize,fastest,quickest,optimize" ","
+
+    opt-tok = first-match sent-tokens (fn t ->
+      cond (member (nth t 0) opt-directives) (nth t 0) otherwise _none)
+
+    is-minimize = cond (exists opt-tok)
+                    (cond (eq opt-tok "minimize") "yes"
+                          (eq opt-tok "fastest")  "yes"
+                          (eq opt-tok "quickest") "yes"
+                          otherwise "no")
+                    otherwise "no"
+
+    is-optimize = cond (exists opt-tok)
+                    (cond (eq opt-tok "optimize") "yes" otherwise "no")
+                    otherwise "no"
+
+    saw-fastest = cond (exists opt-tok)
+                    (cond (eq opt-tok "fastest")  "yes"
+                          (eq opt-tok "quickest") "yes"
+                          otherwise "no")
+                    otherwise "no"
+
+    saw-pw-goal = cond (exists (first-match sent-words (fn w -> cond (eq w "power") "yes" otherwise _none))) "yes" otherwise "no"
+    saw-t-goal  = cond (exists (first-match sent-words (fn w -> cond (eq w "time")  "yes" otherwise _none))) "yes" otherwise "no"
+
+    wants-min-pw-a = cond (eq is-minimize "yes") saw-pw-goal otherwise "no"
+    wants-min-pw   = cond (eq is-optimize "yes") saw-pw-goal otherwise wants-min-pw-a
+
+    wants-min-t-a  = cond (eq is-minimize "yes") saw-t-goal otherwise "no"
+    wants-min-t-b  = cond (eq is-optimize "yes") saw-t-goal otherwise wants-min-t-a
+    wants-min-t    = cond (eq saw-fastest "yes") "yes" otherwise wants-min-t-b
+
+    goal = cond (eq wants-min-pw "yes") "minimize-power"
+                (eq wants-min-t  "yes") "minimize-time"
+                otherwise "balanced"
+
+  return
+    goal  string
+
+done

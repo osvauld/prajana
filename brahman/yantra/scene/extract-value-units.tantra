@@ -1,25 +1,27 @@
 tantra extract-value-units
 
-  -- Sphoṭa-based value-unit extraction.
+  -- Graded-ring value-unit extraction.
   --
-  -- Two-pass group-theoretic approach:
+  -- Two-pass approach with sentence-aware (grade-local) indexing:
   --
-  -- Pass 1: collect raw [value, concept, unit] triples in sentence order.
+  -- Pass 1: collect raw [value, concept, unit, sentence-num] triples.
+  --   Track sentence boundaries via period tokens ("." emitted by tokeniser).
   --   For each number token, hold it as last-num.
   --   For each unit token with a pending last-num, emit a triple.
   --   Unit resolved via: direct dim-vector (classified concept) or alias lookup.
   --   Concept resolved via: concepts-for-unit shabda on the unit node.
   --
-  -- Pass 2: assign joint-idx = position within concept group.
-  --   For each triple, count how many prior triples share the same concept.
-  --   That count is the joint-idx. Each concept forms its own group with
-  --   0-based sequential indices. No global counter. No sentence splitting needed.
+  -- Pass 2: assign idx = position within concept group PER SENTENCE.
+  --   For each triple, count prior triples with same concept AND same sentence-num.
+  --   The additive group resets at each sentence boundary (period = grade boundary).
+  --   This prevents index pollution: target coordinates in sentence 1 don't inflate
+  --   link-length indices from sentence 0.
   --
-  -- Group theory: each concept class (link-length, joint-speed-max, ...) is a
-  -- group indexed by {0, 1, ..., n-1}. Position within the group = joint index.
-  -- "respectively" semantics fall out naturally from shared index set.
+  -- Algebraic structure: each sentence is a grade in a graded ring.
+  -- Additive op (comma/and) assigns sequential indices within a sentence.
+  -- Multiplicative op (cross-sentence selectors) is Phase B (future).
   --
-  -- Returns list of [value, concept, unit-name, joint-idx] tuples.
+  -- Returns list of [value, concept, unit-name, idx, sentence-num] tuples.
 
   inputs
     classified  list    -- output of classify-fold: [[word, kind, resolved], ...]
@@ -27,52 +29,72 @@ tantra extract-value-units
   let
     unit-alias-pairs = shabda-pairs "unit-aliases"
 
-    -- pass 1: collect raw [value, concept, unit] triples
-    -- accumulator: [results, last-num]
-    pass1 = reduce classified [[], _none]
+    -- pass 1: collect raw [value, concept, unit, sentence-num] triples
+    -- accumulator: [results, pending-nums, sentence-num]
+    -- pending-nums supports grouped expressions like "0.3 and 0.2 and 0.1 m".
+    pass1 = reduce classified [[], [], 0]
       (fn acc triple ->
-        let results  = nth acc 0
-        let last-num = nth acc 1
+        let results      = nth acc 0
+        let pending-nums = nth acc 1
+        let sentence-num = nth acc 2
 
         let word     = nth triple 0
         let kind     = nth triple 1
         let resolved = nth triple 2
 
+        -- detect sentence boundary (period token)
+        let is-period = eq word "."
+
         -- detect number
         let as-num    = to-number word
         let is-number = exists as-num
 
-        -- detect unit: direct (concept with dim-vector) or via unit-alias lookup
-        let direct-vec = cond (eq kind "concept") (dim-vector resolved) otherwise _none
-        let alias-name = cond (not (exists direct-vec))
+        -- detect unit:
+        --   1) classified concept that carries concepts-for-unit shabda
+        --   2) alias lookup from surface token (m -> metre, rad/s -> radian-per-second)
+        let direct-name = cond (eq kind "concept")
+          (cond (exists (shabda resolved "concepts-for-unit")) resolved otherwise _none)
+          otherwise _none
+        let alias-name = cond (not (exists direct-name))
           (first-match unit-alias-pairs (fn kv -> cond (eq (nth kv 0) word) (nth kv 1) otherwise _none))
           otherwise _none
-        let unit-vec   = cond (exists direct-vec) direct-vec (exists alias-name) (dim-vector alias-name) otherwise _none
-        let unit-name  = cond (exists direct-vec) resolved (exists alias-name) alias-name otherwise ""
-        let is-unit    = exists unit-vec
+        let unit-name  = cond (exists direct-name) direct-name (exists alias-name) alias-name otherwise ""
+        let is-unit    = neq unit-name ""
 
         -- resolve concept from unit node shabda
         let cands   = cond is-unit (split (shabda unit-name "concepts-for-unit") ",") otherwise (range 0)
         let concept = cond (gt (length cands) 0) (nth cands 0) otherwise unit-name
 
-        -- emit triple when unit follows a pending number
-        let new-results = cond (and is-unit (exists last-num))
-          (append results [[last-num, concept, unit-name]])
+        -- emit triples when unit follows one or more pending numbers
+        let emitted = map pending-nums (fn n -> [n, concept, unit-name, sentence-num])
+        let new-results = cond (and is-unit (gt (length pending-nums) 0))
+          (append results emitted)
           otherwise results
 
-        -- update last-num: set on number, clear on unit, carry otherwise
-        let new-num = cond is-number as-num is-unit _none otherwise last-num
+        -- update pending-nums:
+        --   number   -> append
+        --   unit     -> clear (consumed)
+        --   period   -> clear (new sentence grade)
+        --   other    -> keep (so conjunctions like "and" work)
+        let new-pending = cond is-number (append pending-nums (split (to-string as-num) " "))
+                           is-unit []
+                           is-period []
+                           otherwise pending-nums
 
-        [new-results, new-num])
+        -- update sentence-num: increment on period
+        let new-sent = cond is-period (add sentence-num 1) otherwise sentence-num
+
+        [new-results, new-pending, new-sent])
 
     raw-triples = nth pass1 0
 
-    -- pass 2: assign joint-idx by position within concept group
-    -- for each triple: idx = count of prior triples with same concept
+    -- pass 2: assign idx by position within concept group PER SENTENCE
+    -- for each triple: idx = count of prior triples with same concept AND same sentence-num
     result = reduce raw-triples [] (fn acc t ->
       let concept = nth t 1
-      let idx     = length (filter acc (fn r -> eq (nth r 1) concept))
-      append acc [[nth t 0, concept, nth t 2, idx]])
+      let sent    = nth t 3
+      let idx     = length (filter acc (fn r -> and (eq (nth r 1) concept) (eq (nth r 4) sent)))
+      append acc [[nth t 0, concept, nth t 2, idx, sent]])
 
   return
     result  list

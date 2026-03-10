@@ -1,0 +1,25 @@
+tantra torque-gravity-ndof
+
+  -- Gravity-load torque for each joint in a serial kinematic chain.
+  -- tau_i = m_i * g * l_i / 2
+  -- Models each link as a uniform rod: centre of mass at l_i/2.
+  -- These are quasi-static torques — the torque each motor must hold
+  -- against gravity when the arm moves slowly (no inertial terms).
+  -- Used as the representative torque for path-energy calculation.
+
+  inputs
+    n-joints     float
+    link-masses  list    -- kg per link
+    link-lengths list    -- metres per link
+    g            float   -- gravitational acceleration (m/s^2)
+
+  let
+    torques = map (range n-joints) (fn i ->
+      let lm = nth link-masses i
+      let li = nth link-lengths i
+      mul lm (mul g (div li 2)))
+
+  return
+    torques  list   -- N*m per joint
+
+done

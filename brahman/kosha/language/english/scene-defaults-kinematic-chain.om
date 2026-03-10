@@ -6,6 +6,6 @@ kosha scene-defaults-kinematic-chain
   "setu-swarupa kinematic-chain-abheda domain-language-sthita"
   "scene-extract-yukta seema-sthita"
 
-shabda shabda-tmpl:language/english/scene-defaults-kinematic-chain.shabda
+  shabda shabda-tmpl:language/english/scene-defaults-kinematic-chain.shabda
 
 done

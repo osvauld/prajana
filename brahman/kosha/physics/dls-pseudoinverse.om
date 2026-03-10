@@ -1,0 +1,21 @@
+kosha dls-pseudoinverse
+
+  -- dls-pseudoinverse: damped least-squares inverse of the Jacobian
+  -- solves: delta-theta = J^T (J J^T + lambda I)^{-1} * error
+  -- minimum-norm solution for the underdetermined system J * delta-theta = error
+  -- lambda (seema) damps the inverse near singularities, preventing blow-up
+  -- iterative: krama of Newton-Raphson steps converges to the IK solution
+
+  -- sangati roots: viparita (the act of inversion), seema (lambda = the
+  -- damping threshold), krama (iterative steps), viveka (choosing minimum norm)
+
+  "viparita-swarupa krama-siddha"
+  "seema-yukta singularity-nirodha"
+  "jacobian-viparita norm-seema-yukta"
+  "viveka-siddha minimum-norm-phala"
+  "ik-siddha joint-space-phala"
+  "domain-physics-sthita domain-robotics-sthita"
+
+shabda dls-pseudoinverse / J-T-times-J-JT-plus-lambda-I-inverse-minimum-norm-IK-step-seema-lambda-guards-singularity-viparita-via-viveka
+
+done

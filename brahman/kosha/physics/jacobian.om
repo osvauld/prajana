@@ -1,0 +1,23 @@
+kosha jacobian
+
+  -- jacobian: the matrix of partial derivatives of FK with respect to joint angles
+  -- J[row, col] = d(end-effector[row]) / d(theta[col])
+  -- maps joint-space velocities (chala-apeksha) to task-space velocities (sthira-apeksha)
+  -- each column j = how much the end-effector moves per unit change in joint j
+  -- the Jacobian IS the linearisation of FK at the current configuration
+
+  -- sangati roots: krama (the ordered chain grounds each column), apeksha (the
+  -- denominator d/d(theta_j) is the apeksha for each partial derivative),
+  -- chala-apeksha and sthira-apeksha (the two frames it connects)
+
+  "krama-sthita apeksha-yukta"
+  "chala-apeksha-ahara sthira-apeksha-phala"
+  "partial-derivative-swarupa matrix-siddha"
+  "kinematic-chain-abheda fk-kramanusara"
+  "joint-space-ahara task-space-phala"
+  "dls-pseudoinverse-ahara ik-siddha"
+  "domain-physics-sthita domain-robotics-sthita"
+
+shabda jacobian / matrix-of-d-FK-d-theta-maps-chala-apeksha-joint-velocities-to-sthira-apeksha-task-velocities-each-column-is-one-partial-derivative
+
+done

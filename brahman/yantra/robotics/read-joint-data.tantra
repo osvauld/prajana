@@ -1,0 +1,93 @@
+tantra read-joint-data
+
+  -- Reads all per-joint and per-link data from a scene graph for a kinematic chain.
+  -- Centralises shabda-pairs lookups so no other tantra needs to know the node
+  -- naming convention (joint-{i}-{hash}, link-{i}-{hash}).
+  -- Returns parallel lists indexed 0..n-joints-1.
+  -- Optional fields fall back to defaults: omega=2, torque=5, power=20, mass=1,
+  -- axis=(0,0,1) — disclosed by the caller via provided-flags lists.
+
+  inputs
+    root-name  string
+    hash       string
+    n-joints   float
+
+  let
+    root-pairs  = shabda-pairs root-name
+
+    link-lengths = map (range n-joints) (fn i ->
+      let lp  = shabda-pairs (concat "link-" (to-string i) "-" hash)
+      let l-s = first-match lp (fn p -> cond (eq (nth p 0) "link-length") (nth p 1) otherwise _none)
+      cond (exists l-s) (to-number l-s) otherwise 0.5)
+
+    joint-angles = map (range n-joints) (fn i ->
+      let jp   = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let th-s = first-match jp (fn p -> cond (eq (nth p 0) "joint-angle") (nth p 1) otherwise _none)
+      cond (exists th-s) (to-number th-s) otherwise 0)
+
+    omega-maxes = map (range n-joints) (fn i ->
+      let jp  = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let w-s = first-match jp (fn p -> cond (eq (nth p 0) "joint-speed-max") (nth p 1) otherwise _none)
+      cond (exists w-s) (to-number w-s) otherwise 2)
+
+    rated-torques = map (range n-joints) (fn i ->
+      let jp   = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let rt-s = first-match jp (fn p -> cond (eq (nth p 0) "rated-torque") (nth p 1) otherwise _none)
+      cond (exists rt-s) (to-number rt-s) otherwise 5)
+
+    rated-powers = map (range n-joints) (fn i ->
+      let jp   = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let rp-s = first-match jp (fn p -> cond (eq (nth p 0) "rated-power") (nth p 1) otherwise _none)
+      cond (exists rp-s) (to-number rp-s) otherwise 20)
+
+    link-masses = map (range n-joints) (fn i ->
+      let lp   = shabda-pairs (concat "link-" (to-string i) "-" hash)
+      let lm-s = first-match lp (fn p -> cond (eq (nth p 0) "link-mass") (nth p 1) otherwise _none)
+      cond (exists lm-s) (to-number lm-s) otherwise 1)
+
+    axis-xs = map (range n-joints) (fn i ->
+      let jp   = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let ax-s = first-match jp (fn p -> cond (eq (nth p 0) "axis-x") (nth p 1) otherwise _none)
+      cond (exists ax-s) (to-number ax-s) otherwise 0)
+
+    axis-ys = map (range n-joints) (fn i ->
+      let jp   = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let ay-s = first-match jp (fn p -> cond (eq (nth p 0) "axis-y") (nth p 1) otherwise _none)
+      cond (exists ay-s) (to-number ay-s) otherwise 0)
+
+    axis-zs = map (range n-joints) (fn i ->
+      let jp   = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let az-s = first-match jp (fn p -> cond (eq (nth p 0) "axis-z") (nth p 1) otherwise _none)
+      cond (exists az-s) (to-number az-s) otherwise 1)
+
+    -- provided-flags: "yes" if the value was in the scene, "no" if default was used
+    mass-provided = map (range n-joints) (fn i ->
+      let lp = shabda-pairs (concat "link-" (to-string i) "-" hash)
+      let mp = first-match lp (fn p -> cond (eq (nth p 0) "mass-provided") (nth p 1) otherwise _none)
+      cond (exists mp) mp otherwise "no")
+
+    rtorq-provided = map (range n-joints) (fn i ->
+      let jp  = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let rtp = first-match jp (fn p -> cond (eq (nth p 0) "rtorq-provided") (nth p 1) otherwise _none)
+      cond (exists rtp) rtp otherwise "no")
+
+    rpwr-provided = map (range n-joints) (fn i ->
+      let jp  = shabda-pairs (concat "joint-" (to-string i) "-" hash)
+      let rpp = first-match jp (fn p -> cond (eq (nth p 0) "rpwr-provided") (nth p 1) otherwise _none)
+      cond (exists rpp) rpp otherwise "no")
+
+  return
+    link-lengths   list
+    joint-angles   list
+    omega-maxes    list
+    rated-torques  list
+    rated-powers   list
+    link-masses    list
+    axis-xs        list
+    axis-ys        list
+    axis-zs        list
+    mass-provided  list
+    rtorq-provided list
+    rpwr-provided  list
+
+done

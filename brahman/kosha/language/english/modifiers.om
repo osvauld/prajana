@@ -13,6 +13,6 @@ kosha english-modifiers
   -- NOTE: "initial" and "final" are NOT modifiers.
   -- they are avastha qualifiers (purva / uttara) — handled by avastha-viveka.
 
-  shabda kinetic:compound electrical:compound angular:compound potential:compound universal:compound coulomb:compound linear:compound rotational:compound thermal:compound internal:compound centripetal:compound relative:compound orbital:compound escape:compound terminal:compound total:aggregation net:aggregation average:aggregation maximum:seema minimum:seema max:seema min:seema rated:seema limit:seema
+  shabda kinetic:compound electrical:compound angular:compound potential:compound universal:compound coulomb:compound linear:compound rotational:compound thermal:compound internal:compound centripetal:compound relative:compound orbital:compound escape:compound terminal:compound total:aggregation net:aggregation average:aggregation maximum:seema minimum:seema max:seema min:seema rated:seema limit:seema minimize:seema maximize:seema fastest:seema quickest:seema optimize:seema
 
 done
