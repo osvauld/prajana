@@ -1,0 +1,29 @@
+# matra-beeja: unit seed definitions
+# format — name: concepts | composition | symbols / description
+# concepts:    space-separated list of concept-yukta edges
+# composition: space-separated list of base-unit-yukta edges
+# symbols:     comma-separated aliases, then / description
+
+joule: energy-yukta work-yukta | kilogram-yukta metre-yukta second-yukta | joule, J / kilogram-metre-squared-per-second-squared
+watt: power-yukta | joule-yukta second-yukta | watt, W / joule-per-second concepts-for-unit:rated-power,power
+pascal: pressure-yukta | newton-yukta metre-yukta | pascal, Pa / newton-per-metre-squared
+hertz: frequency-yukta | second-yukta | hertz, Hz / per-second-the-unit-of-frequency
+ampere: current-yukta charge-yukta | coulomb-yukta second-yukta | ampere, amp, A / coulomb-per-second
+volt: potential-yukta | joule-yukta coulomb-yukta | volt, V / joule-per-coulomb
+ohm: resistance-yukta | volt-yukta ampere-yukta | ohm / volt-per-ampere
+kelvin: temperature-yukta | absolute-zero-yukta | kelvin, K / absolute-temperature
+mole: quantity-yukta | avogadro-constant-yukta | mole, mol / avogadro-number-of-particles
+celsius: temperature-yukta | kelvin-yukta | celsius, centigrade, C / degree-celsius
+fahrenheit: temperature-yukta | celsius-yukta | fahrenheit, F / degree-fahrenheit
+degree: kona-yukta | radian-yukta pi-yukta | degree, degrees, deg / one-360th-rotation
+metre-per-second: velocity-yukta speed-yukta | metre-yukta second-yukta | m/s, mps, metres-per-second / unit-of-velocity concepts-for-unit:velocity,speed
+metre-per-second-squared: acceleration-yukta | metre-yukta second-yukta | m/s2, metres-per-second-squared / unit-of-acceleration concepts-for-unit:acceleration
+newton-metre: torque-yukta | newton-yukta metre-yukta | Nm, N-m, newton-metre / unit-of-torque concepts-for-unit:rated-torque,torque
+radian-per-second: angular-velocity-yukta | radian-yukta second-yukta | rad/s, radians-per-second / unit-of-angular-velocity concepts-for-unit:joint-speed-max,angular-velocity
+kilometre: length-yukta displacement-yukta | metre-yukta | kilometre, kilometer, km / one-thousand-metres
+centimetre: length-yukta | metre-yukta | centimetre, centimeter, cm / one-hundredth-of-a-metre concepts-for-unit:link-length,displacement,distance
+millimetre: length-yukta | metre-yukta | millimetre, millimeter, mm / one-thousandth-of-a-metre
+gram: mass-yukta | kilogram-yukta | gram, grams, g / one-thousandth-of-a-kilogram
+kilometre-per-hour: velocity-yukta speed-yukta | kilometre-yukta second-yukta | km/h, kmph, kph / common-speed-unit
+litre: volume-yukta | metre-yukta | litre, liter, L / one-cubic-decimetre
+kilogram-metre-squared: moment-of-inertia-yukta | kilogram-yukta metre-yukta | kg-m2 / unit-of-moment-of-inertia

@@ -1,0 +1,16 @@
+tantra vec-scale
+
+  -- multiply each component of an n-dimensional vector by a scalar
+  -- s · [a1..an] = [s·a1..s·an]
+
+  inputs
+    scalar  float
+    v       list
+
+  let
+    result = vec-scale scalar v
+
+  return
+    result  list
+
+done

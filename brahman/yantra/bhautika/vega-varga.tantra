@@ -1,17 +1,17 @@
 tantra velocity-squared
 
   inputs
-    initial-velocity  float  metre-per-second
-    acceleration      float  metre-per-second-squared
-    displacement      float  metre
+    velocity      float  metre-per-second  purva
+    acceleration  float  metre-per-second-squared
+    displacement  float  metre
 
   let
-    u2     = power initial-velocity 2.0
+    u2     = power velocity 2.0
     two-as = mul (mul 2.0 acceleration) displacement
     v2     = add u2 two-as
     v      = sqrt v2
 
   return
-    v  float  metre-per-second
+    v  float  metre-per-second  uttara
 
 done

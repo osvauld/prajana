@@ -16,6 +16,9 @@ kosha visheshanam-ring
 
   -- sangati-level grammar dimensions (ring claims them)
   "sandhi-yukta matra-yukta krama-yukta"
+  "kramanusara-yukta avastha-yukta apeksha-yukta"
+  -- apeksha: with-respect-to — the denominator of a derivative.
+  -- d(displacement)/d(time): displacement is kramanusara, time is apeksha.
 
 shabda dimension-registry / the-ring-of-all-edge-dimensions-core-and-dynamic
 

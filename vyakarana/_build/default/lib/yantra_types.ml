@@ -2,10 +2,11 @@
 (* ---- types ---- *)
 
 type tantra_param = {
-  tp_name      : string;        (* as written in .tantra: "mass", "time" *)
+  tp_name      : string;        (* as written in .tantra: "mass", "velocity" *)
   tp_canonical : string;        (* graph-resolved: "mass", "kaala" *)
   tp_type      : string;        (* "float", "int" *)
   tp_unit      : string option; (* Some "kilogram", None *)
+  tp_avastha   : string option; (* Some "purva" | Some "uttara" | None *)
 }
 
 (* expression tree for the let-block RHS *)
@@ -73,6 +74,60 @@ type yantra_result = {
   yr_tantra     : string;                  (* tantra name used *)
   yr_code       : string;                  (* emitted OCaml source *)
   yr_raw_output : string;                  (* raw stdout from OCaml *)
+}
+
+(* ---- scene comprehension types ---- *)
+
+(* one level in an entity's krama (derivative) stack.
+   depth 0 = position/displacement, 1 = velocity, 2 = acceleration, 3 = jerk.
+   each depth IS the kramanusara of the one below it wrt time.
+   the unit is a consequence of the depth — not stored, derivable via matra-viveka. *)
+type krama_state = {
+  ks_depth   : int;            (* kramanusara depth: 0,1,2,3,... *)
+  ks_concept : string;         (* "displacement","velocity","acceleration","jerk" *)
+  ks_binding : binding option; (* measured value + unit; None if unknown/derived *)
+}
+
+(* a physical entity — the thing that HAS state and undergoes change.
+   e_krama is the full derivative stack, ordered by depth.
+   e_spanda is omega — if set, jerk loops back to velocity: j = -ω²·v.
+   this is the closure that makes oscillation. *)
+type entity = {
+  e_id      : int;
+  e_label   : string;           (* surface word: "ball", "block", "particle", "spring" *)
+  e_krama   : krama_state list; (* ordered derivative stack — the state trajectory *)
+  e_spanda  : float option;     (* ω — if non-zero: entity is oscillating (spanda) *)
+  e_context : binding list;     (* other properties: mass, charge, radius, etc. *)
+}
+
+(* a sandhi — where two or more krama chains meet and interact.
+   collision, connection, contact — any junction that changes the trajectory. *)
+type sandhi = {
+  sh_kind     : string;     (* "collision","connection","contact","compression" *)
+  sh_entities : int list;   (* entity ids involved *)
+  sh_time     : float option (* when in the krama sequence — None if not specified *)
+}
+
+(* a process — what transforms purva-avastha into uttara-avastha for a set of entities.
+   the sangati tells you the structural kind: gati, sandhi, spanda.
+   purva and uttara hold the before/after bindings per entity. *)
+type process = {
+  pr_sangati  : string;                       (* "gati","sandhi","spanda","kramanusara" *)
+  pr_entities : int list;                     (* which entity ids are involved *)
+  pr_purva    : (int * binding list) list;    (* entity_id → measured before-state *)
+  pr_uttara   : (int * binding list) list;    (* entity_id → measured after-state *)
+  pr_target   : (int option * string) option; (* (entity_id, concept) to compute *)
+}
+
+(* the full scene — all entities, all processes, the sandhi interaction points,
+   the krama sequence order, and what needs to be found.
+   sc_targets: list of (entity_id option, concept) — None entity = any/all. *)
+type scene = {
+  sc_entities  : entity list;
+  sc_processes : process list;
+  sc_sandhis   : sandhi list;
+  sc_krama_seq : int list;                    (* process ids in time order *)
+  sc_targets   : (int option * string) list;  (* what to find *)
 }
 
 (* ---- value coercions ---- *)

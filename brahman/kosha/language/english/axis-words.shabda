@@ -1,0 +1,19 @@
+# axis-words.shabda
+# axis detection: preposition/keyword → axis-trigger, and axis-name → axis vector
+# tantras load via shabda-pairs "axis-words"
+
+# prepositions / keywords that signal the next token is an axis name
+about:axis-trigger
+along:axis-trigger
+around:axis-trigger
+
+# axis name → axis vector as "ax:ay:az" (colon-separated floats)
+x:1:0:0
+y:0:1:0
+z:0:0:1
+X:1:0:0
+Y:0:1:0
+Z:0:0:1
+
+# default axis when none detected (Z is standard revolute default)
+default:0:0:1

@@ -1,0 +1,28 @@
+tantra scene-understand
+
+  -- Top-level scene comprehension router.
+  -- Detects scene type from sentence and dispatches to the right
+  -- scene-understand-<type> tantra.
+  --
+  -- Currently handled:
+  --   kinematic-chain  arm / joint / robot / end-effector / kinematic
+  --
+  -- Returns empty string if no scene type detected (caller falls through
+  -- to normal anuvada-ganana computation path).
+
+  inputs
+    sentence  string
+
+  let
+    words = map (tokenise sentence) (fn w -> lower w)
+
+    -- detect kinematic chain keywords
+    kc-words  = split "arm,joint,robot,kinematic,end-effector,manipulator,dof" ","
+    has-kc    = gt (length (filter words (fn w -> member w kc-words))) 0
+
+    result = cond has-kc (scene-understand-kinematic-chain sentence) otherwise ""
+
+  return
+    result  string
+
+done

@@ -6,7 +6,7 @@ tantra threshold-check
 
   let
     margin  = sub force max-force
-    status  = cond [(gt force max-force, 1.0)] otherwise 0.0
+    status  = cond (gt force max-force) 1.0 otherwise 0.0
 
   return
     status  float  dimensionless

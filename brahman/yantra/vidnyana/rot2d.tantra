@@ -1,0 +1,22 @@
+tantra rot2d
+
+  -- rotate a 2D vector by angle theta
+  -- applies the 2D rotation matrix R(θ) to vector [x, y]
+  -- R(θ) = [[cos θ, -sin θ], [sin θ, cos θ]]
+  -- result = [x·cos θ - y·sin θ, x·sin θ + y·cos θ]
+  --
+  -- this is the fundamental operation of a revolute joint:
+  -- given a link vector in local frame, rotate it to world frame
+  -- used in forward kinematics to chain joint transforms
+
+  inputs
+    angle   float  radian
+    v       list
+
+  let
+    result = rot2d angle v
+
+  return
+    result  list
+
+done

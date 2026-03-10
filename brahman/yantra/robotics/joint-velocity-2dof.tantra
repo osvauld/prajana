@@ -1,0 +1,37 @@
+tantra joint-velocity-2dof
+
+  -- joint velocity planning for a 2-DOF arm — synchronized motion
+  -- kramanusara of kona wrt time: ω = dθ/dt for each joint
+  --
+  -- the goal is minimum-time synchronized motion:
+  --   both joints start and finish at the same time
+  --   the bottleneck joint (largest |Δθ|/ω_max) runs at its max speed
+  --   the other joint is scaled to match: ω = Δθ / T
+  --
+  -- T = max(|Δθ1|/ω1_max, |Δθ2|/ω2_max)
+  -- ω1 = Δθ1 / T
+  -- ω2 = Δθ2 / T
+
+  inputs
+    theta1-current  float  radian
+    theta2-current  float  radian
+    theta1-target   float  radian
+    theta2-target   float  radian
+    omega1-max      float  radian-per-second
+    omega2-max      float  radian-per-second
+
+  let
+    delta-theta1  = sub theta1-target theta1-current
+    delta-theta2  = sub theta2-target theta2-current
+    t1            = div (abs delta-theta1) omega1-max
+    t2            = div (abs delta-theta2) omega2-max
+    move-time     = max t1 t2
+    omega1        = div delta-theta1 move-time
+    omega2        = div delta-theta2 move-time
+
+  return
+    omega1      float  radian-per-second
+    omega2      float  radian-per-second
+    move-time   float  second
+
+done

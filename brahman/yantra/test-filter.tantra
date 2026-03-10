@@ -1,0 +1,13 @@
+tantra test-filter
+
+  inputs
+    dummy  string
+
+  let
+    items = split "a,b,c" ","
+    result = filter items (fn kv -> eq (nth kv 0) "a")
+
+  return
+    result  string
+
+done

@@ -103,18 +103,31 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
          | Some resolved -> resolved
          | None -> target in
        let target_canon = Setu.resolve_to_canonical k target in
-       let bindings = List.filter (fun b ->
-         let bcanon = Setu.resolve_to_canonical k b.b_name in
-         not (b.b_name = target || b.b_name = target_canon || bcanon = target || bcanon = target_canon)
-       ) bindings in
-       let candidates =
-         (match Hashtbl.find_opt ctx.ctx_index.by_name target with Some t -> [t] | None -> []) @
-         (match Hashtbl.find_opt ctx.ctx_index.by_output target with Some l -> l | None -> []) @
-         (let resolved = Setu.resolve k target in
-          List.concat_map (fun name ->
-            match Hashtbl.find_opt ctx.ctx_index.by_output name with Some l -> l | None -> []
-          ) resolved)
-       in
+        (* avastha-aware filter: velocity:purva is an INPUT, not the target.
+           only filter bindings whose base name matches target AND have no avastha
+           or have uttara avastha (which would be the output). *)
+        let bindings = List.filter (fun b ->
+          let b_base, b_av = match String.index_opt b.b_name ':' with
+            | Some i -> (String.sub b.b_name 0 i,
+                         Some (String.sub b.b_name (i+1) (String.length b.b_name - i - 1)))
+            | None -> (b.b_name, None)
+          in
+          let bcanon = Setu.resolve_to_canonical k b_base in
+          let name_is_target = b_base = target || b_base = target_canon
+                              || bcanon = target || bcanon = target_canon in
+          (* keep avastha-tagged bindings even if base name matches target *)
+          match b_av with
+          | Some _ -> true     (* has avastha tag — always keep as potential input *)
+          | None -> not name_is_target
+        ) bindings in
+        let candidates =
+          (match Hashtbl.find_opt ctx.ctx_index.by_name target with Some t -> [t] | None -> []) @
+          (match Hashtbl.find_opt ctx.ctx_index.by_output target with Some l -> l | None -> []) @
+          (let resolved = Setu.resolve k target in
+           List.concat_map (fun name ->
+             match Hashtbl.find_opt ctx.ctx_index.by_output name with Some l -> l | None -> []
+           ) resolved)
+        in
        let seen = Hashtbl.create 16 in
        let candidates = List.filter (fun t ->
          if Hashtbl.mem seen t.t_name then false
@@ -246,11 +259,20 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
          | Some resolved -> resolved
          | None -> target in
        let target_canon = Setu.resolve_to_canonical k target in
-       let bindings = List.filter (fun b ->
-         let bcanon = Setu.resolve_to_canonical k b.b_name in
-         not (b.b_name = target || b.b_name = target_canon || bcanon = target || bcanon = target_canon)
-       ) bindings in
-       let mk_forward_step (t : tantra) (assignments : (string * float) list) : value =
+        let bindings = List.filter (fun b ->
+          let b_base, b_av = match String.index_opt b.b_name ':' with
+            | Some i -> (String.sub b.b_name 0 i,
+                         Some (String.sub b.b_name (i+1) (String.length b.b_name - i - 1)))
+            | None -> (b.b_name, None)
+          in
+          let bcanon = Setu.resolve_to_canonical k b_base in
+          let name_is_target = b_base = target || b_base = target_canon
+                              || bcanon = target || bcanon = target_canon in
+          match b_av with
+          | Some _ -> true
+          | None -> not name_is_target
+        ) bindings in
+        let mk_forward_step (t : tantra) (assignments : (string * float) list) : value =
          let assign_vs = List.map (fun (n, f) -> VBinding (n, f)) assignments in
          VList [
            VPair ("kind", VString "forward");
@@ -325,19 +347,25 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
             | Some t ->
               let input_values = List.map (fun (n, f) -> (n, VFloat f)) assignments in
               let result = !_eval_tantra_ref k t input_values in
-              (match t.t_returns with
-               | [ret] ->
-                 let f = as_float result in
-                 (* store under the tantra name — the canonical output key.
-                    internal return variable names (e.g. "ke" for kinetic-energy)
-                    are not stored to prevent stale values from polluting
-                    subsequent chain resolutions. *)
-                  let ts = Unix.gettimeofday () in
-                  ctx.ctx_session.bindings <-
-                   { b_name = t.t_name; b_value = f; b_unit = ret.tp_unit;
-                     b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
-                     b_confidence = 1.0; b_ttl = None }
-                   :: List.filter (fun b -> b.b_name <> t.t_name) ctx.ctx_session.bindings
+               (match t.t_returns with
+                | [ret] ->
+                  let f = as_float result in
+                  (* store under both tantra name and return param name.
+                     tantra name (e.g. "vega-ganana") is the canonical key.
+                     return param name (e.g. "velocity") is the concept key
+                     that target lookup uses to find the result. *)
+                   let ts = Unix.gettimeofday () in
+                   ctx.ctx_session.bindings <-
+                    { b_name = t.t_name; b_value = f; b_unit = ret.tp_unit;
+                      b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                      b_confidence = 1.0; b_ttl = None }
+                    :: List.filter (fun b -> b.b_name <> t.t_name) ctx.ctx_session.bindings;
+                   if ret.tp_name <> t.t_name then
+                     ctx.ctx_session.bindings <-
+                      { b_name = ret.tp_name; b_value = f; b_unit = ret.tp_unit;
+                        b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                        b_confidence = 1.0; b_ttl = None }
+                      :: List.filter (fun b -> b.b_name <> ret.tp_name) ctx.ctx_session.bindings
                | rets ->
                  let ts = Unix.gettimeofday () in
                  let values = as_list result in
@@ -452,6 +480,95 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
           last_invoked_tantra := attribution;
           ctx.ctx_session.last_result <- [(result_name, result_value)];
           Some (VList [VString "result"; VString result_name; VFloat result_value; VString unit_str; VString attribution])))
+
+  (* ------------------------------------------------------------------ *)
+  (* scene-extract: sentence → VNode scene-root
+     Thin dispatcher: tokenises, scores scene type from scene-type-words
+     kosha node, then delegates ALL extraction logic to
+     scene-extract-<type>.tantra. The tantra uses split/filter/member/
+     shabda-pairs/emit-node to parse and populate the graph.
+     No hardcoded defaults, unit lists, goal maps or domain logic here. *)
+  | "scene-extract" ->
+    let sentence = as_string (e_eval k e (List.nth args 0)) in
+    (* deterministic hash for stable node names within a session *)
+    let hash = Printf.sprintf "%d" (abs (Hashtbl.hash sentence)) in
+    (match !eval_ctx with
+     | None -> Some (VNode ("scene-" ^ hash))
+     | Some ctx ->
+       (* score each lowercase token against the scene-type-words kosha node *)
+       let scene_type_pairs = Setu.read_shabda k "scene-type-words" in
+       let scores : (string, int) Hashtbl.t = Hashtbl.create 8 in
+       let tokens = !_yantra_tokenise_ref sentence in
+       List.iter (fun tok ->
+         let tok = String.lowercase_ascii tok in
+         (match List.assoc_opt tok scene_type_pairs with
+          | Some st ->
+            Hashtbl.replace scores st
+              (1 + (match Hashtbl.find_opt scores st with Some n -> n | None -> 0))
+          | None -> ())
+       ) tokens;
+       let scene_type = Hashtbl.fold
+         (fun st cnt (bst, bcnt) -> if cnt > bcnt then (st, cnt) else (bst, bcnt))
+         scores ("generic", 0) |> fst
+       in
+       (* delegate to the per-type tantra *)
+       let tantra_name = "scene-extract-" ^ scene_type in
+       let root_name = (match Hashtbl.find_opt ctx.ctx_index.by_name tantra_name with
+         | Some t ->
+           let result = !_eval_tantra_ref k t
+             [("sentence", VString sentence); ("scene-hash", VString hash)] in
+           as_string result
+         | None ->
+           (* fallback: emit a minimal generic root node *)
+           let root = "scene-" ^ hash in
+           let n : Proof_graph.nigamana = {
+             name = root; layer = "kosha"; slokas = ["domain-physics-sthita"];
+             edges = []; satya = 0.0; shabda = "goals:result";
+           } in
+           ignore (Proof_graph.join k n);
+           Hashtbl.replace k.nodes root { n with satya = Proof_graph.raw_satya n };
+           root)
+       in
+       Some (VNode root_name))
+
+  (* ------------------------------------------------------------------ *)
+  (* scene-narrate: VNode scene-root → VString narration
+     Delegates to scene-narrate-<scene-type>.tantra.
+     The scene type is stored in the root node's shabda as "scene-type". *)
+  | "scene-narrate" ->
+    let root_name = as_string (e_eval k e (List.nth args 0)) in
+    (match !eval_ctx with
+     | None -> Some (VString ("Scene: " ^ root_name))
+     | Some ctx ->
+       let pairs = Setu.read_shabda k root_name in
+       let scene_type = match List.assoc_opt "scene-type" pairs with
+         | Some t -> t
+         | None ->
+           (* infer from root name prefix before first '-' then '-' *)
+           (* e.g. "arm-12345" → "kinematic-chain"; "circuit-12345" → "circuit" *)
+           let prefix_map = [
+             ("arm-",            "kinematic-chain");
+             ("circuit-",        "circuit");
+             ("pulley-system-",  "pulley-system");
+             ("oscillator-",     "oscillator");
+             ("collision-",      "collision");
+           ] in
+           (match List.find_opt (fun (pfx, _) ->
+             String.length root_name >= String.length pfx &&
+             String.sub root_name 0 (String.length pfx) = pfx
+           ) prefix_map with
+           | Some (_, st) -> st
+           | None -> "generic")
+       in
+       let tantra_name = "scene-narrate-" ^ scene_type in
+       let narration = (match Hashtbl.find_opt ctx.ctx_index.by_name tantra_name with
+         | Some t ->
+           as_string (!_eval_tantra_ref k t [("root-node", VString root_name)])
+         | None ->
+           let goals = List.assoc_opt "goals" pairs |> Option.value ~default:"" in
+           "Scene understood:\n  Root: " ^ root_name ^ "\n  Goals: " ^ goals)
+       in
+       Some (VString narration))
 
   (* print / debug *)
   | "print" ->

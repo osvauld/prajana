@@ -11,9 +11,29 @@ tantra yantra-plan-extraction
     -- try exact case first (R→resistance), then lowercase (f→force)
     binding-triples = fold-triples joined (fn a b c -> cond (and (eq (nth a 1) "concept") (or (eq (nth b 2) "is") (eq (nth b 2) "=")) (eq (nth c 1) "number")) (pair "binding" (bind (nth a 2) (nth c 2))) (and (eq (nth a 1) "unknown") (or (eq (nth b 2) "is") (eq (nth b 2) "=")) (eq (nth c 1) "number")) (let alias-exact = shabda "aliases" (nth a 0) in let alias-lower = shabda "aliases" (lower (nth a 0)) in let alias = cond (neq alias-exact "") alias-exact (neq alias-lower "") alias-lower otherwise "" in let resolved-name = cond (neq alias "") alias otherwise (nth a 0) in pair "binding" (bind resolved-name (nth c 2))) otherwise _none)
     target-triples = fold-triples joined (fn a b c -> cond (and (or (eq (nth a 2) "what") (eq (nth a 2) "when")) (eq (nth b 2) "is") (eq (nth c 1) "concept")) (pair "target" (nth c 2)) (and (has (nth a 2) "kriya-yantra") (eq (nth b 1) "concept")) (pair "target" (nth b 2)) otherwise _none)
+    -- fold-pairs catches kriya + concept at any position (including end of list)
+    target-pairs = fold-pairs joined (fn a b -> cond (and (eq (nth a 1) "kriya") (eq (nth b 1) "concept")) (pair "target" (nth b 2)) otherwise _none)
+    -- positional bindings: concept/unknown immediately followed by number
+    -- handles "mass 5, acceleration 3, find force" (commas stripped by tokeniser)
+    binding-pairs = fold-pairs joined (fn a b ->
+      let b-is-num = eq (nth b 1) "number"
+      let a-is-concept = eq (nth a 1) "concept"
+      let a-is-unknown = eq (nth a 1) "unknown"
+      let alias-exact = cond a-is-unknown (shabda "aliases" (nth a 0)) otherwise ""
+      let alias-lower = cond a-is-unknown (shabda "aliases" (lower (nth a 0))) otherwise ""
+      let alias = cond (neq alias-exact "") alias-exact (neq alias-lower "") alias-lower otherwise ""
+      let resolved = cond (neq alias "") alias (neq (nth a 2) "") (nth a 2) otherwise (nth a 0)
+      let match-val = cond (and a-is-concept b-is-num) (pair "binding" (bind (nth a 2) (nth b 2))) (and a-is-unknown b-is-num) (pair "binding" (bind resolved (nth b 2))) otherwise _none
+      match-val)
     binding-items = filter binding-triples (fn item -> eq (nth item 0) "binding")
-    bindings = map binding-items (fn item -> nth item 1)
-    target-items = filter target-triples (fn item -> eq (nth item 0) "target")
+    pair-binding-items = filter binding-pairs (fn item -> eq (nth item 0) "binding")
+    triple-bindings = map binding-items (fn item -> nth item 1)
+    triple-names = map triple-bindings (fn b -> nth b 0)
+    unique-pair = filter pair-binding-items (fn item -> not (member (nth (nth item 1) 0) triple-names))
+    bindings = append triple-bindings (map unique-pair (fn item -> nth item 1))
+    target-items-t = filter target-triples (fn item -> eq (nth item 0) "target")
+    target-items-p = filter target-pairs (fn item -> eq (nth item 0) "target")
+    target-items = cond (gt (length target-items-t) 0) target-items-t otherwise target-items-p
     explicit-target = cond (gt (length target-items) 0) (nth (nth target-items 0) 1) otherwise ""
     bound-names = map bindings (fn b -> nth b 0)
     lone-candidates = filter joined (fn tok -> cond (not (eq (nth tok 1) "concept")) false (first-match bound-names (fn name -> cond (eq name (nth tok 2)) true otherwise false)) false otherwise true)

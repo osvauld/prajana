@@ -1,27 +1,29 @@
-# ~~Robotics + Graduate Motion Plan~~ [SUPERSEDED — see scene-comprehension-plan.md]
-## Status: COMPLETE (partially implemented) — remaining items carried forward to new plan
+# Robotics + Graduate Motion Plan
+## Status: PARTIALLY COMPLETE — see remaining items below
 
-### What was completed from this plan:
+### Completed ✓
 - Extended `binding` type with 4 new fields (timestamp, source, confidence, ttl) ✓
 - Updated all binding construction sites across OCaml codebase ✓
 - 22 new motion tantras (rotational, rolling, circular, projectile, SHM, friction, collisions) ✓
 - `seema-pariksha.tantra` (threshold check) ✓
 - Phase 1 build + test (rolling sphere 6.48 m/s ✓, SHM ✓, incline friction ✓) ✓
-- CSR-backed PPR (previous session) ✓
+- CSR-backed PPR ✓
+- `matra-aayaama.shabda` — SI dimension vectors for 60+ units ✓
+- `dim-vector`, `dim-op`, `dim-to-unit` primitives ✓
+- `matra-viveka.tantra`, `matra-ganana.tantra` ✓
+- `kramanusara` + `apeksha` graph structure on all derivative quantities ✓
+- Scene types in `yantra_types.ml` ✓
 
-### What was NOT completed (carried forward):
-- Problem ingestion (PROBLEM...END) → scene-comprehension-plan.md Part F
-- Configurable chain depth → scene-comprehension-plan.md Part F
-- Binary cache (--cache flag) → scene-comprehension-plan.md Part F
-- Robotics sensor demo → scene-comprehension-plan.md Part F
-- Multi-entity resolver → superseded by scene-aware resolver in new plan
+### Remaining — NOT YET IMPLEMENTED
 
-### Why superseded:
-The design for multi-body physics revealed a deeper architectural need:
-N-entity scene comprehension with root-sangati as structural grammar,
-dynamic graph dimensions (sandhi, matra, krama as new visheshanam axes),
-and concept-type matching in the resolver. These replace the "second-mass"
-naming approach. The new plan builds on the completed work here.
+| Item | Part | Priority |
+|---|---|---|
+| Problem ingestion (`PROBLEM...END`, multi-target) | Part D | High |
+| Configurable chain depth (`max_depth` param, problem mode = 10) | Part D2 | High |
+| 2-DOF robot arm IK + velocity + time | see robotics-ik-2dof-plan.md | High |
+| Binary cache (`--cache` flag) | Part F | Low |
+| Robotics sensor demo (50Hz IMU, `robot_session.ml`, `sensor_sim.ml`) | Part E | Low |
+| Multi-entity scene-aware resolver | see scene-comprehension-plan.md Phase 6 | High |
 
 ---
 

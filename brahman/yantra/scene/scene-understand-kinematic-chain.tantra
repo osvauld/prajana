@@ -1,0 +1,250 @@
+tantra scene-understand-kinematic-chain
+
+  -- Full pipeline: extract scene → narrate → compute FK/IK → return result.
+  -- Handles n-DOF serial arms. Computation uses arm-plan-2dof for first 2
+  -- revolute joints (planar XY) plus prismatic Z offset for joint 3+.
+
+  inputs
+    sentence  string
+
+  let
+    hash = "sc1"
+
+    -- 1. extract scene graph nodes
+    root-name = scene-extract-kinematic-chain sentence hash
+
+    -- 2. narrate scene understanding
+    narration = scene-narrate-kinematic-chain root-name
+
+    -- 3. read root properties
+    root-pairs  = shabda-pairs root-name
+    n-joints-s  = first-match root-pairs (fn p -> cond (eq (nth p 0) "n-joints") (nth p 1) otherwise _none)
+    tnode       = first-match root-pairs (fn p -> cond (eq (nth p 0) "target-node") (nth p 1) otherwise _none)
+    n-joints    = cond (exists n-joints-s) (to-number n-joints-s) otherwise 2
+
+    -- 4. read target position
+    tp   = shabda-pairs tnode
+    tx-s = first-match tp (fn p -> cond (eq (nth p 0) "x") (nth p 1) otherwise _none)
+    ty-s = first-match tp (fn p -> cond (eq (nth p 0) "y") (nth p 1) otherwise _none)
+    tz-s = first-match tp (fn p -> cond (eq (nth p 0) "z") (nth p 1) otherwise _none)
+    tx   = cond (exists tx-s) (to-number tx-s) otherwise 0
+    ty   = cond (exists ty-s) (to-number ty-s) otherwise 0
+    tz   = cond (exists tz-s) (to-number tz-s) otherwise 0
+
+    -- 5. read joint 0 and 1 link/joint properties
+    j0p  = shabda-pairs (concat "joint-0-" hash)
+    l0p  = shabda-pairs (concat "link-0-" hash)
+    j1p  = shabda-pairs (concat "joint-1-" hash)
+    l1p  = shabda-pairs (concat "link-1-" hash)
+    j2p  = shabda-pairs (concat "joint-2-" hash)
+    l2p  = shabda-pairs (concat "link-2-" hash)
+
+    l0-s  = first-match l0p (fn p -> cond (eq (nth p 0) "link-length")    (nth p 1) otherwise _none)
+    l1-s  = first-match l1p (fn p -> cond (eq (nth p 0) "link-length")    (nth p 1) otherwise _none)
+    l2-s  = first-match l2p (fn p -> cond (eq (nth p 0) "link-length")    (nth p 1) otherwise _none)
+    th0-s = first-match j0p (fn p -> cond (eq (nth p 0) "joint-angle")    (nth p 1) otherwise _none)
+    th1-s = first-match j1p (fn p -> cond (eq (nth p 0) "joint-angle")    (nth p 1) otherwise _none)
+    w0-s  = first-match j0p (fn p -> cond (eq (nth p 0) "joint-speed-max") (nth p 1) otherwise _none)
+    w1-s  = first-match j1p (fn p -> cond (eq (nth p 0) "joint-speed-max") (nth p 1) otherwise _none)
+    rt0-s = first-match j0p (fn p -> cond (eq (nth p 0) "rated-torque")   (nth p 1) otherwise _none)
+    rt1-s = first-match j1p (fn p -> cond (eq (nth p 0) "rated-torque")   (nth p 1) otherwise _none)
+    rp0-s = first-match j0p (fn p -> cond (eq (nth p 0) "rated-power")    (nth p 1) otherwise _none)
+    rp1-s = first-match j1p (fn p -> cond (eq (nth p 0) "rated-power")    (nth p 1) otherwise _none)
+    jt2-s = first-match j2p (fn p -> cond (eq (nth p 0) "joint-type")     (nth p 1) otherwise _none)
+
+    l0   = cond (exists l0-s)  (to-number l0-s)  otherwise 0.5
+    l1   = cond (exists l1-s)  (to-number l1-s)  otherwise 0.5
+    l2   = cond (exists l2-s)  (to-number l2-s)  otherwise 0.5
+    -- start angles: from extracted joint-angle (current pose before the move)
+    th0  = cond (exists th0-s) (to-number th0-s) otherwise 0
+    th1  = cond (exists th1-s) (to-number th1-s) otherwise 0
+    w0   = cond (exists w0-s)  (to-number w0-s)  otherwise 2
+    w1   = cond (exists w1-s)  (to-number w1-s)  otherwise 2
+    rt0  = cond (exists rt0-s) (to-number rt0-s) otherwise 5
+    rt1  = cond (exists rt1-s) (to-number rt1-s) otherwise 5
+    rp0  = cond (exists rp0-s) (to-number rp0-s) otherwise 20
+    rp1  = cond (exists rp1-s) (to-number rp1-s) otherwise 20
+    jt2  = cond (exists jt2-s) jt2-s otherwise "revolute"
+    has-prismatic-z = eq jt2 "prismatic"
+
+    -- 6. compute: arm-plan-2dof for first 2 joints (planar XY projection)
+    -- th0, th1 are start angles; IK returns end angles and synchronized velocities
+    plan     = arm-plan-2dof l0 l1 th0 th1 tx ty w0 w1
+    theta0   = nth plan 0
+    theta1   = nth plan 1
+    omega0   = nth plan 2
+    omega1   = nth plan 3
+    t-move   = nth plan 4
+    j1x      = nth plan 5
+    j1y      = nth plan 6
+    ex       = nth plan 7
+    ey       = nth plan 8
+
+    -- 7. prismatic joint 2: move along Z to reach target-z
+    d2       = cond has-prismatic-z tz otherwise 0
+
+    -- 8. motor feasibility for joints 0 and 1
+    -- torque ≈ mass * L * g * 0.1 (rough estimate at max extension)
+    -- just check against rated; use arm-plan omega and link mass
+    lm0-s = first-match l0p (fn p -> cond (eq (nth p 0) "link-mass") (nth p 1) otherwise _none)
+    lm1-s = first-match l1p (fn p -> cond (eq (nth p 0) "link-mass") (nth p 1) otherwise _none)
+    lm0   = cond (exists lm0-s) (to-number lm0-s) otherwise 1
+    lm1   = cond (exists lm1-s) (to-number lm1-s) otherwise 1
+    -- torque needed ≈ m * g * L/2 (gravity load, rough)
+    g-str = shabda "physics-constants" "gravitational-acceleration"
+    g     = cond (exists g-str) (to-number (nth (split g-str " ") 0)) otherwise 9.80665
+    tq0   = mul lm0 (mul g (div l0 2))
+    tq1   = mul lm1 (mul g (div l1 2))
+    pw0   = mul tq0 (abs omega0)
+    pw1   = mul tq1 (abs omega1)
+    m0ok  = motor-check tq0 pw0 rt0 rp0
+    m1ok  = motor-check tq1 pw1 rt1 rp1
+    ok0   = nth m0ok 0
+    ok1   = nth m1ok 0
+
+    -- 9. assemble computation result lines
+    ok0-verdict = cond (gt ok0 0) "OK" otherwise "EXCEEDS"
+    ok1-verdict = cond (gt ok1 0) "OK" otherwise "EXCEEDS"
+    d2-line = cond has-prismatic-z
+      (concat "\n  Joint 2 (prismatic): d = " (to-string d2) " m")
+      otherwise ""
+
+    -- path energy (invariant: does not change with speed, only with path)
+    -- E = sum_i( tau_i * |delta_theta_i| )
+    -- power P = E / T  =>  min power at given T,  P*T = E = const
+    e0           = mul tq0 (abs theta0)
+    e1           = mul tq1 (abs theta1)
+    path-energy  = add e0 e1
+    pw-total     = add pw0 pw1
+
+    -- bi-objective optimum: minimize T + P simultaneously (equal weight)
+    -- dL/dT = 0 where L = T + E/T  =>  T* = sqrt(E)
+    -- if T* < T_min (speed-limited), clamp to T_min
+    t-opt-unconstrained = sqrt path-energy
+    t-opt       = cond (gt t-move t-opt-unconstrained) t-move otherwise t-opt-unconstrained
+    -- optimal synchronized speeds at t-opt
+    omega0-opt  = div (abs theta0) t-opt
+    omega1-opt  = div (abs theta1) t-opt
+    pw0-opt     = mul tq0 omega0-opt
+    pw1-opt     = mul tq1 omega1-opt
+    pw-opt-total = add pw0-opt pw1-opt
+
+    -- detect optimization objective from sentence keywords
+    -- use exact-match "power" (singular) to avoid false match on "powers" in specs
+    -- use exact-match "time" and "fastest"/"quickest" for time objectives
+    sent-words   = split (lower sentence) " "
+    saw-minimize = cond (exists (first-match sent-words (fn w -> cond (eq w "minimize") "yes" otherwise _none))) "yes" otherwise "no"
+    saw-optimize = cond (exists (first-match sent-words (fn w -> cond (eq w "optimize") "yes" otherwise _none))) "yes" otherwise "no"
+    saw-fastest  = cond (exists (first-match sent-words (fn w -> cond (eq w "fastest") "yes" (eq w "quickest") "yes" otherwise _none))) "yes" otherwise "no"
+    -- "power" singular (not "powers") — exact match avoids false trigger on "rated motor powers"
+    saw-pw-goal  = cond (exists (first-match sent-words (fn w -> cond (eq w "power") "yes" otherwise _none))) "yes" otherwise "no"
+    -- "time" exact — only matches if user wrote "minimize time" not just mentioned timing
+    saw-t-goal   = cond (exists (first-match sent-words (fn w -> cond (eq w "time") "yes" otherwise _none))) "yes" otherwise "no"
+
+    -- combine: needs trigger (minimize/optimize) AND objective (power/time)
+    wants-min-pw-a = cond (eq saw-minimize "yes") saw-pw-goal otherwise "no"
+    wants-min-pw   = cond (eq saw-optimize "yes") saw-pw-goal otherwise wants-min-pw-a
+    wants-min-t-a  = cond (eq saw-minimize "yes") saw-t-goal otherwise "no"
+    wants-min-t-b  = cond (eq saw-optimize "yes") saw-t-goal otherwise wants-min-t-a
+    wants-min-t    = cond (eq saw-fastest "yes") "yes" otherwise wants-min-t-b
+
+    -- select primary plan: time → T_min, power → T_long, otherwise → T* balanced
+    -- for "minimize power": P = E/T decreases as T increases; T_budget = 3*T* is a practical choice
+    t-budget     = mul t-opt 3
+    omega0-slow  = div (abs theta0) t-budget
+    omega1-slow  = div (abs theta1) t-budget
+    pw0-slow     = mul tq0 omega0-slow
+    pw1-slow     = mul tq1 omega1-slow
+    pw-slow-total = add pw0-slow pw1-slow
+
+    ik-line = concat
+      "\n  IK solution (all joints move simultaneously, start -> end):"
+      "\n    joint0: " (to-string th0) " rad -> " (to-string theta0) " rad   (delta=" (to-string (abs (sub theta0 th0))) " rad)"
+      "\n    joint1: " (to-string th1) " rad -> " (to-string theta1) " rad   (delta=" (to-string (abs (sub theta1 th1))) " rad)"
+      d2-line
+      "\n  FK verify: end-effector = [" (to-string ex) ", " (to-string ey) ", " (to-string d2) "]"
+      "\n  Motor check (gravity-load torque vs ratings):"
+      "\n    joint0: tq_req=" (to-string tq0) " N*m (rated " (to-string rt0) ")  [" ok0-verdict "]"
+      "\n    joint1: tq_req=" (to-string tq1) " N*m (rated " (to-string rt1) ")  [" ok1-verdict "]"
+      "\n  Path energy E = sum(tau_i*|d_theta_i|) = " (to-string path-energy) " J  (P = E/T, invariant wrt speed)"
+
+    plan-time = concat
+      "\n  [Goal: minimize time — all joints at rated max speed]"
+      "\n    T = " (to-string t-move) " s   P_total = " (to-string pw-total) " W"
+      "\n    omega0 = " (to-string omega0) " rad/s   omega1 = " (to-string omega1) " rad/s"
+      "\n  Reference: balanced optimum at T* = " (to-string t-opt) " s  P* = " (to-string pw-opt-total) " W"
+
+    plan-power = concat
+      "\n  [Goal: minimize power — move slowly (example at T = 3*T*)]"
+      "\n    T = " (to-string t-budget) " s   P_total = " (to-string pw-slow-total) " W"
+      "\n    omega0 = " (to-string omega0-slow) " rad/s   omega1 = " (to-string omega1-slow) " rad/s"
+      "\n    (P decreases further as T increases; P = E/T = " (to-string path-energy) " / T)"
+      "\n  Reference: balanced optimum at T* = " (to-string t-opt) " s  P* = " (to-string pw-opt-total) " W"
+
+    plan-balanced = concat
+      "\n  [Goal: minimize T and P simultaneously — T* = P* = sqrt(E) = " (to-string t-opt) " s / W]"
+      "\n    T* = " (to-string t-opt) " s   P* = " (to-string pw-opt-total) " W"
+      "\n    omega0 = " (to-string omega0-opt) " rad/s   omega1 = " (to-string omega1-opt) " rad/s"
+      "\n    power: joint0=" (to-string pw0-opt) " W   joint1=" (to-string pw1-opt) " W"
+      "\n  Minimum-time bound: T_min=" (to-string t-move) " s  P=" (to-string pw-total) " W  (at rated max speed)"
+
+    -- select plan by detected goal
+    plan-a  = cond (eq wants-min-t "yes") plan-time otherwise plan-balanced
+    plan-sel = cond (eq wants-min-pw "yes") plan-power otherwise plan-a
+
+    compute-block = concat "\nComputation:" ik-line "\n" plan-sel
+
+    -- 10. detect missing properties by reading the provided-flags written at extraction time
+    -- the extraction tantra writes mass-provided:yes/no, rtorq-provided:yes/no, rpwr-provided:yes/no
+    -- into each node's shabda so we can distinguish user-provided from defaulted values
+
+    mp0-s  = first-match l0p (fn p -> cond (eq (nth p 0) "mass-provided")  (nth p 1) otherwise _none)
+    mp1-s  = first-match l1p (fn p -> cond (eq (nth p 0) "mass-provided")  (nth p 1) otherwise _none)
+    rtp0-s = first-match j0p (fn p -> cond (eq (nth p 0) "rtorq-provided") (nth p 1) otherwise _none)
+    rtp1-s = first-match j1p (fn p -> cond (eq (nth p 0) "rtorq-provided") (nth p 1) otherwise _none)
+    rpp0-s = first-match j0p (fn p -> cond (eq (nth p 0) "rpwr-provided")  (nth p 1) otherwise _none)
+    rpp1-s = first-match j1p (fn p -> cond (eq (nth p 0) "rpwr-provided")  (nth p 1) otherwise _none)
+
+    -- "yes" = this group has at least one defaulted value
+    mass-miss-a   = cond (eq mp0-s  "no") "yes" otherwise "no"
+    mass-miss     = cond (eq mp1-s  "no") "yes" otherwise mass-miss-a
+    torque-miss-a = cond (eq rtp0-s "no") "yes" otherwise "no"
+    torque-miss   = cond (eq rtp1-s "no") "yes" otherwise torque-miss-a
+    power-miss-a  = cond (eq rpp0-s "no") "yes" otherwise "no"
+    power-miss    = cond (eq rpp1-s "no") "yes" otherwise power-miss-a
+
+    -- any-missing: chain of single-arm conds, body is a plain variable
+    miss-a      = cond (eq mass-miss "yes") "yes" otherwise "no"
+    miss-b      = cond (eq torque-miss "yes") "yes" otherwise miss-a
+    any-missing = cond (eq power-miss "yes") "yes" otherwise miss-b
+
+    -- note lines: pre-computed strings, then selected by cond with plain variable body
+    lm-def = to-string lm0
+    rt-def = to-string rt0
+    rp-def = to-string rp0
+    mass-note-str   = concat "\n    link masses           (default: " lm-def " kg/link)"
+    torque-note-str = concat "\n    rated motor torques   (default: " rt-def " N*m/joint)"
+    power-note-str  = concat "\n    rated motor powers    (default: " rp-def " W/joint)"
+    mass-note   = cond (eq mass-miss   "yes") mass-note-str   otherwise ""
+    torque-note = cond (eq torque-miss "yes") torque-note-str otherwise ""
+    power-note  = cond (eq power-miss  "yes") power-note-str  otherwise ""
+
+    -- suggested sentences (ASCII, match grammatical form of input)
+    mass-q   = cond (eq mass-miss   "yes") "\n    \"Link masses are [m0] kg and [m1] kg.\""            otherwise ""
+    torque-q = cond (eq torque-miss "yes") "\n    \"Rated motor torques are [t0] N*m and [t1] N*m.\""  otherwise ""
+    power-q  = cond (eq power-miss  "yes") "\n    \"Rated motor powers are [P0] W and [P1] W.\""       otherwise ""
+
+    -- assemble clarification: pre-compute body, then select with plain-variable cond body
+    clarify-body = concat
+      "\n\nNot specified (defaults used):"
+      mass-note torque-note power-note
+      "\n\nFor accurate results, extend your description with:"
+      mass-q torque-q power-q
+    clarify-block = cond (eq any-missing "yes") clarify-body otherwise ""
+
+    result = concat narration compute-block clarify-block
+
+  return
+    result  string
+
+done

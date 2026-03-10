@@ -1,0 +1,22 @@
+tantra power-joint
+
+  -- mechanical power delivered by a joint
+  -- P = τ × ω
+  --
+  -- torque in N·m, angular-velocity in rad/s → power in watts
+  -- this is the instantaneous power at the moment the joint
+  -- is running at its target angular velocity.
+  --
+  -- compare against stepper rated-power to check feasibility.
+
+  inputs
+    torque           float  newton-metre
+    angular-velocity float  radian-per-second
+
+  let
+    power = mul torque angular-velocity
+
+  return
+    power  float  watt
+
+done

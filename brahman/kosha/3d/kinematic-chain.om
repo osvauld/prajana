@@ -1,0 +1,51 @@
+sangati kinematic-chain
+
+  -- a kinematic chain is an armature seen from both the 3D and physics perspectives
+  -- it is the bridge between domain-3d and domain-robotics / domain-physics
+  --
+  -- 3D perspective:
+  --   a DAG of bones whose transforms compose from root to tip via scene-graph
+  --   each bone has a local rotation (kona as quaternion) and a world-space pose
+  --   the tip bone's world-space position IS the end-effector location (bindu)
+  --
+  -- physics perspective:
+  --   each bone is a rigid link with mass and moment of inertia
+  --   each joint is a kona with angular-velocity (kramanusara of kona wrt time)
+  --   motion planning operates in the joint-space (kona space)
+  --   torque and power are the physical costs of moving through that space
+  --
+  -- the FK (forward kinematics) IS scene-graph composition:
+  --   bone.world = parent.world × bone.local(kona)
+  --   end-effector-bindu = tip-bone.world.position
+  --
+  -- the IK (inverse kinematics) inverts this:
+  --   given end-effector-bindu → find kona values for each bone
+  --
+  -- the motion plan IS a keyframe trajectory in joint-space:
+  --   kona(t=0) = theta-current → kona(t=T) = theta-target
+  --   interpolated along the krama axis (time)
+
+  "domain-3d-sthita domain-physics-sthita domain-robotics-sthita"
+
+  -- 3D structure
+  "armature-swarupa bone-yukta scene-graph-yukta"
+  "world-space-phala"
+
+  -- physics quantities carried by each link
+  "mass-yukta moment-of-inertia-yukta"
+  "kona-yukta angular-velocity-yukta torque-yukta"
+
+  -- kinematic operations
+  "fk-siddha ik-siddha"
+  "kramanusara-yukta apeksha-yukta"
+
+  -- the end-effector position is a bindu in world-space / aayaama-dvaya
+  "bindu-phala aayaama-dvaya-sthita"
+
+  -- motion plan bridges to 3D animation
+  "keyframe-abheda interpolation-abheda"
+  "move-time-yukta"
+
+shabda kinematic-chain, robot-arm, manipulator, serial-chain
+
+done

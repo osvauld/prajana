@@ -1,0 +1,80 @@
+tantra extract-value-units
+
+  -- Sphoṭa-based value-unit extraction.
+  --
+  -- Two-pass group-theoretic approach:
+  --
+  -- Pass 1: collect raw [value, concept, unit] triples in sentence order.
+  --   For each number token, hold it as last-num.
+  --   For each unit token with a pending last-num, emit a triple.
+  --   Unit resolved via: direct dim-vector (classified concept) or alias lookup.
+  --   Concept resolved via: concepts-for-unit shabda on the unit node.
+  --
+  -- Pass 2: assign joint-idx = position within concept group.
+  --   For each triple, count how many prior triples share the same concept.
+  --   That count is the joint-idx. Each concept forms its own group with
+  --   0-based sequential indices. No global counter. No sentence splitting needed.
+  --
+  -- Group theory: each concept class (link-length, joint-speed-max, ...) is a
+  -- group indexed by {0, 1, ..., n-1}. Position within the group = joint index.
+  -- "respectively" semantics fall out naturally from shared index set.
+  --
+  -- Returns list of [value, concept, unit-name, joint-idx] tuples.
+
+  inputs
+    classified  list    -- output of classify-fold: [[word, kind, resolved], ...]
+
+  let
+    unit-alias-pairs = shabda-pairs "unit-aliases"
+
+    -- pass 1: collect raw [value, concept, unit] triples
+    -- accumulator: [results, last-num]
+    pass1 = reduce classified [[], _none]
+      (fn acc triple ->
+        let results  = nth acc 0
+        let last-num = nth acc 1
+
+        let word     = nth triple 0
+        let kind     = nth triple 1
+        let resolved = nth triple 2
+
+        -- detect number
+        let as-num    = to-number word
+        let is-number = exists as-num
+
+        -- detect unit: direct (concept with dim-vector) or via unit-alias lookup
+        let direct-vec = cond (eq kind "concept") (dim-vector resolved) otherwise _none
+        let alias-name = cond (not (exists direct-vec))
+          (first-match unit-alias-pairs (fn kv -> cond (eq (nth kv 0) word) (nth kv 1) otherwise _none))
+          otherwise _none
+        let unit-vec   = cond (exists direct-vec) direct-vec (exists alias-name) (dim-vector alias-name) otherwise _none
+        let unit-name  = cond (exists direct-vec) resolved (exists alias-name) alias-name otherwise ""
+        let is-unit    = exists unit-vec
+
+        -- resolve concept from unit node shabda
+        let cands   = cond is-unit (split (shabda unit-name "concepts-for-unit") ",") otherwise (range 0)
+        let concept = cond (gt (length cands) 0) (nth cands 0) otherwise unit-name
+
+        -- emit triple when unit follows a pending number
+        let new-results = cond (and is-unit (exists last-num))
+          (append results [[last-num, concept, unit-name]])
+          otherwise results
+
+        -- update last-num: set on number, clear on unit, carry otherwise
+        let new-num = cond is-number as-num is-unit _none otherwise last-num
+
+        [new-results, new-num])
+
+    raw-triples = nth pass1 0
+
+    -- pass 2: assign joint-idx by position within concept group
+    -- for each triple: idx = count of prior triples with same concept
+    result = reduce raw-triples [] (fn acc t ->
+      let concept = nth t 1
+      let idx     = length (filter acc (fn r -> eq (nth r 1) concept))
+      append acc [[nth t 0, concept, nth t 2, idx]])
+
+  return
+    result  list
+
+done

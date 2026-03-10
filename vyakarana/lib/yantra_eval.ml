@@ -154,7 +154,23 @@ let yantra_tokenise (s : string) : string list =
         flush (); incr i
       end
     | ':' -> flush (); incr i
-    | '+' | '*' | '/' | '=' ->
+    | '*' | '/' ->
+      (* keep as part of token when alpha on both sides: "rad/s" → "rad/s", "n*m" → "n*m" *)
+      let prev_alpha = Buffer.length buf > 0 &&
+        let contents = Buffer.contents buf in
+        let last = contents.[String.length contents - 1] in
+        (last >= 'a' && last <= 'z') || (last >= 'A' && last <= 'Z') in
+      let next_alpha = !i + 1 < len &&
+        let nc = s.[!i + 1] in
+        (nc >= 'a' && nc <= 'z') || (nc >= 'A' && nc <= 'Z') in
+      if prev_alpha && next_alpha then begin
+        Buffer.add_char buf c; incr i
+      end else begin
+        flush ();
+        tokens := String.make 1 c :: !tokens;
+        incr i
+      end
+    | '+' | '=' ->
       flush ();
       tokens := String.make 1 c :: !tokens;
       incr i
@@ -177,6 +193,16 @@ let yantra_tokenise (s : string) : string list =
         incr i
       end
     | c ->
+      (* split on digit↔letter transition: "0.5m" → "0.5","m"; "1kg" → "1","kg" *)
+      if Buffer.length buf > 0 then begin
+        let contents = Buffer.contents buf in
+        let last = contents.[String.length contents - 1] in
+        let last_is_digit = last >= '0' && last <= '9' in
+        let c_is_alpha = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') in
+        let last_is_alpha = (last >= 'a' && last <= 'z') || (last >= 'A' && last <= 'Z') in
+        let c_is_digit = c >= '0' && c <= '9' in
+        if (last_is_digit && c_is_alpha) || (last_is_alpha && c_is_digit) then flush ()
+      end;
       Buffer.add_char buf c;
       incr i
   done;
@@ -208,7 +234,19 @@ let () =
   Yantra_parser.register_graph_op_arity "member"            2;   (* member value list → bool *)
   Yantra_parser.register_graph_op_arity "ppr"               3;   (* ppr seeds target bindings → [(name,score)] *)
   Yantra_parser.register_graph_op_arity "graph-node-count" (-1); (* () → float *)
-  Yantra_parser.register_graph_op_arity "graph-edge-count" (-1)  (* () → float *)
+  Yantra_parser.register_graph_op_arity "graph-edge-count" (-1); (* () → float *)
+  Yantra_parser.register_graph_op_arity "emit-node"          4;  (* name layer slokas shabda → VNode *)
+  Yantra_parser.register_graph_op_arity "register-dimension" 1;  (* name → float(index) *)
+  Yantra_parser.register_graph_op_arity "dimension-count"  (-1); (* () → float *)
+  Yantra_parser.register_graph_op_arity "outgoing-edges"     1;  (* node-name → outgoing edges only *)
+  Yantra_parser.register_graph_op_arity "dim-vector"         1;  (* unit-name → [M,L,T,I,θ,N,J,scale] *)
+  Yantra_parser.register_graph_op_arity "dim-op"             3;  (* vec-a vec-b op → result-vec *)
+  Yantra_parser.register_graph_op_arity "dim-to-unit"        1;  (* vec → unit-name *)
+  Yantra_parser.register_graph_op_arity "dim-kramanusara-depth" 1; (* vec → float (|T exponent|) *)
+  Yantra_parser.register_graph_op_arity "range"           1;  (* n → [0..n-1] *)
+  Yantra_parser.register_graph_op_arity "shabda-pairs"    1;  (* node-name → [[key,value],...] *)
+  Yantra_parser.register_graph_op_arity "scene-extract"   1;  (* sentence → VNode root *)
+  Yantra_parser.register_graph_op_arity "scene-narrate"   1   (* VNode root → VString narration *)
 
 (* ---- run anuvada-ganana: the meta-tantra pipeline ---- *)
 let run_anuvada_ganana (k : proof_graph) (idx : tantra_index) (session : session)

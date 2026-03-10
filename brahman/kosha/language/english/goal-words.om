@@ -1,0 +1,13 @@
+kosha goal-words
+
+  -- word → canonical goal name lookup for scene-extract goal detection.
+  -- also contains "goal-trigger:" prefixed entries for words that open
+  -- the goal zone (find, compute, determine, etc.).
+  -- tantras load via shabda-pairs "goal-words".
+
+  "setu-swarupa english-sthita domain-language-sthita"
+  "scene-extract-yukta kriya-yantra-abheda"
+
+shabda shabda-tmpl:language/english/goal-words.shabda
+
+done

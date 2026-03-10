@@ -1,0 +1,12 @@
+kosha axis-words
+
+  -- axis detection words for kinematic chain extraction.
+  -- preposition/keyword → axis-trigger, and axis-name → "ax:ay:az".
+  -- tantras load via shabda-pairs "axis-words".
+
+  "setu-swarupa english-sthita domain-language-sthita"
+  "scene-extract-yukta kinematic-chain-abheda"
+
+shabda shabda-tmpl:language/english/axis-words.shabda
+
+done

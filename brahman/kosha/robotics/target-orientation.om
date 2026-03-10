@@ -1,0 +1,38 @@
+kosha target-orientation
+
+  -- the target orientation for the end-effector in world-space (sthira-apeksha)
+  -- a rotation — expressed as quaternion [qw, qx, qy, qz] or Euler angles
+  --
+  -- in 2D (planar arm): orientation is a single angle — the end-effector's
+  --   heading in the tala. Often unconstrained in pure position IK.
+  -- in 3D (spatial arm): orientation is a full SO(3) rotation — 3 DOF.
+  --   requires at least 6-DOF arm to control both position AND orientation.
+  --   with fewer DOF: position is primary, orientation is best-effort.
+  --
+  -- the full IK problem (position + orientation):
+  --   find joint-angles such that:
+  --     fk_position(joint-angles) = target-position
+  --     fk_orientation(joint-angles) = target-orientation
+  --   requires 6 equations → needs 6+ DOF for exact solution
+  --
+  -- scene extraction:
+  --   "point the gripper downward" → target-orientation = [0°, 90°, 0°] (Euler ZYX)
+  --   "end-effector facing Z" → target-orientation = identity rotation about Z
+  --   if no orientation specified → orientation is unconstrained (position-only IK)
+
+  "domain-robotics-sthita kinematic-chain-yukta"
+  "bindu-sthita world-space-sthita sthira-apeksha-sthita"
+
+  -- rotation representation
+  "kona-yukta"
+  "quaternion-drishthanta"
+
+  -- paired with target-position for full pose target
+  "target-position-yukta"
+
+  -- orientation IK needs 6+ DOF
+  "aayaama-traya-sthita"
+
+shabda target-orientation, end-effector-orientation, goal-orientation / the-world-space-rotation-the-end-effector-must-achieve-paired-with-target-position-for-full-pose
+
+done

@@ -1,0 +1,5 @@
+# scene-defaults-oscillator.shabda
+default-mass:1.0
+default-spring-constant:10.0
+default-amplitude:0.1
+default-goals:period,frequency

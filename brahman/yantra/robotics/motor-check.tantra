@@ -1,0 +1,34 @@
+tantra motor-check
+
+  -- feasibility check: does the required torque and power fit within the stepper rating?
+  --
+  -- the stepper motor is the actuator at each bone joint in the kinematic-chain.
+  -- its rated-torque and rated-power are the physical limits of the bone's rotation.
+  -- in the 3D perspective these limits constrain the keyframe animation speed:
+  -- a motion plan that requires more torque or power than the motor can deliver
+  -- is physically unrealisable — the bone cannot follow the intended trajectory.
+  --
+  -- margin > 0 → within rating (safe)
+  -- margin < 0 → exceeds rating (infeasible — reduce speed or redesign)
+  --
+  -- motor-ok = 1.0 if both torque and power are within rating, 0.0 otherwise
+
+  inputs
+    torque        float  newton-metre
+    power         float  watt
+    rated-torque  float  newton-metre
+    rated-power   float  watt
+
+  let
+    margin-torque  = sub rated-torque torque
+    margin-power   = sub rated-power power
+    torque-ok      = ge margin-torque 0
+    power-ok       = ge margin-power 0
+    motor-ok       = cond (and torque-ok power-ok) 1 otherwise 0
+
+  return
+    motor-ok       float
+    margin-torque  float  newton-metre
+    margin-power   float  watt
+
+done

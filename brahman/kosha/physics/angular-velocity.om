@@ -1,11 +1,14 @@
 kosha angular-velocity
 
   "velocity-abheda kona-yukta radian-swarupa"
-  "derivative-siddha kaala-yukta"
   "avrti-yukta frequency-abheda"
   "pi-yukta period-yukta"
-  "angular-acceleration-janaka"
+  "angular-acceleration-phala"
   "domain-physics-sthita"
+
+  -- d(angle)/d(time): kona is numerator, time is apeksha
+  "kona-kramanusara"
+  "physics-time-apeksha"
 
 shabda angular-velocity / rate-of-change-of-kona-per-unit-time-d-theta-by-dt-in-radians-per-second-omega
 

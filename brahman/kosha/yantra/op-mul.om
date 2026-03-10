@@ -2,6 +2,6 @@ kosha op-mul
 
   "op-class-monoid-kriya"
 
-shabda name:mul
+shabda name:mul parse-arity:2
 
 done

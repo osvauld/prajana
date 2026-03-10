@@ -1,9 +1,12 @@
 kosha angular-acceleration
 
   "acceleration-abheda kona-yukta"
-  "derivative-siddha angular-velocity-yukta kaala-yukta"
   "torque-yukta moment-of-inertia-yukta"
   "avrti-swarupa domain-physics-sthita"
+
+  -- d(angular-velocity)/d(time)
+  "angular-velocity-kramanusara"
+  "physics-time-apeksha"
 
 shabda angular-acceleration / rate-of-change-of-angular-velocity-d-omega-by-dt-alpha-caused-by-torque
 

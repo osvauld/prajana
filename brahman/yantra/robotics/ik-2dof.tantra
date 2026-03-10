@@ -1,0 +1,43 @@
+tantra ik-2dof
+
+  -- inverse kinematics for a 2-DOF planar arm in aayaama-dvaya (2D tala)
+  -- given a target bindu (x, y) in world-space, find joint angles θ1, θ2
+  --
+  -- derivation:
+  --   r² = x² + y²  (squared distance from base to target)
+  --   law of cosines: r² = L1² + L2² - 2·L1·L2·cos(π - θ2)
+  --                      = L1² + L2² + 2·L1·L2·cos(θ2)
+  --   → cos(θ2) = (r² - L1² - L2²) / (2·L1·L2)
+  --   → θ2 = acos(cos(θ2))                          [elbow-down solution]
+  --
+  --   θ1 = atan2(y, x) - atan2(L2·sin(θ2), L1 + L2·cos(θ2))
+  --
+  -- the elbow-up solution uses θ2 = -acos(cos(θ2))
+  -- reachability condition: |r| ≤ L1 + L2 (not checked here — caller's responsibility)
+
+  inputs
+    link-length-1   float  metre
+    link-length-2   float  metre
+    target-x        float  metre
+    target-y        float  metre
+
+  let
+    x-sq        = mul target-x target-x
+    y-sq        = mul target-y target-y
+    r-sq        = add x-sq y-sq
+    l1-sq       = mul link-length-1 link-length-1
+    l2-sq       = mul link-length-2 link-length-2
+    cos-theta2  = div (sub r-sq (add l1-sq l2-sq))
+                      (mul 2 (mul link-length-1 link-length-2))
+    theta2      = acos cos-theta2
+    sin-theta2  = sin theta2
+    alpha       = atan2 target-y target-x
+    beta        = atan2 (mul link-length-2 sin-theta2)
+                        (add link-length-1 (mul link-length-2 cos-theta2))
+    theta1      = sub alpha beta
+
+  return
+    theta1  float  radian
+    theta2  float  radian
+
+done
