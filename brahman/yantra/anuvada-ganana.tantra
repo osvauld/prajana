@@ -2,82 +2,65 @@ tantra anuvada-ganana
 
   -- the meta-tantra: orchestrates the full query-to-answer pipeline.
   --
-  -- pipeline (9 steps):
-  --   1. tokenise: string → word list
-  --   2. classify-fold: word list → typed token triples [word, kind, resolved]
-  --      (graph-driven compound resolution via iterative bigram folding)
-  --   3. query-intents: sentence → intent list (identity|origin|process|consequence|transmission)
-  --   4. yantra-plan-extraction: tokens → target + bindings (or stored assignment)
-  --   5. yantra-plan-resolution: target → plan (mode: direct|inverse|chain, steps, config)
-  --   6. execute-plan: plan → raw result [kind, name, value, unit, attr]
-  --   7. format-response: raw result → natural language string
-  --   8. error gating: suppress "tantra exists but missing input" when intent is identity
-  --   9. fallback: if computation yields nothing, compose conceptual answer via anuvada
-  --      (graph walk through visheshanam-projection algebra)
-  --
-  -- the computational path (steps 4-7) resolves tantras as equations.
-  -- the conceptual path (step 9) walks the proof-graph tensor via typed edges.
-  -- both paths use the same classified tokens and intent detection.
+  -- routing priority (first match wins):
+  --   1. scene comprehension  — multi-entity physical scene description
+  --      detected early (before binding extraction) via scene-understand
+  --   2. computation          — target + bindings → tantra → numeric result
+  --   3. conceptual answer    — graph walk via anuvada (visheshanam projection)
 
   inputs
     sentence  string
 
   let
-    -- step 1: split sentence into words
-    words = tokenise sentence
-
-    -- step 2: classify and join bigrams (graph-driven compound resolution)
+    -- step 1: tokenise and classify
+    words  = tokenise sentence
     joined = classify-fold words
-
-    -- step 2b: detect query intents from sentence (used by both paths)
     intents = query-intents sentence
 
-    -- step 3: extract target and bindings from classified tokens
-    extraction = yantra-plan-extraction joined
+    -- step 2: scene detection (highest priority)
+    -- scene-understand returns "" if no scene keywords found
+    scene-result = scene-understand sentence
 
-    -- step 3b: detect stored (assignment) vs query case
-    stored-flag = eq (nth extraction 0) "stored"
+    -- step 3: if scene handled, skip computation
+    -- otherwise run computation pipeline
+    extraction = cond (eq scene-result "") (yantra-plan-extraction joined) otherwise _none
+    stored-flag = cond (exists extraction) (eq (nth extraction 0) "stored") otherwise false
 
-    -- step 4: get the target for query case
-    raw-target = cond (stored-flag) "" otherwise (nth extraction 0)
+    raw-target = cond (and (exists extraction) (not stored-flag)) (nth extraction 0) otherwise ""
 
-    -- step 4b: if target is empty, find an operator concept or symbol
-    concept-target = first-match joined (fn tok -> cond (and (eq (nth tok 1) "concept") (is-tantra (nth tok 2))) (nth tok 2) otherwise _none)
+    concept-target = cond (eq raw-target "")
+      (first-match joined (fn tok -> cond (and (eq (nth tok 1) "concept") (is-tantra (nth tok 2))) (nth tok 2) otherwise _none))
+      otherwise _none
 
-    -- step 4c: if no concept, try operator symbol via graph
-    op-target = first-match joined (fn tok -> cond (eq (nth tok 1) "operator") (shabda "chihna-ganaka" (nth tok 2)) otherwise _none)
+    op-target = cond (and (eq raw-target "") (not (exists concept-target)))
+      (first-match joined (fn tok -> cond (eq (nth tok 1) "operator") (shabda "chihna-ganaka" (nth tok 2)) otherwise _none))
+      otherwise _none
 
-    -- step 4d: pick the right target
-    target = cond (stored-flag) "" (neq raw-target "") raw-target (exists concept-target) concept-target (exists op-target) op-target otherwise ""
+    target = cond (stored-flag) ""
+             (neq raw-target "") raw-target
+             (exists concept-target) concept-target
+             (exists op-target) op-target
+             otherwise ""
 
-    -- step 5: resolve which tantra to use via policy planner
-    plan = yantra-plan-resolution target extraction joined
+    plan      = cond (neq target "") (yantra-plan-resolution target extraction joined) otherwise _none
+    raw-result = cond (exists plan) (execute-plan plan) otherwise _none
+    final-result = cond stored-flag extraction (exists raw-result) raw-result otherwise _none
 
-    -- step 6: execute the plan, getting raw result data [kind;name;value;unit;attr]
-    raw-result = execute-plan plan
+    formatted = cond (exists final-result) (format-response final-result) otherwise ""
 
-    -- step 7: pick stored extraction or computed result
-    final-result = cond (stored-flag) extraction otherwise raw-result
-
-    -- step 8: format the response using format-response tantra
-    formatted = format-response final-result
-
-    -- step 8b: distinguish real partial-input errors from "no target found" noise
-    -- "exists but" in the reason means a tantra was found but inputs are missing → show error
-    -- but suppress that error when intent is "identity" AND no session bindings exist
-    -- (pure definitional query: "what is X" with no stored values → fall to anuvada)
-    -- when session bindings exist, the user is computing, so show the error even with identity intent
-    error-reason = nth final-result 1
+    error-reason = cond (exists final-result) (nth final-result 1) otherwise ""
     is-missing-input-error = and (eq (nth final-result 0) "error") (gt (length (split error-reason "exists but")) 1)
     has-identity-intent = gt (length (filter intents (fn i -> eq i "identity"))) 0
     has-session-bindings = gt (length (session-bindings _none)) 0
     is-pure-identity = and has-identity-intent (not has-session-bindings)
     is-real-error = and is-missing-input-error (not is-pure-identity)
-    is-any-error = eq (nth final-result 0) "error"
+    is-any-error = cond (exists final-result) (eq (nth final-result 0) "error") otherwise false
     computed = cond (is-real-error) formatted (and (neq formatted "") (not is-any-error)) formatted otherwise ""
 
-    -- step 9: if computation yielded nothing, compose conceptual answer via anuvada
-    result = cond (neq computed "") computed otherwise (anuvada joined intents)
+    -- step 4: conceptual fallback if nothing computed and no scene
+    result = cond (neq scene-result "") scene-result
+             (neq computed "") computed
+             otherwise (anuvada joined intents)
 
   return
     result  string

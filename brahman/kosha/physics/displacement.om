@@ -5,4 +5,16 @@ sangati displacement
   "viveka-yukta direction-yukta"
   "domain-physics-sthita"
 
+  -- kramanusara chain: displacement is the root quantity
+  -- velocity is kramanusara of displacement wrt time (d displacement / d time)
+  "velocity-kramanusara-phala"
+
+  -- matra: displacement is measured in metres.
+  -- this is the ROOT unit — velocity, acceleration, jerk units
+  -- all derive from here via kramanusara (each d/dt subtracts T^-1).
+  "metre-matra"
+
+  -- avastha: displacement can have initial/final states
+  "avastha-sthita"
+
 done

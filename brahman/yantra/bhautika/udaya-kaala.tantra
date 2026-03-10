@@ -1,11 +1,11 @@
 tantra flight-time
 
   inputs
-    initial-velocity  float  metre-per-second
-    angle             float  radian
+    velocity  float  metre-per-second  purva
+    angle     float  radian
 
   let
-    t = div (mul 2.0 (mul initial-velocity (sin angle))) gravity
+    t = div (mul 2.0 (mul velocity (sin angle))) gravity
 
   return
     t  float  second

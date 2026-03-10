@@ -8,4 +8,8 @@ kosha vibration
   "oscillation-abheda pulse-abheda"
   "domain-physics-sthita"
 
+  -- the kramanusara chain bends back through jerk
+  -- vibration = the loop where jerk = -ω² × velocity
+  "jerk-abheda kramanusara-sthita"
+
 done

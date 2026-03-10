@@ -5,10 +5,14 @@ tantra classify-fold-resolve
   -- calls itself recursively when merges occur — the deepening return.
   --
   -- fold-pairs walks adjacent tokens. for each pair (a, b):
-  --   if a is a modifier/concept/unknown, try compound a-resolved "-" b-resolved
-  --   check graph (lookup) and aliases (shabda "aliases").
-  --   if compound is found: merge into one concept token.
-  --   if not: keep a, retry from b.
+  --
+  --   1. avastha + concept: "initial" + "velocity" → ["initial velocity", "concept", "velocity:purva"]
+  --      the concept name stays as-is, but gets avastha-tagged via "name:avastha"
+  --
+  --   2. modifier/concept + concept: try compound a-resolved "-" b-resolved
+  --      check graph (lookup) and aliases (shabda "aliases").
+  --      if compound is found: merge into one concept token.
+  --      if not: keep a, retry from b.
   --
   -- when the list shrinks (a merge happened), apply again (avrti).
   -- when stable, return.
@@ -17,7 +21,17 @@ tantra classify-fold-resolve
     tokens  list
 
   let
-    merged = fold-pairs tokens (fn a b -> cond (and (or (eq (nth a 1) "modifier") (eq (nth a 1) "concept") (eq (nth a 1) "unknown")) (or (exists (lookup (concat (nth a 2) "-" (nth b 2)))) (exists (shabda "aliases" (concat (nth a 2) "-" (nth b 2)))))) [concat (nth a 0) " " (nth b 0), "concept", cond (exists (lookup (concat (nth a 2) "-" (nth b 2)))) (name (lookup (concat (nth a 2) "-" (nth b 2)))) otherwise (shabda "aliases" (concat (nth a 2) "-" (nth b 2)))] otherwise _none)
+    merged = fold-pairs tokens (fn a b ->
+      let a-kind    = nth a 1
+      let a-is-mod  = or (eq a-kind "compound") (or (eq a-kind "seema") (or (eq a-kind "aggregation") (or (eq a-kind "modifier") (or (eq a-kind "concept") (eq a-kind "unknown")))))
+      let compound  = concat (nth a 2) "-" (nth b 2)
+      let found     = cond (exists (lookup compound)) (name (lookup compound)) (exists (shabda "aliases" compound)) (shabda "aliases" compound) otherwise _none
+      cond
+      (and (eq a-kind "avastha") (eq (nth b 1) "concept"))
+        [concat (nth a 0) " " (nth b 0), "concept", concat (nth b 2) ":" (nth a 2)]
+      (and a-is-mod (exists found))
+        [concat (nth a 0) " " (nth b 0), "concept", found]
+      otherwise _none)
     changed = neq (length merged) (length tokens)
     result = cond (changed) (classify-fold-resolve merged) otherwise merged
 

@@ -1,0 +1,23 @@
+kosha rotation-matrix
+
+  "matrix-swarupa transform-swarupa domain-math-sthita"
+  "kona-yukta orthogonal-swarupa"
+  "vector-kriya direction-phala"
+  "aayaama-yukta"
+
+  -- a rotation matrix R(θ) rotates a vector by angle θ
+  -- in 2D: [[cos θ, -sin θ], [sin θ, cos θ]]
+  -- in 3D axis-aligned: Rx, Ry, Rz (rotate in YZ, XZ, XY planes)
+  -- in 3D arbitrary axis u: Rodrigues formula
+  --   R = I·cosθ + (1-cosθ)·(u⊗u) + sinθ·[u]×
+  --   equivalently: v_rot = v·cosθ + (u×v)·sinθ + u·(u·v)·(1-cosθ)
+  --   implemented as rot3d.tantra using vec-cross inline
+  -- in n-D: a plane of rotation is chosen, same cos/sin structure
+  -- orthogonal: R^T = R^-1, det(R) = 1
+  -- composition: R(θ1+θ2) = R(θ1)·R(θ2)
+  -- in kinematic chains: R_world = R_0 · R_1 · ... · R_{n-1}
+  --   propagated via fk-ndof.tantra (frame reduce over krama joints)
+
+shabda rotation-matrix / the-matrix-that-rotates-a-vector-by-an-angle-in-a-chosen-plane-orthogonal-and-det-1
+
+done

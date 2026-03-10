@@ -1,0 +1,17 @@
+tantra vec-add
+
+  -- component-wise addition of two n-dimensional vectors
+  -- works for any n — 2D, 3D, nD
+  -- [a1..an] + [b1..bn] = [a1+b1..an+bn]
+
+  inputs
+    a  list
+    b  list
+
+  let
+    result = vec-add a b
+
+  return
+    result  list
+
+done

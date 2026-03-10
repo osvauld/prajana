@@ -1,0 +1,11 @@
+kosha vec-scale
+
+  "vector-kriya domain-math-sthita"
+  "scalar-multiplication-abheda aayaama-yukta"
+
+  -- multiply each component of an n-dimensional vector by a scalar
+  -- s · [a1,a2,...,an] = [s·a1, s·a2,...,s·an]
+
+shabda vec-scale / scalar-multiplication-of-an-n-dimensional-vector
+
+done

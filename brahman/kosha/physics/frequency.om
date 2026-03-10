@@ -7,4 +7,11 @@ sangati frequency
   "energy-yukta"
   "domain-physics-sthita domain-math-sthita"
 
+  -- frequency = 1/period = pratipaksha of period
+  -- unit: hertz = 1/second — matra stated directly since
+  -- the numerator is dimensionless (cycle count, a pure number)
+  "period-pratipaksha"
+  "hertz-matra"
+  "jerk-yukta"
+
 done

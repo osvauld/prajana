@@ -1,0 +1,23 @@
+sangati kramanusara
+
+  -- kramanusara: the rate of one quantity with respect to another (the krama axis)
+  -- this is the general structure of d/dx — not only d/dt
+  -- the krama axis is the denominator: can be time, distance, volume, angle, anything
+  -- recursive: kramanusara of kramanusara is the second derivative (T^-2, etc.)
+  -- each application adds -1 to the denominator dimension's SI exponent
+
+  -- root structure: viveka is the act of differentiation (discerning the instant)
+  -- sama-kalana is integration (gathering the whole) — kramanusara is the inverse direction
+  "viveka-abheda sama-kalana-pratipaksha"
+
+  "krama-sthita tat-kshana-siddha"
+  "purva-rupa-sthita uttara-rupa-phala"
+  "matra-janya vivartana-kriya"
+  "svayambhu-yukta"
+
+  -- svayambhu-yukta: self-composable — kramanusara of kramanusara is valid (2nd derivative etc.)
+  -- matra-janya: produces a new unit by dividing numerator dim by denominator dim
+
+shabda rate-of-one-thing-wrt-another / the-d-by-dx-structure-viveka-at-each-instant-the-krama-axis-is-the-denominator-recursive-each-application-subtracts-one-from-that-dimensions-exponent
+
+done

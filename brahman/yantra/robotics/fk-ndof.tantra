@@ -1,0 +1,99 @@
+tantra fk-ndof
+
+  -- Forward kinematics for an n-DOF serial arm with arbitrary joint axes.
+  --
+  -- The arm is a krama (ordered chain): each joint's frame grounds the next.
+  -- Joint local swatantra (one angle per revolute joint) is expressed in
+  -- that joint's own chala-apeksha frame. The krama couples them — moving
+  -- joint i changes the world-frame of all joints i+1..n-1.
+  --
+  -- Algorithm (reduce over joints):
+  --   Accumulator: flat 12-element list [xx,xy,xz, yx,yy,yz, zx,zy,zz, px,py,pz]
+  --   Encodes the accumulated world frame (xhat,yhat,zhat) and position p.
+  --   Start: identity frame + zero position = [1,0,0, 0,1,0, 0,0,1, 0,0,0]
+  --   Each joint i:
+  --     1. Extract frame basis vectors and position from accumulator
+  --     2. Transform local axis [axi,ayi,azi] to world frame via frame basis
+  --     3. Rotate xhat,yhat,zhat by theta_i around world axis (Rodrigues via rot3d)
+  --     4. Extend position: p += xhat_new * link_length_i
+  --     5. Rebuild accumulator from new frame + position
+  --   End: acc[9..11] is end-effector position in sthira-apeksha (world frame)
+  --
+  -- inputs are parallel lists indexed 0..n-1.
+
+  inputs
+    n             float           -- number of joints (DOF)
+    joint-angles  list            radian   -- [theta_0 .. theta_{n-1}]
+    axis-xs       list            -- [ax_0 .. ax_{n-1}] local axis x-component
+    axis-ys       list            -- [ay_0 .. ay_{n-1}] local axis y-component
+    axis-zs       list            -- [az_0 .. az_{n-1}] local axis z-component
+    link-lengths  list            metre    -- [l_0 .. l_{n-1}]
+
+  let
+    -- flat 12-element accumulator: identity frame + zero position
+    -- [xx xy xz  yx yy yz  zx zy zz  px py pz]
+    init = split "1 0 0 0 1 0 0 0 1 0 0 0" " "
+
+    -- reduce over joint indices 0..n-1
+    final = reduce (range n) init (fn acc i ->
+      -- extract frame basis vectors (as string lists for arithmetic compatibility)
+      let xx = nth acc 0
+      let xy = nth acc 1
+      let xz = nth acc 2
+      let yx = nth acc 3
+      let yy = nth acc 4
+      let yz = nth acc 5
+      let zx = nth acc 6
+      let zy = nth acc 7
+      let zz = nth acc 8
+      let px = nth acc 9
+      let py = nth acc 10
+      let pz = nth acc 11
+      let xhat = split (concat xx " " xy " " xz) " "
+      let yhat = split (concat yx " " yy " " yz) " "
+      let zhat = split (concat zx " " zy " " zz) " "
+      -- joint i parameters
+      let axi     = nth axis-xs i
+      let ayi     = nth axis-ys i
+      let azi     = nth axis-zs i
+      let theta-i = nth joint-angles i
+      let l-i     = nth link-lengths i
+      -- transform local axis to world frame via accumulated frame
+      let ax-w = vec-add (vec-scale axi xhat) (vec-add (vec-scale ayi yhat) (vec-scale azi zhat))
+      -- rotate frame basis vectors by theta-i around world axis (Rodrigues)
+      let xhat-new = rot3d ax-w theta-i xhat
+      let yhat-new = rot3d ax-w theta-i yhat
+      let zhat-new = rot3d ax-w theta-i zhat
+      -- extend position along new local X axis (link points along xhat-new)
+      let link-w  = vec-scale l-i xhat-new
+      -- extract components for accumulator rebuild
+      let nxx = nth xhat-new 0
+      let nxy = nth xhat-new 1
+      let nxz = nth xhat-new 2
+      let nyx = nth yhat-new 0
+      let nyy = nth yhat-new 1
+      let nyz = nth yhat-new 2
+      let nzx = nth zhat-new 0
+      let nzy = nth zhat-new 1
+      let nzz = nth zhat-new 2
+      let npx = add px (nth link-w 0)
+      let npy = add py (nth link-w 1)
+      let npz = add pz (nth link-w 2)
+      -- rebuild flat accumulator
+      split (concat
+        (to-string nxx) " " (to-string nxy) " " (to-string nxz) " "
+        (to-string nyx) " " (to-string nyy) " " (to-string nyz) " "
+        (to-string nzx) " " (to-string nzy) " " (to-string nzz) " "
+        (to-string npx) " " (to-string npy) " " (to-string npz)) " ")
+
+    -- extract end-effector position from final accumulator
+    end-x = to-number (nth final 9)
+    end-y = to-number (nth final 10)
+    end-z = to-number (nth final 11)
+
+  return
+    end-x  float  metre
+    end-y  float  metre
+    end-z  float  metre
+
+done

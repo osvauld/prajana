@@ -1,0 +1,48 @@
+sangati chala-apeksha
+
+  -- chala-apeksha: a moving reference frame — the denominator itself is in motion
+  --
+  -- the canonical case in robotics:
+  --   joint i's local frame is the apeksha for joint i+1's position
+  --   but joint i's frame moves whenever joint i (or any ancestor joint) changes angle
+  --   so the apeksha is itself rotating and translating in world-space
+  --
+  -- kramanusara wrt chala-apeksha = total derivative (includes transport term):
+  --
+  --   (d/dt)_world = (d/dt)_local + ω × (·)
+  --
+  --   where ω is the angular velocity of the moving frame itself
+  --   this extra term is what produces:
+  --     Coriolis acceleration:   2 · ω × v_local
+  --     centripetal acceleration: ω × (ω × r)
+  --
+  -- in a kinematic chain: every joint except the base has a chala-apeksha
+  -- the base joint has sthira-apeksha (fixed to the world)
+  --
+  -- for torque computation: ignoring chala-apeksha (using τ = I·α alone)
+  -- is only valid when joints are slow or independent. At speed the
+  -- coupling terms between joints become significant.
+  --
+  -- the correct equation (Newton-Euler, recursive):
+  --   τ[i] = I[i]·α[i] + ω[i] × (I[i]·ω[i])   ← chala-apeksha term
+  --   plus contributions from all child links (propagated backward from tip)
+
+  "apeksha-swarupa"
+  "krama-sthita kramanusara-yukta"
+
+  -- the frame itself has velocity and acceleration — it is a joint in the chain
+  "angular-velocity-yukta angular-acceleration-yukta"
+  "kona-yukta"
+
+  -- the transport theorem: what connects local-derivative to world-derivative
+  -- (d/dt)_world = (d/dt)_local + ω × (·)
+  "sambandha-yukta"
+  "sthira-apeksha-pratipaksha"
+
+  -- downstream joints are chala-apeksha for their children
+  -- upstream (base) joint is sthira-apeksha
+  "parampara-sthita"
+
+shabda chala-apeksha, moving-frame, body-frame, local-frame / the-reference-that-itself-moves-total-derivative-includes-transport-term-omega-cross
+
+done

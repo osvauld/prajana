@@ -232,6 +232,11 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     let b = as_list (e_eval k e (List.nth args 1)) in
     Some (VList (a @ b))
 
+  (* range: n → [0, 1, ..., n-1]  so tantras can map over variable-length sequences *)
+  | "range" ->
+    let n = int_of_float (as_float (e_eval k e (List.nth args 0))) in
+    Some (VList (List.init (max 0 n) (fun i -> VFloat (float_of_int i))))
+
   | "sort-desc" ->
     let lst = as_list (e_eval k e (List.nth args 0)) in
     let score_of_pair = function
@@ -328,6 +333,10 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     Some (if b = 0.0 then VFloat 0.0 else VFloat (as_float (e_eval k e (List.nth args 0)) /. b))
   | "power" -> Some (VFloat (as_float (e_eval k e (List.nth args 0)) ** as_float (e_eval k e (List.nth args 1))))
   | "sqrt"  -> Some (VFloat (sqrt     (as_float (e_eval k e (List.nth args 0)))))
+  | "asin"  -> Some (VFloat (asin     (as_float (e_eval k e (List.nth args 0)))))
+  | "acos"  -> Some (VFloat (acos     (as_float (e_eval k e (List.nth args 0)))))
+  | "atan2" -> Some (VFloat (atan2    (as_float (e_eval k e (List.nth args 0)))
+                                       (as_float (e_eval k e (List.nth args 1)))))
   | "sin"   -> Some (VFloat (sin      (as_float (e_eval k e (List.nth args 0)))))
   | "cos"   -> Some (VFloat (cos      (as_float (e_eval k e (List.nth args 0)))))
   | "tan"   -> Some (VFloat (tan      (as_float (e_eval k e (List.nth args 0)))))
@@ -339,5 +348,84 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
   | "mod"   -> Some (VFloat (mod_float (as_float (e_eval k e (List.nth args 0))) (as_float (e_eval k e (List.nth args 1)))))
   | "min"   -> Some (VFloat (Float.min (as_float (e_eval k e (List.nth args 0))) (as_float (e_eval k e (List.nth args 1)))))
   | "max"   -> Some (VFloat (Float.max (as_float (e_eval k e (List.nth args 0))) (as_float (e_eval k e (List.nth args 1)))))
+
+  (* ---- n-dimensional vector operations ---- *)
+  (* all operate on VList of VFloat — works for any n: 2D, 3D, nD *)
+
+  (* vec-add: [a1..an] x [b1..bn] → [a1+b1..an+bn] *)
+  | "vec-add" ->
+    let va = as_list (e_eval k e (List.nth args 0)) in
+    let vb = as_list (e_eval k e (List.nth args 1)) in
+    Some (VList (List.map2 (fun a b -> VFloat (as_float a +. as_float b)) va vb))
+
+  (* vec-sub: [a1..an] x [b1..bn] → [a1-b1..an-bn] *)
+  | "vec-sub" ->
+    let va = as_list (e_eval k e (List.nth args 0)) in
+    let vb = as_list (e_eval k e (List.nth args 1)) in
+    Some (VList (List.map2 (fun a b -> VFloat (as_float a -. as_float b)) va vb))
+
+  (* vec-scale: scalar x [a1..an] → [s·a1..s·an] *)
+  | "vec-scale" ->
+    let s  = as_float (e_eval k e (List.nth args 0)) in
+    let va = as_list (e_eval k e (List.nth args 1)) in
+    Some (VList (List.map (fun a -> VFloat (s *. as_float a)) va))
+
+  (* vec-dot: [a1..an] x [b1..bn] → scalar sum of component products *)
+  | "vec-dot" ->
+    let va = as_list (e_eval k e (List.nth args 0)) in
+    let vb = as_list (e_eval k e (List.nth args 1)) in
+    let s = List.fold_left2 (fun acc a b -> acc +. as_float a *. as_float b) 0.0 va vb in
+    Some (VFloat s)
+
+  (* vec-norm: [a1..an] → sqrt(a1²+...+an²) *)
+  | "vec-norm" ->
+    let va = as_list (e_eval k e (List.nth args 0)) in
+    let s = List.fold_left (fun acc a -> acc +. as_float a *. as_float a) 0.0 va in
+    Some (VFloat (sqrt s))
+
+  (* vec-nth: [a1..an] x i → ai  (0-based index) *)
+  | "vec-nth" ->
+    let va  = as_list (e_eval k e (List.nth args 0)) in
+    let idx = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    Some (if idx >= 0 && idx < List.length va then List.nth va idx else VNone)
+
+  (* rot2d: angle x [x,y] → [x·cos θ - y·sin θ, x·sin θ + y·cos θ]
+     applies a 2D rotation matrix to a 2D vector.
+     generalises to any plane of rotation for higher dims. *)
+  | "rot2d" ->
+    let theta = as_float (e_eval k e (List.nth args 0)) in
+    let v     = as_list (e_eval k e (List.nth args 1)) in
+    let x = as_float (List.nth v 0) in
+    let y = as_float (List.nth v 1) in
+    let c = cos theta in
+    let s = sin theta in
+    Some (VList [VFloat (x *. c -. y *. s); VFloat (x *. s +. y *. c)])
+
+  (* mat-mul: flat row-major matrix (n*m floats, ncols) x flat matrix (m*p floats, pcols)
+     → flat result matrix (n*p floats).
+     mat-mul A ncols B pcols → C
+     used for homogeneous transform composition in kinematic chains. *)
+  | "mat-mul" ->
+    let a_flat = as_list (e_eval k e (List.nth args 0)) in
+    let ncols_a = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let b_flat = as_list (e_eval k e (List.nth args 2)) in
+    let ncols_b = int_of_float (as_float (e_eval k e (List.nth args 3))) in
+    let a = List.map as_float a_flat in
+    let b = List.map as_float b_flat in
+    let nrows_a = List.length a / ncols_a in
+    let nrows_b = List.length b / ncols_b in
+    if ncols_a <> nrows_b then Some VNone
+    else
+      let result = Array.make (nrows_a * ncols_b) 0.0 in
+      for i = 0 to nrows_a - 1 do
+        for j = 0 to ncols_b - 1 do
+          let s = ref 0.0 in
+          for kk = 0 to ncols_a - 1 do
+            s := !s +. List.nth a (i * ncols_a + kk) *. List.nth b (kk * ncols_b + j)
+          done;
+          result.(i * ncols_b + j) <- !s
+        done
+      done;
+      Some (VList (Array.to_list (Array.map (fun f -> VFloat f) result)))
 
   | _ -> None

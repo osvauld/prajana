@@ -347,8 +347,8 @@ let () =
   (* derive vp_satya_weight for each relation type from the visheshanam-entropy-weights tantra.
      the tantra computes Shannon entropy of each relation's target distribution across all edges.
      this runs after build_index so the tantra is loaded and all symmetry edges are present. *)
-   (let rel_names = ["swarupa";"abheda";"drishthanta";"sthita";"yukta";
-                    "siddha";"kriya";"phala";"janya";"pratipaksha"] in
+   (let ndims = Proof_graph.dimension_count () in
+    let rel_names = List.init ndims (fun i -> Proof_graph.string_of_visheshanam i) in
     match Hashtbl.find_opt yantra_idx.by_name "visheshanam-entropy-weights" with
      | None ->
        (* tantra not loaded — fall back to OCaml computation *)
@@ -379,9 +379,53 @@ let () =
               Proof_graph.register_vish_props v { existing with Proof_graph.vp_satya_weight = w })
          | _ -> ()
        ) (Yantra.as_list result));
+   (* matra-nirmana: generate unit nodes from matra-beeja seed table.
+      reads the shabda entries, parses each "name: concepts | composition | symbols / desc",
+      and emits nodes into the graph. runs before CSR materialization. *)
+   (match Proof_graph.find k0 "matra-beeja" with
+    | None -> ()
+    | Some _beeja ->
+      let pairs = Setu.read_shabda k0 "matra-beeja" in
+      let generated = ref 0 in
+      List.iter (fun (name, defn) ->
+        if name <> "shabda-tmpl" && name <> "name" then begin
+          (* parse: "concepts | composition | symbols / description" *)
+          let parts = String.split_on_char '|' defn in
+          match parts with
+          | concepts_str :: composition_str :: rest ->
+            let symbols_str = String.concat "|" rest in
+            let concepts = String.split_on_char ' ' (String.trim concepts_str)
+              |> List.filter (fun s -> String.length s > 0) in
+            let composition = String.split_on_char ' ' (String.trim composition_str)
+              |> List.filter (fun s -> String.length s > 0) in
+            (* build slokas *)
+            let sloka1 = "matra-sthita float-swarupa" in
+            let sloka2 = "float-abheda " ^ String.concat " " concepts in
+            let sloka3 = String.concat " " composition in
+            let sloka4 = "domain-physics-sthita" in
+            let slokas = [sloka1; sloka2; sloka3; sloka4] in
+            (* decompose slokas into edges *)
+            let all_names = Hashtbl.fold (fun n _ acc -> n :: acc) k0.nodes [] in
+            let edges = List.concat_map (fun sloka ->
+              Om_parser.decompose_sloka all_names name sloka
+            ) slokas in
+            let shabda = String.trim symbols_str in
+            let node : Proof_graph.nigamana = {
+              name; layer = "kosha"; slokas; edges;
+              satya = 0.0; shabda;
+            } in
+            ignore (Proof_graph.join k0 node);
+            let r = Proof_graph.raw_satya node in
+            Hashtbl.replace k0.nodes name { node with Proof_graph.satya = r };
+            incr generated
+          | _ -> () (* skip malformed entries *)
+        end
+      ) pairs;
+      if !generated > 0 && not quiet_startup then
+        Printf.printf "matra-nirmana: %d units generated from matra-beeja\n%!" !generated);
    (* materialize CSR adjacency for cache-friendly PPR SpMV.
-     called after entropy weights are finalized so out_rel_count × weights is correct. *)
-  Proof_graph.materialize_csr k0;
+      called after entropy weights are finalized so out_rel_count × weights is correct. *)
+   Proof_graph.materialize_csr k0;
   (* set the graph ref for legacy invert_expr calls *)
   Yantra._graph_ref := Some k0;
   let tantra_count = List.length !(yantra_idx.all_tantras) in

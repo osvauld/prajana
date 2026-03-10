@@ -1,0 +1,180 @@
+tantra scene-extract-kinematic-chain
+
+  -- Sphoṭa-based kinematic chain extraction from a natural language sentence.
+  -- Emits live graph nodes: arm-<hash>, joint-N-<hash>, link-N-<hash>, target-<hash>.
+  -- All defaults from scene-defaults-kinematic-chain.shabda.
+  --
+  -- Strategy: three independent signals converge to assign each value to a concept:
+  --   1. dim-vector of the unit → physical class (L, T⁻¹, etc.)
+  --   2. kramanusara depth (|T|) → position in derivative chain
+  --   3. concepts-for-unit shabda on unit node → candidate concepts in this domain
+  -- The combination selects concept unambiguously (sphoṭa).
+
+  inputs
+    sentence    string
+    scene-hash  string
+
+  let
+    -- ---- 1. tokenise and classify ----
+    words = map (tokenise sentence) (fn w -> lower w)
+    classified = classify-fold words
+
+    -- ---- 2. detect joint count ----
+    -- count "joint N" or "link N" entity markers
+    joint-markers = fold-pairs classified (fn a b ->
+      cond (and (or (eq (nth a 2) "joint") (eq (nth a 2) "link"))
+                (exists (to-number (nth b 0)))) "JMARK"
+      otherwise _none)
+
+    n-from-entities = length (filter joint-markers (fn x -> eq x "JMARK"))
+
+    n-default = to-number (shabda "scene-defaults-kinematic-chain" "default-joint-count")
+    n-def-f   = cond (exists n-default) n-default otherwise 2
+    n-joints  = cond (gt n-from-entities 0) n-from-entities otherwise n-def-f
+
+    -- ---- 3. detect goals ----
+    goal-word-pairs = shabda-pairs "goal-words"
+    trigger-values  = filter goal-word-pairs (fn kv -> eq (nth kv 0) "goal-trigger")
+    trigger-words   = map trigger-values (fn kv -> nth kv 1)
+
+    goal-scan = reduce classified (pair "0" (range 0))
+      (fn acc triple ->
+        let active  = nth acc 0
+        let goals   = nth acc 1
+        let tok     = nth triple 0
+        let is-trig = member tok trigger-words
+        let new-active = cond is-trig "1" otherwise active
+        let goal-val = cond (eq new-active "1")
+          (first-match goal-word-pairs (fn kv ->
+            cond (and (eq (nth kv 0) tok) (neq (nth kv 0) "goal-trigger")) (nth kv 1)
+            otherwise _none))
+          otherwise _none
+        let new-goals = cond (and (exists goal-val) (not (member goal-val goals)))
+          (append goals (split goal-val ","))
+          otherwise goals
+        pair new-active new-goals)
+
+    detected-goals    = nth goal-scan 1
+    default-goals-str = shabda "scene-defaults-kinematic-chain" "default-goals"
+    goals-list = cond (gt (length detected-goals) 0) detected-goals otherwise (split default-goals-str ",")
+    goals-str  = join goals-list ","
+
+    -- ---- 4. detect target position ----
+    target-triggers = split "to,position,target,effector" ","
+
+    target-scan = reduce classified (pair "0" (range 0))
+      (fn acc triple ->
+        let active  = nth acc 0
+        let floats  = nth acc 1
+        let tok     = nth triple 0
+        let is-trig = member tok target-triggers
+        let new-active = cond is-trig "1" otherwise active
+        let as-num  = cond (eq new-active "1") (to-number tok) otherwise _none
+        let new-floats = cond (and (exists as-num) (lt (length floats) 3))
+          (append floats (split (to-string as-num) " "))
+          otherwise floats
+        pair new-active new-floats)
+
+    raw-target = nth target-scan 1
+    tx-str = cond (gt (length raw-target) 0) (nth raw-target 0) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-x")
+    ty-str = cond (gt (length raw-target) 1) (nth raw-target 1) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-y")
+    tz-str = cond (gt (length raw-target) 2) (nth raw-target 2) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-z")
+
+    -- ---- 5. emit target node ----
+    target-name   = concat "target-" scene-hash
+    target-shabda = concat "x:" tx-str " y:" ty-str " z:" tz-str
+    target-node   = emit-node target-name "kosha"
+                      (split "bindu-swarupa sthira-apeksha-sthita" " ")
+                      target-shabda
+
+    -- ---- 6. sphoṭa extraction: value-unit-concept-joint tuples ----
+    value-tuples = extract-value-units classified
+
+    -- ---- 7. defaults from kosha ----
+    jtype-def  = shabda "scene-defaults-kinematic-chain" "default-joint-type"
+    jangle-def = to-number (shabda "scene-defaults-kinematic-chain" "default-joint-angle")
+    llen-def   = to-number (shabda "scene-defaults-kinematic-chain" "default-link-length")
+    lmass-def  = to-number (shabda "scene-defaults-kinematic-chain" "default-link-mass")
+    spd-def    = to-number (shabda "scene-defaults-kinematic-chain" "default-joint-speed-max")
+    torq-def   = to-number (shabda "scene-defaults-kinematic-chain" "default-rated-torque")
+    pwr-def    = to-number (shabda "scene-defaults-kinematic-chain" "default-rated-power")
+
+    jangle-f = cond (exists jangle-def) jangle-def otherwise 0
+    llen-f   = cond (exists llen-def)   llen-def   otherwise 0.5
+    lmass-f  = cond (exists lmass-def)  lmass-def  otherwise 1.0
+    spd-f    = cond (exists spd-def)    spd-def    otherwise 2.0
+    torq-f   = cond (exists torq-def)   torq-def   otherwise 5.0
+    pwr-f    = cond (exists pwr-def)    pwr-def    otherwise 20.0
+
+    -- ---- 8. emit per-joint nodes ----
+    joint-indices = range n-joints
+
+    joint-nodes = map joint-indices (fn i ->
+      -- find tuples for this joint index
+      let my-tuples = filter value-tuples (fn t -> eq (nth t 3) i)
+
+      -- resolve each property by concept name — inline lookup, no local fn call
+      let jangle-m = first-match my-tuples (fn t -> cond (eq (nth t 1) "joint-angle")    (nth t 0) otherwise _none)
+      let llen-m   = first-match my-tuples (fn t -> cond (eq (nth t 1) "link-length")    (nth t 0) otherwise _none)
+      let llen-cm  = first-match my-tuples (fn t -> cond (and (eq (nth t 1) "link-length") (eq (nth t 2) "centimetre")) (nth t 0) otherwise _none)
+      let lmass-m  = first-match my-tuples (fn t -> cond (eq (nth t 1) "link-mass")      (nth t 0) otherwise _none)
+      let spd-m    = first-match my-tuples (fn t -> cond (eq (nth t 1) "joint-speed-max") (nth t 0) otherwise _none)
+      let rtorq-m  = first-match my-tuples (fn t -> cond (eq (nth t 1) "rated-torque")   (nth t 0) otherwise _none)
+      let rpwr-m   = first-match my-tuples (fn t -> cond (eq (nth t 1) "rated-power")    (nth t 0) otherwise _none)
+
+      let jangle = cond (exists jangle-m) jangle-m otherwise jangle-f
+      let llen   = cond (exists llen-m) llen-m (exists llen-cm) (mul llen-cm 0.01) otherwise llen-f
+      let lmass  = cond (exists lmass-m)  lmass-m  otherwise lmass-f
+      let spd    = cond (exists spd-m)    spd-m    otherwise spd-f
+      let rtorq  = cond (exists rtorq-m)  rtorq-m  otherwise torq-f
+      let rpwr   = cond (exists rpwr-m)   rpwr-m   otherwise pwr-f
+
+      let jname   = concat "joint-" (to-string i) "-" scene-hash
+      let lname   = concat "link-"  (to-string i) "-" scene-hash
+
+      -- track which values were explicitly provided vs defaulted
+      let spd-prov    = cond (exists spd-m)   "yes" otherwise "no"
+      let rtorq-prov  = cond (exists rtorq-m) "yes" otherwise "no"
+      let rpwr-prov   = cond (exists rpwr-m)  "yes" otherwise "no"
+      let lmass-prov  = cond (exists lmass-m) "yes" otherwise "no"
+
+      let j-shabda = concat
+        "joint-type:" jtype-def
+        " joint-angle:" (to-string jangle)
+        " joint-speed-max:" (to-string spd)
+        " rated-torque:" (to-string rtorq)
+        " rated-power:" (to-string rpwr)
+        " spd-provided:" spd-prov
+        " rtorq-provided:" rtorq-prov
+        " rpwr-provided:" rpwr-prov
+
+      let l-shabda = concat
+        "link-length:" (to-string llen)
+        " link-mass:" (to-string lmass)
+        " mass-provided:" lmass-prov
+
+      let jnode = emit-node jname "kosha"
+                    (split "chala-apeksha-sthita krama-janya-yukta sambandha-yukta" " ")
+                    j-shabda
+      let lnode = emit-node lname "kosha"
+                    (split "chala-apeksha-sthita krama-janya-yukta" " ")
+                    l-shabda
+      pair jname lname)
+
+    -- ---- 9. emit root arm node ----
+    workspace  = shabda "scene-defaults-kinematic-chain" "default-workspace"
+    root-name  = concat "arm-" scene-hash
+    root-shabda = concat
+      "n-joints:" (to-string n-joints)
+      " workspace:" workspace
+      " goals:" goals-str
+      " target-node:" target-name
+      " scene-type:kinematic-chain"
+    root-node = emit-node root-name "kosha"
+                  (split "kinematic-chain-swarupa aayaama-traya-sthita domain-robotics-sthita" " ")
+                  root-shabda
+
+  return
+    root-name  string
+
+done

@@ -1,0 +1,5 @@
+# scene-defaults-circuit.shabda
+default-topology:series
+default-voltage:9.0
+default-resistance:10.0
+default-goals:current,voltage,power

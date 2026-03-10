@@ -1,15 +1,18 @@
-tantra final-velocity
+tantra vega-ganana
+
+  -- v(uttara) = v(purva) + a * t
+  -- velocity in and velocity out — same concept, different avastha
 
   inputs
-    initial-velocity  float  metre-per-second
-    acceleration      float  metre-per-second-squared
-    time              float  second
+    velocity      float  metre-per-second  purva
+    acceleration  float  metre-per-second-squared
+    time          float  second
 
   let
     at = mul acceleration time
-    v  = add initial-velocity at
+    velocity  = add velocity at
 
   return
-    v  float  metre-per-second
+    velocity  float  metre-per-second  uttara
 
 done

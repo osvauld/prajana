@@ -108,6 +108,37 @@ let join_bigrams (k : proof_graph) (tokens : (string * ytoken) list)
   in
   loop tokens
 
+(* ---- classify via tantra pipeline ---- *)
+
+let classify_via_tantra (k : proof_graph) (idx : tantra_index) (session : session)
+    (words : string list) : (string * ytoken) list =
+  (* try the classify-fold tantra; fall back to old path if tantra not loaded *)
+  match Hashtbl.find_opt idx.by_name "classify-fold" with
+  | None ->
+    let classified = List.map (fun w -> (w, classify_for_yantra k w)) words in
+    join_bigrams k classified
+  | Some t ->
+    let word_values = VList (List.map (fun w -> VString w) words) in
+    let result = eval_tantra ~idx ~session k t [("words", word_values)] in
+    let tokens = as_list result in
+    List.filter_map (fun tv ->
+      let items = as_list tv in
+      match items with
+      | [VString w; VString kind; VString resolved] ->
+        let ytoken = match kind with
+          | "concept" -> YConcept resolved
+          | "number" -> (match float_of_string_opt resolved with
+                         | Some f -> YNumber f | None -> YConcept resolved)
+          | "operator" -> YOperator resolved
+          | "grammar" -> YGrammar Proof_graph.sthita
+          | "modifier" -> YUnknown w  (* unresolved modifier — treat as unknown *)
+          | "avastha" -> YGrammar Proof_graph.sthita  (* shouldn't remain after fold-resolve *)
+          | _ -> YUnknown w
+        in
+        Some (w, ytoken)
+      | _ -> None
+    ) tokens
+
 (* ---- binding extraction (not yet split) ---- *)
 
 type extraction = {
@@ -243,8 +274,7 @@ let run (k : proof_graph) (idx : tantra_index) (session : session)
     ) words in
     if not has_number then None
     else begin
-      let classified = List.map (fun w -> (w, classify_for_yantra k w)) words in
-      let classified = join_bigrams k classified in
+      let classified = classify_via_tantra k idx session words in
       let extraction = extract_bindings k idx session classified in
       match extraction.ex_target, extraction.ex_bindings with
       | Some target, bindings when bindings <> [] ->
@@ -309,22 +339,22 @@ let run (k : proof_graph) (idx : tantra_index) (session : session)
                                         b_unit = ret.tp_unit;
                                         b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
                                         b_confidence = 1.0; b_ttl = None } :: !final_bindings;
-                    if t.t_name <> ret.tp_name then
-                      final_bindings := { b_name = t.t_name; b_value = v;
-                                          b_unit = ret.tp_unit;
-                                          b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
-                                          b_confidence = 1.0; b_ttl = None } :: !final_bindings
-                  | rets ->
-                    let ts = Unix.gettimeofday () in
-                    let values = as_list result in
-                    List.iteri (fun i ret ->
-                      let v = if i < List.length values
-                              then as_float (List.nth values i) else 0.0 in
-                      final_bindings := { b_name = ret.tp_name; b_value = v;
-                                          b_unit = ret.tp_unit;
-                                          b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
-                                          b_confidence = 1.0; b_ttl = None } :: !final_bindings
-                    ) rets);
+                     if t.t_name <> ret.tp_name then
+                       final_bindings := { b_name = t.t_name; b_value = v;
+                                           b_unit = ret.tp_unit;
+                                           b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                                           b_confidence = 1.0; b_ttl = None } :: !final_bindings
+                   | rets ->
+                     let ts = Unix.gettimeofday () in
+                     let values = as_list result in
+                     List.iteri (fun i ret ->
+                       let v = if i < List.length values
+                               then as_float (List.nth values i) else 0.0 in
+                       final_bindings := { b_name = ret.tp_name; b_value = v;
+                                           b_unit = ret.tp_unit;
+                                           b_timestamp = ts; b_source = "tantra:" ^ t.t_name;
+                                           b_confidence = 1.0; b_ttl = None } :: !final_bindings
+                     ) rets);
                 tantra_names := t.t_name :: !tantra_names
               | CInverse (t, _tgt, _plan, _kv) ->
                 tantra_names := (t.t_name ^ "(inv)") :: !tantra_names

@@ -1,0 +1,85 @@
+# scene-type-words.shabda
+# word → scene-type mapping for scene-extract
+# format: word:scene-type
+# scene-types: kinematic-chain | circuit | pulley-system | collision | oscillator | constrained-gati | generic
+
+# kinematic chain — robot arm / manipulator
+joint:kinematic-chain
+revolute:kinematic-chain
+prismatic:kinematic-chain
+spherical:kinematic-chain
+manipulator:kinematic-chain
+end-effector:kinematic-chain
+gripper:kinematic-chain
+dof:kinematic-chain
+actuator:kinematic-chain
+servo:kinematic-chain
+stepper:kinematic-chain
+
+# circuit — electrical
+resistor:circuit
+capacitor:circuit
+inductor:circuit
+battery:circuit
+voltage:circuit
+current:circuit
+circuit:circuit
+wire:circuit
+diode:circuit
+transistor:circuit
+kirchhoff:circuit
+ohm:circuit
+ampere:circuit
+series:circuit
+parallel:circuit
+
+# pulley system — Atwood / rope-and-pulley
+pulley:pulley-system
+atwood:pulley-system
+rope:pulley-system
+cord:pulley-system
+string:pulley-system
+hanging:pulley-system
+suspended:pulley-system
+
+# collision — impact events
+collides:collision
+collision:collision
+impact:collision
+hits:collision
+strikes:collision
+elastic:collision
+inelastic:collision
+perfectly-inelastic:collision
+
+# oscillator — SHM / periodic motion
+spring:oscillator
+oscillates:oscillator
+shm:oscillator
+pendulum:oscillator
+harmonic:oscillator
+period:oscillator
+frequency:oscillator
+amplitude:oscillator
+resonance:oscillator
+
+# constrained gati — inclined plane / rolling / sliding
+incline:constrained-gati
+inclined:constrained-gati
+slope:constrained-gati
+ramp:constrained-gati
+rolls:constrained-gati
+rolling:constrained-gati
+slides:constrained-gati
+sliding:constrained-gati
+friction:constrained-gati
+frictionless:constrained-gati
+
+# optics — ray tracing / lens systems
+lens:optics
+mirror:optics
+refraction:optics
+reflection:optics
+focal:optics
+prism:optics
+snell:optics

@@ -1,0 +1,50 @@
+tantra rot3d
+
+  -- Rodrigues rotation formula: rotate vector v around unit axis u by angle theta.
+  --
+  --   v_rot = v·cosθ + (u × v)·sinθ + u·(u·v)·(1 - cosθ)
+  --
+  -- u must be a unit vector [ux, uy, uz].
+  -- v is any 3D vector [vx, vy, vz].
+  -- Returns the rotated vector as [rx, ry, rz].
+  --
+  -- This is the primitive for composing joint rotations in fk-ndof.
+  -- Each revolute joint rotates the downstream frame around its world-frame axis.
+  -- The krama (chain) couples joints: each frame grounds the next.
+
+  inputs
+    axis   list     -- [ux, uy, uz] unit rotation axis
+    angle  float    radian
+    v      list     -- [vx, vy, vz] vector to rotate
+
+  let
+    ux = nth axis 0
+    uy = nth axis 1
+    uz = nth axis 2
+    vx = nth v 0
+    vy = nth v 1
+    vz = nth v 2
+
+    c  = cos angle
+    s  = sin angle
+    t  = sub 1 c
+
+    -- dot product u · v
+    dot-uv = add (mul ux vx) (add (mul uy vy) (mul uz vz))
+
+    -- cross product u × v = [uy·vz - uz·vy, uz·vx - ux·vz, ux·vy - uy·vx]
+    cx = sub (mul uy vz) (mul uz vy)
+    cy = sub (mul uz vx) (mul ux vz)
+    cz = sub (mul ux vy) (mul uy vx)
+
+    -- Rodrigues components: v·c + (u×v)·s + u·(u·v)·t
+    rx = add (mul vx c) (add (mul cx s) (mul ux (mul dot-uv t)))
+    ry = add (mul vy c) (add (mul cy s) (mul uy (mul dot-uv t)))
+    rz = add (mul vz c) (add (mul cz s) (mul uz (mul dot-uv t)))
+
+  return
+    rx  float
+    ry  float
+    rz  float
+
+done

@@ -5,6 +5,10 @@ kosha physics-time
   "avrti-yukta matra-sthita"
   "domain-physics-sthita"
 
+  -- matra: second. time is the apeksha (wrt) variable for all of mechanics.
+  -- every kramanusara in physics divides by time unless otherwise stated.
+  "second-matra"
+
 shabda physical-time / duration-measured-as-counted-spanda-observer-dependent-relativity-applies
 
 done

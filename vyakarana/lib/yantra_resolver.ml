@@ -32,22 +32,29 @@ type resolution =
    uses canonical names resolved at parse time; no graph walks needed here. *)
 let try_match_inputs (_k : proof_graph) (tantra : tantra) (bindings : binding list)
     (idx : tantra_index) : (string * float) list option =
+  (* avastha-aware binding match:
+     binding "velocity:purva" matches input velocity(purva).
+     binding "velocity" (unqualified) matches any avastha.
+     binding "velocity:uttara" does NOT match input velocity(purva). *)
+  let binding_matches_input (b : binding) (inp : tantra_param) : bool =
+    let b_base, b_av = match String.index_opt b.b_name ':' with
+      | Some i -> (String.sub b.b_name 0 i,
+                   Some (String.sub b.b_name (i+1) (String.length b.b_name - i - 1)))
+      | None -> (b.b_name, None)
+    in
+    let name_ok = b_base = inp.tp_name || b_base = inp.tp_canonical in
+    let av_ok = match inp.tp_avastha, b_av with
+      | None, _ -> true                  (* input has no avastha requirement *)
+      | Some _, None -> true             (* unqualified binding satisfies any avastha *)
+      | Some a, Some ba -> a = ba        (* both qualified — must match *)
+    in
+    name_ok && av_ok
+  in
   let find_binding (inp : tantra_param) : float option =
-    match List.find_opt (fun b ->
-      b.b_name = inp.tp_name || b.b_name = inp.tp_canonical
-    ) bindings with
+    match List.find_opt (fun b -> binding_matches_input b inp) bindings with
     | Some b -> Some b.b_value
     | None ->
-      (* partial compound match: "velocity" matches input "initial-velocity" *)
-      let parts = String.split_on_char '-' inp.tp_name in
-      let canon_parts = String.split_on_char '-' inp.tp_canonical in
-      match List.find_opt (fun b ->
-        not (String.contains b.b_name '-') &&
-        (List.mem b.b_name parts || List.mem b.b_name canon_parts)
-      ) bindings with
-      | Some b -> Some b.b_value
-      | None ->
-        Hashtbl.find_opt idx.constants inp.tp_name
+      Hashtbl.find_opt idx.constants inp.tp_name
   in
   let find_binding_positional (i : int) (inp : tantra_param) : float option =
     match find_binding inp with
@@ -256,13 +263,23 @@ and names_match_resolved (k : proof_graph) (a : string) (b : string) : bool =
   let cb = Setu.resolve_to_canonical k b in
   ca = cb || ca = b || a = cb
 
-(* chain input matching — exact on canonical names only *)
+(* chain input matching — avastha-aware *)
 and try_match_chain (_k : proof_graph) (t : tantra) (known : binding list) (idx : tantra_index)
     : (string * float) list option =
+  let chain_binding_matches (b : binding) (inp : tantra_param) : bool =
+    let b_base, b_av = match String.index_opt b.b_name ':' with
+      | Some i -> (String.sub b.b_name 0 i,
+                   Some (String.sub b.b_name (i+1) (String.length b.b_name - i - 1)))
+      | None -> (b.b_name, None)
+    in
+    let name_ok = b_base = inp.tp_name || b_base = inp.tp_canonical in
+    let av_ok = match inp.tp_avastha, b_av with
+      | None, _ -> true | Some _, None -> true | Some a, Some ba -> a = ba
+    in
+    name_ok && av_ok
+  in
   let find_binding (inp : tantra_param) : float option =
-    match List.find_opt (fun b ->
-      b.b_name = inp.tp_name || b.b_name = inp.tp_canonical
-    ) known with
+    match List.find_opt (fun b -> chain_binding_matches b inp) known with
     | Some b -> Some b.b_value
     | None -> Hashtbl.find_opt idx.constants inp.tp_name
   in

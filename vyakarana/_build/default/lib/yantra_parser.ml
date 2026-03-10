@@ -125,7 +125,7 @@ let is_known_op name = op_arity name <> 0
 
 (* is this token a boundary that stops argument collection? *)
 let is_boundary = function
-  | ")" | "]" | "," | "in" | "otherwise" | "done" -> true
+  | ")" | "]" | "," | "in" | "otherwise" | "done" | "let" -> true
   | _ -> false
 
 exception Arg_overconsumed
@@ -184,7 +184,11 @@ let rec parse_expr (tokens : string list) : expr * string list =
        (* successive let without in: chain them *)
        let (body, rest'') = parse_expr rest' in
        (LetIn (name, rhs, body), rest'')
-     | _ -> (LetIn (name, rhs, Var name), rest'))
+     | [] | ")" :: _ | "]" :: _ -> (LetIn (name, rhs, Var name), rest')
+     | _ ->
+       (* last let in a lambda body: parse remainder as the body *)
+       let (body, rest'') = parse_expr rest' in
+       (LetIn (name, rhs, body), rest''))
 
   (* cond (guard body) (guard body) ... otherwise default *)
   | "cond" :: rest ->
@@ -260,9 +264,13 @@ and parse_cond (branches : (expr * expr) list) (tokens : string list) : expr * s
     (* consume any trailing paren from an outer grouping *)
     let rest'' = match rest'' with ")" :: r -> r | r -> r in
     parse_cond ((guard, body) :: branches) rest''
+  | [] ->
+    (Cond (List.rev branches, Var "_none"), [])
   | _ ->
-    (* no more branches, no otherwise — use VNone as default *)
-    (Cond (List.rev branches, Var "_none"), tokens)
+    (* bare guard (variable or simple call, no parens): parse guard then body *)
+    let (guard, rest') = parse_expr tokens in
+    let (body, rest'') = parse_expr rest' in
+    parse_cond ((guard, body) :: branches) rest''
 
 let parse_expr_string (s : string) : expr =
   let tokens = tokenise_expr s in
@@ -337,11 +345,13 @@ let parse_let_block (lines : string list) : (string * expr) list =
   (* parse each binding's text as an expression *)
   List.filter_map (fun (name, text) ->
     if String.length (String.trim text) = 0 then None
-    else
+    else begin
+      ();
       try Some (name, parse_expr_string text)
       with exn ->
         Printf.printf "warning: could not parse let binding '%s': %s [%s]\n%!" name (Printexc.to_string exn) (String.trim text);
         None
+    end
   ) (List.rev !bindings)
 
 (* parse a tantra file — supports multi-line let bindings with lambdas,
@@ -377,28 +387,29 @@ let parse_tantra_file (path : string) : tantra option =
       else begin
         match !section with
         | "inputs" ->
-          let parts = String.split_on_char ' ' trimmed
+           let parts = String.split_on_char ' ' trimmed
                       |> List.filter (fun s -> String.length s > 0) in
-          (match parts with
-           | pname :: ptype :: rest ->
-             let punit = match rest with u :: _ -> Some u | [] -> None in
-             inputs := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit } :: !inputs
-           | _ -> ())
-        | "let" ->
-          let_lines := line :: !let_lines
-        | "return" ->
-          let parts = String.split_on_char ' ' trimmed
+           (match parts with
+            | pname :: ptype :: rest ->
+              let punit = match rest with u :: _ when u <> "purva" && u <> "uttara" -> Some u | _ -> None in
+              let pavastha = List.find_opt (fun s -> s = "purva" || s = "uttara") rest in
+              inputs := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit; tp_avastha = pavastha } :: !inputs
+            | _ -> ())
+         | "let" ->
+           let_lines := line :: !let_lines
+         | "return" ->
+           let parts = String.split_on_char ' ' trimmed
                       |> List.filter (fun s -> String.length s > 0) in
-          (match parts with
-           | pname :: ptype :: rest ->
-             let punit = match rest with u :: _ -> Some u | [] -> None in
-             returns := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit } :: !returns
-           | _ -> ())
+           (match parts with
+            | pname :: ptype :: rest ->
+              let punit = match rest with u :: _ when u <> "purva" && u <> "uttara" -> Some u | _ -> None in
+              let pavastha = List.find_opt (fun s -> s = "purva" || s = "uttara") rest in
+              returns := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit; tp_avastha = pavastha } :: !returns
+            | _ -> ())
         | _ -> ()
       end
     ) lines;
 
-    (* parse the let block with multi-line support *)
     let lets = parse_let_block (List.rev !let_lines) in
 
     if String.length !name > 0 then

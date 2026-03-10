@@ -1,12 +1,12 @@
 tantra displacement
 
   inputs
-    initial-velocity  float  metre-per-second
-    acceleration      float  metre-per-second-squared
-    time              float  second
+    velocity      float  metre-per-second  purva
+    acceleration  float  metre-per-second-squared
+    time          float  second
 
   let
-    ut  = mul initial-velocity time
+    ut  = mul velocity time
     at2 = mul (mul 0.5 acceleration) (power time 2.0)
     s   = add ut at2
 

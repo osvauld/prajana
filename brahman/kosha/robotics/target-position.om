@@ -1,0 +1,38 @@
+kosha target-position
+
+  -- the target bindu for the end-effector in world-space (sthira-apeksha)
+  -- a single point in n-dimensional space — not split into x, y, z components
+  --
+  -- dimensionality matches the arm's workspace:
+  --   2-DOF planar arm: target is [x, y] in aayaama-dvaya
+  --   3-DOF spatial arm: target is [x, y, z] in aayaama-traya
+  --   n-DOF arm:         target is a bindu in the appropriate aayaama
+  --
+  -- the target IS a bindu — zero-extent pure position in akasham
+  -- it lives in sthira-apeksha (world frame) — it does not move when joints move
+  -- the IK problem: find joint-angles such that fk(joint-angles) = target-position
+  --
+  -- scene extraction:
+  --   "move end effector to (0.6, 0.3, 0.4)" → target-position = [0.6, 0.3, 0.4]
+  --   "reach position x=3, y=4" → target-position = [3, 4]
+  --   the dimensionality is inferred from the number of coordinates given
+  --   and matched against the arm's aayaama (workspace dimension)
+
+  "domain-robotics-sthita kinematic-chain-yukta"
+
+  -- a bindu in world-space — sthira-apeksha (does not move with joints)
+  "bindu-swarupa world-space-sthita sthira-apeksha-sthita"
+
+  -- n-dimensional — aayaama determined by workspace
+  "aayaama-yukta"
+  "aayaama-dvaya-drishthanta aayaama-traya-drishthanta"
+
+  -- the IK problem connects this to joint-angles via forward kinematics
+  "ik-ahara fk-phala-pratipaksha"
+
+  -- metre in each dimension
+  "metre-matra"
+
+shabda target-position, target, end-effector-target, goal-position / the-world-space-bindu-the-end-effector-must-reach-n-dimensional-sthira-apeksha
+
+done

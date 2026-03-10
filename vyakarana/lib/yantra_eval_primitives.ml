@@ -165,6 +165,16 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
              VString edge.target]
     ) edges))
 
+  (* outgoing-edges: node-name → [(source, relation, target)] outgoing only *)
+  | "outgoing-edges" ->
+    let node_name = as_string (e_eval k e (List.nth args 0)) in
+    let edges = List.filter (fun e -> e.source = node_name) !(k.all_edges) in
+    Some (VList (List.map (fun edge ->
+      VList [VString edge.source;
+             VString (Proof_graph.string_of_visheshanam edge.relation);
+             VString edge.target]
+    ) edges))
+
   (* all-edges: () → [(source, relation, target)] for every edge in the graph.
      used by visheshanam-entropy-weights tantra to compute relation conductances. *)
   | "all-edges" ->
@@ -447,6 +457,17 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      | Some (_, v) -> VString v
      | None -> VNone)
 
+  (* shabda-pairs: node-name → [[key, value], ...]
+     returns all key:value pairs from a node's shabda field as a list of
+     [VString key, VString value] pairs. tantras use this to iterate over
+     lookup tables stored in kosha nodes (e.g. goal-words, unit-aliases). *)
+  | "shabda-pairs" ->
+    let node_name = as_string (e_eval k e (List.nth args 0)) in
+    let pairs = Setu.read_shabda k node_name in
+    Some (VList (List.map (fun (k_s, v_s) ->
+      VList [VString k_s; VString v_s]
+    ) pairs))
+
   (* exists: value → bool — true unless VNone or empty *)
   | "exists" ->
     let v = e_eval k e (List.nth args 0) in
@@ -509,6 +530,169 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   (* graph-edge-count: () → float — number of edges in the proof graph *)
   | "graph-edge-count" ->
     Some (VFloat (float_of_int (List.length !(k.all_edges))))
+
+  (* emit-node: name × layer × slokas × shabda → VNode
+     creates or merges a node in the live graph. slokas is a list of strings.
+     edges are decomposed from slokas using the current dimension registry.
+     used by unit-generation tantra and learning tantras. *)
+  | "emit-node" ->
+    let name   = as_string (e_eval k e (List.nth args 0)) in
+    let layer  = as_string (e_eval k e (List.nth args 1)) in
+    let slokas = List.map as_string (as_list (e_eval k e (List.nth args 2))) in
+    let shabda = as_string (e_eval k e (List.nth args 3)) in
+    (* decompose slokas into edges using the full dimension registry *)
+    let all_names = Hashtbl.fold (fun n _ acc -> n :: acc) k.nodes [] in
+    let edges = List.concat_map (fun sloka ->
+      let words = String.split_on_char ' ' sloka in
+      List.filter_map (fun word ->
+        let word = String.trim word in
+        if String.length word = 0 then None
+        else
+          (* split at last '-' to find suffix *)
+          let rec try_split i =
+            if i <= 0 then None
+            else if word.[i] = '-' then
+              let suffix = String.sub word (i + 1) (String.length word - i - 1) in
+              match Proof_graph.visheshanam_of_string suffix with
+              | Some rel ->
+                let target = String.sub word 0 i in
+                Some { Proof_graph.source = name; target; relation = rel }
+              | None -> try_split (i - 1)
+            else try_split (i - 1)
+          in
+          try_split (String.length word - 1)
+      ) words
+    ) slokas in
+    let n : Proof_graph.nigamana = {
+      name; layer; slokas; edges;
+      satya = 0.0; shabda;
+    } in
+    ignore (Proof_graph.join k n);
+    (* update satya for this node *)
+    let r = Proof_graph.raw_satya n in
+    Hashtbl.replace k.nodes name { n with satya = r };
+    ignore all_names;
+    Some (VNode name)
+
+  (* register-dimension: name → int index
+     registers a new graph dimension at runtime. idempotent. *)
+  | "register-dimension" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    let idx = Proof_graph.register_dimension name in
+    Some (VFloat (float_of_int idx))
+
+  (* dimension-count: () → float — current number of dimensions *)
+  | "dimension-count" ->
+    Some (VFloat (float_of_int (Proof_graph.dimension_count ())))
+
+  (* dim-vector: unit-name → [M, L, T, I, θ, N, J, scale]
+     reads the SI dimension exponent vector from matra-aayaama.
+     the exponent vector IS the unit. kramanusara depth = |T exponent|. *)
+  | "dim-vector" ->
+    let unit_name = as_string (e_eval k e (List.nth args 0)) in
+    let pairs = Setu.read_shabda k "matra-aayaama" in
+    Some (match List.find_opt (fun (name, _) -> name = unit_name) pairs with
+     | Some (_, dims_str) ->
+       let parts = String.split_on_char ' ' (String.trim dims_str)
+         |> List.filter (fun s -> String.length s > 0) in
+       VList (List.map (fun s ->
+         match float_of_string_opt s with Some f -> VFloat f | None -> VFloat 0.0
+       ) parts)
+     | None -> VNone)
+
+  (* dim-op: vector-a × vector-b × op → result-vector
+     op = "mul" → add exponents, multiply scales
+     op = "div" → subtract exponents, divide scales
+     op = "kramanusara" → subtract [0,0,1,0,0,0,0] from vector-a (d/dt)
+     op = "sama-kalana" → add [0,0,1,0,0,0,0] to vector-a (∫dt)
+     the result IS the unit of the composed quantity. *)
+  | "dim-op" ->
+    let va = as_list (e_eval k e (List.nth args 0)) in
+    let vb = if List.length args > 1 then as_list (e_eval k e (List.nth args 1)) else [] in
+    let op_name = if List.length args > 2 then as_string (e_eval k e (List.nth args 2))
+      else if List.length args > 1 then as_string (e_eval k e (List.nth args 1))
+      else "" in
+    let fa = List.map as_float va in
+    let fb = List.map as_float vb in
+    let n = 8 in (* M L T I θ N J scale *)
+    let pad lst = let len = List.length lst in
+      if len >= n then lst
+      else lst @ List.init (n - len) (fun i -> if i = n - len - 1 then 1.0 else 0.0) in
+    let fa = pad fa in
+    let fb = pad fb in
+    let result = match op_name with
+      | "mul" ->
+        (* add exponents for dims 0-6, multiply scales *)
+        List.mapi (fun i a ->
+          let b = List.nth fb i in
+          if i < 7 then a +. b else a *. b
+        ) fa
+      | "div" ->
+        (* subtract exponents for dims 0-6, divide scales *)
+        List.mapi (fun i a ->
+          let b = List.nth fb i in
+          if i < 7 then a -. b else if b <> 0.0 then a /. b else a
+        ) fa
+      | "kramanusara" ->
+        (* d/dt: subtract 1 from T exponent (index 2) *)
+        List.mapi (fun i a -> if i = 2 then a -. 1.0 else a) fa
+      | "sama-kalana" ->
+        (* ∫dt: add 1 to T exponent (index 2) *)
+        List.mapi (fun i a -> if i = 2 then a +. 1.0 else a) fa
+      | "pow" ->
+        (* raise to power: multiply all exponents by scalar, raise scale to power *)
+        let exp = List.nth fb 0 in
+        List.mapi (fun i a ->
+          if i < 7 then a *. exp else Float.pow a exp
+        ) fa
+      | "inv" ->
+        (* invert: negate exponents, reciprocal scale *)
+        List.mapi (fun i a ->
+          if i < 7 then (-. a) else if a <> 0.0 then 1.0 /. a else 0.0
+        ) fa
+      | _ -> fa
+    in
+    Some (VList (List.map (fun f -> VFloat f) result))
+
+  (* dim-to-unit: vector → unit-name
+     reverse lookup: find the unit whose exponent vector matches.
+     compares only the 7 dimension exponents (not scale). *)
+  | "dim-to-unit" ->
+    let vr = as_list (e_eval k e (List.nth args 0)) in
+    let fr = List.map as_float vr in
+    let target_dims = if List.length fr >= 7 then
+      List.filteri (fun i _ -> i < 7) fr else fr in
+    let pairs = Setu.read_shabda k "matra-aayaama" in
+    let match_unit = List.find_opt (fun (_, dims_str) ->
+      let parts = String.split_on_char ' ' (String.trim dims_str)
+        |> List.filter (fun s -> String.length s > 0) in
+      let dims = List.filteri (fun i _ -> i < 7)
+        (List.map (fun s -> match float_of_string_opt s with
+           | Some f -> f | None -> 0.0) parts) in
+      List.length dims = List.length target_dims &&
+      List.for_all2 (fun a b -> Float.equal a b) dims target_dims
+    ) pairs in
+    Some (match match_unit with
+     | Some (name, _) -> VString name
+     | None ->
+       (* build a human-readable dimension string *)
+       let dim_names = [|"M"; "L"; "T"; "I"; "\xce\xb8"; "N"; "J"|] in
+       let parts = List.mapi (fun i exp ->
+         if Float.equal exp 0.0 then ""
+         else if Float.equal exp 1.0 then dim_names.(i)
+         else Printf.sprintf "%s^%g" dim_names.(i) exp
+       ) target_dims |> List.filter (fun s -> String.length s > 0) in
+       if parts = [] then VString "dimensionless"
+       else VString (String.concat "\xc2\xb7" parts))
+
+  (* dim-kramanusara-depth: vector → float
+     returns the absolute value of the T exponent — how many times
+     rate-of-change has been applied. *)
+  | "dim-kramanusara-depth" ->
+    let v = as_list (e_eval k e (List.nth args 0)) in
+    let floats = List.map as_float v in
+    let t_exp = if List.length floats > 2 then List.nth floats 2 else 0.0 in
+    Some (VFloat (Float.abs t_exp))
 
   | _ -> None
 

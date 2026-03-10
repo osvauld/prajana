@@ -1,11 +1,11 @@
 tantra max-height
 
   inputs
-    initial-velocity  float  metre-per-second
-    angle             float  radian
+    velocity  float  metre-per-second  purva
+    angle     float  radian
 
   let
-    h = div (mul (power initial-velocity 2.0) (power (sin angle) 2.0)) (mul 2.0 gravity)
+    h = div (mul (power velocity 2.0) (power (sin angle) 2.0)) (mul 2.0 gravity)
 
   return
     h  float  metre

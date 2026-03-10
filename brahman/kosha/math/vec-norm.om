@@ -1,0 +1,12 @@
+kosha vec-norm
+
+  "vector-kriya scalar-phala domain-math-sthita"
+  "norm-abheda mula-ganana-yukta aayaama-yukta"
+
+  -- Euclidean norm (length) of an n-dimensional vector
+  -- |v| = sqrt(v1² + v2² + ... + vn²) = sqrt(v · v)
+  -- this is the kramanusara depth = 0 quantity — the base magnitude
+
+shabda vec-norm / euclidean-length-of-an-n-dimensional-vector-sqrt-of-dot-product-with-itself
+
+done

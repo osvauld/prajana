@@ -1,0 +1,70 @@
+tantra arm-plan-2dof
+
+  -- complete 2-DOF arm motion plan: IK + FK verification + synchronized joint velocity
+  -- workspace: aayaama-dvaya — the 2D tala
+  -- structure: armature with two bones (rekha) joined at sandhi points (kona state)
+  --
+  -- given:
+  --   current config (purva-avastha): theta1-current, theta2-current
+  --   target bindu: (target-x, target-y) in world-space
+  --   joint speed limits: omega1-max, omega2-max
+  --
+  -- computes:
+  --   target config (uttara-avastha): theta1, theta2
+  --   joint velocities: omega1, omega2 (synchronized, minimum time)
+  --   motion time: move-time
+  --   FK verification: ex, ey (should match target-x, target-y)
+  --   joint2 world position: j2x, j2y
+
+  inputs
+    link-length-1   float  metre
+    link-length-2   float  metre
+    theta1-current  float  radian
+    theta2-current  float  radian
+    target-x        float  metre
+    target-y        float  metre
+    omega1-max      float  radian-per-second
+    omega2-max      float  radian-per-second
+
+  let
+    -- IK: find target joint angles from target bindu
+    x-sq          = mul target-x target-x
+    y-sq          = mul target-y target-y
+    r-sq          = add x-sq y-sq
+    l1-sq         = mul link-length-1 link-length-1
+    l2-sq         = mul link-length-2 link-length-2
+    cos-theta2    = div (sub r-sq (add l1-sq l2-sq))
+                        (mul 2 (mul link-length-1 link-length-2))
+    theta2        = acos cos-theta2
+    sin-theta2    = sin theta2
+    alpha         = atan2 target-y target-x
+    beta          = atan2 (mul link-length-2 sin-theta2)
+                          (add link-length-1 (mul link-length-2 cos-theta2))
+    theta1        = sub alpha beta
+    -- FK verification: compute actual end-effector position from solved angles
+    theta12       = add theta1 theta2
+    j2x           = mul link-length-1 (cos theta1)
+    j2y           = mul link-length-1 (sin theta1)
+    ex            = add j2x (mul link-length-2 (cos theta12))
+    ey            = add j2y (mul link-length-2 (sin theta12))
+    -- velocity: synchronized motion, minimize time
+    delta-theta1  = sub theta1 theta1-current
+    delta-theta2  = sub theta2 theta2-current
+    t1            = div (abs delta-theta1) omega1-max
+    t2            = div (abs delta-theta2) omega2-max
+    move-time     = max t1 t2
+    omega1        = div delta-theta1 move-time
+    omega2        = div delta-theta2 move-time
+
+  return
+    theta1      float  radian
+    theta2      float  radian
+    omega1      float  radian-per-second
+    omega2      float  radian-per-second
+    move-time   float  second
+    j2x         float  metre
+    j2y         float  metre
+    ex          float  metre
+    ey          float  metre
+
+done
