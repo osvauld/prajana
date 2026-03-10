@@ -9,6 +9,9 @@ tantra scene-extract-kinematic-chain
   --   2. kramanusara depth (|T|) → position in derivative chain
   --   3. concepts-for-unit shabda on unit node → candidate concepts in this domain
   -- The combination selects concept unambiguously (sphoṭa).
+  --
+  -- n-DOF: each joint contributes 1 DOF (revolute or prismatic).
+  -- total DOF = n-joints. The arm is a serial chain: link_0 → joint_0 → link_1 → ... → link_{n-1}.
 
   inputs
     sentence    string
@@ -19,18 +22,43 @@ tantra scene-extract-kinematic-chain
     words = map (tokenise sentence) (fn w -> lower w)
     classified = classify-fold words
 
-    -- ---- 2. detect joint count ----
-    -- count "joint N" or "link N" entity markers
+    -- ---- 2. detect joint count (three signals, decreasing reliability) ----
+
+    -- signal A: explicit "joint N" or "link N" entity markers
     joint-markers = fold-pairs classified (fn a b ->
       cond (and (or (eq (nth a 2) "joint") (eq (nth a 2) "link"))
                 (exists (to-number (nth b 0)))) "JMARK"
       otherwise _none)
-
     n-from-entities = length (filter joint-markers (fn x -> eq x "JMARK"))
 
+    -- signal A2: count explicit entity mentions ("3 joint ...", "3-joint ...")
+    n-joint-word = length (filter words (fn w -> or (eq w "joint") (eq w "joints")))
+
+    -- signal B: "N-DOF" compound in words (e.g. "3-dof", "6-dof")
+    dof-idx = first-match words (fn w ->
+      let parts   = split w "-"
+      let has-dof = exists (first-match parts (fn p -> cond (eq p "dof") "yes" otherwise _none))
+      let num-val = to-number (nth parts 0)
+      cond (and has-dof (exists num-val)) num-val otherwise _none)
+    n-from-dof = cond (exists dof-idx) dof-idx otherwise 0
+
+    -- signal B2: token triples like "3 - dof" or "3 - joint"
+    marker-scan = reduce words [0, "", "", 0]
+      (fn acc w ->
+        let found = nth acc 0
+        let p1    = nth acc 1
+        let p2    = nth acc 2
+        let cur   = nth acc 3
+        let cand-a = cond (and (eq p1 "-") (or (eq w "dof") (eq w "joint") (eq w "joints"))) (to-number p2) otherwise _none
+        let cand-b = cond (and (neq p1 "-") (or (eq w "dof") (eq w "joint") (eq w "joints"))) (to-number p1) otherwise _none
+        let cur2 = cond (exists cand-a) cand-a (exists cand-b) cand-b otherwise cur
+        let found2 = cond (gt found 0) found (gt cur2 0) cur2 otherwise 0
+        [found2, w, p1, cur2])
+    n-from-markers = nth marker-scan 0
+
+    -- default
     n-default = to-number (shabda "scene-defaults-kinematic-chain" "default-joint-count")
     n-def-f   = cond (exists n-default) n-default otherwise 2
-    n-joints  = cond (gt n-from-entities 0) n-from-entities otherwise n-def-f
 
     -- ---- 3. detect goals ----
     goal-word-pairs = shabda-pairs "goal-words"
@@ -59,26 +87,15 @@ tantra scene-extract-kinematic-chain
     goals-list = cond (gt (length detected-goals) 0) detected-goals otherwise (split default-goals-str ",")
     goals-str  = join goals-list ","
 
-    -- ---- 4. detect target position ----
-    target-triggers = split "to,position,target,effector" ","
+    -- ---- 4. detect target position (reusable extract-vector-coords) ----
+    target-triggers  = split "to,position,target,effector" ","
+    -- NOTE: tantra returns VList of individual return values — for a list return,
+    -- the list elements become separate slots. Use raw-coords directly as the coord list.
+    raw-coords = extract-vector-coords classified target-triggers 3
 
-    target-scan = reduce classified (pair "0" (range 0))
-      (fn acc triple ->
-        let active  = nth acc 0
-        let floats  = nth acc 1
-        let tok     = nth triple 0
-        let is-trig = member tok target-triggers
-        let new-active = cond is-trig "1" otherwise active
-        let as-num  = cond (eq new-active "1") (to-number tok) otherwise _none
-        let new-floats = cond (and (exists as-num) (lt (length floats) 3))
-          (append floats (split (to-string as-num) " "))
-          otherwise floats
-        pair new-active new-floats)
-
-    raw-target = nth target-scan 1
-    tx-str = cond (gt (length raw-target) 0) (nth raw-target 0) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-x")
-    ty-str = cond (gt (length raw-target) 1) (nth raw-target 1) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-y")
-    tz-str = cond (gt (length raw-target) 2) (nth raw-target 2) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-z")
+    tx-str = cond (gt (length raw-coords) 0) (nth raw-coords 0) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-x")
+    ty-str = cond (gt (length raw-coords) 1) (nth raw-coords 1) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-y")
+    tz-str = cond (gt (length raw-coords) 2) (nth raw-coords 2) otherwise (shabda "scene-defaults-kinematic-chain" "default-target-z")
 
     -- ---- 5. emit target node ----
     target-name   = concat "target-" scene-hash
@@ -89,6 +106,23 @@ tantra scene-extract-kinematic-chain
 
     -- ---- 6. sphoṭa extraction: value-unit-concept-joint tuples ----
     value-tuples = extract-value-units classified
+
+    -- ---- 6b. signal C: count link-length tuples in structural sentence ----
+    -- extract-value-units now tags each tuple with sentence-num (graded ring).
+    -- the structural sentence is the first sentence containing link-length values.
+    -- only count link-lengths in that sentence — target coords are in a later sentence.
+    link-len-tuples = filter value-tuples (fn t -> eq (nth t 1) "link-length")
+    struct-sent = cond (gt (length link-len-tuples) 0) (nth (nth link-len-tuples 0) 4) otherwise 0
+    struct-link-tuples = filter link-len-tuples (fn t -> eq (nth t 4) struct-sent)
+    n-from-values = length struct-link-tuples
+
+    -- final n-joints: strong explicit signals > value-group cardinality > defaults
+    n-joints = cond (gt n-from-entities 0) n-from-entities
+               (gt n-from-markers 0) n-from-markers
+               (gt n-from-dof 0) n-from-dof
+               (gt n-joint-word 0) n-joint-word
+               (gt n-from-values 0) n-from-values
+               otherwise n-def-f
 
     -- ---- 7. defaults from kosha ----
     jtype-def  = shabda "scene-defaults-kinematic-chain" "default-joint-type"

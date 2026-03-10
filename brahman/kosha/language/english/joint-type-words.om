@@ -6,6 +6,6 @@ kosha joint-type-words
   "setu-swarupa english-sthita domain-language-sthita"
   "scene-extract-yukta kinematic-chain-abheda"
 
-shabda shabda-tmpl:language/english/joint-type-words.shabda
+  shabda shabda-tmpl:language/english/joint-type-words.shabda
 
 done

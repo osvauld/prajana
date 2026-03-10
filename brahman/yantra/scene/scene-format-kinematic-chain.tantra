@@ -1,0 +1,119 @@
+tantra scene-format-kinematic-chain
+
+  -- Formats the structured output of scene-compute-kinematic-chain into a
+  -- human-readable string. No computation here — pure string assembly.
+  -- All three plan templates are built; goal selects which one to emit.
+
+  inputs
+    n-joints        float
+    joint-angles    list
+    theta-target    list
+    ex              float
+    ey              float
+    tz              float
+    motor-lines     string
+    path-energy     float
+    goal            string
+    t-move          float
+    pw-total        float
+    t-opt           float
+    pw-opt-total    float
+    omegas-opt      list
+    t-budget        float
+    pw-slow-total   float
+    omegas-slow     list
+    omegas-mintime  list
+    any-missing     string
+    mass-any-miss   string
+    torque-any-miss string
+    power-any-miss  string
+    lm-def          string
+    rt-def          string
+    rp-def          string
+
+  let
+    -- IK per-joint lines
+    ik-joint-lines = reduce (range n-joints) "" (fn acc i ->
+      let th-start = nth joint-angles i
+      let th-end-i = nth theta-target i
+      let di       = abs (sub th-end-i th-start)
+      let ln       = (concat "\n    joint" (to-string i) ": " (to-string th-start) " rad -> " (to-string th-end-i) " rad   (delta=" (to-string di) " rad)")
+      concat acc ln)
+
+    -- omega lines for each plan mode
+    omega-lines-mintime = reduce (range n-joints) "" (fn acc i ->
+      let om = nth omegas-mintime i
+      let ln = (concat "\n    joint" (to-string i) ": " (to-string om) " rad/s")
+      concat acc ln)
+
+    omega-lines-opt = reduce (range n-joints) "" (fn acc i ->
+      let om = nth omegas-opt i
+      let ln = (concat "\n    joint" (to-string i) ": " (to-string om) " rad/s")
+      concat acc ln)
+
+    omega-lines-slow = reduce (range n-joints) "" (fn acc i ->
+      let om = nth omegas-slow i
+      let ln = (concat "\n    joint" (to-string i) ": " (to-string om) " rad/s")
+      concat acc ln)
+
+    -- three plan templates
+    plan-time = concat
+      "\n  [Goal: minimize time - all joints at rated max speed]"
+      "\n    T = " (to-string t-move) " s   P_total = " (to-string pw-total) " W"
+      omega-lines-mintime
+      "\n  Reference: balanced optimum at T* = " (to-string t-opt) " s  P* = " (to-string pw-opt-total) " W"
+
+    plan-power = concat
+      "\n  [Goal: minimize power - slow motion at T = 3*T*]"
+      "\n    T = " (to-string t-budget) " s   P_total = " (to-string pw-slow-total) " W"
+      omega-lines-slow
+      "\n    (P decreases further as T grows: P = E/T = " (to-string path-energy) " / T)"
+      "\n  Reference: balanced optimum at T* = " (to-string t-opt) " s  P* = " (to-string pw-opt-total) " W"
+
+    plan-balanced = concat
+      "\n  [Goal: minimize T and P simultaneously - T* = P* = sqrt(E) = " (to-string t-opt) " s / W]"
+      "\n    T* = " (to-string t-opt) " s   P* = " (to-string pw-opt-total) " W"
+      omega-lines-opt
+      "\n  Minimum-time bound: T_min=" (to-string t-move) " s  P=" (to-string pw-total) " W  (at rated max speed)"
+
+    plan-sel = cond (eq goal "minimize-time")  plan-time
+                    (eq goal "minimize-power") plan-power
+                    otherwise                  plan-balanced
+
+    -- computation block
+    compute-block = concat
+      "\nComputation:"
+      "\n  IK solution (n-DOF Jacobian-transpose):"
+      ik-joint-lines
+      "\n  FK verify (n-DOF): end-effector = [" (to-string ex) ", " (to-string ey) ", " (to-string tz) "]"
+      "\n  Motor check (gravity-load torque vs ratings):"
+      motor-lines
+      "\n  Path energy E = sum(tau_i*|d_theta_i|) = " (to-string path-energy) " J  (P = E/T, invariant wrt speed)"
+      "\n"
+      plan-sel
+
+    -- clarification block for defaults used
+    last-idx-s   = to-string (sub n-joints 1)
+
+    mass-note   = cond (eq mass-any-miss   "yes") (concat "\n    link masses           (default: " lm-def " kg/link)") otherwise ""
+    torque-note = cond (eq torque-any-miss "yes") (concat "\n    rated motor torques   (default: " rt-def " N*m/joint)") otherwise ""
+    power-note  = cond (eq power-any-miss  "yes") (concat "\n    rated motor powers    (default: " rp-def " W/joint)") otherwise ""
+
+    mass-q   = cond (eq mass-any-miss   "yes") (concat "\n    \"Link masses are [m0]..[m" last-idx-s "] kg.\"") otherwise ""
+    torque-q = cond (eq torque-any-miss "yes") (concat "\n    \"Rated motor torques are [t0]..[t" last-idx-s "] N*m.\"") otherwise ""
+    power-q  = cond (eq power-any-miss  "yes") (concat "\n    \"Rated motor powers are [P0]..[P" last-idx-s "] W.\"") otherwise ""
+
+    clarify-block = cond (eq any-missing "yes")
+      (concat
+        "\n\nNot specified (defaults used):"
+        mass-note torque-note power-note
+        "\n\nFor accurate results, extend your description with:"
+        mass-q torque-q power-q)
+      otherwise ""
+
+    result = concat compute-block clarify-block
+
+  return
+    result  string
+
+done

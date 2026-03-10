@@ -8,6 +8,6 @@ kosha matra-beeja
   "matra-sthita domain-physics-sthita"
   "yantra-sthita"
 
-shabda shabda-tmpl:physics/matra-beeja.shabda
+  shabda shabda-tmpl:physics/matra-beeja.shabda
 
 done

@@ -8,6 +8,6 @@ kosha goal-words
   "setu-swarupa english-sthita domain-language-sthita"
   "scene-extract-yukta kriya-yantra-abheda"
 
-shabda shabda-tmpl:language/english/goal-words.shabda
+  shabda shabda-tmpl:language/english/goal-words.shabda
 
 done

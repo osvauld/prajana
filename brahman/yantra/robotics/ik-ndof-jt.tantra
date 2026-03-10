@@ -1,0 +1,96 @@
+tantra ik-ndof-jt
+
+  -- n-DOF Damped Least Squares (DLS) IK for a planar serial arm.
+  --
+  -- Since the task space is always 2D (XY end-effector position),
+  -- the Jacobian J is always 2 x n.  J*J^T is therefore always 2x2
+  -- and analytically invertible.
+  --
+  -- Each iteration:
+  --   1. FK at current angles -> end-effector (cx, cy) -> error (errx, erry)
+  --   2. Finite-difference Jacobian J: two rows (J_x, J_y), each length n
+  --      Column j = (FK(angles + eps at j) - FK(angles)) / eps
+  --   3. Compute A = J * J^T (2x2):
+  --        a00 = dot(J_x, J_x),  a01 = dot(J_x, J_y)
+  --        a10 = a01,             a11 = dot(J_y, J_y)
+  --   4. Damped inverse of A: det = a00*a11 - a01^2 + lambda
+  --        inv_A = (1/det) * [[a11, -a01], [-a01, a00]]
+  --   5. Compute w = inv_A * e  (2-vector)
+  --   6. delta_theta_j = J_x_j * w_x + J_y_j * w_y  (pseudoinverse step)
+  --   7. theta := theta + delta_theta
+  --
+  -- Works for any n.  Lambda (damping) prevents singularity blow-up.
+  -- Converges in O(10) iterations from any non-degenerate start.
+
+  inputs
+    n-joints           float
+    link-lengths       list
+    axis-xs            list
+    axis-ys            list
+    axis-zs            list
+    joint-angles-init  list
+    target-x           float  metre
+    target-y           float  metre
+
+  let
+    eps    = 0.0001
+    lambda = 0.001
+
+    final-angles = reduce (range 40) joint-angles-init (fn angles _k ->
+      -- step 1: FK at current angles
+      let p0   = fk-ndof n-joints angles axis-xs axis-ys axis-zs link-lengths
+      let cx   = nth p0 0
+      let cy   = nth p0 1
+      let errx = sub target-x cx
+      let erry = sub target-y cy
+
+      -- step 2: Jacobian columns (J_x list and J_y list, both length n)
+      let jac-x = map (range n-joints) (fn j ->
+        let plus = map (range n-joints) (fn i ->
+          let a = nth angles i
+          cond (eq i j) (add a eps) otherwise a)
+        let p1 = fk-ndof n-joints plus axis-xs axis-ys axis-zs link-lengths
+        div (sub (nth p1 0) cx) eps)
+
+      let jac-y = map (range n-joints) (fn j ->
+        let plus = map (range n-joints) (fn i ->
+          let a = nth angles i
+          cond (eq i j) (add a eps) otherwise a)
+        let p1 = fk-ndof n-joints plus axis-xs axis-ys axis-zs link-lengths
+        div (sub (nth p1 1) cy) eps)
+
+      -- step 3: A = J * J^T (2x2 symmetric)
+      let a00 = reduce (range n-joints) 0 (fn s j -> add s (mul (nth jac-x j) (nth jac-x j)))
+      let a01 = reduce (range n-joints) 0 (fn s j -> add s (mul (nth jac-x j) (nth jac-y j)))
+      let a11 = reduce (range n-joints) 0 (fn s j -> add s (mul (nth jac-y j) (nth jac-y j)))
+
+      -- step 4: damped inverse of (A + lambda*I)
+      --   B = [[a00+lambda, a01], [a01, a11+lambda]]
+      --   det_B = (a00+lambda)*(a11+lambda) - a01^2
+      --   B^{-1} = (1/det_B) * [[a11+lambda, -a01], [-a01, a00+lambda]]
+      let b00  = add a00 lambda
+      let b11  = add a11 lambda
+      let det  = sub (mul b00 b11) (mul a01 a01)
+      let i00  = div b11 det
+      let i01  = div (mul -1 a01) det
+      let i11  = div b00 det
+
+      -- step 5: w = inv_A * e
+      let wx = add (mul i00 errx) (mul i01 erry)
+      let wy = add (mul i01 errx) (mul i11 erry)
+
+      -- step 6: delta_theta = J^T * w  (simultaneous update)
+      map (range n-joints) (fn j ->
+        let dj = add (mul (nth jac-x j) wx) (mul (nth jac-y j) wy)
+        add (nth angles j) dj))
+
+    pf    = fk-ndof n-joints final-angles axis-xs axis-ys axis-zs link-lengths
+    end-x = nth pf 0
+    end-y = nth pf 1
+
+  return
+    final-angles  list
+    end-x         float  metre
+    end-y         float  metre
+
+done

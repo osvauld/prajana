@@ -1,0 +1,33 @@
+tantra joint-velocity-ndof
+
+  -- n-DOF synchronized joint velocity planner.
+  -- Given current and target angles with per-joint speed limits,
+  -- choose a single move-time T so all joints finish together.
+
+  inputs
+    n-joints             float
+    joint-angles-start   list
+    joint-angles-target  list
+    joint-speed-max      list
+
+  let
+    t-move = reduce (range n-joints) 0 (fn acc i ->
+      let th0 = nth joint-angles-start i
+      let th1 = nth joint-angles-target i
+      let wmx = nth joint-speed-max i
+      let dt  = abs (sub th1 th0)
+      let ti  = cond (gt wmx 0) (div dt wmx) otherwise 0
+      max acc ti)
+
+    t-safe = cond (gt t-move 0) t-move otherwise 1
+
+    omegas = map (range n-joints) (fn i ->
+      let th0 = nth joint-angles-start i
+      let th1 = nth joint-angles-target i
+      div (sub th1 th0) t-safe)
+
+  return
+    omegas  list
+    t-safe  float  second
+
+done

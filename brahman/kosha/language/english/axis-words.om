@@ -7,6 +7,6 @@ kosha axis-words
   "setu-swarupa english-sthita domain-language-sthita"
   "scene-extract-yukta kinematic-chain-abheda"
 
-shabda shabda-tmpl:language/english/axis-words.shabda
+  shabda shabda-tmpl:language/english/axis-words.shabda
 
 done

@@ -3,6 +3,6 @@ kosha scene-defaults-oscillator
   "setu-swarupa spanda-abheda domain-language-sthita"
   "scene-extract-yukta seema-sthita"
 
-shabda shabda-tmpl:language/english/scene-defaults-oscillator.shabda
+  shabda shabda-tmpl:language/english/scene-defaults-oscillator.shabda
 
 done

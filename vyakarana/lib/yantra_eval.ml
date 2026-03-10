@@ -151,7 +151,9 @@ let yantra_tokenise (s : string) : string list =
       if prev_digit && next_digit then begin
         Buffer.add_char buf '.'; incr i
       end else begin
-        flush (); incr i
+        flush ();
+        tokens := "." :: !tokens;  (* emit sentence-ending period as token *)
+        incr i
       end
     | ':' -> flush (); incr i
     | '*' | '/' ->
