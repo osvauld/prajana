@@ -1,4 +1,4 @@
-kosha logarithm
+mantra logarithm
 
   "number-varga-karma"
   "vibhajana-swarupa e-yukta"
@@ -8,6 +8,6 @@ kosha logarithm
   "O-nlogn-yukta sort-siddha"
   "power-pratipaksha"
 
-  shabda eval:log arity:1 pratipaksha-0:exp
+  shabda eval:log arity:1 pratipaksha-0:exp degree:log per-element:yes invertible:yes inverse:power
 
 done

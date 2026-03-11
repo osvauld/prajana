@@ -25,12 +25,12 @@ tantra anuvada
     seeds        = cond (should-gate) primary-seed otherwise seeds0
 
     -- expand seeds via abheda equivalences
-    abheda-exp   = flatten (map seeds (fn s -> abheda-of s))
+    abheda-exp   = flatten (map seeds (fn s -> walk s "abheda"))
     all-seeds    = append seeds abheda-exp
 
     -- score nearby nodes by weighted context proximity
     -- uses relation weights and depth decay instead of flat edge count
-    all-incoming = flatten (map all-seeds (fn s -> incoming-to s))
+    all-incoming = flatten (map all-seeds (fn s -> filter (edges s) (fn eg -> and (eq (nth eg 2) s) (neq (nth eg 0) s))))
     incoming-src = unique (map all-incoming (fn e -> nth e 0))
     scored-in    = map incoming-src (fn n -> pair n (weighted-context-score n all-seeds))
     top-scored   = sort-desc scored-in

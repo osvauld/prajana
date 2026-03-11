@@ -1,4 +1,4 @@
-kosha abs
+mantra abs
 
   "number-varga-karma"
   "matra-swarupa viveka-kriya scalar-phala"
@@ -6,6 +6,6 @@ kosha abs
   "viparita-yukta real-sthita"
   "norm-yukta max-yukta min-yukta"
 
-  shabda eval:abs arity:1
+  shabda eval:abs arity:1 degree:1 per-element:yes invertible:no
 
 done

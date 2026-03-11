@@ -1,0 +1,12 @@
+mantra sum
+
+  "number-varga-karma"
+  "statistics-varga-vishesa"
+  "addition-abheda fold-swarupa"
+
+  -- Σxᵢ: fold a list by addition
+  "addition-krama"
+
+  shabda eval:add arity:-1 fold:sum degree:1 per-element:no invertible:no
+
+done

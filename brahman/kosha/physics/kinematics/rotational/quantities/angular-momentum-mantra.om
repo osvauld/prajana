@@ -1,0 +1,13 @@
+mantra angular-momentum-mantra
+
+  "rotational-motion-varga-vishesa"
+  "angular-momentum-swarupa"
+
+  -- L = I·ω: moment of inertia times angular velocity
+  "multiplication-krama"
+
+  "execute-chain-kriya"
+
+  shabda angular-momentum-mantra / L-equals-I-omega-moment-of-inertia-times-angular-velocity degree:1 krama-lhs:angular-momentum krama-rhs:moment-of-inertia,angular-velocity
+
+done

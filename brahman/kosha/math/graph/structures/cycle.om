@@ -1,0 +1,10 @@
+kosha cycle
+
+  "graph-varga-vishesa"
+  "graph-sthita"
+  "path-swarupa"
+  "avrti-yukta"     -- closes back on itself
+
+shabda cycle / path-that-returns-to-its-starting-vertex
+
+done

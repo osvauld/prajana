@@ -1,4 +1,4 @@
-kosha factorial
+mantra factorial
 
   "number-varga-karma"
   "avrti-swarupa guna-kriya mula-sthita"
@@ -7,6 +7,6 @@ kosha factorial
   "combination-yukta permutation-yukta series-yukta"
   "avrti-yukta"
 
-  shabda eval:factorial arity:1
+  shabda eval:factorial arity:1 degree:n! per-element:no invertible:no
 
 done

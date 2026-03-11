@@ -34,7 +34,11 @@ let rec eval (k : proof_graph) (e : env) (expr : expr) : value =
            (match Hashtbl.find_opt ctx.ctx_index.by_name v with
             | Some t when t.t_inputs = [] ->
               !_eval_tantra_ref k t []
-            | _ -> VString v)
+            | Some t ->
+              VFn (List.map (fun p -> p.tp_name) t.t_inputs,
+                   Call (t.t_name, List.map (fun p -> Var p.tp_name) t.t_inputs),
+                   new_env ())
+            | None -> VString v)
          | None -> VString v)
 
   | LetIn (name, rhs, body) ->
@@ -259,7 +263,12 @@ let () =
   Yantra_parser.register_graph_op_arity "shabda-pairs"    1;  (* node-name → [[key,value],...] *)
   Yantra_parser.register_graph_op_arity "scene-extract"   1;  (* sentence → VNode root *)
   Yantra_parser.register_graph_op_arity "scene-narrate"   1;  (* VNode root → VString narration *)
-  Yantra_parser.register_graph_op_arity "ancestors-of"    1   (* node-name → [ancestor-names] via inheritance *)
+  Yantra_parser.register_graph_op_arity "ancestors-of"    1;  (* node-name → [ancestor-names] via inheritance *)
+  Yantra_parser.register_graph_op_arity "in-degree"       1;  (* node-name → float *)
+  Yantra_parser.register_graph_op_arity "out-degree"      1;  (* node-name → float *)
+  Yantra_parser.register_graph_op_arity "neighbors"       1;  (* node-name → [names] *)
+  Yantra_parser.register_graph_op_arity "walk-chain"      2;  (* node depth → [names] *)
+  Yantra_parser.register_graph_op_arity "resolve-node"    1   (* node-name → [names] *)
 
 (* ---- run anuvada-ganana: the meta-tantra pipeline ---- *)
 let run_anuvada_ganana (k : proof_graph) (idx : tantra_index) (session : session)

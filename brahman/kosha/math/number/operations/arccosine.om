@@ -1,0 +1,9 @@
+mantra arccosine
+
+  "number-varga-karma"
+  "trigonometry-varga-vishesa"
+  "cosine-pratipaksha"
+
+  shabda eval:acos arity:1 degree:1 per-element:yes invertible:yes inverse:cosine
+
+done

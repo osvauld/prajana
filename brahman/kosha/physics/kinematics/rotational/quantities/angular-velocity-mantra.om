@@ -1,0 +1,13 @@
+mantra angular-velocity-mantra
+
+  "rotational-motion-varga-vishesa"
+  "angular-velocity-swarupa"
+
+  -- ω = v/r: divide linear velocity by radius
+  "division-krama"
+
+  "execute-chain-kriya"
+
+  shabda angular-velocity-mantra / omega-equals-v-over-r-angular-velocity-from-linear-velocity-and-radius degree:1 krama-lhs:angular-velocity krama-rhs:velocity,radius
+
+done

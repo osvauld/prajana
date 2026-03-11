@@ -200,7 +200,7 @@ let compose_from_setu (k : proof_graph) (setu_node : string) (_seeds : string li
 
 let run ?(emit_meta = true) (k : proof_graph) ~(instruction : string) ~(input : string) ~(domain_hint : string option) : unit =
   let tokens = Setu.tokenise instruction in
-  let all_candidates = tokens @ Setu.bigrams tokens in
+  let all_candidates = tokens in
 
   let recognised = List.filter_map (find k) all_candidates in
   let seeds = tokens in

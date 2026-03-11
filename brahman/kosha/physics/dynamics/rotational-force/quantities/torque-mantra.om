@@ -1,0 +1,13 @@
+mantra torque-mantra
+
+  "rotational-force-varga-vishesa"
+  "torque-swarupa"
+
+  -- τ = Iα: multiply moment-of-inertia by angular-acceleration
+  "multiplication-krama"
+
+  "execute-chain-kriya"
+
+  shabda torque-mantra / tau-equals-I-alpha-moment-of-inertia-times-angular-acceleration degree:1 krama-lhs:torque krama-rhs:moment-of-inertia,angular-acceleration
+
+done

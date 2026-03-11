@@ -1,0 +1,10 @@
+mantra neg
+
+  "number-varga-karma"
+  "negation-abheda additive-inverse-swarupa"
+  "neg-pratipaksha"
+
+  -- unary minus: negation is self-inverse
+  shabda eval:neg arity:1 degree:1 per-element:yes invertible:yes inverse:neg
+
+done

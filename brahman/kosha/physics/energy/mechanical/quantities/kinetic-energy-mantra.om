@@ -1,0 +1,15 @@
+mantra kinetic-energy-mantra
+
+  "mechanical-energy-varga-vishesa"
+  "kinetic-energy-swarupa"
+
+  -- KE = ½mv²: square velocity, multiply mass, halve
+  "square-krama"
+  "multiplication-krama"
+  "division-krama"
+
+  "execute-chain-kriya"
+
+  shabda kinetic-energy-mantra / KE-equals-half-mv-squared degree:2 krama-lhs:energy krama-rhs:mass,velocity
+
+done

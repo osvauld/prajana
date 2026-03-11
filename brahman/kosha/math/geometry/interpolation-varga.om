@@ -1,0 +1,13 @@
+kosha interpolation-varga
+
+  "geometry-varga-vishesa"
+  "number-varga-vishesa"
+
+  -- estimating values between known data points
+  -- lerp (linear), slerp (spherical), spline, bezier
+  "seema-yukta krama-abheda"
+  "lerp-drishthanta slerp-drishthanta"
+
+  shabda interpolation-varga / estimating-intermediate-values-between-known-points-lerp-slerp-spline
+
+done

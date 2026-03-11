@@ -1,0 +1,10 @@
+kosha shortest-path
+
+  "graph-varga-karma"
+  "graph-walk-swarupa"
+  "weighted-graph-sthita"
+  "seema-yukta"   -- minimises total weight
+
+shabda shortest-path / path-between-two-vertices-minimising-total-edge-weight
+
+done

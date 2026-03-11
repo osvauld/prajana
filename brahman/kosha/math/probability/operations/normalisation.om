@@ -1,0 +1,9 @@
+kosha normalisation
+
+  "probability-varga-karma"
+  "distribution-sthita"
+  "purna-yukta"   -- ensures total probability sums to 1
+
+shabda normalisation / scaling-a-distribution-so-probabilities-sum-to-one
+
+done

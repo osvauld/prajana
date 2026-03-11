@@ -1,4 +1,4 @@
-kosha vec-norm
+mantra vec-norm
 
   "geometry-varga-karma"
   "vector-kriya scalar-phala"
@@ -6,7 +6,10 @@ kosha vec-norm
 
   -- Euclidean norm (length) of an n-dimensional vector
   -- |v| = sqrt(v1² + v2² + ... + vn²) = sqrt(v · v)
+  "square-krama"
+  "addition-krama"
+  "square-root-krama"
 
-shabda vec-norm / euclidean-length-of-an-n-dimensional-vector-sqrt-of-dot-product-with-itself
+  shabda vec-norm / euclidean-length-of-an-n-dimensional-vector-sqrt-of-dot-product-with-itself degree:1 krama-input:vector krama-output:scalar per-element:yes fold:sum
 
 done

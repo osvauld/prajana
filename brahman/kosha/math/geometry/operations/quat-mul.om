@@ -1,0 +1,19 @@
+mantra quat-mul
+
+  "geometry-varga-karma"
+  "quaternion-varga-vishesa"
+  "rotation-abheda composition-swarupa"
+  "quat-conjugate-yukta non-commutative-swarupa"
+
+  -- Hamilton product: [w1,x1,y1,z1] * [w2,x2,y2,z2]
+  -- w = w1w2 - x1x2 - y1y2 - z1z2
+  -- x = w1x2 + x1w2 + y1z2 - z1y2
+  -- y = w1y2 - x1z2 + y1w2 + z1x2
+  -- z = w1z2 + x1y2 - y1x2 + z1w2
+  "multiplication-krama"
+  "subtraction-krama"
+  "addition-krama"
+
+  shabda quat-mul / hamilton-product-of-two-quaternions-rotation-composition degree:1 krama-input:quat-a,quat-b krama-output:quaternion
+
+done

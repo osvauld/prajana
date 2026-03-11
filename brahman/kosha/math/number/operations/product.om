@@ -1,0 +1,12 @@
+mantra product
+
+  "number-varga-karma"
+  "statistics-varga-vishesa"
+  "multiplication-abheda fold-swarupa"
+
+  -- Πxᵢ: fold a list by multiplication
+  "multiplication-krama"
+
+  shabda eval:mul arity:-1 fold:product degree:1 per-element:no invertible:no
+
+done

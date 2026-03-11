@@ -1,0 +1,18 @@
+mantra jacobian-mantra
+
+  "jacobian-swarupa"
+
+  -- numerical Jacobian via finite differences
+  -- for each joint j: column j = (FK(θ + ε·eⱼ) - FK(θ)) / ε
+  -- assembles into matrix: rows = task-space dims, cols = joint count
+  "fk-krama"
+  "addition-krama"
+  "fk-krama"
+  "subtraction-krama"
+  "division-krama"
+
+  "execute-chain-kriya"
+
+  shabda jacobian-mantra / numerical-jacobian-finite-difference-per-column-fk-perturb-subtract-divide degree:1 krama-lhs:jacobian krama-rhs:fk,angles,epsilon
+
+done

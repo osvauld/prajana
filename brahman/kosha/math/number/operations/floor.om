@@ -1,4 +1,4 @@
-kosha floor
+mantra floor
 
   "number-varga-karma"
   "seema-swarupa viveka-kriya int-phala"
@@ -6,6 +6,6 @@ kosha floor
   "float-yukta int-yukta ceil-inverse"
   "abs-yukta real-sthita"
 
-  shabda eval:floor arity:1
+  shabda eval:floor arity:1 degree:1 per-element:yes invertible:no
 
 done

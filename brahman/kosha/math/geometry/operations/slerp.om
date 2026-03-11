@@ -1,0 +1,15 @@
+kosha slerp
+
+  "interpolation-varga-vishesa"
+  "geometry-varga-vishesa"
+  "quaternion-varga-vishesa"
+
+  -- spherical linear interpolation: constant-speed arc on unit sphere
+  -- preserves unit length; used for smooth rotation interpolation
+  "spherical-swarupa great-circle-abheda"
+  "lerp-abheda quaternion-yukta"
+  "rotation-yukta animation-yukta"
+
+  shabda slerp / spherical-linear-interpolation-constant-speed-arc-on-unit-sphere-for-rotations
+
+done

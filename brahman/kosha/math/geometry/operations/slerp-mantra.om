@@ -1,0 +1,18 @@
+mantra slerp
+
+  "geometry-varga-karma"
+  "interpolation-varga-vishesa"
+  "quaternion-varga-vishesa"
+  "lerp-abheda spherical-swarupa"
+
+  -- slerp(q1, q2, t) = q1·(q1⁻¹·q2)^t: spherical linear interpolation
+  -- preserves unit length; constant angular velocity along great-circle arc
+  "quat-conjugate-krama"
+  "quat-mul-krama"
+  "arctangent-krama"
+  "sine-krama"
+  "quat-mul-krama"
+
+  shabda slerp / spherical-linear-interpolation-between-two-quaternions degree:1 krama-input:quat-a,quat-b,t krama-output:quaternion
+
+done

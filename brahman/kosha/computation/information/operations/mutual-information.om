@@ -1,0 +1,9 @@
+kosha mutual-information
+
+  "information-varga-karma"
+  "viveka-yukta"
+  "sambandha-yukta"   -- measures shared information between two variables
+
+shabda mutual-information / measure-of-information-shared-between-two-random-variables
+
+done

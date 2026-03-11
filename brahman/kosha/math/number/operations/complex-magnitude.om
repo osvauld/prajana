@@ -1,0 +1,14 @@
+mantra complex-magnitude
+
+  "number-varga-karma"
+  "complex-varga-vishesa"
+  "vec-norm-abheda modulus-swarupa"
+
+  -- |a+bi| = sqrt(a² + b²)
+  "square-krama"
+  "addition-krama"
+  "square-root-krama"
+
+  shabda complex-magnitude / modulus-of-complex-number-sqrt-a-squared-plus-b-squared degree:1 krama-input:complex krama-output:scalar
+
+done

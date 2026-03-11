@@ -234,25 +234,46 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      | Some v -> VString (Anuvada.english_of_visheshanam_from_graph k v)
      | None -> VString rel_str)
 
-  (* incoming-to: node-name -> incoming typed edges [source, relation, target].
-     delegates to incoming-to.tantra when loaded; OCaml fallback otherwise. *)
+  (* in-degree: node-name → float (count of incoming edges) *)
+  | "in-degree" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    Some (VFloat (float_of_int (Proof_graph.in_degree k name)))
+
+  (* out-degree: node-name → float (count of outgoing edges) *)
+  | "out-degree" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    Some (VFloat (float_of_int (Proof_graph.out_degree k name)))
+
+  (* neighbors: node-name → [neighbor-names] (all adjacent nodes, in + out) *)
+  | "neighbors" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    Some (VList (List.map (fun n -> VNode n) (Proof_graph.neighbors k name)))
+
+  (* walk-chain: node × depth → [node-names]
+     BFS N hops over kriya/phala/swarupa/abheda edges *)
+  | "walk-chain" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    let depth = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    Some (VList (List.map (fun n -> VNode n) (Setu.walk_chain k name depth [])))
+
+  (* resolve-node: node-name → [node + abheda aliases] *)
+  | "resolve-node" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    Some (VList (List.map (fun n -> VString n) (Setu.resolve k name)))
+
+  (* incoming-to: node-name -> incoming typed edges [source, relation, target]. *)
   | "incoming-to" ->
     let name = as_string (e_eval k e (List.nth args 0)) in
-    (match !eval_ctx with
-     | Some ctx when Hashtbl.mem ctx.ctx_index.by_name "incoming-to" ->
-       let t = Hashtbl.find ctx.ctx_index.by_name "incoming-to" in
-       Some (!_eval_tantra_ref k t [("n", VString name)])
-     | _ ->
-       let edges = Proof_graph.edges_of k name in
-       let incoming = List.filter_map (fun edge ->
-         if edge.Proof_graph.target = name && edge.Proof_graph.source <> name then
-           Some (VList [ VString edge.Proof_graph.source;
-                         VString (Proof_graph.string_of_visheshanam edge.Proof_graph.relation);
-                         VString edge.Proof_graph.target ])
-         else
-           None
-       ) edges in
-       Some (VList incoming))
+    let edges = Proof_graph.edges_of k name in
+    let incoming = List.filter_map (fun edge ->
+      if edge.Proof_graph.target = name && edge.Proof_graph.source <> name then
+        Some (VList [ VString edge.Proof_graph.source;
+                      VString (Proof_graph.string_of_visheshanam edge.Proof_graph.relation);
+                      VString edge.Proof_graph.target ])
+      else
+        None
+    ) edges in
+    Some (VList incoming)
 
   (* domain-of: node-name -> list of domain-* names linked to this node.
      delegates to domain-of.tantra when loaded; OCaml fallback otherwise. *)
@@ -356,27 +377,21 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     in
     Some (VString (if has_sthita then "sthita" else if has_rahita then "rahita" else "none"))
 
-  (* abheda-of: node-name -> outgoing abheda targets.
-     delegates to abheda-of.tantra when loaded; OCaml fallback otherwise. *)
+  (* abheda-of: node-name -> outgoing abheda targets. *)
   | "abheda-of" ->
     let name = as_string (e_eval k e (List.nth args 0)) in
-    (match !eval_ctx with
-     | Some ctx when Hashtbl.mem ctx.ctx_index.by_name "abheda-of" ->
-       let t = Hashtbl.find ctx.ctx_index.by_name "abheda-of" in
-       Some (!_eval_tantra_ref k t [("n", VString name)])
-     | _ ->
-       let targets =
-         match Hashtbl.find_opt k.nodes name with
-         | None -> []
-         | Some n ->
-           List.filter_map (fun edge ->
-             if edge.Proof_graph.source = name
-                 && edge.Proof_graph.relation = Proof_graph.abheda
-             then Some edge.Proof_graph.target
-             else None
-           ) n.edges
-       in
-       Some (VList (List.map (fun t -> VString t) (List.sort_uniq String.compare targets))))
+    let targets =
+      match Hashtbl.find_opt k.nodes name with
+      | None -> []
+      | Some n ->
+        List.filter_map (fun edge ->
+          if edge.Proof_graph.source = name
+              && edge.Proof_graph.relation = Proof_graph.abheda
+          then Some edge.Proof_graph.target
+          else None
+        ) n.edges
+    in
+    Some (VList (List.map (fun t -> VString t) (List.sort_uniq String.compare targets)))
 
   (* avrti: seed-names × max-passes -> flat triples [source-raw, relation-name, [target-raws]] *)
   | "avrti" ->

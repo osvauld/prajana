@@ -52,71 +52,13 @@ let resolve_alias (k : proof_graph) (name : string) : string =
 
 (* ---- classification helpers (not yet split) ---- *)
 
-let classify_for_yantra (k : proof_graph) (word : string) : ytoken =
-  load_aliases k;
-  let alias_hit = if String.length word <= 2 then
-    Hashtbl.find_opt alias_cache word
-  else None in
-  match alias_hit with
-  | Some full -> YConcept full
-  | None ->
-    match Setu.classify_token k word with
-    | Setu.Number f    -> YNumber f
-    | Setu.Operator op -> YOperator op
-    | Setu.Content name -> YConcept name
-    | Setu.Grammar v   -> YGrammar v
-    | Setu.Article      -> YGrammar sthita
-    | Setu.Unknown w    ->
-      match Hashtbl.find_opt alias_cache w with
-      | Some full -> YConcept full
-      | None -> YUnknown w
-
-let try_bigram_join (k : proof_graph) (n1 : string) (n2 : string)
-    (w1 : string) (w2 : string) : string option =
-  let joined = n1 ^ "-" ^ n2 in
-  match Hashtbl.find_opt k.nodes joined with
-  | Some _ -> Some joined
-  | None ->
-    let joined_raw = w1 ^ "-" ^ w2 in
-    if joined_raw <> joined then
-      match Hashtbl.find_opt k.nodes joined_raw with
-      | Some _ -> Some joined_raw
-      | None -> None
-    else None
-
-let join_bigrams (k : proof_graph) (tokens : (string * ytoken) list)
-    : (string * ytoken) list =
-  let rec loop = function
-    | [] -> []
-    | (w1, YConcept c1) :: (w2, YConcept c2) :: rest ->
-      (match try_bigram_join k c1 c2 w1 w2 with
-       | Some joined -> (w1 ^ " " ^ w2, YConcept joined) :: loop rest
-       | None -> (w1, YConcept c1) :: loop ((w2, YConcept c2) :: rest))
-    | (w1, YUnknown u1) :: (w2, YUnknown u2) :: rest ->
-      (match try_bigram_join k u1 u2 w1 w2 with
-       | Some joined -> (w1 ^ " " ^ w2, YConcept joined) :: loop rest
-       | None -> (w1, YUnknown u1) :: loop ((w2, YUnknown u2) :: rest))
-    | (w1, YUnknown u1) :: (w2, YConcept c2) :: rest ->
-      (match try_bigram_join k u1 c2 w1 w2 with
-       | Some joined -> (w1 ^ " " ^ w2, YConcept joined) :: loop rest
-       | None -> (w1, YUnknown u1) :: loop ((w2, YConcept c2) :: rest))
-    | (w1, YConcept c1) :: (w2, YUnknown u2) :: rest ->
-      (match try_bigram_join k c1 u2 w1 w2 with
-       | Some joined -> (w1 ^ " " ^ w2, YConcept joined) :: loop rest
-       | None -> (w1, YConcept c1) :: loop ((w2, YUnknown u2) :: rest))
-    | x :: rest -> x :: loop rest
-  in
-  loop tokens
 
 (* ---- classify via tantra pipeline ---- *)
 
 let classify_via_tantra (k : proof_graph) (idx : tantra_index) (session : session)
     (words : string list) : (string * ytoken) list =
-  (* try the classify-fold tantra; fall back to old path if tantra not loaded *)
   match Hashtbl.find_opt idx.by_name "classify-fold" with
-  | None ->
-    let classified = List.map (fun w -> (w, classify_for_yantra k w)) words in
-    join_bigrams k classified
+  | None -> []
   | Some t ->
     let word_values = VList (List.map (fun w -> VString w) words) in
     let result = eval_tantra ~idx ~session k t [("words", word_values)] in

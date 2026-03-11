@@ -1,0 +1,14 @@
+mantra period-mantra
+
+  "oscillation-varga-vishesa"
+  "period-swarupa"
+
+  -- T = 2π/ω: multiply 2 by pi, divide by angular-velocity
+  "multiplication-krama"
+  "division-krama"
+
+  "execute-chain-kriya"
+
+  shabda period-mantra / T-equals-2-pi-over-omega-period-from-angular-velocity degree:1 krama-lhs:period krama-rhs:angular-velocity
+
+done

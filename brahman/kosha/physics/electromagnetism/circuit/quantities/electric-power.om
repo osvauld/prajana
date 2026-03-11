@@ -1,0 +1,12 @@
+kosha electric-power
+
+  "circuit-varga-vishesa"
+
+  -- P = VI: electric power
+  "power-swarupa voltage-yukta current-yukta"
+  "watt-matra"
+
+  -- mantra: P = VI
+  shabda electric-power / rate-of-electrical-energy-transfer-in-watts
+
+done

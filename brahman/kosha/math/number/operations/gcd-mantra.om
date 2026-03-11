@@ -1,0 +1,13 @@
+mantra gcd
+
+  "number-varga-karma"
+  "number-theory-varga-vishesa"
+  "lcm-yukta divisor-swarupa"
+
+  -- gcd(a,b): Euclidean algorithm — mod until zero
+  -- gcd(a,b) = gcd(b, a mod b) until b=0
+  "modulo-krama"
+
+  shabda gcd / greatest-common-divisor-euclidean-algorithm-mod-until-zero degree:1 krama-input:a,b krama-output:divisor
+
+done
