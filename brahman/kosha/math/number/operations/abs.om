@@ -1,0 +1,11 @@
+kosha abs
+
+  "number-varga-karma"
+  "matra-swarupa viveka-kriya scalar-phala"
+  "sama-vishama-abheda sign-rahita-siddha"
+  "viparita-yukta real-sthita"
+  "norm-yukta max-yukta min-yukta"
+
+  shabda eval:abs arity:1
+
+done

@@ -1,0 +1,16 @@
+bhasha resonance-ir
+
+  -- resonance-ir — resonance as graph motion dynamics
+  -- one of the pratibimba (renderer) family.
+  -- translates satya, pass energy, and relation flow into animation fields.
+  -- consumed by Raylib for node pulse, edge flow, camera breath.
+  -- shares thaalam timing grid with music-ir.
+
+  "pratibimba-yukta setu-swarupa spanda-phala"
+  "satya-yukta avrti-yukta thaalam-yukta"
+  "resonance-ir-setu-yukta"
+  "domain-sangeetham-sthita domain-language-sthita"
+
+  shabda shabda-tmpl:language/render/resonance-ir-setu.shabda
+
+done

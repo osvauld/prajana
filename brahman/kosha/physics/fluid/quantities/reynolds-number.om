@@ -1,0 +1,14 @@
+kosha reynolds-number
+
+  "fluid-varga-vishesa"
+  "subanta-swarupa"
+
+  -- rho*v*L/mu: dimensionless ratio predicting laminar (< 2300) or turbulent (> 4000) flow
+  "scalar-swarupa float-abheda"
+  "mass-density-yukta velocity-yukta viscosity-yukta"
+  "dimensionless-siddha"
+  "turbulence-phala laminar-phala"
+
+shabda reynolds-number / rho-v-L-over-mu-the-dimensionless-ratio-that-predicts-laminar-below-2300-or-turbulent-above-4000-flow
+
+done

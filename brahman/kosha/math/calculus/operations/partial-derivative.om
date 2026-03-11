@@ -1,0 +1,16 @@
+kosha partial-derivative
+
+  -- partial-derivative: kramanusara of a multi-variable expression
+  -- w.r.t. one apeksha variable, all others held constant (treated as sthira-apeksha)
+  -- d(f)/d(x_j) where x_0..x_{n-1} are inputs and only x_j is the apeksha
+
+  "calculus-varga-karma"
+  "kramanusara-swarupa derivative-abheda"
+  "apeksha-yukta viveka-siddha"
+  "aneka-ahara eka-apeksha-phala"
+  "chala-apeksha-siddha sthira-apeksha-yukta"
+  "jacobian-janaka gradient-janaka"
+
+shabda partial-derivative / d-f-by-d-x-j-kramanusara-of-f-wrt-one-variable-others-held-constant-viveka-singles-out-one-apeksha-from-many
+
+done

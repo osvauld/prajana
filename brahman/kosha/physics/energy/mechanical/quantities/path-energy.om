@@ -1,0 +1,19 @@
+kosha path-energy
+
+  -- E = sum over joints of tau_i * |delta-theta_i|
+  -- the total work done moving along a trajectory regardless of speed
+  -- speed-invariant: svabhava of the path, not of the motion plan
+  -- P = E / T: power decreases as T grows; T* = sqrt(E) balances T and P
+
+  "mechanical-energy-varga-vishesa"
+
+  -- sangati roots: gati (the path whose energy this measures), krama (ordered
+  -- sum over joints), svabhava (intrinsic to the path — invariant to speed)
+  "gati-swarupa krama-sthita svabhava-siddha"
+  "torque-yukta angular-displacement-yukta"
+  "energy-abheda work-abheda trajectory-sthita"
+  "velocity-plan-janaka power-apeksha"
+
+shabda path-energy / E-equals-sum-tau-i-times-delta-theta-i-svabhava-of-the-trajectory-speed-invariant-P-equals-E-over-T
+
+done

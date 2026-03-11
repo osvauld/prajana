@@ -20,6 +20,7 @@ kosha target-orientation
   --   "end-effector facing Z" → target-orientation = identity rotation about Z
   --   if no orientation specified → orientation is unconstrained (position-only IK)
 
+  "subanta-swarupa"
   "domain-robotics-sthita kinematic-chain-yukta"
   "bindu-sthita world-space-sthita sthira-apeksha-sthita"
 

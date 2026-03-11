@@ -1,0 +1,25 @@
+kosha rotational-motion-varga
+
+  -- cluster for rotational kinematic quantities: the time-derivative chain in rotation.
+  -- angular-displacement → angular-velocity → angular-acceleration — each is d/dt of previous.
+  -- the chain is: rad → rad⋅s⁻¹ → rad⋅s⁻²
+  -- angular-velocity IS angular-frequency (omega) — connects directly to oscillation-varga.
+
+  "kinematics-varga-vishesa"
+  "oscillation-varga-vishesa"
+  "subanta-swarupa"
+
+  -- units: radians for angle, seconds for time
+  "radian-matra"  -- all rotational quantities have angular dimension
+  "second-matra"  -- derivative chain subtracts T each step
+
+  -- sangati roots
+  "kona-swarupa"      -- rotational motion IS motion through angle (kona)
+  "gati-yukta"        -- rotation is a form of motion
+  "kramanusara-yukta" -- the d/dt structure connects all members
+  "avrti-yukta"       -- rotation is fundamentally repetitive (avrti = repetition)
+  "avastha-yukta"     -- initial and final angles are the states of rotational problems
+
+shabda rotational-motion-varga / cluster-for-rotational-derivative-chain-angular-displacement-velocity-acceleration
+
+done

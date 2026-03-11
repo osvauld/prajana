@@ -6,7 +6,8 @@ kosha matra-aayaama
   -- kramanusara (d/dt) subtracts 1 from the T exponent.
   -- the T exponent depth = kramanusara depth.
 
-  "matra-sthita domain-physics-sthita kramanusara-yukta"
+  "physics-varga-vishesa"
+  "matra-sthita kramanusara-yukta"
   "yantra-sthita aayaama-yukta"
 
   shabda shabda-tmpl:physics/matra-aayaama.shabda

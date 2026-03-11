@@ -1,0 +1,11 @@
+kosha square
+
+  "number-varga-karma"
+  "multiplication-swarupa svayam-yukta vivartana-kriya"
+  "kshetra-abheda dviguna-phala samikarana-yukta"
+  "number-yukta expression-yukta"
+  "square-root-pratipaksha"
+
+  shabda eval:square arity:1 pratipaksha-0:sqrt
+
+done

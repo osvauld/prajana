@@ -1,6 +1,7 @@
-sangati domain-fluid
+kosha domain-fluid
 
-  "domain-physics-sthita domain-math-sthita"
+  "fluid-varga-vishesa"
+  "domain-math-sthita"
   "pressure-yukta density-yukta viscosity-yukta velocity-yukta"
   "gradient-yukta divergence-yukta curl-yukta laplacian-yukta"
   "continuity-yukta navier-stokes-yukta bernoulli-yukta"

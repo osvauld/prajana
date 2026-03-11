@@ -1,0 +1,20 @@
+kosha biology-varga
+
+  -- root cluster for all biology domain nodes.
+  -- biology is grounded in chemistry: all life processes are chemical reactions.
+  -- inherits chemistry-varga which in turn reaches physics and math.
+
+  -- domain identity
+  "domain-biology-sthita"
+  "chemistry-varga-vishesa"
+  "subanta-swarupa"
+
+  -- sangati roots
+  "spanda-yukta"        -- life is self-sustaining oscillation (metabolism, heartbeat)
+  "sva-dharana-yukta"   -- living systems maintain themselves (homeostasis)
+  "kramanusara-yukta"   -- biological processes are time-derivative chains (growth, decay)
+  "avastha-yukta"       -- all biological processes have states (alive, dormant, dead)
+
+shabda biology-varga / root-cluster-for-all-biology-domain-nodes
+
+done

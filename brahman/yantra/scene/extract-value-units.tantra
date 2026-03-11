@@ -71,15 +71,27 @@ tantra extract-value-units
           (append results emitted)
           otherwise results
 
-        -- update pending-nums:
-        --   number   -> append
-        --   unit     -> clear (consumed)
-        --   period   -> clear (new sentence grade)
-        --   other    -> keep (so conjunctions like "and" work)
+        -- update pending-nums (sphoTa accumulation):
+        --   A number only pairs with a unit in its immediate vicinity.
+        --   The "vicinity" is a contiguous run of numbers and conjunctions.
+        --   Any non-numeric, non-conjunction, non-unit token breaks the run
+        --   and clears the pending accumulator — the number's meaning was
+        --   consumed by that context (e.g. "2 joints" — 2 belongs to joints).
+        --
+        --   This is the graded ring within a sentence grade: the additive
+        --   operation (comma/and) extends the group, anything else closes it.
+        --
+        --   number       -> append to pending (extend the numeric run)
+        --   unit         -> clear (consumed: numbers paired with this unit)
+        --   period       -> clear (grade boundary)
+        --   conjunction  -> keep (additive: "0.3 and 0.2 m" groups together)
+        --   other        -> clear (sphoTa: number absorbed by this context)
+        let is-conjunction = (or (eq word "and") (eq word ","))
         let new-pending = cond is-number (append pending-nums (split (to-string as-num) " "))
                            is-unit []
                            is-period []
-                           otherwise pending-nums
+                           is-conjunction pending-nums
+                           otherwise []
 
         -- update sentence-num: increment on period
         let new-sent = cond is-period (add sentence-num 1) otherwise sentence-num

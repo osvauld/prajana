@@ -1,0 +1,12 @@
+kosha factorial
+
+  "number-varga-karma"
+  "avrti-swarupa guna-kriya mula-sthita"
+  "int-ahara int-phala"
+  "eka-aneka-abheda parampara-siddha"
+  "combination-yukta permutation-yukta series-yukta"
+  "avrti-yukta"
+
+  shabda eval:factorial arity:1
+
+done

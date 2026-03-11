@@ -1,4 +1,4 @@
-sangati kinematic-chain
+kosha kinematic-chain
 
   -- a kinematic chain is an armature seen from both the 3D and physics perspectives
   -- it is the bridge between domain-3d and domain-robotics / domain-physics

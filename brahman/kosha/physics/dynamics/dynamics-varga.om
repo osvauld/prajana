@@ -1,0 +1,24 @@
+kosha dynamics-varga
+
+  -- cluster for all dynamic quantities: motion described with cause (force).
+  -- dynamics asks WHY — what force causes this motion?
+  -- Newton's laws are the niyama of this cluster.
+
+  "physics-varga-vishesa"
+  "subanta-swarupa"
+
+  -- units: force is kg⋅m⋅s⁻² (newton); torque is kg⋅m²⋅s⁻²
+  "newton-matra"    -- SI unit for force
+  "kilogram-matra"  -- mass dimension: M
+  "metre-matra"     -- spatial dimension: L
+  "second-matra"    -- time dimension: T
+
+  -- sangati roots
+  "mula-shakti-yukta"  -- all forces are expressions of the four fundamental interactions
+  "gati-yukta"         -- forces cause changes in motion
+  "niyama-yukta"       -- Newton's laws, conservation of momentum govern this cluster
+  "kaala-yukta"        -- force operates through time (impulse = force × time)
+
+shabda dynamics-varga / cluster-for-force-and-cause-of-motion-quantities
+
+done

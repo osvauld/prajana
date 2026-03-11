@@ -16,6 +16,7 @@ kosha rated-power
   --   margin-power = rated-power - required-power
   --   a joint can fail either the torque check OR the power check or both
 
+  "subanta-swarupa"
   "domain-robotics-sthita kinematic-chain-yukta"
   "shakti-abheda"
   "joint-yukta"

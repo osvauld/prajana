@@ -1,0 +1,55 @@
+tantra pramana-tostring-format
+
+  -- @proves undocumented: to-string uses %g format on VFloat
+  --
+  -- Engine behavior (yantra_types.ml as_string):
+  --   VFloat uses Printf.sprintf "%g" which:
+  --   - Drops trailing zeros: 2.0 → "2", 3.50 → "3.5"
+  --   - Integer floats have no decimal: 100.0 → "100"
+  --   - Small fractions: 0.001 → "0.001"
+  --   - Very small: 0.00001 → "1e-05" (switches to scientific notation)
+  --   - Very large: 1000000.0 → "1e+06"
+  --
+  -- This matters for string equality checks on formatted numbers.
+
+  inputs
+    dummy  float
+
+  let
+    -- integer float → no decimal point
+    s1   = to-string 2.0
+    ok-1 = eq s1 "2"
+
+    -- non-integer → minimal representation
+    s2   = to-string 3.5
+    ok-2 = eq s2 "3.5"
+
+    -- small fraction → decimal
+    s3   = to-string 0.001
+    ok-3 = eq s3 "0.001"
+
+    -- large number → scientific notation
+    s4   = to-string 1000000.0
+    ok-4 = eq s4 "1e+06"
+
+    -- zero → "0"
+    s5   = to-string 0.0
+    ok-5 = eq s5 "0"
+
+    -- negative → preserves sign
+    s6   = to-string -3.14
+    ok-6 = eq s6 "-3.14"
+
+    result = cond ok-1 (cond ok-2 (cond ok-3 (cond ok-4 (cond ok-5 (cond ok-6
+               "pass"
+               otherwise (concat "fail: -3.14 → " s6))
+               otherwise (concat "fail: 0.0 → " s5))
+               otherwise (concat "fail: 1000000.0 → " s4))
+               otherwise (concat "fail: 0.001 → " s3))
+               otherwise (concat "fail: 3.5 → " s2))
+               otherwise (concat "fail: 2.0 → " s1)
+
+  return
+    result  string
+
+done

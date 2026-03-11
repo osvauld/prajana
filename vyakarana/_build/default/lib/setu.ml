@@ -126,25 +126,22 @@ let parse_shabda_file (path : string) : (string * string) list =
     List.rev !pairs
   with _ -> []
 
-let read_shabda (k : proof_graph) (node_name : string) : (string * string) list =
+(* raw_shabda_for_node: read a single node's own shabda without inheritance.
+   handles shabda-tmpl file indirection exactly as before. *)
+let raw_shabda_for_node (k : proof_graph) (node_name : string) : (string * string) list =
   match find k node_name with
   | None -> []
   | Some n ->
     let inline = parse_shabda n.shabda in
-    (* if inline shabda contains a shabda-tmpl key, load the file instead *)
     match List.assoc_opt "shabda-tmpl" inline with
     | Some rel_path ->
-      (* search kosha_root first, then all loaded dirs (covers session dirs) *)
       let search_roots =
         let kr = !(k.kosha_root) in
         let base_roots = if String.length kr > 0 then [kr] else [] in
         base_roots @ !(k.search_dirs)
       in
-      (* try each root in order; use the first file that exists *)
       let rec try_roots = function
-        | [] ->
-          (* last resort: treat rel_path as absolute/cwd-relative *)
-          parse_shabda_file rel_path
+        | [] -> parse_shabda_file rel_path
         | root :: rest ->
           let full_path = Filename.concat root rel_path in
           if Sys.file_exists full_path then parse_shabda_file full_path
@@ -152,6 +149,33 @@ let read_shabda (k : proof_graph) (node_name : string) : (string * string) list 
       in
       try_roots search_roots
     | None -> inline
+
+(* merge_shabda_priority: merge shabda pairs where earlier lists have higher priority.
+   pairs_by_priority: [own_pairs; immediate_parent_pairs; grandparent_pairs; ...]
+   For each key, the first (highest-priority) value wins.
+   shabda-tmpl is never inherited — it would resolve the wrong file. *)
+let merge_shabda_priority (pairs_by_priority : (string * string) list list)
+    : (string * string) list =
+  let seen = Hashtbl.create 16 in
+  let result = ref [] in
+  List.iter (fun pairs ->
+    List.iter (fun (key, v) ->
+      if key <> "shabda-tmpl" && not (Hashtbl.mem seen key) then begin
+        Hashtbl.replace seen key true;
+        result := (key, v) :: !result
+      end
+    ) pairs
+  ) pairs_by_priority;
+  List.rev !result
+
+(* read_shabda: return effective shabda pairs for a node, including inherited pairs.
+   inheritance chain: walk dhatu, abheda, swarupa edges (IS-A only) via Proof_graph.
+   own pairs win over inherited pairs on key conflict. *)
+let read_shabda (k : proof_graph) (node_name : string) : (string * string) list =
+  let own = raw_shabda_for_node k node_name in
+  let ancestors = Proof_graph.walk_inheritance k node_name in
+  let ancestor_shabda = List.map (raw_shabda_for_node k) ancestors in
+  merge_shabda_priority (own :: ancestor_shabda)
 
 let shabda_get (pairs : (string * string) list) (key : string) : string option =
   List.assoc_opt key pairs
@@ -233,11 +257,16 @@ let janya_of (k : proof_graph) (name : string) : string list =
     ) n.edges
 
 let has_domain_sthita (k : proof_graph) (name : string) (domain : string) : bool =
-  match Hashtbl.find_opt k.nodes name with
-  | None -> false
-  | Some n -> List.exists (fun e ->
-      e.source = name && e.relation = Proof_graph.sthita && e.target = domain
-    ) n.edges
+  (* check the node itself and all ancestors reachable via inheritance (vishesa, abheda, swarupa) *)
+  let has_direct node_name =
+    match Hashtbl.find_opt k.nodes node_name with
+    | None -> false
+    | Some n -> List.exists (fun e ->
+        e.source = node_name && e.relation = Proof_graph.sthita && e.target = domain
+      ) n.edges
+  in
+  has_direct name ||
+  List.exists has_direct (Proof_graph.walk_inheritance k name)
 
 let is_setu (k : proof_graph) (name : string) : bool =
   match Hashtbl.find_opt k.nodes name with

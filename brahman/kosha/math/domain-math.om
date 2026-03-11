@@ -1,7 +1,10 @@
-sangati domain-math
+kosha domain-math
+
+  -- domain anchor for mathematics.
+  -- leaves no longer need domain-math-sthita directly;
+  -- they inherit it through math-varga via has_domain_sthita inheritance walk.
 
   "kramanusara-yukta apeksha-yukta"
-  "arithmetic-yukta number-yukta matra-yukta expression-yukta equation-yukta matrix-multiplication-yukta determinant-yukta truth-math-yukta logic-gate-yukta group-yukta group-witness-yukta identity-matrix-yukta density-proof-yukta set-yukta set-union-yukta set-intersection-yukta set-complement-yukta set-difference-yukta empty-set-yukta subset-yukta closure-yukta associativity-yukta homomorphism-yukta subgroup-yukta commutativity-yukta identity-element-yukta inverse-element-yukta tensor-yukta tensor-product-yukta graded-ring-yukta ideal-yukta kernel-yukta quotient-yukta lattice-yukta partial-order-yukta filtration-yukta"
 
 shabda math, mathematics
 

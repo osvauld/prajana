@@ -1,0 +1,18 @@
+kosha joint-space
+
+  -- the configuration space of a kinematic chain
+  -- each dimension is one kona (joint angle) — the chala-apeksha of that joint
+  -- a point in joint-space fully determines the pose of the entire chain via FK
+  -- IK is the inverse: find the joint-space point that places the end-effector at target
+
+  "domain-robotics-sthita"
+
+  -- akasham: the space itself; aayaama: the dimensionality (one per joint kona)
+  "akasham-swarupa kona-yukta chala-apeksha-sthita"
+  "aayaama-vistara-yukta"
+  "kinematic-chain-abheda vector-space-abheda"
+  "fk-ahara ik-phala"
+
+shabda joint-space / akasham-of-joint-kona-values-dimensionality-aayaama-vistara-grows-with-each-joint-chala-apeksha-made-into-configuration-space
+
+done

@@ -17,6 +17,7 @@ kosha joint-speed-max
   --   the actual world-frame tip velocity depends on the full Jacobian
   --   (joint-speed-max alone does not bound end-effector speed)
 
+  "subanta-swarupa"
   "domain-robotics-sthita kinematic-chain-yukta"
   "angular-velocity-abheda"
   "joint-yukta"

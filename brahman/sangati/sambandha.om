@@ -6,7 +6,7 @@ sangati sambandha
   "samsarga-janya viveka-siddha"
   "kshetra-seema-yukta matra-yukta"
 
-  "domain-biology-drishthanta domain-physics-drishthanta domain-sangeetham-drishthanta"
+  -- drishthanta edges belong on kosha nodes pointing here, not here pointing at domains
 
 shabda the-connection-that-carries-typed-meaning-from-one-phala-to-one-ahara / structural-relationship-wire-synapse-bond-coupling
 

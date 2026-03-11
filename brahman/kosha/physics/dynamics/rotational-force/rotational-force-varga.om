@@ -1,0 +1,24 @@
+kosha rotational-force-varga
+
+  -- cluster for rotational force quantities: torque and rotational inertia.
+  -- torque causes angular acceleration (τ = Iα) — the rotational analogue of F = ma.
+  -- moment-of-inertia is the rotational analogue of mass: resistance to angular acceleration.
+
+  "dynamics-varga-vishesa"
+  "subanta-swarupa"
+
+  -- units: torque in newton-metres (N⋅m = kg⋅m²⋅s⁻²); MOI in kg⋅m²
+  "newton-matra"    -- force component of torque
+  "kilogram-matra"  -- mass dimension: M
+  "metre-matra"     -- spatial dimension: L (squared for MOI)
+  "second-matra"    -- time dimension: T
+
+  -- sangati roots
+  "mula-shakti-yukta"  -- torque is force applied at angular leverage
+  "kona-yukta"         -- torque acts through angles
+  "gati-yukta"         -- torque causes rotational motion
+  "niyama-yukta"       -- τ = Iα is the rotational Newton's second law
+
+shabda rotational-force-varga / cluster-for-rotational-forces-torque-moment-of-inertia-angular-momentum
+
+done

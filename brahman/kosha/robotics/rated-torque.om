@@ -17,6 +17,7 @@ kosha rated-torque
   --   margin > 0 → feasible
   --   margin < 0 → infeasible — must reduce speed or redesign
 
+  "subanta-swarupa"
   "domain-robotics-sthita kinematic-chain-yukta"
   "torque-abheda"
   "joint-yukta"

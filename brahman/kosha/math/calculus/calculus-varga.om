@@ -1,0 +1,18 @@
+kosha calculus-varga
+
+  -- cluster for calculus quantities: derivatives, integrals, limits, series.
+  -- calculus studies continuous change — how quantities vary with respect to others.
+  -- kramanusara (derivative) and sama-kalana (integral) are the two operations.
+
+  "math-varga-vishesa"
+
+  -- sangati roots
+  "kramanusara-swarupa"  -- calculus IS the study of kramanusara (rate of change)
+  "kaala-yukta"          -- most calculus quantities involve change over time or space
+  "seema-yukta"          -- limits (seema) are the foundation of calculus
+  "niyama-yukta"         -- fundamental theorem of calculus is the governing niyama
+  "viveka-yukta"         -- differentiation is the act of viveka (precise distinction) at a point
+
+shabda calculus-varga / cluster-for-calculus-derivative-integral-limit-partial-gradient
+
+done

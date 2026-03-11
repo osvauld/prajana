@@ -1,0 +1,12 @@
+kosha vec-add
+
+  "geometry-varga-karma"
+  "vector-kriya"
+  "addition-abheda aayaama-yukta"
+
+  -- component-wise addition of two n-dimensional vectors
+  -- [a1,a2,...,an] + [b1,b2,...,bn] = [a1+b1, a2+b2,...,an+bn]
+
+shabda vec-add / component-wise-vector-addition-for-n-dimensional-vectors
+
+done

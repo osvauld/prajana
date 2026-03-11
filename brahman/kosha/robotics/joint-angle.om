@@ -24,6 +24,7 @@ kosha joint-angle
   --   joint-angle at uttara-avastha = target configuration (where the arm must GO)
   --   the difference Δθ drives the motion plan
 
+  "subanta-swarupa"
   "domain-robotics-sthita kinematic-chain-yukta"
   "kona-abheda"
   "joint-yukta"

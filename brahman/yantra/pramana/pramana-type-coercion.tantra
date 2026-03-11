@@ -1,0 +1,68 @@
+tantra pramana-type-coercion
+
+  -- @proves undocumented: silent type coercion chain
+  --
+  -- Engine behavior (yantra_types.ml as_float/as_bool/as_string):
+  --   as_float: VString tries float_of_string, returns 0.0 on failure
+  --             VBool true → 1.0, false → 0.0
+  --             VNone → 0.0
+  --   as_bool:  VString → length > 0 (so "0" is TRUE, "" is FALSE)
+  --             VNone → false
+  --             VFloat → f != 0.0
+  --             VList → non-empty
+  --   as_string: VNone → "" (empty string)
+  --              VFloat 2.0 → "2" (not "2.0" — %g format)
+  --
+  -- These silent coercions can mask bugs. A pramana to prove them.
+
+  inputs
+    dummy  float
+
+  let
+    -- as_float on non-numeric string → 0.0 (silent!)
+    bad-add  = add "hello" 3
+    ok-1     = eq bad-add 3
+
+    -- as_float on numeric string → parses correctly
+    good-add = add "2.5" 3
+    ok-2     = eq good-add 5.5
+
+    -- as_bool on "0" → true (string length > 0, NOT numeric zero!)
+    zero-str-bool = cond "0" "truthy" otherwise "falsy"
+    ok-3     = eq zero-str-bool "truthy"
+
+    -- as_bool on "" → false (empty string)
+    empty-bool = cond "" "truthy" otherwise "falsy"
+    ok-4     = eq empty-bool "falsy"
+
+    -- as_bool on VNone → false
+    none-bool = cond _none "truthy" otherwise "falsy"
+    ok-5     = eq none-bool "falsy"
+
+    -- as_string on VNone → "" (empty string, not "_none")
+    none-str  = to-string _none
+    ok-6      = eq none-str ""
+
+    -- as_bool on empty list → false
+    empty-list-bool = cond (range 0) "truthy" otherwise "falsy"
+    ok-7     = eq empty-list-bool "falsy"
+
+    -- as_bool on non-empty list → true
+    list-bool = cond (split "a" " ") "truthy" otherwise "falsy"
+    ok-8     = eq list-bool "truthy"
+
+    result = cond ok-1 (cond ok-2 (cond ok-3 (cond ok-4 (cond ok-5 (cond ok-6
+               (cond ok-7 (cond ok-8 "pass"
+                 otherwise "fail: non-empty list should be truthy")
+                 otherwise "fail: empty list should be falsy")
+                 otherwise "fail: to-string _none should be empty")
+                 otherwise "fail: _none should be falsy")
+                 otherwise "fail: empty string should be falsy")
+                 otherwise "fail: string '0' should be truthy")
+                 otherwise "fail: add '2.5' 3 should be 5.5")
+                 otherwise "fail: add 'hello' 3 should be 3"
+
+  return
+    result  string
+
+done

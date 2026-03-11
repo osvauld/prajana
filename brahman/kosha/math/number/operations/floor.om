@@ -1,0 +1,11 @@
+kosha floor
+
+  "number-varga-karma"
+  "seema-swarupa viveka-kriya int-phala"
+  "sama-vishama-abheda kshaya-siddha"
+  "float-yukta int-yukta ceil-inverse"
+  "abs-yukta real-sthita"
+
+  shabda eval:floor arity:1
+
+done
