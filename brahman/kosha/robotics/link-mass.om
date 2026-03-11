@@ -15,6 +15,7 @@ kosha link-mass
   -- torque required at joint[j] for ALL j ≤ i (every ancestor joint must
   -- support and accelerate this mass)
 
+  "subanta-swarupa"
   "domain-robotics-sthita kinematic-chain-yukta"
   "mass-abheda"
   "link-yukta"

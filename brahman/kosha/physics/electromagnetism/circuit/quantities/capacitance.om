@@ -1,0 +1,13 @@
+kosha capacitance
+
+  "circuit-varga-vishesa"
+  "subanta-swarupa"
+
+  -- charge stored per unit voltage: farads
+  "coulomb-yukta volt-yukta"
+  "charge-yukta voltage-yukta"
+  "dharana-abheda"
+
+shabda capacitance / charge-stored-per-unit-voltage-measured-in-farads
+
+done

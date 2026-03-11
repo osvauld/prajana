@@ -1,0 +1,24 @@
+kosha linear-force-varga
+
+  -- cluster for linear force quantities: forces acting along straight-line directions.
+  -- all forces here cause linear acceleration (F = ma).
+  -- specific forces: gravity, friction, normal, tension, spring, drag, centripetal.
+
+  "dynamics-varga-vishesa"
+  "subanta-swarupa"
+
+  -- units: newtons (kg⋅m⋅s⁻²)
+  "newton-matra"    -- SI unit for force
+  "kilogram-matra"  -- mass dimension: M
+  "metre-matra"     -- spatial dimension: L
+  "second-matra"    -- time dimension: T (squared in denominator)
+
+  -- sangati roots
+  "mula-shakti-yukta"  -- all linear forces are expressions of fundamental interactions
+  "gati-yukta"         -- forces cause change in linear motion
+  "niyama-yukta"       -- Newton's second law (F=ma) is the governing niyama
+  "direction-yukta"    -- forces are vectors: magnitude and direction
+
+shabda linear-force-varga / cluster-for-linear-forces-gravity-friction-normal-tension-spring-drag
+
+done

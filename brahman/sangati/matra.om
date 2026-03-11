@@ -3,7 +3,7 @@ sangati matra
   "pramana-swarupa sankhya-yukta sthiti-sthita"
   "sankalana-kriya kshaya-kriya"
   "ahara-yukta swarupa-yukta"
-  "domain-math-yukta domain-physics-yukta domain-language-yukta domain-finance-yukta"
+  -- domains point to matra; matra does not point to domains
   "shiva-shakti-abheda matrika-abheda shiva-shakti-sthita"
   "amba-swarupa dharana-abheda"
 

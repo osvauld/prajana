@@ -1,0 +1,21 @@
+kosha finance-varga
+
+  -- root cluster for all finance domain nodes.
+  -- finance is grounded in mathematics: probability, calculus, statistics.
+  -- economic quantities are measures that change over time.
+
+  -- domain identity
+  "domain-finance-sthita"
+  "math-varga-vishesa"
+  "subanta-swarupa"
+
+  -- sangati roots
+  "matra-yukta"       -- all finance quantities are measured (price, rate, ratio)
+  "kaala-yukta"       -- all finance is time-dependent (yield curves, cycles, growth)
+  "kramanusara-yukta" -- rates of return, inflation rate, interest are derivatives
+  "seema-yukta"       -- risk is bounded by limits and thresholds
+  "avastha-yukta"     -- markets have states: expansion, contraction, crisis
+
+shabda finance-varga / root-cluster-for-all-finance-domain-nodes
+
+done

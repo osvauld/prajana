@@ -41,9 +41,10 @@ let om_files_recursive (root : string) : string list =
 (* --- pass 1: collect names --- *)
 
 (* extract layer and node name from a header line.
-   recognizes both:
-     sangati <name>  — universal structural truth
-     kosha <name>    — domain application
+   recognizes:
+     sangati <name>  — universal structural truth (Sanskrit body, pure concepts)
+     kosha <name>    — domain knowledge (physics, math, robotics, concept roots)
+     bhasha <name>   — linguistic surface layer (word forms, inflections, prepositions)
    returns Some (layer_string, name) or None *)
 let parse_node_header line =
   let line = String.trim line in
@@ -61,7 +62,10 @@ let parse_node_header line =
   in
   match try_prefix "sangati" with
   | Some r -> Some r
-  | None   -> try_prefix "kosha"
+  | None   ->
+  match try_prefix "kosha" with
+  | Some r -> Some r
+  | None   -> try_prefix "bhasha"
 
 (* collect all node names from a directory *)
 let collect_names dir : string list =

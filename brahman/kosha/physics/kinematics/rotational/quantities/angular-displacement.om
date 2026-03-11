@@ -1,0 +1,14 @@
+kosha angular-displacement
+
+  -- delta-theta: kona traversed along a trajectory
+  -- signed radian difference from start to target angle
+  -- path-energy depends on angular-displacement: E = sum(tau_i * |delta-theta_i|)
+
+  "rotational-motion-varga-vishesa"
+  "kona-swarupa gati-abheda trajectory-sthita"
+  "angular-velocity-kramanusara-ahara"
+  "path-energy-janaka"
+
+shabda angular-displacement / delta-theta-the-kona-traversed-along-a-trajectory-signed-radian-difference-from-start-to-target-angle
+
+done

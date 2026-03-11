@@ -1,0 +1,18 @@
+kosha type-varga
+
+  -- cluster for type system concepts: primitive types, composite types, type constructors.
+  -- types classify values and constrain operations — the niyama of computation.
+  -- type theory is grounded in logic (math-varga).
+
+  "cs-varga-vishesa"
+  "subanta-swarupa"
+
+  -- sangati roots
+  "jati-yukta"    -- types are jati: genus/class of values
+  "niyama-yukta"  -- type rules constrain what operations are valid
+  "viveka-yukta"  -- type checking is the act of viveka: does this value belong to this type?
+  "seema-yukta"   -- types are boundaries (seema) on the space of valid values
+
+shabda type-varga / cluster-for-type-system-concepts-primitive-composite-type-constructor
+
+done

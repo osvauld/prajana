@@ -1,0 +1,44 @@
+tantra test-case4
+
+  -- Diagnose why "target position [0.5, 0.2]" after full spec doesn't extract target.
+  -- The sentence: "...rated power 25W, target position [0.5, 0.2], minimize power"
+  -- Tokens after yantra_tokenise then classify-fold — specifically near target.
+
+  inputs
+    dummy  float
+
+  let
+    -- Reproduce the token stream around the target section
+    -- "rated power 25W , target position [ 0.5 , 0.2 ] , minimize power"
+    -- After sphoTa fix: "25" clears on "W" (unit). Then "target" concept clears pending (nothing).
+    -- Then "position" concept — still no pending. Then "[" unknown. Then "0.5" number.
+    -- Then "0.2" number. Then "]" unknown.
+    -- Trigger check: "target" -> activates scanning. Next: "position" (concept) -> not number.
+    -- Then "[" -> not number. Then "0.5" -> number -> collected. "0.2" -> collected.
+
+    c = [
+      ["rated",    "concept", "rated"],
+      ["power",    "concept", "power"],
+      ["25",       "unknown", "25"],
+      ["w",        "concept", "watt"],
+      ["target",   "concept", "target"],
+      ["position", "concept", "position"],
+      ["[",        "unknown", "["],
+      ["0.5",      "unknown", "0.5"],
+      ["0.2",      "unknown", "0.2"],
+      ["]",        "unknown", "]"],
+      ["minimize", "unknown", "minimize"],
+      ["power",    "concept", "power"]]
+
+    triggers = split "to,position,target,effector" ","
+    coords   = extract-vector-coords c triggers 3
+    n        = length coords
+    x        = cond (gt n 0) (nth coords 0) otherwise "none"
+    y        = cond (gt n 1) (nth coords 1) otherwise "none"
+
+    result = (concat "n=" (to-string n) " x=" x " y=" y)
+
+  return
+    result  string
+
+done

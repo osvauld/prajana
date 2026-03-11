@@ -7,6 +7,7 @@ kosha link-length
   -- 3D perspective: the bone's rest-length in local space
   -- physics perspective: the arm of the lever — determines torque sensitivity
 
+  "subanta-swarupa"
   "domain-robotics-sthita kinematic-chain-yukta"
   "bone-sthita rekha-abheda"
   "metre-matra"

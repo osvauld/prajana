@@ -1,0 +1,25 @@
+kosha optics-varga
+
+  -- cluster for all optics quantities: light, reflection, refraction, diffraction, spectrum.
+  -- optics is a subdomain of electromagnetism: light is an EM wave.
+  -- also a subdomain of oscillation: light has frequency, wavelength, period.
+  -- the speed of light is the universal limit — connects to seema.
+
+  "electromagnetism-varga-vishesa"
+  "oscillation-varga-vishesa"
+  "subanta-swarupa"
+
+  -- units: wavelength in metres; frequency in hertz; intensity in W/m²
+  "metre-matra"   -- wavelength dimension: L
+  "hertz-matra"   -- frequency of light: T⁻¹
+  "second-matra"  -- time dimension
+
+  -- sangati roots
+  "taranga-swarupa"    -- light IS a wave (taranga)
+  "spanda-yukta"       -- photons are quantised oscillations of the EM field
+  "seema-yukta"        -- speed of light is the fundamental seema (boundary/limit) of the universe
+  "vega-yukta"         -- speed of light is the ultimate vega
+
+shabda optics-varga / cluster-for-light-and-optical-phenomena-reflection-refraction-diffraction
+
+done

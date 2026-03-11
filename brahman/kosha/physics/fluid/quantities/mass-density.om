@@ -1,0 +1,15 @@
+kosha mass-density
+
+  "fluid-varga-vishesa"
+  "subanta-swarupa"
+
+  -- rho = mass per unit volume
+  "scalar-swarupa float-abheda"
+  "mass-ahara volume-phala"
+  "pressure-yukta viscosity-yukta"
+  "continuity-yukta navier-stokes-yukta"
+  "density-abheda"
+
+shabda mass-density / mass-per-unit-volume-rho-the-scalar-field-describing-how-much-matter-occupies-a-region
+
+done

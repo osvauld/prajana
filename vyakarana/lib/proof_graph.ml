@@ -77,7 +77,7 @@ type typed_edge = {
 (* one truth in the space *)
 type nigamana = {
   name   : string;
-  layer  : string;            (* "sangati" | "kosha" — which layer this node lives in *)
+  layer  : string;            (* "sangati" | "kosha" | "bhasha" — which layer this node lives in *)
   slokas : string list;       (* raw sloka text, preserved *)
   edges  : typed_edge list;   (* extracted from slokas *)
   satya  : float;             (* raw_satya set at load time; read-only thereafter *)
@@ -241,10 +241,17 @@ let raw_satya (n : nigamana) : float =
   let s = sloka_count /. (1.0 +. sloka_count) in
   let e = edge_count /. (1.0 +. edge_count) in
   let d = type_diversity /. (1.0 +. type_diversity) in
-  if edge_count = 0.0 then
-    s *. 0.5
-  else
-    (s *. e *. d) ** (1.0 /. 3.0)
+  let base =
+    if edge_count = 0.0 then
+      s *. 0.5
+    else
+      (s *. e *. d) ** (1.0 /. 3.0)
+  in
+  (* bhasha nodes are surface pointers — not semantic substance.
+     halve their prior so PPR strongly prefers kosha/sangati neighbours. *)
+  match n.layer with
+  | "bhasha" -> base *. 0.5
+  | _        -> base
 
 (* init_satya: set raw_satya on every node once at load time.
    called by build_index after apply_relation_axioms. *)
@@ -594,3 +601,52 @@ let run_ppr (k : proof_graph)
 let query_depth_affinity (k : proof_graph) (target : string)
     (binding_names : string list) : float =
   compute_depth_affinity k target binding_names
+
+(* walk_inheritance: collect ancestor nodes for shabda inheritance.
+   follows dhatu, abheda, and swarupa edges — IS-A relationships only.
+   dhatu is a dynamic dimension looked up by name; gracefully absent if not yet registered.
+   returns ancestors in BFS order: immediate parents first, then grandparents.
+   depth-limited to 4 hops to bound cost and avoid pathological graphs.
+
+   which edges carry inheritance (IS-A only):
+     abheda    — "is a kind of"   (static dim 1)
+     swarupa   — "essentially is" (static dim 0)
+     dhatu     — word-form IS-A concept root (dynamic, may not yet be registered)
+
+   edges that do NOT carry inheritance (relations, not IS-A):
+     yukta, kriya, phala, janya, pratipaksha, sandhi, matra, ... *)
+let walk_inheritance (k : proof_graph) (node_name : string) : string list =
+  let dhatu_idx = visheshanam_of_string "dhatu" in
+  let vishesa_idx = visheshanam_of_string "vishesa" in
+  let amsha_idx = visheshanam_of_string "amsha" in
+  let is_inheritance_edge rel =
+    rel = abheda || rel = swarupa ||
+    (match dhatu_idx with Some d -> rel = d | None -> false) ||
+    (match vishesa_idx with Some v -> rel = v | None -> false) ||
+    (match amsha_idx with Some a -> rel = a | None -> false)
+  in
+  let immediate_parents name =
+    match Hashtbl.find_opt k.nodes name with
+    | None -> []
+    | Some n ->
+      List.filter_map (fun e ->
+        if e.source = name && is_inheritance_edge e.relation
+        then Some e.target else None
+      ) n.edges
+  in
+  let visited = Hashtbl.create 8 in
+  Hashtbl.replace visited node_name true;
+  let result = ref [] in
+  let frontier = ref (immediate_parents node_name) in
+  for _ = 1 to 4 do
+    let next_frontier = ref [] in
+    List.iter (fun p ->
+      if not (Hashtbl.mem visited p) then begin
+        Hashtbl.replace visited p true;
+        result := p :: !result;
+        next_frontier := (immediate_parents p) @ !next_frontier
+      end
+    ) !frontier;
+    frontier := !next_frontier
+  done;
+  List.rev !result

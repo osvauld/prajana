@@ -1,0 +1,18 @@
+kosha computation-varga
+
+  -- cluster for computation concepts: algorithm, recursion, loop, function, conditional.
+  -- computation is the execution of a sequence of steps that transforms input to output.
+  -- all computation is kramanusara: each step is a transformation of the previous state.
+
+  "cs-varga-vishesa"
+  "subanta-swarupa"
+
+  -- sangati roots
+  "krama-swarupa"   -- computation IS ordered sequence (krama) of transformations
+  "niyama-yukta"    -- algorithms are niyama: rules that define valid sequences
+  "avastha-yukta"   -- computation transforms states: input → intermediate → output
+  "kaala-yukta"     -- time complexity is the kaala of computation
+
+shabda computation-varga / cluster-for-computation-concepts-algorithm-recursion-function-loop
+
+done

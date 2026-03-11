@@ -18,6 +18,7 @@ kosha target-position
   --   the dimensionality is inferred from the number of coordinates given
   --   and matched against the arm's aayaama (workspace dimension)
 
+  "subanta-swarupa"
   "domain-robotics-sthita kinematic-chain-yukta"
 
   -- a bindu in world-space — sthira-apeksha (does not move with joints)

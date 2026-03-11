@@ -1,0 +1,23 @@
+kosha robotics-varga
+
+  -- root cluster for all robotics domain nodes.
+  -- robotics is physics (kinematics, dynamics) enacted through computation (control, planning).
+  -- the kinematic chain IS the scene-graph: geometry + physics + algorithm together.
+
+  -- domain identity
+  "domain-robotics-sthita"
+  "physics-varga-vishesa"
+  "cs-varga-vishesa"
+  "subanta-swarupa"
+
+  -- sangati roots
+  "gati-yukta"        -- robotics is controlled motion
+  "kona-yukta"        -- joint angles are the state space
+  "seema-yukta"       -- actuator limits, workspace bounds
+  "niyama-yukta"      -- control laws govern motion
+  "kaala-yukta"       -- trajectories unfold in time
+  "mula-shakti-yukta" -- motors exert force; force traces to fundamental interactions
+
+shabda robotics-varga / root-cluster-for-all-robotics-domain-nodes
+
+done

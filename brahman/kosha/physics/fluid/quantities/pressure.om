@@ -1,0 +1,14 @@
+kosha pressure
+
+  "fluid-varga-vishesa"
+  "subanta-swarupa"
+
+  -- force per unit area; scalar field that drives fluid from high to low
+  "scalar-swarupa float-abheda"
+  "force-ahara area-phala"
+  "gradient-yukta density-yukta"
+  "navier-stokes-yukta bernoulli-yukta"
+
+shabda pressure / force-per-unit-area-the-scalar-field-that-drives-fluid-from-high-to-low
+
+done

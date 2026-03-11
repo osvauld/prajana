@@ -20,6 +20,21 @@ kosha visheshanam-ring
   -- apeksha: with-respect-to — the denominator of a derivative.
   -- d(displacement)/d(time): displacement is kramanusara, time is apeksha.
 
+  -- morphological / argument dimensions (linguistic, Phase 1)
+  "ahara-yukta"    -- intake / input — what a verb takes as argument
+  "dhatu-yukta"    -- morphological root — word form's root concept (enables walk_inheritance)
+  "vrnda-yukta"    -- paradigm family — groups all inflections of a word
+
+  -- grammatical dimensions (Paninian, Phase 1)
+  "kala-yukta"     -- tense:   vartamana / purva / bhavishya / vidhi / sambhavana
+  "prayoga-yukta"  -- voice:   kartari / karmani / bhave
+  "vachana-yukta"  -- number:  eka / dvi / bahu
+  "purusa-yukta"   -- person:  prathama / madhyama / uttama
+
+  -- IS-A inheritance dims (Phase 2.5)
+  "vishesa-yukta"  -- particular of a universal (samanya) — open-ended, additive
+  "amsha-yukta"    -- member of a constituted set — exhaustive, closed partition
+
 shabda dimension-registry / the-ring-of-all-edge-dimensions-core-and-dynamic
 
 done

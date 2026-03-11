@@ -1,0 +1,21 @@
+kosha chemistry-varga
+
+  -- root cluster for all chemistry domain nodes.
+  -- chemistry sits at the intersection of physics (atomic forces) and
+  -- mathematics (molecular geometry, reaction rates).
+
+  -- domain identity
+  "domain-chemistry-sthita"
+  "physics-varga-vishesa"
+  "math-varga-vishesa"
+  "subanta-swarupa"
+
+  -- sangati roots
+  "sandhi-yukta"      -- chemistry is the science of bonding (sandhi = joining)
+  "mula-shakti-yukta" -- chemical bonds are electromagnetic force at atomic scale
+  "spanda-yukta"      -- atomic vibration underlies temperature and reaction rates
+  "matra-yukta"       -- quantities: moles, concentration, atomic mass
+
+shabda chemistry-varga / root-cluster-for-all-chemistry-domain-nodes
+
+done

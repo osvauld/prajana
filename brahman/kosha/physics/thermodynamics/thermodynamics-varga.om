@@ -1,0 +1,24 @@
+kosha thermodynamics-varga
+
+  -- cluster for all thermodynamic quantities: heat, temperature, entropy.
+  -- thermodynamics is physics of energy in its thermal (disordered) form.
+  -- heat IS molecular kinetic energy — spanda at the atomic level.
+  -- cross-links to energy-varga: thermal energy is a form of energy.
+
+  "physics-varga-vishesa"
+  "energy-varga-vishesa"
+  "subanta-swarupa"
+
+  -- units: temperature in kelvin; heat/entropy in joules and joules/kelvin
+  "kelvin-matra"  -- SI unit for temperature
+  "joule-matra"   -- heat is measured in joules
+
+  -- sangati roots
+  "spanda-swarupa"  -- heat IS molecular vibration — spanda at atomic scale
+  "niyama-yukta"    -- thermodynamic laws (zeroth through third) govern this cluster
+  "avastha-yukta"   -- states of matter, thermal equilibrium are avastha
+  "kaala-yukta"     -- entropy increases with time (second law is time-directional)
+
+shabda thermodynamics-varga / cluster-for-thermal-quantities-heat-temperature-entropy
+
+done

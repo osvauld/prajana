@@ -5,7 +5,8 @@ kosha matra-beeja
   -- the matra-nirmana startup hook reads this and emits unit nodes.
   -- base units (kilogram, metre, second, newton) remain as sangati .om files.
 
-  "matra-sthita domain-physics-sthita"
+  "physics-varga-vishesa"
+  "matra-sthita"
   "yantra-sthita"
 
   shabda shabda-tmpl:physics/matra-beeja.shabda

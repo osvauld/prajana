@@ -1,0 +1,17 @@
+kosha algebra-varga
+
+  -- cluster for algebraic structures: groups, rings, fields, ideals, kernels.
+  -- algebra studies structure preserved under operations.
+  -- the central question: what operations are valid, and what do they preserve?
+
+  "math-varga-vishesa"
+
+  -- sangati roots
+  "niyama-yukta"    -- algebraic axioms (associativity, closure, identity) are niyama
+  "sandhi-yukta"    -- algebra studies how elements combine (sandhi = joining)
+  "viveka-yukta"    -- homomorphisms and isomorphisms are acts of precise distinction
+  "dvandva-yukta"   -- binary operations (dvandva = pair) are the basic unit
+
+shabda algebra-varga / cluster-for-algebraic-structures-group-ring-field-ideal-kernel
+
+done

@@ -171,6 +171,17 @@ let rec parse_expr (tokens : string list) : expr * string list =
     in
     let (params, rest') = collect_params [] rest in
     let (body, rest'') = parse_expr rest' in
+    (* warn if the terminal expression of the lambda body is a bare variadic op.
+       this catches pitfall 1/9: concat/add/or/and at the end of a lambda body
+       will greedily consume tokens from the enclosing call. wrap in (...). *)
+    let rec terminal_expr = function
+      | LetIn (_, _, b) -> terminal_expr b
+      | e -> e
+    in
+    (match terminal_expr body with
+     | Call (op, args) when op_arity op = -1 && List.length args > 2 ->
+       Printf.eprintf "warning: variadic op '%s' with %d args as lambda body — wrap in (...) to prevent token consumption (pitfall 1)\n%!" op (List.length args)
+     | _ -> ());
     (Lambda (params, body), rest'')
 
   (* let x = e1 in e2 *)
@@ -279,16 +290,22 @@ let parse_expr_string (s : string) : expr =
     let (e, _) = parse_expr tokens in
     e
 
-(* strip_comment: remove everything after -- (two consecutive dashes) *)
+(* strip_comment: remove everything after two consecutive dashes,
+   but skip dashes that appear inside string literals. *)
 let strip_comment (line : string) : string =
   let len = String.length line in
-  let rec find i =
-    if i >= len - 1 then line
-    else if line.[i] = '-' && line.[i + 1] = '-' then
+  let rec find i in_string =
+    if i >= len then line
+    else if line.[i] = '"' then
+      (* toggle string mode; handle escaped quote *)
+      if i > 0 && line.[i - 1] = '\\' then find (i + 1) in_string
+      else find (i + 1) (not in_string)
+    else if (not in_string) && i < len - 1
+            && line.[i] = '-' && line.[i + 1] = '-' then
       String.sub line 0 i
-    else find (i + 1)
+    else find (i + 1) in_string
   in
-  find 0
+  find 0 false
 
 (* parse the let block: multi-line expression support.
    a new binding starts when a line matches "name = ..." where name is a

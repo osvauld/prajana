@@ -1,0 +1,17 @@
+kosha number-varga
+
+  -- cluster for number types: integer, float, real, rational, irrational, complex, prime.
+  -- number theory studies the intrinsic properties of numbers and their relationships.
+  -- the hierarchy: natural ⊂ integer ⊂ rational ⊂ real ⊂ complex.
+
+  "math-varga-vishesa"
+
+  -- sangati roots
+  "matra-yukta"   -- numbers are the basis of all measurement
+  "niyama-yukta"  -- arithmetic laws (commutativity, associativity) are niyama
+  "eka-yukta"     -- unity (eka) is the primitive from which all numbers are built
+  "shunya-yukta"  -- zero (shunya) is the additive identity — the void that enables counting
+
+shabda number-varga / cluster-for-number-types-int-float-real-rational-complex-prime
+
+done

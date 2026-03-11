@@ -1,0 +1,12 @@
+kosha continuity
+
+  "fluid-varga-vishesa"
+
+  -- del(rho)/del(t) + div(rho*v) = 0: mass conservation
+  "mass-density-yukta velocity-yukta divergence-yukta"
+  "conservation-swarupa first-law-abheda"
+  "navier-stokes-sthita"
+
+shabda continuity / del-rho-del-t-plus-divergence-of-rho-v-equals-zero-mass-is-neither-created-nor-destroyed
+
+done

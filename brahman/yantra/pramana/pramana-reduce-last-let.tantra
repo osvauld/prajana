@@ -1,0 +1,51 @@
+tantra pramana-reduce-last-let
+
+  -- @proves pitfall-13 (reduce — last expression after final let is the return)
+  --
+  -- Engine behavior: in a reduce lambda with multiple let bindings,
+  -- the expression AFTER the last let is the return value of that iteration.
+  -- If the last let has no expression after it, the let variable itself is returned.
+  --
+  -- WRONG pattern:
+  --   reduce items 0 (fn acc x -> let v = add acc x)
+  --   → returns the VALUE of v (which is add acc x) — happens to work!
+  --
+  -- But if you have:
+  --   reduce items 0 (fn acc x -> let v = mul x 2 let w = add acc v)
+  --   → returns w (the add acc v result) — correct, last let's value.
+  --
+  -- The rule: the terminal expression of the lambda body is what's returned.
+  -- For let chains, that's the body of the innermost LetIn node.
+
+  inputs
+    dummy  float
+
+  let
+    items = split "1 2 3" " "
+
+    -- case 1: single let, no trailing expression → returns the let variable
+    sum1  = reduce items 0 (fn acc x -> let v = add acc (to-number x) v)
+    ok-1  = eq sum1 6
+
+    -- case 2: two lets, second let value is the return
+    sum2  = reduce items 0 (fn acc x ->
+      let n = to-number x
+      let v = add acc n
+      v)
+    ok-2  = eq sum2 6
+
+    -- case 3: bare expression (no let) — just the expression itself
+    sum3  = reduce items 0 (fn acc x -> add acc (to-number x))
+    ok-3  = eq sum3 6
+
+    result = cond ok-1
+               (cond ok-2
+                 (cond ok-3 "pass"
+                   otherwise (concat "fail: bare expr sum=" (to-string sum3)))
+                 otherwise (concat "fail: two-let sum=" (to-string sum2)))
+               otherwise (concat "fail: single-let sum=" (to-string sum1))
+
+  return
+    result  string
+
+done

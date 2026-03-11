@@ -166,6 +166,13 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     ) edges))
 
   (* outgoing-edges: node-name → [(source, relation, target)] outgoing only *)
+  (* ancestors-of: node-name → [ancestor-names] via inheritance edges (vishesa/abheda/swarupa/dhatu).
+     depth-limited to 4 hops (same as walk_inheritance). *)
+  | "ancestors-of" ->
+    let node_name = as_string (e_eval k e (List.nth args 0)) in
+    let ancestors = Proof_graph.walk_inheritance k node_name in
+    Some (VList (List.map (fun a -> VNode a) ancestors))
+
   | "outgoing-edges" ->
     let node_name = as_string (e_eval k e (List.nth args 0)) in
     let edges = List.filter (fun e -> e.source = node_name) !(k.all_edges) in
@@ -257,28 +264,30 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
        Some (!_eval_tantra_ref k t [("n", VString name)])
      | _ ->
        let is_domain_name n =
-         String.length n >= 7 && String.sub n 0 7 = "domain-"
-       in
-       let own = if is_domain_name name then [name] else [] in
-       let domains =
-         match Hashtbl.find_opt k.nodes name with
-         | None -> own
-         | Some n ->
-           let from_outgoing = List.filter_map (fun edge ->
-             if edge.Proof_graph.source = name
-                 && edge.Proof_graph.relation = Proof_graph.sthita
-                && is_domain_name edge.Proof_graph.target
-             then Some edge.Proof_graph.target
-             else None
-           ) n.edges in
-           let from_incoming = List.filter_map (fun edge ->
-             if edge.Proof_graph.target = name && is_domain_name edge.Proof_graph.source
-             then Some edge.Proof_graph.source
-             else None
-           ) (Proof_graph.edges_of k name) in
-           List.sort_uniq String.compare (own @ from_outgoing @ from_incoming)
-       in
-       Some (VList (List.map (fun d -> VString d) domains)))
+          String.length n >= 7 && String.sub n 0 7 = "domain-"
+        in
+        let own = if is_domain_name name then [name] else [] in
+        let domains_for node_name =
+          match Hashtbl.find_opt k.nodes node_name with
+          | None -> []
+          | Some n ->
+            let from_outgoing = List.filter_map (fun edge ->
+              if edge.Proof_graph.source = node_name
+                  && edge.Proof_graph.relation = Proof_graph.sthita
+                 && is_domain_name edge.Proof_graph.target
+              then Some edge.Proof_graph.target
+              else None
+            ) n.edges in
+            let from_incoming = List.filter_map (fun edge ->
+              if edge.Proof_graph.target = node_name && is_domain_name edge.Proof_graph.source
+              then Some edge.Proof_graph.source
+              else None
+            ) (Proof_graph.edges_of k node_name) in
+            from_outgoing @ from_incoming
+        in
+        let ancestors = Proof_graph.walk_inheritance k name in
+        let all = own @ domains_for name @ List.concat_map domains_for ancestors in
+        Some (VList (List.map (fun d -> VString d) (List.sort_uniq String.compare all))))
 
   (* context-score: node-name x [seed-names] -> edge connectivity score.
      delegates to context-score.tantra when loaded; OCaml fallback otherwise. *)

@@ -1,0 +1,56 @@
+tantra pramana-local-fn-call
+
+  -- @proves pitfall-3 (let f = fn... local function calls have arity 0)
+  --
+  -- Engine behavior: when you define a local function via let f = fn x -> ...,
+  -- the name f is stored in the env as VFn. But the parser doesn't know f's
+  -- arity (it's not in _tantra_arities or _graph_arities), so op_arity f = 0.
+  -- That means f is parsed as Var (a variable reference), not as Call(f, [arg]).
+  -- Writing "f arg" gives you two separate expressions: Var "f" and the next
+  -- token gets consumed by the enclosing call.
+  --
+  -- WRONG:  let f = fn x -> mul x 2
+  --         let r = f 5          → r = VFn (the closure itself, not the result)
+  --
+  -- RIGHT:  use the lambda inline: let r = (fn x -> mul x 2) 5
+  --         or use map with a single-element list as a workaround
+  --
+  -- This pramana demonstrates that a local fn binding used as a "call" actually
+  -- returns the VFn closure, not the computed result.
+
+  inputs
+    dummy  float
+
+  let
+    -- define a local function
+    double = fn x -> mul x 2
+
+    -- "calling" it: double is parsed as Var, returns VFn
+    -- the "5" after it is parsed separately by the enclosing context
+    -- since this is a let binding, "5" becomes the body of an implicit LetIn
+    -- and double just returns the closure
+
+    -- workaround: apply via map on a single-element list
+    applied = map (split "5" " ") (fn x -> mul (to-number x) 2)
+    r       = nth applied 0
+    ok-r    = eq r 10
+
+    -- verify: the closure itself is truthy (VFn is always truthy)
+    fn-is-truthy = cond double "truthy" otherwise "falsy"
+    ok-fn   = eq fn-is-truthy "truthy"
+
+    -- verify: to-string on VFn gives "<fn>"
+    fn-str  = to-string double
+    ok-str  = eq fn-str "<fn>"
+
+    result = cond ok-r
+               (cond ok-fn
+                 (cond ok-str "pass"
+                   otherwise (concat "fail: to-string VFn=" fn-str))
+                 otherwise "fail: VFn should be truthy")
+               otherwise (concat "fail: map workaround gave " (to-string r))
+
+  return
+    result  string
+
+done

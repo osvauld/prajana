@@ -1,0 +1,24 @@
+kosha energy-varga
+
+  -- cluster for all energy quantities: the capacity to do work.
+  -- energy is conserved across all conversions: mechanical, thermal, electrical, chemical.
+  -- the conservation law is the deepest niyama of physics.
+
+  "physics-varga-vishesa"
+  "subanta-swarupa"
+
+  -- units: energy is kg⋅m²⋅s⁻² (joule)
+  "joule-matra"     -- SI unit for energy and work
+  "kilogram-matra"  -- mass dimension: M
+  "metre-matra"     -- spatial dimension: L
+  "second-matra"    -- time dimension: T
+
+  -- sangati roots
+  "shakti-swarupa"    -- energy IS shakti: the capacity to cause change
+  "niyama-yukta"      -- conservation of energy is the governing niyama
+  "spanda-yukta"      -- all energy forms involve vibration or potential for motion
+  "kaala-yukta"       -- power is energy per unit time
+
+shabda energy-varga / cluster-for-all-energy-quantities-mechanical-thermal-electrical
+
+done

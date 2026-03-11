@@ -1,0 +1,25 @@
+kosha mechanical-energy-varga
+
+  -- cluster for mechanical energy quantities: kinetic, potential, work, path-energy.
+  -- mechanical energy is energy in its motion and position forms.
+  -- KE = ½mv²; PE = mgh; Work = F⋅d — all are joules.
+  -- conservation: in the absence of friction, KE + PE = constant.
+
+  "energy-varga-vishesa"
+  "subanta-swarupa"
+
+  -- units: joules (kg⋅m²⋅s⁻²)
+  "joule-matra"     -- SI unit for energy and work
+  "kilogram-matra"  -- mass dimension: M
+  "metre-matra"     -- spatial dimension: L (squared)
+  "second-matra"    -- time dimension: T (squared in denominator)
+
+  -- sangati roots
+  "shakti-swarupa"    -- mechanical energy IS shakti in its kinematic form
+  "gati-yukta"        -- kinetic energy is energy of motion
+  "niyama-yukta"      -- conservation of mechanical energy is the governing niyama
+  "avastha-yukta"     -- potential energy depends on state (position, height)
+
+shabda mechanical-energy-varga / cluster-for-mechanical-energy-kinetic-potential-work
+
+done

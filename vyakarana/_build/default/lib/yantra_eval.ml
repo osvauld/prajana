@@ -140,7 +140,7 @@ let yantra_tokenise (s : string) : string list =
   while !i < len do
     let c = s.[!i] in
     match c with
-    | ' ' | '\t' | '\n' | ',' | '?' | '!' | ';' | '(' | ')' ->
+    | ' ' | '\t' | '\n' | ',' | '?' | '!' | ';' | '(' | ')' | '[' | ']' ->
       flush (); incr i
     | '.' ->
       let prev_digit = Buffer.length buf > 0 &&
@@ -181,13 +181,23 @@ let yantra_tokenise (s : string) : string list =
         let contents = Buffer.contents buf in
         let last = contents.[String.length contents - 1] in
         (last >= 'a' && last <= 'z') || (last >= 'A' && last <= 'Z') in
+      let prev_digit = Buffer.length buf > 0 &&
+        let contents = Buffer.contents buf in
+        let last = contents.[String.length contents - 1] in
+        last >= '0' && last <= '9' in
       let next_alpha = !i + 1 < len &&
         let nc = s.[!i + 1] in
         (nc >= 'a' && nc <= 'z') || (nc >= 'A' && nc <= 'Z') in
       if prev_alpha && next_alpha then begin
+        (* keep hyphenated words: "link-length", "n-dof", "axis-x" *)
+        Buffer.add_char buf '-'; incr i
+      end else if prev_digit && next_alpha then begin
+        (* keep digit-hyphen-alpha as one token: "2-DOF", "3-axis", "6-joint"
+           prevents the digit leaking into extract-value-units pending-nums *)
         Buffer.add_char buf '-'; incr i
       end else if Buffer.length buf = 0 && !i + 1 < len &&
                   s.[!i + 1] >= '0' && s.[!i + 1] <= '9' then begin
+        (* negative number: "-3.14" *)
         Buffer.add_char buf '-'; incr i
       end else begin
         flush ();
@@ -248,7 +258,8 @@ let () =
   Yantra_parser.register_graph_op_arity "range"           1;  (* n → [0..n-1] *)
   Yantra_parser.register_graph_op_arity "shabda-pairs"    1;  (* node-name → [[key,value],...] *)
   Yantra_parser.register_graph_op_arity "scene-extract"   1;  (* sentence → VNode root *)
-  Yantra_parser.register_graph_op_arity "scene-narrate"   1   (* VNode root → VString narration *)
+  Yantra_parser.register_graph_op_arity "scene-narrate"   1;  (* VNode root → VString narration *)
+  Yantra_parser.register_graph_op_arity "ancestors-of"    1   (* node-name → [ancestor-names] via inheritance *)
 
 (* ---- run anuvada-ganana: the meta-tantra pipeline ---- *)
 let run_anuvada_ganana (k : proof_graph) (idx : tantra_index) (session : session)
