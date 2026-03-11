@@ -1,0 +1,20 @@
+mantra gravitational-force-mantra
+
+  "linear-force-varga-vishesa"
+  "gravitational-force-swarupa"
+
+  -- F = G·m₁·m₂ / r²: Newton's law of universal gravitation
+  -- step 1: multiply G by m1 → G·m1
+  -- step 2: multiply by m2 → G·m1·m2
+  -- step 3: square radius → r²
+  -- step 4: divide → G·m1·m2 / r²
+  "multiplication-krama"
+  "multiplication-krama"
+  "square-krama"
+  "division-krama"
+
+  "execute-chain-kriya"
+
+  shabda gravitational-force-mantra / F-equals-G-m1-m2-over-r-squared-newtons-law-of-universal-gravitation degree:2 krama-lhs:gravitational-force krama-rhs:gravitational-constant,mass1,mass2,radius
+
+done

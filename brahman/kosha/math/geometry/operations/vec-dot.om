@@ -1,4 +1,4 @@
-kosha vec-dot
+mantra vec-dot
 
   "geometry-varga-karma"
   "vector-kriya scalar-phala"
@@ -8,7 +8,9 @@ kosha vec-dot
   -- [a1,...,an] · [b1,...,bn] = a1·b1 + a2·b2 + ... + an·bn
   -- result is a scalar — the projection magnitude
   -- |a|·|b|·cos(θ) where θ is the angle between vectors
+  "multiplication-krama"
+  "addition-krama"
 
-shabda vec-dot / dot-product-of-n-dimensional-vectors-scalar-projection
+  shabda vec-dot / dot-product-of-n-dimensional-vectors-scalar-projection degree:1 krama-input:vec-a,vec-b krama-output:scalar per-element:yes fold:sum
 
 done

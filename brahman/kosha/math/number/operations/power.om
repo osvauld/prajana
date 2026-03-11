@@ -1,4 +1,4 @@
-kosha power
+mantra power
 
   "number-varga-karma"
   "ghana-pramana-abheda guna-kriya mula-shakti-sthita"
@@ -9,6 +9,6 @@ kosha power
   "polynomial-yukta derivative-yukta"
   "avrti-yukta"
 
-  shabda eval:power arity:2 pratipaksha-0:power pratipaksha-0-compound:true
+  shabda eval:power arity:2 pratipaksha-0:power pratipaksha-0-compound:true degree:exp per-element:no invertible:yes inverse:logarithm
 
 done

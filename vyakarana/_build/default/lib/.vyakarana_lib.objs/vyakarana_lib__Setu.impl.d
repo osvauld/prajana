@@ -1,1 +1,1 @@
-lib/setu.ml: Array Buffer Bytes Char Filename Hashtbl List Proof_graph Seq String Sys
+lib/setu.ml: Buffer Bytes Char Hashtbl List Proof_graph Setu_classify Setu_shabda String

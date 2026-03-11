@@ -1,0 +1,12 @@
+mantra mat-add
+
+  "geometry-varga-karma"
+  "matrix-swarupa"
+  "mat-scale-yukta"
+
+  -- element-wise matrix addition: C[i][j] = A[i][j] + B[i][j]
+  "addition-krama"
+
+  shabda mat-add / element-wise-matrix-addition-same-dimensions-required degree:1 krama-input:mat-a,mat-b krama-output:matrix per-element:yes
+
+done

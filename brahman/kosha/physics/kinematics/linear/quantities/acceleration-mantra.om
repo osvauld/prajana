@@ -1,0 +1,14 @@
+mantra acceleration-mantra
+
+  "linear-motion-varga-vishesa"
+  "acceleration-swarupa"
+
+  -- a = (v - u) / t: change in velocity over time
+  "subtraction-krama"
+  "division-krama"
+
+  "execute-chain-kriya"
+
+  shabda acceleration-mantra / a-equals-delta-v-over-t-change-in-velocity-divided-by-time degree:1 krama-lhs:acceleration krama-rhs:final-velocity,initial-velocity,time
+
+done

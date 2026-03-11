@@ -1,0 +1,12 @@
+mantra mat-scale
+
+  "geometry-varga-karma"
+  "matrix-swarupa"
+  "mat-add-yukta"
+
+  -- scalar multiplication of a matrix: B[i][j] = s * A[i][j]
+  "multiplication-krama"
+
+  shabda mat-scale / multiply-every-element-of-matrix-by-scalar degree:1 krama-input:scalar,matrix krama-output:matrix per-element:yes
+
+done

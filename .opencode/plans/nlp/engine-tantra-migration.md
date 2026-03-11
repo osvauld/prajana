@@ -16,6 +16,18 @@ be passed as a function to another.
 
 ---
 
+## Graph-native computation model
+
+See **[graph-native-computation.md](graph-native-computation.md)** for full design.
+
+Summary: the proof graph IS the expression tree. Walking `janya → kriya → phala`
+is computation. Scene understanding is the same walk in reverse via `pratipaksha`
+edges. Operation nodes carry `degree:` in shabda — composing them multiplies
+grades. Grade product = 1 means identity (inverses). Tantras become thin walkers
+with no hardcoded dispatch tables.
+
+---
+
 ## What the OCaml layer currently does — module map
 
 Build order (from `lib/dune`):
@@ -589,19 +601,54 @@ structure. Every `math/graph/` node must anchor to these:
    two nodes) would need a new `recurse` primitive or a fixed-depth `walk-chain`.
    `walk-chain` (step 2 of implementation sequence) covers the common case.
 
+6. **Operation nodes have no grade**: `degree:` is not in any operation node shabda
+   yet. Without it, tantras cannot derive ring identities (e.g. `sqrt(x²) = x`) by
+   walking — they must hardcode them. Step 6 adds `degree:` and `pratipaksha` edges.
+   See `graded-morphisms.md` (to be written).
+
+7. **No graph-native computation dispatch tantra**: `compute-from-node.tantra` and
+   `execute-chain.tantra` do not exist yet. Once they do, any operation whose
+   structure is declared in `.om` can be executed without a dedicated tantra. Step 7.
+
+8. **Scene understanding uses separate extraction logic**: Currently extraction is
+   hardcoded pattern matching in tantras. Once `scene-walk.tantra` exists, the same
+   backward-walk pattern handles all domains — the `.om` nodes' `pratipaksha` edges
+   are the extraction rules. Step 7.
+
 ---
 
 ## Implementation sequence
 
 ```
 Step 0  — remove dead duplicates from setu.ml (200 lines, no behaviour change)
-Step 1  — add higher-order tantra VFn wrapping in yantra_eval.ml (1-line change)
-Step 2  — add in-degree, out-degree, neighbors, has-domain, walk-chain, resolve-node
-          primitives to yantra_eval_primitives.ml + register arities
-Step 3  — write has-domain.tantra, resolve-node.tantra, infer-inputs.tantra,
+          callers updated: yantra.ml:63 and anuvada.ml:1195 → Setu_classify.classify_token
+
+Step 1  — add higher-order tantra VFn wrapping in yantra_eval.ml
+          Var v branch: tantras with inputs → VFn instead of VString
+          enables: map nodes domain-of  (no fn n → wrapper needed)
+
+Step 2  — add primitives to yantra_eval_primitives.ml:
+          in-degree, out-degree, neighbors, walk-chain, resolve-node
+          + walk_chain implementation in setu.ml (BFS N hops over kriya/phala/swarupa/abheda)
+
+Step 3  — write semantic tantras:
+          has-domain.tantra, resolve-node.tantra, infer-inputs.tantra,
           infer-outputs.tantra, domain-of-seeds.tantra
+
 Step 4  — run regression (must stay 49/52)
-Step 5  — proceed to math/graph/ sub-varga build (phase 2.9 step 10)
+
+Step 5  — math/graph/ sub-varga build (see phase-2.9-math.md step 10)
+
+Step 6  — graded morphism enrichment on operation nodes:
+          add degree: field to operation node shabda (square, sqrt, rotation-matrix, etc.)
+          add pratipaksha edges between inverse operation pairs
+          see: graded-morphisms.md (to be written)
+
+Step 7  — write graph-native computation tantras:
+          compute-from-node.tantra  — generic dispatch: walk kriya → apply → return phala
+          execute-chain.tantra      — fold composition over a sequence of operation nodes
+          scene-walk.tantra         — backward walk from phala through pratipaksha to janya
+          see: graph-computation-tantras.md (to be written)
 ```
 
 ---

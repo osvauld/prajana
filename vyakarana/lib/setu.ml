@@ -2,183 +2,20 @@
    the bridge between raw graph structure and domain renderers.
    reads the graph. does not emit. does not print.
 
-   dependency: Proof_graph only. *)
+   dependency: Proof_graph, Setu_shabda, Setu_classify. *)
 
 open Proof_graph
 
-(* --- shabda reader ---
-   parse_shabda: "key:value key:value ..." -> [(key, value); ...]
-   read_shabda:  find node, return its parsed shabda pairs *)
+(* --- shabda reader: forwarding to Setu_shabda ---
+   canonical implementations live in setu_shabda.ml — this forwards for callers
+   that still refer to Setu.read_shabda etc. *)
 
-let parse_shabda (s : string) : (string * string) list =
-  (* Scan left-to-right. A new key starts whenever a space-separated token
-     contains ':' and the part before ':' contains only key-safe chars
-     (letters, digits, '-', '_'). Everything between two such boundaries
-     is the value of the preceding key, allowing spaces in values. *)
-  if String.length s = 0 then []
-  else
-    let is_key_char c =
-      (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
-      (c >= '0' && c <= '9') || c = '-' || c = '_' ||
-      (* symbols — the graph needs to know what these characters are *)
-      c = '+' || c = '*' || c = '/' || c = '=' ||
-      c = '.' || c = '?' || c = '!' || c = ',' || c = ';' ||
-      c = '\'' || c = '#' || c = '@' || c = '&' || c = '%'
-    in
-    let is_key_token tok =
-      match String.split_on_char ':' tok with
-      | k :: _ :: _ when String.length k > 0 ->
-        String.to_seq k |> Seq.for_all is_key_char
-      | _ -> false
-    in
-    let tokens = String.split_on_char ' ' (String.trim s) in
-    (* collect (key, rest_of_first_token, subsequent_value_tokens) groups *)
-    let groups : (string * string list) list ref = ref [] in
-    let cur_key  = ref "" in
-    let cur_vals = ref [] in
-    List.iter (fun tok ->
-      if is_key_token tok then begin
-        if String.length !cur_key > 0 then
-          groups := (!cur_key, List.rev !cur_vals) :: !groups;
-        (match String.split_on_char ':' tok with
-         | k :: rest ->
-           cur_key  := k;
-           let v = String.concat ":" rest in
-           cur_vals := if String.length v > 0 then [v] else []
-         | _ -> ())
-      end else begin
-        if String.length !cur_key > 0 then
-          cur_vals := tok :: !cur_vals
-      end
-    ) tokens;
-    if String.length !cur_key > 0 then
-      groups := (!cur_key, List.rev !cur_vals) :: !groups;
-    let pairs = List.filter_map (fun (k, vs) ->
-      let v = String.trim (String.concat " " vs) in
-      if String.length v > 0 then Some (k, v) else None
-    ) (List.rev !groups) in
-    (* if no key:value pairs found, treat the text before '/' as the "name" key —
-       this handles inline shabda like: shabda bridge / the-crossing-that-carries-meaning-across *)
-    if pairs = [] then
-      let before_slash = match String.index_opt s '/' with
-        | Some i -> String.trim (String.sub s 0 i)
-        | None   -> String.trim s
-      in
-      if String.length before_slash > 0 then [("name", before_slash)] else []
-    else pairs
-
-(* parse_shabda_file: read a .shabda file — one "key: value" per line.
-   blank lines and lines starting with # are ignored.
-   multiline values: if value is "|", subsequent indented lines are collected
-   until a non-indented non-empty line is found. *)
-let parse_shabda_file (path : string) : (string * string) list =
-  try
-    let ic = open_in path in
-    let all_lines = ref [] in
-    (try
-      while true do
-        all_lines := input_line ic :: !all_lines
-      done
-    with End_of_file -> ());
-    close_in ic;
-    let lines = Array.of_list (List.rev !all_lines) in
-    let n = Array.length lines in
-    let pairs = ref [] in
-    let i = ref 0 in
-    while !i < n do
-      let line = lines.(!i) in
-      let trimmed = String.trim line in
-      if String.length trimmed > 0 && trimmed.[0] <> '#' then begin
-        match String.index_opt trimmed ':' with
-        | Some ci ->
-          let k = String.trim (String.sub trimmed 0 ci) in
-          let v = String.trim (String.sub trimmed (ci + 1) (String.length trimmed - ci - 1)) in
-          if String.length k > 0 then begin
-            if v = "|" then begin
-              (* multiline block: collect indented lines until dedent *)
-              incr i;
-              let buf = Buffer.create 256 in
-              while !i < n && (
-                let l = lines.(!i) in
-                String.length l = 0 ||
-                (String.length l > 0 && (l.[0] = ' ' || l.[0] = '\t'))
-              ) do
-                (* strip exactly 2 leading spaces if present *)
-                let raw = lines.(!i) in
-                let stripped =
-                  if String.length raw >= 2 && raw.[0] = ' ' && raw.[1] = ' '
-                  then String.sub raw 2 (String.length raw - 2)
-                  else raw
-                in
-                Buffer.add_string buf stripped;
-                Buffer.add_char buf '\n';
-                incr i
-              done;
-              pairs := (k, Buffer.contents buf) :: !pairs
-            end else begin
-              pairs := (k, v) :: !pairs;
-              incr i
-            end
-          end else incr i
-        | None -> incr i
-      end else incr i
-    done;
-    List.rev !pairs
-  with _ -> []
-
-(* raw_shabda_for_node: read a single node's own shabda without inheritance.
-   handles shabda-tmpl file indirection exactly as before. *)
-let raw_shabda_for_node (k : proof_graph) (node_name : string) : (string * string) list =
-  match find k node_name with
-  | None -> []
-  | Some n ->
-    let inline = parse_shabda n.shabda in
-    match List.assoc_opt "shabda-tmpl" inline with
-    | Some rel_path ->
-      let search_roots =
-        let kr = !(k.kosha_root) in
-        let base_roots = if String.length kr > 0 then [kr] else [] in
-        base_roots @ !(k.search_dirs)
-      in
-      let rec try_roots = function
-        | [] -> parse_shabda_file rel_path
-        | root :: rest ->
-          let full_path = Filename.concat root rel_path in
-          if Sys.file_exists full_path then parse_shabda_file full_path
-          else try_roots rest
-      in
-      try_roots search_roots
-    | None -> inline
-
-(* merge_shabda_priority: merge shabda pairs where earlier lists have higher priority.
-   pairs_by_priority: [own_pairs; immediate_parent_pairs; grandparent_pairs; ...]
-   For each key, the first (highest-priority) value wins.
-   shabda-tmpl is never inherited — it would resolve the wrong file. *)
-let merge_shabda_priority (pairs_by_priority : (string * string) list list)
-    : (string * string) list =
-  let seen = Hashtbl.create 16 in
-  let result = ref [] in
-  List.iter (fun pairs ->
-    List.iter (fun (key, v) ->
-      if key <> "shabda-tmpl" && not (Hashtbl.mem seen key) then begin
-        Hashtbl.replace seen key true;
-        result := (key, v) :: !result
-      end
-    ) pairs
-  ) pairs_by_priority;
-  List.rev !result
-
-(* read_shabda: return effective shabda pairs for a node, including inherited pairs.
-   inheritance chain: walk dhatu, abheda, swarupa edges (IS-A only) via Proof_graph.
-   own pairs win over inherited pairs on key conflict. *)
-let read_shabda (k : proof_graph) (node_name : string) : (string * string) list =
-  let own = raw_shabda_for_node k node_name in
-  let ancestors = Proof_graph.walk_inheritance k node_name in
-  let ancestor_shabda = List.map (raw_shabda_for_node k) ancestors in
-  merge_shabda_priority (own :: ancestor_shabda)
-
-let shabda_get (pairs : (string * string) list) (key : string) : string option =
-  List.assoc_opt key pairs
+let parse_shabda = Setu_shabda.parse_shabda
+let parse_shabda_file = Setu_shabda.parse_shabda_file
+let raw_shabda_for_node = Setu_shabda.raw_shabda_for_node
+let merge_shabda_priority = Setu_shabda.merge_shabda_priority
+let read_shabda = Setu_shabda.read_shabda
+let shabda_get = Setu_shabda.shabda_get
 
 (* --- tokenise --- *)
 
@@ -197,12 +34,6 @@ let tokenise s =
   ) s;
   if Buffer.length buf > 0 then tokens := Buffer.contents buf :: !tokens;
   List.rev !tokens
-
-let bigrams tokens =
-  let rec loop = function
-    | [] | [_] -> []
-    | a :: b :: rest -> (a ^ "-" ^ b) :: loop (b :: rest)
-  in loop tokens
 
 (* --- domain detection --- *)
 
@@ -439,142 +270,19 @@ let to_english ?(context : string option = None)
       | Some best -> best
       | None -> name))
 
-(* --- grammar classification --- *)
-(* reads from english-grammar node shabda: word:visheshanam pairs *)
+(* --- token classification: forwarding to Setu_classify ---
+   canonical implementations live in setu_classify.ml.
+   type equality declaration makes Setu.token_role = Setu_classify.token_role. *)
 
-let grammar_of_english_cache : (string, visheshanam option) Hashtbl.t = Hashtbl.create 64
-
-let grammar_of_english_loaded = ref false
-
-let load_grammar_of_english (k : proof_graph) : unit =
-  if not !grammar_of_english_loaded then begin
-    grammar_of_english_loaded := true;
-    let pairs = read_shabda k "english-grammar" in
-    List.iter (fun (word, vish_str) ->
-      let v = visheshanam_of_string vish_str in
-      Hashtbl.replace grammar_of_english_cache word v
-    ) pairs
-  end
-
-let grammar_of_english (k : proof_graph) word =
-  load_grammar_of_english k;
-  let w = String.lowercase_ascii word in
-  match Hashtbl.find_opt grammar_of_english_cache w with
-  | Some v -> v
-  | None   -> None
-
-let english_token_roles_cache : (string, string) Hashtbl.t = Hashtbl.create 64
-
-let english_token_roles_loaded = ref false
-
-let load_english_token_roles (k : proof_graph) : unit =
-  if not !english_token_roles_loaded then begin
-    english_token_roles_loaded := true;
-    let pairs = read_shabda k "english-token-roles" in
-    List.iter (fun (token, role) ->
-      Hashtbl.replace english_token_roles_cache token role
-    ) pairs
-  end
-
-let english_number_words_cache : (string, string) Hashtbl.t = Hashtbl.create 32
-
-let english_number_words_loaded = ref false
-
-let load_english_number_words (k : proof_graph) : unit =
-  if not !english_number_words_loaded then begin
-    english_number_words_loaded := true;
-    let pairs = read_shabda k "english-number-words" in
-    List.iter (fun (n, word) ->
-      Hashtbl.replace english_number_words_cache n word
-    ) pairs
-  end
-
-let english_number_word (k : proof_graph) (n : string) : string option =
-  load_english_number_words k;
-  Hashtbl.find_opt english_number_words_cache n
-
-type token_role =
+type token_role = Setu_classify.token_role =
   | Article
-  | Grammar of int  (* visheshanam dimension index *)
+  | Grammar of int
   | Content of string
   | Number of float
   | Operator of string
   | Unknown of string
 
-let classify_token (k : proof_graph) word =
-  let w = String.lowercase_ascii word in
-  (* detect operators first *)
-  let is_op = w = "+" || w = "-" || w = "*" || w = "/" || w = "=" in
-  if is_op then Operator w
-  else
-  (* detect numbers: try float first (handles "9.8", "3.14"), then int *)
-  match float_of_string_opt w with
-  | Some f -> Number f
-  | None ->
-  let is_number =
-    match int_of_string_opt w with
-    | Some _ -> true
-    | None -> false
-  in
-  if is_number then
-    match english_number_word k w with
-    | Some mapped -> Content mapped
-    | None -> Content w
-  else begin
-    load_english_token_roles k;
-    match Hashtbl.find_opt english_token_roles_cache w with
-    | Some "article" -> Article
-    | Some "sthita" -> Grammar Proof_graph.sthita
-    | Some role ->
-      (match grammar_of_english k role with
-       | Some v -> Grammar v
-       | None -> Content role)
-    | None ->
-      match grammar_of_english k w with
-      | Some v -> Grammar v
-      | None ->
-        match Hashtbl.find_opt k.nodes w with
-        | Some _ -> Content w
-        | None ->
-          (* search node shabda lines for this English word — checked before partial name match *)
-          let shabda_match = Hashtbl.fold (fun name n acc ->
-            (match acc with
-            | Some _ -> acc
-            | None ->
-              let shabda = String.lowercase_ascii (String.trim n.shabda) in
-              if shabda = "" then None
-              else
-                let before_slash = (match String.index_opt shabda '/' with
-                  | Some i -> String.sub shabda 0 i
-                  | None -> shabda)
-                in
-                let tokens = String.split_on_char ',' before_slash
-                  |> List.map String.trim
-                  |> List.concat_map (fun t -> String.split_on_char ' ' t)
-                  |> List.map String.trim
-                  |> List.filter (fun t -> String.length t > 0)
-                in
-                if List.mem w tokens then Some name else None)
-          ) k.nodes None in
-          (match shabda_match with
-          | Some name -> Content name
-          | None ->
-            let partial_matches = Hashtbl.fold (fun name _ acc ->
-              let parts = String.split_on_char '-' name in
-              if List.exists (fun p -> String.lowercase_ascii p = w) parts then
-                name :: acc
-              else acc
-            ) k.nodes [] in
-            match partial_matches with
-            | [single] -> Content single
-            | _ :: _ ->
-              (* prefer domain-<word> exact match first, then word itself, then alphabetical *)
-              let domain_name = "domain-" ^ w in
-              if List.mem domain_name partial_matches then Content domain_name
-              else if List.mem w partial_matches then Content w
-              else Content (List.hd (List.sort String.compare partial_matches))
-            | [] -> Unknown w)
-  end
+let classify_token = Setu_classify.classify_token
 
 (* --- setu walk: find OCaml construct for a seed --- *)
 

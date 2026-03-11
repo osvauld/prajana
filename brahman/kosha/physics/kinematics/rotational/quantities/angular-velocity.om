@@ -11,6 +11,6 @@ kosha angular-velocity
   "angular-acceleration-phala"
   "kona-kramanusara"
 
-shabda angular-velocity / rate-of-change-of-kona-per-unit-time-d-theta-by-dt-in-radians-per-second-omega
+shabda angular-velocity / rate-of-change-of-angle-per-unit-time-omega-in-radians-per-second
 
 done

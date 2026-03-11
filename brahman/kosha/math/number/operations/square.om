@@ -1,11 +1,12 @@
-kosha square
+mantra square
 
   "number-varga-karma"
   "multiplication-swarupa svayam-yukta vivartana-kriya"
   "kshetra-abheda dviguna-phala samikarana-yukta"
   "number-yukta expression-yukta"
   "square-root-pratipaksha"
+  "power-kriya multiplication-kriya"
 
-  shabda eval:square arity:1 pratipaksha-0:sqrt
+  shabda eval:square arity:1 pratipaksha-0:sqrt degree:2 per-element:yes invertible:yes inverse:sqrt
 
 done

@@ -1,4 +1,4 @@
-kosha rotation-matrix
+mantra rotation-matrix
 
   "geometry-varga-karma"
   "matrix-swarupa transform-swarupa"
@@ -19,6 +19,8 @@ kosha rotation-matrix
   -- in kinematic chains: R_world = R_0 · R_1 · ... · R_{n-1}
   --   propagated via fk-ndof.tantra (frame reduce over krama joints)
 
-shabda rotation-matrix / the-matrix-that-rotates-a-vector-by-an-angle-in-a-chosen-plane-orthogonal-and-det-1
+  "rotation-matrix-pratipaksha"
+
+shabda rotation-matrix / the-matrix-that-rotates-a-vector-by-an-angle-in-a-chosen-plane-orthogonal-and-det-1 degree:SO3-element per-element:no invertible:yes inverse:rotation-matrix
 
 done

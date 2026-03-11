@@ -1,0 +1,13 @@
+mantra mat-transpose
+
+  "geometry-varga-karma"
+  "matrix-swarupa"
+  "mat-transpose-pratipaksha"
+
+  -- transpose: flip rows and columns — M^T[i][j] = M[j][i]
+  -- (mat-transpose is self-inverse: (A^T)^T = A)
+  "index-swap-krama"
+
+  shabda mat-transpose / flip-rows-and-columns-self-inverse-used-in-jacobian-and-rotation-matrix degree:1 krama-input:matrix krama-output:matrix invertible:yes inverse:mat-transpose
+
+done

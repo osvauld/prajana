@@ -1,0 +1,13 @@
+kosha lcm
+
+  "number-theory-varga-vishesa"
+
+  -- least common multiple: smallest integer divisible by both a and b
+  -- lcm(4,6)=12, lcm(a,b) = |a·b|/gcd(a,b)
+  "multiple-swarupa integer-yukta"
+  "gcd-yukta prime-factorization-abheda"
+  "fraction-addition-yukta scheduling-yukta"
+
+  shabda lcm / smallest-integer-divisible-by-both-numbers-used-in-fraction-addition-and-scheduling
+
+done

@@ -1,0 +1,14 @@
+mantra potential-energy-mantra
+
+  "mechanical-energy-varga-vishesa"
+  "potential-energy-swarupa"
+
+  -- PE = mgh: multiply mass by g, then by height
+  "multiplication-krama"
+  "multiplication-krama"
+
+  "execute-chain-kriya"
+
+  shabda potential-energy-mantra / PE-equals-mgh-gravitational-potential-energy degree:1 krama-lhs:energy krama-rhs:mass,gravity,height
+
+done

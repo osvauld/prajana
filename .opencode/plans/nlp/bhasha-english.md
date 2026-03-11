@@ -203,6 +203,94 @@ passive: "[0.4, 0.3] is reached by the arm"  coord is subject → argument order
 
 ---
 
+## Sangati roots as atomic vocabulary — composition over enumeration
+
+**Key insight**: sangati root nodes have single, precise names (`matra`, `spanda`,
+`avrti`, `shakha`, `sambandha`, `kshaya`, `krama`, ...). These ~50 roots ARE the
+atomic vocabulary. Formula sentences are composed from them — not enumerated per-formula.
+
+**What this means for P6 scope**: bhasha nodes are needed for the ~50 sangati roots,
+NOT for every formula or operation node. Any formula written with sangati `yukta` edges
++ krama chain gets language for free through composition.
+
+### How composition works
+
+A formula node carries two kinds of edges that together produce its sentence:
+
+1. **Sangati `yukta` edges** — declare what kind of thing it IS:
+   - `matra-yukta` → "measure/quantity of"
+   - `spanda-yukta` → "of motion/vibration"
+   - `krama-yukta` → "in ordered sequence"
+
+2. **Krama chain** — declare HOW it computes, in order:
+   - `square-krama` → "square the <input>"
+   - `mul-mass-krama` → "multiply by mass"
+   - `mul-half-krama` → "take half"
+
+`to-english` rendering:
+1. Walk sangati `yukta` edges → type description ("measure of motion")
+2. Walk krama chain → step narrative ("square velocity, multiply by mass, halve")
+3. Compose: "kinetic energy is a measure of motion — half the mass times velocity squared"
+
+### Bhasha nodes needed: sangati roots only
+
+```
+bhasha matra
+  "avyaya-swarupa english-sthita"
+  "dhatu measure-sthita"
+  shabda measure, quantity, amount / unit-of-quantification
+done
+
+bhasha spanda
+  "subanta-swarupa english-sthita"
+  "dhatu oscillation-sthita"
+  shabda motion, vibration, oscillation / dynamic-state
+done
+
+bhasha avrti
+  "subanta-swarupa english-sthita"
+  "dhatu repetition-sthita"
+  shabda repetition, iteration, cycle / repeating-process
+done
+
+bhasha kshaya
+  "subanta-swarupa english-sthita"
+  "dhatu decay-sthita"
+  shabda decay, reduction, loss / degradation
+done
+```
+
+**Any new kosha node written with sangati roots + krama chain gets language for free.**
+No per-formula bhasha work. Adding a new physics formula = write the .om node.
+The sentence generator handles the rest by composing from root bhasha forms.
+
+### Priority shift for P6
+
+Original P6 plan: write per-formula bhasha nodes for all physics/math concepts.
+**Revised P6 plan**: write bhasha nodes for ~50 sangati roots. That's the complete
+primitive vocabulary. Formula language emerges from composition.
+
+| Sangati root | English bhasha forms |
+|---|---|
+| `matra` | measure, quantity, amount |
+| `spanda` | motion, vibration, oscillation |
+| `avrti` | repetition, iteration, cycle |
+| `kshaya` | decay, reduction, loss |
+| `shakha` | branch, fork, tree |
+| `sambandha` | relation, connection, link |
+| `krama` | sequence, step, order |
+| `seema` | limit, boundary, bound |
+| `rachana` | structure, arrangement, form |
+| `viveka` | distinction, discrimination, judgment |
+| `niyama` | rule, law, constraint |
+| `satya` | truth, fact, reality |
+| `purna` | complete, full, total |
+| `svabhava` | inherent, intrinsic, natural |
+| `niralamba` | self-grounding, axiomatic, foundational |
+| ... | ~35 more roots |
+
+---
+
 ## Machine languages (future: Phase 9+)
 
 `brahman/bhasha/ocaml/`, `brahman/bhasha/lua/`, `brahman/bhasha/strudel/`,

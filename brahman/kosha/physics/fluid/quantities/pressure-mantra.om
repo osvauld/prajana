@@ -1,0 +1,13 @@
+mantra pressure-mantra
+
+  "fluid-varga-vishesa"
+  "pressure-swarupa"
+
+  -- P = F / A: force per unit area
+  "division-krama"
+
+  "execute-chain-kriya"
+
+  shabda pressure-mantra / P-equals-F-over-A-force-per-unit-area degree:1 krama-lhs:pressure krama-rhs:force,area
+
+done

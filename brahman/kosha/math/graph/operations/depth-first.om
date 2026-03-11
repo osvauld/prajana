@@ -1,0 +1,10 @@
+kosha depth-first
+
+  "graph-varga-karma"
+  "graph-walk-swarupa"
+  "avrti-yukta"   -- recurses deep before backtracking
+  "krama-yukta"
+
+shabda depth-first, DFS / graph-walk-that-recurses-as-deep-as-possible-before-backtracking
+
+done

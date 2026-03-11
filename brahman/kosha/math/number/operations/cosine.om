@@ -1,0 +1,10 @@
+mantra cosine
+
+  "number-varga-karma"
+  "trigonometry-varga-vishesa"
+  "kona-yukta wave-abheda oscillation-yukta"
+  "arccosine-pratipaksha"
+
+  shabda eval:cos arity:1 degree:bounded per-element:yes invertible:yes inverse:arccosine
+
+done

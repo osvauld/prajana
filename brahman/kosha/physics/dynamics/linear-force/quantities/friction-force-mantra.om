@@ -1,0 +1,13 @@
+mantra friction-force-mantra
+
+  "linear-force-varga-vishesa"
+  "friction-force-swarupa"
+
+  -- f = μN: multiply coefficient by normal-force
+  "multiplication-krama"
+
+  "execute-chain-kriya"
+
+  shabda friction-force-mantra / f-equals-mu-N-friction-coefficient-times-normal-force degree:1 krama-lhs:friction-force krama-rhs:coefficient,normal-force
+
+done

@@ -1,0 +1,10 @@
+kosha probability-varga
+
+  "math-varga-vishesa"
+  "matra-yukta"    -- measured on [0,1]
+  "viveka-yukta"   -- distinction between outcomes
+  "seema-yukta"    -- bounded
+
+shabda probability-varga / cluster-for-probability-and-statistics-nodes
+
+done

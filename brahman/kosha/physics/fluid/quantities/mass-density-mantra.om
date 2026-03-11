@@ -1,0 +1,13 @@
+mantra mass-density-mantra
+
+  "fluid-varga-vishesa"
+  "mass-density-swarupa"
+
+  -- ρ = m / V: mass per unit volume
+  "division-krama"
+
+  "execute-chain-kriya"
+
+  shabda mass-density-mantra / rho-equals-m-over-V-mass-per-unit-volume degree:1 krama-lhs:mass-density krama-rhs:mass,volume
+
+done

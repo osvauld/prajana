@@ -1,7 +1,10 @@
-kosha inverse
+mantra inverse
 
   "geometry-varga-karma"
   "identity-matrix-phala matrix-multiplication-sthita determinant-siddha"
   "eka-eka-siddha"
+  "inverse-pratipaksha"
+
+  shabda degree:-1 per-element:no invertible:yes inverse:inverse
 
 done

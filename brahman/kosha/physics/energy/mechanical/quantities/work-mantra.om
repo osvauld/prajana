@@ -1,0 +1,14 @@
+mantra work-mantra
+
+  "mechanical-energy-varga-vishesa"
+  "work-swarupa"
+
+  -- W = F·d·cos(θ): multiply force by displacement, then by cos of angle
+  "multiplication-krama"
+  "multiplication-krama"
+
+  "execute-chain-kriya"
+
+  shabda work-mantra / W-equals-F-d-cos-theta-force-dot-displacement degree:1 krama-lhs:work krama-rhs:force,displacement,angle
+
+done

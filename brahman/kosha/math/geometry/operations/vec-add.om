@@ -1,4 +1,4 @@
-kosha vec-add
+mantra vec-add
 
   "geometry-varga-karma"
   "vector-kriya"
@@ -6,7 +6,8 @@ kosha vec-add
 
   -- component-wise addition of two n-dimensional vectors
   -- [a1,a2,...,an] + [b1,b2,...,bn] = [a1+b1, a2+b2,...,an+bn]
+  "addition-krama"
 
-shabda vec-add / component-wise-vector-addition-for-n-dimensional-vectors
+  shabda vec-add / component-wise-vector-addition-for-n-dimensional-vectors degree:1 krama-input:vec-a,vec-b krama-output:vector per-element:yes
 
 done

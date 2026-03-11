@@ -1,0 +1,15 @@
+mantra tangent
+
+  "number-varga-karma"
+  "trigonometry-varga-vishesa"
+  "sine-yukta cosine-yukta kona-yukta"
+  "arctangent-pratipaksha"
+
+  -- tan(θ) = sin(θ)/cos(θ)
+  "sine-krama"
+  "cosine-krama"
+  "division-krama"
+
+  shabda eval:tan arity:1 degree:bounded per-element:yes invertible:yes inverse:arctangent
+
+done

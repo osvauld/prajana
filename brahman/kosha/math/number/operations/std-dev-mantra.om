@@ -1,0 +1,13 @@
+mantra std-dev
+
+  "number-varga-karma"
+  "statistics-varga-vishesa"
+  "variance-yukta spread-swarupa"
+
+  -- std-dev = sqrt(variance)
+  "variance-krama"
+  "square-root-krama"
+
+  shabda std-dev / square-root-of-variance-standard-deviation degree:1 per-element:no invertible:no
+
+done

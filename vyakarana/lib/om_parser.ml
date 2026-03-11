@@ -15,6 +15,11 @@
        ...
      done
 
+     mantra <name>    -- formula node (krama chain, pratipaksha, relates to a quantity via swarupa)
+       "<sloka 1>"
+       ...
+     done
+
    everything else is ignored. comments (--) are inert. *)
 
 open Proof_graph
@@ -45,6 +50,7 @@ let om_files_recursive (root : string) : string list =
      sangati <name>  — universal structural truth (Sanskrit body, pure concepts)
      kosha <name>    — domain knowledge (physics, math, robotics, concept roots)
      bhasha <name>   — linguistic surface layer (word forms, inflections, prepositions)
+     mantra <name>   — formula/computation node (krama chain + pratipaksha, relates quantities)
    returns Some (layer_string, name) or None *)
 let parse_node_header line =
   let line = String.trim line in
@@ -65,7 +71,10 @@ let parse_node_header line =
   | None   ->
   match try_prefix "kosha" with
   | Some r -> Some r
-  | None   -> try_prefix "bhasha"
+  | None   ->
+  match try_prefix "bhasha" with
+  | Some r -> Some r
+  | None   -> try_prefix "mantra"
 
 (* collect all node names from a directory *)
 let collect_names dir : string list =

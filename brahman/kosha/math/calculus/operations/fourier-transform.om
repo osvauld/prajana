@@ -1,4 +1,4 @@
-kosha fourier-transform
+mantra fourier-transform
 
   "calculus-varga-karma"
   "sankshepa-abheda ghana-pramana-abheda"
@@ -10,5 +10,8 @@ kosha fourier-transform
   "inverse-yukta sama-nila-siddha"
   "vrnda-ganita-abheda"
   "eka-eka-swarupa aneka-eka-kriya"
+  "fourier-transform-pratipaksha"
+
+  shabda degree:F per-element:yes invertible:yes inverse:fourier-transform
 
 done

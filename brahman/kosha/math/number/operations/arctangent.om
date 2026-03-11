@@ -1,0 +1,10 @@
+mantra arctangent
+
+  "number-varga-karma"
+  "trigonometry-varga-vishesa"
+  "tangent-pratipaksha"
+
+  -- atan2(y, x): angle from positive x-axis to point (x,y)
+  shabda eval:atan2 arity:2 degree:1 per-element:yes invertible:yes inverse:tangent
+
+done

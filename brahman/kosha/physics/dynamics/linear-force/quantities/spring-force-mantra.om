@@ -1,0 +1,13 @@
+mantra spring-force-mantra
+
+  "linear-force-varga-vishesa"
+  "spring-force-swarupa"
+
+  -- F = kx: Hooke's law — multiply spring-constant by displacement
+  "multiplication-krama"
+
+  "execute-chain-kriya"
+
+  shabda spring-force-mantra / F-equals-kx-spring-constant-times-displacement-hookes-law degree:1 krama-lhs:spring-force krama-rhs:spring-constant,displacement
+
+done

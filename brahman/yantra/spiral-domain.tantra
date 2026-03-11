@@ -18,7 +18,7 @@ tantra spiral-domain
   let
     triples     = avrti domain-seeds 1
     fmt-shallow = format-triples triples "    "
-    fmt-deep    = format-triples-primary triples "      "
+    fmt-deep    = format-triples triples "      "
     formatted   = cond (eq depth 0) fmt-shallow otherwise fmt-deep
     all-targets = flatten (map triples (fn t -> nth t 2))
     scored      = map all-targets (fn n -> pair n (weighted-context-score n context-seeds))

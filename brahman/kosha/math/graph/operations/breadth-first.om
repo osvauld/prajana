@@ -1,0 +1,10 @@
+kosha breadth-first
+
+  "graph-varga-karma"
+  "graph-walk-swarupa"
+  "seema-yukta"   -- explores by level/distance
+  "krama-yukta"
+
+shabda breadth-first, BFS / graph-walk-that-explores-all-neighbors-before-going-deeper
+
+done

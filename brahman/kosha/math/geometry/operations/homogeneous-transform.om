@@ -1,4 +1,4 @@
-kosha homogeneous-transform
+mantra homogeneous-transform
 
   "geometry-varga-karma"
   "matrix-swarupa transform-swarupa"
@@ -13,6 +13,8 @@ kosha homogeneous-transform
   -- this IS the scene-graph composition — each bone applies its local transform
   -- the kinematic chain is the product of all joint transforms from base to tip
 
-shabda homogeneous-transform / the-matrix-encoding-rotation-and-translation-together-enabling-chain-composition-for-kinematic-chains
+  "homogeneous-transform-pratipaksha"
+
+shabda homogeneous-transform / the-matrix-encoding-rotation-and-translation-together-enabling-chain-composition-for-kinematic-chains degree:SE3-element per-element:no invertible:yes inverse:homogeneous-transform
 
 done
