@@ -53,6 +53,16 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     let s = as_string (e_eval k e (List.nth args 0)) in
     Some (match float_of_string_opt s with Some f -> VFloat f | None -> VNone)
 
+  (* split-numeric: "5kg" → ["5.0", "kg"], "3.5m/s" → ["3.5", "m/s"], "42" → ["42.0", ""] *)
+  | "split-numeric" ->
+    let s = as_string (e_eval k e (List.nth args 0)) in
+    let i = ref 0 in
+    while !i < String.length s && (s.[!i] = '-' || s.[!i] = '.' || (s.[!i] >= '0' && s.[!i] <= '9')) do incr i done;
+    let num_part = String.sub s 0 !i in
+    let alpha_part = String.sub s !i (String.length s - !i) in
+    let num_val = match float_of_string_opt num_part with Some f -> string_of_float f | None -> "" in
+    Some (VList [VString num_val; VString alpha_part])
+
   | "to-string" ->
     Some (VString (as_string (e_eval k e (List.nth args 0))))
 
@@ -61,6 +71,16 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
 
   | "lower" ->
     Some (VString (String.lowercase_ascii (as_string (e_eval k e (List.nth args 0)))))
+
+  (* substr: string × start × length → string  — clamps to string bounds *)
+  | "substr" ->
+    let s   = as_string (e_eval k e (List.nth args 0)) in
+    let pos = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let len = int_of_float (as_float (e_eval k e (List.nth args 2))) in
+    let slen = String.length s in
+    let pos' = max 0 (min pos slen) in
+    let len' = max 0 (min len (slen - pos')) in
+    Some (VString (String.sub s pos' len'))
 
   (* starts-with: string × prefix → bool *)
   | "starts-with" ->
@@ -428,5 +448,17 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
         done
       done;
       Some (VList (Array.to_list (Array.map (fun f -> VFloat f) result)))
+
+  | "square" ->
+    let a = as_float (e_eval k e (List.nth args 0)) in
+    Some (VFloat (a *. a))
+
+  | "half" ->
+    let a = as_float (e_eval k e (List.nth args 0)) in
+    Some (VFloat (a *. 0.5))
+
+  | "double" ->
+    let a = as_float (e_eval k e (List.nth args 0)) in
+    Some (VFloat (a *. 2.0))
 
   | _ -> None

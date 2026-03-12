@@ -16,140 +16,189 @@
 `ahara-yukta dhatu-yukta vrnda-yukta kala-yukta prayoga-yukta vachana-yukta purusa-yukta`
 
 ### Phase 1.5 — Sangati Grammar Nodes
-48 files written in `brahman/sangati/`:
-- `kaala.om` updated (owns tense values; IS the tense parent — no separate kala.om)
-- tense: `vartamana-kaala`, `bhuta-kaala`, `bhavishya-kaala`, `vidhi-kaala`, `sambhavana-kaala`
-- voice: `kartari-prayoga`, `karmani-prayoga`, `bhave-prayoga`
-- number: `eka-vachana`, `dvi-vachana`, `bahu-vachana`
-- person: `prathama-purusa`, `madhyama-purusa`, `uttama-purusa`
-- vibhakti: `prathama` through `saptami` + `sambodhana`
-- pada: `subanta`, `tinanta`, `avyaya`, `nipata`, `upasarga`
-- pratyaya: `shatr`, `kta`, `tvaa`, `tumun`
-- samasa: `tatpurusha`, `karmadharaya`, `dvandva`, `bahuvrihi`
-- domains: `domain-vak`, `domain-yantra-bhasha` (split from domain-language)
-- `grammatical-gender.om` moved from `brahman/kosha/` → `brahman/sangati/`
+48 files written in `brahman/sangati/grammar/`:
+- tense: vartamana-kaala, bhuta-kaala, bhavishya-kaala, vidhi-kaala, sambhavana-kaala
+- voice: kartari-prayoga, karmani-prayoga, bhave-prayoga
+- number: eka-vachana, dvi-vachana, bahu-vachana
+- person: prathama-purusa, madhyama-purusa, uttama-purusa
+- vibhakti: prathama through saptami + sambodhana
+- pada: subanta, tinanta, avyaya, nipata, upasarga
+- pratyaya: shatr, kta, tvaa, tumun
+- samasa: tatpurusha, karmadharaya, dvandva, bahuvrihi
 
 ### Phase 2 — Kosha Process Nodes
-- Annotated existing physics process nodes with `bhave-prayoga-swarupa tinanta-swarupa` and `subanta-swarupa`
+- Annotated existing physics process nodes with bhave-prayoga-swarupa tinanta-swarupa subanta-swarupa
 - 21 new process nodes created
 - 525 kosha headers corrected sangati→kosha
-- `aarambham`/`abhava`/`niyama` moved to `brahman/sangati/`
+- aarambham/abhava/niyama moved to brahman/sangati/
 
-### Phase 2.5 — Kosha Samanya Nodes + Inheritance Restructure
-- Step 1: `vishesa` and `amsha` added as ring dims to `visheshanam-ring.om`; `walk_inheritance` updated
-- Step 2: Varga nodes created for all domains:
-  - Root: `physics-varga`, `math-varga`, `cs-varga`, `chemistry-varga`, `biology-varga`, `sangeetham-varga`, `finance-varga`, `robotics-varga`
-  - Physics subdomain vargas: `kinematics-varga`, `dynamics-varga`, `energy-varga`, `oscillation-varga`, `thermodynamics-varga`, `electromagnetism-varga`, `optics-varga`, `fluid-varga`, `quantum-varga`
-  - Physics sub-subdomain vargas: `linear-motion-varga`, `rotational-motion-varga`, `linear-force-varga`, `rotational-force-varga`, `mechanical-energy-varga`, `circuit-varga`, `field-varga`
-  - Math subdomain vargas: `algebra-varga`, `geometry-varga`, `calculus-varga`, `number-varga`, `set-varga`
-  - CS subdomain vargas: `type-varga`, `computation-varga`, `memory-varga`
-  - Chemistry/Biology/Sangeetham/Finance subdomain vargas: all created
-- Step 3+4: Full physics kosha subdir restructure complete:
-  - All physics leaf nodes migrated to subdir topology
-  - All `domain-physics-sthita` removed from leaves
-  - Sangati fixes: `matra.om`, `sambandha.om`, `prasarana.om` — removed downward domain references
+### Phase 2.5 — Kosha Varga Nodes + Inheritance Restructure
+- vishesa and amsha added to visheshanam-ring.om; walk_inheritance updated
+- All domain varga nodes created (physics, math, cs, chemistry, biology, etc.)
+- Physics/math/cs subdomain vargas created
+- Full physics kosha subdir restructure complete
+- All domain-physics-sthita removed from leaves
+- Sangati fixes on matra.om, sambandha.om, prasarana.om
 
 ### Phase 2.6 — Sangati Subdir Restructure
-Full restructure of `brahman/sangati/` from 263 flat files into hierarchy:
-
-```
-brahman/sangati/
-  mula/          22 root philosophical claims
-  spanda/        19 vibration/spiral/pulse nodes
-  parampara/     19 structure-in-nature nodes
-  jiva/          22 living-things nodes
-  bhava/         16 experiential-state nodes
-  chetan/        14 consciousness/knowing nodes
-  vak/           13 language/sound nodes
-  grammar/
-    kaala/       kaala.om + 5 tense amshas
-    vibhakti/    vibhakti.om + 8 case amshas
-    pada/        pada.om + 5 word class nodes
-    vachana/     vachana.om + 3 number nodes
-    prayoga/     prayoga.om + 3 voice nodes
-    purusa/      purusa.om + 3 person nodes
-    samasa/      samasa.om + 4 compound nodes
-    pratyaya/    pratyaya.om + 4 suffix nodes
-    linga/       linga.om + grammatical-gender
-  geometry/      15 spatial/geometric nodes
-```
-
-Sthalam nodes: all 6 rewritten as thin anchors (direction flipped to upward). 5 new sthalam nodes.
-Engine duplicates and collatz removed from sangati.
-
-**Regression: 49/52 — same 3 pre-existing failures. Zero new failures.**
+Full restructure of brahman/sangati/ from 263 flat files into hierarchy:
+mula/ spanda/ parampara/ jiva/ bhava/ chetan/ vak/ grammar/ geometry/
+Sthalam nodes rewritten as thin anchors (direction flipped to upward).
+**Regression: 49/52 — same 3 pre-existing failures.**
 
 ### Bhasha migration
-- `brahman/bhasha/ocaml/` — 30 files moved from `kosha/language/ocaml/`, headers → bhasha
-- `brahman/bhasha/lua/` — 12 files moved, headers → bhasha
-- `brahman/bhasha/strudel/` — 6 files moved, headers → bhasha
-- `brahman/bhasha/render/` — 5 files moved, headers → bhasha
-- `_migration/kosha-language/` — 138 English language files removed from brahman, kept as reference
+- brahman/bhasha/ocaml/   — 30 files, headers → bhasha
+- brahman/bhasha/lua/     — 12 files, headers → bhasha
+- brahman/bhasha/strudel/ — 6 files, headers → bhasha
+- brahman/bhasha/render/  — 5 files, headers → bhasha
+- _migration/kosha-language/ — 138 English language files kept as reference
+
+### Loader fix
+om_parser.ml expand_dir handles both kosha and bhasha subdirs.
+
+### Phase 5 — Math Kosha Restructure (COMPLETE)
+Full structure: algebra/ geometry/ calculus/ number/ set/ graph/ logic/ probability/ complexity/
+CS information/ upgrade + bit.om upgraded
+compose-degrees.tantra written
+is-identity-composition.tantra written
+Core math operation word: keys written (half, double, mul, div, add, sub, square, sqrt, power)
+Pratipaksha edges on operation pairs (square↔square-root, derivative↔antiderivative, etc.)
+Degree enrichment on number/geometry/calculus operations
+
+### Phase 5.5 — Physics Mantra Shabda Cleanup (COMPLETE)
+All 22 physics mantra nodes updated: name: + krama-lhs-unit: fields.
+Hyphenated descriptions removed.
+
+### Phase 6a — Sangati Root Bhasha Forms (COMPLETE)
+All ~50 sangati root bhasha nodes in brahman/bhasha/english/
+
+Original 31 (sangati root → English filename):
+ahara→input, anu→element, anuvada→translation, avrti→iteration, dvaya→pair,
+kaala→time, kriya→action, kshaya→decay, matra→quantity, nyaya→logic,
+phala→result, pramana→proof, prasarana→extension, pratishedha→negation,
+prayojana→purpose, rachana→composition, sama→equal, sambandha→relation,
+samsarga→combination, sangati→truth, sankshepa→summary, sparsha→contact,
+spanda→motion, sthiti→state, swa→self, swatantra→independent,
+vakya→sentence, vidya→knowledge, vriddhi→growth, vrnda→collection, english
+
+Final 15 added:
+shakha→branch, seema→boundary, niyama→rule, satya→true, purna→complete,
+svabhava→inherent, niralamba→foundational, taranga→wave, kona→angle,
+viparita→inverse, eka→one, dvandva→dual, chala→variable,
+parampara→sequence, ananta→infinite
+
+### Phase 6b — Grammar Composition Layer (COMPLETE)
+brahman/bhasha/english/grammar/:
+- copula.om — is/are/was/were/equals/gives + copula nodes
+- articles.om — a/an/the
+- prepositions.om — of/by/per/from/over/at
+- conjunctions.om — and/or/given/where
+Kaala nodes updated with copula: and word: keys.
+
+### Phase 6c — Implication Edges (COMPLETE)
+All 21 physics mantra nodes carry implication-sthita edges.
+These replace the BFS beam search in yantra_resolver.ml for formula matching.
+
+### Strudel / IR Removal (COMPLETE)
+Removed from anuvada.ml (1388 → ~530 lines):
+- build_music_ir, build_resonance_ir, emit_strudel_from_graph, emit_strudel_to_string, emit_ir
+- renderer_voice type, note_of_node, satya_to_gain, build_voices
+- thaalam_context, js_str/js_float/js_int/js_bool helpers
+- qr_music_ir, qr_resonance_ir, qr_strudel from query_result
+- show_strudel, show_music, show_resonance from output_flags
+- socket.ml strudel/IR JSON lines
+Build clean. 49/52 passing.
+Will add back as tantras later when needed.
 
 ---
 
-## Not yet done
+## Not Yet Done
 
-### Phase 2.7 — Engine to kosha/engine/ (folds into 2.9)
-Move `brahman/engine/` → `brahman/kosha/engine/`
-Update any loader paths that reference `brahman/engine/` directly
+### Phase 7 — Tokeniser Tantra (NEXT)
 
-### Phase 2.8 — Collatz to kosha/math/ (folds into 2.9)
-Write `collatz-math-seema`, `collatz-returningness`, `collatz-space` into
-`brahman/kosha/math/number/structures/`
+Replace:
+- yantra_tokenise (OCaml char loop in yantra_eval.ml)
+- setu_classify.ml (143 lines)
+- classify-fold.tantra + classify-fold-resolve.tantra
+- setu-classify-token.tantra
 
-### Phase 2.9 — Math kosha full restructure (NEXT — see phase-2.9-math.md)
-Full details in `phase-2.9-math.md`
+With:
+- tokenise-question.tantra — single pass, space boundary, graph-native classification
 
-### Phase 3 — Bhasha/English
-Write all nodes in `brahman/bhasha/english/` from `bhasha-english.md` directory structure.
-Fix loader to pick up `brahman/bhasha/` (see loader fix below).
-Delete `_migration/kosha-language/` after verifying coverage.
-
-### Phase 4 — Extraction Pipeline Upgrade
-- New tantra `compute-extraction-seeds` — pre-pass goal detection → seed list
-- Modify `extract-vector-coords` — seeds param, context-score, kala-aware role assignment
-- Modify `scene-extract-kinematic-chain` — call pre-pass, remove `target-triggers`, pass seeds
-
-### Phase 5 — Sense Nodes (Polysemy)
-`position-spatial.om`, `position-verb.om` sense nodes
-
-### Phase 6 — Signal Weight Cache
-Startup pass: compute context-score for kosha process nodes, write to shabda
-
-### Phase 7 — Deduplication Cleanup
-Robotics, physics chain, visheshanam consolidation
-
-### Phase 8 — Broader English Vocabulary
-Comparatives, ordinals, temporal, approximation, circuit/oscillator gaps
-
-### Phase 9+ — Machine Language Bhasha Rewrite
-OCaml/Lua/Strudel nodes: apply Sanskrit grammatical annotations to programming constructs
-
----
-
-## Loader fix needed (Phase 3 prerequisite)
-
-`om_parser.ml` `expand_dir` currently only expands `brahman/kosha/`. Must also expand
-`brahman/bhasha/`:
-
-```ocaml
-let expand_dir d =
-  let sub_kosha = Filename.concat d "kosha" in
-  let sub_bhasha = Filename.concat d "bhasha" in
-  let dirs = [d] in
-  let dirs = if Sys.file_exists sub_kosha && Sys.is_directory sub_kosha
-             then dirs @ [sub_kosha] else dirs in
-  let dirs = if Sys.file_exists sub_bhasha && Sys.is_directory sub_bhasha
-             then dirs @ [sub_bhasha] else dirs in
-  dirs
+Token output format:
+```
+{intent, "solve-for"}
+{value-unit, 5.0, "kilogram"}
+{concept, "kinetic-energy"}
+{grammar, "vartamana-kaala"}
+{unknown, "word"}
 ```
 
-Also: `kosha_root` tracking and `search_dirs` for `shabda-tmpl` resolution must include
-the bhasha path.
+New primitive needed in OCaml: none (split already exists).
+setu_classify.ml removable after this phase.
+
+### Phase 8 — Composition Pipeline Tantras
+
+Depends on: P7 (tokeniser), P6b (grammar layer done), P6c (implication edges done).
+
+New tantras:
+- decompose-question.tantra
+- match-formula.tantra
+- compose-response.tantra
+- invert-mantra.tantra
+- chain-implication.tantra
+
+Full spec in composition-pipeline.md.
+
+### Phase 8.5 — yantra_resolver.ml + yantra_inverter.ml Removal
+
+Depends on: P8 working.
+
+1. resolve-direct in yantra_pipeline_ops.ml → shim to match-formula.tantra
+2. chain_resolve in yantra_resolver.ml → shim to match-formula.tantra
+3. Remove invert_chain calls once all inversions covered
+4. Remove yantra_resolver.ml + yantra_inverter.ml from lib/dune
+
+Gate: 49/52.
+
+### Phase 9 — Testing
+
+Tantra-native tests in brahman/yantra/tests/
+
+Phase 1 (unblocked now):
+- tests/primitives/  — basic OCaml primitive correctness
+- tests/math/        — degree fields, pratipaksha, compose-degrees
+- tests/grammar/     — copula: and word: keys on grammar nodes
+- tests/graph/       — walk, ancestors-of, shabda lookups on known nodes
+- tests/bhasha/      — bhasha nodes load correctly, satya weight = 0.5x
+
+Phase 2 (after P7):
+- tests/mantra/      — execute-chain on all 21 physics mantra nodes
+
+Phase 3 (after P8):
+- tests/pipeline/    — full decompose→match→execute→compose
+- tests/inference/   — chain-implication, inverse via pratipaksha
+- tests/logic/       — implication/theorem/proof node structure
+
+New runner: vyakarana/scripts/run-tantra-tests.sh
+Each test returns bool. Runner checks true.
+Combined target: all tantra tests pass + 49/52 shell tests.
+
+### Phase 10 — CS Kosha Restructure
+
+Full details in phase-cs-restructure.md. Not started.
+
+### Remaining non-blocking items
+
+- Trig function word: keys (sin, cos, tan, asin, acos, atan) — 6 nodes
+- Algebra/set/graph/probability/complexity degree enrichment — ~26 nodes
+- cardinality.om + bijection.om in number/properties/ — 2 nodes
+- Phase 2.7: brahman/engine/ → brahman/kosha/engine/ move
+- Phase 2.8: collatz to kosha/math/number/structures/
+- domain-X-sthita in OCaml (setu.ml, anuvada.ml) — leave for now, non-blocking
 
 ---
 
 ## Pre-existing test failures (3 — do not fix, do not worsen)
 
-Same 3 failures throughout all phases. Regression target is always 49/52.
+Regression target is always 49/52.

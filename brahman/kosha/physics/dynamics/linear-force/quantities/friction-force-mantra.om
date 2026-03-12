@@ -7,7 +7,10 @@ mantra friction-force-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "coefficient-janya"
+  "normal-force-janya"
 
-  shabda friction-force-mantra / f-equals-mu-N-friction-coefficient-times-normal-force degree:1 krama-lhs:friction-force krama-rhs:coefficient,normal-force
+  shabda name:friction-force degree:1 krama-lhs:friction-force krama-lhs-unit:newton krama-rhs:coefficient,normal-force
 
 done

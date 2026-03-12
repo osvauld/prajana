@@ -7,7 +7,10 @@ mantra angular-momentum-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "moment-of-inertia-janya"
+  "angular-velocity-janya"
 
-  shabda angular-momentum-mantra / L-equals-I-omega-moment-of-inertia-times-angular-velocity degree:1 krama-lhs:angular-momentum krama-rhs:moment-of-inertia,angular-velocity
+  shabda name:angular-momentum krama-lhs-unit:kilogram-metre-squared-per-second degree:1 krama-lhs:angular-momentum krama-rhs:moment-of-inertia,angular-velocity
 
 done

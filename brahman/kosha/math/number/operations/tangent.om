@@ -10,6 +10,6 @@ mantra tangent
   "cosine-krama"
   "division-krama"
 
-  shabda eval:tan arity:1 degree:bounded per-element:yes invertible:yes inverse:arctangent
+  shabda word:tangent eval:tan arity:1 degree:bounded per-element:yes invertible:yes inverse:arctangent
 
 done

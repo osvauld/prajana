@@ -472,7 +472,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      | Some (_, rel) -> VString rel
      | None -> VNone)
 
-  (* shabda: node × key → string — read shabda data *)
+  (* shabda: node × key → string — read shabda data (with inheritance) *)
   | "shabda" ->
     let node_name = as_string (e_eval k e (List.nth args 0)) in
     let key = as_string (e_eval k e (List.nth args 1)) in
@@ -480,6 +480,25 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     Some (match List.find_opt (fun (k, _) -> k = key) pairs with
      | Some (_, v) -> VString v
      | None -> VNone)
+
+  (* raw-shabda: node × key → string — own-node shabda only, no inheritance.
+     use this when you need the node's own classification (role:, word:, name:)
+     without bleed from IS-A ancestors. *)
+  | "raw-shabda" ->
+    let node_name = as_string (e_eval k e (List.nth args 0)) in
+    let key = as_string (e_eval k e (List.nth args 1)) in
+    let pairs = Setu_shabda.raw_shabda_for_node k node_name in
+    Some (match List.assoc_opt key pairs with
+     | Some v -> VString v
+     | None -> VNone)
+
+  (* node-layer: node-name → "kosha" | "bhasha" | "sangati" | ""
+     reads n.layer directly — no inheritance, no shabda walk. *)
+  | "node-layer" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    Some (match Proof_graph.find k name with
+     | None -> VString ""
+     | Some n -> VString n.Proof_graph.layer)
 
   (* shabda-pairs: node-name → [[key, value], ...]
      returns all key:value pairs from a node's shabda field as a list of
@@ -718,6 +737,38 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     let t_exp = if List.length floats > 2 then List.nth floats 2 else 0.0 in
     Some (VFloat (Float.abs t_exp))
 
+  (* word-node: word → node-name or VNone
+     O(1) lookup in the word_index built from all nodes' word: shabda keys.
+     "word-node "squared"" → "square", "word-node "was"" → "copula-was" *)
+  | "word-node" ->
+    let word = as_string (e_eval k e (List.nth args 0)) in
+    Some (match !eval_ctx with
+     | Some ctx ->
+       (match Hashtbl.find_opt ctx.ctx_index.word_index word with
+        | Some node_name -> VString node_name
+        | None -> VNone)
+     | None -> VNone)
+
+  (* call-tantra: tantra-name × [arg-vals] → value
+     calls a tantra by name, mapping args positionally to tantra inputs.
+     enables tantras to invoke other tantras by name at runtime. *)
+  | "call-tantra" ->
+    let tname = as_string (e_eval k e (List.nth args 0)) in
+    let arg_list = as_list (e_eval k e (List.nth args 1)) in
+    Some (match !eval_ctx with
+     | Some ctx ->
+       (match Hashtbl.find_opt ctx.ctx_index.by_name tname with
+        | None -> VNone
+        | Some t ->
+          let input_values = List.mapi (fun i v ->
+            let param_name = if i < List.length t.t_inputs
+              then (List.nth t.t_inputs i).tp_name
+              else Printf.sprintf "arg%d" i in
+            (param_name, v)
+          ) arg_list in
+          !_eval_tantra_ref k t input_values)
+     | None -> VNone)
+
   | _ -> None
 
 (* ---- eval_call: primitive operation dispatch ---- *)
@@ -736,5 +787,98 @@ let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : val
       match !_eval_pipeline_op_raw e_eval k e op args with
       | Some v -> v
       | None ->
-        Printf.printf "eval: unknown operation '%s'\n%!" op;
-        VNone
+        (* helper: apply a primitive op by name to a list of values *)
+        let apply_op_vals prim_name op_args =
+          let lifted = List.map (fun v -> match v with
+            | VFloat f -> Lit f
+            | VString s -> StrLit s
+            | VBool b -> BoolLit b
+            | _ -> Lit (as_float v)) op_args in
+          match !_eval_pure_op_raw e_eval k e prim_name lifted with
+          | Some v -> v
+          | None ->
+            (match eval_graph_op e_eval k e prim_name lifted with
+             | Some v -> v
+             | None -> VNone)
+        in
+        (match op with
+
+        (* execute-chain: mantra-name × [arg-vals] → value
+           runs a stack machine over the krama edges of a mantra node.
+           krama edges are read in node-edge-list order (= file order).
+           stack starts with args reversed (first arg at bottom, last at top). *)
+        | "execute-chain" ->
+          let mantra_name = as_string (e_eval k e (List.nth args 0)) in
+          let arg_vals = as_list (e_eval k e (List.nth args 1)) in
+          (match Proof_graph.find k mantra_name with
+           | None -> VString ("no-mantra-" ^ mantra_name)
+           | Some n ->
+             (match Proof_graph.visheshanam_of_string "krama" with
+              | None -> VString "krama-not-registered"
+              | Some krama_rel ->
+                let steps = List.filter_map (fun edge ->
+                  if edge.source = mantra_name && edge.relation = krama_rel
+                  then Some edge.target else None
+                ) n.edges in
+                let stack = ref (List.rev arg_vals) in
+                let pop () = match !stack with
+                  | v :: rest -> stack := rest; v
+                  | [] -> VFloat 0.0
+                in
+                let get_shabda_key node_name key =
+                  match Proof_graph.find k node_name with
+                  | None -> None
+                  | Some op_n ->
+                    let sh = Setu_shabda.parse_shabda op_n.shabda in
+                    List.assoc_opt key sh
+                in
+                List.iter (fun step_name ->
+                  let arity = match get_shabda_key step_name "arity" with
+                    | Some s -> (try int_of_string (String.trim s) with _ -> 1)
+                    | None -> 1
+                  in
+                  let prim_name = match get_shabda_key step_name "eval" with
+                    | Some s -> String.trim s
+                    | None -> step_name
+                  in
+                  let op_args = List.init arity (fun _ -> pop ()) in
+                  let result = apply_op_vals prim_name op_args in
+                  stack := result :: !stack
+                ) steps;
+                (match !stack with v :: _ -> v | [] -> VNone)))
+
+        (* apply-op: op-name × [arg-vals] → value
+           looks up eval: name from op node's shabda, then dispatches. *)
+        | "apply-op" ->
+          let op_name = as_string (e_eval k e (List.nth args 0)) in
+          let op_args_v = as_list (e_eval k e (List.nth args 1)) in
+          let prim_name = match Proof_graph.find k op_name with
+            | None -> op_name
+            | Some n ->
+              let sh = Setu_shabda.parse_shabda n.shabda in
+              (match List.assoc_opt "eval" sh with
+               | Some s -> String.trim s
+               | None -> op_name)
+          in
+          apply_op_vals prim_name op_args_v
+
+        (* tantra-by-name fallback: if op matches a loaded tantra, call it *)
+        | _ ->
+          (match !eval_ctx with
+           | Some ctx ->
+             (match Hashtbl.find_opt ctx.ctx_index.by_name op with
+              | Some t ->
+                let arg_vals = List.map (e_eval k e) args in
+                let input_values = List.mapi (fun i v ->
+                  let param_name = if i < List.length t.t_inputs
+                    then (List.nth t.t_inputs i).tp_name
+                    else Printf.sprintf "arg%d" i in
+                  (param_name, v)
+                ) arg_vals in
+                !_eval_tantra_ref k t input_values
+              | None ->
+                Printf.printf "eval: unknown operation '%s'\n%!" op;
+                VNone)
+           | None ->
+             Printf.printf "eval: unknown operation '%s'\n%!" op;
+             VNone))

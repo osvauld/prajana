@@ -8,7 +8,11 @@ mantra velocity-mantra
   "addition-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "initial-velocity-janya"
+  "acceleration-janya"
+  "time-janya"
 
-  shabda velocity-mantra / v-equals-u-plus-at-final-velocity-from-initial-plus-acceleration-times-time degree:1 krama-lhs:velocity krama-rhs:initial-velocity,acceleration,time
+  shabda name:velocity degree:1 krama-lhs:velocity krama-lhs-unit:metre-per-second krama-rhs:initial-velocity,acceleration,time
 
 done

@@ -4,6 +4,6 @@ mantra square-root
   "sqrt-abheda square-pratipaksha"
   "yantra-kriya"
 
-shabda square-root / the-inverse-of-squaring-finding-what-multiplied-by-itself-gives-the-value degree:0.5 per-element:yes invertible:yes inverse:square
+shabda word:root-of eval:sqrt arity:1 degree:0.5 per-element:yes invertible:yes inverse:square
 
 done

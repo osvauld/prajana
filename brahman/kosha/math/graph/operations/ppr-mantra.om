@@ -1,0 +1,10 @@
+mantra ppr-mantra
+
+  "graph-walk-swarupa"
+  "breadth-first-swarupa"
+  -- personalized pagerank: surfaces contextually relevant nodes
+  -- given seeds and a target, ranks all nodes by teleport probability
+
+  shabda word:pagerank eval:ppr arity:3 name:personalized-pagerank
+
+done

@@ -4,6 +4,6 @@ kosha metre
   "float-abheda length-yukta space-yukta displacement-yukta"
   "physics-varga-vishesa"
 
-  shabda concepts-for-unit:link-length,displacement,distance
+  shabda word:m,metre,meter concepts-for-unit:link-length,displacement,distance
 
 done

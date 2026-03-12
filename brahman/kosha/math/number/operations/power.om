@@ -9,6 +9,6 @@ mantra power
   "polynomial-yukta derivative-yukta"
   "avrti-yukta"
 
-  shabda eval:power arity:2 pratipaksha-0:power pratipaksha-0-compound:true degree:exp per-element:no invertible:yes inverse:logarithm
+  shabda word:to-the-power eval:power arity:2 pratipaksha-0:power pratipaksha-0-compound:true degree:exp per-element:no invertible:yes inverse:logarithm
 
 done

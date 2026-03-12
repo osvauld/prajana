@@ -14,7 +14,12 @@ mantra gravitational-force-mantra
   "division-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "gravitational-constant-janya"
+  "mass1-janya"
+  "mass2-janya"
+  "radius-janya"
 
-  shabda gravitational-force-mantra / F-equals-G-m1-m2-over-r-squared-newtons-law-of-universal-gravitation degree:2 krama-lhs:gravitational-force krama-rhs:gravitational-constant,mass1,mass2,radius
+  shabda name:gravitational-force krama-lhs-unit:newton degree:2 krama-lhs:gravitational-force krama-rhs:gravitational-constant,mass1,mass2,radius
 
 done

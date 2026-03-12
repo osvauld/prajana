@@ -30,6 +30,7 @@ let empty_index () : tantra_index = {
   constants   = Hashtbl.create 16;
   conversions = Hashtbl.create 16;
   all_tantras = ref [];
+  word_index  = Hashtbl.create 256;
 }
 
 let add_to_list_table tbl key value =
@@ -340,6 +341,89 @@ let apply_relation_axioms (k : proof_graph) : int * (string * int * int) list =
   let summary = List.sort (fun (a,_,_) (b,_,_) -> String.compare a b) summary in
   let total = List.fold_left (fun acc (_, a, _) -> acc + a) 0 summary in
   (total, summary)
+
+(* register_mantra_nodes: scan all mantra-layer graph nodes and register each one
+   that has krama-lhs/krama-rhs shabda fields as a synthetic tantra.
+   the synthetic tantra body calls execute-chain, which runs the stack machine
+   over the node's krama edges.
+   call after build_index so all .tantra files are already indexed. *)
+let register_mantra_nodes (k : proof_graph) (idx : tantra_index) : unit =
+  Hashtbl.iter (fun name n ->
+    if n.Proof_graph.layer = "mantra"
+    && not (Hashtbl.mem idx.by_name name) then begin
+      let sh = Setu_shabda.parse_shabda n.Proof_graph.shabda in
+      match List.assoc_opt "krama-lhs" sh, List.assoc_opt "krama-rhs" sh with
+      | Some lhs, Some rhs ->
+        let lhs = String.trim lhs in
+        let rhs_vars = String.split_on_char ',' (String.trim rhs)
+                       |> List.map String.trim
+                       |> List.filter (fun s -> String.length s > 0) in
+        let mk_param v = {
+          tp_name      = v;
+          tp_type      = "float";
+          tp_canonical = v;
+          tp_unit      = None;
+          tp_avastha   = None;
+        } in
+        let t : tantra = {
+          t_name    = name;
+          t_file    = name ^ ".om";
+          t_inputs  = List.map mk_param rhs_vars;
+          t_lets    = [(lhs,
+                        Call ("execute-chain",
+                              [StrLit name;
+                               ListExpr (List.map (fun v -> Var v) rhs_vars)]))];
+          t_returns = [mk_param lhs];
+        } in
+        register_tantra ~graph:k idx t
+      | _ -> ()
+    end
+  ) k.Proof_graph.nodes
+
+(* build_word_index: scan all graph nodes for word: key in their shabda.
+   populates idx.word_index with word → node-name mappings.
+   comma-separated word: values (e.g. "word:and,both") register all words.
+   called after build_index and register_mantra_nodes. *)
+let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
+  Hashtbl.iter (fun node_name n ->
+    let pairs = Setu_shabda.parse_shabda n.Proof_graph.shabda in
+    (* index all word: key values (comma-separated) *)
+    (match List.assoc_opt "word" pairs with
+    | None -> ()
+    | Some words_str ->
+      let words = String.split_on_char ',' words_str in
+      List.iter (fun w ->
+        let w = String.trim w in
+        if String.length w > 0 then
+          Hashtbl.replace idx.word_index w node_name
+      ) words);
+    (* also index name: key so physics/math quantity names are findable.
+       e.g. name:velocity on velocity-mantra → word-node "velocity" → "velocity-mantra" *)
+    (match List.assoc_opt "name" pairs with
+    | None -> ()
+    | Some name_str ->
+      let name_str = String.trim name_str in
+      if String.length name_str > 0 then begin
+        (* register the name itself if not already claimed by a word: entry *)
+        if not (Hashtbl.mem idx.word_index name_str) then
+          Hashtbl.replace idx.word_index name_str node_name;
+        (* also register hyphenated names with spaces: "kinetic-energy" → "kinetic energy" *)
+        let spaced = String.map (fun c -> if c = '-' then ' ' else c) name_str in
+        if spaced <> name_str && not (Hashtbl.mem idx.word_index spaced) then
+          Hashtbl.replace idx.word_index spaced node_name
+      end);
+    (* auto-index kosha node names as concept words (lowest priority).
+       allows word-node "mass" → "mass", word-node "kinetic-energy" → "kinetic-energy".
+       only applied if not already claimed by word: or name: entries. *)
+    if n.Proof_graph.layer = "kosha" then begin
+      if not (Hashtbl.mem idx.word_index node_name) then
+        Hashtbl.replace idx.word_index node_name node_name;
+      (* also register spaced form: "kinetic-energy" → "kinetic energy" *)
+      let spaced = String.map (fun c -> if c = '-' then ' ' else c) node_name in
+      if spaced <> node_name && not (Hashtbl.mem idx.word_index spaced) then
+        Hashtbl.replace idx.word_index spaced node_name
+    end
+  ) k.Proof_graph.nodes
 
 let build_index ?(graph : proof_graph option) (dirs : string list) : tantra_index =
   let idx = empty_index () in

@@ -4,6 +4,6 @@ mantra arcsine
   "trigonometry-varga-vishesa"
   "sine-pratipaksha"
 
-  shabda eval:asin arity:1 degree:1 per-element:yes invertible:yes inverse:sine
+  shabda word:arcsine eval:asin arity:1 degree:1 per-element:yes invertible:yes inverse:sine
 
 done

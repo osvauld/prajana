@@ -1,0 +1,9 @@
+mantra double
+
+  "number-varga-karma"
+  "multiplication-swarupa multiplication-kriya"
+  "half-pratipaksha"
+
+  shabda word:double eval:double arity:1 per-element:yes invertible:yes inverse:half
+
+done

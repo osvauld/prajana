@@ -50,6 +50,7 @@ type tantra_index = {
   constants    : (string, float) Hashtbl.t;
   conversions  : (string * string, tantra) Hashtbl.t;
   all_tantras  : tantra list ref;
+  word_index   : (string, string) Hashtbl.t;  (* word: key → node-name *)
 }
 
 type binding = {

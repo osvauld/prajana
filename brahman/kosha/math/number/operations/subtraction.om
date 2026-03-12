@@ -4,6 +4,6 @@ mantra subtraction
   "kshaya-kriya matra-kriya arithmetic-kriya minus-abheda equation-yukta"
   "addition-pratipaksha"
 
-  shabda eval:sub arity:2 pratipaksha-0:add pratipaksha-1:sub pratipaksha-1-flip:true degree:1 per-element:no invertible:yes inverse:addition
+  shabda word:minus eval:sub arity:2 pratipaksha-0:add pratipaksha-1:sub pratipaksha-1-flip:true degree:1 per-element:no invertible:yes inverse:addition
 
 done

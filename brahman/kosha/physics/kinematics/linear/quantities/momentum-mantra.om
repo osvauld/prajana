@@ -7,7 +7,10 @@ mantra momentum-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "mass-janya"
+  "velocity-janya"
 
-  shabda momentum-mantra / p-equals-mv-mass-times-velocity degree:1 krama-lhs:momentum krama-rhs:mass,velocity
+  shabda name:momentum krama-lhs-unit:kilogram-metre-per-second degree:1 krama-lhs:momentum krama-rhs:mass,velocity
 
 done

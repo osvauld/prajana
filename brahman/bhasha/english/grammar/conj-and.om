@@ -1,0 +1,8 @@
+bhasha conj-and
+
+  "conjunction-swarupa dvandva-sthita"
+  -- additive join: "mass AND velocity", "force AND displacement"
+
+  shabda word:and  role:grammar
+
+done

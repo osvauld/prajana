@@ -7,7 +7,10 @@ mantra torque-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "moment-of-inertia-janya"
+  "angular-acceleration-janya"
 
-  shabda torque-mantra / tau-equals-I-alpha-moment-of-inertia-times-angular-acceleration degree:1 krama-lhs:torque krama-rhs:moment-of-inertia,angular-acceleration
+  shabda name:torque krama-lhs-unit:newton-metre degree:1 krama-lhs:torque krama-rhs:moment-of-inertia,angular-acceleration
 
 done

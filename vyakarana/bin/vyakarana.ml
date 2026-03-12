@@ -108,10 +108,12 @@ let find_default_corpus () : string list =
   let try_prefix prefix =
     let sangati = prefix ^ "brahman/sangati" in
     let kosha   = prefix ^ "brahman/kosha" in
+    let bhasha  = prefix ^ "brahman/bhasha" in
     let engine  = prefix ^ "brahman/engine" in
     if Sys.file_exists sangati then
       let dirs = [sangati] in
       let dirs = if Sys.file_exists kosha   then dirs @ [kosha]   else dirs in
+      let dirs = if Sys.file_exists bhasha  then dirs @ [bhasha]  else dirs in
       let dirs = if Sys.file_exists engine  then dirs @ [engine]  else dirs in
       (* include all session directories *)
       let sessions_root = prefix ^ "sessions" in
@@ -344,6 +346,11 @@ let () =
   in
   (* build yantra tantra index from loaded dirs — pass graph so tantras register as nodes *)
   let yantra_idx = Yantra.build_index ~graph:k0 dirs in
+  (* register mantra nodes as synthetic tantras so the chain resolver can use them *)
+  Yantra.register_mantra_nodes k0 yantra_idx;
+  (* build word index: word: key → node-name for all graph nodes.
+     enables word-node primitive (O(1) synonym lookup) in tantras. *)
+  Yantra.build_word_index k0 yantra_idx;
   (* derive vp_satya_weight for each relation type from the visheshanam-entropy-weights tantra.
      the tantra computes Shannon entropy of each relation's target distribution across all edges.
      this runs after build_index so the tantra is loaded and all symmetry edges are present. *)

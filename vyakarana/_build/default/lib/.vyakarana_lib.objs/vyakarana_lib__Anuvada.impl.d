@@ -1,1 +1,1 @@
-lib/anuvada.ml: Array Buffer Float Hashtbl List Option Printf Proof_graph Set Setu String
+lib/anuvada.ml: Array Buffer Hashtbl List Printf Proof_graph Set Setu String

@@ -7,7 +7,10 @@ mantra electric-power-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "voltage-janya"
+  "current-janya"
 
-  shabda electric-power-mantra / P-equals-VI-electric-power-is-voltage-times-current degree:1 krama-lhs:power krama-rhs:voltage,current
+  shabda name:electric-power krama-lhs-unit:watt degree:1 krama-lhs:power krama-rhs:voltage,current
 
 done

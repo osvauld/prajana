@@ -7,7 +7,10 @@ mantra photon-energy-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "planck-constant-janya"
+  "frequency-janya"
 
-  shabda photon-energy-mantra / E-equals-hf-photon-energy-is-planck-constant-times-frequency degree:1 krama-lhs:energy krama-rhs:planck-constant,frequency
+  shabda name:photon-energy krama-lhs-unit:joule degree:1 krama-lhs:energy krama-rhs:planck-constant,frequency
 
 done

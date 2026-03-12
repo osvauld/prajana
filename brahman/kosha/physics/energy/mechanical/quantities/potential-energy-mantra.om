@@ -8,7 +8,11 @@ mantra potential-energy-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "mass-janya"
+  "gravity-janya"
+  "height-janya"
 
-  shabda potential-energy-mantra / PE-equals-mgh-gravitational-potential-energy degree:1 krama-lhs:energy krama-rhs:mass,gravity,height
+  shabda name:potential-energy krama-lhs-unit:joule degree:1 krama-lhs:energy krama-rhs:mass,gravity,height
 
 done

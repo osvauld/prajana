@@ -8,7 +8,11 @@ mantra acceleration-mantra
   "division-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "final-velocity-janya"
+  "initial-velocity-janya"
+  "time-janya"
 
-  shabda acceleration-mantra / a-equals-delta-v-over-t-change-in-velocity-divided-by-time degree:1 krama-lhs:acceleration krama-rhs:final-velocity,initial-velocity,time
+  shabda name:acceleration krama-lhs-unit:metre-per-second-squared degree:1 krama-lhs:acceleration krama-rhs:final-velocity,initial-velocity,time
 
 done
