@@ -12,7 +12,11 @@ mantra jacobian-mantra
   "division-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "fk-janya"
+  "angles-janya"
+  "epsilon-janya"
 
-  shabda jacobian-mantra / numerical-jacobian-finite-difference-per-column-fk-perturb-subtract-divide degree:1 krama-lhs:jacobian krama-rhs:fk,angles,epsilon
+  shabda name:jacobian degree:1 krama-lhs:jacobian krama-rhs:fk,angles,epsilon
 
 done

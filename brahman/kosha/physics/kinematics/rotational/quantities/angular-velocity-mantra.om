@@ -7,7 +7,10 @@ mantra angular-velocity-mantra
   "division-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "velocity-janya"
+  "radius-janya"
 
-  shabda angular-velocity-mantra / omega-equals-v-over-r-angular-velocity-from-linear-velocity-and-radius degree:1 krama-lhs:angular-velocity krama-rhs:velocity,radius
+  shabda name:angular-velocity krama-lhs-unit:radian-per-second degree:1 krama-lhs:angular-velocity krama-rhs:velocity,radius
 
 done

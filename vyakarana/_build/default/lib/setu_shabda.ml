@@ -165,13 +165,25 @@ let merge_shabda_priority (pairs_by_priority : (string * string) list list)
   ) pairs_by_priority;
   List.rev !result
 
+(* inheritable_keys: only these keys flow upward through IS-A inheritance.
+   structural/classification keys (role:, word:, name:, krama-lhs/rhs) are node-own only. *)
+let inheritable_keys = [
+  "eval"; "arity"; "parse-arity"; "degree"; "pratipaksha";
+  "copula"; "copula-plural"; "copula-formula";
+  "matra"; "concepts-for-unit"
+]
+
 (* read_shabda: return effective shabda pairs for a node, including inherited pairs.
    inheritance chain: walk dhatu, abheda, swarupa edges (IS-A only) via Proof_graph.
-   own pairs win over inherited pairs on key conflict. *)
+   own pairs win over inherited pairs on key conflict.
+   Only inheritable_keys flow from ancestors — structural keys (role:, word:, name:) stay local. *)
 let read_shabda (k : proof_graph) (node_name : string) : (string * string) list =
   let own = raw_shabda_for_node k node_name in
   let ancestors = Proof_graph.walk_inheritance k node_name in
-  let ancestor_shabda = List.map (raw_shabda_for_node k) ancestors in
+  let ancestor_shabda = List.map (fun a ->
+    List.filter (fun (key, _) -> List.mem key inheritable_keys)
+      (raw_shabda_for_node k a)
+  ) ancestors in
   merge_shabda_priority (own :: ancestor_shabda)
 
 let shabda_get (pairs : (string * string) list) (key : string) : string option =

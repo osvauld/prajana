@@ -7,7 +7,9 @@ mantra frequency-mantra
   "division-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "period-janya"
 
-  shabda frequency-mantra / f-equals-1-over-T-frequency-is-reciprocal-of-period degree:1 krama-lhs:frequency krama-rhs:period
+  shabda name:frequency krama-lhs-unit:hertz degree:1 krama-lhs:frequency krama-rhs:period
 
 done

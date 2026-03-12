@@ -15,7 +15,9 @@ include Yantra_bigram       (* ytoken *)
 (* explicit re-exports from modules that can't be cleanly include'd without
    shadowing each other *)
 let parse_expr_string   = Yantra_parser.parse_expr_string
-let build_index         = Yantra_index.build_index
+let build_index           = Yantra_index.build_index
+let register_mantra_nodes = Yantra_index.register_mantra_nodes
+let build_word_index      = Yantra_index.build_word_index
 
 let resolve_tantra      = Yantra_resolver.resolve_tantra
 let chain_resolve       = Yantra_resolver.chain_resolve

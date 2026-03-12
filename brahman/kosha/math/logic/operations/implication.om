@@ -3,6 +3,6 @@ mantra implication
   "logic-varga-karma"
   "sambandha-yukta krama-yukta"   -- if A then B; directional
 
-shabda implication / logical-connective-if-A-then-B
+shabda word:if,implies,therefore name:logical-implication / logical-connective-if-A-then-B
 
 done

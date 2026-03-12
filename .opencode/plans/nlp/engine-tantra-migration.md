@@ -1,7 +1,6 @@
 # Engine / Tantra Migration Plan
 
-**Status**: Analysis complete. Implementation not yet started.
-**Prerequisite for**: `graph/` sub-varga build (phase 2.9 step 10)
+**Status**: Steps 0–6 done. Step 7 partial. P7 (tokenise-question.tantra) is next.
 **Regression baseline**: 49/52 passing — do not break.
 
 ---
@@ -620,35 +619,46 @@ structure. Every `math/graph/` node must anchor to these:
 ## Implementation sequence
 
 ```
-Step 0  — remove dead duplicates from setu.ml (200 lines, no behaviour change)
-          callers updated: yantra.ml:63 and anuvada.ml:1195 → Setu_classify.classify_token
+Step 0  ✅ remove dead duplicates from setu.ml
+Step 1  ✅ higher-order tantra VFn wrapping in yantra_eval.ml
+Step 2  ✅ primitives: in-degree, out-degree, neighbors, walk-chain, resolve-node
+Step 3  ✅ semantic tantras: has-domain, resolve-node, infer-inputs, infer-outputs, domain-of-seeds
+Step 4  ✅ regression 49/52
+Step 5  ✅ math/graph/ sub-varga + all math kosha restructure
+Step 6  ✅ graded morphisms: degree: fields + pratipaksha edges on operation pairs
+           compose-degrees.tantra + is-identity-composition.tantra written
+Step 7  partial:
+           ✅ compute-from-node.tantra — generic dispatch via kriya edge
+           ✅ execute-chain.tantra — fold over krama edges
+           ⬜ scene-walk.tantra — backward walk from phala through pratipaksha to janya
+              (blocked on P8 decompose-question + match-formula)
 
-Step 1  — add higher-order tantra VFn wrapping in yantra_eval.ml
-          Var v branch: tantras with inputs → VFn instead of VString
-          enables: map nodes domain-of  (no fn n → wrapper needed)
+--- NEXT ---
 
-Step 2  — add primitives to yantra_eval_primitives.ml:
-          in-degree, out-degree, neighbors, walk-chain, resolve-node
-          + walk_chain implementation in setu.ml (BFS N hops over kriya/phala/swarupa/abheda)
+Step 8  P7 — tokenise-question.tantra
+          Replace: yantra_tokenise OCaml char loop
+                   setu_classify.ml (143 lines) → remove entirely
+                   classify-fold.tantra + classify-fold-resolve.tantra → merge in
+                   setu-classify-token.tantra → replace
+          With: single pass, space boundary, graph-native classification
+          Token output: [{intent,solve-for}, {value-unit,5.0,kilogram}, {concept,kinetic-energy}, ...]
 
-Step 3  — write semantic tantras:
-          has-domain.tantra, resolve-node.tantra, infer-inputs.tantra,
-          infer-outputs.tantra, domain-of-seeds.tantra
+Step 9  P8 — composition pipeline tantras
+          decompose-question.tantra, match-formula.tantra, compose-response.tantra,
+          invert-mantra.tantra, chain-implication.tantra
+          See: composition-pipeline.md
 
-Step 4  — run regression (must stay 49/52)
+Step 10 P8.5 — yantra_resolver.ml + yantra_inverter.ml removal
+          Depends on P8.
+          Replace chain_resolve + invert_chain with thin shims → match-formula.tantra
 
-Step 5  — math/graph/ sub-varga build (see phase-2.9-math.md step 10)
+Step 11 P9 — tantra-native testing
+          brahman/yantra/tests/ — all categories (see tantra-testing.md)
+          New runner: vyakarana/scripts/run-tantra-tests.sh
 
-Step 6  — graded morphism enrichment on operation nodes:
-          add degree: field to operation node shabda (square, sqrt, rotation-matrix, etc.)
-          add pratipaksha edges between inverse operation pairs
-          see: graded-morphisms.md (to be written)
+--- DEFERRED ---
 
-Step 7  — write graph-native computation tantras:
-          compute-from-node.tantra  — generic dispatch: walk kriya → apply → return phala
-          execute-chain.tantra      — fold composition over a sequence of operation nodes
-          scene-walk.tantra         — backward walk from phala through pratipaksha to janya
-          see: graph-computation-tantras.md (to be written)
+Strudel/music_ir/resonance_ir as tantras — removed from OCaml, add back when needed
 ```
 
 ---
@@ -656,13 +666,19 @@ Step 7  — write graph-native computation tantras:
 ## Key files
 
 ```
-vyakarana/lib/setu.ml                  dead duplicates to remove (steps 0)
-vyakarana/lib/yantra_eval.ml           Var branch — higher-order tantra fix (step 1)
-vyakarana/lib/yantra_eval_primitives.ml  new primitives (step 2)
-brahman/yantra/has-domain.tantra        new (step 3)
-brahman/yantra/resolve-node.tantra      new (step 3)
-brahman/yantra/infer-inputs.tantra      new (step 3)
-brahman/yantra/infer-outputs.tantra     new (step 3)
-brahman/yantra/domain-of-seeds.tantra   new (step 3)
-vyakarana/scripts/run-regression.sh     regression check after step 4
+vyakarana/lib/setu_classify.ml         TARGET FOR REMOVAL (Step 8 / P7)
+vyakarana/lib/yantra_pipeline_ops.ml   tokenise primitive — thin after P7
+vyakarana/lib/yantra_resolver.ml       TARGET FOR REMOVAL (Step 10 / P8.5)
+vyakarana/lib/yantra_inverter.ml       TARGET FOR REMOVAL (Step 10 / P8.5)
+vyakarana/lib/anuvada.ml               strudel/IR removed, ~530 lines
+brahman/yantra/tokenise-question.tantra    new (Step 8)
+brahman/yantra/decompose-question.tantra   new (Step 9)
+brahman/yantra/match-formula.tantra        new (Step 9)
+brahman/yantra/compose-response.tantra     new (Step 9)
+brahman/yantra/invert-mantra.tantra        new (Step 9)
+brahman/yantra/chain-implication.tantra    new (Step 9)
+brahman/yantra/scene-walk.tantra           new (Step 9, uses P8)
+brahman/yantra/tests/                      new (Step 11)
+vyakarana/scripts/run-tantra-tests.sh      new (Step 11)
+vyakarana/scripts/run-regression.sh        gate: 49/52 throughout
 ```

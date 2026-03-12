@@ -7,7 +7,10 @@ mantra mass-density-mantra
   "division-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "mass-janya"
+  "volume-janya"
 
-  shabda mass-density-mantra / rho-equals-m-over-V-mass-per-unit-volume degree:1 krama-lhs:mass-density krama-rhs:mass,volume
+  shabda name:density krama-lhs-unit:kilogram-per-cubic-metre degree:1 krama-lhs:mass-density krama-rhs:mass,volume
 
 done

@@ -192,7 +192,7 @@ let graph_delta_json (r : Anuvada.query_result) : string =
     (String.concat "," edges)
 
 let ok_response (req_id : string) (ses_id : string) (trn_id : string)
-    (r : Anuvada.query_result) (flags : Anuvada.output_flags) : string =
+    (r : Anuvada.query_result) (_flags : Anuvada.output_flags) : string =
   let buf = Buffer.create 512 in
   Buffer.add_string buf
     (Printf.sprintf
@@ -204,12 +204,7 @@ let ok_response (req_id : string) (ses_id : string) (trn_id : string)
       (steps_json r.Anuvada.qr_steps)
       (String.concat "," (List.map je r.Anuvada.qr_next_qs))
       (graph_delta_json r));
-  if flags.Anuvada.show_music then
-    Buffer.add_string buf (Printf.sprintf ",\"music_ir\":%s" r.Anuvada.qr_music_ir);
-  if flags.Anuvada.show_resonance then
-    Buffer.add_string buf (Printf.sprintf ",\"resonance_ir\":%s" r.Anuvada.qr_resonance_ir);
-  if flags.Anuvada.show_strudel then
-    Buffer.add_string buf (Printf.sprintf ",\"assets\":{\"strudel\":%s}" (je r.Anuvada.qr_strudel));
+
   Buffer.add_string buf
     (Printf.sprintf ",\"diagnostics\":{\"passes\":%d,\"connections\":%d,\"confidence_top\":%.4f}}"
       r.Anuvada.qr_passes

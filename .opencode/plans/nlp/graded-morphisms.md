@@ -1,6 +1,6 @@
 # Graded Morphisms — Operation Node Enrichment
 
-**Status**: Design complete. No implementation yet.
+**Status**: PARTIAL. Number/geometry/calculus operations enriched. Algebra/set/graph/probability/complexity operations NOT started (0%). See audit findings.
 **Depends on**: math/graph/ sub-varga (phase 2.9 step 10)
 **Part of**: engine-tantra-migration.md step 6
 

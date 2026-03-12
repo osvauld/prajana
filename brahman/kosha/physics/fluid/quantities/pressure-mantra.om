@@ -7,7 +7,10 @@ mantra pressure-mantra
   "division-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "force-janya"
+  "area-janya"
 
-  shabda pressure-mantra / P-equals-F-over-A-force-per-unit-area degree:1 krama-lhs:pressure krama-rhs:force,area
+  shabda name:pressure krama-lhs-unit:pascal degree:1 krama-lhs:pressure krama-rhs:force,area
 
 done

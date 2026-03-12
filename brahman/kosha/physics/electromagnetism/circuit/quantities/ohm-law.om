@@ -9,6 +9,6 @@ mantra ohm-law
 
   "execute-chain-kriya"
 
-  shabda ohm-law / V-equals-IR-voltage-is-current-times-resistance degree:1 krama-lhs:voltage krama-rhs:current,resistance
+  shabda name:ohm-law krama-lhs-unit:volt degree:1 krama-lhs:voltage krama-rhs:current,resistance
 
 done

@@ -348,9 +348,14 @@ let load_dirs ?(emit_meta = true) (dirs : string list) (k : proof_graph) : proof
      "language/english/unit-aliases.shabda" resolve whether the user passes
      "brahman/" or "brahman/kosha" explicitly. *)
   let expand_dir d =
-    let sub = Filename.concat d "kosha" in
-    if Sys.file_exists sub && Sys.is_directory sub then [d; sub]
-    else [d]
+    let sub_kosha = Filename.concat d "kosha" in
+    let sub_bhasha = Filename.concat d "bhasha" in
+    let dirs = [d] in
+    let dirs = if Sys.file_exists sub_kosha && Sys.is_directory sub_kosha
+               then dirs @ [sub_kosha] else dirs in
+    let dirs = if Sys.file_exists sub_bhasha && Sys.is_directory sub_bhasha
+               then dirs @ [sub_bhasha] else dirs in
+    dirs
   in
   let expanded_dirs = List.concat_map expand_dir dirs in
   let kosha_dir = List.fold_left (fun acc d ->

@@ -1,0 +1,9 @@
+bhasha english
+
+  "bhasha-swarupa-sthita"
+  -- anchor node for all English-language surface forms
+  -- every bhasha node in this directory carries english-sthita pointing here
+
+  shabda English / the-english-language-surface-layer
+
+done

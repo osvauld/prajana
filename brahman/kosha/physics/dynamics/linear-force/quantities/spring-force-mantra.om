@@ -7,7 +7,10 @@ mantra spring-force-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "spring-constant-janya"
+  "displacement-janya"
 
-  shabda spring-force-mantra / F-equals-kx-spring-constant-times-displacement-hookes-law degree:1 krama-lhs:spring-force krama-rhs:spring-constant,displacement
+  shabda name:spring-force krama-lhs-unit:newton degree:1 krama-lhs:spring-force krama-rhs:spring-constant,displacement
 
 done

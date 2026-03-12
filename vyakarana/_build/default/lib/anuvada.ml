@@ -1,21 +1,13 @@
 (* anuvada.ml — sentence understanding + emit-from-graph + output
-   the reasoning/text output layer. reads the graph via Setu. emits text and Strudel.
+   the reasoning/text output layer. reads the graph via Setu.
 
-   responsibility: question answering, concept explanation, resonance reasoning.
+   responsibility: question answering, concept explanation, graph reasoning.
    not responsible for code generation — that is prayoga's domain.
-
-   setu nodes used here:
-     visheshanam-english  — relation types -> English phrases
-     thaalam              — beat cycle names and counts
-     ocaml-setu           — OCaml forms for math/physics bridge programs
-     swara-to-strudel     — swara names -> pitch letters
-     strudel              — synth/rhythm defaults
+   strudel / music_ir / resonance_ir removed — add back later as tantras.
 
    dependency: Proof_graph, Setu. *)
 
 open Proof_graph
-
-(* sahaja gloss now comes directly from each node's shabda field. *)
 
 (* render a visheshanam as an English phrase — reads from visheshanam-english node *)
 let english_of_visheshanam_cache : (string, string) Hashtbl.t = Hashtbl.create 16
@@ -38,52 +30,15 @@ let english_of_visheshanam_from_graph (k : proof_graph) (v : visheshanam) : stri
   | Some s -> s
   | None -> key
 
-(* rhythmic cycle — reads beat counts from thaalam node shabda *)
-let thaalam_cycle_cache : (string, (string * int)) Hashtbl.t = Hashtbl.create 8
-
-let thaalam_cycle_loaded = ref false
-
-let load_thaalam_cycle (k : proof_graph) : unit =
-  if not !thaalam_cycle_loaded then begin
-    thaalam_cycle_loaded := true;
-    let pairs = Setu.read_shabda k "thaalam" in
-    List.iter (fun (name, beats_str) ->
-      match int_of_string_opt beats_str with
-      | Some beats -> Hashtbl.replace thaalam_cycle_cache name (name, beats)
-      | None -> ()
-    ) pairs
-  end
-
-let thaalam_cycle (k : proof_graph) name =
-  load_thaalam_cycle k;
-  let n = String.lowercase_ascii name in
-  (* try exact match first, then prefix match *)
-  match Hashtbl.find_opt thaalam_cycle_cache n with
-  | Some pair -> Some pair
-  | None ->
-    Hashtbl.fold (fun key pair acc ->
-      match acc with
-      | Some _ -> acc
-      | None ->
-         if String.length n >= String.length key
-            && String.sub n 0 (String.length key) = key
-         then Some pair
-         else None
-     ) thaalam_cycle_cache None
-
-let thaalam_default (k : proof_graph) : string option =
-  let pairs = Setu.read_shabda k "thaalam" in
-  Setu.shabda_get pairs "default"
-
 (* --- avrti on language: the spiral --- *)
 
 type anuvada_triple = {
-  a_source   : string;
-  a_source_raw : string;
-  a_relation : visheshanam;
-  a_targets  : string list;
+  a_source      : string;
+  a_source_raw  : string;
+  a_relation    : visheshanam;
+  a_targets     : string list;
   a_targets_raw : string list;
-  a_pass     : int;
+  a_pass        : int;
 }
 
 module TripleKey = struct
@@ -341,9 +296,6 @@ let ocaml_of_composition
     (container : string)
     (_elem : string)
     : string option =
-  (* Build a canonical key from the combination and look it up in ocaml-setu.
-     Key format: impl-<shape-flags>-<op-flags>-<container-short>
-     e.g. impl-map-fold-dot-list, impl-map-fold-dot-aa, impl-map-fold-mul-add-list *)
   let has_map  = List.mem "map"                   shape in
   let has_fold = List.mem "fold"                  shape in
   let has_dot  = List.mem "dot-product"           ops   in
@@ -660,8 +612,7 @@ let emit_ocaml_from_graph (k : proof_graph) (content_words : string list) : unit
             else List.exists (fun t ->
               List.mem t inputs || List.mem t outputs
             ) physics_terms_in_query in
-          let has_arithmetic_yukta =
-            yukta_operators k name <> [] in
+          let has_arithmetic_yukta = yukta_operators k name <> [] in
           ignore has_arithmetic_yukta;
           let matches_math_query =
             if not math_required then true
@@ -719,432 +670,24 @@ let emit_ocaml_from_graph (k : proof_graph) (content_words : string list) : unit
     end
   end
 
-(* --- strudel mini-notation emission from graph structure --- *)
-
-(* --- renderer voice layer ---
-   reads from strudel.shabda flat keys: <relation>-sound, -octave, -gain, -speed
-   shared by strudel emit, music_ir, and resonance_ir *)
-
-type renderer_voice = {
-  v_source  : string;
-  v_label   : string;
-  v_relation: visheshanam;
-  v_targets : string list;
-  v_notes   : string list;
-  v_sound   : string;
-  v_timbre  : string;   (* music_ir field — same concept as sound *)
-  v_octave  : int;
-  v_gain    : float;
-  v_pan     : float;
-  v_speed   : float;
-  v_articulation : string;
-}
-
-let note_of_node (k : proof_graph) (name : string) (octave : int) : string =
-  let pairs = Setu.read_shabda k "swara-to-strudel" in
-  let ordered = ["shadja";"rishabha";"gandhara";"madhyama";"panchama";"dhaivata";"nishada"] in
-  let note_names = List.filter_map (fun s -> Setu.shabda_get pairs s) ordered in
-  match note_names with
-  | [] -> Printf.sprintf "c%d" octave
-  | names ->
-    let arr = Array.of_list names in
-    let idx = (Hashtbl.hash name land 0x7fffffff) mod (Array.length arr) in
-    Printf.sprintf "%s%d" arr.(idx) octave
-
-let satya_to_gain (satya : float) (energy_min : float) (energy_max : float) : float =
-  energy_min +. satya *. (energy_max -. energy_min)
-
-let build_voices (k : proof_graph) (name : string) : renderer_voice list =
-  match Hashtbl.find_opt k.nodes name with
-  | None -> []
-  | Some n ->
-    let strudel_pairs  = Setu.read_shabda k "strudel" in
-    let music_pairs    = Setu.read_shabda k "music-ir" in
-    let swara_pairs    = Setu.read_shabda k "swara-to-strudel" in
-    let rir_pairs      = Setu.read_shabda k "resonance-ir" in
-    let sg pairs key fb = match Setu.shabda_get pairs key with Some v -> v | None -> fb in
-    let energy_min = float_of_string_opt (sg rir_pairs "energy-min" "0.1") |> Option.value ~default:0.1 in
-    let energy_max = float_of_string_opt (sg rir_pairs "energy-max" "1.0") |> Option.value ~default:1.0 in
-    let groups : (visheshanam, string list) Hashtbl.t = Hashtbl.create 9 in
-    List.iter (fun e ->
-      if e.source = name then begin
-        let existing = match Hashtbl.find_opt groups e.relation with
-          | Some xs -> xs | None -> [] in
-        Hashtbl.replace groups e.relation (existing @ [e.target])
-      end
-    ) n.edges;
-    let relation_order = [swarupa; abheda; sthita; janya; yukta; phala; kriya; siddha; drishthanta] in
-    List.filter_map (fun rel ->
-      match Hashtbl.find_opt groups rel with
-      | None -> None
-      | Some targets ->
-        let targets = List.filter (fun t ->
-          not (String.length t >= 7 && String.sub t 0 7 = "domain-")
-        ) targets in
-        if targets = [] then None
-        else
-          let rk = string_of_visheshanam rel in
-          let sound  = sg strudel_pairs (rk ^ "-sound")  "" in
-          let octave = int_of_string_opt (sg strudel_pairs (rk ^ "-octave") "4") |> Option.value ~default:4 in
-          let role_gain = float_of_string_opt (sg strudel_pairs (rk ^ "-gain") "0.4") |> Option.value ~default:0.4 in
-          let speed  = float_of_string_opt (sg strudel_pairs (rk ^ "-speed") "1.0") |> Option.value ~default:1.0 in
-          if sound = "" then None
-          else
-            let timbre = sg music_pairs (rk ^ "-timbre") sound in
-            let pan    = float_of_string_opt (sg music_pairs (rk ^ "-pan") "0.0") |> Option.value ~default:0.0 in
-            let articulation = sg music_pairs (rk ^ "-articulation") "legato" in
-            let base_gain = satya_to_gain n.satya energy_min energy_max in
-            let final_gain = Float.min 1.0 (base_gain *. role_gain) in
-            let notes = List.map (fun t ->
-              match Setu.shabda_get swara_pairs (String.lowercase_ascii t) with
-              | Some sn -> Printf.sprintf "%s%d" sn octave
-              | None    -> note_of_node k t octave
-            ) targets in
-            Some {
-              v_source   = name;
-              v_label    = Printf.sprintf "%s -> %s [%s]"
-                             name (english_of_visheshanam_from_graph k rel)
-                             (String.concat ", " targets);
-              v_relation = rel;
-              v_targets  = targets;
-              v_notes    = notes;
-              v_sound    = sound;
-              v_timbre   = timbre;
-              v_octave   = octave;
-              v_gain     = final_gain;
-              v_pan      = pan;
-              v_speed    = speed;
-              v_articulation = articulation;
-            }
-    ) relation_order
-
-let thaalam_context (k : proof_graph) (thaalam_opt : string option)
-    : string option * string * int =
-  (* returns (selected_thaalam_name, label, beats) *)
-  let ss = Setu.read_shabda k "strudel-setu" in
-  let sg key fb = match Setu.shabda_get ss key with Some v -> v | None -> fb in
-  let selected = match thaalam_opt with Some t -> Some t | None -> thaalam_default k in
-  let (label, beats) = match selected with
-    | None ->
-      ("none", int_of_string_opt (sg "beat-default" "8") |> Option.value ~default:8)
-    | Some t ->
-      match thaalam_cycle k t with
-      | Some (lbl, b) -> (lbl, b)
-      | None -> (t, int_of_string_opt (sg "beat-fallback" "8") |> Option.value ~default:8)
-  in
-  (selected, label, beats)
-
-let emit_strudel_from_graph (k : proof_graph) (content_words : string list)
-    (thaalam_opt : string option) : unit =
-  let ss = Setu.read_shabda k "strudel-setu" in
-  let sg key fb = match Setu.shabda_get ss key with Some v -> v | None -> fb in
-  let rest        = sg "pattern-rest"  "~" in
-  let stack_open  = sg "stack-open"    "stack(" in
-  let stack_close = sg "stack-close"   ")" in
-  let comment     = sg "comment"       "//" in
-  let emit_header = sg "emit-header"   "graph->strudel" in
-  let (_, thaalam_label, beats) = thaalam_context k thaalam_opt in
-  let base_cpm = beats * 4 in
-  let all_voices = List.concat_map (build_voices k) content_words in
-  if all_voices = [] then ()
-  else begin
-    let section_open = sg "section-open" "--- strudel ---" in
-    Printf.printf "\n  %s\n" section_open;
-    Printf.printf "  %s %s\n" comment emit_header;
-    Printf.printf "  %s thaalam: %s (%d beats per cycle)\n" comment thaalam_label beats;
-    Printf.printf "  %s nodes: %s\n" comment (String.concat ", " content_words);
-    Printf.printf "  %s voices: %d (one per edge-type group per node)\n\n"
-      comment (List.length all_voices);
-    let pattern_of_voice v =
-      let n = List.length v.v_notes in
-      if n = 0 then rest
-      else if n = 1 then
-        let note = List.hd v.v_notes in
-        String.concat " " (List.init beats (fun i ->
-          if i = 0 || i = beats / 2 then note else rest))
-      else if n <= beats then
-        String.concat " " (List.init beats (fun i ->
-          if i < n then List.nth v.v_notes i else rest))
-      else
-        let per_beat = (n + beats - 1) / beats in
-        String.concat " " (List.init beats (fun i ->
-          let start = i * per_beat in
-          let group = List.filteri (fun j _ -> j >= start && j < start + per_beat) v.v_notes in
-          match group with [] -> rest | [x] -> x | xs -> "[" ^ String.concat " " xs ^ "]"))
-    in
-    Printf.printf "  %s\n" stack_open;
-    let num_voices = List.length all_voices in
-    List.iteri (fun i v ->
-      let pattern = pattern_of_voice v in
-      let cpm = int_of_float (float_of_int base_cpm *. v.v_speed) in
-      let note_wrapper = sg "note-wrapper" "note(\"%s\")" in
-      let wrapped = match String.split_on_char '%' note_wrapper with
-        | [pre; sfx] when String.length sfx > 0 && sfx.[0] = 's' ->
-          pre ^ pattern ^ String.sub sfx 1 (String.length sfx - 1)
-        | _ -> note_wrapper
-      in
-      Printf.printf "    %s %s\n" comment v.v_label;
-      Printf.printf "    %s\n" wrapped;
-      Printf.printf "      .sound(\"%s\").gain(%.1f).cpm(%d)" v.v_sound v.v_gain cpm;
-      if i < num_voices - 1 then Printf.printf ",\n\n" else Printf.printf "\n"
-    ) all_voices;
-    Printf.printf "  %s\n" stack_close;
-    Printf.printf "\n  %s\n" (sg "section-close" "--- /strudel ---")
-  end
-
-(* escape for JSON — used by IR builders *)
-let json_escape s =
-  let buf = Buffer.create (String.length s) in
-  String.iter (fun c ->
-    match c with
-    | '"'  -> Buffer.add_string buf "\\\""
-    | '\\' -> Buffer.add_string buf "\\\\"
-    | '\n' -> Buffer.add_string buf "\\n"
-    | '\r' -> Buffer.add_string buf "\\r"
-    | '\t' -> Buffer.add_string buf "\\t"
-    | c    -> Buffer.add_char buf c
-  ) s;
-  Buffer.contents buf
-
-(* --- IR builders — pure data, no printing ---
-   build_music_ir: graph energy/relations -> structured timed voice+event data
-   build_resonance_ir: graph satya/pass/flow -> animation dynamics data
-   both read from their respective pratibimba setu nodes *)
-
-let js_str s = "\"" ^ json_escape s ^ "\""
-let js_float f = Printf.sprintf "%.4f" f
-let js_int i = string_of_int i
-let js_bool b = if b then "true" else "false"
-
-let build_music_ir (k : proof_graph) (content_words : string list)
-    (thaalam_opt : string option) (request_id : string) (session_id : string)
-    (turn_id : string) : string =
-  let mp = Setu.read_shabda k "music-ir" in
-  let sg key fb = match Setu.shabda_get mp key with Some v -> v | None -> fb in
-  let (_, _thaalam_label, beats) = thaalam_context k thaalam_opt in
-  let bpm = int_of_string_opt (sg "thaalam-bpm" "96") |> Option.value ~default:96 in
-  let ticks = int_of_string_opt (sg "ticks-per-beat" "24") |> Option.value ~default:24 in
-  let all_voices = List.concat_map (build_voices k) content_words in
-  (* deduplicate voices by voice_id = source-relation *)
-  let seen = Hashtbl.create 16 in
-  let unique_voices = List.filter (fun v ->
-    let vid = v.v_source ^ "-" ^ string_of_visheshanam v.v_relation in
-    if Hashtbl.mem seen vid then false
-    else (Hashtbl.add seen vid true; true)
-  ) all_voices in
-  let buf = Buffer.create 512 in
-  let a = Buffer.add_string buf in
-  a "{\n";
-  a (Printf.sprintf "  \"meta\": { \"request_id\": %s, \"session_id\": %s, \"turn_id\": %s,\n"
-    (js_str request_id) (js_str session_id) (js_str turn_id));
-  a (Printf.sprintf "    \"source_nodes\": [%s] },\n"
-    (String.concat ", " (List.map js_str content_words)));
-  a (Printf.sprintf "  \"timing\": { \"bpm\": %s, \"cycle_beats\": %s, \"ticks_per_beat\": %s },\n"
-    (js_int bpm) (js_int beats) (js_int ticks));
-  a "  \"voices\": [\n";
-  List.iteri (fun i v ->
-    let vid = js_str (v.v_source ^ "-" ^ string_of_visheshanam v.v_relation) in
-    a (Printf.sprintf "    { \"voice_id\": %s, \"label\": %s, \"timbre\": %s,\n"
-      vid (js_str v.v_label) (js_str v.v_timbre));
-    a (Printf.sprintf "      \"gain\": %s, \"pan\": %s, \"octave\": %s, \"speed\": %s }"
-      (js_float v.v_gain) (js_float v.v_pan) (js_int v.v_octave) (js_float v.v_speed));
-    if i < List.length unique_voices - 1 then a ",\n" else a "\n"
-  ) unique_voices;
-  a "  ],\n";
-  (* events: one event per note per voice, spread across ticks *)
-  a "  \"events\": [\n";
-  let all_events = List.concat_map (fun v ->
-    List.mapi (fun i note ->
-      let t_start = i * ticks in
-      (t_start, ticks, v.v_source ^ "-" ^ string_of_visheshanam v.v_relation,
-       note, v.v_gain, v.v_articulation, v.v_source)
-    ) v.v_notes
-  ) all_voices in
-  List.iteri (fun i (t_start, t_dur, vid, pitch, vel, artic, tag) ->
-    a (Printf.sprintf "    { \"t_start_tick\": %s, \"t_dur_tick\": %s, \"voice_id\": %s,\n"
-      (js_int t_start) (js_int t_dur) (js_str vid));
-    a (Printf.sprintf "      \"pitch\": %s, \"velocity\": %s, \"articulation\": %s, \"tags\": [%s] }"
-      (js_str pitch) (js_float vel) (js_str artic) (js_str tag));
-    if i < List.length all_events - 1 then a ",\n" else a "\n"
-  ) all_events;
-  a "  ],\n";
-  a "  \"automation\": [],\n";
-  a "  \"provenance\": [\n";
-  List.iteri (fun i v ->
-    List.iteri (fun j tgt ->
-      let last = i = List.length all_voices - 1 && j = List.length v.v_targets - 1 in
-      a (Printf.sprintf "    { \"source\": %s, \"relation\": %s, \"target\": %s }"
-        (js_str v.v_source) (js_str (string_of_visheshanam v.v_relation)) (js_str tgt));
-      if not last then a ",\n" else a "\n"
-    ) v.v_targets
-  ) all_voices;
-  a "  ]\n}";
-  Buffer.contents buf
-
-let build_resonance_ir (k : proof_graph) (content_words : string list)
-    (pass_groups : (int * anuvada_triple list) list)
-    (thaalam_opt : string option) (request_id : string) (session_id : string)
-    (turn_id : string) : string =
-  let rp = Setu.read_shabda k "resonance-ir" in
-  let sg key fb = match Setu.shabda_get rp key with Some v -> v | None -> fb in
-  let (_, _thaalam_label, beats) = thaalam_context k thaalam_opt in
-  let bpm   = int_of_string_opt (sg "thaalam-bpm" "96")   |> Option.value ~default:96 in
-  let ticks = int_of_string_opt (sg "ticks-per-beat" "24") |> Option.value ~default:24 in
-  let focus_threshold = float_of_string_opt (sg "focus-threshold" "0.75") |> Option.value ~default:0.75 in
-  let energy_min = float_of_string_opt (sg "energy-min" "0.1") |> Option.value ~default:0.1 in
-  let energy_max = float_of_string_opt (sg "energy-max" "1.0") |> Option.value ~default:1.0 in
-  let breath    = sg "camera-breath"    "0.25" in
-  let zoom_bias = sg "camera-zoom-bias" "0.12" in
-  (* collect activated nodes from all passes *)
-  let activated = List.sort_uniq String.compare
-    (content_words @ List.concat_map (fun (_, ts) ->
-      List.concat_map (fun t -> t.a_source_raw :: t.a_targets_raw) ts
-    ) pass_groups) in
-  (* accent pattern — read from setu, default to flat *)
-  let accent_str = match thaalam_opt with
-    | Some t ->
-      let key = String.lowercase_ascii t ^ "-accent" in
-      (match Setu.shabda_get rp key with
-       | Some v -> v
-       | None -> sg "adi-accent" "1.0 0.4 0.6 0.8 0.4 0.6 0.8 0.4")
-    | None -> sg "adi-accent" "1.0 0.4 0.6 0.8 0.4 0.6 0.8 0.4"
-  in
-  let accent_floats = List.filter_map float_of_string_opt
-    (String.split_on_char ' ' accent_str) in
-  let buf = Buffer.create 512 in
-  let a = Buffer.add_string buf in
-  a "{\n";
-  a (Printf.sprintf "  \"meta\": { \"request_id\": %s, \"session_id\": %s, \"turn_id\": %s,\n"
-    (js_str request_id) (js_str session_id) (js_str turn_id));
-  a (Printf.sprintf "    \"source_nodes\": [%s] },\n"
-    (String.concat ", " (List.map js_str content_words)));
-  a (Printf.sprintf "  \"timing\": { \"bpm\": %s, \"cycle_beats\": %s, \"ticks_per_beat\": %s,\n"
-    (js_int bpm) (js_int beats) (js_int ticks));
-  a (Printf.sprintf "    \"accent_pattern\": [%s] },\n"
-    (String.concat ", " (List.map js_float accent_floats)));
-  (* nodes *)
-  a "  \"nodes\": [\n";
-  List.iteri (fun i name ->
-    let satya = match Hashtbl.find_opt k.nodes name with
-      | Some n -> n.satya | None -> 0.1 in
-    let energy = satya_to_gain satya energy_min energy_max in
-    let rk = "swarupa" in
-    let relevance = float_of_string_opt (sg (rk ^ "-relevance") "0.8")
-      |> Option.value ~default:0.8 in
-    let focus = energy >= focus_threshold in
-    a (Printf.sprintf "    { \"node_id\": %s, \"energy\": %s, \"relevance\": %s"
-      (js_str name) (js_float energy) (js_float relevance));
-    if focus then a (Printf.sprintf ", \"focus\": %s" (js_bool focus));
-    a " }";
-    if i < List.length activated - 1 then a ",\n" else a "\n"
-  ) activated;
-  a "  ],\n";
-  (* edges — from pass_groups triples *)
-  let edges = List.concat_map (fun (_, ts) ->
-    List.concat_map (fun t ->
-      List.map (fun tgt -> (t.a_source_raw, t.a_relation, tgt)) t.a_targets_raw
-    ) ts
-  ) pass_groups in
-  let edges = List.sort_uniq compare edges in
-  a "  \"edges\": [\n";
-  List.iteri (fun i (src, rel, tgt) ->
-    let rk = string_of_visheshanam rel in
-    let flow = float_of_string_opt (sg (rk ^ "-flow") "0.7") |> Option.value ~default:0.7 in
-    let dir  = float_of_string_opt (sg (rk ^ "-direction") "0.7") |> Option.value ~default:0.7 in
-    a (Printf.sprintf "    { \"source\": %s, \"target\": %s, \"flow\": %s, \"direction_bias\": %s }"
-      (js_str src) (js_str tgt) (js_float flow) (js_float dir));
-    if i < List.length edges - 1 then a ",\n" else a "\n"
-  ) edges;
-  a "  ],\n";
-  (* events — one focus_shift per pass start *)
-  a "  \"events\": [\n";
-  let pass_start_kind = sg "pass-start-kind" "focus_shift" in
-  List.iteri (fun i (pass_num, ts) ->
-    let target = match ts with t :: _ -> t.a_source_raw | [] -> "" in
-    if String.length target > 0 then begin
-      let t_tick = (pass_num - 1) * beats * ticks in
-      a (Printf.sprintf "    { \"t_tick\": %s, \"kind\": %s, \"target\": %s, \"strength\": %s }"
-        (js_int t_tick) (js_str pass_start_kind) (js_str target) (js_float 0.8));
-      if i < List.length pass_groups - 1 then a ",\n" else a "\n"
-    end
-  ) pass_groups;
-  a "  ],\n";
-  (* camera *)
-  let center = match content_words with w :: _ -> w | [] -> "" in
-  a (Printf.sprintf "  \"camera\": { \"center_node\": %s, \"zoom_bias\": %s, \"breath\": %s }\n"
-    (js_str center) zoom_bias breath);
-  a "}";
-  Buffer.contents buf
-
-let emit_ir (k : proof_graph) (content_words : string list)
-    (pass_groups : (int * anuvada_triple list) list)
-    (thaalam_opt : string option) : unit =
-  if content_words = [] then ()
-  else begin
-    let req = "anuvada" and ses = "session" and trn = "turn" in
-    let music = build_music_ir k content_words thaalam_opt req ses trn in
-    let res   = build_resonance_ir k content_words pass_groups thaalam_opt req ses trn in
-    Printf.printf "\n  --- music_ir ---\n%s\n" music;
-    Printf.printf "\n  --- resonance_ir ---\n%s\n" res
-  end
-
-
-
-
-
-
-
-(* --- query result type ---
-   single source of truth consumed by both stdout and socket modes *)
+(* --- query result type --- *)
 
 type query_result = {
-  qr_answer_text  : string;                              (* rendered spiral output *)
-  qr_steps        : (int * anuvada_triple list) list;    (* pass_groups *)
-  qr_next_qs      : string list;                         (* thread questions *)
-  qr_content_words: string list;                         (* resolved seed nodes *)
+  qr_answer_text  : string;
+  qr_steps        : (int * anuvada_triple list) list;
+  qr_next_qs      : string list;
+  qr_content_words: string list;
   qr_thaalam      : string option;
-  qr_music_ir     : string;                              (* JSON string *)
-  qr_resonance_ir : string;                              (* JSON string *)
-  qr_strudel      : string;                              (* strudel mini-notation *)
   qr_passes       : int;
   qr_connections  : int;
-  qr_confidence   : float;                               (* top node satya *)
+  qr_confidence   : float;
 }
 
-(* emit_strudel_to_string — same as emit_strudel_from_graph but returns string *)
-let emit_strudel_to_string (k : proof_graph) (content_words : string list)
-    (thaalam : string option) : string =
-  let buf = Buffer.create 256 in
-  let voices = List.concat_map (fun w ->
-    build_voices k w
-  ) content_words in
-  let strudel_map = Setu.read_shabda k "strudel" in
-  let sg key fb = match Setu.shabda_get strudel_map key with Some v -> v | None -> fb in
-  let rhythm = match thaalam with
-    | Some t -> sg (String.lowercase_ascii t ^ "-rhythm") (sg "default-rhythm" "x x x x")
-    | None -> sg "default-rhythm" "x x x x"
-  in
-  if voices <> [] then begin
-    Buffer.add_string buf "stack(\n";
-    List.iteri (fun i v ->
-      let notes = String.concat " " v.v_notes in
-      Buffer.add_string buf
-        (Printf.sprintf "  note(\"%s\").sound(\"%s\").gain(%.2f)"
-          notes v.v_sound v.v_gain);
-      if i < List.length voices - 1 then Buffer.add_string buf ",\n"
-      else Buffer.add_char buf '\n'
-    ) voices;
-    Buffer.add_string buf (Printf.sprintf ").cpm(%s)" rhythm)
-  end else
-    Buffer.add_string buf (Printf.sprintf "silence // no nodes resolved\n// rhythm: %s" rhythm);
-  Buffer.contents buf
-
-(* anuvada_query — pure: takes a question, returns a structured result.
-   both stdout mode and socket mode call this; they differ only in how they render it. *)
+(* anuvada_query — pure: takes a question, returns a structured result. *)
 let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
     ?(request_id = "anuvada") ?(session_id = "session") ?(turn_id = "turn")
     (k : proof_graph) (sentence : string) : query_result =
-  let _ = sahaja in
+  let _ = (sahaja, request_id, session_id, turn_id) in
   let spaced_math_ops (s : string) : string =
     let buf = Buffer.create (String.length s * 2) in
     String.iter (fun c ->
@@ -1178,7 +721,6 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
            || c = '-' || c = '+' || c = '*' || c = '/' || c = '=' then
           Buffer.add_char buf c
         else if c = '.' then begin
-          (* preserve '.' between digits — floats like 9.8 *)
           let prev_digit = i > 0 && w.[i-1] >= '0' && w.[i-1] <= '9' in
           let next_digit = i < len - 1 && w.[i+1] >= '0' && w.[i+1] <= '9' in
           if prev_digit && next_digit then Buffer.add_char buf c
@@ -1187,19 +729,11 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
       Buffer.contents buf
     end
   in
-  let clean_words ws =
-    let ws = List.map clean ws in
-    List.filter (fun w -> String.length w > 0) ws
-  in
-  let words = clean_words words in
+  let words = List.filter (fun w -> String.length w > 0) (List.map clean words) in
   let classified = List.map (fun w -> (w, Setu.classify_token k w)) words in
   let content_words = List.filter_map (fun (_, role) ->
     match role with Setu.Content name -> Some name | _ -> None
   ) classified in
-  (* extract context anchor: content word immediately following a Sthita ("in") token
-     e.g. "polarity in wave" → context_anchor = Some "wave"
-           "shiva-shakti in dna" → context_anchor = Some "dna"
-     works for any node, not just domains *)
   let context_anchor =
     let rec find_after_sthita = function
       | [] -> None
@@ -1216,10 +750,8 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
     find_after_sthita classified
   in
   let (pass_groups_final, total_passes) =
-    if content_words <> [] then
-      avrti_anuvada k content_words max_passes
-    else
-      ([], 0)
+    if content_words <> [] then avrti_anuvada k content_words max_passes
+    else ([], 0)
   in
   let answer_buf =
     if content_words <> []
@@ -1228,13 +760,6 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
   in
   let total_triples = List.fold_left (fun acc (_, ts) ->
     acc + List.length ts) 0 pass_groups_final in
-  let music_ir = if content_words <> [] then
-    build_music_ir k content_words thaalam request_id session_id turn_id
-  else "{}" in
-  let resonance_ir = if content_words <> [] then
-    build_resonance_ir k content_words pass_groups_final thaalam request_id session_id turn_id
-  else "{}" in
-  let strudel = emit_strudel_to_string k content_words thaalam in
   let confidence = List.fold_left (fun best w ->
     match Hashtbl.find_opt k.nodes w with
     | Some n -> if n.satya > best then n.satya else best
@@ -1245,74 +770,41 @@ let anuvada_query ?(max_passes = 2) ?thaalam ?(sahaja = false)
   ; qr_next_qs       = []
   ; qr_content_words = content_words
   ; qr_thaalam       = thaalam
-  ; qr_music_ir      = music_ir
-  ; qr_resonance_ir  = resonance_ir
-  ; qr_strudel       = strudel
   ; qr_passes        = total_passes
   ; qr_connections   = total_triples
   ; qr_confidence    = confidence
   }
 
-(* --- output flags ---
-   controls which sections are printed. default: reasoning only.
-   inline query syntax:  "what is avrti +strudel +resonance"
-   session flag:         --show strudel,music,resonance
-   socket field:         "show": ["resonance","music"]
-
-   flags: reasoning (always on), strudel, music, resonance, prayoga, all *)
+(* --- output flags --- *)
 
 type output_flags = {
-  show_strudel   : bool;
-  show_music     : bool;
-  show_resonance : bool;
-  show_prayoga   : bool;
+  show_prayoga : bool;
 }
 
-let flags_default = {
-  show_strudel   = false;
-  show_music     = false;
-  show_resonance = false;
-  show_prayoga   = false;
-}
+let flags_default = { show_prayoga = false }
 
-let flags_all = {
-  show_strudel   = true;
-  show_music     = true;
-  show_resonance = true;
-  show_prayoga   = true;
-}
-
-(* parse +flag tokens out of a query string, return (clean_query, flags) *)
+(* parse +flag tokens out of a query string *)
 let parse_inline_flags ?(base = flags_default) (sentence : string) : string * output_flags =
   let tokens = String.split_on_char ' ' sentence in
   let flags = ref base in
   let rest = List.filter (fun t ->
     match String.lowercase_ascii (String.trim t) with
-    | "+strudel"   -> flags := { !flags with show_strudel   = true }; false
-    | "+music"     -> flags := { !flags with show_music     = true }; false
-    | "+resonance" -> flags := { !flags with show_resonance = true }; false
-    | "+prayoga"   -> flags := { !flags with show_prayoga   = true }; false
-    | "+all"       -> flags := flags_all; false
-    | _            -> true
+    | "+prayoga" -> flags := { show_prayoga = true }; false
+    | _          -> true
   ) tokens in
   (String.concat " " (List.filter (fun s -> String.length (String.trim s) > 0) rest), !flags)
 
-(* parse --show csv string into flags, e.g. "strudel,music,resonance" *)
 let flags_of_show_string ?(base = flags_default) (s : string) : output_flags =
   let parts = String.split_on_char ',' s in
   List.fold_left (fun f p ->
     match String.trim (String.lowercase_ascii p) with
-    | "strudel"   -> { f with show_strudel   = true }
-    | "music"     -> { f with show_music     = true }
-    | "resonance" -> { f with show_resonance = true }
-    | "prayoga"   -> { f with show_prayoga   = true }
-    | "all"       -> flags_all
-    | _           -> f
+    | "prayoga" -> { show_prayoga = true }
+    | _         -> f
   ) base parts
 
-(* anuvada: parse an English sentence, resolve through graph, output understanding.
-   thin wrapper over anuvada_query — same result, rendered to stdout. *)
-let anuvada ?(max_passes = 2) ?thaalam ?(sahaja = false) ?(flags = flags_default) (k : proof_graph) (sentence : string) : unit =
+(* anuvada: thin wrapper over anuvada_query, renders to stdout. *)
+let anuvada ?(max_passes = 2) ?thaalam ?(sahaja = false) ?(flags = flags_default)
+    (k : proof_graph) (sentence : string) : unit =
   let (clean_sentence, flags) = parse_inline_flags ~base:flags sentence in
   let as_ = Setu.read_shabda k "anuvada-setu" in
   let ag key fallback = match Setu.shabda_get as_ key with Some v -> v | None -> fallback in
@@ -1327,12 +819,6 @@ let anuvada ?(max_passes = 2) ?thaalam ?(sahaja = false) ?(flags = flags_default
     print_string r.qr_answer_text;
   if flags.show_prayoga then
     emit_ocaml_from_graph k r.qr_content_words;
-  if flags.show_strudel then
-    emit_strudel_from_graph k r.qr_content_words thaalam;
-  if r.qr_content_words <> [] then begin
-    if flags.show_music     then Printf.printf "\n  --- music_ir ---\n%s\n" r.qr_music_ir;
-    if flags.show_resonance then Printf.printf "\n  --- resonance_ir ---\n%s\n" r.qr_resonance_ir
-  end;
   Printf.printf "%s\n%!" (ag "separator" "---")
 
 (* sthiti — human-readable state *)
@@ -1352,6 +838,20 @@ let print (k : proof_graph) : unit =
     ) n.slokas
   ) nodes;
   Printf.printf "---\n%!"
+
+(* json_escape — used by pravaha *)
+let json_escape s =
+  let buf = Buffer.create (String.length s) in
+  String.iter (fun c ->
+    match c with
+    | '"'  -> Buffer.add_string buf "\\\""
+    | '\\' -> Buffer.add_string buf "\\\\"
+    | '\n' -> Buffer.add_string buf "\\n"
+    | '\r' -> Buffer.add_string buf "\\r"
+    | '\t' -> Buffer.add_string buf "\\t"
+    | c    -> Buffer.add_char buf c
+  ) s;
+  Buffer.contents buf
 
 (* pravaha — JSON output for LLM to read *)
 let pravaha (k : proof_graph) : unit =

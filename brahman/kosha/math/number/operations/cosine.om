@@ -5,6 +5,6 @@ mantra cosine
   "kona-yukta wave-abheda oscillation-yukta"
   "arccosine-pratipaksha"
 
-  shabda eval:cos arity:1 degree:bounded per-element:yes invertible:yes inverse:arccosine
+  shabda word:cosine eval:cos arity:1 degree:bounded per-element:yes invertible:yes inverse:arccosine
 
 done

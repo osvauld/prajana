@@ -1,0 +1,42 @@
+tantra lookup-word
+
+  -- find the knowledge graph node for a surface word form.
+  -- tries direct hit first, then strips common english plural suffixes.
+  -- returns the node name, or _none if no match.
+
+  inputs
+    word  string
+
+  let
+    len     = string-length word
+
+    -- 1. direct hit (also handles abbreviations: kg, m/s, rad)
+    direct  = word-node word
+
+    -- 2. strip trailing "s"  (metres → metre, kilograms → kilogram)
+    via-s   = cond (gt len 2)
+                (word-node (substr word 0 (sub len 1)))
+              otherwise _none
+
+    -- 3. strip trailing "es"  (masses → mass)
+    via-es  = cond (gt len 3)
+                (word-node (substr word 0 (sub len 2)))
+              otherwise _none
+
+    -- 4. strip "ies", add "y"  (velocities → velocity, frequencies → frequency)
+    via-ies = cond (gt len 4)
+                (word-node (concat (substr word 0 (sub len 3)) "y"))
+              otherwise _none
+
+    -- first hit wins
+    result  = cond
+      (exists direct)   direct
+      (exists via-s)    via-s
+      (exists via-es)   via-es
+      (exists via-ies)  via-ies
+      otherwise         _none
+
+  return
+    result  string
+
+done

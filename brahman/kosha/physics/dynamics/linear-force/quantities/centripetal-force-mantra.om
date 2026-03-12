@@ -9,7 +9,11 @@ mantra centripetal-force-mantra
   "division-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "mass-janya"
+  "velocity-janya"
+  "radius-janya"
 
-  shabda centripetal-force-mantra / F-equals-mv-squared-over-r-centripetal-force-for-circular-motion degree:2 krama-lhs:centripetal-force krama-rhs:mass,velocity,radius
+  shabda name:centripetal-force degree:2 krama-lhs:centripetal-force krama-lhs-unit:newton krama-rhs:mass,velocity,radius
 
 done

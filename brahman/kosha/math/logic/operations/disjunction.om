@@ -2,6 +2,6 @@ mantra disjunction
 
   "logic-varga-karma"
 
-shabda disjunction / logical-OR-true-when-at-least-one-operand-is-true
+shabda word:or,either eval:or arity:2 name:logical-or / logical-OR-true-when-at-least-one-operand-is-true
 
 done

@@ -4,6 +4,6 @@ kosha radian
   "float-abheda kona-yukta angle-yukta"
   "physics-varga-vishesa"
 
-  shabda concepts-for-unit:joint-angle,angle
+  shabda word:rad,radian concepts-for-unit:joint-angle,angle
 
 done

@@ -8,7 +8,11 @@ mantra work-mantra
   "multiplication-krama"
 
   "execute-chain-kriya"
+  "implication-sthita"
+  "force-janya"
+  "displacement-janya"
+  "angle-janya"
 
-  shabda work-mantra / W-equals-F-d-cos-theta-force-dot-displacement degree:1 krama-lhs:work krama-rhs:force,displacement,angle
+  shabda name:work degree:1 krama-lhs:work krama-lhs-unit:joule krama-rhs:force,displacement,angle
 
 done

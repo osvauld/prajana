@@ -3,6 +3,6 @@ mantra quantifier
   "logic-varga-karma"
   "vrnda-yukta"   -- ranges over a set
 
-shabda quantifier / logical-operator-expressing-for-all-or-there-exists
+shabda word:all,every,some,any name:logical-quantifier / logical-operator-expressing-for-all-or-there-exists
 
 done
