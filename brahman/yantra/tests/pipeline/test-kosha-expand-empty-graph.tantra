@@ -1,0 +1,9 @@
+tantra test-kosha-expand-empty-graph
+  -- kosha-expand on an empty graph should return an empty graph (no crash).
+  let
+    graph  = []
+    result = kosha-expand graph
+    ok     = eq (length result) 0
+  return
+    ok  bool
+done

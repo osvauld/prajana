@@ -1,0 +1,78 @@
+tantra vibhakti-shashthi
+
+  -- entity detection + concept ownership from possession signal (R8 + R9).
+  -- sandhi-viveka has already promoted has/with/have/of to typed dimension triples:
+  --   [has, shashthi-vibhakti, shashthi-vibhakti]  (reflexive object = grammar signal)
+  -- this tantra reads those signals directly.
+  --
+  -- pattern:
+  --   [label, mithya] → accumulate as potential entity label
+  --   [word, shashthi-vibhakti, shashthi-vibhakti] → signal: preceding label is an entity
+  --     → emit [label, prathama-vibhakti, object]
+  --     → set cur-entity = label
+  --   [concept, satya] while cur-entity set → emit [concept, shashthi-vibhakti, cur-entity]
+  --
+  -- R9: consecutive mithya words compound into entity name: ball + A → ball-A
+  --
+  -- scope cleared by:
+  --   vidhi-kaala (solve-for zone starts)
+  --   sentence viraam (. ? !)
+  --   new shashthi-vibhakti signal after new mithya label
+  --
+  -- state: [last-label, cur-entity, output]
+
+  inputs
+    graph  list
+
+  let
+    pass = reduce graph ["", "", []] (fn state tri ->
+      let last-label = nth state 0
+      let cur-entity = nth state 1
+      let out        = nth state 2
+      let edge       = nth tri 1
+      let word       = nth tri 0
+
+      -- vidhi-kaala: clear entity scope
+      cond (eq edge "vidhi-kaala")
+        ["", "", (append out [tri])]
+
+      -- sentence viraam: clear entity scope
+      (and (eq edge "viraam")
+           (or (eq word ".") (or (eq word "?") (eq word "!"))))
+        ["", "", (append out [tri])]
+
+      -- shashthi-vibhakti signal (reflexive object) with pending label → entity declared
+      (and (eq edge "shashthi-vibhakti")
+           (eq (nth tri 2) "shashthi-vibhakti")
+           (gt (string-length last-label) 0))
+        ["", last-label,
+         (append out [[last-label, "prathama-vibhakti", "object"]])]
+
+      -- shashthi-vibhakti signal with no pending label → discard
+      (and (eq edge "shashthi-vibhakti")
+           (eq (nth tri 2) "shashthi-vibhakti"))
+        ["", cur-entity, out]
+
+      -- satya concept while entity is active → ownership edge
+      (and (eq edge "satya")
+           (gt (string-length cur-entity) 0))
+        ["", cur-entity,
+         (append out [tri, [word, "shashthi-vibhakti", cur-entity]])]
+
+      -- mithya: compound into entity label (R9)
+      (eq edge "mithya")
+        [(cond (gt (string-length last-label) 0)
+           (concat last-label "-" word)
+           otherwise word),
+         cur-entity, (append out [tri])]
+
+      -- anything else: pass through
+      otherwise
+        [last-label, cur-entity, (append out [tri])])
+
+    result = nth pass 2
+
+  return
+    result  list
+
+done

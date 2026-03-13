@@ -1,0 +1,8 @@
+tantra test-lookup-word-concept-acceleration
+  -- "acceleration" should resolve to the kosha concept node, not acceleration-mantra
+  -- KNOWN FAILURE: name:acceleration on mantra shabda claims the word_index slot first
+  let
+    result = eq (lookup-word "acceleration") "acceleration"
+  return
+    result  bool
+done

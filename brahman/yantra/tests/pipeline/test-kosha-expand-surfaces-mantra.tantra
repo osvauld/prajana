@@ -1,0 +1,19 @@
+tantra test-kosha-expand-surfaces-mantra
+  -- given mass + velocity as satya nodes, kosha-expand should surface
+  -- at least one related physics concept via PPR (momentum, kinetic-energy,
+  -- linear-force, or acceleration — all have mass-yukta and/or velocity-yukta edges).
+  let
+    graph   = [["mass",     "satya",   "mass"],
+               ["velocity", "satya",   "velocity"]]
+    result  = kosha-expand graph
+    names   = reduce result [] (fn acc tri ->
+      cond (eq (nth tri 1) "kosha-janya")
+        (append acc [(nth tri 2)])
+      otherwise acc)
+    ok = or (member "momentum" names)
+            (or (member "kinetic-energy" names)
+                (or (member "linear-force" names)
+                    (member "acceleration" names)))
+  return
+    ok  bool
+done

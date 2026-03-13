@@ -1,0 +1,16 @@
+tantra test-vishesa-step-debug
+  -- step-by-step: trace which sub-tantra crashes on the symbolic value case
+  let
+    g0 = [["ball",     "mithya",           "ball"],
+           ["has",      "shashthi-vibhakti", "shashthi-vibhakti"],
+           ["velocity", "satya",            "velocity"],
+           ["v1",       "mithya",           "v1"]]
+    g1 = sandhi-kosha    g0
+    g2 = sandhi-avastha  g1
+    g3 = sandhi-bandhana g2
+    g4 = vibhakti-shashthi g3
+    g5 = vishesa-instance  g4
+    ok = gt (length g5) 0
+  return
+    ok  bool
+done

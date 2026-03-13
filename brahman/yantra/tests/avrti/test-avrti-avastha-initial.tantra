@@ -1,0 +1,11 @@
+tantra test-avrti-avastha-initial
+  -- "initial" + "velocity" → "initial-velocity" (avastha synthesis, no kosha node needed)
+  let
+    g    = [["initial", "mithya", "initial"], ["velocity", "satya", "velocity"]]
+    r    = avrti-refine g
+    node = nth (nth r 0) 0
+    edge = nth (nth r 0) 1
+    ok   = cond (and (eq node "initial-velocity") (eq edge "satya")) true otherwise false
+  return
+    ok  bool
+done

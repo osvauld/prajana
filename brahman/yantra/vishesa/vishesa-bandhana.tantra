@@ -1,0 +1,47 @@
+tantra vishesa-bandhana
+
+  -- binding re-attribution: moves sankhya/matra/shashthi-vibhakti
+  -- from the kosha concept to the vishesa instance.
+  --
+  -- when [label, vishesa, concept] exists in the graph:
+  --   [concept, sankhya, X]           → [label, sankhya, X]
+  --   [concept, matra,   X]           → [label, matra,   X]
+  --   [concept, shashthi-vibhakti, E] → [label, shashthi-vibhakti, E]
+  --
+  -- this is avrti — the graph learns its own structure through passes.
+  -- the vishesa triple is the signal; the bindings follow naturally.
+  -- runs after vishesa-instance; fixpoint converges when no more moves happen.
+
+  inputs
+    graph  list
+
+  let
+    -- build concept → instance map from vishesa triples (exclude rashi)
+    -- stored as triples [concept, instance, "pair"] to avoid 2-element list parse issue
+    instance-map = reduce graph [] (fn acc tri ->
+      cond (and (eq (nth tri 1) "vishesa")
+                (neq (nth tri 2) "rashi"))
+        (append acc [[(nth tri 2), (nth tri 0), "pair"]])
+      otherwise acc)
+
+    result = cond (eq (length instance-map) 0)
+      graph
+    otherwise
+      (reduce graph [] (fn acc tri ->
+        let subj  = nth tri 0
+        let edge  = nth tri 1
+        let obj   = nth tri 2
+        let rebind = or (eq edge "sankhya")
+                        (or (eq edge "matra")
+                            (eq edge "shashthi-vibhakti"))
+        let inst  = reduce instance-map "" (fn iacc pair ->
+          cond (eq (nth pair 0) subj) (nth pair 1) otherwise iacc)
+        cond (and rebind (gt (string-length inst) 0))
+          (append acc [[inst, edge, obj]])
+        otherwise
+          (append acc [tri])))
+
+  return
+    result  list
+
+done

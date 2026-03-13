@@ -1,0 +1,22 @@
+tantra test-entity-reasoning-no-numeric
+  -- reasoning question: entity present, property has symbolic label only (no numeric value)
+  -- "ball A has velocity v1" → entity ball-A declared, v1 IS a velocity instance
+  -- avrti should produce:
+  --   [ball-A, prathama-vibhakti, object]   ← entity
+  --   [v1, vishesa, velocity]               ← v1 is a typed quantity instance
+  let
+    g = [["ball-A",   "mithya",  "ball-A"],
+         ["has",      "mithya",  "has"],
+          ["velocity", "satya",   "velocity"],
+         ["v1",       "mithya",  "v1"]]
+    r         = fixpoint (sandhi-viveka g) avrti-refine
+    is-entity = reduce r false (fn acc tri ->
+                  cond (and (eq (nth tri 0) "ball-A") (eq (nth tri 1) "prathama-vibhakti"))
+                    true otherwise acc)
+    has-sym   = reduce r false (fn acc tri ->
+                  cond (and (eq (nth tri 0) "v1") (eq (nth tri 1) "vishesa"))
+                    true otherwise acc)
+    ok = and is-entity has-sym
+  return
+    ok  bool
+done

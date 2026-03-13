@@ -1,0 +1,9 @@
+bhasha some
+
+  "indefinite-swarupa quantifier-sthita"
+  -- indefinite quantifier / determiner: "some object", "some mass"
+  -- treated as grammar so BQG drops it
+
+  shabda word:some  role:grammar
+
+done

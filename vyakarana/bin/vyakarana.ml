@@ -270,39 +270,19 @@ let rec madakkal (k : Proof_graph.proof_graph) (yantra_idx : Yantra.tantra_index
           flush ();
           List.rev !args
         in
-        let parts = parse_eval_args expr_str in
-        match parts with
-        | tantra_name :: args ->
-          (match Hashtbl.find_opt yantra_idx.by_name tantra_name with
-           | Some t ->
-             let input_values = List.mapi (fun i arg ->
-               let inp = if i < List.length t.t_inputs then
-                 (List.nth t.t_inputs i).tp_name else Printf.sprintf "arg%d" i in
-               let v = match float_of_string_opt arg with
-                 | Some f -> Yantra.VFloat f
-                 | None -> Yantra.VString arg
-               in
-               (inp, v)
-             ) args in
-             (* add tantra index to env *)
-             let tnames = List.map (fun t -> Yantra.VString t.Yantra.t_name)
-               !(yantra_idx.all_tantras) in
-             let input_values = ("_tantra_index", Yantra.VList tnames) :: input_values in
-             let result = Yantra.eval_tantra ~idx:yantra_idx ~session:yantra_session k t input_values in
-             Printf.printf "%s\n%!" (Yantra.as_string result)
-           | None ->
-             (* evaluate as a raw expression *)
-             let expr = Yantra.parse_expr_string expr_str in
-             let env = Yantra.new_env () in
-             let tnames = List.map (fun t -> Yantra.VString t.Yantra.t_name)
-               !(yantra_idx.all_tantras) in
-             Hashtbl.replace env "_tantra_index" (Yantra.VList tnames);
-             (* set eval context so pipeline ops (extract-bindings, resolve-tantra, etc.) work *)
-             Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
-             let result = Yantra.eval k env expr in
-             Yantra.eval_ctx := None;
-             Printf.printf "%s\n%!" (Yantra.as_string result))
-        | [] -> Printf.printf "eval: empty expression\n%!"
+        (* always evaluate as a raw expression — the arity table handles tantras
+           naturally via Call dispatch, and list literals / nested expressions
+           are parsed correctly by parse_expr_string. *)
+        ignore parse_eval_args;
+        let expr = Yantra.parse_expr_string expr_str in
+        let env = Yantra.new_env () in
+        let tnames = List.map (fun t -> Yantra.VString t.Yantra.t_name)
+          !(yantra_idx.all_tantras) in
+        Hashtbl.replace env "_tantra_index" (Yantra.VList tnames);
+        Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
+        let result = Yantra.eval k env expr in
+        Yantra.eval_ctx := None;
+        Printf.printf "%s\n%!" (Yantra.as_string result)
       end else
         (match Yantra.run k yantra_idx yantra_session y.sentence with
          | Some r -> Yantra.print_result r
@@ -348,9 +328,6 @@ let () =
   let yantra_idx = Yantra.build_index ~graph:k0 dirs in
   (* register mantra nodes as synthetic tantras so the chain resolver can use them *)
   Yantra.register_mantra_nodes k0 yantra_idx;
-  (* build word index: word: key → node-name for all graph nodes.
-     enables word-node primitive (O(1) synonym lookup) in tantras. *)
-  Yantra.build_word_index k0 yantra_idx;
   (* derive vp_satya_weight for each relation type from the visheshanam-entropy-weights tantra.
      the tantra computes Shannon entropy of each relation's target distribution across all edges.
      this runs after build_index so the tantra is loaded and all symmetry edges are present. *)
@@ -428,8 +405,12 @@ let () =
           | _ -> () (* skip malformed entries *)
         end
       ) pairs;
-      if !generated > 0 && not quiet_startup then
+       if !generated > 0 && not quiet_startup then
         Printf.printf "matra-nirmana: %d units generated from matra-beeja\n%!" !generated);
+   (* build word index: word: key → node-name for all graph nodes.
+      runs AFTER matra-nirmana so unit nodes (metre-per-second, etc.) and their
+      word: aliases (m/s, mps, ...) are present in the graph before indexing. *)
+   Yantra.build_word_index k0 yantra_idx;
    (* materialize CSR adjacency for cache-friendly PPR SpMV.
       called after entropy weights are finalized so out_rel_count × weights is correct. *)
    Proof_graph.materialize_csr k0;

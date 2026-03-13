@@ -1,0 +1,29 @@
+tantra test-vishesa-bind-reduce
+  -- does the main reduce in vishesa-bandhana crash?
+  -- instance-map = [["velocity","v1"]], graph = [[v1,vishesa,velocity]]
+  -- the reduce iterates over graph triples. but does the cond (eq (length instance-map) 0)
+  -- short-circuit work, or does it fall through to reduce graph []?
+  let
+    g = [["v1", "vishesa", "velocity"]]
+    instance-map = [["velocity", "v1"]]
+    -- replicate the result computation from vishesa-bandhana
+    result = cond (eq (length instance-map) 0)
+      g
+    otherwise
+      (reduce g [] (fn acc tri ->
+        let subj  = nth tri 0
+        let edge  = nth tri 1
+        let obj   = nth tri 2
+        let rebind = or (eq edge "sankhya")
+                        (or (eq edge "matra")
+                            (eq edge "shashthi-vibhakti"))
+        let inst  = reduce instance-map "" (fn iacc pair ->
+          cond (eq (nth pair 0) subj) (nth pair 1) otherwise iacc)
+        cond (and rebind (gt (string-length inst) 0))
+          (append acc [[inst, edge, obj]])
+        otherwise
+          (append acc [tri])))
+    ok = gt (length result) 0
+  return
+    ok  bool
+done

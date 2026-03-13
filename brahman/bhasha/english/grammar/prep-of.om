@@ -1,9 +1,13 @@
 bhasha prep-of
 
   "preposition-swarupa sambandha-sthita"
-  -- genitive/possessive relation: "square root OF velocity"
-  -- "half OF the product"
+  "shashthi-vibhakti-sthita"
+  -- genitive/possessive relation: "mass OF the ball", "momentum OF the system"
+  -- of IS shashthi-vibhakti expressed as an English preposition
+  -- context-dependent: if followed by known entity → role:possession (R8 fires)
+  --                    if structural ("square root of", "half of") → role:grammar
+  -- avrti guard: check whether what follows "of" is a known entity name
 
-  shabda word:of  role:grammar
+  shabda word:of  role:possession
 
 done

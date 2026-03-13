@@ -27,3 +27,4 @@ gram: mass-yukta | kilogram-yukta | word:gram,grams,g one-thousandth-of-a-kilogr
 kilometre-per-hour: velocity-yukta speed-yukta | kilometre-yukta second-yukta | word:km/h,kmph,kph common-speed-unit
 litre: volume-yukta | metre-yukta | word:litre,liter,L one-cubic-decimetre
 kilogram-metre-squared: moment-of-inertia-yukta | kilogram-yukta metre-yukta | word:kg-m2 unit-of-moment-of-inertia
+kilogram-metre-per-second: momentum-yukta | kilogram-yukta metre-yukta second-yukta | word:kg-m/s,kgms unit-of-momentum

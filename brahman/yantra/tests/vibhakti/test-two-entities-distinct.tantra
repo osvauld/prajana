@@ -1,0 +1,15 @@
+tantra test-two-entities-distinct
+  -- "ball A has mass 5 kg and ball B has mass 10 kg"
+  -- two distinct entity labels: ball-A and ball-B
+  -- each should be a separate entity in the graph
+  -- KNOWN FAILURE: entity naming (ball+A → ball-A) and disambiguation not implemented
+  let
+    g   = build-question-graph "ball A has mass 5 kg and ball B has mass 10 kg"
+    has-a = reduce g false (fn acc tri ->
+              cond (eq (nth tri 0) "ball-A") true otherwise acc)
+    has-b = reduce g false (fn acc tri ->
+              cond (eq (nth tri 0) "ball-B") true otherwise acc)
+    ok = cond (and has-a has-b) true otherwise false
+  return
+    ok  bool
+done

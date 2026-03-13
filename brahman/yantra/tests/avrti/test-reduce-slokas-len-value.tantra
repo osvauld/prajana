@@ -1,0 +1,10 @@
+tantra test-reduce-slokas-len-value
+  -- what is the string-length of the last element?
+  let
+    s = node-slokas "verb-has"
+    r = reduce s "" (fn a x -> x)
+    n = string-length r
+    ok = eq n 24.0
+  return
+    ok  bool
+done

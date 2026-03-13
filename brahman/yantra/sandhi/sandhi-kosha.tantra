@@ -1,0 +1,67 @@
+tantra sandhi-kosha
+
+  -- compound word resolution via kosha lookup.
+  -- scans left-to-right with a pending mithya buffer.
+  -- when a mithya word immediately precedes a satya concept:
+  --   try lookup(last-mithya + "-" + concept)
+  --   if kosha hit → emit [compound, satya, compound]
+  --                + [compound, sandhi-rename, concept]  (consumed by sandhi-bandhana)
+  --   if miss → pass both through unchanged
+  -- example: "kinetic" (mithya) + "energy" (satya) → "kinetic-energy" (satya)
+
+  inputs
+    graph  list
+
+  let
+    pass = reduce graph [[], []] (fn state tri ->
+      let pending = nth state 0
+      let out     = nth state 1
+      let edge    = nth tri 1
+      let word    = nth tri 0
+      let n-pend  = length pending
+
+      let last-pend = cond (gt n-pend 0) (nth pending (sub n-pend 1)) otherwise ""
+
+      -- prefix: all-but-last pending words flushed as mithya
+      let prefix-out = reduce (range (max 0 (sub n-pend 1))) out (fn acc i ->
+        append acc [[(nth pending i), "mithya", (nth pending i)]])
+
+      -- full flush: all pending as mithya (used when no compound)
+      let full-flush = reduce pending out (fn acc w ->
+        append acc [[w, "mithya", w]])
+
+      let compound-str = cond (and (gt (string-length last-pend) 0) (eq edge "satya"))
+                           (concat last-pend "-" word)
+                         otherwise ""
+      let comp-node = cond (gt (string-length compound-str) 0)
+                       (lookup compound-str)
+                     otherwise _none
+
+      -- kosha hit: emit compound satya + sandhi-rename marker
+      cond (exists comp-node)
+        [[], (append prefix-out
+               [[(to-string comp-node), "satya",         (to-string comp-node)],
+                [(to-string comp-node), "sandhi-rename",  word]])]
+
+      -- mithya: accumulate into pending
+      (eq edge "mithya")
+        [(append pending [word]), out]
+
+      -- non-compound satya or other: flush pending, pass current triple through
+      (gt n-pend 0)
+        [[], (append full-flush [tri])]
+
+      otherwise
+        [[], (append out [tri])])
+
+    pending-list = nth pass 0
+    rough        = nth pass 1
+
+    -- flush any trailing pending mithya
+    result = reduce pending-list rough (fn acc w ->
+               append acc [[w, "mithya", w]])
+
+  return
+    result  list
+
+done

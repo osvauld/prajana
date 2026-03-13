@@ -1,0 +1,67 @@
+tantra emit-triples
+
+  -- given word sense and context, return triples to add to the question graph.
+  -- info:    [node, role, layer, num-val, unit-node]
+  -- context: [active-concept, pending-num]
+
+  inputs
+    word     string
+    info     list
+    context  list
+
+  let
+    node      = nth info 0
+    role      = nth info 1
+    layer     = nth info 2
+    num-val   = nth info 3
+    unit-node = nth info 4
+
+    active    = nth context 0
+    pending   = nth context 1
+
+    has-num   = gt (string-length num-val) 0
+    has-unit  = gt (string-length (to-string unit-node)) 0
+    has-act   = gt (string-length (to-string active)) 0
+    has-pend  = neq pending ""
+    is-kosha  = eq layer "kosha"
+
+    -- is-concept: node exists and is not a grammar/intent/boundary word
+    -- covers both kosha concepts (mass, velocity) and bhasha concepts (time, angle)
+    -- excludes mantra layer nodes (substitution, execute-chain etc. grabbed by word-node)
+    is-concept = and (exists node)
+                     (and (neq role "grammar")
+                          (and (neq role "intent")
+                               (and (neq role "boundary")
+                                    (and (neq role "possession")
+                                         (neq layer "mantra")))))
+
+    -- is-unit: node is a measurement unit — has a word: key (found via word-node)
+    -- units: kilogram, metre, newton, joule, second, etc.
+    -- concepts: acceleration, force, mass etc. — found via lookup, not word-node
+    is-unit = exists (word-node word)
+
+    triples = cond
+      (eq role "intent")
+        [[word, "vidhi-kaala", "solve-for"]]
+      (eq role "grammar")
+        []
+      (and has-num has-unit has-act)
+        [[(to-string active), "sankhya", num-val],
+         [(to-string active), "matra",  (to-string unit-node)]]
+      (and has-num has-unit)
+        [["_", "sankhya", num-val],
+         ["_", "matra",  (to-string unit-node)]]
+      has-num
+        [[word, "asprista-sankhya", num-val]]
+      (and has-pend is-concept is-unit has-act)
+        [[(to-string active), "sankhya", pending],
+         [(to-string active), "matra",  (to-string node)]]
+      is-concept
+        [[(to-string node), "satya", (to-string node)]]
+      otherwise
+        [[word, "mithya", word]]
+
+  return
+    triples  list
+
+done

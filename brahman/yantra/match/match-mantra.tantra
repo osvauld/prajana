@@ -1,0 +1,81 @@
+tantra match-mantra
+
+  -- given a question graph (list of triples), find the best matching mantra:
+  -- 1. extract solve-for concept from the graph (the satya concept named as vidhi-kaala target)
+  -- 2. filter mantras to those whose name: or krama-lhs matches the solve-for concept
+  -- 3. among those, find first whose krama-rhs is fully covered by bound concepts
+  -- 4. if no solve-for concept, fall back to any mantra with full krama-rhs coverage
+  -- returns [mantra-name, [arg-val-0, arg-val-1, ...]] in krama-rhs order,
+  -- or [] if no mantra matches.
+
+  inputs
+    graph  list
+
+  let
+    -- bound-vals: [bound-list, vals-list] built in one pass
+    -- bound = concept names that have a "sankhya" triple
+    -- vals  = [[concept, sankhya], ...] lookup table
+    bound-vals = reduce graph [[], []] (fn acc tri ->
+      cond (eq (nth tri 1) "sankhya")
+        [(append (nth acc 0) [(nth tri 0)]),
+         (append (nth acc 1) [[(nth tri 0), (nth tri 2)]])]
+      otherwise acc)
+
+    -- extract solve-for concept: first satya concept AFTER the vidhi-kaala triple
+    -- state: [past-intent, fallback, sf]
+    -- fallback = first satya overall (used if no vidhi-kaala triple)
+    -- sf       = first satya after vidhi-kaala (the real solve-for)
+    sf-state = reduce graph [false, "", ""] (fn acc tri ->
+      let past-intent = nth acc 0
+      let fallback    = nth acc 1
+      let sf          = nth acc 2
+      cond
+        (eq (nth tri 1) "vidhi-kaala")
+          [true, fallback, sf]
+        (and (not past-intent) (eq fallback "") (eq (nth tri 1) "satya"))
+          [past-intent, (nth tri 0), sf]
+        (and past-intent (eq sf "") (eq (nth tri 1) "satya"))
+          [past-intent, fallback, (nth tri 0)]
+        otherwise
+          acc)
+
+    solve-for = cond (gt (string-length (nth sf-state 2)) 0)
+      (nth sf-state 2)
+      otherwise (nth sf-state 1)
+
+    -- all mantra nodes reachable via execute-chain
+    mantras = walk-in "execute-chain" "kriya"
+
+    -- filter mantras to those matching solve-for (by name: or krama-lhs)
+    -- if solve-for is empty, use all mantras
+    candidates = cond (gt (string-length solve-for) 0)
+      (filter mantras (fn m ->
+        let mname = shabda m "name"
+        let mlhs  = shabda m "krama-lhs"
+        or (eq mname solve-for) (eq mlhs solve-for)))
+      otherwise mantras
+
+    -- find first candidate whose entire krama-rhs is covered by bound or constants
+    match = reduce candidates [] (fn acc m ->
+      cond (gt (length acc) 0) acc
+      otherwise
+        (let rhs-str   = shabda m "krama-rhs"
+         let rhs       = split rhs-str ","
+         let all-ok    = reduce rhs true (fn a r ->
+           and a (or (member r (nth bound-vals 0))
+                     (gt (string-length (shabda r "constants-key")) 0)))
+         let args      = reduce rhs [] (fn a r ->
+           let ck = shabda r "constants-key"
+           let v  = cond (gt (string-length ck) 0)
+             (nth (split-numeric (shabda "physics-constants" ck)) 0)
+             otherwise
+               (reduce (nth bound-vals 1) "" (fn acc2 kv ->
+                 cond (eq (nth kv 0) r) (nth kv 1) otherwise acc2))
+           append a [v])
+         cond all-ok [m, args]
+         otherwise []))
+
+  return
+    match  list
+
+done

@@ -1,0 +1,17 @@
+tantra test-debug-inner-reduce
+  -- debug: does the inner reduce over slokas find the root?
+  let
+    sthita-len = string-length "-sthita"
+    gnode  = lookup-word "has"
+    slokas = node-slokas (to-string gnode)
+    root   = reduce slokas "" (fn acc s ->
+      cond (neq acc "") acc
+      (ends-with s "-sthita")
+        (cond (exists (lookup (substr s 0 (sub (string-length s) sthita-len))))
+          (substr s 0 (sub (string-length s) sthita-len))
+          otherwise "")
+      otherwise "")
+    ok = eq root "shashthi-vibhakti"
+  return
+    ok  bool
+done

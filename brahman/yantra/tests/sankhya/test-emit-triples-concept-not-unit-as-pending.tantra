@@ -1,0 +1,15 @@
+tantra test-emit-triples-concept-not-unit-as-pending
+  -- when a kosha concept follows a pending sankhya, it must NOT be consumed as a matra
+  -- "acceleration" has no word-node hit → is-unit=false → emit satya, not matra binding
+  -- context has pending="3.", satya="force"
+  let
+    info    = ["acceleration", "", "kosha", "", ""]
+    ctx     = ["force", "3."]
+    triples = emit-triples "acceleration" info ctx
+    first   = nth triples 0
+    -- should be [acceleration, satya, concept] not [force, matra, acceleration]
+    ok      = cond (and (eq (nth first 0) "acceleration") (eq (nth first 1) "satya"))
+                true otherwise false
+  return
+    ok  bool
+done

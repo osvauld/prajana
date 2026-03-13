@@ -1,0 +1,27 @@
+sangati rashi
+
+  -- rashi: a measurable quantity — the thing being measured.
+  -- the general form of which mass, velocity, force, energy etc. are all particulars.
+  --
+  -- a rashi has three aspects:
+  --   sankhya  — the numeric value (how much)
+  --   matra    — the unit (in what terms)
+  --   vishesa  — the type (which quantity: mass, velocity, ...)
+  --
+  -- a named quantity instance (v1, m1, a) is a rashi:
+  --   [v1, vishesa, velocity]   -- specific type
+  --   [v1, vishesa, rashi]      -- general: v1 is a measurable quantity
+  --   [v1, sankhya, "20.0"]     -- value
+  --   [v1, matra,   metre-per-second]  -- unit
+  --
+  -- distinct from the kosha concept (velocity) which is the universal —
+  -- rashi is the particular instance that appears in a specific question.
+  -- the kosha concept is atemporal; rashi is situated in a problem context.
+
+  "pramana-swarupa sankhya-yukta matra-yukta"
+  "vishesa-sthita sambandha-yukta"
+  "prashna-sthita viveka-kriya"
+
+shabda rashi / a-measurable-quantity-instance-situated-in-a-problem-context
+
+done

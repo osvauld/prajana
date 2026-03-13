@@ -1,0 +1,9 @@
+tantra test-bqg-unit-binding
+  -- "mass 5 kg" should bind kilogram as the matra triple for mass
+  let
+    g      = build-question-graph "mass 5 kg"
+    result = reduce g false (fn acc t ->
+      cond (and (eq (nth t 0) "mass") (eq (nth t 1) "matra")) true otherwise acc)
+  return
+    result  bool
+done

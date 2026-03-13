@@ -4,5 +4,6 @@ vyakarana_lib__Setu
 vyakarana_lib__Setu_classify
 vyakarana_lib__Setu_shabda
 vyakarana_lib__Yantra_inverter
+vyakarana_lib__Yantra_parser
 vyakarana_lib__Yantra_resolver
 vyakarana_lib__Yantra_types

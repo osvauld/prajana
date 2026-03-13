@@ -1,0 +1,12 @@
+kosha op-fixpoint
+
+  "op-class-higher-order-kriya"
+  "krama-swarupa parampara-abheda"
+
+shabda name:fixpoint parse-arity:2 arg0:state arg1:fn
+
+  -- apply fn repeatedly until output equals input (structural equality).
+  -- terminates when the graph stabilises — the natural avrti fixpoint condition.
+  -- fixpoint x (fn s -> ...) = stable s
+
+done

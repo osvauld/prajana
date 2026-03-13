@@ -1,0 +1,9 @@
+tantra test-reduce-cond-simple
+  let
+    r = reduce ["a", "b"] "" (fn a x ->
+      cond (eq x "b") x
+      otherwise a)
+    ok = eq r "b"
+  return
+    ok  bool
+done

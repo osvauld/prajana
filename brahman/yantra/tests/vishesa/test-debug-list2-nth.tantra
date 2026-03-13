@@ -1,0 +1,9 @@
+tantra test-debug-list2-nth
+  -- can we nth into a 2-element list?
+  let
+    pair = ["velocity", "v1"]
+    first = nth pair 0
+    second = nth pair 1
+  return
+    first  string
+done

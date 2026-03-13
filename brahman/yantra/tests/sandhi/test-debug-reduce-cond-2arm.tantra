@@ -1,0 +1,11 @@
+tantra test-debug-reduce-cond-2arm
+  -- minimal: reduce with 2-arm cond inside the lambda
+  let
+    items = ["a", "b-sthita", "c"]
+    found = reduce items "" (fn acc s ->
+      cond (ends-with s "-sthita") s
+      otherwise acc)
+    ok = eq found "b-sthita"
+  return
+    ok  bool
+done

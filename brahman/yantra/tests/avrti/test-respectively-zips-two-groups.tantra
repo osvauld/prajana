@@ -1,0 +1,19 @@
+tantra test-respectively-zips-two-groups
+  -- "respectively" zips two dvandva groups by grade (position)
+  -- [mass, dvandva, [m1,m2,m3]] + [velocity, dvandva, [v1,v2,v3]] + respectively
+  -- → [m1, vishesa, mass], [m2, vishesa, mass], [m3, vishesa, mass]
+  --   [v1, vishesa, velocity], ...
+  --   [m1, krama, v1], [m2, krama, v2], [m3, krama, v3]
+  -- KNOWN FAILURE: respectively zip rule not implemented
+  let
+    g = [["mass",     "dvandva", ["m1","m2","m3"]],
+         ["velocity", "dvandva", ["v1","v2","v3"]],
+         ["x",        "mithya",  "respectively"]]
+    r    = fixpoint g avrti-refine
+    -- check that grade-0 pair exists: m1 krama v1
+    has  = reduce r false (fn acc tri ->
+             cond (and (eq (nth tri 0) "m1") (eq (nth tri 1) "krama"))
+               true otherwise acc)
+  return
+    has  bool
+done

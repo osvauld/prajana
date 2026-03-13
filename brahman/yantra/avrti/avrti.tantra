@@ -1,0 +1,19 @@
+tantra avrti
+
+  -- spreading activation over a tightly scoped word frontier.
+  -- each pass: frontier nodes are replaced by their neighbors, deduplicated.
+  -- terminates at fixpoint — when no new nodes are added.
+  -- seeds must be resolved word-nodes (not high-degree graph nodes).
+  -- used by build-question-graph for morphological resolution passes.
+
+  inputs
+    seeds  list
+
+  let
+    result = fixpoint seeds (fn frontier ->
+      unique (flatten (map frontier (fn node -> neighbors node))))
+
+  return
+    result  list
+
+done

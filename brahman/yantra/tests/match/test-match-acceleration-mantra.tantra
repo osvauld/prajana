@@ -1,0 +1,15 @@
+tantra test-match-acceleration-mantra
+  -- acceleration is solve-for → matches acceleration-mantra
+  -- krama-rhs: final-velocity, initial-velocity, time — all bound
+  let
+    g      = [["calculate",       "vidhi-kaala",  "solve-for"],
+               ["acceleration",    "satya",  "acceleration"],
+              ["final-velocity",  "sankhya",   "20.0"],
+              ["initial-velocity","sankhya",   "5.0"],
+              ["time",            "sankhya",   "3.0"]]
+    r      = match-mantra g
+    name   = nth r 0
+    ok     = eq (to-string name) "acceleration-mantra"
+  return
+    ok  bool
+done

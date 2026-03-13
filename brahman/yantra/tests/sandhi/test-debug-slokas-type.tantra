@@ -1,0 +1,10 @@
+tantra test-debug-slokas-type
+  -- is node-slokas result a list at all?
+  let
+    gnode  = lookup-word "has"
+    name   = to-string gnode
+    slokas = node-slokas name
+    ok     = gt (length slokas) 0
+  return
+    ok  bool
+done

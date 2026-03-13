@@ -1,0 +1,15 @@
+tantra test-ownership-not-transitive
+  -- shashthi-vibhakti is NOT transitive: ball owns mass, but ball does NOT own "5.0"
+  -- emitting [t5-mass, shashthi-vibhakti, t5-ball] and [t5-value, shashthi-vibhakti, t5-mass]
+  -- walk-in "t5-ball" shashthi-vibhakti should return [t5-mass] only, not [t5-value]
+  let
+    _ = emit-node "t5-mass"  "prashna" ["t5-ball-shashthi-vibhakti"] ""
+    _ = emit-node "t5-value" "prashna" ["t5-mass-shashthi-vibhakti"] ""
+    ball-owns      = walk-in "t5-ball" "shashthi-vibhakti"
+    ball-owns-names = map ball-owns (fn n -> to-string n)
+    owns-mass  = member "t5-mass"  ball-owns-names
+    owns-value = member "t5-value" ball-owns-names
+    ok         = and owns-mass (not owns-value)
+  return
+    ok  bool
+done

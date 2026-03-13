@@ -1,0 +1,22 @@
+tantra lookup-word
+
+  -- find the knowledge graph node for a surface word form.
+  -- 1. word-node word  — word: key mappings (what→prashna, kg→kilogram, N→newton)
+  -- 2. lookup word     — exact graph node by name (acceleration, mass, force, ...)
+  -- 3. try-morpheme-rules word — suffix inversion for plurals (velocities→velocity)
+  -- returns the node name, or _none if no match.
+
+  inputs
+    word  string
+
+  let
+    abbrev = word-node word
+    exact  = cond (exists abbrev) _none otherwise (lookup word)
+    result = cond (exists abbrev) abbrev
+             otherwise (cond (exists exact) exact
+             otherwise (try-morpheme-rules word))
+
+  return
+    result  string
+
+done

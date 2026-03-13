@@ -1,0 +1,10 @@
+tantra test-avrti-avastha-final
+  -- "final" + "velocity" → "final-velocity" (avastha synthesis)
+  let
+    g    = [["final", "mithya", "final"], ["velocity", "satya", "velocity"]]
+    r    = avrti-refine g
+    node = nth (nth r 0) 0
+    ok   = eq node "final-velocity"
+  return
+    ok  bool
+done

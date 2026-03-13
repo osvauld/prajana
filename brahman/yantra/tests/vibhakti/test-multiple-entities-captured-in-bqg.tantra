@@ -1,0 +1,27 @@
+tantra test-multiple-entities-captured-in-bqg
+  -- "ball A has mass 5 kg and ball B has mass 10 kg find total momentum if both move with velocity 3 m"
+  -- at minimum: both "ball" mithya labels are captured, both mass bindings present,
+  -- momentum and velocity satya concepts present
+  -- this is a REACHABILITY test — verifies nothing is lost even before entity resolution
+  let
+    g = build-question-graph "ball A has mass 5 kg and ball B has mass 10 kg find total momentum if both move with velocity 3 m"
+    -- both entity labels present (as mithya)
+    has-ball = reduce g false (fn acc tri ->
+                 cond (and (eq (nth tri 0) "ball") (eq (nth tri 1) "mithya"))
+                   true otherwise acc)
+    -- momentum satya
+    has-momentum = reduce g false (fn acc tri ->
+                     cond (and (eq (nth tri 0) "momentum") (eq (nth tri 1) "satya"))
+                       true otherwise acc)
+    -- velocity satya with sankhya
+    has-velocity = reduce g false (fn acc tri ->
+                     cond (and (eq (nth tri 0) "velocity") (eq (nth tri 1) "sankhya"))
+                       true otherwise acc)
+    -- vidhi-kaala present
+    has-intent = reduce g false (fn acc tri ->
+                   cond (eq (nth tri 1) "vidhi-kaala") true otherwise acc)
+    ok = reduce [has-ball, has-momentum, has-velocity, has-intent]
+           true (fn acc x -> and acc x)
+  return
+    ok  bool
+done

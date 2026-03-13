@@ -1,0 +1,20 @@
+tantra test-group-type-from-bahu-vachana
+  -- "v1 v2 v3 velocities" — "velocities" (bahu-vachana) names the type of the group
+  -- the mithya sequence [v1,v2,v3] before "velocity" (resolved from "velocities")
+  -- should produce [velocity, dvandva, [v1,v2,v3]]
+  -- this is the tatpurusha typing: v1 is-a velocity, v2 is-a velocity, v3 is-a velocity
+  -- KNOWN FAILURE: group-from-mithya-sequence + type-from-bahu-vachana not implemented
+  let
+    g = [["v1",       "mithya",  "v1"],
+         ["v2",       "mithya",  "v2"],
+         ["v3",       "mithya",  "v3"],
+          ["velocity", "satya",  "velocity"]]
+    r       = fixpoint g avrti-refine
+    members = reduce r [] (fn acc tri ->
+                cond (and (eq (nth tri 0) "velocity") (eq (nth tri 1) "dvandva"))
+                  (nth tri 2)
+                otherwise acc)
+    ok = eq (length members) 3
+  return
+    ok  bool
+done

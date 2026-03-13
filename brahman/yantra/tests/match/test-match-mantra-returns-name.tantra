@@ -1,0 +1,11 @@
+tantra test-match-mantra-returns-name
+  -- match returns [mantra-name, args] — first element is a string (mantra node name)
+  let
+    g    = [["mass",     "sankhya", "5.0"],
+            ["velocity", "sankhya", "10.0"]]
+    r    = match-mantra g
+    name = nth r 0
+    ok   = gt (string-length (to-string name)) 0
+  return
+    ok  bool
+done

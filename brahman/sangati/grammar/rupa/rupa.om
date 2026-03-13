@@ -1,0 +1,12 @@
+sangati rupa
+
+  "bhasha-swarupa-sthita dhatu-yukta"
+  "vachana-janya"
+  -- surface form — the inflected or derived form of a stem under a vachana
+  -- produced by applying a vachana (eka/dvi/bahu) to a dhatu
+  -- A rupa B means B is the surface form of stem A
+  -- antisymmetric: surface form is not its own stem
+
+shabda surface-form / the-inflected-or-derived-form-of-a-stem
+
+done

@@ -1,0 +1,17 @@
+sangati asprista-sankhya
+
+  -- a numeric value that has entered the question graph but is not yet bound to any concept.
+  -- held provisionally until avrti attaches it to the preceding active concept.
+  -- example: [5, asprista-sankhya, 5.0]  — the 5 in "ball has mass 5 kg" before binding
+  --
+  -- asprista = not yet touched by understanding
+  -- sankhya  = numeric value
+  -- together: a number whose meaning (which quantity it measures) has not yet been discerned
+
+  "prashna-sthita"
+  "asprista-sthita sankhya-sthita"
+  "mithya-satya-sthita"   -- pending = not yet fully resolved
+
+shabda asprista-sankhya / unattached-numeric-value-awaiting-concept-binding
+
+done

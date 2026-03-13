@@ -1,0 +1,15 @@
+bhasha pronoun-their
+
+  "avyaya-swarupa english-sthita"
+  "naama-pratibodha-sthita"
+  "bahu-vachana-sthita"
+  -- "their" — plural possessive pronoun, third person
+  -- signals: all currently established entities collectively own the following concept
+  -- their IS naama-pratibodha expressed as an English pronoun (plural)
+  -- example: "ball A has mass 3 kg, ball B has mass 7 kg. find THEIR total momentum."
+  --   → [their, naama-pratibodha, [ball-A, ball-B]]
+  --   → [total-momentum, shashthi-vibhakti, [ball-A, ball-B]]
+
+  shabda word:their  role:pronoun
+
+done

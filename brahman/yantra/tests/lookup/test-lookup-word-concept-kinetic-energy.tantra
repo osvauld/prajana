@@ -1,0 +1,8 @@
+tantra test-lookup-word-concept-kinetic-energy
+  -- "kinetic-energy" should resolve to the kosha concept node, not kinetic-energy-mantra
+  -- KNOWN FAILURE: name:kinetic-energy on mantra shabda claims the word_index slot first
+  let
+    result = eq (lookup-word "kinetic-energy") "kinetic-energy"
+  return
+    result  bool
+done

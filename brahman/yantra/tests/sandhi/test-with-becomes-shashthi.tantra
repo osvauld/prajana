@@ -1,0 +1,10 @@
+tantra test-with-becomes-shashthi
+  -- "with" carries shashthi-vibhakti-sthita → should be promoted
+  let
+    graph  = [["with", "mithya", "with"]]
+    result = sandhi-viveka graph
+    tri    = nth result 0
+    ok     = eq (nth tri 1) "shashthi-vibhakti"
+  return
+    ok  bool
+done

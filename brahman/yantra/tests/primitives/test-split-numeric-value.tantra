@@ -1,0 +1,7 @@
+tantra test-split-numeric-value
+  -- split-numeric "5kg" → [5., "kg"]; numeric part is VFloat
+  let
+    result = lt (abs (sub (nth (split-numeric "5kg") 0) 5)) 0.001
+  return
+    result  bool
+done

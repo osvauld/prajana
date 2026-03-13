@@ -1,0 +1,9 @@
+tantra test-ppr-returns-results
+  -- ppr with mass+velocity seeds should return a non-empty ranked list.
+  let
+    seeds   = [["mass", "1.0"], ["velocity", "1.0"]]
+    results = ppr seeds "mass" []
+    ok      = gt (length results) 0
+  return
+    ok  bool
+done

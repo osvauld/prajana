@@ -1,0 +1,11 @@
+tantra test-debug-reduce-literal-list
+  -- reduce over a literal list that looks like what node-slokas returns
+  let
+    slokas = ["kriya-swarupa sambandha-sthita", "shashthi-vibhakti-sthita"]
+    found  = reduce slokas "" (fn acc s ->
+      cond (ends-with s "-sthita") s
+      otherwise acc)
+    ok = eq found "shashthi-vibhakti-sthita"
+  return
+    ok  bool
+done

@@ -1,0 +1,17 @@
+tantra test-satya-triple-is-reflexive
+  -- satya triple must be [node, "satya", node] — reflexive.
+  -- the object being the node name (not dead string "concept") means:
+  --   nth tri 2 gives a live kosha node name usable as PPR seed,
+  --   and after materialize: walk node "satya" bridges into kosha structure.
+  let
+    info    = ["mass", "", "kosha", "", ""]
+    ctx     = ["", ""]
+    triples = emit-triples "mass" info ctx
+    tri     = nth triples 0
+    subj    = nth tri 0
+    edge    = nth tri 1
+    obj     = nth tri 2
+    ok      = and (eq edge "satya") (eq obj subj)
+  return
+    ok  bool
+done

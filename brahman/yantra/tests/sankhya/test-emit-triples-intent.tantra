@@ -1,0 +1,11 @@
+tantra test-emit-triples-intent
+  -- info with role=intent → [[word, "vidhi-kaala", "solve-for"]]
+  let
+    info    = ["what", "intent", "bhasha", "", ""]
+    ctx     = ["", ""]
+    triples = emit-triples "what" info ctx
+    first   = nth triples 0
+    result  = eq (nth first 1) "vidhi-kaala"
+  return
+    result  bool
+done

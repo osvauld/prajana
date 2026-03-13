@@ -1,0 +1,8 @@
+tantra test-reduce-node-slokas-nth
+  let
+    s  = node-slokas "verb-has"
+    s0 = nth s 0
+    ok = gt (string-length s0) 0
+  return
+    ok  bool
+done

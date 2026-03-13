@@ -1,0 +1,11 @@
+tantra test-reduce-two-sthita
+  -- both slokas end with -sthita — reduce takes the first one
+  let
+    slokas = ["kriya-swarupa sambandha-sthita", "shashthi-vibhakti-sthita"]
+    r = reduce slokas "" (fn a x ->
+      cond (ends-with x "-sthita") x
+      otherwise a)
+    ok = eq r "shashthi-vibhakti-sthita"
+  return
+    ok  bool
+done

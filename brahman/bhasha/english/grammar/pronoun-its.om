@@ -1,0 +1,15 @@
+bhasha pronoun-its
+
+  "avyaya-swarupa english-sthita"
+  "naama-pratibodha-sthita"
+  "eka-vachana-sthita"
+  -- "its" — singular possessive pronoun, third person
+  -- signals: the most recently established entity owns the following concept
+  -- its IS naama-pratibodha expressed as an English pronoun
+  -- example: "a ball has mass 5 kg. find ITS kinetic energy."
+  --   → [its, naama-pratibodha, ball]
+  --   → [kinetic-energy, shashthi-vibhakti, ball]  (derived from reference)
+
+  shabda word:its  role:pronoun
+
+done

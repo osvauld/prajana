@@ -1,0 +1,12 @@
+tantra test-mithya-passthrough
+  -- sandhi-viveka should leave non-grammar mithya words unchanged
+  -- "ball" has no "-sthita" slokas → passes through as [ball, mithya, ball]
+  let
+    graph  = [["ball", "mithya", "ball"]]
+    result = sandhi-viveka graph
+    tri    = nth result 0
+    ok     = and (eq (nth tri 0) "ball")
+                 (eq (nth tri 1) "mithya")
+  return
+    ok  bool
+done

@@ -1,0 +1,9 @@
+tantra test-reduce-slokas-last
+  -- what is the last element of node-slokas?
+  let
+    s = node-slokas "verb-has"
+    r = reduce s "" (fn a x -> x)
+    ok = eq r "shashthi-vibhakti-sthita"
+  return
+    ok  bool
+done
