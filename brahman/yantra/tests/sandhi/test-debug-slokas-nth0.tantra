@@ -1,0 +1,9 @@
+tantra test-debug-slokas-nth0
+  let
+    gnode  = lookup-word "has"
+    slokas = node-slokas (to-string gnode)
+    s0     = nth slokas 0
+    ok     = eq s0 "kriya-swarupa sambandha-sthita"
+  return
+    ok  bool
+done

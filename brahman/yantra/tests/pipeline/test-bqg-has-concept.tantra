@@ -1,0 +1,9 @@
+tantra test-bqg-has-concept
+  -- "force" → satya concept triple present (kosha node)
+  let
+    g      = build-question-graph "find force"
+    result = reduce g false (fn acc t ->
+      cond (and (eq (nth t 0) "force") (eq (nth t 1) "satya")) true otherwise acc)
+  return
+    result  bool
+done

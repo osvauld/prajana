@@ -1,0 +1,9 @@
+kosha op-ends-with
+
+  "op-class-relation-kriya"
+
+shabda name:ends-with parse-arity:2 arg0:string arg1:suffix
+
+  -- string suffix test. ends-with s suffix → bool.
+
+done

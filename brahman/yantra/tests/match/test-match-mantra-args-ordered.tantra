@@ -1,0 +1,16 @@
+tantra test-match-mantra-args-ordered
+  -- match returns args in krama-rhs order so execute-chain gets them right
+  -- kinetic-energy-mantra krama-rhs: mass, velocity → args[0]=mass-val, args[1]=velocity-val
+  let
+    g    = [["mass",     "sankhya", "5.0"],
+            ["velocity", "sankhya", "10.0"]]
+    r    = match-mantra g
+    args = nth r 1
+    arg0 = nth args 0
+    arg1 = nth args 1
+    ok   = cond (and (lt (abs (sub (to-number arg0) 5.0)) 0.001)
+                     (lt (abs (sub (to-number arg1) 10.0)) 0.001))
+             true otherwise false
+  return
+    ok  bool
+done

@@ -1,0 +1,42 @@
+tantra test-avrti-r3-dual-avastha-same-base
+  -- bug 2: R3 reattributes stale sankhya bindings using a flat rename map.
+  -- when two avastha compounds share the same base word (both initial-velocity
+  -- and final-velocity come from "velocity"), the flat map's last entry wins,
+  -- so ALL velocity sankhya triples get attributed to final-velocity.
+  --
+  -- input: "initial velocity 20 final velocity 40"
+  --   pass1 (R2) synthesises: initial-velocity, final-velocity
+  --   BQG emits: [velocity, sankhya, 20.] and [velocity, sankhya, 40.]
+  --   pass1b (R3) must attribute 20. → initial-velocity and 40. → final-velocity
+  --
+  -- current behaviour: both values go to final-velocity (last rename wins).
+  --   [final-velocity, sankhya, 20.]  ← stale/wrong
+  --   [final-velocity, sankhya, 40.]  ← correct but duplicate
+  --   initial-velocity gets no sankhya triple at all.
+  -- expected: [initial-velocity, sankhya, 20.] and [final-velocity, sankhya, 40.]
+  --
+  -- KNOWN FAILURE: pass1b uses reduce over flat rename map (last wins).
+  let
+    g     = [["initial",  "mithya", "initial"],
+             ["velocity", "satya", "velocity"],
+             ["velocity", "sankhya",  "20."],
+             ["final",    "mithya", "final"],
+             ["velocity", "satya", "velocity"],
+             ["velocity", "sankhya",  "40."]]
+    r     = avrti-refine g
+    iv-ok = reduce r false (fn acc tri ->
+              cond (and (eq (nth tri 0) "initial-velocity") (eq (nth tri 1) "sankhya"))
+                true otherwise acc)
+    fv-ok = reduce r false (fn acc tri ->
+              cond (and (eq (nth tri 0) "final-velocity") (eq (nth tri 1) "sankhya"))
+                true otherwise acc)
+    -- initial-velocity must NOT carry the sankhya 40. (that belongs to final-velocity)
+    iv-clean = reduce r true (fn acc tri ->
+                 cond (and (and (eq (nth tri 0) "initial-velocity")
+                                (eq (nth tri 1) "sankhya"))
+                           (eq (nth tri 2) "40."))
+                   false otherwise acc)
+    ok    = and iv-ok (and fv-ok iv-clean)
+  return
+    ok  bool
+done

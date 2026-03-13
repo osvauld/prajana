@@ -163,37 +163,35 @@ generation (inspect character ending → infer morpheme → apply suffix).
 `datum → data` cannot be inferred. That node gets `vachana-bahu: english-plural-irregular`
 and `plural-form:data` in its shabda.
 
-### lookup-word is a mantra, not a tantra
+### lookup-word — tantra (bridge) ✅ done
 
-`lookup-word` is a **mantra node** — a krama chain executed by `execute-chain`.
-The graph itself does the lookup. No tantra procedural code needed.
+`lookup-word.tantra` is fully graph-native. Three steps:
+1. **Graph lookup** — `lookup word` (direct `Proof_graph.find` — kosha concept wins)
+2. **Abbreviation lookup** — `word-node word` (word: keys only — kg, N, m, rad)
+3. **Graph-walk morpheme inversion** — `try-morpheme-rules word`
+   walks `walk-in "vachana-bahu" "sthita"` to get all rule nodes,
+   reads `suffix`/`stem-suffix` from each rule's shabda,
+   applies inverse, returns first `lookup` hit
 
-```
-lookup-word-mantra
-  krama: try-direct → try-strip-s → try-strip-es → try-strip-ies → miss
-  krama-rhs: word (string)
-  krama-lhs: resolved-node
-```
+No hardcoded suffix list. Adding a new morpheme `.om` file is picked up automatically.
 
-Each krama step is a graph op: strip suffix from string, call word-node, short-circuit if found.
-The morpheme nodes are the operands — the mantra walks them in order.
-`build-question-graph` calls `execute-chain` on this mantra for each word in the reduce.
-
-**Current phasing**: `execute-chain`'s stack machine runs ordered krama steps but does
-not yet short-circuit on a non-miss result. Until short-circuit support exists,
-`lookup-word` is backed by a **`lookup-word.tantra`** that implements the same 4-step
-strategy using tantra `cond`/`exists` branching. `build-question-graph` calls
-`lookup-word` (the tantra) directly. When the stack machine gains short-circuit support,
-`lookup-word.tantra` becomes the backing for `lookup-word-mantra` krama steps and
-`build-question-graph` calls `execute-chain "lookup-word-mantra"` instead.
+**Future**: when `execute-chain` gains short-circuit support, `lookup-word-mantra`
+becomes a krama chain where each step is a graph op. Until then `lookup-word.tantra`
+is the bridge implementation.
 
 Lookup strategy:
-1. **Direct hit** — `word-node word` → found → done
-2. **Strip `s`** → retry (metres → metre, kilograms → kilogram)
-3. **Strip `es`** → retry (masses → mass)
-4. **Strip `ies`, add `y`** → retry (velocities → velocity, frequencies → frequency)
-5. **Irregular** — node has explicit `plural-form:` key listing surface variants
-6. **Miss** → mithya layer
+1. **Direct graph hit** — `lookup word` → kosha node if it exists → done
+2. **Abbreviation** — `word-node word` → word: key hit (kg→kilogram, N→newton)
+3. **Morpheme inversion** — walk bahu-vachana rules from graph, apply inverse suffix
+4. **Miss** → `_none` → mithya layer
+
+**Why `lookup` before `word-node`**: `word-node` uses the `word_index` hashtable
+which is built by `build_word_index` in a single non-deterministic `Hashtbl.iter` pass.
+Mantra nodes with `name:acceleration` in their shabda can claim the slot before the
+kosha node `acceleration` is auto-indexed — purely an iteration order accident.
+`lookup` goes directly to `Proof_graph.find k word` which always returns the actual
+graph node if one exists by that name. Concept nodes (`acceleration`, `kinetic-energy`)
+are always in the graph as kosha nodes. `lookup` hits them correctly every time.
 
 This is the same mechanism as Sanskrit vibhakti (case endings) projected onto English.
 `vachana` (number: singular/plural) is already a grammar dimension — plural is just
@@ -412,6 +410,30 @@ tantra build-question-graph
 done
 ```
 
+### P8-C: `avrti-refine.tantra` ← next
+One refinement pass over the question graph. Resolves patterns requiring full-graph
+context — things the single-pass linear reduce cannot handle.
+
+Applied as `fixpoint graph avrti-refine` until the graph stabilises.
+
+**Refinement rules (ordered by priority):**
+
+| Pass | Pattern | Action |
+|---|---|---|
+| 2 | `[w, mithya]` immediately before `[c, active, concept]` | try `lookup "w-c"` → if hit replace both with `[compound, active, concept]` |
+| 3 | `[c, active, concept]` + unresolved unit string (mithya) | try unit match against c's expected unit (future) |
+| N | any remaining mithya adjacent to satya with high context pressure | collapse mithya → satya (future) |
+
+**Example (compound resolution):**
+```
+before: [[kinetic, mithya, kinetic], [energy, active, concept]]
+after:  [[kinetic-energy, active, concept]]
+```
+
+`fixpoint` terminates when no new triples change — naturally stable after O(sentence-length) passes.
+
+OCaml: `fixpoint` and `iterate` primitives added to `yantra_ops.ml`. ✅ done.
+
 ### P8-D: `match-mantra.tantra`
 Given question graph → find mantra node whose krama-rhs nodes are
 all bound in the satya layer. Returns mantra + bindings map.
@@ -437,16 +459,18 @@ Derives the unit for a concept node by walking graph edges.
 Replaces: `matra-viveka.tantra`.
 Becomes `unit-of-concept-mantra` when graph-walk krama steps supported.
 
-### P8-G: `lookup-word.tantra` + `lookup-word-mantra` (graph node)
-`lookup-word.tantra` — 4-step morpheme-inverting lookup using `substr` primitive:
-  1. direct word-node hit
-  2. strip trailing `s` → retry
-  3. strip trailing `es` → retry
-  4. strip trailing `ies`, add `y` → retry
-  5. miss → `_none`
+### P8-G: `lookup-word.tantra` + `try-morpheme-rules.tantra` ✅ done
 
-`lookup-word-mantra` — declares the same strategy as a krama chain in the graph.
-Currently backed by `lookup-word.tantra` steps. Future: native stack machine execution.
+`lookup-word.tantra` — 2-step graph-native lookup:
+  1. direct `word-node` hit (exact match + abbreviations)
+  2. `try-morpheme-rules` — walks `walk-in "vachana-bahu" "sthita"` from the graph,
+     reads `suffix`/`stem-suffix` shabda from each rule, applies inverse, returns hit
+  3. miss → `_none`
+
+`try-morpheme-rules.tantra` — fully graph-driven morpheme inversion.
+No hardcoded suffix list. New morpheme `.om` files are picked up automatically.
+
+`lookup-word-mantra` (future) — krama chain version once `execute-chain` has short-circuit.
 
 ### New `anuvada-ganana.tantra` (replaces migration version)
 Top-level orchestrator. Drops in as direct replacement — OCaml `run_anuvada_ganana`
@@ -457,7 +481,8 @@ tantra anuvada-ganana
   inputs
     sentence  string
   let
-    graph    = build-question-graph sentence
+    graph0   = build-question-graph sentence    -- pass 1: linear word scan
+    graph    = fixpoint graph0 avrti-refine     -- passes 2+: compound + unit resolution
     match    = match-mantra graph
     result   = cond (exists match)
                  (execute-chain (nth match 0) (nth match 1))
@@ -468,22 +493,35 @@ tantra anuvada-ganana
 done
 ```
 
+The fixpoint loop is the avrti spiral:
+- pass 1 (`build-question-graph`): rough graph, mithya words held as seeds
+- pass 2+ (`avrti-refine`): compound resolution, mithya→satya where context pressure resolves
+- terminates when graph stops changing (structural equality)
+
 ## Natural Language Tantra Design (P8-NL)
 
 Tantras are written IN the graph's own vocabulary. Graph node names are verbs.
 Connectives (`and`, `of`, `in`, `for`, `with`) are grammar nodes. The meaning
 lives in the nodes — not in the parser.
 
-**Target form — `lookup-word.tantra`:**
+**Target form — `lookup-word.tantra`:** ✅ done
 ```
 tantra lookup-word
   inputs
     word  string
 
-  try direct and try strip-s and try strip-es and try strip-ies
-  return node
+  let
+    direct = word-node word
+    result = cond (exists direct) direct
+             otherwise (try-morpheme-rules word)
+
+  return result
 done
 ```
+
+`try X and try Y` form is NOT needed — `lookup-word` is now just two branches.
+The old strip chain (`try-strip-s`, `try-strip-es`, `try-strip-ies`) is replaced by
+`try-morpheme-rules` which walks the graph to find all bahu-vachana rules automatically.
 
 **Target form — `build-question-graph.tantra`:**
 ```
@@ -499,34 +537,30 @@ tantra build-question-graph
 done
 ```
 
-Each sub-operation (`try-direct`, `try-strip-s`, `emit-triples`, `find-context`)
+Each sub-operation (`try-morpheme-rules`, `emit-triples`, `find-context`)
 is a standalone graph node — a mantra or tantra — that holds its own logic.
 Most computation lives in the graph, not in parser rules.
 
 ### Sentence forms needed (smallest to largest)
 
-| Form | Sugar for | Needed by |
-|---|---|---|
-| `try X and try Y and try Z` | `cond (exists X) X (cond (exists Y) Y ...)` | `lookup-word` |
-| `split X into Y` | `Y = split X " "` | `build-question-graph` |
-| `for each X in Y ... and ...` | `reduce Y [] (fn g x -> ...)` | `build-question-graph` |
+| Form | Sugar for | Needed by | Status |
+|---|---|---|---|
+| `split X into Y` | `Y = split X " "` | `build-question-graph` | partial (scoping bug) |
+| `for each X in Y A and B and C` | `reduce Y [] (fn g x -> A x; B x; C x)` | `build-question-graph` | pending |
 
-### Standalone sub-tantra nodes (no parser change needed)
+`try X and try Y` is dropped — `lookup-word` no longer needs it.
+`and` is the key composition operator inside `for each` bodies.
 
-Before adding sentence forms, extract the sub-operations as named tantras.
-Each is a tiny, focused chain of thought:
+### Standalone sub-tantra nodes ✅ done
 
 ```
-tantra try-direct      -- word-node word → node or _none
-tantra try-strip-s     -- word-node (substr word 0 (len-1)) → node or _none
-tantra try-strip-es    -- word-node (substr word 0 (len-2)) → node or _none
-tantra try-strip-ies   -- word-node (concat (substr word 0 (len-3)) "y") → node or _none
-tantra find-context    -- active-concept and pending-number from graph
-tantra emit-triples    -- given word + sense + context → triples
+tantra try-morpheme-rules  -- walk bahu-vachana rules from graph → node or _none  ✅
+tantra find-context        -- active-concept and pending-number from graph         ✅
+tantra emit-triples        -- given word + sense + context → triples               ✅
 ```
 
 These exist as graph vocabulary. `lookup-word` and `build-question-graph` call them
-by name. The `try X and try Y` parser form is layered on top once these exist.
+by name.
 
 ## Parser + Eval Modularization (P8-M)
 
@@ -564,23 +598,26 @@ yantra_pipeline_ops.ml (604 lines) → DELETE after tantras replace pipeline:
 
 ### Order
 
-1. Split `yantra_parser.ml` — creates `yantra_sentence_parser.ml` (empty stub)
-2. Add `try X and try Y` to `yantra_sentence_parser.ml`
-3. Write standalone sub-tantras (`try-direct`, `try-strip-s`, etc.)
-4. Rewrite `lookup-word.tantra` in natural form
-5. Add `split X into Y` and `for each X in Y`
-6. Rewrite `build-question-graph.tantra` in natural form
-7. Split eval modules
-8. Delete `yantra_pipeline_ops.ml` once covered by tantras
+1. ✅ Split `yantra_parser.ml` — created `yantra_sentence_parser.ml`
+2. ✅ Write standalone sub-tantras — `try-morpheme-rules`, `find-context`, `emit-triples`
+   - `try-strip-s/es/ies` replaced by graph-walk `try-morpheme-rules`
+   - `ends-with` primitive added (OCaml + op node)
+3. ✅ Rewrite `lookup-word.tantra` — graph-native: direct hit + try-morpheme-rules
+4. ✅ `split X into Y` — implemented in `yantra_sentence_parser.ml` (scoping bug to fix)
+5. → Implement `for each X in Y A and B and C` sentence form
+6. → Fix `split X into Y` scoping bug
+7. → Rewrite `build-question-graph.tantra` in natural form
+8. Split eval modules
+9. Delete `yantra_pipeline_ops.ml` once covered by tantras
 
 ## OCaml Primitives Required
 
-### New (P8-A): `substr`
-```ocaml
-| "substr" -> string × start × length → string
-```
-Needed by `lookup-word.tantra` for suffix stripping.
-3-line addition to `yantra_ops.ml`. Register arity 3 in `yantra_eval.ml`.
+### ✅ `substr` — string × start × length → string
+Used by `try-morpheme-rules.tantra` for suffix stripping in morpheme inversion.
+
+### ✅ `ends-with` — string × suffix → bool
+Used by `try-morpheme-rules.tantra` to check if word ends with a morpheme's suffix.
+Added to `yantra_ops.ml` + `brahman/kosha/yantra/op-ends-with.om`.
 
 ### Already exists (P8-E): `dim-vector`, `dim-op`, `dim-to-unit`
 These back `unit-compose-mantra` krama steps via `apply-op`. No new OCaml needed.
@@ -589,11 +626,17 @@ These back `unit-compose-mantra` krama steps via `apply-op`. No new OCaml needed
 
 | Target | Lines | Replacement |
 |---|---|---|
+| `build_word_index` — `name:` registration block | ~15 | `lookup` primitive handles concept nodes directly |
+| `build_word_index` — kosha auto-index block | ~10 | `lookup` primitive handles concept nodes directly |
 | `yantra_resolver.ml` — `chain_resolve` BFS | ~300 | `match-mantra.tantra` |
 | `yantra_inverter.ml` — `invert_chain` | ~200 | mantra `pratipaksha` walk (future) |
 | `setu_classify.ml` — `classify_token` | 144 | `build-question-graph.tantra` |
 | `classify_via_tantra` + `extract_bindings` in `yantra.ml` | ~80 | `build-question-graph.tantra` |
 | `run_anuvada_ganana` pipeline fallback in `yantra.ml` | ~120 | new `anuvada-ganana.tantra` |
+
+After removing `name:` and kosha auto-index from `build_word_index`, the function
+becomes word:-keys-only. `word-node` is then purely an abbreviation lookup.
+Concept resolution goes through `lookup` (graph-native, always correct).
 
 Gate: 49/52 regression throughout.
 
@@ -621,6 +664,41 @@ This is a flat list of triples. The `match-mantra.tantra` walks this
 to find which mantra node's krama-rhs are all bound.
 
 ## Execution Flow (Full)
+
+```
+sentence: "what is the kinetic energy of a 5kg ball moving at 10m/s"
+
+build-question-graph (pass 1 — linear scan):
+  "what"    → intent: [what, intent, solve-for]
+  "is"      → grammar: []
+  "the"     → grammar: []
+  "kinetic" → miss: [kinetic, mithya, kinetic]
+  "energy"  → kosha concept: [energy, active, concept]
+  "of"      → grammar: []
+  "a"       → grammar: []
+  "5kg"     → value+unit: [energy, value, 5.0], [energy, unit, kilogram]
+  "ball"    → miss: [ball, mithya, ball]
+  "moving"  → miss: [moving, mithya, moving]
+  "at"      → grammar: []
+  "10m/s"   → number+unknown-unit: [10m/s, pending-number, 10.0]
+
+avrti-refine (pass 2 — compound resolution):
+  sees [kinetic, mithya] before [energy, active]
+  → lookup "kinetic-energy" → HIT (kosha node)
+  → replace both with [kinetic-energy, active, concept]
+  graph now: [what, intent, solve-for]
+             [kinetic-energy, active, concept]
+             [kinetic-energy, value, 5.0], [kinetic-energy, unit, kilogram]
+             [ball, mithya, ball], [moving, mithya, moving]
+
+avrti-refine (pass 3 — no new compounds, graph stable → fixpoint done)
+
+match-mantra:
+  bound = [kinetic-energy]  ← but kinetic-energy-mantra needs mass + velocity → no match
+  (this sentence doesn't bind mass/velocity individually — needs better unit parsing)
+```
+
+---
 
 ```
 sentence: "calculate velocity given momentum 50kgm/s and mass 2kg"
@@ -685,7 +763,8 @@ not a standalone answer.
 - `execute-chain` primitive — still the execution engine
 - Mantra node structure (`krama`, `krama-lhs`, `krama-rhs`, `implication-sthita`)
 - `dim-vector`, `dim-op`, `dim-to-unit` primitives
-- `word-node` and word_index for base unit lookup
+- `lookup` primitive (`Proof_graph.find`) — the correct primary path for concept nodes
+- `word-node` and word_index — retained but now abbreviation-only (word: keys)
 - Regression baseline: 49/52
 
 ## Resolved Design Decisions
@@ -725,3 +804,10 @@ not a standalone answer.
    phase. `anuvada-ganana.tantra` is stateless — each call is independent.
    Session bindings via existing `session-bindings`/`remember-bindings` primitives
    added in a later phase.
+
+9. **`lookup` before `word-node` in `lookup-word.tantra`**: `lookup word` hits
+   `Proof_graph.find` directly — always returns the kosha concept node if one exists
+   by that name. `word-node` (word_index) is only consulted as fallback for
+   abbreviations (kg, N, m) that have no corresponding graph node by that name.
+   `build_word_index` is simplified to word:-keys-only — the `name:` registration
+   and kosha auto-index blocks are removed as they are made redundant by `lookup`.

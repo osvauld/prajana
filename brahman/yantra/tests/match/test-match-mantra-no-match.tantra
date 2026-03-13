@@ -1,0 +1,9 @@
+tantra test-match-mantra-no-match
+  -- graph with only mass bound → no mantra has just mass as its only krama-rhs
+  let
+    g      = [["mass", "sankhya", "5.0"], ["mass", "matra", "kilogram"]]
+    r      = match-mantra g
+    empty  = eq (length r) 0
+  return
+    empty  bool
+done

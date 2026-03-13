@@ -1,0 +1,14 @@
+tantra test-vishesa-bind-nested2
+  -- same but without cond — does the inner reduce using outer let variable work?
+  let
+    g = [["v1", "vishesa", "velocity"]]
+    instance-map = [["velocity", "v1"]]
+    result = reduce g [] (fn acc tri ->
+      let subj = nth tri 0
+      let inst = reduce instance-map "" (fn iacc pair ->
+        cond (eq (nth pair 0) subj) (nth pair 1) otherwise iacc)
+      append acc [inst])
+    ok = gt (length result) 0
+  return
+    ok  bool
+done

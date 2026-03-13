@@ -1,0 +1,24 @@
+tantra test-avrti-r9-plus-r4b-symbol
+  -- R9 + R8 + vishesa-instance: named entity has property with symbolic label
+  -- "ball A has velocity v1" →
+  --   [ball-A, prathama-vibhakti, object]    ← R9+R8
+  --   [velocity, shashthi-vibhakti, ball-A]  ← R8
+  --   [v1, vishesa, velocity]                ← vishesa-instance: v1 IS a velocity
+  --   [v1, vishesa, rashi]                   ← v1 is a measurable quantity
+  let
+    g = [["ball",     "mithya", "ball"],
+         ["A",        "mithya", "A"],
+         ["has",      "mithya", "has"],
+          ["velocity", "satya", "velocity"],
+         ["v1",       "mithya", "v1"]]
+    r      = fixpoint (sandhi-viveka g) avrti-refine
+    is-ent = reduce r false (fn acc tri ->
+               cond (and (eq (nth tri 0) "ball-A") (eq (nth tri 1) "prathama-vibhakti"))
+                 true otherwise acc)
+    is-sym = reduce r false (fn acc tri ->
+               cond (and (eq (nth tri 0) "v1") (eq (nth tri 1) "vishesa"))
+                 true otherwise acc)
+    ok     = and is-ent is-sym
+  return
+    ok  bool
+done

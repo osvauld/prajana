@@ -1,0 +1,17 @@
+mantra total-momentum-mantra
+
+  "linear-motion-varga-vishesa"
+  "momentum-swarupa samgraha-sthita"
+
+  -- p_total = mv: single-body case (same formula as momentum-mantra)
+  -- multi-body case requires dvandva groups (Phase 4)
+  "multiplication-krama"
+
+  "execute-chain-kriya"
+  "implication-sthita"
+  "mass-janya"
+  "velocity-janya"
+
+  shabda name:total-momentum krama-lhs-unit:kilogram-metre-per-second degree:1 krama-lhs:total-momentum krama-rhs:mass,velocity
+
+done

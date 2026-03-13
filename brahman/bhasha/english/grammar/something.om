@@ -1,0 +1,9 @@
+bhasha something
+
+  "indefinite-swarupa generic-sthita"
+  -- indefinite pronoun: "something has mass 5 kg", "find something"
+  -- treated as grammar so BQG drops it; entity/intent recognised from context
+
+  shabda word:something  role:grammar
+
+done

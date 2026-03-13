@@ -1,0 +1,69 @@
+tantra kosha-expand
+
+  -- PPR-based kosha expansion pass.
+  --
+  -- given a question graph (list of triples), extracts all active concept nodes
+  -- (those with a satya triple), uses them as PPR seeds, and appends
+  -- kosha-janya triples for the highest-ranked related nodes.
+  --
+  -- this is additive — no existing triples are removed or modified.
+  -- running twice is idempotent: already-present nodes are not added again.
+  --
+  -- output triple format: [seed-node, "kosha-janya", ranked-node]
+  --   seed-node:   the satya concept that was used as the primary PPR seed
+  --   ranked-node: a kosha node surfaced by PPR above the threshold
+  --
+  -- threshold: 0.001 — filters low-relevance noise while keeping close neighbours
+  -- top-k:     20    — at most 20 expansions per seed to avoid graph bloat
+
+  inputs
+    graph  list
+
+  let
+    -- 1. extract satya node names from the question graph.
+    --    satya triples are [node, "satya", node] — reflexive object.
+    satya-nodes = reduce graph [] (fn acc tri ->
+      cond (eq (nth tri 1) "satya")
+        (append acc [(nth tri 2)])
+      otherwise acc)
+
+    -- 2. build PPR seed pairs: [[node, "1.0"], ...]
+    seed-pairs = map satya-nodes (fn n -> [n, "1.0"])
+
+    -- 3. collect names already present in the graph (subjects + objects)
+    --    to avoid re-adding nodes that are already explicitly named.
+    existing = reduce graph [] (fn acc tri ->
+      let s = nth tri 0
+      let o = nth tri 2
+      let with-s = cond (member s acc) acc otherwise (append acc [s])
+      cond (member o with-s) with-s otherwise (append with-s [o]))
+
+    -- 4. run expansion: for each satya node, run PPR and collect expansions.
+    --    threshold = 0.001; top-k = 20.
+    --    only add nodes not already in the graph.
+    threshold = 0.001
+    top-k     = 100
+
+    new-triples = cond (eq (length satya-nodes) 0)
+      []
+    otherwise
+      (reduce satya-nodes [] (fn acc seed ->
+        let results = ppr seed-pairs seed []
+        -- take only top-k results, filter by threshold, skip already-present nodes
+        let filtered = reduce results [] (fn facc entry ->
+          let name  = to-string (nth entry 0)
+          let score = to-number (to-string (nth entry 1))
+          cond (and (gt score threshold)
+                    (not (member name existing))
+                    (gt (length facc) (sub 0 1))
+                    (lt (length facc) top-k))
+            (append facc [[seed, "kosha-janya", name]])
+          otherwise facc)
+        append acc filtered))
+
+    result = append graph new-triples
+
+  return
+    result  list
+
+done

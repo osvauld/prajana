@@ -1,0 +1,12 @@
+tantra test-emit-triples-time-active
+  -- "time" is a bhasha node (not kosha) but is a concept, not grammar
+  -- emit-triples must produce [time, satya, concept] — not mithya
+  let
+    info    = ["time", "", "bhasha", "", ""]
+    ctx     = ["", ""]
+    triples = emit-triples "time" info ctx
+    first   = nth triples 0
+    ok      = eq (nth first 1) "satya"
+  return
+    ok  bool
+done

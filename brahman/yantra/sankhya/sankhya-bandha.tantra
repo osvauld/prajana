@@ -1,0 +1,45 @@
+tantra sankhya-bandha
+
+  -- binds floating asprista-sankhya (unattached numbers) to their preceding satya concept.
+  -- asprista-sankhya arises when a number appears without a unit in direct proximity.
+  -- example: "mass 10 and acceleration 2" → mass=10, acceleration=2
+  --
+  -- guards (must NOT bind):
+  --   concept already has a sankhya triple → already bound, skip
+  --
+  -- state: [last-active, output]
+  --   last-active: most recent satya concept subject
+
+  inputs
+    graph  list
+
+  let
+    -- concepts already bound to a numeric value
+    already-bound = reduce graph [] (fn acc tri ->
+      cond (eq (nth tri 1) "sankhya")
+        (append acc [(nth tri 0)])
+      otherwise acc)
+
+    pass = reduce graph ["", []] (fn state tri ->
+      let last-active = nth state 0
+      let out         = nth state 1
+      let edge        = nth tri 1
+      let word        = nth tri 0
+
+      cond (eq edge "satya")
+        [word, (append out [tri])]
+
+      (and (eq edge "asprista-sankhya")
+           (gt (string-length last-active) 0)
+           (not (member last-active already-bound)))
+        [last-active, (append out [[last-active, "sankhya", (nth tri 2)]])]
+
+      otherwise
+        [last-active, (append out [tri])])
+
+    result = nth pass 1
+
+  return
+    result  list
+
+done

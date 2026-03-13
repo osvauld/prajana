@@ -387,8 +387,10 @@ let register_mantra_nodes (k : proof_graph) (idx : tantra_index) : unit =
 let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
   Hashtbl.iter (fun node_name n ->
     let pairs = Setu_shabda.parse_shabda n.Proof_graph.shabda in
-    (* index all word: key values (comma-separated) *)
-    (match List.assoc_opt "word" pairs with
+    (* index word: keys only — abbreviations and explicit aliases (kg, N, m, rad).
+       concept nodes (mass, acceleration, kinetic-energy) are found via lookup
+       (Proof_graph.find) in lookup-word.tantra — no need to duplicate them here. *)
+    match List.assoc_opt "word" pairs with
     | None -> ()
     | Some words_str ->
       let words = String.split_on_char ',' words_str in
@@ -396,33 +398,7 @@ let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
         let w = String.trim w in
         if String.length w > 0 then
           Hashtbl.replace idx.word_index w node_name
-      ) words);
-    (* also index name: key so physics/math quantity names are findable.
-       e.g. name:velocity on velocity-mantra → word-node "velocity" → "velocity-mantra" *)
-    (match List.assoc_opt "name" pairs with
-    | None -> ()
-    | Some name_str ->
-      let name_str = String.trim name_str in
-      if String.length name_str > 0 then begin
-        (* register the name itself if not already claimed by a word: entry *)
-        if not (Hashtbl.mem idx.word_index name_str) then
-          Hashtbl.replace idx.word_index name_str node_name;
-        (* also register hyphenated names with spaces: "kinetic-energy" → "kinetic energy" *)
-        let spaced = String.map (fun c -> if c = '-' then ' ' else c) name_str in
-        if spaced <> name_str && not (Hashtbl.mem idx.word_index spaced) then
-          Hashtbl.replace idx.word_index spaced node_name
-      end);
-    (* auto-index kosha node names as concept words (lowest priority).
-       allows word-node "mass" → "mass", word-node "kinetic-energy" → "kinetic-energy".
-       only applied if not already claimed by word: or name: entries. *)
-    if n.Proof_graph.layer = "kosha" then begin
-      if not (Hashtbl.mem idx.word_index node_name) then
-        Hashtbl.replace idx.word_index node_name node_name;
-      (* also register spaced form: "kinetic-energy" → "kinetic energy" *)
-      let spaced = String.map (fun c -> if c = '-' then ' ' else c) node_name in
-      if spaced <> node_name && not (Hashtbl.mem idx.word_index spaced) then
-        Hashtbl.replace idx.word_index spaced node_name
-    end
+      ) words
   ) k.Proof_graph.nodes
 
 let build_index ?(graph : proof_graph option) (dirs : string list) : tantra_index =

@@ -1,0 +1,12 @@
+tantra test-bqg-sum-mithya
+  -- "sum" currently resolves as mantra layer → is-concept=false → mithya
+  -- this test documents the CURRENT (failing) state: sum should be satya, not mithya
+  -- KNOWN FAILURE: sum is layer:mantra, so emit-triples marks it mithya
+  let
+    g   = build-question-graph "find sum of 10 and 14"
+    has = reduce g false (fn acc tri ->
+            cond (and (eq (nth tri 0) "sum") (eq (nth tri 1) "satya"))
+              true otherwise acc)
+  return
+    has  bool
+done

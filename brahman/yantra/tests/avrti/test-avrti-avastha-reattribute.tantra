@@ -1,0 +1,20 @@
+tantra test-avrti-avastha-reattribute
+  -- after "final-velocity" synthesised, sankhya triple on base "velocity" is reattributed
+  -- [velocity, sankhya, 20] → [final-velocity, sankhya, 20]
+  let
+    g    = [["final", "mithya", "final"],
+            ["velocity", "satya", "velocity"],
+            ["velocity", "sankhya", "20."]]
+    r    = avrti-refine g
+    -- find the sankhya triple — should now be on final-velocity
+    has  = reduce r false (fn acc tri ->
+             cond (and (eq (nth tri 0) "final-velocity") (eq (nth tri 1) "sankhya"))
+               true otherwise acc)
+    -- and no stale velocity sankhya triple
+    stale = reduce r false (fn acc tri ->
+              cond (and (eq (nth tri 0) "velocity") (eq (nth tri 1) "sankhya"))
+                true otherwise acc)
+    ok   = cond (and has (not stale)) true otherwise false
+  return
+    ok  bool
+done

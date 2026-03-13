@@ -1,0 +1,14 @@
+tantra test-ppr-entry-fields
+  -- ppr returns VBinding entries; nth entry 0 = name, nth entry 1 = score.
+  let
+    seeds   = [["mass", "1.0"]]
+    results = ppr seeds "mass" []
+    entry   = nth results 0
+    name    = nth entry 0
+    score   = nth entry 1
+    -- name should be a non-empty string, score should be a number > 0
+    ok      = and (gt (string-length (to-string name)) 0)
+                  (gt (to-number (to-string score)) 0.0)
+  return
+    ok  bool
+done

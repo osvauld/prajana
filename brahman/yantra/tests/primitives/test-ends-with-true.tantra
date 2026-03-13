@@ -1,0 +1,6 @@
+tantra test-ends-with-true
+  let
+    result = ends-with "velocities" "ies"
+  return
+    result  bool
+done

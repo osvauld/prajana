@@ -500,6 +500,16 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      | None -> VString ""
      | Some n -> VString n.Proof_graph.layer)
 
+  (* node-slokas: node-name → [sloka-string, ...]
+     returns the raw slokas list of a node as a list of strings.
+     tantras use this to inspect the grammar structure of a node —
+     e.g. filter for "-sthita" suffix to find vibhakti/kaala roots. *)
+  | "node-slokas" ->
+    let name = as_string (e_eval k e (List.nth args 0)) in
+    Some (match Proof_graph.find k name with
+     | None   -> VList []
+     | Some n -> VList (List.map (fun s -> VString s) n.Proof_graph.slokas))
+
   (* shabda-pairs: node-name → [[key, value], ...]
      returns all key:value pairs from a node's shabda field as a list of
      [VString key, VString value] pairs. tantras use this to iterate over
@@ -880,5 +890,108 @@ let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : val
                 Printf.printf "eval: unknown operation '%s'\n%!" op;
                 VNone)
            | None ->
-             Printf.printf "eval: unknown operation '%s'\n%!" op;
-             VNone))
+               Printf.printf "eval: unknown operation '%s'\n%!" op;
+              VNone))
+
+(* ---- register_primitive_arities ----------------------------------------
+   ONE SOURCE OF TRUTH for every primitive arity.
+   Called once from yantra_eval.ml during init.
+   Adding a new primitive: add the implementation above AND an entry here.
+   Never add arities anywhere else. *)
+let register_primitive_arities () =
+  let r = Yantra_parser.register_graph_op_arity in
+  (* graph ops *)
+  r "lookup"              1;   (* name → node or VNone *)
+  r "walk"                2;   (* node rel → [nodes] *)
+  r "walk-in"             2;   (* node rel → [nodes] inbound *)
+  r "has"                 2;   (* node rel → bool *)
+  r "edges"               1;   (* node → [(src,rel,tgt)] *)
+  r "outgoing-edges"      1;   (* node → outgoing edges only *)
+  r "ancestors-of"        1;   (* node → [ancestor-names] *)
+  r "all-edges"          (-1); (* () → all edges *)
+  r "in-degree"           1;   (* node → float *)
+  r "out-degree"          1;   (* node → float *)
+  r "neighbors"           1;   (* node → [names] *)
+  r "walk-chain"          2;   (* node depth → [names] *)
+  r "resolve-node"        1;   (* node → [names] *)
+  r "ppr"                 3;   (* seeds target bindings → [(name,score)] *)
+  r "emit-node"           4;   (* name layer slokas shabda → VNode *)
+  r "register-dimension"  1;   (* name → float *)
+  r "dimension-count"    (-1); (* () → float *)
+  r "graph-node-count"   (-1); (* () → float *)
+  r "graph-edge-count"   (-1); (* () → float *)
+  (* field accessors *)
+  r "shabda"              2;   (* node key → string *)
+  r "raw-shabda"          2;   (* node key → own-only string *)
+  r "shabda-pairs"        1;   (* node → [[key,val],...] *)
+  r "node-layer"          1;   (* node → "kosha"|"bhasha"|"sangati" *)
+  r "node-slokas"         1;   (* node → [sloka-string,...] *)
+  r "word-node"           1;   (* word → node or VNone *)
+  r "lookup-word"         1;   (* word → node via bhasha word: key *)
+  (* pipeline ops *)
+  r "execute-chain"       2;   (* mantra args → value *)
+  r "apply-op"            2;   (* op-name args → value *)
+  r "call-tantra"         2;   (* tantra-name [args] → value *)
+  r "split-numeric"       1;   (* "5kg" → ["5.0","kg"] *)
+  r "find-context"        1;   (* graph → context *)
+  r "scene-extract"       1;   (* sentence → VNode root *)
+  r "scene-narrate"       1;   (* VNode root → VString *)
+  r "dim-vector"          1;   (* unit → [M,L,T,...] *)
+  r "dim-op"              3;   (* vec-a vec-b op → vec *)
+  r "dim-to-unit"         1;   (* vec → unit-name *)
+  r "dim-kramanusara-depth" 1; (* vec → float *)
+  (* math *)
+  r "square"              1;   (* x → x² *)
+  r "half"                1;   (* x → x/2 *)
+  r "double"              1;   (* x → x*2 *)
+  r "abs"                 1;   (* float → float *)
+  r "sqrt"                1;   (* float → float *)
+  r "floor"               1;   (* float → float *)
+  r "ceil"                1;   (* float → float *)
+  r "sum"                 1;   (* [list] → float *)
+  r "frequencies"         1;   (* [list] → [[val,count],...] *)
+  (* logic *)
+  r "not"                 1;   (* bool → bool *)
+  r "exists"              1;   (* value → bool *)
+  r "eq"                  2;   (* a b → bool *)
+  r "neq"                 2;   (* a b → bool *)
+  r "lt"                  2;   (* a b → bool *)
+  r "le"                  2;   (* a b → bool *)
+  r "gt"                  2;   (* a b → bool *)
+  r "ge"                  2;   (* a b → bool *)
+  r "and"                 2;   (* a b → bool *)
+  r "or"                  2;   (* a b → bool *)
+  (* string *)
+  r "string-length"       1;   (* string → float *)
+  r "to-string"           1;   (* value → string *)
+  r "to-number"           1;   (* string → float *)
+  r "concat"             (-1); (* variadic string concat *)
+  r "substr"              3;   (* string start len → string *)
+  r "starts-with"         2;   (* string prefix → bool *)
+  r "ends-with"           2;   (* string suffix → bool *)
+  r "split"               2;   (* string delim → list *)
+  r "join"                2;   (* list sep → string *)
+  r "char-at"             2;   (* string idx → char *)
+  (* list *)
+  r "nth"                 2;   (* list idx → element *)
+  r "length"              1;   (* list → float *)
+  r "append"              2;   (* list item → list *)
+  r "flatten"             1;   (* [[...]] → [...] *)
+  r "unique"              1;   (* list → dedup *)
+  r "member"              2;   (* value list → bool *)
+  r "range"               1;   (* n → [0..n-1] *)
+  r "map"                 2;   (* list fn → list *)
+  r "filter"              2;   (* list fn → list *)
+  r "reduce"              3;   (* list init fn → value *)
+  r "fixpoint"            2;   (* state fn → stable-state *)
+  r "iterate"             3;   (* n state fn → state *)
+  (* arithmetic *)
+  r "add"                (-1); (* variadic add *)
+  r "mul"                (-1); (* variadic mul *)
+  r "sub"                 2;   (* a b → float *)
+  r "div"                 2;   (* a b → float *)
+  r "mod"                 2;   (* a b → float *)
+  r "max"                 2;   (* a b → float *)
+  r "min"                 2;   (* a b → float *)
+  r "pow"                 2    (* base exp → float *)
+

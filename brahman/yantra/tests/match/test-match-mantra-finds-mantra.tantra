@@ -1,0 +1,12 @@
+tantra test-match-mantra-finds-mantra
+  -- graph with mass + velocity bound → kinetic-energy-mantra matches
+  let
+    g = [["mass",     "sankhya", "5.0"],
+         ["mass",     "matra",   "kilogram"],
+         ["velocity", "sankhya", "10.0"],
+         ["velocity", "matra",   "metre-per-second"]]
+    r      = match-mantra g
+    found  = cond (gt (length r) 0) true otherwise false
+  return
+    found  bool
+done

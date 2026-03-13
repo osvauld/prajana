@@ -1,0 +1,18 @@
+tantra test-entity-signal-with
+  -- "a block with mass 5 kg"
+  -- "with" is structurally identical to "has" as a possession signal
+  -- [block, mithya] + [with, mithya] + [mass, satya] → [block, prathama-vibhakti, object]
+  -- KNOWN FAILURE: entity-from-has rule only checks for "has", not "with"
+  let
+    g = [["block", "mithya",  "block"],
+         ["with",  "mithya",  "with"],
+          ["mass",  "satya",   "mass"],
+         ["mass",  "sankhya", "5."],
+         ["mass",  "matra",   "kilogram"]]
+    r   = fixpoint (sandhi-viveka g) avrti-refine
+    has = reduce r false (fn acc tri ->
+            cond (and (eq (nth tri 0) "block") (eq (nth tri 1) "prathama-vibhakti"))
+              true otherwise acc)
+  return
+    has  bool
+done

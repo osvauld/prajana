@@ -1,0 +1,31 @@
+tantra find-context
+
+  -- extract active-concept and pending-number from the partial question graph.
+  -- active-concept: the MOST RECENT concept node waiting for a sankhya binding.
+  -- pending-num:    a bare number from the previous word, waiting for a matra.
+  -- returns [active-concept, pending-num]
+
+  inputs
+    graph  list
+
+  let
+    -- most recent satya concept: reduce to find last match
+    active-concept = reduce graph "" (fn acc tri ->
+      cond (eq (nth tri 1) "satya")
+        (nth tri 0)
+      otherwise acc)
+
+    last-tri    = cond (gt (length graph) 0)
+                    (nth graph (sub (length graph) 1))
+                  otherwise []
+
+    pending-num = cond (and (gt (length last-tri) 0) (eq (nth last-tri 1) "asprista-sankhya"))
+                    (nth last-tri 2)
+                  otherwise ""
+
+    context = [active-concept, pending-num]
+
+  return
+    context  list
+
+done

@@ -1,0 +1,11 @@
+tantra test-vishesa-bind-debug2
+  -- return the inst lookup result for tri=[v1,vishesa,velocity]
+  -- does reduce instance-map crash when subj is captured from outer let?
+  let
+    instance-map = [["velocity", "v1"]]
+    subj = "v1"
+    inst = reduce instance-map "" (fn iacc pair ->
+      cond (eq (nth pair 0) subj) (nth pair 1) otherwise iacc)
+  return
+    inst  string
+done

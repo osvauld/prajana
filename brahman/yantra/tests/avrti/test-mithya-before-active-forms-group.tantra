@@ -1,0 +1,17 @@
+tantra test-mithya-before-active-forms-group
+  -- consecutive mithya triples immediately before a satya concept
+  -- should form a dvandva group: [velocity, dvandva, [v1, v2, v3]]
+  -- the satya concept (velocity) is the group's type/identity
+  -- KNOWN FAILURE: avrti-refine has no group-from-mithya-sequence rule yet
+  let
+    g = [["v1",       "mithya",  "v1"],
+         ["v2",       "mithya",  "v2"],
+         ["v3",       "mithya",  "v3"],
+          ["velocity", "satya",  "velocity"]]
+    r   = fixpoint g avrti-refine
+    has = reduce r false (fn acc tri ->
+            cond (and (eq (nth tri 0) "velocity") (eq (nth tri 1) "dvandva"))
+              true otherwise acc)
+  return
+    has  bool
+done

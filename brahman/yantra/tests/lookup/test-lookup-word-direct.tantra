@@ -1,0 +1,7 @@
+tantra test-lookup-word-direct
+  -- exact node name → same node returned
+  let
+    result = eq (lookup-word "mass") "mass"
+  return
+    result  bool
+done

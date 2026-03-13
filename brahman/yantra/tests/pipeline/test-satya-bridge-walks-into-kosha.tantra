@@ -1,0 +1,18 @@
+tantra test-satya-bridge-walks-into-kosha
+  -- the key unlock of reflexive satya:
+  -- nth tri 2 from a satya triple gives a live kosha node name.
+  -- walk directly from that name into kosha structure.
+  -- with "concept" as object: walk "concept" "matra" → nothing.
+  -- with "mass" as object:    walk "mass"    "matra" → [kilogram].
+  let
+    graph = [["mass", "satya", "mass"],
+             ["mass", "sankhya", "5."]]
+    -- extract kosha node from the satya triple (subject and object are the same)
+    kosha-node = reduce graph "" (fn acc tri ->
+                   cond (eq (nth tri 1) "satya") (nth tri 2) otherwise acc)
+    -- walk directly into kosha structure from the satya object
+    unit-nodes = walk kosha-node "matra"
+    ok = member "kilogram" (map unit-nodes (fn n -> to-string n))
+  return
+    ok  bool
+done

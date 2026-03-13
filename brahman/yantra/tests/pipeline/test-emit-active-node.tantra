@@ -1,0 +1,11 @@
+tantra test-emit-active-node
+  -- emit a prashna node for "t-mass2" with reflexive satya edge → "t-mass2"
+  -- then walk "t-mass2" "satya" should contain "t-mass2" (not dead string "concept")
+  let
+    _      = emit-node "t-mass2" "prashna" ["t-mass2-satya"] ""
+    walked = walk "t-mass2" "satya"
+    names  = map walked (fn n -> to-string n)
+    ok     = member "t-mass2" names
+  return
+    ok  bool
+done

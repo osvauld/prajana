@@ -1,0 +1,14 @@
+tantra test-match-kinetic-energy-not-momentum
+  -- kinetic-energy is solve-for → must match kinetic-energy-mantra, NOT momentum-mantra
+  -- both have krama-rhs: mass,velocity — disambiguation via solve-for
+  let
+    g      = [["what",     "vidhi-kaala",  "solve-for"],
+               ["kinetic-energy", "satya", "kinetic-energy"],
+              ["mass",     "sankhya",   "5.0"],
+              ["velocity", "sankhya",   "10.0"]]
+    r      = match-mantra g
+    name   = nth r 0
+    ok     = eq (to-string name) "kinetic-energy-mantra"
+  return
+    ok  bool
+done

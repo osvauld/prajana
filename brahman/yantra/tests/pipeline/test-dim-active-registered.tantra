@@ -1,0 +1,8 @@
+tantra test-dim-active-registered
+  -- "satya" dimension is registered: register-dimension returns an index >= 10
+  let
+    idx = register-dimension "satya"
+    ok  = ge idx 10
+  return
+    ok  bool
+done

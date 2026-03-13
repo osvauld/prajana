@@ -1,0 +1,74 @@
+tantra unit-of-concept
+
+  -- find the canonical unit for a concept node.
+  -- three paths tried in order:
+  --
+  -- 1. swarupa: concept has a mantra as its swarupa (essential form)
+  --    the mantra's krama-lhs-unit IS the canonical unit.
+  --    e.g. velocity -swarupa-> velocity-mantra, krama-lhs-unit: metre-per-second
+  --    e.g. kinetic-energy -swarupa-> kinetic-energy-mantra, krama-lhs-unit: joule
+  --    this is the most authoritative path — the mantra defines the concept.
+  --
+  -- 2. yukta: unit nodes that are yukta to this concept and are matra members
+  --    e.g. kilogram -yukta-> mass, kilogram -sthita-> matra
+  --    used for primitive concepts (mass, time, length) with no defining mantra.
+  --
+  -- 3. sthita: concept is a krama-rhs input to mantras
+  --    find mantras where this concept appears as input, read their krama-lhs-unit
+  --    as a context signal, then walk back to find this concept's own unit.
+  --    this handles inverse cases — knowing the output unit and the formula
+  --    constrains what the input units must be.
+  --
+  -- returns the unit name string, or _none if not found.
+
+  inputs
+    concept  string
+
+  let
+    -- path 1: swarupa — concept's defining mantra carries the canonical unit
+    swarupa-nodes  = walk-in concept "swarupa"
+    swarupa-mantras = filter swarupa-nodes
+                        (fn m -> gt (string-length (shabda m "krama-lhs-unit")) 0)
+    swarupa-unit   = cond (gt (length swarupa-mantras) 0)
+                       (shabda (nth swarupa-mantras 0) "krama-lhs-unit")
+                     otherwise _none
+
+    -- path 2: yukta — unit nodes directly linked to this concept, filtered to matra
+    --   prefer the SI base unit (scale=1 in matra-aayaama) over scaled variants
+    yukta-nodes  = walk-in concept "yukta"
+    yukta-units  = filter yukta-nodes (fn u -> member "matra" (walk u "sthita"))
+    -- SI base: the unit whose dim-vector last element (scale) equals 1
+    yukta-si     = filter yukta-units (fn u ->
+                     let v = dim-vector u
+                     cond (gt (length v) 0)
+                       (eq (nth v (sub (length v) 1)) 1)
+                     otherwise false)
+    yukta-unit   = cond (gt (length yukta-si) 0)   (nth yukta-si 0)
+                   otherwise (cond (gt (length yukta-units) 0) (nth yukta-units 0)
+                   otherwise _none)
+
+    -- path 3: sthita — mantras that use this concept as input
+    --   from the mantra's krama-rhs we know this concept appears,
+    --   so walk back to find which yukta unit belongs specifically to it
+    --   by checking the other rhs concepts and their units via path 1/2
+    sthita-mantras = filter (walk-in concept "sthita")
+                       (fn m -> gt (string-length (shabda m "krama-lhs-unit")) 0)
+    sthita-unit    = reduce sthita-mantras _none (fn acc m ->
+      cond (neq acc _none) acc
+      otherwise
+        (let rhs-str  = shabda m "krama-rhs"
+         let rhs-list = split rhs-str ","
+         -- this concept is one of the rhs inputs; find its unit via yukta
+         let direct = filter (walk-in concept "yukta")
+                        (fn u -> member "matra" (walk u "sthita"))
+         cond (gt (length direct) 0) (nth direct 0) otherwise _none))
+
+    result = cond (exists swarupa-unit) swarupa-unit
+             otherwise (cond (exists yukta-unit) yukta-unit
+             otherwise (cond (exists sthita-unit) sthita-unit
+             otherwise _none))
+
+  return
+    result  string
+
+done

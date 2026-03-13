@@ -1,0 +1,9 @@
+tantra test-bqg-binds-value-unit
+  -- "mass 5 kg" → sankhya triple bound to mass
+  let
+    g      = build-question-graph "mass 5 kg"
+    result = reduce g false (fn acc t ->
+      cond (and (eq (nth t 0) "mass") (eq (nth t 1) "sankhya")) true otherwise acc)
+  return
+    result  bool
+done

@@ -1,0 +1,12 @@
+tantra test-entity-ball-is-mithya
+  -- "ball" is not a kosha concept — it's a physical entity label
+  -- correctly lands as mithya initially — avrti will type it as entity
+  -- this verifies the CURRENT correct behaviour
+  let
+    g   = build-question-graph "a ball has mass 5 kg"
+    has = reduce g false (fn acc tri ->
+            cond (and (eq (nth tri 0) "ball") (eq (nth tri 1) "mithya"))
+              true otherwise acc)
+  return
+    has  bool
+done

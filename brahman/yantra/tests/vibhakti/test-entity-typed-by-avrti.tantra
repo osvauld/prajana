@@ -1,0 +1,18 @@
+tantra test-entity-typed-by-avrti
+  -- "ball" mithya + "has" mithya + [mass, satya] → ball is an entity
+  -- avrti-refine should produce [ball, prathama-vibhakti, "object"]
+  -- the "has" verb is the signal: mithya-label HAS concept → label is an entity
+  -- KNOWN FAILURE: entity-from-has rule not yet in avrti-refine
+  let
+    g = [["ball", "mithya",  "ball"],
+         ["has",  "mithya",  "has"],
+          ["mass", "satya",   "mass"],
+         ["mass", "sankhya", "5."],
+         ["mass", "matra",   "kilogram"]]
+    r   = fixpoint (sandhi-viveka g) avrti-refine
+    has = reduce r false (fn acc tri ->
+            cond (and (eq (nth tri 0) "ball") (eq (nth tri 1) "prathama-vibhakti"))
+              true otherwise acc)
+  return
+    has  bool
+done

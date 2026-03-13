@@ -21,6 +21,54 @@
 - The engine is self-describing: its own operations are nodes in the graph it walks.
 - `domain-X-sthita` references in OCaml: leave for now (non-blocking).
 - Strudel / music_ir / resonance_ir removed from OCaml — add back later as tantras.
+- **Sanskrit is the canonical inner form.** English is surface projection (dhvani). The inner
+  representation uses Sanskrit grammatical relations, not English-named edge strings. ✅ S0+S1 DONE.
+- **The proof graph IS the grammar.** `prathama-vibhakti` as an edge label means `walk concept
+  "prathama-vibhakti"` answers "what is the nominative subject here?" directly — no external
+  grammar table. `bhave-prayoga` (impersonal process) is also a readable graph relation.
+  The vibhakti IS the relation IS the edge. Panini's grammar as graph traversal.
+- **Semantic meaning IS structural meaning.** This is what artha-viveka does — it converts
+  the semantic content of a word into a structural position in the proof graph. The meaning of
+  `mass` is not held in weights or embeddings — it IS the edges: `kilogram-matra`,
+  `inertia-abheda`, `newton-second-law-siddha`, `linear-force-varga-vishesa`. Walk them
+  and you have understood. There is no hidden representation. Structure = meaning.
+- **satya triple is reflexive.** ✅ `[mass, satya, mass]` — reflexive, subject = object = kosha
+  node. `walk "mass" "satya"` returns the kosha node and you can keep walking into its structure.
+  `nth tri 2` on any satya triple gives a live kosha node name for PPR seeds.
+- **Kosha expansion via PPR (Phase S1.5).** After a word resolves to satya, use all currently-satya
+  nodes as PPR seeds, run PPR over the kosha, pull back only top-ranked nodes. PPR score =
+  relevance to THIS question's context. Threshold is adaptive: lower it if mithya words remain
+  unresolved after a pass.
+- **PPR domain boundary constraint.** The PPR walk is bounded by domain:
+  - UPWARD: walk `vishesa`/`amsha` chains toward more general nodes freely (mass → linear-force-varga → physics-varga).
+  - DOWNWARD: walk back into specializations only within domains already established by the question's satya nodes.
+  - LATERAL: BLOCKED. Cannot cross into a varga not seeded by the question. `mass`+`velocity`
+    establish `linear-force-varga` + `linear-motion-varga`. PPR cannot descend into
+    `thermodynamics-varga` even though it shares `physics-varga` as ancestor.
+  - Rule: go up freely, come down only into domains the question already owns.
+  - This is an explicit hard boundary, not just a soft PPR score — cross-domain lateral
+    connections are excluded regardless of rank.
+- **Mithya resolution is contextual, not lexical.** Once satya expansions establish a domain
+  (e.g. `linear-motion-varga` from `mass` + `velocity`), mithya words are resolved WITHIN
+  that domain. `"speed"` alone is mithya; `"speed"` in mechanics context resolves to `velocity`
+  because `velocity` has `shabda: speed / ...` and is in the same domain. The kosha expansion
+  provides the context that makes this possible.
+- **Avrti spiral:** satya node resolved → kosha expansion → domain context widens →
+  previously-mithya word now resolves → new satya node → new expansion → wider context →
+  more resolutions → fixpoint. Fixpoint IS sphoTa: no remaining mithya that can be resolved.
+- **match-mantra collapses into avrti.** At fixpoint, the kosha expansion has already surfaced
+  the mantra connections via `siddha`/`implication` edges. match-mantra becomes a READ of what
+  avrti already found — not a separate search. The answer is in the graph; you just read it.
+- **artha-viveka, not sankshepa.** The English→Sanskrit operation is meaning-discernment,
+  not compression. Artha-lossless (meaning preserved), dhvani-lossy (surface dissolved).
+- **mithya ≠ asprista.** mithya = provisional/ungrounded (BQG output). asprista = genuinely
+  unknown after all avrti passes + kosha expansions reach fixpoint.
+- **kramanusara(X, apeksha=Y)** is the general derivative — NOT just d/dt. kaala ≠ time.
+  kaala is the ordering principle; thaalam (measured time) is one manifestation.
+- **visheshanam ring IS the category.** swarupa = identity, kriya = composition, yuktu = addition,
+  janya ⊣ phala = adjunction. The ring is already a type theory.
+- **vishesa vs amsha**: vishesa = open IS-A (extensional), amsha = closed partition (exhaustive).
+- Test baseline: **124 pass / 11 fail** (2026-03-13 after S1.5 reflexive satya — `[node, satya, node]`, 2 new tests).
 
 ## Files in this directory
 
@@ -42,16 +90,25 @@
 | [mantra-nodes.md](mantra-nodes.md) | krama + pratipaksha + kriya edges. yantra_inverter.ml removal path. |
 | [scene-understanding.md](scene-understanding.md) | End-to-end pipeline. Worked examples. |
 | [composition-pipeline.md](composition-pipeline.md) | decompose-question → match-formula → execute-chain → compose-response |
-| [question-graph.md](question-graph.md) | **NEW** — sentence as graph fragment. Stateful reduce builds partial mantra instantiation. Replaces P8 pipeline. |
-| [session-graph.md](session-graph.md) | **NEW** — session as persistent graph. Compute vs theoretical routing. Formal proof via implication walk. Dialogue generation when slots unfilled. |
+| [question-graph.md](question-graph.md) | sentence as graph fragment. Stateful reduce builds partial mantra instantiation. Replaces P8 pipeline. |
+| [scene-understanding.md](scene-understanding.md) | **CANONICAL** — full end-to-end pipeline. Signal-based ownership model, mithya/satya layers, dvandva groups, entity recognition, pronouns as cross-group references, reasoning trace output. |
+| [graph-formalization-plan.md](graph-formalization-plan.md) | **CANONICAL** — implementation plan for registering question graph edges as visheshanam dimensions, materializing into proof graph, signal-based R8 rewrite. Replaces Phase A–F. |
+| [sanskrit-grammar-layer.md](sanskrit-grammar-layer.md) | **NEW** — Sanskrit as canonical inner form. artha-viveka (not sankshepa). sphoTa. kramanusara+apeksha general derivative (kaala ≠ time). Logic/math Sanskrit equivalents. mithya vs asprista. Sanskrit canonical edge names. Phases S0–S4. |
+| [session-graph.md](session-graph.md) | session as persistent graph. Compute vs theoretical routing. Formal proof via implication walk. Dialogue generation when slots unfilled. |
 | [tantra-testing.md](tantra-testing.md) | Tantra-native testing plan — test categories, runner design |
 
 ## Regression baseline
 
-49/52 passing. 3 pre-existing failures. Do not break further.
+**124 pass / 11 fail** (2026-03-13). Do not break further.
+
+The 11 remaining failures are all known and expected:
+- 7 dvandva tests (R5/R6/R7 not implemented — Phase 4)
+- `test-its-refers-to-last-entity` (R10 pronouns — Phase 3)
+- `test-entity-owns-symbolic-group` (Phase 4)
+- `test-two-entities-distinct`, `test-two-entities-separate-mass-bindings` (test design issues)
 
 ```
-vyakarana/scripts/run-regression.sh
+cd vyakarana && bash scripts/run-tests.sh
 ```
 
 ## Key source files

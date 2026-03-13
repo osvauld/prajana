@@ -1,0 +1,12 @@
+tantra test-avrti-full-sentence
+  -- full pipeline: build-question-graph + fixpoint avrti-refine
+  -- "what is kinetic energy" → graph contains [kinetic-energy, satya, concept]
+  let
+    g    = build-question-graph "what is kinetic energy"
+    r    = fixpoint g avrti-refine
+    has  = reduce r false (fn acc tri ->
+             cond (and (eq (nth tri 0) "kinetic-energy") (eq (nth tri 1) "satya"))
+               true otherwise acc)
+  return
+    has  bool
+done

@@ -1,0 +1,17 @@
+tantra test-avrti-unitless-multi
+  -- multiple unitless bindings: mass=10, acceleration=2
+  -- simulates "mass 10 and acceleration 2" after BQG
+  let
+    g   = [["mass",         "satya",            "mass"],
+           ["10",           "asprista-sankhya",  "10."],
+           ["mass",         "sankhya",           "10."],
+           ["mass",         "matra",             "kilogram"],
+           ["acceleration", "satya",             "acceleration"],
+           ["2",            "asprista-sankhya",  "2."]]
+    r   = fixpoint g avrti-refine
+    has = reduce r false (fn acc tri ->
+            cond (and (eq (nth tri 0) "acceleration") (eq (nth tri 1) "sankhya"))
+              true otherwise acc)
+  return
+    has  bool
+done

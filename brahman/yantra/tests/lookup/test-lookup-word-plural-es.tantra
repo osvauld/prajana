@@ -1,0 +1,8 @@
+tantra test-lookup-word-plural-es
+  -- "masses" → strip "es" → "mass" (es-plural morpheme rule)
+  -- KNOWN FAILURE: depends on whether english-plural-es morpheme rule exists in graph
+  let
+    result = eq (lookup-word "masses") "mass"
+  return
+    result  bool
+done

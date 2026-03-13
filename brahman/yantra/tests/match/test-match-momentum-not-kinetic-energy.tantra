@@ -1,0 +1,13 @@
+tantra test-match-momentum-not-kinetic-energy
+  -- momentum is solve-for → must match momentum-mantra, NOT kinetic-energy-mantra
+  let
+    g      = [["what",     "vidhi-kaala",  "solve-for"],
+               ["momentum", "satya",  "momentum"],
+              ["mass",     "sankhya",   "3.0"],
+              ["velocity", "sankhya",   "4.0"]]
+    r      = match-mantra g
+    name   = nth r 0
+    ok     = eq (to-string name) "momentum-mantra"
+  return
+    ok  bool
+done

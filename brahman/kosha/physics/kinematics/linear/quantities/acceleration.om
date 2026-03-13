@@ -8,4 +8,7 @@ kosha acceleration
   "velocity-kramanusara"
   "jerk-kramanusara-phala"
 
+  -- apeksha: kramanusara wrt physics-time, held in a sthira (fixed) reference frame
+  "sthira-apeksha-sthita"
+
 done

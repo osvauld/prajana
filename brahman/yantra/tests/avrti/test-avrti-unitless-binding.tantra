@@ -1,0 +1,13 @@
+tantra test-avrti-unitless-binding
+  -- asprista-sankhya with no following matra → binds to satya concept (rule 4)
+  -- [acceleration, satya] + [x, asprista-sankhya, 2.] → [acceleration, sankhya, 2.]
+  let
+    g   = [["acceleration", "satya", "acceleration"],
+           ["2", "asprista-sankhya", "2."]]
+    r   = avrti-refine g
+    has = reduce r false (fn acc tri ->
+            cond (and (eq (nth tri 0) "acceleration") (eq (nth tri 1) "sankhya"))
+              true otherwise acc)
+  return
+    has  bool
+done

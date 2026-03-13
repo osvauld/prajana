@@ -1,0 +1,7 @@
+tantra test-reduce-sum
+  let
+    r = reduce [1, 2, 3] 0 (fn a x -> add a x)
+    ok = eq r 6.0
+  return
+    ok  bool
+done

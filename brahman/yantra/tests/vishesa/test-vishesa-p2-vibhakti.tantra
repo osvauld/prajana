@@ -1,0 +1,14 @@
+tantra test-vishesa-p2-vibhakti
+  -- pass-2 isolation: vibhakti-shashthi on pass-1 output
+  let
+    g = [["ball",     "mithya",             "ball"],
+         ["ball",     "prathama-vibhakti",  "object"],
+         ["velocity", "satya",              "velocity"],
+         ["velocity", "shashthi-vibhakti",  "ball"],
+         ["v1",       "vishesa",            "velocity"],
+         ["v1",       "vishesa",            "rashi"]]
+    r  = vibhakti-shashthi g
+    ok = gt (length r) 0
+  return
+    ok  bool
+done

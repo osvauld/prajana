@@ -1,0 +1,29 @@
+tantra test-materialize-suvat
+  -- materialize a SUVAT question graph and verify full graph traversal:
+  -- train-T owns both initial-velocity and final-velocity
+  -- each has a naama-mudra edge (u and v respectively)
+  -- simulates avrti output for "train T has initial velocity u and final velocity v"
+  -- unique t7- prefix to avoid global graph collision with other tests
+  let
+    graph = [["t7-train-T",          "prathama-vibhakti",  "object"],
+             ["t7-initial-velocity", "satya",  "t7-initial-velocity"],
+             ["t7-initial-velocity", "shashthi-vibhakti",   "t7-train-T"],
+             ["t7-initial-velocity", "naama-mudra",  "u"],
+             ["t7-final-velocity",   "satya",  "t7-final-velocity"],
+             ["t7-final-velocity",   "shashthi-vibhakti",   "t7-train-T"],
+             ["t7-final-velocity",   "naama-mudra",  "v"]]
+    _        = materialize-question-graph graph
+    -- walk-in from entity: should return both concepts
+    owns     = walk-in "t7-train-T" "shashthi-vibhakti"
+    owns-ns  = map owns (fn n -> to-string n)
+    has-iv   = member "t7-initial-velocity" owns-ns
+    has-fv   = member "t7-final-velocity"   owns-ns
+    -- walk from concept to naama-mudra
+    iv-syms  = walk "t7-initial-velocity" "naama-mudra"
+    has-u    = member "u" (map iv-syms (fn n -> to-string n))
+    fv-syms  = walk "t7-final-velocity" "naama-mudra"
+    has-v    = member "v" (map fv-syms (fn n -> to-string n))
+    ok       = and (and has-iv has-fv) (and has-u has-v)
+  return
+    ok  bool
+done

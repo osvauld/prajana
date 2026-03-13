@@ -8,6 +8,9 @@ kosha velocity
   "displacement-kramanusara"
   "acceleration-kramanusara-phala"
 
+  -- apeksha: kramanusara wrt physics-time, held in a sthira (fixed) reference frame
+  "sthira-apeksha-sthita"
+
   -- avastha: initial-velocity and final-velocity are velocity wearing a state
   "purva-avastha-drishthanta uttara-avastha-drishthanta"
 

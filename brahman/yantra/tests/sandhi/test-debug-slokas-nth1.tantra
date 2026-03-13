@@ -1,0 +1,9 @@
+tantra test-debug-slokas-nth1
+  let
+    gnode  = lookup-word "has"
+    slokas = node-slokas (to-string gnode)
+    s1     = nth slokas 1
+    ok     = eq s1 "shashthi-vibhakti-sthita"
+  return
+    ok  bool
+done

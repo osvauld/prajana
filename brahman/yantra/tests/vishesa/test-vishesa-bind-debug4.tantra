@@ -1,0 +1,9 @@
+tantra test-vishesa-bind-debug4
+  -- confirm: what does append acc [["velocity","v1"]] actually produce?
+  -- is ["velocity","v1"] parsed as (nth "velocity" "v1") or a 2-element list?
+  let
+    pair = ["velocity", "v1"]
+    len  = length pair
+  return
+    len  float
+done

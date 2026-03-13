@@ -89,6 +89,13 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     let n = String.length pre in
     Some (VBool (String.length s >= n && String.sub s 0 n = pre))
 
+  | "ends-with" ->
+    let s   = as_string (e_eval k e (List.nth args 0)) in
+    let suf = as_string (e_eval k e (List.nth args 1)) in
+    let slen = String.length s in
+    let n    = String.length suf in
+    Some (VBool (slen >= n && String.sub s (slen - n) n = suf))
+
   (* member: value × list → bool — O(n) membership test *)
   | "member" ->
     let needle = as_string (e_eval k e (List.nth args 0)) in
@@ -226,6 +233,50 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
        ) init lst in
        Some acc
      | _ -> Some init)
+
+  (* fixpoint: state × fn → stable-state
+     applies fn repeatedly until output = input. safety cap: 20 iterations. *)
+  | "fixpoint" ->
+    let state0 = e_eval k e (List.nth args 0) in
+    let fn_val = e_eval k e (List.nth args 1) in
+    let env_copy c =
+      let e2 = Hashtbl.create (Hashtbl.length c) in
+      Hashtbl.iter (fun kk v -> Hashtbl.replace e2 kk v) c; e2
+    in
+    let apply_fn s = match fn_val with
+      | VFn ([p], body, captured) ->
+        let local = env_copy captured in
+        Hashtbl.replace local p s;
+        e_eval k local body
+      | _ -> s
+    in
+    let rec loop s fuel =
+      if fuel <= 0 then s
+      else let s' = apply_fn s in
+           if s' = s then s' else loop s' (fuel - 1)
+    in
+    Some (loop state0 20)
+
+  (* iterate: n × state × fn → state after n applications *)
+  | "iterate" ->
+    let n      = int_of_float (as_float (e_eval k e (List.nth args 0))) in
+    let state0 = e_eval k e (List.nth args 1) in
+    let fn_val = e_eval k e (List.nth args 2) in
+    let env_copy c =
+      let e2 = Hashtbl.create (Hashtbl.length c) in
+      Hashtbl.iter (fun kk v -> Hashtbl.replace e2 kk v) c; e2
+    in
+    let apply_fn s = match fn_val with
+      | VFn ([p], body, captured) ->
+        let local = env_copy captured in
+        Hashtbl.replace local p s;
+        e_eval k local body
+      | _ -> s
+    in
+    let rec loop s i =
+      if i <= 0 then s else loop (apply_fn s) (i - 1)
+    in
+    Some (loop state0 n)
 
   | "length" ->
     let lst = as_list (e_eval k e (List.nth args 0)) in

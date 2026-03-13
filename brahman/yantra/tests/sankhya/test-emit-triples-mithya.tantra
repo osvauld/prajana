@@ -1,0 +1,11 @@
+tantra test-emit-triples-mithya
+  -- unknown word (no node, no role) → [[word, "mithya", word]]
+  let
+    info    = ["", "", "", "", ""]
+    ctx     = ["", ""]
+    triples = emit-triples "xyzfoo" info ctx
+    first   = nth triples 0
+    result  = eq (nth first 1) "mithya"
+  return
+    result  bool
+done

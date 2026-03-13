@@ -1,0 +1,32 @@
+tantra test-avrti-r9-plus-r2-owned
+  -- R9 + R2 + R3 + R8: named entity has avastha compound concept with sankhya
+  -- "train T has initial velocity 20" →
+  --   [train-T, prathama-vibhakti, object]
+  --   [initial-velocity, satya, concept]         ← R2: avastha synthesis
+  --   [initial-velocity, shashthi-vibhakti, train-T]  ← R8: ownership
+  --   [initial-velocity, sankhya, 20.]           ← R3: sankhya reattributed from velocity → initial-velocity
+  -- this is the core of kinematics problems: named object with named state variables
+  let
+    g = [["train",    "mithya",  "train"],
+         ["T",        "mithya",  "T"],
+         ["has",      "mithya",  "has"],
+         ["initial",  "mithya",  "initial"],
+          ["velocity", "satya",   "velocity"],
+         ["velocity", "sankhya", "20."]]
+    r      = fixpoint (sandhi-viveka g) avrti-refine
+    is-ent = reduce r false (fn acc tri ->
+               cond (and (eq (nth tri 0) "train-T") (eq (nth tri 1) "prathama-vibhakti"))
+                 true otherwise acc)
+    is-iv  = reduce r false (fn acc tri ->
+               cond (and (eq (nth tri 0) "initial-velocity") (eq (nth tri 1) "satya"))
+                 true otherwise acc)
+    owns   = reduce r false (fn acc tri ->
+               cond (and (eq (nth tri 0) "initial-velocity") (eq (nth tri 1) "shashthi-vibhakti"))
+                 true otherwise acc)
+    has-v  = reduce r false (fn acc tri ->
+               cond (and (eq (nth tri 0) "initial-velocity") (eq (nth tri 1) "sankhya"))
+                 true otherwise acc)
+    ok     = and is-ent (and is-iv (and owns has-v))
+  return
+    ok  bool
+done

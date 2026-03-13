@@ -1,0 +1,71 @@
+tantra sandhi-viveka
+
+  -- sandhi-viveka: grammar structure discernment pass.
+  --
+  -- runs AFTER build-question-graph, BEFORE avrti-refine.
+  --
+  -- for every [word, mithya, word] triple:
+  --   look up the bhasha grammar node behind the word
+  --   read its slokas
+  --   find any sloka ending in "-sthita"
+  --   strip "-sthita" → root name (e.g. "shashthi-vibhakti-sthita" → "shashthi-vibhakti")
+  --   if that root node exists in the graph:
+  --     emit [word, root-name, root-name]   -- typed, reflexive grammar triple
+  --     drop the original mithya triple     -- word is now structurally placed
+  --   if no grammar root found:
+  --     pass the mithya triple through unchanged
+  --
+  -- what this produces:
+  --   [has,  shashthi-vibhakti, shashthi-vibhakti]  -- possession signal
+  --   [with, shashthi-vibhakti, shashthi-vibhakti]  -- possession signal
+  --   [have, shashthi-vibhakti, shashthi-vibhakti]  -- possession signal
+  --   [of,   shashthi-vibhakti, shashthi-vibhakti]  -- possession signal
+  --   [at,   saptami-vibhakti,  saptami-vibhakti]   -- locative signal
+  --   [by,   trtiya-vibhakti,   trtiya-vibhakti]    -- instrumental signal
+  --   [from, panchami-vibhakti, panchami-vibhakti]  -- ablative signal
+  --   [was,  bhuta-kaala,       bhuta-kaala]         -- past tense signal
+  --   [its,  naama-pratibodha,  naama-pratibodha]    -- pronoun reference signal
+  --   [their,naama-pratibodha,  naama-pratibodha]    -- pronoun reference signal
+  --
+  -- non-grammar mithya words (ball, mass, etc.) pass through unchanged.
+  -- satya, sankhya, matra, vidhi-kaala triples pass through unchanged.
+  --
+  -- additive: never removes satya/sankhya/matra triples.
+  -- R8 in avrti-refine reads shashthi-vibhakti edge instead of role:possession.
+
+  inputs
+    graph  list
+
+  let
+    sthita-len = string-length "-sthita"
+
+    -- for each triple: if mithya, scan its node's slokas for a "-sthita" root.
+    -- if found and root node exists → emit typed triple [word, root, root].
+    -- otherwise pass through unchanged.
+    result = map graph (fn tri ->
+      let word   = nth tri 0
+      let edge   = nth tri 1
+      let gnode  = cond (eq edge "mithya") (lookup-word word) otherwise _none
+      let slokas = cond (exists gnode) (node-slokas (to-string gnode)) otherwise []
+      -- split each sloka on spaces, scan all words for a "-sthita" root.
+      -- the candidate root must be a registered visheshanam dimension —
+      -- verified by: walk-in candidate "yukta" contains "visheshanam-ring".
+      -- this is purely graph-grounded: sambandha, kriya etc. are excluded
+      -- because they are not registered dimensions. no name patterns needed.
+      let words  = reduce slokas [] (fn acc s -> append acc (split s " "))
+      let root   = reduce words "" (fn acc w ->
+        cond (neq acc "") acc
+        (ends-with w "-sthita")
+          (cond (member "visheshanam-ring"
+                  (map (walk-in (substr w 0 (sub (string-length w) sthita-len)) "yukta")
+                       (fn n -> to-string n)))
+            (substr w 0 (sub (string-length w) sthita-len))
+            otherwise "")
+        otherwise "")
+      cond (gt (string-length root) 0) [word, root, root]
+      otherwise tri)
+
+  return
+    result  list
+
+done

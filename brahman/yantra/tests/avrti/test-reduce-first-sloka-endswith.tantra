@@ -1,0 +1,7 @@
+tantra test-reduce-first-sloka-endswith
+  -- does "kriya-swarupa sambandha-sthita" end with "-sthita"?
+  let
+    ok = ends-with "kriya-swarupa sambandha-sthita" "-sthita"
+  return
+    ok  bool
+done

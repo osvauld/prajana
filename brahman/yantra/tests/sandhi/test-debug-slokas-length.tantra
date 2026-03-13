@@ -1,0 +1,8 @@
+tantra test-debug-slokas-length
+  let
+    gnode  = lookup-word "has"
+    slokas = node-slokas (to-string gnode)
+    ok     = eq (length slokas) 2.0
+  return
+    ok  bool
+done

@@ -1,0 +1,8 @@
+tantra test-debug-lookup-shashthi
+  -- debug: can we lookup shashthi-vibhakti directly?
+  let
+    n  = lookup "shashthi-vibhakti"
+    ok = exists n
+  return
+    ok  bool
+done
