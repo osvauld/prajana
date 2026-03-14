@@ -118,13 +118,9 @@ def test_uppercase_returns_null(vy, word):
     )
 
 
-# ── abbreviations (not yet built) ─────────────────────────────────────────────
+# ── abbreviations ─────────────────────────────────────────────────────────────
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="abbreviation expansion not built: 'kg', 'N' not registered in word_index",
-)
 @pytest.mark.parametrize(
     "abbr,expected",
     [

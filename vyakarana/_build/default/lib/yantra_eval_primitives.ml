@@ -14,11 +14,10 @@
 
    the ops modules are wired via forward references to avoid cycles.
 
-   dependency: Proof_graph, Yantra_types, Yantra_resolver, Setu, Anuvada. *)
+   dependency: Proof_graph, Yantra_types, Setu, Anuvada. *)
 
 open Proof_graph
 open Yantra_types
-open Yantra_resolver
 
 (* ---- runtime context ---- *)
 (* gives the evaluator access to the tantra index and session
@@ -37,11 +36,6 @@ let eval_ctx : eval_context option ref = ref None
 let _eval_ref : (proof_graph -> env -> expr -> value) ref =
   ref (fun _ _ _ -> VNone)
 
-let _yantra_tokenise_ref : (string -> string list) ref = ref (fun _ -> [])
-let _resolve_concept_to_tantra_ref : (proof_graph -> tantra_index -> string -> string option) ref =
-  ref (fun _ _ _ -> None)
-let _resolve_tantra_ref : (proof_graph -> tantra_index -> binding list -> string -> resolution) ref =
-  ref (fun _ _ _ target -> NotFound (Printf.sprintf "not initialized: %s" target))
 let _eval_tantra_ref : (proof_graph -> tantra -> (string * value) list -> value) ref =
   ref (fun _ _ _ -> VNone)
 
@@ -539,11 +533,15 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     let tname = as_string (e_eval k e (List.nth args 0)) in
     Some (match !eval_ctx with
      | Some ctx ->
-       let direct = Hashtbl.mem ctx.ctx_index.by_name tname in
-       if direct then VBool true
-       else
-         let resolved = !_resolve_concept_to_tantra_ref k ctx.ctx_index tname in
-         VBool (resolved <> None)
+        let direct = Hashtbl.mem ctx.ctx_index.by_name tname in
+        if direct then VBool true
+        else
+          (* walk graph aliases: check if any resolved name is a known tantra *)
+          let resolved = Setu.resolve k tname in
+          VBool (List.exists (fun name ->
+            Hashtbl.mem ctx.ctx_index.by_name name ||
+            Hashtbl.mem ctx.ctx_index.by_output name
+          ) resolved)
      | None ->
        match Hashtbl.find_opt e "_tantra_index" with
        | Some (VList names) ->
@@ -1000,5 +998,5 @@ let register_primitive_arities () =
   r "mod"                 2;   (* a b → float *)
   r "max"                 2;   (* a b → float *)
   r "min"                 2;   (* a b → float *)
-  r "pow"                 2    (* base exp → float *)
+  r "power"               2    (* base exp → float *)
 

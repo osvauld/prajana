@@ -1,5 +1,21 @@
 (* yantra_ops.ml — pure primitive operations with no graph or session dependency.
-   covers: string ops, list ops, boolean/comparison ops, constructors, numeric math.
+   covers: string ops, list ops, boolean/comparison ops, constructors, numeric math,
+   vector/matrix ops (Category A floor) and composed ops pending tantra migration.
+
+   Category A (irreducible — stay here forever):
+     scalar: add mul sub div sqrt power abs neg floor ceil mod min max
+     trig:   sin cos tan asin acos atan2 log exp
+     list:   map filter reduce fixpoint nth length range flatten append unique sum
+     string: split join concat substr starts-with ends-with member char-at
+             string-length to-string to-number split-numeric
+     bool:   eq neq lt le gt ge and or not
+     ctor:   pair bind
+
+   Category B (composed — migrate to tantras in brahman, then remove OCaml arm):
+     vec-add vec-sub vec-scale vec-dot vec-norm rot2d mat-mul
+     square half double first-match frequencies
+     (fold-pairs fold-triples iterate already removed — use reduce/fixpoint)
+
    all operations take e_eval as a parameter (the forward-ref'd core evaluator)
    and return value option — Some v if the op name matched, None to fall through.
 
@@ -156,60 +172,6 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
        Some (match result with Some v -> v | None -> VNone)
      | _ -> Some VNone)
 
-  | "fold-pairs" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    let fn_val = e_eval k e (List.nth args 1) in
-    (match fn_val with
-     | VFn (params, body, captured) ->
-       let env_copy c =
-         let e2 = Hashtbl.create (Hashtbl.length c) in
-         Hashtbl.iter (fun k v -> Hashtbl.replace e2 k v) c; e2
-       in
-       let rec process = function
-         | [] -> []
-         | [x] -> [x]
-         | a :: b :: rest ->
-           let local = env_copy captured in
-           (match params with
-            | [pa; pb] -> Hashtbl.replace local pa a; Hashtbl.replace local pb b
-            | _ -> ());
-           let result = e_eval k local body in
-            (match result with
-             | VNone -> a :: process (b :: rest)
-             | v    -> v :: process rest)
-       in
-       Some (VList (process lst))
-     | _ -> Some (VList lst))
-
-  | "fold-triples" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    let fn_val = e_eval k e (List.nth args 1) in
-    (match fn_val with
-     | VFn (params, body, captured) ->
-       let env_copy c =
-         let e2 = Hashtbl.create (Hashtbl.length c) in
-         Hashtbl.iter (fun k v -> Hashtbl.replace e2 k v) c; e2
-       in
-       let results = ref [] in
-       let rec process = function
-         | [] | [_] | [_; _] -> ()
-         | a :: b :: c :: rest ->
-           let local = env_copy captured in
-           (match params with
-            | [pa; pb; pc] ->
-              Hashtbl.replace local pa a;
-              Hashtbl.replace local pb b;
-              Hashtbl.replace local pc c
-            | _ -> ());
-           let result = e_eval k local body in
-           (match result with
-            | VNone -> process (b :: c :: rest)
-            | v -> results := v :: !results; process rest)
-       in
-       process lst;
-       Some (VList (List.rev !results))
-      | _ -> Some (VList []))
-
   (* reduce: list × init × fn → scalar
      general fold: carry accumulator through every element.
      fold-pairs and fold-triples are specialisations of this.
@@ -256,27 +218,6 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
            if s' = s then s' else loop s' (fuel - 1)
     in
     Some (loop state0 20)
-
-  (* iterate: n × state × fn → state after n applications *)
-  | "iterate" ->
-    let n      = int_of_float (as_float (e_eval k e (List.nth args 0))) in
-    let state0 = e_eval k e (List.nth args 1) in
-    let fn_val = e_eval k e (List.nth args 2) in
-    let env_copy c =
-      let e2 = Hashtbl.create (Hashtbl.length c) in
-      Hashtbl.iter (fun kk v -> Hashtbl.replace e2 kk v) c; e2
-    in
-    let apply_fn s = match fn_val with
-      | VFn ([p], body, captured) ->
-        let local = env_copy captured in
-        Hashtbl.replace local p s;
-        e_eval k local body
-      | _ -> s
-    in
-    let rec loop s i =
-      if i <= 0 then s else loop (apply_fn s) (i - 1)
-    in
-    Some (loop state0 n)
 
   | "length" ->
     let lst = as_list (e_eval k e (List.nth args 0)) in

@@ -162,12 +162,12 @@ let rec madakkal (k : Proof_graph.proof_graph) (yantra_idx : Yantra.tantra_index
         Yantra.eval_ctx := None;
         Printf.printf "%s\n%!" (Yantra.as_string result)
       end else
-        (match Yantra.run k yantra_idx yantra_session y.sentence with
+        (match Yantra.run_anuvada_ganana k yantra_idx yantra_session y.sentence with
          | Some r -> Yantra.print_result r
-         | None   -> Printf.printf "yantra: could not compute\n%!");
+         | None   -> Printf.printf "yantra: anuvada-ganana not loaded\n%!");
       madakkal k yantra_idx yantra_session emit_only
     | Some (Event.Anuvada a) ->
-      (match Yantra.run k yantra_idx yantra_session a.sentence with
+      (match Yantra.run_anuvada_ganana k yantra_idx yantra_session a.sentence with
        | Some r -> Yantra.print_result r
        | None ->
          match Yantra.run_tantra_by_name k yantra_idx yantra_session

@@ -146,14 +146,9 @@ def test_pipeline_kosha_expand_in_bqg_surfaces_momentum(vy):
 # ── entity ownership (not yet built) ─────────────────────────────────────────
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="entity ownership via 'has' not built: ball+A entity compounding and "
-    "R8/R9 ownership rules not in vibhakti-shashthi.tantra",
-)
 def test_pipeline_entity_owns_mass(vy):
     raw, refined = full_pipeline(vy, "ball A has mass 5 kg")
-    # ball-A should be an entity that owns mass
+    # ball should be an entity that owns mass
     assert vy.has_triple(refined, pred="prathama-vibhakti"), (
         f"expected entity (prathama-vibhakti) in graph"
     )
@@ -162,10 +157,6 @@ def test_pipeline_entity_owns_mass(vy):
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="full SUVAT pipeline blocked by entity ownership + solve-for heuristic bug",
-)
 def test_pipeline_suvat_acceleration(vy):
     # "train T: u=5, v=20, t=3 → find acceleration"
     raw, refined = full_pipeline(

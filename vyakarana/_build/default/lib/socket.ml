@@ -315,13 +315,15 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                   "INVALID_REQUEST" "question must not be empty"
               | Some q ->
                 (try
-                  let r = Anuvada.anuvada_query
-                    ~max_passes:(Option.value ~default:2 max_passes)
-                    ~request_id:req_id ~session_id:ses_id ~turn_id:trn_id
-                    k q in
-                  if String.length r.Anuvada.qr_answer_text > 0 then
-                    Printf.printf "[socket] %s\n  %s\n%!" q r.Anuvada.qr_answer_text;
-                  ok_response req_id ses_id trn_id r.Anuvada.qr_answer_text
+                  ignore max_passes;
+                  (match Yantra.run_anuvada_ganana k yantra_idx _active_session q with
+                   | Some r ->
+                     if String.length r.Yantra.yr_raw_output > 0 then
+                       Printf.printf "[socket] %s\n  %s\n%!" q r.Yantra.yr_raw_output;
+                     ok_response req_id ses_id trn_id r.Yantra.yr_raw_output
+                   | None ->
+                     error_response req_id ses_id trn_id
+                       "ENGINE_ERROR" "anuvada-ganana tantra not loaded")
                 with exn ->
                   error_response req_id ses_id trn_id
                     "ENGINE_ERROR" (Printexc.to_string exn)))

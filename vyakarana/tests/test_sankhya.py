@@ -169,12 +169,6 @@ def test_emit_triples_number_value_in_obj(vy):
 # ── emit-triples: unit consumes pending → sankhya + matra ────────────────────
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="unit-consumes-pending path not firing: requires is-unit=true which needs "
-    "word-node to find the kosha node for the unit word; 'kg' not in word_index so "
-    "word-node returns None and is-unit=false",
-)
 def test_emit_triples_unit_consumes_pending(vy):
     # when active="mass", pending="5.", word="kilogram" (a unit)
     # should produce [mass, sankhya, 5] and [mass, matra, kilogram]

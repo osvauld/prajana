@@ -119,11 +119,11 @@ def test_unknown_word_gets_no_kosha_janya(vy):
 # ── grammar words ─────────────────────────────────────────────────────────────
 
 
-def test_grammar_word_has_is_mithya(vy):
-    # "has" stays mithya — verb promotion not built
+def test_grammar_word_has_is_promoted(vy):
+    # "has" is promoted to shashthi-vibhakti by sandhi-viveka in BQG
     g = vy.eval('build-question-graph "ball has mass"')
-    assert vy.has_triple(g, subj="has", pred="mithya"), (
-        f"expected 'has' to be mithya before sandhi-viveka, "
+    assert vy.has_triple(g, subj="has", pred="shashthi-vibhakti"), (
+        f"expected 'has' promoted to shashthi-vibhakti in BQG, "
         f"got {[t for t in g if t[0] == 'has']!r}"
     )
 
@@ -138,23 +138,20 @@ def test_conjunction_and_is_mithya(vy):
 # ── "what" resolves as satya kosha node ──────────────────────────────────────
 
 
-def test_what_is_satya_kosha_node(vy):
-    # "what" is in the kosha as a question concept → resolves to satya
+def test_what_emits_vidhi_kaala_solve_for(vy):
+    # "what" resolves to prashna via word_index → emits vidhi-kaala intent triple
     g = vy.eval('build-question-graph "what is force"')
-    assert vy.has_triple(g, subj="what", pred="satya"), (
-        f"'what' expected to be satya (it's a kosha node), "
+    t = vy.find_triple(g, subj="what", pred="vidhi-kaala")
+    assert t is not None, (
+        f"'what' expected to emit vidhi-kaala triple, "
         f"got {[t for t in g if t[0] == 'what'][:3]!r}"
     )
+    assert t[2] == "solve-for", f"expected obj='solve-for', got {t[2]!r}"
 
 
 # ── "what" intent role (not yet built) ────────────────────────────────────────
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="vidhi-kaala intent triple not built: 'what' resolves as satya kosha "
-    "node; intent role assignment not in BQG pipeline",
-)
 def test_what_emits_vidhi_kaala_intent(vy):
     g = vy.eval('build-question-graph "what is force"')
     assert vy.has_triple(g, pred="vidhi-kaala"), (
@@ -165,20 +162,19 @@ def test_what_emits_vidhi_kaala_intent(vy):
 # ── unit word not yet bound ───────────────────────────────────────────────────
 
 
-def test_unit_kg_is_mithya_in_bqg(vy):
-    # "kg" not in word_index → stays mithya
+def test_unit_kg_binds_mass_matra(vy):
+    # "kg" resolves to kilogram via word_index → unit binding fires: mass gets matra+sankhya
     g = vy.eval('build-question-graph "mass 5 kg"')
-    assert vy.has_triple(g, subj="kg", pred="mithya"), (
-        f"expected 'kg' to be mithya (abbreviation not in word_index), "
-        f"got {[t for t in g if t[0] == 'kg']!r}"
+    assert vy.has_triple(g, subj="mass", pred="matra"), (
+        f"expected 'kg' to bind as matra=kilogram on mass, "
+        f"got {[t for t in g if t[0] == 'mass'][:5]!r}"
+    )
+    assert vy.has_triple(g, subj="mass", pred="sankhya"), (
+        f"expected mass to have sankhya=5 after unit binding, "
+        f"got {[t for t in g if t[0] == 'mass'][:5]!r}"
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="BQG unit binding not built: 'kg' not in word_index; "
-    "emit-triples unit-consumes-pending path not firing",
-)
 def test_unit_binding_in_bqg(vy):
     # After BQG, mass should have matra=kilogram bound directly
     g = vy.eval('build-question-graph "mass 5 kg"')
