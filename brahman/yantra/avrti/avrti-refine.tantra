@@ -4,27 +4,23 @@ tantra avrti-refine
   -- calls sub-tantras in sequence; fixpoint runs until stable.
   --
   -- pipeline:
-  --   sandhi-kosha    → compound word resolution (mithya+satya → kosha node)
-  --   sandhi-avastha  → avastha qualification (initial/final/angular/...)
-  --   sandhi-bandhana → reattribute sankhya/matra after rename
+  --   sandhi-kosha      → compound word resolution (mithya+satya → kosha node)
+  --   sandhi-avastha    → avastha qualification (initial/final/angular/...)
+  --   sandhi-bandhana   → reattribute sankhya/matra after rename
   --   vibhakti-shashthi → entity + ownership from possession signal
   --   vishesa-instance  → owned concept + label → typed rashi instance
   --   vishesa-bandhana  → move bindings from concept to instance
   --   sankhya-bandha    → bind floating asprista-sankhya to preceding concept
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    after-sandhi-kosha    = sandhi-kosha    graph
-    after-sandhi-avastha  = sandhi-avastha  after-sandhi-kosha
-    after-sandhi-bandhana = sandhi-bandhana after-sandhi-avastha
-    after-vibhakti        = vibhakti-shashthi after-sandhi-bandhana
-    after-vishesa-inst    = vishesa-instance  after-vibhakti
-    after-vishesa-bind    = vishesa-bandhana  after-vishesa-inst
-    result                = sankhya-bandha    after-vishesa-bind
+  after-sandhi-kosha    = sandhi-kosha    graph
+  after-sandhi-avastha  = sandhi-avastha  after-sandhi-kosha
+  after-sandhi-bandhana = sandhi-bandhana after-sandhi-avastha
+  after-vibhakti        = vibhakti-shashthi after-sandhi-bandhana
+  after-vishesa-inst    = vishesa-instance  after-vibhakti
+  after-vishesa-bind    = vishesa-bandhana  after-vishesa-inst
+  result                = sankhya-bandha    after-vishesa-bind
 
-  return
-    result  list
-
+  return result
 done

@@ -6,17 +6,13 @@ tantra lookup-word
   -- 3. try-morpheme-rules word — suffix inversion for plurals (velocities→velocity)
   -- returns the node name, or _none if no match.
 
-  inputs
-    word  string
+  takes word
 
-  let
-    abbrev = word-node word
-    exact  = cond (exists abbrev) _none otherwise (lookup word)
-    result = cond (exists abbrev) abbrev
-             otherwise (cond (exists exact) exact
-             otherwise (try-morpheme-rules word))
+  abbrev = word-node word
+  exact  = cond (abbrev exists) _none otherwise (lookup word)
+  result = cond (abbrev exists) abbrev
+           otherwise (cond (exact exists) exact
+           otherwise (try-morpheme-rules word))
 
-  return
-    result  string
-
+  return result
 done

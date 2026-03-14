@@ -5,27 +5,22 @@ tantra find-context
   -- pending-num:    a bare number from the previous word, waiting for a matra.
   -- returns [active-concept, pending-num]
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    -- most recent satya concept: reduce to find last match
-    active-concept = reduce graph "" (fn acc tri ->
-      cond (eq (nth tri 1) "satya")
-        (nth tri 0)
-      otherwise acc)
+  -- most recent satya concept
+  active-concept = reduce graph "" (fn acc [s, e, o] ->
+    cond (e is satya) s otherwise acc)
 
-    last-tri    = cond (gt (length graph) 0)
-                    (nth graph (sub (length graph) 1))
-                  otherwise []
+  last-tri    = cond (gt (length graph) 0)
+                  (nth graph (sub (length graph) 1))
+                otherwise []
 
-    pending-num = cond (and (gt (length last-tri) 0) (eq (nth last-tri 1) "asprista-sankhya"))
-                    (nth last-tri 2)
-                  otherwise ""
+  pending-num = cond (and (gt (length last-tri) 0)
+                          ((nth last-tri 1) is asprista-sankhya))
+                  (nth last-tri 2)
+                otherwise ""
 
-    context = [active-concept, pending-num]
+  context = [active-concept, pending-num]
 
-  return
-    context  list
-
+  return context
 done

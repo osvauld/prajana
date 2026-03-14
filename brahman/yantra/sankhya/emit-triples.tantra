@@ -25,9 +25,6 @@ tantra emit-triples
     has-pend  = neq pending ""
     is-kosha  = eq layer "kosha"
 
-    -- is-concept: node exists and is not a grammar/intent/boundary word
-    -- covers both kosha concepts (mass, velocity) and bhasha concepts (time, angle)
-    -- excludes mantra layer nodes (substitution, execute-chain etc. grabbed by word-node)
     is-concept = and (exists node)
                      (and (neq role "grammar")
                           (and (neq role "intent")
@@ -35,9 +32,6 @@ tantra emit-triples
                                     (and (neq role "possession")
                                          (neq layer "mantra")))))
 
-    -- is-unit: node is a measurement unit — has a word: key (found via word-node)
-    -- units: kilogram, metre, newton, joule, second, etc.
-    -- concepts: acceleration, force, mass etc. — found via lookup, not word-node
     is-unit = exists (word-node word)
 
     triples = cond

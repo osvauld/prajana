@@ -6,40 +6,28 @@ tantra sankhya-bandha
   --
   -- guards (must NOT bind):
   --   concept already has a sankhya triple → already bound, skip
-  --
-  -- state: [last-active, output]
-  --   last-active: most recent satya concept subject
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    -- concepts already bound to a numeric value
-    already-bound = reduce graph [] (fn acc tri ->
-      cond (eq (nth tri 1) "sankhya")
-        (append acc [(nth tri 0)])
-      otherwise acc)
+  -- concepts already bound to a numeric value
+  already-bound = from graph
+    where [s, e, o]
+    and e is sankhya
+    collect s
 
-    pass = reduce graph ["", []] (fn state tri ->
-      let last-active = nth state 0
-      let out         = nth state 1
-      let edge        = nth tri 1
-      let word        = nth tri 0
+  result = scan graph with last-active = ""
 
-      cond (eq edge "satya")
-        [word, (append out [tri])]
+    when edge is satya
+      set last-active to word
+      emit triple
 
-      (and (eq edge "asprista-sankhya")
-           (gt (string-length last-active) 0)
-           (not (member last-active already-bound)))
-        [last-active, (append out [[last-active, "sankhya", (nth tri 2)]])]
+    when edge is asprista-sankhya
+      and last-active is not ""
+      and not (member last-active already-bound)
+      emit [last-active, sankhya, obj]
 
-      otherwise
-        [last-active, (append out [tri])])
+    otherwise
+      emit triple
 
-    result = nth pass 1
-
-  return
-    result  list
-
+  return result
 done

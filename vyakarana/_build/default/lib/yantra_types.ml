@@ -10,7 +10,19 @@ type tantra_param = {
 }
 
 (* expression tree for the let-block RHS *)
-type expr =
+type scan_stmt =
+  | SEmit    of expr                               (* emit <expr> or emit triple *)
+  | SSet     of string * expr                      (* set <var> to <expr> *)
+  | SClear   of string                             (* clear <var> — sets to "" *)
+  | SLet     of string * expr                      (* let <name> = <expr> *)
+  | SWhen    of expr * scan_stmt list * scan_stmt list  (* when <guard> <body> otherwise <body> *)
+
+and scan_branch = {
+  sb_guard : expr option;     (* None = otherwise *)
+  sb_body  : scan_stmt list;
+}
+
+and expr =
   | Lit      of float
   | Var      of string
   | Call     of string * expr list    (* op name, arguments *)
@@ -20,6 +32,10 @@ type expr =
   | Lambda   of string list * expr    (* fn x y -> body *)
   | Cond     of (expr * expr) list * expr  (* cond [(guard, body); ...] otherwise *)
   | LetIn    of string * expr * expr  (* let x = e1 in e2 *)
+  | From     of expr * string list * expr list * expr
+      (* from <list> where [<pattern>] and <guards>... collect <expr> *)
+  | Scan     of expr * (string * expr) list * scan_branch list
+      (* scan <list> with <state-decls> <branches> *)
 
 (* runtime value — what expressions evaluate to *)
 type value =
@@ -164,6 +180,40 @@ let rec as_string = function
   | VList items ->
     "[" ^ String.concat ", " (List.map as_string items) ^ "]"
   | VFn _ -> "<fn>"
+
+(* JSON serialization of a value — used by the eval-json socket command.
+   Strings are quoted and escaped. Floats use compact repr. Bools as JSON bools.
+   VNode is a string in JSON. VPair → {"name":…,"value":…}. VBinding → {"name":…,"value":…}.
+   VNone → null. VFn → "<fn>" string. VList → JSON array. *)
+let json_escape s =
+  let buf = Buffer.create (String.length s + 4) in
+  String.iter (fun c ->
+    match c with
+    | '"'  -> Buffer.add_string buf "\\\""
+    | '\\' -> Buffer.add_string buf "\\\\"
+    | '\n' -> Buffer.add_string buf "\\n"
+    | '\r' -> Buffer.add_string buf "\\r"
+    | '\t' -> Buffer.add_string buf "\\t"
+    | c    -> Buffer.add_char buf c
+  ) s;
+  Buffer.contents buf
+
+let rec val_to_json = function
+  | VString s  -> "\"" ^ json_escape s ^ "\""
+  | VFloat f   ->
+    if Float.is_nan f || Float.is_infinite f then "null"
+    else if Float.is_integer f && Float.is_finite f then Printf.sprintf "%.0f" f
+    else Printf.sprintf "%g" f
+  | VBool b    -> if b then "true" else "false"
+  | VNode n    -> "\"" ^ json_escape n ^ "\""
+  | VNone      -> "null"
+  | VFn _      -> "\"<fn>\""
+  | VPair (n, v) ->
+    Printf.sprintf "{\"name\":%s,\"value\":%s}" ("\"" ^ json_escape n ^ "\"") (val_to_json v)
+  | VBinding (n, v) ->
+    Printf.sprintf "{\"name\":%s,\"value\":%g}" ("\"" ^ json_escape n ^ "\"") v
+  | VList items ->
+    "[" ^ String.concat "," (List.map val_to_json items) ^ "]"
 
 let as_bool = function
   | VBool b -> b

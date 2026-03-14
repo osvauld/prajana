@@ -17,62 +17,42 @@ tantra vibhakti-shashthi
   -- scope cleared by:
   --   vidhi-kaala (solve-for zone starts)
   --   sentence viraam (. ? !)
-  --   new shashthi-vibhakti signal after new mithya label
-  --
-  -- state: [last-label, cur-entity, output]
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    pass = reduce graph ["", "", []] (fn state tri ->
-      let last-label = nth state 0
-      let cur-entity = nth state 1
-      let out        = nth state 2
-      let edge       = nth tri 1
-      let word       = nth tri 0
+  result = scan graph with last-label = "", cur-entity = ""
 
-      -- vidhi-kaala: clear entity scope
-      cond (eq edge "vidhi-kaala")
-        ["", "", (append out [tri])]
+    when edge is vidhi-kaala
+      clear last-label
+      clear cur-entity
+      emit triple
 
-      -- sentence viraam: clear entity scope
-      (and (eq edge "viraam")
-           (or (eq word ".") (or (eq word "?") (eq word "!"))))
-        ["", "", (append out [tri])]
+    when edge is viraam and (word is "." or word is "?" or word is "!")
+      clear last-label
+      clear cur-entity
+      emit triple
 
-      -- shashthi-vibhakti signal (reflexive object) with pending label → entity declared
-      (and (eq edge "shashthi-vibhakti")
-           (eq (nth tri 2) "shashthi-vibhakti")
-           (gt (string-length last-label) 0))
-        ["", last-label,
-         (append out [[last-label, "prathama-vibhakti", "object"]])]
+    when edge is shashthi-vibhakti and obj is shashthi-vibhakti and last-label is not ""
+      set cur-entity to last-label
+      emit [cur-entity, prathama-vibhakti, object]
+      clear last-label
 
-      -- shashthi-vibhakti signal with no pending label → discard
-      (and (eq edge "shashthi-vibhakti")
-           (eq (nth tri 2) "shashthi-vibhakti"))
-        ["", cur-entity, out]
+    when edge is shashthi-vibhakti and obj is shashthi-vibhakti
+      -- no pending label: discard signal
+      -- (do not emit triple)
 
-      -- satya concept while entity is active → ownership edge
-      (and (eq edge "satya")
-           (gt (string-length cur-entity) 0))
-        ["", cur-entity,
-         (append out [tri, [word, "shashthi-vibhakti", cur-entity]])]
+    when edge is satya and cur-entity is not ""
+      emit triple
+      emit [word, shashthi-vibhakti, cur-entity]
 
-      -- mithya: compound into entity label (R9)
-      (eq edge "mithya")
-        [(cond (gt (string-length last-label) 0)
-           (concat last-label "-" word)
-           otherwise word),
-         cur-entity, (append out [tri])]
+    when edge is mithya
+      set last-label to (cond (gt (string-length last-label) 0)
+        (concat last-label "-" word)
+        otherwise word)
+      emit triple
 
-      -- anything else: pass through
-      otherwise
-        [last-label, cur-entity, (append out [tri])])
+    otherwise
+      emit triple
 
-    result = nth pass 2
-
-  return
-    result  list
-
+  return result
 done

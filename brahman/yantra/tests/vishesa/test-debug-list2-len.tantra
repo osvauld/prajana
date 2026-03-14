@@ -1,8 +1,0 @@
-tantra test-debug-list2-len
-  -- can we get length of a 2-element list?
-  let
-    pair = ["velocity", "v1"]
-    len = length pair
-  return
-    len  float
-done

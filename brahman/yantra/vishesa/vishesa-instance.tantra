@@ -2,73 +2,50 @@ tantra vishesa-instance
 
   -- typed quantity instance creation (R4b redesigned).
   -- when a mithya label follows an owned satya concept with no numeric binding:
-  --   [concept, satya]  (concept is owned by an entity)
-  --   [label,   mithya] (immediately after, not an entity name)
   --   → [label, vishesa, concept]   (label IS a particular of concept)
   --   → [label, vishesa, rashi]     (label is a measurable quantity)
-  --
-  -- the label becomes a first-class node typed by the kosha concept.
-  -- vishesa-bandhana subsequently moves sankhya/matra/shashthi-vibhakti to the instance.
-  --
-  -- guards (must NOT fire):
-  --   concept already has a numeric sankhya → fully bound, no label needed
-  --   mithya word is itself an entity name → back-reference, not an instance
-  --
-  -- state: [last-active, output]
-  --   last-active: most recent satya concept (cleared when sankhya/matra/vishesa seen)
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    -- concepts owned by an entity (have shashthi-vibhakti edge)
-    owned-concepts = reduce graph [] (fn acc tri ->
-      cond (eq (nth tri 1) "shashthi-vibhakti")
-        (append acc [(nth tri 0)])
-      otherwise acc)
+  -- concepts owned by an entity (have shashthi-vibhakti edge)
+  owned-concepts = from graph
+    where [s, e, o]
+    and e is shashthi-vibhakti
+    collect s
 
-    -- entity names (have prathama-vibhakti edge)
-    ent-names = reduce graph [] (fn acc tri ->
-      cond (eq (nth tri 1) "prathama-vibhakti")
-        (append acc [(nth tri 0)])
-      otherwise acc)
+  -- entity names (have prathama-vibhakti edge)
+  ent-names = from graph
+    where [s, e, o]
+    and e is prathama-vibhakti
+    collect s
 
-    -- concepts already bound to a numeric value
-    bound-concepts = reduce graph [] (fn acc tri ->
-      cond (eq (nth tri 1) "sankhya")
-        (append acc [(nth tri 0)])
-      otherwise acc)
+  -- concepts already bound to a numeric value
+  bound-concepts = from graph
+    where [s, e, o]
+    and e is sankhya
+    collect s
 
-    pass = reduce graph ["", []] (fn state tri ->
-      let last-active = nth state 0
-      let out         = nth state 1
-      let edge        = nth tri 1
-      let word        = nth tri 0
+  result = scan graph with last-active = ""
 
-      -- satya: track as potential instance target
-      cond (eq edge "satya")
-        [word, (append out [tri])]
+    when edge is satya
+      set last-active to word
+      emit triple
 
-      -- sankhya/matra/vishesa: concept now bound → clear last-active
-      (or (eq edge "sankhya") (or (eq edge "matra") (eq edge "vishesa")))
-        ["", (append out [tri])]
+    when edge is sankhya or edge is matra or edge is vishesa
+      clear last-active
+      emit triple
 
-      -- mithya after owned unbound satya concept → vishesa instance
-      (and (eq edge "mithya")
-           (gt (string-length last-active) 0)
-           (member last-active owned-concepts)
-           (not (member last-active bound-concepts))
-           (not (member word ent-names)))
-        ["", (append (append out
-               [[word, "vishesa", last-active]])
-               [[word, "vishesa", "rashi"]])]
+    when edge is mithya
+      and last-active is not ""
+      and (member last-active owned-concepts)
+      and (not (member last-active bound-concepts))
+      and (not (member word ent-names))
+      clear last-active
+      emit [word, vishesa, last-active]
+      emit [word, vishesa, rashi]
 
-      otherwise
-        [last-active, (append out [tri])])
+    otherwise
+      emit triple
 
-    result = nth pass 1
-
-  return
-    result  list
-
+  return result
 done

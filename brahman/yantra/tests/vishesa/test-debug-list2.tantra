@@ -1,7 +1,0 @@
-tantra test-debug-list2
-  -- can we even create a 2-element list and return it?
-  let
-    pair = ["velocity", "v1"]
-  return
-    pair  list
-done

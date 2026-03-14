@@ -97,10 +97,20 @@ let pre_scan_tantra_file (path : string) : (string * int) option =
       in
       if String.length trimmed >= 7 && String.sub trimmed 0 7 = "tantra " then
         name := String.trim (String.sub trimmed 7 (String.length trimmed - 7))
-      else if trimmed = "inputs" then
+      else if trimmed = "inputs" || trimmed = "takes" then
         section := "inputs"
       else if trimmed = "let" || trimmed = "return" || trimmed = "done" then
         section := trimmed
+      (* new-style: "return name" inline — stop body, switch to return *)
+      else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "return " then
+        section := "return"
+      (* new-style: "takes name [type]" all on one line —
+         count the single param and switch to body so subsequent lines are not counted *)
+      else if String.length trimmed >= 6 && String.sub trimmed 0 6 = "takes " then begin
+        section := "body";
+        incr input_count
+      end
+      (* old-style: bare param line inside inputs section *)
       else if !section = "inputs" && String.length trimmed > 0 then
         incr input_count
     ) lines;
@@ -125,12 +135,81 @@ let is_known_op name = op_arity name <> 0
 
 (* is this token a boundary that stops argument collection? *)
 let is_boundary = function
-  | ")" | "]" | "," | "in" | "otherwise" | "done" | "let" -> true
+  | ")" | "]" | "," | "in" | "otherwise" | "done" | "let"
+  | "when" | "emit" | "set" | "clear" | "return"
+  | "where" | "collect" | "with" -> true
   | _ -> false
 
 exception Arg_overconsumed
 
+(* ---- infix postfix operators -------------------------------------------
+   After parsing a primary expression we check for:
+     X is Y          → eq X Y
+     X is not Y      → neq X Y
+     X is empty      → eq (length X) 0
+     X is not empty  → gt (length X) 0
+     X exists        → exists X
+   These are lower precedence than function application. *)
+let try_parse_infix (lhs : expr) (tokens : string list) : (expr * string list) option =
+  match tokens with
+  | "is" :: "not" :: "empty" :: rest ->
+    Some (Call ("gt", [Call ("length", [lhs]); Lit 0.0]), rest)
+  | "is" :: "empty" :: rest ->
+    Some (Call ("eq", [Call ("length", [lhs]); Lit 0.0]), rest)
+  | "is" :: "not" :: rest ->
+    (* parse RHS: handle string literals and bare names *)
+    let (rhs, rest') = match rest with
+      | tok :: tl when String.length tok >= 2 && tok.[0] = '"' ->
+        let s = String.sub tok 1 (String.length tok - 2) in
+        (StrLit s, tl)
+      | tok :: tl -> (Var tok, tl)
+      | [] -> failwith "is not: missing RHS"
+    in
+    Some (Call ("neq", [lhs; rhs]), rest')
+  | "is" :: rest ->
+    let (rhs, rest') = match rest with
+      | tok :: tl when String.length tok >= 2 && tok.[0] = '"' ->
+        let s = String.sub tok 1 (String.length tok - 2) in
+        (StrLit s, tl)
+      | tok :: tl -> (Var tok, tl)
+      | [] -> failwith "is: missing RHS"
+    in
+    Some (Call ("eq", [lhs; rhs]), rest')
+  | "exists" :: rest ->
+    Some (Call ("exists", [lhs]), rest)
+  | _ -> None
+
+(* wrap_destructure: given a param that starts with "[", parse names until "]",
+   return (synthetic_param_name, desugared_body_wrapper, remaining_tokens).
+   The wrapper takes the body and wraps it in LetIn chains:
+     fn _arg_N -> let name0 = nth _arg_N 0 let name1 = nth _arg_N 1 ... body *)
+let parse_destructure_pattern (idx : int) (tokens : string list)
+    : string * (expr -> expr) * string list =
+  (* tokens starts right after "[" *)
+  let arg_name = Printf.sprintf "_arg_%d" idx in
+  let rec collect_names acc toks =
+    match toks with
+    | "]" :: rest -> (List.rev acc, rest)
+    | "," :: rest -> collect_names acc rest
+    | name :: rest -> collect_names (name :: acc) rest
+    | [] -> (List.rev acc, [])
+  in
+  let (names, rest) = collect_names [] tokens in
+  let wrapper body =
+    List.fold_right (fun (i, name) inner ->
+      LetIn (name, Call ("nth", [Var arg_name; Lit (float_of_int i)]), inner)
+    ) (List.mapi (fun i n -> (i, n)) names) body
+  in
+  (arg_name, wrapper, rest)
+
 let rec parse_expr (tokens : string list) : expr * string list =
+  let (e, rest) = parse_expr_primary tokens in
+  (* try infix postfix operators *)
+  match try_parse_infix e rest with
+  | Some (e', rest') -> (e', rest')
+  | None -> (e, rest)
+
+and parse_expr_primary (tokens : string list) : expr * string list =
   match tokens with
   | [] -> failwith "parse_expr: empty"
   | "(" :: rest ->
@@ -162,27 +241,32 @@ let rec parse_expr (tokens : string list) : expr * string list =
   | "true" :: rest -> (BoolLit true, rest)
   | "false" :: rest -> (BoolLit false, rest)
 
-  (* fn x y -> body *)
+  (* fn x y -> body  — with optional destructuring patterns *)
   | "fn" :: rest ->
-    let rec collect_params acc = function
-      | "->" :: rest' -> (List.rev acc, rest')
-      | p :: rest' -> collect_params (p :: acc) rest'
-      | [] -> (List.rev acc, [])
+    let rec collect_params acc param_idx = function
+      | "->" :: rest' -> (List.rev acc, [], rest')
+      | "[" :: rest' ->
+        (* destructuring pattern *)
+        let (arg_name, wrapper, rest'') = parse_destructure_pattern param_idx rest' in
+        collect_params (arg_name :: acc) (param_idx + 1) rest''
+          |> (fun (ps, wrappers, r) -> (ps, wrapper :: wrappers, r))
+      | p :: rest' -> collect_params (p :: acc) (param_idx + 1) rest'
+      | [] -> (List.rev acc, [], [])
     in
-    let (params, rest') = collect_params [] rest in
+    let (params, wrappers, rest') = collect_params [] 0 rest in
     let (body, rest'') = parse_expr rest' in
-    (* warn if the terminal expression of the lambda body is a bare variadic op.
-       this catches pitfall 1/9: concat/add/or/and at the end of a lambda body
-       will greedily consume tokens from the enclosing call. wrap in (...). *)
+    (* apply all destructuring wrappers innermost-first *)
+    let body' = List.fold_left (fun b w -> w b) body (List.rev wrappers) in
+    (* warn if the terminal expression of the lambda body is a bare variadic op. *)
     let rec terminal_expr = function
       | LetIn (_, _, b) -> terminal_expr b
       | e -> e
     in
-    (match terminal_expr body with
+    (match terminal_expr body' with
      | Call (op, args) when op_arity op = -1 && List.length args > 2 ->
        Printf.eprintf "warning: variadic op '%s' with %d args as lambda body — wrap in (...) to prevent token consumption (pitfall 1)\n%!" op (List.length args)
      | _ -> ());
-    (Lambda (params, body), rest'')
+    (Lambda (params, body'), rest'')
 
   (* let x = e1 in e2 *)
   | "let" :: name :: "=" :: rest ->
@@ -205,6 +289,15 @@ let rec parse_expr (tokens : string list) : expr * string list =
   | "cond" :: rest ->
     parse_cond [] rest
 
+  (* from <list> where [pat] [and <guard>]* collect <expr>
+     desugars to: reduce <list> [] (fn _acc [pat] -> cond (guard) (append _acc [collect]) otherwise _acc) *)
+  | "from" :: rest ->
+    parse_from rest
+
+  (* scan <list> with <var>=<init>,... when/otherwise ... *)
+  | "scan" :: rest ->
+    parse_scan rest
+
   | tok :: rest ->
     (* try literal float *)
     match float_of_string_opt tok with
@@ -220,10 +313,6 @@ let rec parse_expr (tokens : string list) : expr * string list =
             | [] -> raise Arg_overconsumed
             | t0 :: _ when is_boundary t0 -> raise Arg_overconsumed
             | t0 :: rest0 ->
-              (* if next token is a known op with arity > 0, treat it as Var
-                 (it is an input param / variable being passed as argument,
-                  not a nested call). this prevents sqrt/floor/value etc.
-                  from consuming the next token when used as argument names. *)
               let arg_as_var = op_arity t0 > 0 && t0 <> "(" in
               if arg_as_var then
                 collect_args (n - 1) (Var t0 :: acc) rest0
@@ -237,9 +326,6 @@ let rec parse_expr (tokens : string list) : expr * string list =
                    else
                      collect_args (n - 1) (Var t0 :: acc) rest0)
         in
-        (* if the op can't collect all its arguments (e.g. a boundary keyword
-           like "otherwise" appears where an arg is expected), fall back to
-           treating the token as a variable reference, not a function call *)
         (try
            let (args, rest') = collect_args arity [] rest in
            (Call (tok, args), rest')
@@ -260,6 +346,128 @@ let rec parse_expr (tokens : string list) : expr * string list =
       end else
         (* variable name or constant reference *)
         (Var tok, rest)
+
+(* ---- from/where/collect parser ------------------------------------------
+   Produces: From (list_expr, pattern_names, guard_exprs, collect_expr)
+   Evaluated directly by eval_from in yantra_eval.ml — no desugaring. *)
+and parse_from (tokens : string list) : expr * string list =
+  let rec collect_until_where acc = function
+    | "where" :: rest -> (List.rev acc, rest)
+    | tok :: rest -> collect_until_where (tok :: acc) rest
+    | [] -> (List.rev acc, [])
+  in
+  let (list_toks, rest) = collect_until_where [] tokens in
+  let list_expr = match list_toks with
+    | [] -> failwith "from: missing list expression"
+    | _ -> let (e, _) = parse_expr list_toks in e
+  in
+  let (pat_names, rest) = match rest with
+    | "[" :: rest' ->
+      let rec collect_pat acc = function
+        | "]" :: r -> (List.rev acc, r)
+        | "," :: r -> collect_pat acc r
+        | name :: r -> collect_pat (name :: acc) r
+        | [] -> (List.rev acc, [])
+      in
+      collect_pat [] rest'
+    | _ -> failwith "from: expected '[' pattern after where"
+  in
+  let rec collect_guards acc = function
+    | "and" :: rest ->
+      let (g, rest') = parse_expr rest in
+      collect_guards (g :: acc) rest'
+    | "collect" :: rest -> (List.rev acc, rest)
+    | other -> ([], other)
+  in
+  let (extra_guards, rest) = collect_guards [] rest in
+  let (collect_expr, rest) = parse_expr rest in
+  (From (list_expr, pat_names, extra_guards, collect_expr), rest)
+
+(* ---- scan/with/when/emit parser -----------------------------------------
+   Produces: Scan (list_expr, state_decls, branches)
+   Evaluated directly by eval_scan in yantra_eval.ml — no desugaring.
+   Supports nested when/otherwise inside branch bodies. *)
+and parse_scan (tokens : string list) : expr * string list =
+  let rec collect_until_with acc = function
+    | "with" :: rest -> (List.rev acc, rest)
+    | tok :: rest    -> collect_until_with (tok :: acc) rest
+    | []             -> (List.rev acc, [])
+  in
+  let (list_toks, rest) = collect_until_with [] tokens in
+  let list_expr = match list_toks with
+    | [] -> failwith "scan: missing list expression"
+    | _ -> let (e, _) = parse_expr list_toks in e
+  in
+  (* parse state variable declarations: var=init [, var=init]* until first "when"/"otherwise" *)
+  let rec parse_state_decls acc toks =
+    match toks with
+    | "when" :: _ | "otherwise" :: _ -> (List.rev acc, toks)
+    | [] -> (List.rev acc, [])
+    | name :: "=" :: rest ->
+      let rec collect_init iacc = function
+        | ("," | "when" | "otherwise") :: _ as r -> (List.rev iacc, r)
+        | tok :: rest -> collect_init (tok :: iacc) rest
+        | [] -> (List.rev iacc, [])
+      in
+      let (init_toks, rest') = collect_init [] rest in
+      let init_expr = let (e, _) = parse_expr init_toks in e in
+      let rest'' = match rest' with "," :: r -> r | r -> r in
+      parse_state_decls ((name, init_expr) :: acc) rest''
+    | _ :: rest -> parse_state_decls acc rest
+  in
+  let (state_decls, rest) = parse_state_decls [] rest in
+  (* parse scan body: list of scan_stmt.
+     'when' is ALWAYS a top-level branch boundary → stop.
+     Nested conditionals inside branch bodies use 'cond' or 'if-then'.
+     'otherwise' at the start of stmts = top-level default branch → stop.
+     'otherwise' after statements (inside an if-then) → handled by caller. *)
+  let rec parse_scan_stmts toks : scan_stmt list * string list =
+    match toks with
+    | "emit" :: rest ->
+      let (e, rest') = parse_expr rest in
+      let (more, rest'') = parse_scan_stmts rest' in
+      (SEmit e :: more, rest'')
+    | "set" :: var :: "to" :: rest ->
+      let (e, rest') = parse_expr rest in
+      let (more, rest'') = parse_scan_stmts rest' in
+      (SSet (var, e) :: more, rest'')
+    | "clear" :: var :: rest ->
+      let (more, rest') = parse_scan_stmts rest in
+      (SClear var :: more, rest')
+    | "let" :: name :: "=" :: rest ->
+      let (e, rest') = parse_expr rest in
+      let (more, rest'') = parse_scan_stmts rest' in
+      (SLet (name, e) :: more, rest'')
+    | "when" :: _ | "otherwise" :: _ | "return" :: _ | "done" :: _ | [] ->
+      ([], toks)
+    | _ :: rest -> parse_scan_stmts rest
+  in
+  (* parse branches *)
+  let rec parse_branches acc toks =
+    match toks with
+    | "when" :: rest ->
+      let (guard, rest') = parse_expr rest in
+      (* check for nested "and" guard continuations before body *)
+      let rec collect_and_guards g toks =
+        match toks with
+        | "and" :: rest ->
+          let (g2, rest') = parse_expr rest in
+          collect_and_guards (Call ("and", [g; g2])) rest'
+        | _ -> (g, toks)
+      in
+      let (guard, rest') = collect_and_guards guard rest' in
+      let (body, rest'') = parse_scan_stmts rest' in
+      parse_branches ({ sb_guard = Some guard; sb_body = body } :: acc) rest''
+    | "otherwise" :: rest ->
+      let (body, rest') = parse_scan_stmts rest in
+      (List.rev ({ sb_guard = None; sb_body = body } :: acc), rest')
+    | [] ->
+      (* implicit otherwise: emit triple *)
+      (List.rev ({ sb_guard = None; sb_body = [SEmit (Var "triple")] } :: acc), [])
+    | _ :: rest -> parse_branches acc rest
+  in
+  let (branches, rest) = parse_branches [] rest in
+  (Scan (list_expr, state_decls, branches), rest)
 
 and parse_cond (branches : (expr * expr) list) (tokens : string list) : expr * string list =
   match tokens with
@@ -372,7 +580,9 @@ let parse_let_block (lines : string list) : (string * expr) list =
   ) (List.rev !bindings)
 
 (* parse a tantra file — supports multi-line let bindings with lambdas,
-   cond expressions, let-in chains, etc. *)
+   cond expressions, let-in chains, etc.
+   Supports both old-style (inputs/let/return sections) and new-style
+   (takes <param> on same or next line, body bindings, return <name> done). *)
 let parse_tantra_file (path : string) : tantra option =
   try
     let ic = open_in path in
@@ -401,6 +611,40 @@ let parse_tantra_file (path : string) : tantra option =
         section := "let"
       else if trimmed = "return" then
         section := "return"
+      (* new-style: "takes" keyword — same line or next line params *)
+      else if trimmed = "takes" then
+        section := "inputs"
+      else if String.length trimmed >= 6 && String.sub trimmed 0 6 = "takes " then begin
+        (* inline: takes param [type] — parse the param, then switch to body
+           so subsequent lines go into let_lines, not input params *)
+        section := "body";
+        let rest = String.trim (String.sub trimmed 6 (String.length trimmed - 6)) in
+        let parts = String.split_on_char ' ' rest
+                   |> List.filter (fun s -> String.length s > 0) in
+        (match parts with
+         | pname :: ptype :: rest2 ->
+           let punit = match rest2 with u :: _ when u <> "purva" && u <> "uttara" -> Some u | _ -> None in
+           let pavastha = List.find_opt (fun s -> s = "purva" || s = "uttara") rest2 in
+           inputs := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit; tp_avastha = pavastha } :: !inputs
+         | [pname] ->
+           inputs := { tp_name = pname; tp_canonical = pname; tp_type = "list"; tp_unit = None; tp_avastha = None } :: !inputs
+         | _ -> ())
+      end
+      (* new-style: "return <name>" — single-line return *)
+      else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "return " then begin
+        section := "return";
+        let rest = String.trim (String.sub trimmed 7 (String.length trimmed - 7)) in
+        let parts = String.split_on_char ' ' rest
+                   |> List.filter (fun s -> String.length s > 0) in
+        (match parts with
+         | pname :: ptype :: rest2 ->
+           let punit = match rest2 with u :: _ when u <> "purva" && u <> "uttara" -> Some u | _ -> None in
+           let pavastha = List.find_opt (fun s -> s = "purva" || s = "uttara") rest2 in
+           returns := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit; tp_avastha = pavastha } :: !returns
+         | [pname] ->
+           returns := { tp_name = pname; tp_canonical = pname; tp_type = "list"; tp_unit = None; tp_avastha = None } :: !returns
+         | _ -> ())
+      end
       else begin
         match !section with
         | "inputs" ->
@@ -423,11 +667,44 @@ let parse_tantra_file (path : string) : tantra option =
               let pavastha = List.find_opt (fun s -> s = "purva" || s = "uttara") rest in
               returns := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit; tp_avastha = pavastha } :: !returns
             | _ -> ())
-        | _ -> ()
-      end
+         (* new-style body: any line inside a tantra that isn't a keyword goes into let_lines *)
+         | "body" ->
+           let_lines := line :: !let_lines
+         | _ -> ()
+       end
     ) lines;
 
-    let lets = parse_let_block (List.rev !let_lines) in
+    (* if no explicit "let" section but we have bindings from body, use them.
+       detect new-style tantras: they use "takes" instead of "inputs" and have
+       no explicit "let" section — the entire body between takes and return is let_lines. *)
+    (* For new-style tantras: collect all non-keyword, non-header lines as let_lines.
+       We detect this by checking if let_lines is empty and section was never "let".
+       Re-scan for new-style body lines. *)
+    let let_lines_final =
+      if !let_lines = [] then begin
+        (* second pass: collect body lines for new-style tantras *)
+        let body_lines = ref [] in
+        let in_body = ref false in
+        List.iter (fun line ->
+          let stripped = strip_comment line in
+          let trimmed = String.trim stripped in
+          if String.length trimmed = 0 || trimmed = "done" then ()
+          else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "tantra " then ()
+          else if trimmed = "takes" || (String.length trimmed >= 6 && String.sub trimmed 0 6 = "takes ") then
+            in_body := true
+          else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "return " then
+            in_body := false
+          else if trimmed = "return" then
+            in_body := false
+          else if !in_body then
+            body_lines := line :: !body_lines
+        ) lines;
+        List.rev !body_lines
+      end else
+        List.rev !let_lines
+    in
+
+    let lets = parse_let_block let_lines_final in
 
     if String.length !name > 0 then
       Some {

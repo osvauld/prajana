@@ -8,60 +8,53 @@ tantra sandhi-avastha
   --      + [qualifier-concept, sandhi-rename, concept]  (consumed by sandhi-bandhana)
   -- example: "initial" + "velocity" → "initial-velocity" (satya)
   -- example: "final"   + "velocity" → "final-velocity"   (satya)
-  -- avastha qualifiers: initial, final, angular, linear, net, total, average, relative
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    avastha-qualifiers = ["initial", "final", "angular", "linear",
-                          "net", "total", "average", "relative"]
+  avastha-qualifiers = ["initial", "final", "angular", "linear",
+                        "net", "total", "average", "relative"]
 
-    pass = reduce graph [[], []] (fn state tri ->
-      let pending = nth state 0
-      let out     = nth state 1
-      let edge    = nth tri 1
-      let word    = nth tri 0
-      let n-pend  = length pending
+  pass = reduce graph [[], []] (fn acc [word, edge, obj] ->
+    let pending  = nth acc 0
+    let out      = nth acc 1
+    let n-pend   = length pending
 
-      let last-pend = cond (gt n-pend 0) (nth pending (sub n-pend 1)) otherwise ""
+    let last-pend = cond (gt n-pend 0) (nth pending (sub n-pend 1)) otherwise ""
 
-      let prefix-out = reduce (range (max 0 (sub n-pend 1))) out (fn acc i ->
-        append acc [[(nth pending i), "mithya", (nth pending i)]])
+    let prefix-out = reduce (range (max 0 (sub n-pend 1))) out (fn pacc i ->
+      append pacc [[(nth pending i), mithya, (nth pending i)]])
 
-      let full-flush = reduce pending out (fn acc w ->
-        append acc [[w, "mithya", w]])
+    let full-flush = reduce pending out (fn pacc w ->
+      append pacc [[w, mithya, w]])
 
-      let compound-str = cond (and (gt (string-length last-pend) 0) (eq edge "satya"))
-                           (concat last-pend "-" word)
-                         otherwise ""
+    let compound-str = cond (and (gt (string-length last-pend) 0) (edge is satya))
+                         (concat last-pend "-" word)
+                       otherwise ""
 
-      -- avastha qualifier + satya → synthesize compound key
-      cond (and (gt (string-length compound-str) 0)
-                (eq edge "satya")
-                (member last-pend avastha-qualifiers))
-        [[], (append prefix-out
-               [[compound-str, "satya",         compound-str],
-                [compound-str, "sandhi-rename",  word]])]
+    -- avastha qualifier + satya → synthesize compound key
+    cond (and (gt (string-length compound-str) 0)
+              (edge is satya)
+              (member last-pend avastha-qualifiers))
+      [[], (append prefix-out
+             [[compound-str, satya,         compound-str],
+              [compound-str, sandhi-rename,  word]])]
 
-      -- mithya: accumulate into pending
-      (eq edge "mithya")
-        [(append pending [word]), out]
+    -- mithya: accumulate into pending
+    (edge is mithya)
+      [(append pending [word]), out]
 
-      -- non-avastha satya or other: flush pending, pass current through
-      (gt n-pend 0)
-        [[], (append full-flush [tri])]
+    -- non-avastha satya or other: flush pending, pass current through
+    (gt n-pend 0)
+      [[], (append full-flush [[word, edge, obj]])]
 
-      otherwise
-        [[], (append out [tri])])
+    otherwise
+      [[], (append out [[word, edge, obj]])])
 
-    pending-list = nth pass 0
-    rough        = nth pass 1
+  pending-list = nth pass 0
+  rough        = nth pass 1
 
-    result = reduce pending-list rough (fn acc w ->
-               append acc [[w, "mithya", w]])
+  result = reduce pending-list rough (fn acc w ->
+    append acc [[w, mithya, w]])
 
-  return
-    result  list
-
+  return result
 done
