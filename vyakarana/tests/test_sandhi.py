@@ -94,10 +94,6 @@ def test_sandhi_multi_triple_graph(vy):
         ("with", "shashthi-vibhakti"),
     ],
 )
-@pytest.mark.xfail(
-    strict=True,
-    reason="sandhi-viveka verb promotion not yet built: lookup-word 'has'/'with' returns None",
-)
 def test_sandhi_possession_verb_promoted_to_shashthi(vy, verb, expected_pred):
     g = [[verb, "mithya", verb]]
     result = vy.eval(f"sandhi-viveka {tl(g)}")
@@ -106,10 +102,6 @@ def test_sandhi_possession_verb_promoted_to_shashthi(vy, verb, expected_pred):
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="sandhi-viveka verb promotion not yet built: lookup-word 'was' returns None",
-)
 def test_sandhi_past_tense_verb_promoted_to_bhuta_kaala(vy):
     g = [["was", "mithya", "was"]]
     result = vy.eval(f"sandhi-viveka {tl(g)}")

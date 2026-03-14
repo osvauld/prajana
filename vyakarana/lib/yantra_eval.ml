@@ -4,11 +4,10 @@
    yantra_eval_primitives.ml; the mutual recursion is closed here by
    wiring _eval_ref at module init.
 
-   dependency: Proof_graph, Yantra_types, Yantra_resolver, Yantra_ops,
+   dependency: Proof_graph, Yantra_types, Yantra_ops,
                Yantra_pipeline_ops, Yantra_eval_primitives. *)
 
 open Yantra_types
-open Yantra_resolver
 open Yantra_eval_primitives
 open Yantra_ops
 open Yantra_pipeline_ops
@@ -102,8 +101,7 @@ and eval_scan (k : proof_graph) (e : env) (list_expr : expr)
   ) state_decls;
   let output = ref [] in
 
-  (* execute a list of scan_stmts, returns whether any nested when fired
-     (used so outer code knows to stop trying) *)
+  (* execute a list of scan_stmts *)
   let rec exec_stmts (sub_env : env) (stmts : scan_stmt list) : unit =
     List.iter (fun stmt ->
       match stmt with
@@ -112,7 +110,6 @@ and eval_scan (k : proof_graph) (e : env) (list_expr : expr)
         (* emit triple → re-emit current [word, edge, obj] *)
         let item = match v with
           | VString "triple" ->
-            (* bare variable 'triple' — reconstruct from word/edge/obj *)
             let w = try Hashtbl.find sub_env "word" with Not_found -> VNone in
             let e' = try Hashtbl.find sub_env "edge" with Not_found -> VNone in
             let o = try Hashtbl.find sub_env "obj" with Not_found -> VNone in
@@ -140,11 +137,8 @@ and eval_scan (k : proof_graph) (e : env) (list_expr : expr)
 
   List.iter (fun item ->
     let item_list = as_list item in
-    (* create sub-environment with word/edge/obj + state vars *)
     let sub_env = env_copy e in
-    (* bind state vars into sub_env *)
     Hashtbl.iter (fun k v -> Hashtbl.replace sub_env k v) state;
-    (* bind word/edge/obj from triple *)
     let word = if List.length item_list > 0 then List.nth item_list 0 else VNone in
     let edge = if List.length item_list > 1 then List.nth item_list 1 else VNone in
     let obj  = if List.length item_list > 2 then List.nth item_list 2 else VNone in
@@ -153,13 +147,11 @@ and eval_scan (k : proof_graph) (e : env) (list_expr : expr)
     Hashtbl.replace sub_env "obj" obj;
     Hashtbl.replace sub_env "triple" (VList [word; edge; obj]);
 
-    (* try each branch in order *)
     let matched = ref false in
     List.iter (fun branch ->
       if not !matched then begin
         match branch.sb_guard with
         | None ->
-          (* otherwise branch *)
           matched := true;
           exec_stmts sub_env branch.sb_body
         | Some guard ->
@@ -169,7 +161,6 @@ and eval_scan (k : proof_graph) (e : env) (list_expr : expr)
           end
       end
     ) branches;
-    (* after processing: sync state back from sub_env *)
     List.iter (fun (name, _) ->
       match Hashtbl.find_opt sub_env name with
       | Some v -> Hashtbl.replace state name v
@@ -204,162 +195,15 @@ let eval_tantra ?(idx : tantra_index option) ?(session : session option)
   eval_ctx := prev_ctx;
   result
 
-(* ---- parse output back to (name, value) pairs ---- *)
-(* formats: "displacement = 39.600000" or just "8.000000" *)
-let parse_output (raw : string) : (string * float) list =
-  let lines = String.split_on_char '\n' raw
-    |> List.map String.trim
-    |> List.filter (fun s -> String.length s > 0) in
-  List.filter_map (fun line ->
-    match String.index_opt line '=' with
-    | Some eq ->
-      let name = String.trim (String.sub line 0 eq) in
-      let rest = String.trim (String.sub line (eq + 1) (String.length line - eq - 1)) in
-      let num_str = match String.index_opt rest ' ' with
-        | Some sp -> String.sub rest 0 sp
-        | None -> rest
-      in
-      (match float_of_string_opt num_str with
-       | Some f -> Some (name, f)
-       | None -> None)
-    | None ->
-      (match float_of_string_opt (String.trim line) with
-       | Some f -> Some ("result", f)
-       | None -> None)
-  ) lines
-
-(* ---- resolve a concept name to a tantra name via graph abheda walk ---- *)
-let resolve_concept_to_tantra (k : proof_graph) (idx : tantra_index) (concept : string) : string option =
-  if Hashtbl.mem idx.by_name concept then Some concept
-  else if Hashtbl.mem idx.by_output concept then Some concept
-  else if Hashtbl.mem idx.by_input concept then Some concept
-  else begin
-    let resolved = Setu.resolve k concept in
-    List.find_map (fun name ->
-      if Hashtbl.mem idx.by_name name then Some name
-      else if Hashtbl.mem idx.by_output name then Some name
-      else if Hashtbl.mem idx.by_input name then Some name
-      else None
-    ) resolved
-  end
-
 let new_session () : session =
   { bindings = []; last_result = []; history = []; context_seeds = [] }
 
-(* ---- yantra tokeniser: preserve floats and hyphenated words ---- *)
-let yantra_tokenise (s : string) : string list =
-  let buf = Buffer.create 16 in
-  let tokens = ref [] in
-  let flush () =
-    if Buffer.length buf > 0 then begin
-      tokens := Buffer.contents buf :: !tokens;
-      Buffer.clear buf
-    end
-  in
-  let len = String.length s in
-  let i = ref 0 in
-  while !i < len do
-    let c = s.[!i] in
-    match c with
-    | ' ' | '\t' | '\n' | ',' | '?' | '!' | ';' | '(' | ')' | '[' | ']' ->
-      flush (); incr i
-    | '.' ->
-      let prev_digit = Buffer.length buf > 0 &&
-        let contents = Buffer.contents buf in
-        let last = contents.[String.length contents - 1] in
-        last >= '0' && last <= '9' in
-      let next_digit = !i + 1 < len && s.[!i + 1] >= '0' && s.[!i + 1] <= '9' in
-      if prev_digit && next_digit then begin
-        Buffer.add_char buf '.'; incr i
-      end else begin
-        flush ();
-        tokens := "." :: !tokens;  (* emit sentence-ending period as token *)
-        incr i
-      end
-    | ':' -> flush (); incr i
-    | '*' | '/' ->
-      (* keep as part of token when alpha on both sides: "rad/s" → "rad/s", "n*m" → "n*m" *)
-      let prev_alpha = Buffer.length buf > 0 &&
-        let contents = Buffer.contents buf in
-        let last = contents.[String.length contents - 1] in
-        (last >= 'a' && last <= 'z') || (last >= 'A' && last <= 'Z') in
-      let next_alpha = !i + 1 < len &&
-        let nc = s.[!i + 1] in
-        (nc >= 'a' && nc <= 'z') || (nc >= 'A' && nc <= 'Z') in
-      if prev_alpha && next_alpha then begin
-        Buffer.add_char buf c; incr i
-      end else begin
-        flush ();
-        tokens := String.make 1 c :: !tokens;
-        incr i
-      end
-    | '+' | '=' ->
-      flush ();
-      tokens := String.make 1 c :: !tokens;
-      incr i
-    | '-' ->
-      let prev_alpha = Buffer.length buf > 0 &&
-        let contents = Buffer.contents buf in
-        let last = contents.[String.length contents - 1] in
-        (last >= 'a' && last <= 'z') || (last >= 'A' && last <= 'Z') in
-      let prev_digit = Buffer.length buf > 0 &&
-        let contents = Buffer.contents buf in
-        let last = contents.[String.length contents - 1] in
-        last >= '0' && last <= '9' in
-      let next_alpha = !i + 1 < len &&
-        let nc = s.[!i + 1] in
-        (nc >= 'a' && nc <= 'z') || (nc >= 'A' && nc <= 'Z') in
-      if prev_alpha && next_alpha then begin
-        (* keep hyphenated words: "link-length", "n-dof", "axis-x" *)
-        Buffer.add_char buf '-'; incr i
-      end else if prev_digit && next_alpha then begin
-        (* keep digit-hyphen-alpha as one token: "2-DOF", "3-axis", "6-joint"
-           prevents the digit leaking into extract-value-units pending-nums *)
-        Buffer.add_char buf '-'; incr i
-      end else if Buffer.length buf = 0 && !i + 1 < len &&
-                  s.[!i + 1] >= '0' && s.[!i + 1] <= '9' then begin
-        (* negative number: "-3.14" *)
-        Buffer.add_char buf '-'; incr i
-      end else begin
-        flush ();
-        tokens := "-" :: !tokens;
-        incr i
-      end
-    | c ->
-      (* split on digit↔letter transition: "0.5m" → "0.5","m"; "1kg" → "1","kg" *)
-      if Buffer.length buf > 0 then begin
-        let contents = Buffer.contents buf in
-        let last = contents.[String.length contents - 1] in
-        let last_is_digit = last >= '0' && last <= '9' in
-        let c_is_alpha = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') in
-        let last_is_alpha = (last >= 'a' && last <= 'z') || (last >= 'A' && last <= 'Z') in
-        let c_is_digit = c >= '0' && c <= '9' in
-        if (last_is_digit && c_is_alpha) || (last_is_alpha && c_is_digit) then flush ()
-      end;
-      Buffer.add_char buf c;
-      incr i
-  done;
-  flush ();
-  (* lowercase multi-char tokens but preserve case on single-char tokens
-     (physics convention: V = voltage, v = velocity, F = force, f = frequency) *)
-  List.rev_map (fun t ->
-    if String.length t > 1 then String.lowercase_ascii t
-    else t
-  ) !tokens
-
 (* ---- wire up forward references ---- *)
-(* connects the primitives module to the functions defined here *)
 let () =
   _eval_ref := eval;
-  _yantra_tokenise_ref := yantra_tokenise;
-  _resolve_concept_to_tantra_ref := resolve_concept_to_tantra;
-  _resolve_tantra_ref := resolve_tantra;
   _eval_tantra_ref := (fun k t inputs -> eval_tantra k t inputs);
-  _eval_chain_ref := eval;
-  _eval_tantra_chain_ref := (fun k t inputs -> eval_tantra k t inputs);
   _eval_pure_op_raw := eval_pure_op;
   _eval_pipeline_op_raw := eval_pipeline_op;
-  (* all primitive arities registered from one place — yantra_eval_primitives.ml *)
   register_primitive_arities ()
 
 (* ---- run anuvada-ganana: the meta-tantra pipeline ---- *)
@@ -371,8 +215,7 @@ let run_anuvada_ganana (k : proof_graph) (idx : tantra_index) (session : session
     let result = eval_tantra ~idx ~session k ag
       [("sentence", VString sentence)] in
     let raw = as_string result in
-    if String.length raw = 0 then
-      None
+    if String.length raw = 0 then None
     else begin
       let tantra_name = if String.length !last_invoked_tantra > 0 then
         !last_invoked_tantra else "anuvada-ganana" in

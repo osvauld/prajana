@@ -90,9 +90,6 @@ def test_lookup_miss_returns_null(vy):
     assert vy.eval('lookup-word "xyzfoobar"') is None
 
 
-@pytest.mark.xfail(
-    strict=True, reason="abbreviations kg/N not in word_index — not yet built"
-)
 def test_lookup_abbreviation_kg(vy):
     assert vy.eval('lookup-word "kg"') == "kilogram"
 
@@ -140,20 +137,12 @@ def test_sandhi_satya_passthrough(vy):
     assert result[0][1] == "satya"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="sandhi-viveka verb promotion not yet built: lookup-word 'has' returns None",
-)
 def test_sandhi_has_promoted_to_shashthi(vy):
     g = [["has", "mithya", "has"]]
     result = vy.eval(f"sandhi-viveka {tl(g)}")
     assert result[0][1] == "shashthi-vibhakti"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="sandhi-viveka verb promotion not yet built: lookup-word 'was' returns None",
-)
 def test_sandhi_was_promoted_to_bhuta_kaala(vy):
     g = [["was", "mithya", "was"]]
     result = vy.eval(f"sandhi-viveka {tl(g)}")
@@ -179,22 +168,12 @@ def test_bqg_number_emits_asprista_sankhya(vy):
     assert vy.has_triple(g, pred="asprista-sankhya")
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="BQG unit binding not yet built: 'kg' not in word_index, "
-    "emit-triples unit-consumes-pending path not firing",
-)
 def test_bqg_unit_binding(vy):
     # "mass 5 kg" should bind matra=kilogram directly in BQG output
     g = vy.eval('build-question-graph "mass 5 kg"')
     assert vy.has_triple(g, subj="mass", pred="matra")
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="vidhi-kaala intent triple not yet built: 'what' resolves as "
-    "satya kosha node, intent role not assigned by BQG pipeline",
-)
 def test_bqg_what_emits_vidhi_kaala(vy):
     g = vy.eval('build-question-graph "what is force"')
     assert vy.has_triple(g, pred="vidhi-kaala")

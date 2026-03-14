@@ -149,13 +149,6 @@ def test_match_args_is_list(vy):
 # ── solve-for after vidhi-kaala (not yet correct) ─────────────────────────────
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="match solve-for heuristic bug: solve-for target is first satya triple "
-    "overall, not the first satya after vidhi-kaala. When 'what' is a satya "
-    "kosha node before the target concept, match picks 'what' as solve-for "
-    "instead of the intended concept.",
-)
 def test_match_what_sentence_finds_correct_mantra(vy):
     # "what is kinetic energy..." — 'what' is satya before kinetic-energy
     # the first satya after vidhi-kaala should be kinetic-energy, not what

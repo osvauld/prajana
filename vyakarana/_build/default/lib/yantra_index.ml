@@ -419,7 +419,10 @@ let build_index ?(graph : proof_graph option) (dirs : string list) : tantra_inde
      ) summary;
       (* pass 1c: set raw_satya as structural prior on every node.
          no iteration — PPR handles neighbour influence per query at runtime. *)
-      Proof_graph.init_satya k);
+       Proof_graph.init_satya k;
+       (* pass 1d: build word_index from all nodes' word: shabda keys.
+          enables O(1) word-node lookups for abbreviations and aliases. *)
+       build_word_index k idx);
   (* pass 2: pre-scan all tantra arities so the parser knows them *)
   pre_scan_arities tantra_dirs;
   (* pass 3: full parse and registration *)
