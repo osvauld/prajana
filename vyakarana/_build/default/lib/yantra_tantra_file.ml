@@ -129,6 +129,39 @@ let parse_tantra_file (path : string) : tantra option =
         section := "let"
       else if trimmed = "return" then
         section := "return"
+      (* new-style: bare "takes" keyword — next lines are params *)
+      else if trimmed = "takes" then
+        section := "inputs"
+      (* new-style: "takes param [type]" inline — parse param, switch to body *)
+      else if String.length trimmed >= 6 && String.sub trimmed 0 6 = "takes " then begin
+        section := "body";
+        let rest = String.trim (String.sub trimmed 6 (String.length trimmed - 6)) in
+        let parts = String.split_on_char ' ' rest
+                   |> List.filter (fun s -> String.length s > 0) in
+        (match parts with
+         | pname :: ptype :: rest2 ->
+           let punit = match rest2 with u :: _ when u <> "purva" && u <> "uttara" -> Some u | _ -> None in
+           let pavastha = List.find_opt (fun s -> s = "purva" || s = "uttara") rest2 in
+           inputs := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit; tp_avastha = pavastha } :: !inputs
+         | [pname] ->
+           inputs := { tp_name = pname; tp_canonical = pname; tp_type = "list"; tp_unit = None; tp_avastha = None } :: !inputs
+         | _ -> ())
+      end
+      (* new-style: "return <name>" inline — parse return param, switch to return *)
+      else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "return " then begin
+        section := "return";
+        let rest = String.trim (String.sub trimmed 7 (String.length trimmed - 7)) in
+        let parts = String.split_on_char ' ' rest
+                   |> List.filter (fun s -> String.length s > 0) in
+        (match parts with
+         | pname :: ptype :: rest2 ->
+           let punit = match rest2 with u :: _ when u <> "purva" && u <> "uttara" -> Some u | _ -> None in
+           let pavastha = List.find_opt (fun s -> s = "purva" || s = "uttara") rest2 in
+           returns := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit; tp_avastha = pavastha } :: !returns
+         | [pname] ->
+           returns := { tp_name = pname; tp_canonical = pname; tp_type = "list"; tp_unit = None; tp_avastha = None } :: !returns
+         | _ -> ())
+      end
       else begin
         match !section with
         | "inputs" ->
@@ -151,11 +184,39 @@ let parse_tantra_file (path : string) : tantra option =
               let pavastha = List.find_opt (fun s -> s = "purva" || s = "uttara") rest in
               returns := { tp_name = pname; tp_canonical = pname; tp_type = ptype; tp_unit = punit; tp_avastha = pavastha } :: !returns
             | _ -> ())
+         (* new-style body: any line inside a takes/body tantra goes into let_lines *)
+         | "body" ->
+           let_lines := line :: !let_lines
         | _ -> ()
       end
     ) lines;
 
-    let lets = parse_let_block (List.rev !let_lines) in
+    (* if no explicit "let" section but we have a new-style tantra, do a second
+       pass to collect body lines between takes and return *)
+    let let_lines_final =
+      if !let_lines = [] then begin
+        let body_lines = ref [] in
+        let in_body = ref false in
+        List.iter (fun line ->
+          let stripped = strip_comment line in
+          let trimmed = String.trim stripped in
+          if String.length trimmed = 0 || trimmed = "done" then ()
+          else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "tantra " then ()
+          else if trimmed = "takes" || (String.length trimmed >= 6 && String.sub trimmed 0 6 = "takes ") then
+            in_body := true
+          else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "return " then
+            in_body := false
+          else if trimmed = "return" then
+            in_body := false
+          else if !in_body then
+            body_lines := line :: !body_lines
+        ) lines;
+        List.rev !body_lines
+      end else
+        List.rev !let_lines
+    in
+
+    let lets = parse_let_block let_lines_final in
 
     if String.length !name > 0 then
       Some {

@@ -12,7 +12,11 @@
     socket
    yantra_types
    yantra_bigram
-   yantra_parser
+   yantra_tokeniser
+   yantra_arity
+   yantra_sentence_parser
+   yantra_expr_parser
+   yantra_tantra_file
    yantra_inverter
    yantra_index
    yantra_resolver

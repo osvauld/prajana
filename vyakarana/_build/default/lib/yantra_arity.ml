@@ -40,10 +40,19 @@ let pre_scan_tantra_file (path : string) : (string * int) option =
       in
       if String.length trimmed >= 7 && String.sub trimmed 0 7 = "tantra " then
         name := String.trim (String.sub trimmed 7 (String.length trimmed - 7))
-      else if trimmed = "inputs" then
+      else if trimmed = "inputs" || trimmed = "takes" then
         section := "inputs"
       else if trimmed = "let" || trimmed = "return" || trimmed = "done" then
         section := trimmed
+      (* new-style: "return name" inline — stop body, switch to return *)
+      else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "return " then
+        section := "return"
+      (* new-style: "takes name [type]" all on one line — count param, switch to body *)
+      else if String.length trimmed >= 6 && String.sub trimmed 0 6 = "takes " then begin
+        section := "body";
+        incr input_count
+      end
+      (* old-style: bare param line inside inputs section *)
       else if !section = "inputs" && String.length trimmed > 0 then
         incr input_count
     ) lines;
@@ -64,9 +73,15 @@ let op_arity name =
 
 let is_known_op name = op_arity name <> 0
 
+(* dynamic boundary keyword registry — populated at runtime by register_primitive_arities.
+   starts empty; callers must register all keywords before parsing begins. *)
+let _boundary_keywords : (string, unit) Hashtbl.t = Hashtbl.create 32
+
+let register_boundary_keyword (kw : string) : unit =
+  Hashtbl.replace _boundary_keywords kw ()
+
 (* is this token a boundary that stops argument collection? *)
-let is_boundary = function
-  | ")" | "]" | "," | "in" | "otherwise" | "done" | "let" -> true
-  | _ -> false
+let is_boundary (tok : string) : bool =
+  Hashtbl.mem _boundary_keywords tok
 
 exception Arg_overconsumed

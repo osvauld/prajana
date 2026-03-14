@@ -106,20 +106,34 @@ def test_nth_empty_list(vy):
 
 
 def test_cond_inside_reduce_ascending_list(vy):
-    # cond works in fn bodies when then-branch fires on every element.
-    # Use a strictly ascending list so cond always takes then-branch:
-    # gt 1 0 → 1, gt 2 1 → 2, gt 3 2 → 3.  Else-branch never fires last.
-    result = vy.eval("reduce [1, 2, 3] 0 (fn a x -> cond (gt x a) x a)")
-    assert vy.approx_eq(result, 3.0), f"expected 3.0, got {result!r}"
+    # cond with both branches firing — max of arbitrary list
+    result = vy.eval("reduce [3, 1, 4, 1, 5] 0 (fn a x -> cond (gt x a) x a)")
+    assert vy.approx_eq(result, 5.0), f"expected 5.0, got {result!r}"
 
 
 def test_cond_inside_map_numeric(vy):
-    # cond inside map — numeric else-branch before closing paren causes parse
-    # ambiguity, so use 0 as else-value; negative input → None (cond limitation)
-    result = vy.eval("map [1, 2, 3] (fn x -> cond (gt x 0) x 0)")
-    # positive values return x; the else-branch '0' before ')' is consumed by parser
-    assert vy.approx_eq(result[0], 1.0)
-    assert vy.approx_eq(result[2], 3.0)
+    # cond inside map — else-branch fires for non-positive inputs
+    result = vy.eval("map [-1, 2, -3] (fn x -> cond (gt x 0) x 0)")
+    assert vy.approx_eq(result[0], 0.0), f"expected 0.0 for -1, got {result[0]!r}"
+    assert vy.approx_eq(result[1], 2.0), f"expected 2.0 for 2, got {result[1]!r}"
+    assert vy.approx_eq(result[2], 0.0), f"expected 0.0 for -3, got {result[2]!r}"
+
+
+def test_cond_else_branch_in_reduce(vy):
+    # regression test for the parse_cond bug: else-branch inside fn inside reduce
+    # was previously consuming ')' as the else value, returning ")" instead of acc.
+    # reduce [1 2 3] 0 (fn acc x -> cond (gt x 1) acc x):
+    #   x=1: gt 1 1 false → else → x=1    acc=1
+    #   x=2: gt 2 1 true  → then → acc=1  acc=1
+    #   x=3: gt 3 1 true  → then → acc=1  acc=1
+    result = vy.eval("reduce [1, 2, 3] 0 (fn acc x -> cond (gt x 1) acc x)")
+    assert vy.approx_eq(result, 1.0), f"expected 1.0, got {result!r}"
+
+
+def test_cond_otherwise_branch(vy):
+    # cond with explicit otherwise clause
+    result = vy.eval("reduce [1, 2, 3] 0 (fn a x -> cond (gt x 2) x otherwise a)")
+    assert vy.approx_eq(result, 3.0), f"expected 3.0, got {result!r}"
 
 
 # ── fn / closures ─────────────────────────────────────────────────────────────
