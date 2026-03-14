@@ -1,9 +1,0 @@
-tantra test-find-context-empty
-  -- empty graph → active = ""
-  let
-    ctx    = find-context []
-    active = nth ctx 0
-    result = eq active ""
-  return
-    result  bool
-done

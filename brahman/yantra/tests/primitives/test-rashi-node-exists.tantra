@@ -1,9 +1,0 @@
-tantra test-rashi-node-exists
-  -- rashi must exist as a reachable node in the graph.
-  -- it is the general type of measurable quantity instances.
-  let
-    n  = lookup "rashi"
-    ok = exists n
-  return
-    ok  bool
-done

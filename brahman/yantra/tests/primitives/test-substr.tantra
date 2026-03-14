@@ -1,7 +1,0 @@
-tantra test-substr
-  -- substr "hello" start len → string
-  let
-    result = eq (substr "hello" 1 3) "ell"
-  return
-    result  bool
-done

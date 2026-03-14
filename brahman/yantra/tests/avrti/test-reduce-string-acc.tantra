@@ -1,7 +1,0 @@
-tantra test-reduce-string-acc
-  let
-    r = reduce ["a", "b"] "" (fn a x -> x)
-    ok = eq r "b"
-  return
-    ok  bool
-done

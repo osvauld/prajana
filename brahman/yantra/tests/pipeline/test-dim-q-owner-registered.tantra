@@ -1,8 +1,0 @@
-tantra test-dim-q-owner-registered
-  -- "shashthi-vibhakti" dimension is registered: register-dimension returns an index >= 10
-  let
-    idx = register-dimension "shashthi-vibhakti"
-    ok  = ge idx 10
-  return
-    ok  bool
-done

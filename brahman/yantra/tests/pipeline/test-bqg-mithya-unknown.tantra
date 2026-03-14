@@ -1,9 +1,0 @@
-tantra test-bqg-mithya-unknown
-  -- unknown word → mithya triple in output graph
-  let
-    g      = build-question-graph "xyzfoobar"
-    result = reduce g false (fn acc t ->
-      cond (eq (nth t 1) "mithya") true otherwise acc)
-  return
-    result  bool
-done

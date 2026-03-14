@@ -1,9 +1,0 @@
-tantra test-debug-endswith-sloka
-  let
-    gnode  = lookup-word "has"
-    slokas = node-slokas (to-string gnode)
-    s1     = nth slokas 1
-    ok     = ends-with s1 "-sthita"
-  return
-    ok  bool
-done

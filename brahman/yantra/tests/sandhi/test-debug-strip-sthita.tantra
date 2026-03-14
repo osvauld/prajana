@@ -1,8 +1,0 @@
-tantra test-debug-strip-sthita
-  -- debug: does strip-sthita work in isolation?
-  let
-    candidate = substr "shashthi-vibhakti-sthita" 0 (sub (string-length "shashthi-vibhakti-sthita") (string-length "-sthita"))
-    ok = eq candidate "shashthi-vibhakti"
-  return
-    ok  bool
-done

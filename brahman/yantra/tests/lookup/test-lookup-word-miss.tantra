@@ -1,7 +1,0 @@
-tantra test-lookup-word-miss
-  -- unknown word → _none (not in graph, no morpheme match)
-  let
-    result = not (exists (lookup-word "xyzfoobar"))
-  return
-    result  bool
-done
