@@ -27,6 +27,9 @@ module Socket = Vyakarana_lib__Socket
 (** @canonical Vyakarana_lib.Yantra *)
 module Yantra = Vyakarana_lib__Yantra
 
+(** @canonical Vyakarana_lib.Yantra_arity *)
+module Yantra_arity = Vyakarana_lib__Yantra_arity
+
 (** @canonical Vyakarana_lib.Yantra_bigram *)
 module Yantra_bigram = Vyakarana_lib__Yantra_bigram
 
@@ -35,6 +38,9 @@ module Yantra_eval = Vyakarana_lib__Yantra_eval
 
 (** @canonical Vyakarana_lib.Yantra_eval_primitives *)
 module Yantra_eval_primitives = Vyakarana_lib__Yantra_eval_primitives
+
+(** @canonical Vyakarana_lib.Yantra_expr_parser *)
+module Yantra_expr_parser = Vyakarana_lib__Yantra_expr_parser
 
 (** @canonical Vyakarana_lib.Yantra_index *)
 module Yantra_index = Vyakarana_lib__Yantra_index
@@ -45,14 +51,20 @@ module Yantra_inverter = Vyakarana_lib__Yantra_inverter
 (** @canonical Vyakarana_lib.Yantra_ops *)
 module Yantra_ops = Vyakarana_lib__Yantra_ops
 
-(** @canonical Vyakarana_lib.Yantra_parser *)
-module Yantra_parser = Vyakarana_lib__Yantra_parser
-
 (** @canonical Vyakarana_lib.Yantra_pipeline_ops *)
 module Yantra_pipeline_ops = Vyakarana_lib__Yantra_pipeline_ops
 
 (** @canonical Vyakarana_lib.Yantra_resolver *)
 module Yantra_resolver = Vyakarana_lib__Yantra_resolver
+
+(** @canonical Vyakarana_lib.Yantra_sentence_parser *)
+module Yantra_sentence_parser = Vyakarana_lib__Yantra_sentence_parser
+
+(** @canonical Vyakarana_lib.Yantra_tantra_file *)
+module Yantra_tantra_file = Vyakarana_lib__Yantra_tantra_file
+
+(** @canonical Vyakarana_lib.Yantra_tokeniser *)
+module Yantra_tokeniser = Vyakarana_lib__Yantra_tokeniser
 
 (** @canonical Vyakarana_lib.Yantra_types *)
 module Yantra_types = Vyakarana_lib__Yantra_types

@@ -899,7 +899,14 @@ let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : val
    Adding a new primitive: add the implementation above AND an entry here.
    Never add arities anywhere else. *)
 let register_primitive_arities () =
-  let r = Yantra_parser.register_graph_op_arity in
+  let r = Yantra_arity.register_graph_op_arity in
+  (* boundary keywords — structural delimiters always stop argument collection *)
+  let b = Yantra_arity.register_boundary_keyword in
+  List.iter b [")" ; "]" ; "," ; "in" ; "done" ; "let" ; "otherwise"];
+  (* scan construct keywords *)
+  List.iter b ["when" ; "emit" ; "set" ; "clear" ; "return"];
+  (* from construct keywords *)
+  List.iter b ["where" ; "collect" ; "with"];
   (* graph ops *)
   r "lookup"              1;   (* name → node or VNone *)
   r "walk"                2;   (* node rel → [nodes] *)

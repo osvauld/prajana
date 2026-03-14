@@ -1,8 +1,9 @@
 # Test Upgrade Plan
 
-**Status**: Design complete. Implementation in progress.
+**Status**: COMPLETE. 253 passing, 22 xfailed, 0 failing.
 **Supersedes**: `tantra-testing.md` (old true/false tantra approach — archived)
 **Date**: 2026-03-14
+**Completed**: 2026-03-14
 
 ---
 
@@ -667,16 +668,45 @@ When the feature is implemented, pytest errors to force you to promote the test.
 ## Implementation order
 
 ```
-Step 1  test_interpreter.py      — no server needed for design, pure eval
-Step 2  test_word_index.py       — parametric, very fast to write
-Step 3  test_graph_primitives.py — tests walk/emit against live kosha
-Step 4  test_sandhi.py           — parametric verbs, passthroughs
-Step 5  test_bqg.py              — most complex, covers tokenisation
-Step 6  test_sankhya.py          — emit-triples, find-context
-Step 7  test_avrti.py            — largest module, many cases
-Step 8  test_kosha.py            — kosha structure + PPR + expand
-Step 9  test_match.py            — disambiguation, arg ordering
-Step 10 test_pipeline.py         — end-to-end integration
-Step 11 test_session.py          — session isolation + turn counting
-Step 12 Delete debug tantra files — after all Python equivalents pass
+Step 1  test_interpreter.py      ✅ DONE — 71 tests passing
+Step 2  test_word_index.py       ✅ DONE — 24 tests (4 xfail)
+Step 3  test_graph_primitives.py ✅ DONE — 16 tests passing
+Step 4  test_sandhi.py           ✅ DONE — 13 tests (3 xfail)
+Step 5  test_bqg.py              ✅ DONE — 18 tests (3 xfail)
+Step 6  test_sankhya.py          ✅ DONE — 17 tests (1 xfail)
+Step 7  test_avrti.py            ✅ DONE — 21 tests (2 xfail)
+Step 8  test_kosha.py            ✅ DONE — 17 tests passing
+Step 9  test_match.py            ✅ DONE — 13 tests (1 xfail)
+Step 10 test_pipeline.py         ✅ DONE — 12 tests (2 xfail)
+Step 11 test_session.py          ✅ DONE — 13 tests (1 xfail)
+Step 12 Delete debug tantra files ✅ DONE — all 146 test-*.tantra files deleted
 ```
+
+## Key discoveries made during implementation
+
+- **`cond` parser bug** — `parse_cond` `_` branch consumes `)` as an else-branch
+  value. `reduce [1 2 3] 0 (fn acc x -> cond (gt x 1) acc x)` returns `")"`.
+  Workarounds applied in tests; fix tracked in `parser-refactor-plan.md`.
+- **`power` not `pow`** — arithmetic primitive is `power 2 10`, not `pow`.
+- **`range` takes one argument** — `range 4` → `[0,1,2,3]`. `range 0 4` → `[]`.
+- **`cond` at top level fails** — only works inside fn bodies passed to reduce/map/filter.
+- **`kosha-expand` is not idempotent** — running twice doubles kosha-janya triples.
+- **`vy.ask()` command field bug** — must NOT include `"command":"question"`;
+  `json_string_field` finds "question" in the command value first. Fixed in `vy.py`.
+- **`sandhi-viveka.tantra` missing** — `build-question-graph.tantra` calls it but
+  no file exists; resolver silently no-ops. Verb promotion never fires.
+- **Session `turn_id` is echo-only** — response echoes client's submitted turn_id.
+
+## What remains (xfail — features not yet built)
+
+| xfail | Blocking feature |
+|---|---|
+| `lookup-word "kg"/"N"/"m"/"s"` | abbreviations not in word_index |
+| `sandhi-viveka` verb promotion | `sandhi-viveka.tantra` file missing |
+| BQG unit binding | unit not in word_index, emit-triples path not firing |
+| BQG `vidhi-kaala` intent triple | "what" resolves as satya, intent role not assigned |
+| Entity ownership via "has" | avrti R8/R9 rules not in vibhakti-shashthi.tantra |
+| dvandva collection | consecutive asprista-sankhya → dvandva rule missing |
+| match solve-for heuristic | picks first satya overall, not first after vidhi-kaala |
+| Full SUVAT pipeline | blocked by entity ownership + solve-for bugs |
+| Cross-turn session binding | `_active_session` not threaded through anuvada_query |

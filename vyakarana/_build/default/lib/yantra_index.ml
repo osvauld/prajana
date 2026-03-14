@@ -1,7 +1,7 @@
 (* extracted from yantra.ml: index builder *)
 open Proof_graph
 open Yantra_types
-open Yantra_parser
+
 (* ---- index builder ---- *)
 
 (* recursively find all .tantra files *)
@@ -118,7 +118,7 @@ let register_tantra ?(graph : proof_graph option) (idx : tantra_index) (t : tant
 let load_tantra_dir ?(graph : proof_graph option) (idx : tantra_index) (dir : string) : unit =
   let files = tantra_files_recursive dir in
   List.iter (fun path ->
-    match parse_tantra_file path with
+    match Yantra_tantra_file.parse_tantra_file path with
     | None -> ()
     | Some t -> register_tantra ?graph idx t
   ) files
@@ -158,9 +158,9 @@ let pre_scan_arities (tantra_dirs : string list) : unit =
   List.iter (fun dir ->
     let files = tantra_files_recursive dir in
     List.iter (fun path ->
-      match Yantra_parser.pre_scan_tantra_file path with
+      match Yantra_arity.pre_scan_tantra_file path with
       | Some (name, arity) ->
-        Yantra_parser.register_tantra_arity name arity
+        Yantra_arity.register_tantra_arity name arity
       | None -> ()
     ) files
   ) tantra_dirs
@@ -207,7 +207,7 @@ let scan_graph_op_arities (k : proof_graph) : unit =
            | None -> None)
       in
       match arity_opt with
-      | Some arity -> Yantra_parser.register_graph_op_arity op_name arity
+      | Some arity -> Yantra_arity.register_graph_op_arity op_name arity
       | None -> ()
     end
   ) k.nodes
