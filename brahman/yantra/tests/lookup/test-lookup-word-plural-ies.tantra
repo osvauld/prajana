@@ -1,7 +1,0 @@
-tantra test-lookup-word-plural-ies
-  -- "velocities" → strip "ies" + add "y" → "velocity" (morpheme rule inversion)
-  let
-    result = eq (lookup-word "velocities") "velocity"
-  return
-    result  bool
-done

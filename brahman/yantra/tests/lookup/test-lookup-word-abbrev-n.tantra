@@ -1,7 +1,0 @@
-tantra test-lookup-word-abbrev-n
-  -- "N" abbreviation → newton (word: key on newton.om)
-  let
-    result = eq (lookup-word "N") "newton"
-  return
-    result  bool
-done

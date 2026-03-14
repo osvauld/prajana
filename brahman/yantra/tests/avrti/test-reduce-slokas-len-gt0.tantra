@@ -1,9 +1,0 @@
-tantra test-reduce-slokas-len-gt0
-  let
-    s = node-slokas "verb-has"
-    r = reduce s "" (fn a x -> x)
-    n = string-length r
-    ok = gt n 0
-  return
-    ok  bool
-done

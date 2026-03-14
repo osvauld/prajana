@@ -1,9 +1,0 @@
-tantra test-debug-lookup-word-type
-  -- what does lookup-word "has" return? check the name
-  let
-    gnode = lookup-word "has"
-    name  = to-string gnode
-    ok    = eq name "verb-has"
-  return
-    ok  bool
-done

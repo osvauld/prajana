@@ -1,6 +1,0 @@
-tantra test-ends-with-false
-  let
-    result = not (ends-with "velocity" "ies")
-  return
-    result  bool
-done

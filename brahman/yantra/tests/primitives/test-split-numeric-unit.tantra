@@ -1,7 +1,0 @@
-tantra test-split-numeric-unit
-  -- split-numeric "5kg" → [5., "kg"]; unit part is a string
-  let
-    result = eq (nth (split-numeric "5kg") 1) "kg"
-  return
-    result  bool
-done

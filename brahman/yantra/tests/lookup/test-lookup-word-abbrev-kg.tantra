@@ -1,7 +1,0 @@
-tantra test-lookup-word-abbrev-kg
-  -- abbreviation "kg" → kilogram (word: key on kilogram.om)
-  let
-    result = eq (lookup-word "kg") "kilogram"
-  return
-    result  bool
-done

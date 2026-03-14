@@ -1,9 +1,0 @@
-tantra test-bqg-has-intent
-  -- "what" → vidhi-kaala triple present in output graph
-  let
-    g      = build-question-graph "what is force"
-    result = reduce g false (fn acc t ->
-      cond (eq (nth t 1) "vidhi-kaala") true otherwise acc)
-  return
-    result  bool
-done

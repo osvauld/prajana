@@ -1,9 +1,0 @@
-tantra test-reduce-endswith
-  let
-    r = reduce ["abc", "def-sthita"] "" (fn a x ->
-      cond (ends-with x "-sthita") x
-      otherwise a)
-    ok = eq r "def-sthita"
-  return
-    ok  bool
-done

@@ -1,7 +1,0 @@
-tantra test-lookup-word-plural-s
-  -- "metres" → strip "s" → "metre" (regular plural)
-  let
-    result = eq (lookup-word "metres") "metre"
-  return
-    result  bool
-done

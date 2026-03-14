@@ -65,18 +65,43 @@ cd vyakarana/tests && ../../.venv/bin/pytest --socket /tmp/vy.sock -v
 
 ### The `vy` fixture
 
-Every test receives a `vy` (Client) instance. Core API:
+Every test receives a `vy` (Client) instance. Full API:
 
 ```python
 # eval any tantra expression — returns parsed Python value (list, str, float, bool, None)
-result = vy.eval('lookup-word "mass"')              # "mass"
-graph  = vy.eval('build-question-graph "find force"')  # [[...], [...], ...]
+result = vy.eval('lookup-word "mass"')                   # "mass"
+graph  = vy.eval('build-question-graph "find force"')    # [[...], [...], ...]
+val, ms = vy.elapsed_ms('build-question-graph "..."')    # (value, elapsed_ms)
 
-# graph helpers
-triple = vy.find_triple(graph, pred="satya")        # first triple with pred="satya"
-found  = vy.has_triple(graph, subj="mass", pred="sankhya")
-by_pred = vy.triples_by_pred(graph)                 # {"satya": [...], "sankhya": [...]}
+# graph search helpers
+triple  = vy.find_triple(graph, pred="satya")            # first match or None
+found   = vy.has_triple(graph, subj="mass", pred="sankhya")  # bool
+matches = vy.all_triples(graph, pred="shashthi-vibhakti")    # all matches (list)
+by_pred = vy.triples_by_pred(graph)                     # {pred: triple} last-wins
+
+# kosha walk helpers — call walk/walk-in, return list of node-name strings
+units  = vy.walk("mass", "matra")          # ["kilogram"]
+owners = vy.walk_in("kilogram", "matra")   # ["mass"]
+
+# numeric comparison with float tolerance (handles "5." string values from server)
+assert vy.approx_eq(triple[2], 5.0)        # abs(float(a) - float(b)) < 1e-3
+
+# session questions (test_session.py only)
+answer = vy.ask("what is force", session_id="s1")  # returns answer_text string
 ```
+
+### What goes in `vy.py` vs inline
+
+| Use case | Where |
+|---|---|
+| Socket connection, send/receive, retry | `vy.py` — `Client` |
+| Triple search (find/has/all/by_pred) | `vy.py` — static methods |
+| Walk / walk-in kosha graph | `vy.py` — instance methods |
+| Float tolerance comparison | `vy.py` — static `approx_eq` |
+| Session questions | `vy.py` — instance `ask` |
+| Single-predicate filter: `[t for t in g if t[1] == "satya"]` | inline in test |
+| Count triples: `sum(1 for t in g if t[1] == "kosha-janya")` | inline in test |
+| Extract values: `[t[2] for t in g if t[1] == "sankhya"]` | inline in test |
 
 ### No tantra files for tests — inline expressions only
 
