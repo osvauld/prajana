@@ -9,59 +9,53 @@ tantra sandhi-kosha
   --   if miss → pass both through unchanged
   -- example: "kinetic" (mithya) + "energy" (satya) → "kinetic-energy" (satya)
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    pass = reduce graph [[], []] (fn state tri ->
-      let pending = nth state 0
-      let out     = nth state 1
-      let edge    = nth tri 1
-      let word    = nth tri 0
-      let n-pend  = length pending
+  pass = reduce graph [[], []] (fn acc [word, edge, obj] ->
+    let pending  = nth acc 0
+    let out      = nth acc 1
+    let n-pend   = length pending
 
-      let last-pend = cond (gt n-pend 0) (nth pending (sub n-pend 1)) otherwise ""
+    let last-pend = cond (gt n-pend 0) (nth pending (sub n-pend 1)) otherwise ""
 
-      -- prefix: all-but-last pending words flushed as mithya
-      let prefix-out = reduce (range (max 0 (sub n-pend 1))) out (fn acc i ->
-        append acc [[(nth pending i), "mithya", (nth pending i)]])
+    -- prefix: all-but-last pending words flushed as mithya
+    let prefix-out = reduce (range (max 0 (sub n-pend 1))) out (fn pacc i ->
+      append pacc [[(nth pending i), mithya, (nth pending i)]])
 
-      -- full flush: all pending as mithya (used when no compound)
-      let full-flush = reduce pending out (fn acc w ->
-        append acc [[w, "mithya", w]])
+    -- full flush: all pending as mithya (used when no compound)
+    let full-flush = reduce pending out (fn pacc w ->
+      append pacc [[w, mithya, w]])
 
-      let compound-str = cond (and (gt (string-length last-pend) 0) (eq edge "satya"))
-                           (concat last-pend "-" word)
-                         otherwise ""
-      let comp-node = cond (gt (string-length compound-str) 0)
-                       (lookup compound-str)
-                     otherwise _none
+    let compound-str = cond (and (gt (string-length last-pend) 0) (edge is satya))
+                         (concat last-pend "-" word)
+                       otherwise ""
+    let comp-node = cond (gt (string-length compound-str) 0)
+                      (lookup compound-str)
+                    otherwise _none
 
-      -- kosha hit: emit compound satya + sandhi-rename marker
-      cond (exists comp-node)
-        [[], (append prefix-out
-               [[(to-string comp-node), "satya",         (to-string comp-node)],
-                [(to-string comp-node), "sandhi-rename",  word]])]
+    -- kosha hit: emit compound satya + sandhi-rename marker
+    cond (exists comp-node)
+      [[], (append prefix-out
+             [[(to-string comp-node), satya,         (to-string comp-node)],
+              [(to-string comp-node), sandhi-rename,  word]])]
 
-      -- mithya: accumulate into pending
-      (eq edge "mithya")
-        [(append pending [word]), out]
+    -- mithya: accumulate into pending
+    (edge is mithya)
+      [(append pending [word]), out]
 
-      -- non-compound satya or other: flush pending, pass current triple through
-      (gt n-pend 0)
-        [[], (append full-flush [tri])]
+    -- non-compound satya or other: flush pending, pass current through
+    (gt n-pend 0)
+      [[], (append full-flush [[word, edge, obj]])]
 
-      otherwise
-        [[], (append out [tri])])
+    otherwise
+      [[], (append out [[word, edge, obj]])])
 
-    pending-list = nth pass 0
-    rough        = nth pass 1
+  pending-list = nth pass 0
+  rough        = nth pass 1
 
-    -- flush any trailing pending mithya
-    result = reduce pending-list rough (fn acc w ->
-               append acc [[w, "mithya", w]])
+  -- flush any trailing pending mithya
+  result = reduce pending-list rough (fn acc w ->
+    append acc [[w, mithya, w]])
 
-  return
-    result  list
-
+  return result
 done

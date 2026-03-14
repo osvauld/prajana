@@ -1,8 +1,0 @@
-tantra test-debug-list3-triple
-  -- does a 3-element list work with length?
-  let
-    triple = ["velocity", "v1", "extra"]
-    len = length triple
-  return
-    len  float
-done

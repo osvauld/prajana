@@ -1,9 +1,0 @@
-tantra test-vishesa-bind-one
-  -- does vishesa-bandhana crash with a single [v1, vishesa, velocity] triple?
-  let
-    g = [["v1", "vishesa", "velocity"]]
-    r  = vishesa-bandhana g
-    ok = gt (length r) 0
-  return
-    ok  bool
-done

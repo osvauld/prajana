@@ -25,6 +25,23 @@ let rec free_vars : expr -> string list = function
   | Cond (branches, ow) ->
     List.concat_map (fun (g, b) -> free_vars g @ free_vars b) branches @ free_vars ow
   | ListExpr items -> List.concat_map free_vars items
+  | From (lst, _pats, guards, collect) ->
+    free_vars lst @ List.concat_map free_vars guards @ free_vars collect
+  | Scan (lst, decls, branches) ->
+    free_vars lst
+    @ List.concat_map (fun (_, init) -> free_vars init) decls
+    @ List.concat_map (fun b ->
+        (match b.sb_guard with Some g -> free_vars g | None -> [])
+        @ List.concat_map free_vars_stmt b.sb_body
+      ) branches
+and free_vars_stmt : scan_stmt -> string list = function
+  | SEmit e -> free_vars e
+  | SSet (_, e) -> free_vars e
+  | SClear _ -> []
+  | SLet (_, e) -> free_vars e
+  | SWhen (g, then_body, else_body) ->
+    free_vars g @ List.concat_map free_vars_stmt then_body
+    @ List.concat_map free_vars_stmt else_body
 
 let mentions_var name e = List.mem name (free_vars e)
 let is_var_named name = function Var v -> v = name | _ -> false

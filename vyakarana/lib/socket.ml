@@ -40,6 +40,7 @@
      error           {code, message, retryable} *)
 
 open Proof_graph
+open Yantra_types
 
 (* ---- minimal JSON helpers ---- *)
 
@@ -150,76 +151,48 @@ let json_bool_field (json : string) (key : string) : bool option =
   in
   scan 0
 
+(* ---- session store ---- *)
+(* in-memory per-session state, keyed by session_id string.
+   each session has its own yantra evaluation context so bindings are isolated.
+   sessions are created on first question request and persist until end-session
+   or server restart. *)
+
+type session_entry = {
+  mutable se_graph   : (string * string * string) list;  (* accumulated triple layers *)
+  mutable se_turn    : int;                              (* turn count, 1-based *)
+  mutable se_turn_id : string;                           (* "prashna-N" *)
+  mutable se_yantra  : session;                          (* per-session yantra context *)
+}
+
+let session_store : (string, session_entry) Hashtbl.t = Hashtbl.create 16
+
+let get_or_create_session (sid : string) : session_entry =
+  match Hashtbl.find_opt session_store sid with
+  | Some entry -> entry
+  | None ->
+    let entry = {
+      se_graph   = [];
+      se_turn    = 0;
+      se_turn_id = "prashna-0";
+      se_yantra  = Yantra.new_session ();
+    } in
+    Hashtbl.replace session_store sid entry;
+    entry
+
 (* ---- response builders ---- *)
 
-let steps_json (pass_groups : (int * Anuvada.anuvada_triple list) list) : string =
-  let buf = Buffer.create 256 in
-  Buffer.add_char buf '[';
-  let all_steps = List.concat_map (fun (pass_num, triples) ->
-    (* group triples by domain presence for kind field *)
-    List.map (fun t ->
-      let kind = if pass_num = 1 then "pure_domain" else "nature_equiv" in
-      let text = Printf.sprintf "%s %s %s"
-        t.Anuvada.a_source
-        (string_of_visheshanam t.Anuvada.a_relation)
-        (String.concat ", " t.Anuvada.a_targets) in
-      (pass_num, kind, text)
-    ) triples
-  ) pass_groups in
-  List.iteri (fun i (pass_num, kind, text) ->
-    Buffer.add_string buf
-      (Printf.sprintf "{\"pass\":%d,\"kind\":%s,\"text\":%s}"
-        pass_num (je kind) (je text));
-    if i < List.length all_steps - 1 then Buffer.add_char buf ','
-  ) all_steps;
-  Buffer.add_char buf ']';
-  Buffer.contents buf
-
-let graph_delta_json (r : Anuvada.query_result) : string =
-  let nodes = List.map je r.Anuvada.qr_content_words in
-  let edges = List.concat_map (fun (_, triples) ->
-    List.concat_map (fun t ->
-      List.map (fun tgt ->
-        Printf.sprintf "{\"source\":%s,\"relation\":%s,\"target\":%s}"
-          (je t.Anuvada.a_source_raw)
-          (je (string_of_visheshanam t.Anuvada.a_relation))
-          (je tgt)
-      ) t.Anuvada.a_targets_raw
-    ) triples
-  ) r.Anuvada.qr_steps in
-  Printf.sprintf "{\"nodes_activated\":[%s],\"edges_activated\":[%s]}"
-    (String.concat "," nodes)
-    (String.concat "," edges)
-
 let ok_response (req_id : string) (ses_id : string) (trn_id : string)
-    (r : Anuvada.query_result) (_flags : Anuvada.output_flags) : string =
-  let buf = Buffer.create 512 in
-  Buffer.add_string buf
-    (Printf.sprintf
-      "{\"schema_version\":\"1.0\",\"request_id\":%s,\"session_id\":%s,\"turn_id\":%s,\
-\"status\":\"ok\",\"answer_text\":%s,\"steps\":%s,\"next_questions\":[%s],\
-\"graph_delta\":%s"
-      (je req_id) (je ses_id) (je trn_id)
-      (je r.Anuvada.qr_answer_text)
-      (steps_json r.Anuvada.qr_steps)
-      (String.concat "," (List.map je r.Anuvada.qr_next_qs))
-      (graph_delta_json r));
-
-  Buffer.add_string buf
-    (Printf.sprintf ",\"diagnostics\":{\"passes\":%d,\"connections\":%d,\"confidence_top\":%.4f}}"
-      r.Anuvada.qr_passes
-      r.Anuvada.qr_connections
-      r.Anuvada.qr_confidence);
-  Buffer.contents buf
+    (answer_text : string) : string =
+  Printf.sprintf
+    "{\"status\":\"ok\",\"request_id\":%s,\"session_id\":%s,\"turn_id\":%s,\"answer_text\":%s}"
+    (je req_id) (je ses_id) (je trn_id) (je answer_text)
 
 let error_response (req_id : string) (ses_id : string) (trn_id : string)
-    (code : string) (msg : string) (retryable : bool) : string =
+    (code : string) (msg : string) : string =
   Printf.sprintf
-    "{\"schema_version\":\"1.0\",\"request_id\":%s,\"session_id\":%s,\"turn_id\":%s,\
-\"status\":\"error\",\"error\":{\"code\":%s,\"message\":%s,\"retryable\":%s},\
-\"diagnostics\":{}}"
-    (je req_id) (je ses_id) (je trn_id)
-    (je code) (je msg) (if retryable then "true" else "false")
+    "{\"status\":\"error\",\"request_id\":%s,\"session_id\":%s,\"turn_id\":%s,\
+\"error\":{\"code\":%s,\"message\":%s}}"
+    (je req_id) (je ses_id) (je trn_id) (je code) (je msg)
 
 (* ---- graph response — full pravaha as a single JSON line ---- *)
 
@@ -250,9 +223,19 @@ let graph_response (k : proof_graph) : string =
   Buffer.add_string buf "]}";
   Buffer.contents buf
 
+(* ---- eval response ---- *)
+
+let eval_response (expr_str : string) (result_str : string) (elapsed_ms : int) : string =
+  (* passed = result is "true" (test convention) or non-empty non-"false" *)
+  let passed = result_str = "true" || (result_str <> "" && result_str <> "false" && result_str <> "none") in
+  Printf.sprintf
+    "{\"status\":\"ok\",\"command\":\"eval\",\"expr\":%s,\"result\":%s,\"passed\":%s,\"elapsed_ms\":%d}"
+    (je expr_str) (je result_str) (if passed then "true" else "false") elapsed_ms
+
 (* ---- handle one client connection ---- *)
 
-let handle_client (k : proof_graph) (ic : in_channel) (oc : out_channel) : unit =
+let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session : session)
+    (ic : in_channel) (oc : out_channel) : unit =
   (try
     while true do
       let line = input_line ic in
@@ -262,49 +245,86 @@ let handle_client (k : proof_graph) (ic : in_channel) (oc : out_channel) : unit 
         let command = json_string_field line "command" in
         let resp = match command with
           | Some "graph" ->
-            (* return full proof graph as pravaha JSON — used by engine:graph() Lua binding *)
+            (* return full proof graph as JSON *)
             (try graph_response k
              with exn ->
-               error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn) true)
+               error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn))
+          | Some "eval" | Some "eval-json" ->
+             (* evaluate a tantra expression directly — used by the Python test runner.
+                "eval"      → result field is a string (as_string repr, legacy).
+                "eval-json" → result field is a JSON value (val_to_json repr). *)
+             let as_json = (command = Some "eval-json") in
+             let expr_str = Option.value ~default:"" (json_string_field line "expr") in
+             if String.trim expr_str = "" then
+               error_response "" "" "" "INVALID_REQUEST" "missing required field: expr"
+             else
+               (try
+                 let t0 = Unix.gettimeofday () in
+                 let expr = Yantra.parse_expr_string expr_str in
+                 let env  = Yantra.new_env () in
+                 let tnames = List.map (fun t -> Yantra.VString t.t_name)
+                   !(yantra_idx.all_tantras) in
+                 Hashtbl.replace env "_tantra_index" (Yantra.VList tnames);
+                 Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
+                 let result = Yantra.eval k env expr in
+                 Yantra.eval_ctx := None;
+                 let t1 = Unix.gettimeofday () in
+                 let elapsed_ms = int_of_float ((t1 -. t0) *. 1000.0) in
+                 let result_str = Yantra.as_string result in
+                 let result_json = Yantra.val_to_json result in
+                 Printf.printf "[eval] %s → %s (%dms)\n%!" expr_str result_str elapsed_ms;
+                 if as_json then
+                   Printf.sprintf
+                     "{\"status\":\"ok\",\"command\":\"eval-json\",\"expr\":%s,\"result\":%s,\"elapsed_ms\":%d}"
+                     (je expr_str) result_json elapsed_ms
+                 else
+                   eval_response expr_str result_str elapsed_ms
+               with exn ->
+                 Yantra.eval_ctx := None;
+                 error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn))
+          | Some "end-session" ->
+            (* explicit session teardown — clears session state from store *)
+            let ses_id = Option.value ~default:"" (json_string_field line "session_id") in
+            if ses_id <> "" then Hashtbl.remove session_store ses_id;
+            "{\"status\":\"ok\",\"command\":\"end-session\"}"
           | _ ->
-            let req_id  = Option.value ~default:"" (json_string_field line "request_id") in
-            let ses_id  = Option.value ~default:"" (json_string_field line "session_id") in
-            let trn_id  = Option.value ~default:"" (json_string_field line "turn_id") in
-            let question = json_string_field line "question" in
-            let show_str = json_string_field line "show" in
+            let req_id     = Option.value ~default:"" (json_string_field line "request_id") in
+            let ses_id     = Option.value ~default:"" (json_string_field line "session_id") in
+            let trn_id     = Option.value ~default:"" (json_string_field line "turn_id") in
+            let question   = json_string_field line "question" in
             let max_passes = json_int_field line "max_passes" in
-            let thaalam = json_string_field line "thaalam" in
-            let sahaja  = Option.value ~default:true (json_bool_field line "sahaja") in
+            (* resolve per-session yantra context when session_id is present *)
+            let _active_session =
+              if ses_id <> "" then
+                let entry = get_or_create_session ses_id in
+                entry.se_turn    <- entry.se_turn + 1;
+                entry.se_turn_id <- Printf.sprintf "prashna-%d" entry.se_turn;
+                (match entry.se_turn with
+                | 1 -> Printf.printf "[session %s / %s]\n%!" ses_id entry.se_turn_id
+                | n -> Printf.printf "[session %s / %s ← parampara: prashna-%d]\n%!"
+                         ses_id entry.se_turn_id (n - 1));
+                entry.se_yantra
+              else yantra_session
+            in
             (match question with
               | None ->
                 error_response req_id ses_id trn_id
-                  "INVALID_REQUEST" "missing required field: question" false
+                  "INVALID_REQUEST" "missing required field: question"
               | Some q when String.trim q = "" ->
                 error_response req_id ses_id trn_id
-                  "INVALID_REQUEST" "question must not be empty" false
+                  "INVALID_REQUEST" "question must not be empty"
               | Some q ->
                 (try
-                  let base_flags = match show_str with
-                    | Some s -> Anuvada.flags_of_show_string s
-                    | None   -> Anuvada.flags_default
-                  in
-                  let (clean_q, flags) = Anuvada.parse_inline_flags ~base:base_flags q in
                   let r = Anuvada.anuvada_query
                     ~max_passes:(Option.value ~default:2 max_passes)
-                    ?thaalam
-                    ~sahaja
-                    ~request_id:req_id
-                    ~session_id:ses_id
-                    ~turn_id:trn_id
-                    k clean_q in
-                  (* echo answer to terminal so human sees it alongside LLM *)
+                    ~request_id:req_id ~session_id:ses_id ~turn_id:trn_id
+                    k q in
                   if String.length r.Anuvada.qr_answer_text > 0 then
-                    Printf.printf "[socket] %s\n  %s\n%!"
-                      q r.Anuvada.qr_answer_text;
-                  ok_response req_id ses_id trn_id r flags
+                    Printf.printf "[socket] %s\n  %s\n%!" q r.Anuvada.qr_answer_text;
+                  ok_response req_id ses_id trn_id r.Anuvada.qr_answer_text
                 with exn ->
                   error_response req_id ses_id trn_id
-                    "ENGINE_ERROR" (Printexc.to_string exn) true))
+                    "ENGINE_ERROR" (Printexc.to_string exn)))
         in
         output_string oc resp;
         output_char oc '\n';
@@ -315,7 +335,8 @@ let handle_client (k : proof_graph) (ic : in_channel) (oc : out_channel) : unit 
 
 (* ---- main server loop ---- *)
 
-let serve (k : proof_graph) (socket_path : string) : unit =
+let serve (k : proof_graph) (yantra_idx : tantra_index) (yantra_session : session)
+    (socket_path : string) : unit =
   (* remove stale socket *)
   (try Unix.unlink socket_path with Unix.Unix_error _ -> ());
   let sock = Unix.socket Unix.PF_UNIX Unix.SOCK_STREAM 0 in
@@ -327,7 +348,7 @@ let serve (k : proof_graph) (socket_path : string) : unit =
     let (client, _) = Unix.accept sock in
     let ic = Unix.in_channel_of_descr client in
     let oc = Unix.out_channel_of_descr client in
-    (try handle_client k ic oc
+    (try handle_client k yantra_idx yantra_session ic oc
      with exn ->
        Printf.eprintf "client error: %s\n%!" (Printexc.to_string exn));
     (try Unix.close client with Unix.Unix_error _ -> ())

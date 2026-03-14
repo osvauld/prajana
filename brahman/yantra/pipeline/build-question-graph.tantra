@@ -1,66 +1,41 @@
 -- build-question-graph.tantra
 -- stateful reduce over sentence words → question graph (list of triples).
---
--- Satya layer triples (drive mantra matching):
---   [concept-node, "active", "concept"]
---   [concept-node, "value",  "5.0"]
---   [concept-node, "unit",   unit-node]
---   ["solve-for",  "intent", concept-node]
---
--- Mithya layer triples (provisional — held for dialogue):
---   [word, "mithya", word]
 
 tantra build-question-graph
-  inputs
-    sentence  string
+  takes sentence
 
-  let
-    -- sentence punctuation characters that attach to word-final position
-    -- these are stripped from the word for lookup, then emitted as structural triples.
-    -- commas are dvandva operators; periods mark sentence boundaries; ? marks questions.
-    sent-punct = [".", "?", "!", ","]
+  sent-punct = [".", "?", "!", ","]
 
-    words = split sentence " "
-    graph = reduce words [] (fn g word ->
-      -- strip trailing sentence punctuation from the word for clean lookup
-      let wlen    = string-length word
-      let last-ch = cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise ""
-      let has-punct = member last-ch sent-punct
-      let clean   = cond has-punct (substr word 0 (sub wlen 1)) otherwise word
-      let punct   = cond has-punct last-ch otherwise ""
+  words  = split sentence " "
+  graph  = reduce words [] (fn g word ->
+    let wlen     = string-length word
+    let last-ch  = cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise ""
+    let has-punct = member last-ch sent-punct
+    let clean    = cond has-punct (substr word 0 (sub wlen 1)) otherwise word
+    let punct    = cond has-punct last-ch otherwise ""
 
-      -- skip empty words (happens if word was just punctuation, e.g. standalone ".")
-      let node    = cond (gt (string-length clean) 0) (lookup-word clean) otherwise _none
-      let role    = cond (exists node) (shabda node "role")  otherwise ""
-      let layer   = cond (exists node) (node-layer node)     otherwise ""
-      let parts   = split-numeric clean
-      let num-str = nth parts 0
-      let uni-str = nth parts 1
-      let num-val = cond (gt (string-length num-str) 0) num-str otherwise ""
-      let uni-nod = cond (gt (string-length uni-str) 0) (word-node uni-str) otherwise ""
-      let ctx     = find-context g
-      let info    = [(to-string node), role, layer, num-val, (to-string uni-nod)]
-      let triples = emit-triples clean info ctx
+    let node     = cond (gt (string-length clean) 0) (lookup-word clean) otherwise _none
+    let role     = cond (exists node) (shabda node "role")  otherwise ""
+    let layer    = cond (exists node) (node-layer node)     otherwise ""
+    let parts    = split-numeric clean
+    let num-str  = nth parts 0
+    let uni-str  = nth parts 1
+    let num-val  = cond (gt (string-length num-str) 0) num-str otherwise ""
+    let uni-nod  = cond (gt (string-length uni-str) 0) (word-node uni-str) otherwise ""
+    let ctx      = find-context g
+    let info     = [(to-string node), role, layer, num-val, (to-string uni-nod)]
+    let triples  = emit-triples clean info ctx
 
-      -- append word triples, then punctuation triple if present
-      let with-word = append g triples
-      cond (gt (string-length punct) 0)
-        (append with-word [[punct, "viraam", punct]])
-      otherwise with-word)
+    let with-word = append g triples
+    cond (gt (string-length punct) 0)
+      (append with-word [[punct, viraam, punct]])
+    otherwise with-word)
 
-    -- sandhi-viveka: promote grammar mithya words to typed dimension triples.
-    -- [has, mithya, has] → [has, shashthi-vibhakti, shashthi-vibhakti]
-    -- must run before avrti-refine so R8 can read the typed edge directly.
-    after-sandhi = sandhi-viveka graph
+  -- sandhi-viveka: promote grammar mithya words to typed dimension triples
+  after-sandhi = sandhi-viveka graph
 
-    -- kosha-expand: PPR-based kosha expansion.
-    -- extracts satya node names as seeds, runs PPR, and appends
-    -- kosha-janya triples for the top-ranked related kosha nodes.
-    -- runs after sandhi-viveka so grammar signals are promoted first.
-    -- additive — does not remove or modify existing triples.
-    result = kosha-expand after-sandhi
+  -- kosha-expand: PPR-based kosha expansion
+  result = kosha-expand after-sandhi
 
-  return
-    result  list
-
+  return result
 done

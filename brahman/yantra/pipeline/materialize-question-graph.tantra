@@ -1,84 +1,58 @@
 tantra materialize-question-graph
 
-  -- convert a VList question graph (list of [subject, edge-label, object] triples)
-  -- into proof-graph nodes with typed edges via emit-node.
-  --
-  -- after this call, the question graph is traversable by walk/walk-in/has/edges:
-  --   walk "mass"  "shashthi-vibhakti"   → [ball]      (mass is owned by ball)
-  --   walk-in "ball" "shashthi-vibhakti" → [mass, ...]  (ball owns these concepts)
-  --   has "mass" "satya"      → true         (mass is an active concept)
-  --
-  -- edge label → dimension name mapping (string → string):
-  --   "satya"          → active      "mithya"    → mithya
-  --   "shashthi-vibhakti"          → q-owner     "prathama-vibhakti"    → q-entity
-  --   "vidhi-kaala"         → q-intent    "naama-mudra"    → q-symbol
-  --   "dvandva"        → q-dvandva   "naama-pratibodha" → q-refers-to
-  --   "krama"    → q-paired-with            "vishesa" → q-instance-of
-  --   "viraam"          → q-punct
-  --   "sankhya" / "matra" / "asprista-sankhya" → stored in node shabda, no sloka edge
-  --
-  -- returns list of emitted node names.
+  -- convert a VList question graph into proof-graph nodes with typed edges.
+  -- after this call the graph is traversable by walk/walk-in/has/edges.
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    result = reduce graph [] (fn acc tri ->
-      let subj = nth tri 0
-      let edge = nth tri 1
-      let obj  = nth tri 2
+  result = reduce graph [] (fn acc [subj, edge, obj] ->
 
-      -- data edges: store in shabda (numeric values can't be node targets)
-      cond
-        (eq edge "sankhya")
-          (let _ = emit-node subj "prashna" [] (concat "sankhya:" obj)
-           acc)
-        (eq edge "matra")
-          (let _ = emit-node subj "prashna" [] (concat "matra:" obj)
-           acc)
-        (eq edge "asprista-sankhya")
-          (let _ = emit-node subj "prashna" [] (concat "asprista-sankhya:" obj)
-           acc)
+    -- data edges: store in shabda (numeric values can't be node targets)
+    cond
+      (edge is sankhya)
+        (let _ = emit-node subj "prashna" [] (concat "sankhya:" obj) acc)
+      (edge is matra)
+        (let _ = emit-node subj "prashna" [] (concat "matra:" obj) acc)
+      (edge is asprista-sankhya)
+        (let _ = emit-node subj "prashna" [] (concat "asprista-sankhya:" obj) acc)
 
-        -- structural edges: build sloka "obj-dimname" and emit
-        (eq edge "satya")
-          (let _ = emit-node subj "prashna" [(concat obj "-satya")] ""
-           (append acc [subj]))
-        (eq edge "mithya")
-          (let _ = emit-node subj "prashna" [(concat obj "-mithya")] ""
-           (append acc [subj]))
-        (eq edge "shashthi-vibhakti")
-          (let _ = emit-node subj "prashna" [(concat obj "-shashthi-vibhakti")] ""
-           (append acc [subj]))
-        (eq edge "prathama-vibhakti")
-          (let _ = emit-node subj "prashna" [(concat obj "-prathama-vibhakti")] ""
-           (append acc [subj]))
-        (eq edge "vidhi-kaala")
-          (let _ = emit-node subj "prashna" [(concat obj "-vidhi-kaala")] ""
-           (append acc [subj]))
-        (eq edge "naama-mudra")
-          (let _ = emit-node subj "prashna" [(concat obj "-naama-mudra")] ""
-           (append acc [subj]))
-        (eq edge "dvandva")
-          (let _ = emit-node subj "prashna" [(concat obj "-q-dvandva")] ""
-           (append acc [subj]))
-        (eq edge "naama-pratibodha")
-          (let _ = emit-node subj "prashna" [(concat obj "-naama-pratibodha")] ""
-           (append acc [subj]))
-        (eq edge "krama")
-          (let _ = emit-node subj "prashna" [(concat obj "-krama")] ""
-           (append acc [subj]))
-        (eq edge "vishesa")
-          (let _ = emit-node subj "prashna" [(concat obj "-vishesa")] ""
-           (append acc [subj]))
-        (eq edge "viraam")
-          (let _ = emit-node subj "prashna" [(concat obj "-viraam")] ""
-           (append acc [subj]))
+      -- structural edges: build sloka and emit
+      (edge is satya)
+        (let _ = emit-node subj "prashna" [(concat obj "-satya")] ""
+         (append acc [subj]))
+      (edge is mithya)
+        (let _ = emit-node subj "prashna" [(concat obj "-mithya")] ""
+         (append acc [subj]))
+      (edge is shashthi-vibhakti)
+        (let _ = emit-node subj "prashna" [(concat obj "-shashthi-vibhakti")] ""
+         (append acc [subj]))
+      (edge is prathama-vibhakti)
+        (let _ = emit-node subj "prashna" [(concat obj "-prathama-vibhakti")] ""
+         (append acc [subj]))
+      (edge is vidhi-kaala)
+        (let _ = emit-node subj "prashna" [(concat obj "-vidhi-kaala")] ""
+         (append acc [subj]))
+      (edge is naama-mudra)
+        (let _ = emit-node subj "prashna" [(concat obj "-naama-mudra")] ""
+         (append acc [subj]))
+      (edge is dvandva)
+        (let _ = emit-node subj "prashna" [(concat obj "-q-dvandva")] ""
+         (append acc [subj]))
+      (edge is naama-pratibodha)
+        (let _ = emit-node subj "prashna" [(concat obj "-naama-pratibodha")] ""
+         (append acc [subj]))
+      (edge is krama)
+        (let _ = emit-node subj "prashna" [(concat obj "-krama")] ""
+         (append acc [subj]))
+      (edge is vishesa)
+        (let _ = emit-node subj "prashna" [(concat obj "-vishesa")] ""
+         (append acc [subj]))
+      (edge is viraam)
+        (let _ = emit-node subj "prashna" [(concat obj "-viraam")] ""
+         (append acc [subj]))
 
-        -- unknown edge type: skip
-        otherwise acc)
+      -- unknown edge type: skip
+      otherwise acc)
 
-  return
-    result  list
-
+  return result
 done

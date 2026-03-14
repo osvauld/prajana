@@ -1,8 +1,0 @@
-tantra test-debug-list3-ab
-  -- does ["a", "b"] work with length?
-  let
-    pair = ["a", "b"]
-    len = length pair
-  return
-    len  float
-done

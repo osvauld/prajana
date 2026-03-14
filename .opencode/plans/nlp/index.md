@@ -1,6 +1,6 @@
 # Linguistic Graph & NLP Plan — Index
 
-**Status**: P0–P6c done. P7 (tokeniser tantra) is next.
+**Status**: P0–P6c done. Codebase cleanup done (2026-03-14). P7 (tokeniser tantra) is next.
 
 ## Key decisions (quick reference)
 
@@ -68,7 +68,18 @@
 - **visheshanam ring IS the category.** swarupa = identity, kriya = composition, yuktu = addition,
   janya ⊣ phala = adjunction. The ring is already a type theory.
 - **vishesa vs amsha**: vishesa = open IS-A (extensional), amsha = closed partition (exhaustive).
-- Test baseline: **124 pass / 11 fail** (2026-03-13 after S1.5 reflexive satya — `[node, satya, node]`, 2 new tests).
+- Test baseline: **134 pass / 11 fail** (2026-03-14 after directory restructure + kosha-expand + vishesa redesign).
+  Previous: 124 pass / 11 fail (2026-03-13 after S1.5 reflexive satya).
+- **`vishesa` typed instances** replace `naama-mudra`. `[v1, vishesa, velocity]` + `[v1, vishesa, rashi]`.
+  `rashi` = measurable quantity instance (new sangati node `brahman/sangati/rashi.om`).
+- **2-element list `[a, b]` is broken** — parser treats it as function call `(a b)`. Known bug.
+  Root cause of `Failure("nth")` crashes in `vishesa-bandhana`. Will be fixed by syntax refactor
+  (destructuring eliminates the need for 2-element list literals).
+- **Dynamic mantras**: Mantras should resolve at call time from the graph, not be pre-registered
+  as synthetic tantras. `eval_call` fallback checks for mantra-layer nodes.
+- **Tantra syntax refactor**: Clean break. `scan/when/emit` for stateful triple processing,
+  `from/where/collect` for filtering, triple destructuring, bare node references, `is`/`exists`
+  infix operators. Full spec in `tantra-syntax-refactor.md`.
 
 ## Files in this directory
 
@@ -96,20 +107,27 @@
 | [sanskrit-grammar-layer.md](sanskrit-grammar-layer.md) | **NEW** — Sanskrit as canonical inner form. artha-viveka (not sankshepa). sphoTa. kramanusara+apeksha general derivative (kaala ≠ time). Logic/math Sanskrit equivalents. mithya vs asprista. Sanskrit canonical edge names. Phases S0–S4. |
 | [session-graph.md](session-graph.md) | session as persistent graph. Compute vs theoretical routing. Formal proof via implication walk. Dialogue generation when slots unfilled. |
 | [tantra-testing.md](tantra-testing.md) | Tantra-native testing plan — test categories, runner design |
+| [tantra-syntax-refactor.md](tantra-syntax-refactor.md) | **NEW** — Tantra syntax overhaul: `scan/when/emit`, `from/where/collect`, destructuring, bare node refs, dynamic mantras. Clean break — no backwards compat. |
 
 ## Regression baseline
 
-**124 pass / 11 fail** (2026-03-13). Do not break further.
+**97 pass / 49 fail** (2026-03-14 — all 146 tests across all suites, via Python runner).
+Previous partial baseline (avrti/match/pipeline/primitives/sankhya only): 135 pass / 11 fail.
 
-The 11 remaining failures are all known and expected:
-- 7 dvandva tests (R5/R6/R7 not implemented — Phase 4)
-- `test-its-refers-to-last-entity` (R10 pronouns — Phase 3)
-- `test-entity-owns-symbolic-group` (Phase 4)
-- `test-two-entities-distinct`, `test-two-entities-separate-mass-bindings` (test design issues)
+Run with live server:
+```
+# start server once
+cd vyakarana && ./_build/default/bin/vyakarana.exe --quiet-startup --socket /tmp/vy.sock ../brahman &
+# run all tests
+python3 scripts/run-tests.py --socket /tmp/vy.sock
+# run one suite
+python3 scripts/run-tests.py --socket /tmp/vy.sock avrti
+```
 
-```
-cd vyakarana && bash scripts/run-tests.sh
-```
+The 49 failures split into two categories:
+- **Unimplemented features** (~37): vibhakti entity ownership (r9 rules), sandhi slokas/node-text access,
+  dvandva grouping, abbreviation lookup (`kg`/`N`), full pipeline end-to-end
+- **Known design gaps** (~12): bqg unit binding, intent detection, solve-for routing
 
 ## Key source files
 
@@ -149,15 +167,22 @@ brahman/bhasha/                        surface language forms (P6 complete)
 | P6b | Grammar composition layer (copula.om, articles.om, prepositions.om, conjunctions.om) | ✅ |
 | P6c | Implication edges on all 21 physics mantra nodes | ✅ |
 
-### DONE: Strudel / IR removal
+### DONE: Codebase cleanup (2026-03-14)
 
 | What | Status |
 |---|---|
-| `build_music_ir`, `build_resonance_ir`, `emit_strudel_*` removed from `anuvada.ml` | ✅ |
-| `qr_music_ir`, `qr_resonance_ir`, `qr_strudel` removed from `query_result` | ✅ |
-| `show_strudel`, `show_music`, `show_resonance` removed from `output_flags` | ✅ |
-| `socket.ml` strudel/IR lines removed | ✅ |
-| Build clean, 49/52 passing | ✅ |
+| `sessions/` directory deleted (legacy Lua app) | ✅ |
+| `lib/verify.ml` deleted (dead module, never called) | ✅ |
+| `lib/prayoga.ml` + `lib/prayoga_strudel.ml` deleted (music/DNA/strudel/OCaml emit, 408 lines) | ✅ |
+| `anuvada.ml` stripped 887 → 389 lines (OCaml code-emission removed, stdout wrapper removed) | ✅ |
+| `event.ml` stripped 24 → 9 lines (Prayoga, thaalam, sahaja removed) | ✅ |
+| `vyakarana.ml` stripped 434 → 217 lines (sessions scan, strudel/music help text, Prayoga branch removed) | ✅ |
+| `socket.ml` response simplified: was schema_version+steps+next_questions+graph_delta+diagnostics, now `{status, request_id, session_id, turn_id, answer_text}` | ✅ |
+| Socket `eval` command added — evaluates tantra expressions directly | ✅ |
+| Session store added to `socket.ml` — per-session yantra context, turn counter, parampara narration | ✅ |
+| `Proof_graph.materialize_csr` called at startup — fixes CSR crash in socket eval path | ✅ |
+| Python test runner `scripts/run-tests.py` written — hits live server, ~100× faster than shell runner | ✅ |
+| `output_flags` simplified to `unit` type (prayoga flag gone, type preserved for callers) | ✅ |
 
 ---
 

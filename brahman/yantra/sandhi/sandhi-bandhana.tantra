@@ -4,53 +4,39 @@ tantra sandhi-bandhana
   -- reads [compound, sandhi-rename, base] markers left by sandhi-kosha/sandhi-avastha.
   -- rewrites [base, sankhya/matra, X] → [compound, sankhya/matra, X].
   -- removes sandhi-rename triples from the output (they are internal markers only).
-  --
-  -- sequential tracking: cur-bc = [base, compound] updates when a satya with the
-  -- compound name is seen, so two compounds sharing a base (initial-velocity,
-  -- final-velocity) each only claim their OWN sankhya/matra triples.
-  --
-  -- example: [initial-velocity, sandhi-rename, velocity]
-  --          [velocity, sankhya, "20.0"] → [initial-velocity, sankhya, "20.0"]
 
-  inputs
-    graph  list
+  takes graph
 
-  let
-    -- collect all rename pairs: [[base, compound], ...]
-    renames = reduce graph [] (fn acc tri ->
-      cond (eq (nth tri 1) "sandhi-rename")
-        (append acc [[(nth tri 2), (nth tri 0)]])
-      otherwise acc)
+  -- collect all rename pairs: [[base, compound], ...]
+  renames = from graph
+    where [compound, e, base]
+    and e is sandhi-rename
+    collect [base, compound]
 
-    -- reattribute bindings using sequential cur-bc tracking; strip sandhi-rename triples
-    result = cond (eq (length renames) 0)
-      graph
-    otherwise
-      (nth (reduce graph [["", ""], []] (fn st tri ->
-        let cur-bc  = nth st 0
-        let out     = nth st 1
-        let edge    = nth tri 1
-        let subj    = nth tri 0
+  result = cond (renames is empty)
+    graph
+  otherwise
+    (scan graph with cur-base = "", cur-compound = ""
 
-        -- consume sandhi-rename markers — never pass through
-        cond (eq edge "sandhi-rename")
-          [cur-bc, out]
+      when edge is sandhi-rename
+        -- consume marker, do not emit
 
-        -- satya: update cur-bc if this subject is a known compound
-        (eq edge "satya")
-          (let new-bc = reduce renames cur-bc (fn acc rv ->
-             cond (eq subj (nth rv 1)) rv otherwise acc)
-           [new-bc, (append out [tri])])
+      when edge is satya
+        let new-bc = from renames
+          where [base, compound]
+          and compound is word
+          collect [base, compound]
+        set cur-base     to (cond (new-bc is not empty) (nth (nth new-bc 0) 0) otherwise cur-base)
+        set cur-compound to (cond (new-bc is not empty) (nth (nth new-bc 0) 1) otherwise cur-compound)
+        emit triple
 
-        -- sankhya/matra: rewrite base → compound if cur-bc matches
-        (and (or (eq edge "sankhya") (eq edge "matra"))
-             (eq subj (nth cur-bc 0)))
-          [cur-bc, (append out [[(nth cur-bc 1), edge, (nth tri 2)]])]
+      when edge is sankhya or edge is matra
+        and word is cur-base
+        and cur-base is not ""
+        emit [cur-compound, edge, obj]
 
-        otherwise
-          [cur-bc, (append out [tri])])) 1)
+      otherwise
+        emit triple)
 
-  return
-    result  list
-
+  return result
 done

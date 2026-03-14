@@ -1,9 +1,0 @@
-tantra test-vishesa-bind-debug3
-  -- does nth work on a 2-element list inside a reduce?
-  let
-    pairs = [["velocity", "v1"]]
-    result = reduce pairs "" (fn acc pair ->
-      nth pair 0)
-  return
-    result  string
-done

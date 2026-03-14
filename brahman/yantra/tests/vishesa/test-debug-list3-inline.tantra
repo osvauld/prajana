@@ -1,7 +1,0 @@
-tantra test-debug-list3-inline
-  -- inline the list instead of using a variable
-  let
-    len = length ["velocity", "v1"]
-  return
-    len  float
-done
