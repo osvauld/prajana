@@ -221,16 +221,9 @@ def test_avrti_sankhya_reattribute(vy):
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="entity ownership via 'has' not yet built: avrti R8/R9 rules missing",
-)
 def test_avrti_entity_ownership(vy):
-    g = [
-        ["ball", "mithya", "ball"],
-        ["has", "mithya", "has"],
-        ["mass", "satya", "mass"],
-    ]
-    result = vy.eval(f"fixpoint {tl(g)} avrti-refine")
+    # sandhi-viveka (inside build-question-graph) promotes "has" →
+    # [has, shashthi-vibhakti, shashthi-vibhakti] before avrti-refine runs.
+    result = vy.eval('fixpoint (build-question-graph "ball has mass") avrti-refine')
     assert vy.has_triple(result, subj="ball", pred="prathama-vibhakti")
     assert vy.has_triple(result, subj="mass", pred="shashthi-vibhakti")

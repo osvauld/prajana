@@ -1,17 +1,24 @@
 sangati asprista-sankhya
 
-  -- a numeric value that has entered the question graph but is not yet bound to any concept.
-  -- held provisionally until avrti attaches it to the preceding active concept.
-  -- example: [5, asprista-sankhya, 5.0]  — the 5 in "ball has mass 5 kg" before binding
+  -- a numeric magnitude that has entered the question graph but is not yet
+  -- bound to any rashi. held provisionally until sankhya-bandha attaches it
+  -- to the preceding active rashi.
   --
-  -- asprista = not yet touched by understanding
-  -- sankhya  = numeric value
-  -- together: a number whose meaning (which quantity it measures) has not yet been discerned
+  -- example: "ball has mass 5 kg"
+  --   before binding: [5, asprista-sankhya, 5.0]  — the 5 is floating
+  --   after binding:  [mass, sankhya, 5.0]        — the 5 belongs to mass's rashi
+  --
+  -- asprista = not yet touched by understanding (which rashi does this belong to?)
+  -- sankhya  = numeric magnitude
+  -- together: a magnitude whose rashi owner has not yet been discerned
+  --
+  -- resolves into sankhya on binding. remains asprista-sankhya if no rashi precedes it.
 
   "prashna-sthita"
-  "asprista-sthita sankhya-sthita"
-  "mithya-satya-sthita"   -- pending = not yet fully resolved
+  "asprista-sthita"
+  "sankhya-sthita"        -- it IS a sankhya, just unbound
+  "mithya-satya-sthita"   -- pending: not yet fully resolved
 
-shabda asprista-sankhya / unattached-numeric-value-awaiting-concept-binding
+shabda asprista-sankhya / unbound-numeric-magnitude-awaiting-rashi-binding
 
 done

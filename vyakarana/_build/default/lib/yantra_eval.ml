@@ -117,6 +117,7 @@ and eval_scan (k : proof_graph) (e : env) (list_expr : expr)
           | _ -> v
         in
         output := item :: !output
+      | SSkip -> ()   (* suppress emission of current triple — no-op *)
       | SSet (var, expr) ->
         let v = eval k sub_env expr in
         Hashtbl.replace state var v;
@@ -221,6 +222,28 @@ let run_anuvada_ganana (k : proof_graph) (idx : tantra_index) (session : session
         !last_invoked_tantra else "anuvada-ganana" in
       Some { yr_output = []; yr_tantra = tantra_name;
              yr_code = "(via anuvada-ganana)"; yr_raw_output = raw }
+    end
+
+let run_session_anuvada (k : proof_graph) (idx : tantra_index) (session : session)
+    (prior_graph : (string * string * string) list) (sentence : string)
+    : yantra_result option =
+  match Hashtbl.find_opt idx.by_name "session-anuvada" with
+  | None ->
+    (* fallback to anuvada-ganana if session-anuvada not loaded *)
+    run_anuvada_ganana k idx session sentence
+  | Some sa ->
+    let prior_val = VList (List.map (fun (s, p, o) ->
+      VList [VString s; VString p; VString o]
+    ) prior_graph) in
+    let result = eval_tantra ~idx ~session k sa
+      [("sentence", VString sentence); ("prior-graph", prior_val)] in
+    let raw = as_string result in
+    if String.length raw = 0 then None
+    else begin
+      let tantra_name = if String.length !last_invoked_tantra > 0 then
+        !last_invoked_tantra else "session-anuvada" in
+      Some { yr_output = []; yr_tantra = tantra_name;
+             yr_code = "(via session-anuvada)"; yr_raw_output = raw }
     end
 
 (* ---- print a yantra result ---- *)

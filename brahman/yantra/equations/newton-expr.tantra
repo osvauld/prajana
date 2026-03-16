@@ -1,0 +1,17 @@
+tantra newton-expr
+
+  -- F = ma
+  -- forward: given mass, acceleration → force
+
+  inputs
+    mass         number
+    acceleration number
+
+  let
+
+  value = mul mass acceleration
+
+  return
+    value  any
+
+done

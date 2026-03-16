@@ -1,0 +1,9 @@
+mantra reciprocal
+
+  "number-varga-karma"
+  "arithmetic-kriya"
+  "division-pratipaksha"
+
+  shabda word:reciprocal eval:reciprocal arity:1 degree:1 per-element:yes invertible:yes inverse:reciprocal
+
+done

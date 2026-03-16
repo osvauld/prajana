@@ -1,0 +1,17 @@
+tantra momentum-expr
+
+  -- p = mv
+  -- forward: given mass, velocity → momentum
+
+  inputs
+    mass      number
+    velocity  number
+
+  let
+
+  value = mul mass velocity
+
+  return
+    value  any
+
+done

@@ -41,6 +41,7 @@ let () =
   ) [
     ("swarupa", 0); ("abheda", 1); ("drishthanta", 2); ("sthita", 3); ("yukta", 4);
     ("siddha", 5); ("kriya", 6); ("phala", 7); ("janya", 8); ("pratipaksha", 9);
+    ("varga", 10);
   ];
   (* aliases: forward lookup only — never overwrite the canonical reverse mapping *)
   List.iter (fun (alias, idx) ->

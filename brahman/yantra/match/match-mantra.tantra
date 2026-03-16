@@ -2,10 +2,11 @@ tantra match-mantra
 
   -- given a question graph, find the best matching mantra:
   -- 1. extract solve-for concept (satya concept named as vidhi-kaala target)
-  -- 2. filter mantras to those whose name: or krama-lhs matches the solve-for concept
-  -- 3. among those, find first whose krama-rhs is fully covered by bound concepts
-  -- 4. if no solve-for, fall back to any mantra with full krama-rhs coverage
-  -- returns [mantra-node, [arg-val-0, arg-val-1, ...]] or [] if no match.
+  -- 2. filter mantras to those whose name: or phala edge matches the solve-for concept
+  -- 3. among those, find first whose janya edges are fully covered by bound concepts
+  -- 4. if no solve-for, fall back to any mantra with full janya coverage
+  -- returns [mantra-node, val-pairs] or [] if no match.
+  -- val-pairs = [[concept, val], ...] — passed to execute-chain for dispatch.
 
   takes graph
 
@@ -36,34 +37,25 @@ tantra match-mantra
     otherwise (nth sf-state 1)
 
   -- all mantra nodes
-  mantras = walk-in "execute-chain" "kriya"
+  mantras = walk-in "physics-mantra" "varga"
 
-  -- filter to those matching solve-for (by name: or krama-lhs)
+  -- filter to those matching solve-for (by name: shabda or phala edge)
   candidates = cond (gt (string-length solve-for) 0)
     (filter mantras (fn m ->
-      let mname = shabda m "name"
-      let mlhs  = shabda m "krama-lhs"
-      or (mname is solve-for) (mlhs is solve-for)))
+      let mname  = shabda m "name"
+      let mphala = nth (walk m "phala") 0
+      or (mname is solve-for) (mphala is solve-for)))
     otherwise mantras
 
-  -- find first candidate whose entire krama-rhs is covered
+  -- find first candidate whose entire janya set is covered
   match = reduce candidates [] (fn acc m ->
     cond (gt (length acc) 0) acc
     otherwise
-      (let rhs-str = shabda m "krama-rhs"
-       let rhs     = split rhs-str ","
-       let all-ok  = reduce rhs true (fn a r ->
+      (let janya  = walk m "janya"
+       let all-ok = reduce janya true (fn a r ->
          and a (or (member r (nth bound-vals 0))
                    (gt (string-length (shabda r "constants-key")) 0)))
-       let args    = reduce rhs [] (fn a r ->
-         let ck = shabda r "constants-key"
-         let v  = cond (gt (string-length ck) 0)
-           (nth (split-numeric (shabda "physics-constants" ck)) 0)
-           otherwise
-             (reduce (nth bound-vals 1) "" (fn a2 [concept, val] ->
-               cond (concept is r) val otherwise a2))
-         append a [v])
-       cond all-ok [m, args]
+       cond all-ok [m, (nth bound-vals 1)]
        otherwise []))
 
   return match

@@ -4,6 +4,10 @@ tantra sankhya-bandha
   -- asprista-sankhya arises when a number appears without a unit in direct proximity.
   -- example: "mass 10 and acceleration 2" → mass=10, acceleration=2
   --
+  -- rashi-viveka (earlier avrti pass) handles the named-instance case:
+  --   "velocity v1 of 20" → [v1, vishesa, velocity], [v1, sankhya, 20.]
+  -- by the time sankhya-bandha runs, rashi-bandha signals are already consumed.
+  --
   -- guards (must NOT bind):
   --   concept already has a sankhya triple → already bound, skip
 
@@ -15,7 +19,7 @@ tantra sankhya-bandha
     and e is sankhya
     collect s
 
-  result = scan graph with last-active = ""
+  result = scan graph with let last-active be ""
 
     when edge is satya
       set last-active to word

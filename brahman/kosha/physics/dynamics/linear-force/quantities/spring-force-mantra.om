@@ -1,16 +1,13 @@
 mantra spring-force-mantra
 
   "linear-force-varga-vishesa"
+  "physics-mantra-varga"
   "spring-force-swarupa"
-
-  -- F = kx: Hooke's law — multiply spring-constant by displacement
-  "multiplication-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "spring-force-phala"
+  "spring-force-expr-kriya"
   "spring-constant-janya"
   "displacement-janya"
 
-  shabda name:spring-force krama-lhs-unit:newton degree:1 krama-lhs:spring-force krama-rhs:spring-constant,displacement
+  shabda name:spring-force unit:newton
 
 done

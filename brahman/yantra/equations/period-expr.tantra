@@ -1,0 +1,18 @@
+tantra period-expr
+
+  -- T = 2π/ω
+  -- forward: given angular-velocity → period
+  -- pi resolved from physics-constants
+
+  inputs
+    angular-velocity  number
+
+  let
+
+  pi    = nth (split-numeric (shabda "physics-constants" "pi")) 0
+  value = div (double pi) angular-velocity
+
+  return
+    value  any
+
+done

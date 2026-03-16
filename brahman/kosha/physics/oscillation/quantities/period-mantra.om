@@ -1,16 +1,12 @@
 mantra period-mantra
 
   "oscillation-varga-vishesa"
+  "physics-mantra-varga"
   "period-swarupa"
-
-  -- T = 2π/ω: multiply 2 by pi, divide by angular-velocity
-  "multiplication-krama"
-  "division-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "period-phala"
+  "period-expr-kriya"
   "angular-velocity-janya"
 
-  shabda name:period krama-lhs-unit:second degree:1 krama-lhs:period krama-rhs:angular-velocity
+  shabda name:period unit:second
 
 done

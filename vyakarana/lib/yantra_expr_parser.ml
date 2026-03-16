@@ -260,12 +260,16 @@ and parse_scan (tokens : string list) : expr * string list =
     | [] -> failwith "scan: missing list expression"
     | _ -> let (e, _) = parse_expr list_toks in e
   in
-  (* parse state variable declarations: var=init [, var=init]* until first "when"/"otherwise" *)
+  (* parse state variable declarations: "let name be expr [, let name be expr]*"
+     until first "when"/"otherwise".
+     using "let name be expr" (not "name = expr") so that multi-line state
+     declarations are unambiguous to the tantra file parser — "let" at the
+     start of a line can never be mistaken for a top-level binding start. *)
   let rec parse_state_decls acc toks =
     match toks with
     | "when" :: _ | "otherwise" :: _ -> (List.rev acc, toks)
     | [] -> (List.rev acc, [])
-    | name :: "=" :: rest ->
+    | "let" :: name :: "be" :: rest ->
       let rec collect_init iacc = function
         | ("," | "when" | "otherwise") :: _ as r -> (List.rev iacc, r)
         | tok :: rest -> collect_init (tok :: iacc) rest
@@ -284,6 +288,9 @@ and parse_scan (tokens : string list) : expr * string list =
       let (e, rest') = parse_expr rest in
       let (more, rest'') = parse_scan_stmts rest' in
       (SEmit e :: more, rest'')
+    | "skip" :: rest ->
+      let (more, rest') = parse_scan_stmts rest in
+      (SSkip :: more, rest')
     | "set" :: var :: "to" :: rest ->
       let (e, rest') = parse_expr rest in
       let (more, rest'') = parse_scan_stmts rest' in

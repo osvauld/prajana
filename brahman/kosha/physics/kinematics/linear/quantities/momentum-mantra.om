@@ -1,16 +1,13 @@
 mantra momentum-mantra
 
   "linear-motion-varga-vishesa"
+  "physics-mantra-varga"
   "momentum-swarupa"
-
-  -- p = mv: multiply mass by velocity
-  "multiplication-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "momentum-phala"
+  "momentum-expr-kriya"
   "mass-janya"
   "velocity-janya"
 
-  shabda name:momentum krama-lhs-unit:kilogram-metre-per-second degree:1 krama-lhs:momentum krama-rhs:mass,velocity
+  shabda name:momentum unit:kilogram-metre-per-second
 
 done

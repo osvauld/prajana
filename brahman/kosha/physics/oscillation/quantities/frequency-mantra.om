@@ -1,15 +1,12 @@
 mantra frequency-mantra
 
   "oscillation-varga-vishesa"
+  "physics-mantra-varga"
   "frequency-swarupa"
-
-  -- f = 1 / T: inverse of period
-  "division-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "frequency-phala"
+  "frequency-expr-kriya"
   "period-janya"
 
-  shabda name:frequency krama-lhs-unit:hertz degree:1 krama-lhs:frequency krama-rhs:period
+  shabda name:frequency unit:hertz
 
 done

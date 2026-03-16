@@ -7,18 +7,24 @@ A question IS a partial instantiation of a mantra node.
 
 The sentence "what is kinetic energy of a 5kg ball at 10m/s" assembles
 a graph fragment that is structurally identical to the kinetic-energy-mantra
-node with some krama-rhs slots filled and the krama-lhs slot empty (the unknown).
+node with some janya slots filled and the phala slot open (the unknown).
 
 The answer is the missing slot. The graph walk finds it.
 
 ```
 sentence
   → stateful reduce (word by word)
-  → question graph (partial mantra instantiation)
-  → match: which mantra has all krama-rhs slots bound?
-  → execute-chain
-  → answer (fills krama-lhs slot)
+  → question graph (partial mantra instantiation, entity-scoped nodes)
+  → match: which mantra × which entity has all janya slots bound?
+  → eval-mantra (forward / inverse / clarify)
+  → answer (fills phala slot or unknown janya slot)
 ```
+
+**The question graph IS the bindings.** `eval-mantra` receives the fully
+refined question graph — not a flat `[[concept, val], ...]` list. Entity-scoped
+nodes (`mass-of-ball-A`) are the actual inputs to equation tantras. The node
+carries all context: `sankhya`, `matra`, `shashthi-vibhakti`, `varga`,
+`kramanusara`. The tantra walks from the node index to get what it needs.
 
 ## The Shift from Pipeline to Graph
 

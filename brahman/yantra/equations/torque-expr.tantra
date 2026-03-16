@@ -1,0 +1,17 @@
+tantra torque-expr
+
+  -- τ = Iα
+  -- forward: given moment-of-inertia, angular-acceleration → torque
+
+  inputs
+    moment-of-inertia    number
+    angular-acceleration number
+
+  let
+
+  value = mul moment-of-inertia angular-acceleration
+
+  return
+    value  any
+
+done

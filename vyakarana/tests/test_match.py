@@ -59,8 +59,9 @@ def test_match_kinetic_energy_returns_two_args(vy):
 def test_match_kinetic_energy_arg_values(vy):
     g = bqg_then_avrti(vy, "find kinetic energy given mass 5 and velocity 10")
     result = vy.eval(f"match-mantra {json.dumps(g)}")
-    args = result[1]
-    values = sorted([float(a) for a in args])
+    # result[1] is now val-pairs: [[concept, val], ...]
+    valpairs = result[1]
+    values = sorted([float(kv[1]) for kv in valpairs])
     assert vy.approx_eq(values[0], 5.0), f"expected mass=5.0, got {values[0]}"
     assert vy.approx_eq(values[1], 10.0), f"expected velocity=10.0, got {values[1]}"
 

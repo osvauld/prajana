@@ -1,16 +1,13 @@
 mantra angular-momentum-mantra
 
   "rotational-motion-varga-vishesa"
+  "physics-mantra-varga"
   "angular-momentum-swarupa"
-
-  -- L = I·ω: moment of inertia times angular velocity
-  "multiplication-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "angular-momentum-phala"
+  "angular-momentum-expr-kriya"
   "moment-of-inertia-janya"
   "angular-velocity-janya"
 
-  shabda name:angular-momentum krama-lhs-unit:kilogram-metre-squared-per-second degree:1 krama-lhs:angular-momentum krama-rhs:moment-of-inertia,angular-velocity
+  shabda name:angular-momentum unit:kilogram-metre-squared-per-second
 
 done

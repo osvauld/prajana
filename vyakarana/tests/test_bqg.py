@@ -101,10 +101,21 @@ def test_two_numbers_emit_two_asprista_sankhya(vy):
 
 
 def test_satya_concept_gets_kosha_janya_triples(vy):
-    # every satya concept gets kosha-janya expansion triples
+    # kosha-expand runs after avrti-refine, not inside BQG
+    # BQG output has no kosha-janya — it is added by kosha-expand on the refined graph
     g = vy.eval('build-question-graph "find force"')
-    kosha_janya = vy.all_triples(g, subj="force", pred="kosha-janya")
-    assert len(kosha_janya) > 0, f"expected kosha-janya triples for 'force', got none"
+    kosha_janya_in_bqg = vy.all_triples(g, pred="kosha-janya")
+    assert len(kosha_janya_in_bqg) == 0, (
+        f"BQG should not contain kosha-janya (kosha-expand runs after avrti-refine)"
+    )
+    # after kosha-expand, force gets its neighbourhood
+    expanded = vy.eval(
+        'kosha-expand (fixpoint (build-question-graph "find force") avrti-refine)'
+    )
+    kosha_janya = vy.all_triples(expanded, subj="force", pred="kosha-janya")
+    assert len(kosha_janya) > 0, (
+        f"expected kosha-janya triples for 'force' after kosha-expand, got none"
+    )
 
 
 def test_unknown_word_gets_no_kosha_janya(vy):

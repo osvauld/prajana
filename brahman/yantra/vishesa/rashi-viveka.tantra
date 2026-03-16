@@ -1,0 +1,69 @@
+tantra rashi-viveka
+
+  -- rashi instantiation with value: binds a sankhya to an already-typed rashi instance.
+  --
+  -- vishesa-instance (earlier pass) has already promoted mithya labels following owned
+  -- concepts into vishesa triples:
+  --   [v1, vishesa, velocity]
+  --   [v1, vishesa, rashi]
+  --
+  -- this tantra picks up the value that follows via the rashi-bandha signal:
+  --   [of,  rashi-bandha,     ...]        -- value-assignment signal
+  --   [20,  asprista-sankhya, 20.]        -- the number
+  --
+  -- and emits:
+  --   [v1, sankhya, 20.]
+  --
+  -- consuming both the rashi-bandha and asprista-sankhya triples.
+  --
+  -- example: "ball1 has velocity v1 of 20 and ball2 has velocity v2 of 30"
+  --   input (post vishesa-instance):
+  --     [v1, vishesa, velocity], [v1, vishesa, rashi],
+  --     [of, rashi-bandha, ...], [20, asprista-sankhya, 20.]
+  --     [v2, vishesa, velocity], [v2, vishesa, rashi],
+  --     [of, rashi-bandha, ...], [30, asprista-sankhya, 30.]
+  --   output:
+  --     [v1, vishesa, velocity], [v1, vishesa, rashi], [v1, sankhya, 20.]
+  --     [v2, vishesa, velocity], [v2, vishesa, rashi], [v2, sankhya, 30.]
+
+  takes graph
+
+  -- labels that are rashi instances (have [label, vishesa, rashi])
+  rashi-labels = from graph
+    where [s, e, o]
+    and e is vishesa
+    and o is rashi
+    collect s
+
+  -- labels already bound to a numeric value (idempotence guard)
+  already-bound = from graph
+    where [s, e, o]
+    and e is sankhya
+    collect s
+
+  result = cond (rashi-labels is empty)
+    graph
+  otherwise
+    (scan graph with
+      let last-rashi be ""
+      let saw-rashi-bandha be false
+
+      when edge is vishesa and (member word rashi-labels)
+        set last-rashi to word
+        emit triple
+
+      when edge is rashi-bandha and last-rashi is not ""
+        set saw-rashi-bandha to true
+
+      when edge is asprista-sankhya and saw-rashi-bandha and last-rashi is not ""
+        and (not (member last-rashi already-bound))
+        emit [last-rashi, sankhya, obj]
+        clear last-rashi
+        set saw-rashi-bandha to false
+
+      otherwise
+        set saw-rashi-bandha to false
+        emit triple)
+
+  return result
+done

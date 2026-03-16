@@ -1,18 +1,14 @@
 mantra velocity-mantra
 
   "linear-motion-varga-vishesa"
+  "physics-mantra-varga"
   "velocity-swarupa"
-
-  -- v = u + at: multiply acceleration by time, add initial-velocity
-  "multiplication-krama"
-  "addition-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "velocity-phala"
+  "velocity-expr-kriya"
   "initial-velocity-janya"
   "acceleration-janya"
   "time-janya"
 
-  shabda name:velocity degree:1 krama-lhs:velocity krama-lhs-unit:metre-per-second krama-rhs:initial-velocity,acceleration,time
+  shabda name:velocity unit:metre-per-second
 
 done

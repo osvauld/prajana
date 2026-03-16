@@ -1,9 +1,13 @@
 tantra vishesa-instance
 
   -- typed quantity instance creation (R4b redesigned).
-  -- when a mithya label follows an owned satya concept with no numeric binding:
+  -- when a mithya label follows a satya concept with no numeric binding:
   --   → [label, vishesa, concept]   (label IS a particular of concept)
   --   → [label, vishesa, rashi]     (label is a measurable quantity)
+  --
+  -- fires when the concept is owned (has shashthi-vibhakti) OR when the graph
+  -- contains a rashi-bandha signal (the "concept label of value" pattern without
+  -- an explicit entity — e.g. "magnetic field B of 0.1").
 
   takes graph
 
@@ -25,7 +29,17 @@ tantra vishesa-instance
     and e is sankhya
     collect s
 
-  result = scan graph with last-active = ""
+  -- whether any rashi-bandha signal is present (the "of" value-assignment pattern)
+  -- used to also promote labels in bare "concept label of value" sentences
+  -- (no entity/has — e.g. "magnetic field B of 0.1")
+  has-rashi-bandha = exists (from graph
+    where [s, e, o]
+    and e is rashi-bandha
+    collect s)
+
+  can-promote-val = has-rashi-bandha
+
+  result = scan graph with let last-active be "", let can-promote be can-promote-val
 
     when edge is satya
       set last-active to word
@@ -37,11 +51,12 @@ tantra vishesa-instance
 
     when edge is mithya
       and last-active is not ""
-      and (member last-active owned-concepts)
+      and ((member last-active owned-concepts) or can-promote)
       and (not (member last-active bound-concepts))
       and (not (member word ent-names))
+      let concept = last-active
       clear last-active
-      emit [word, vishesa, last-active]
+      emit [word, vishesa, concept]
       emit [word, vishesa, rashi]
 
     otherwise
