@@ -1,0 +1,17 @@
+tantra capacitance-expr
+
+  -- C = Q/V
+  -- forward: given charge, voltage → capacitance
+
+  inputs
+    charge   number
+    voltage  number
+
+  let
+
+  value = div charge voltage
+
+  return
+    value  any
+
+done

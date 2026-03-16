@@ -1,9 +1,10 @@
 tantra vibhakti-shashthi
 
   -- entity detection + concept ownership from possession signal (R8 + R9).
-  -- sandhi-viveka has already promoted has/with/have/of to typed dimension triples:
+  -- sandhi-viveka has already promoted has/with/have to typed dimension triples:
   --   [has, shashthi-vibhakti, shashthi-vibhakti]  (reflexive object = grammar signal)
-  -- this tantra reads those signals directly.
+  -- note: 'of' is NOT shashthi-vibhakti here — prep-of.om uses rashi-bandha-sthita,
+  --   so 'of' becomes [of, rashi-bandha, rashi-bandha] and is handled by sankhya-bandha.
   --
   -- pattern:
   --   [label, mithya] → accumulate as potential entity label
@@ -11,8 +12,12 @@ tantra vibhakti-shashthi
   --     → emit [label, prathama-vibhakti, object]
   --     → set cur-entity = label
   --   [concept, satya] while cur-entity set → emit [concept, shashthi-vibhakti, cur-entity]
+  --     → cur-entity stays set (entity owns all subsequent concepts until new entity or scope clear)
+  --     → set just-saw-concept = true
   --
   -- R9: consecutive mithya words compound into entity name: ball + A → ball-A
+  --     exception: mithya word immediately after a satya concept is a rashi label —
+  --     do not accumulate it into last-label (just-saw-concept flag prevents compounding)
   --
   -- scope cleared by:
   --   vidhi-kaala (solve-for zone starts)
@@ -20,16 +25,18 @@ tantra vibhakti-shashthi
 
   takes graph
 
-  result = scan graph with last-label = "", cur-entity = ""
+  result = scan graph with let last-label be "", let cur-entity be "", let just-saw-concept be false
 
     when edge is vidhi-kaala
       clear last-label
       clear cur-entity
+      set just-saw-concept to false
       emit triple
 
     when edge is viraam and (word is "." or word is "?" or word is "!")
       clear last-label
       clear cur-entity
+      set just-saw-concept to false
       emit triple
 
     when edge is shashthi-vibhakti and obj is shashthi-vibhakti and last-label is not ""
@@ -44,6 +51,28 @@ tantra vibhakti-shashthi
     when edge is satya and cur-entity is not ""
       emit triple
       emit [word, shashthi-vibhakti, cur-entity]
+      -- cur-entity intentionally NOT cleared: entity continues to own subsequent concepts
+      -- (e.g. "ball has velocity v1 of 20 and mass m1 of 5" — ball owns both)
+      set just-saw-concept to true
+
+    when edge is satya and cur-entity is ""
+      -- satya word before has-signal: may be a named entity (e.g. "electron has mass 5")
+      -- set last-label so the shashthi-vibhakti branch can promote it to prathama-vibhakti
+      -- just-saw-concept stays false — this is not yet confirmed as a concept-owner
+      set last-label to word
+      emit triple
+
+    when edge is rashi-bandha
+      -- 'of' signals value assignment: the preceding mithya word is a rashi label, not entity name
+      -- clear last-label so the next mithya word starts fresh (no spurious compounding)
+      clear last-label
+      emit triple
+
+    when edge is mithya and just-saw-concept is true
+      -- mithya word immediately after a concept is a rashi label, not an entity name
+      -- do not accumulate into last-label; next mithya will start fresh
+      set just-saw-concept to false
+      emit triple
 
     when edge is mithya
       set last-label to (cond (gt (string-length last-label) 0)

@@ -1,0 +1,17 @@
+tantra angular-momentum-expr
+
+  -- L = Iω
+  -- forward: given moment-of-inertia, angular-velocity → angular-momentum
+
+  inputs
+    moment-of-inertia  number
+    angular-velocity   number
+
+  let
+
+  value = mul moment-of-inertia angular-velocity
+
+  return
+    value  any
+
+done

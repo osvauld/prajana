@@ -30,9 +30,24 @@ tantra emit-triples
                           (and (neq role "intent")
                                (and (neq role "boundary")
                                     (and (neq role "possession")
-                                         (neq layer "mantra")))))
+                                         (and (neq role "rashi-bandha")
+                                              (neq layer "mantra"))))))
 
     is-unit = exists (word-node word)
+
+    -- rashi-label guard: a word that resolves to a kosha unit node is treated
+    -- as a rashi instance label (mithya) when:
+    --   1. there IS an active concept (the label follows a concept)
+    --   2. there is NO pending number (not in "5 m/s" position — that IS a unit)
+    --   3. the word text differs from the node name it resolved to
+    --      — i.e. it is an abbreviation/alias, not the concept word itself
+    -- examples:
+    --   "mass m of 5"      → word=m, node=metre, word≠node → label (mithya)
+    --   "velocity is 5 m/s"→ pending=5. → m is a unit (satya)
+    --   "charge q of 1.6"  → word=q, node=charge(?), word≠node → label (mithya)
+    --   "find kinetic energy mass 5" → word=mass, node=mass, word=node → concept (satya)
+    --   "find mass velocity 10" → word=velocity, node=velocity, word=node → concept (satya)
+    is-rashi-label = and has-act (and (not has-pend) (and is-concept (neq word (to-string node))))
 
     triples = cond
       (eq role "intent")
@@ -50,6 +65,10 @@ tantra emit-triples
       (and has-pend is-concept is-unit has-act)
         [[(to-string active), "sankhya", pending],
          [(to-string active), "matra",  (to-string node)]]
+      -- rashi label: concept node that appears in label position → emit mithya
+      -- rashi-viveka will later bind it as a vishesa instance of the active concept
+      is-rashi-label
+        [[word, "mithya", word]]
       is-concept
         [[(to-string node), "satya", (to-string node)]]
       otherwise

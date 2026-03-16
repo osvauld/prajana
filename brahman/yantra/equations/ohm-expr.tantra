@@ -1,0 +1,17 @@
+tantra ohm-expr
+
+  -- V = IR (Ohm's law)
+  -- forward: given current, resistance → voltage
+
+  inputs
+    current     number
+    resistance  number
+
+  let
+
+  value = mul current resistance
+
+  return
+    value  any
+
+done

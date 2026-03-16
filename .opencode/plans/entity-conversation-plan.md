@@ -21,7 +21,7 @@ They are the same graph pipeline applied to different kosha nodes.
 
 ```
 "what is kinetic energy given mass 5 and velocity 10?"
-→ artha-viveka → sphoTa → match mantra → execute-chain → anuvada → answer
+→ artha-viveka → sphoTa → match mantra → eval-mantra → anuvada → answer
 
 "all objects with mass experience gravity"
 → artha-viveka → sphoTa → match niyama → no compute → anuvada → acknowledgement
@@ -31,11 +31,16 @@ They are the same graph pipeline applied to different kosha nodes.
 ```
 
 The difference is what the kosha contains and what the graph walk produces.
-- Physics: kosha has mantras with krama chains → compute path
+- Physics: kosha has mantras with equation tantras → eval-mantra (compute/inverse/clarify)
 - Logic: kosha has niyama nodes (laws, implications) → inference path
 - Conversation: kosha has state nodes, person nodes, relational predicates → assertion path
 
 One pipeline. Three kosha domains.
+
+**The question graph IS the bindings.** `eval-mantra` does not receive a flat
+`[[concept, val], ...]` list — it receives the refined question graph. Entity-scoped
+nodes (`mass-of-ball-A`, `velocity-of-ball-A`) are the actual inputs to equation
+tantras, not abstract concept names or pre-resolved numbers.
 
 ---
 
@@ -96,12 +101,21 @@ right order. None of them execute because `word-node` returns None for every
 | Feature | Needed for | Status |
 |---|---|---|
 | Person nodes (I, you, we, they) | conversation, 1st/2nd person entities | not in bhasha |
+| `manusha` kosha node | `I` resolves to a typed entity, not just a purusa marker | not in kosha |
+| `nam` / `brahman-self` kosha node | graph speaks as uttama-purusa, `you` resolves to graph | not in kosha |
+| Greeting word key (`hi`, `hello`) | `hi` → `avahana` node (already in sangati at 0.902) | word key missing |
+| Copula word key (`am`, `is`, `are`) | `am` → `abheda` / `pratijnaa` edge (already in sangati) | word key missing |
+| `namakarana` word key | `"I am Abraham"` → `[abraham, namakarana, speaker]` (node exists) | word key missing |
 | Quantifier nodes (all, every, some, no) | logic, general claims | not in bhasha |
 | Demonstrative nodes (this, that, these, those) | deixis, back-reference | not in bhasha |
 | Interaction signals (hits, pushes, transfers) | multi-entity physics | not in bhasha |
-| The graph's self-node | graph as conversational participant | not in kosha |
 | State predicates (tired, at-rest, moving) | conversation + physics state | partial |
 | `sarva-vishesa` (universal quantifier) | "all X have Y" | not in sangati |
+
+**Key insight**: for greeting + self-declaration, the Sanskrit structure is entirely already in the
+kosha/sangati. `avahana` (0.902), `namakarana`, `pratijnaa` (0.905), `abheda`, `manusha`, `nam`
+all exist as nodes. The only gaps are the English **word keys** pointing into them and the
+`brahman-self` self-node. No new structural concepts needed.
 
 ### The root cause blocking everything: `word-node` returning None
 
@@ -170,6 +184,34 @@ walk → no compute → asprista-aware anuvada:
   "I hear that you are tired."  ← madhyama-purusa response, vartamana
 ```
 
+### Greeting + direct self-declaration
+```
+"hi i am abraham"
+
+sphoTa:
+  [session-1,  vishesa,            avahana]    ← "hi" → avahana node (already in sangati)
+  [speaker,    uttama-purusa,      manusha]    ← "I" → uttama-purusa entity of type manusha
+  [speaker,    prathama-vibhakti,  object]     ← nominative subject
+  [speaker,    vishesa,            axiom]      ← speaker-stated = self-grounding
+  [speaker,    namakarana,         abraham]    ← "am abraham" → copula → abheda → namakarana
+  [abraham,    vishesa,            axiom]      ← first axiom of this session
+
+routing:
+  avahana detected + namakarana asserted → greeting-acknowledgement path
+  no proposition → no compute → no mantra match
+
+anuvada (uttama-purusa, vartamana):
+  "Abraham. Received."
+  ← session now has abraham as named anchor for all subsequent I/me/my
+```
+
+This is structurally identical to `"I am tired"` — same pipeline, same routing.
+The predicate is a **namakarana** (name) instead of a state. Nothing new to compute.
+The session mechanism holds `abraham` as the speaker node for all subsequent turns.
+
+Note: all concepts used are already in the kosha/sangati — `avahana`, `namakarana`,
+`pratijnaa`, `abheda`, `manusha`, `nam`. Only the word keys (`hi`, `am`) are missing.
+
 ### Conversation — question to the graph
 ```
 "what do you know about kinetic energy?"
@@ -185,6 +227,35 @@ walk → walk kosha for kinetic-energy → anuvada as uttama-purusa:
 
 The **only** difference between these is what the kosha returns during graph walk.
 The pipeline structure is identical.
+
+### Per-entity firing
+```
+"what is the KE of ball-A and ball-B?"
+
+graph:
+  [ball-A, prathama-vibhakti, object]
+  [mass-of-ball-A, sankhya, 5.]   [velocity-of-ball-A, sankhya, 10.]
+  [ball-B, prathama-vibhakti, object]
+  [mass-of-ball-B, sankhya, 8.]   [velocity-of-ball-B, sankhya, 20.]
+
+match-mantra fires per entity:
+  ke-mantra + ball-A → eval-mantra → KE-of-ball-A = 250J
+  ke-mantra + ball-B → eval-mantra → KE-of-ball-B = 1600J
+```
+
+### Clarification — incomplete or ambiguous context
+```
+"what is the kinetic energy?"  (no entity given)
+
+eval-mantra: janya mass-of-? and velocity-of-? not found in graph
+→ clarification path → generate-question tantra
+→ new sphoTa: [mass, vishesa, proposition] targeting missing slot
+→ anuvada: "What is the mass of the object?"
+→ session absorbs answer → slot fills → original computation completes
+```
+
+`eval-mantra` has three paths: forward (all janya bound), inverse (one janya
+is proposition + phala bound), clarification (incomplete or ambiguous).
 
 ---
 
@@ -293,10 +364,11 @@ different node. Two options:
 Option A is simpler. Add to brahman/bhasha/english/grammar/prashna.om or create a
 thin `what.om` node with `role:intent`.
 
-### Phase 2 — Person nodes (conversation unblocked)
+### Phase 2 — Person nodes + manusha + greeting word keys
 
-Create bhasha nodes for first/second/third person pronouns and conversational entities.
-These are the minimum for conversation to work:
+Create bhasha nodes for first/second/third person pronouns. Also add the three
+word-key gaps that unblock greeting + self-declaration — all concepts already exist
+in the kosha/sangati, only the English word keys are missing.
 
 ```
 brahman/bhasha/english/grammar/pronoun-i.om
@@ -318,18 +390,47 @@ Each must carry `role:entity` (not `role:pronoun`) so that `emit-triples` places
 them in the satya layer with prathama-vibhakti. Pronouns that are back-references
 (`its`, `their`) carry `role:pronoun` and go through naama-pratibodha resolution.
 
-### Phase 3 — Graph self-node
+**`manusha` kosha node** — so `I` (uttama-purusa) resolves to a typed entity:
+```
+brahman/kosha/jiva/manusha.om
+  word:person,human,manusha  role:entity
+  "uttama-purusa-swarupa"    ← manusha IS the uttama-purusa entity class
+  "ahamkara-yukta"           ← manusha carries ahamkara (already in sangati)
+  "swa-yukta jiva-swarupa"   ← swa and jiva already in sangati at high satya
+```
+`pronoun-i` → resolves entity type to `manusha`. All subsequent `I/me/my` in this
+session resolve to the same speaker node via naama-pratibodha.
+
+**Greeting word key** — `hi` → `avahana` (already in sangati):
+```
+brahman/bhasha/english/grammar/greeting.om
+  word:hi,hello,hey,greetings  role:avahana
+```
+`avahana` is already in the sangati (0.902). Only the word key is missing.
+The anuvada of `avahana` received → acknowledgement (no compute, no mantra).
+
+**Copula word key** — `am/is/are` → `abheda` / `pratijnaa` (already in sangati):
+```
+brahman/bhasha/english/grammar/copula.om
+  word:am,is,are,was,were  role:copula
+```
+`abheda` and `pratijnaa` (0.905) are already in the sangati. The copula triggers
+`namakarana` edge when the predicate is a proper noun: `[speaker, namakarana, abraham]`.
+
+### Phase 3 — Graph self-node (nam)
 
 ```
 brahman/kosha/brahman-self.om
   word:vyakarana,brahman  role:entity  purusa:uttama
   "uttama-purusa-sthita madhyama-purusa-yukta"
   "viveka-swarupa artha-viveka-kriya"
+  "nam-swarupa"   ← nam: inclusive-we, the proof graph itself (already in sangati)
 ```
 
 When `you` is used in a question directed at the system, avrti resolves `you` →
-naama-pratibodha → brahman-self. The response is then generated as madhyama
-being addressed, and the answer is produced as uttama-purusa.
+naama-pratibodha → brahman-self. The response is generated as madhyama being
+addressed, answered as uttama-purusa. `nam` (already in sangati at 0.915) is the
+philosophical ground — `brahman-self` is its kosha manifestation with word keys.
 
 ### Phase 4 — Quantifiers (logic unblocked)
 

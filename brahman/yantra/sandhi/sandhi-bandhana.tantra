@@ -16,7 +16,7 @@ tantra sandhi-bandhana
   result = cond (renames is empty)
     graph
   otherwise
-    (scan graph with cur-base = "", cur-compound = ""
+    (scan graph with let cur-base be "", let cur-compound be ""
 
       when edge is sandhi-rename
         -- consume marker, do not emit

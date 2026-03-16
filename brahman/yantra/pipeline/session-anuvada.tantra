@@ -1,0 +1,65 @@
+tantra session-anuvada
+
+  -- session-aware wrapper around anuvada-ganana.
+  -- owns the parampara: receives prior-graph from the socket layer,
+  -- calls anuvada-ganana on the seeded graph, stores this turn's
+  -- sankhya concepts back into session bindings for the next turn.
+  --
+  -- anuvada-ganana remains pure (no session awareness).
+  -- this tantra is called by the socket only when session_id is present.
+  -- the socket builds prior-graph from entry.se_yantra.bindings and passes it in.
+  --
+  -- pipeline:
+  --   1. build-question-graph on sentence only
+  --   2. avrti-refine on sentence graph (prior-graph must NOT enter avrti)
+  --   3. inject prior-graph AFTER avrti (sandhi-bandhana would corrupt it)
+  --   4. kosha-expand on merged graph
+  --   5. match-mantra / derive-step / execute (same as anuvada-ganana)
+  --   6. remember this turn's sankhya concepts for next turn
+
+  takes
+    sentence    string
+    prior-graph list
+
+  raw-graph = build-question-graph sentence
+  refined   = fixpoint raw-graph avrti-refine
+
+  -- inject prior-turn triples after avrti-refine, before kosha-expand
+  merged = cond (and (exists prior-graph) (gt (length prior-graph) 0))
+    (append prior-graph refined)
+  otherwise
+    refined
+
+  expanded = kosha-expand merged
+  match    = match-mantra expanded
+
+  enriched = cond (gt (length match) 0)
+    expanded
+  otherwise
+    (fixpoint expanded derive-step)
+
+  final-match = cond (gt (length match) 0)
+    match
+  otherwise
+    (match-mantra enriched)
+
+  -- remember this turn's NEW sankhya concepts (from refined only, not prior-graph)
+  -- so the socket can build prior-graph for the next turn
+  this-turn-concepts = from refined
+    where [s, e, o]
+    and e is sankhya
+    collect [s, o]
+  _stored = remember-bindings (map this-turn-concepts (fn p -> bind (nth p 0) (nth p 1)))
+
+  result = cond (gt (length final-match) 0)
+    (let mantra  = nth final-match 0
+     let valpairs = nth final-match 1
+     let value   = execute-chain mantra valpairs
+     let phala   = walk mantra "phala"
+     let label   = cond (gt (length phala) 0) (nth phala 0) otherwise mantra
+     concat label " = " (to-string value))
+  otherwise
+    "no match"
+
+  return result
+done

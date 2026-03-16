@@ -1,0 +1,16 @@
+tantra frequency-expr
+
+  -- f = 1/T
+  -- forward: given period → frequency
+
+  inputs
+    period  number
+
+  let
+
+  value = reciprocal period
+
+  return
+    value  any
+
+done

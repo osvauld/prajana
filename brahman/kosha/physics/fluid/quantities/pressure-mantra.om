@@ -1,16 +1,13 @@
 mantra pressure-mantra
 
   "fluid-varga-vishesa"
+  "physics-mantra-varga"
   "pressure-swarupa"
-
-  -- P = F / A: force per unit area
-  "division-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "pressure-phala"
+  "pressure-expr-kriya"
   "force-janya"
   "area-janya"
 
-  shabda name:pressure krama-lhs-unit:pascal degree:1 krama-lhs:pressure krama-rhs:force,area
+  shabda name:pressure unit:pascal
 
 done

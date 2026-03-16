@@ -233,18 +233,11 @@ def test_avrti_second_pass_same_length(vy):
 # ── entity ownership via "has" (not yet built) ────────────────────────────────
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="entity ownership via 'has' not built: avrti R8/R9 rules missing from "
-    "vibhakti-shashthi.tantra; entity-label compounding (ball+A → ball-A) also missing",
-)
 def test_avrti_entity_owns_property_via_has(vy):
-    g = [
-        ["ball", "mithya", "ball"],
-        ["has", "mithya", "has"],
-        ["mass", "satya", "mass"],
-    ]
-    result = vy.eval(f"fixpoint {tl(g)} avrti-refine")
+    # sandhi-viveka (inside build-question-graph) promotes "has" →
+    # [has, shashthi-vibhakti, shashthi-vibhakti] before avrti-refine runs.
+    # vibhakti-shashthi then recognises the signal and establishes ownership.
+    result = vy.eval('fixpoint (build-question-graph "ball has mass") avrti-refine')
     assert vy.has_triple(result, subj="ball", pred="prathama-vibhakti"), (
         f"ball should get prathama-vibhakti (entity subject)"
     )

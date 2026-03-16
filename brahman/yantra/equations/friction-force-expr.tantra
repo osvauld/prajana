@@ -1,0 +1,17 @@
+tantra friction-force-expr
+
+  -- f = μN
+  -- forward: given coefficient, normal-force → friction-force
+
+  inputs
+    coefficient   number
+    normal-force  number
+
+  let
+
+  value = mul coefficient normal-force
+
+  return
+    value  any
+
+done

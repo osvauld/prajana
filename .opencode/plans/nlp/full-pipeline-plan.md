@@ -1,9 +1,10 @@
 # Full Pipeline Plan — Canonical Reference
 
 **Created**: 2026-03-12
-**Status**: P0–P6c + logic enrichment + OCaml primitives done. P7 next.
+**Updated**: 2026-03-14
+**Status**: P0–P6c + anuvada-ganana working + 273 pytest passing. P8 (chain-implication) is next.
 **Supersedes**: composition-pipeline.md (incorporated here), hollerith.md
-**Regression baseline**: 49/52 (do not break)
+**Regression baseline**: 273 passed / 4 xfailed (pytest). Do not break.
 
 ---
 
@@ -15,6 +16,68 @@
 4. **Bhava prayoga** — all output is impersonal/process-focused ("velocity was squared... kinetic energy is 22.5 joules")
 5. **No fallback paths** — old OCaml paths are removed, not kept as fallbacks. Regression gate enforces this.
 6. **Decomposition is the inverse of composition** — parsing and generation walk the same graph in opposite directions
+
+---
+
+## Current State (2026-03-14)
+
+### What is working (273 pytest passing)
+- `build-question-graph` — sentence → triple graph
+- `fixpoint avrti-refine` — compound resolution, entity ownership, avastha qualification
+- `match-mantra` — single-pass: find mantra whose krama-rhs are all covered by sankhya bindings
+- `execute-chain` — stack machine over krama edges → numeric result
+- `anuvada-ganana.tantra` — BQG → fixpoint → match-mantra → execute-chain → "concept = value"
+- All 24 physics mantras callable. Single-step questions work end-to-end via socket.
+- Session layer: per-session yantra context, turn counting, end-session.
+
+### The critical gap: single-pass match-mantra
+`match-mantra` does one pass. It returns `[]` when a required input is not directly
+provided but is derivable. Example:
+
+  "find kinetic energy given initial velocity 0 acceleration 4 time 10 mass 1200"
+
+  Available: initial-velocity, acceleration, time, mass
+  Needed for KE: mass, velocity  ← velocity not provided
+  velocity-mantra FIRES (u,a,t all available) → velocity = 40
+  Then kinetic-energy-mantra FIRES (mass=1200, velocity=40) → KE = 960000
+
+  Current result: "no match"  ← because single-pass doesn't chain
+
+### The logic/physics unification (discovered 2026-03-14)
+Inspecting the graph directly revealed:
+
+- Every physics mantra has `sthita: implication` — they ARE logical implications
+- `modus-ponens` is a mantra: `inference-swarupa implication-janya` — if premise+implication
+  are both satya, conclusion follows. Physics mantras are all instances of this.
+- `inference` node: swarupa of modus-ponens, substitution, inversion — three forms of inference
+- `nyaya` (sangati): the verification framework. `viveka` (sangati): `aneka-ahara eka-phala`
+  — many inputs, one output through discrimination. This IS the dependency resolver shape.
+- `phala` (consequence) on a mantra = its output. `sthita`/`janya` = its inputs.
+- The dependency graph: walk `implication-sthita` edges from target → find mantra →
+  check `janya` inputs covered → fire or recurse on missing inputs.
+- Logic mantras (modus-ponens, conjunction, negation) follow the same structure.
+  `conjunction` has `eval:and arity:2`. Once they get `krama-lhs/rhs/execute-chain-kriya`,
+  logical questions become answerable the same way physics ones are.
+- The Sanskrit structure IS the reasoning engine. `viveka` discriminates, `nyaya` verifies,
+  `phala` is the result. The tantra just makes this walk explicit.
+
+### What "dependency-path" actually means
+Not a separate graph algorithm. It is `viveka` made executable:
+1. Given solve-for target, find mantras where `phala` = target (walk `implication-sthita`)
+2. For each candidate: check if all `sthita`/`janya` inputs are satya in the question graph
+3. If yes: fire — `execute-chain`, add result as new sankhya binding
+4. If no: recurse — which missing inputs can themselves be derived? (depth-first on janya)
+5. Repeat until target fires or nothing new fires (fixpoint — `nyaya` termination)
+
+This is `chain-implication.tantra` from the P8 plan. It upgrades `anuvada-ganana` from
+single-pass to fixpoint chaining.
+
+### Implications for existing tantras
+- `match-mantra` — stays exactly as is. Correct single-step matcher. Called per iteration.
+- `anuvada-ganana` — upgraded: replace single match-mantra call with fixpoint chaining loop.
+- `avrti-refine`, `kosha-expand` — untouched. Run before chaining.
+- Logic mantras — currently no `krama-lhs/rhs/execute-chain-kriya`. Add these to make
+  logical questions answerable. Separate step after chain-implication works for physics.
 
 ---
 
@@ -254,22 +317,50 @@ done
 
 ---
 
-### P8 — Composition Pipeline
+### P8 — Chain Implication (NEXT — immediate)
 
-**Depends on**: P7 (tokeniser), P6b (grammar nodes done), P6c (implication edges done).
+**Does not depend on P7.** Works on the existing BQG → avrti graph. No new OCaml needed.
+All primitives required are already available: `walk`, `walk-in`, `filter`, `reduce`,
+`fixpoint`, `member`, `shabda`, `execute-chain`, `call-tantra`.
+
+**The critical insight**: `match-mantra` is correct for single-step. The gap is chaining.
+`anuvada-ganana` needs to run match-mantra in a fixpoint loop — fire what fires, accumulate
+results as new sankhya bindings, repeat until the target fires or nothing new fires.
 
 **New tantras**:
 
 | Tantra | Purpose |
 |---|---|
+| `chain-implication.tantra` | fixpoint loop: fire ready mantras, accumulate, repeat until target |
+| `match-formula.tantra` | implication walk from target → find + rank candidates (replaces match-mantra eventually) |
+
+**Upgrade**: `anuvada-ganana.tantra` — replace single `match-mantra` call with `chain-implication`.
+
+**Test plan** (xfail first):
+1. `"find kinetic energy given initial velocity 0 acceleration 4 time 10 mass 1200"` → `"energy = 960000"`
+   (requires: velocity-mantra fires first, then kinetic-energy-mantra)
+2. `"find force given initial velocity 5 final velocity 20 time 3 mass 800"` → `"force = ..."`
+   (requires: acceleration-mantra fires first via v,u,t, then newton fires via mass,acceleration)
+3. Multi-entity paragraph → each entity scoped → each solve-for dispatched correctly
+
+**Implementation order**:
+1. Write xfail test for multi-step chaining
+2. Write `chain-implication.tantra`
+3. Upgrade `anuvada-ganana.tantra` to use it
+4. Promote xfail tests as they pass
+5. Write xfail test for multi-entity scoping
+6. Add entity scoping to `anuvada-ganana.tantra`
+
+**Old P8 composition pipeline tantras** (still needed, now lower priority):
+
+| Tantra | Purpose |
+|---|---|
 | `grade-sentences.tantra` | paragraph → [sentence, grade, tokens] |
 | `decompose-question.tantra` | tokens → {intent, target, anchors, bindings} |
-| `match-formula.tantra` | implication walk → formula candidates + coverage check |
 | `compose-response.tantra` | formula + result + grammar → full sentence |
 | `narrate-krama.tantra` | mantra → computation narrative in bhava prayoga |
 | `compose-trace.tantra` | full thinking trace (tokens + formula + krama + result) |
 | `invert-mantra.tantra` | pratipaksha walk → inverse formula |
-| `chain-implication.tantra` | multi-step inference chain |
 
 **Decompose-question key logic**:
 - `word-node word` for each token → if found, classify by node type (bhasha → grammar/intent, kosha → concept)

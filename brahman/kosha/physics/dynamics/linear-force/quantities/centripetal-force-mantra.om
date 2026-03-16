@@ -1,19 +1,14 @@
 mantra centripetal-force-mantra
 
   "linear-force-varga-vishesa"
+  "physics-mantra-varga"
   "centripetal-force-swarupa"
-
-  -- F = mv²/r: square velocity, multiply mass, divide by radius
-  "square-krama"
-  "multiplication-krama"
-  "division-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "centripetal-force-phala"
+  "centripetal-force-expr-kriya"
   "mass-janya"
   "velocity-janya"
   "radius-janya"
 
-  shabda name:centripetal-force degree:2 krama-lhs:centripetal-force krama-lhs-unit:newton krama-rhs:mass,velocity,radius
+  shabda name:centripetal-force unit:newton
 
 done

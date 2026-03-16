@@ -1,0 +1,37 @@
+tantra execute-chain
+
+  -- dispatch to a mantra's equation tantra.
+  -- resolves janya concepts to numeric values, then calls the equation tantra
+  -- identified by the mantra's kriya edge (e.g. ke-expr-kriya -> ke-expr).
+  --
+  -- takes:
+  --   mantra   string   -- the mantra node name (e.g. "kinetic-energy-mantra")
+  --   bindings list     -- [[concept, val], ...] from the question graph
+
+  inputs
+    mantra    string
+    bindings  list
+
+  let
+
+  -- resolve each janya concept to a numeric value
+  janya = walk mantra "janya"
+
+  args = reduce janya [] (fn acc concept ->
+    let ck = shabda concept "constants-key"
+    let v  = cond (gt (string-length ck) 0)
+      (nth (split-numeric (shabda "physics-constants" ck)) 0)
+      otherwise
+        (reduce bindings "" (fn a2 kv ->
+          cond (eq (nth kv 0) concept) (nth kv 1) otherwise a2))
+    append acc [v])
+
+  -- call the equation tantra (the mantra's kriya edge)
+  expr-tantra = nth (walk mantra "kriya") 0
+
+  value = call-tantra expr-tantra args
+
+  return
+    value  any
+
+done

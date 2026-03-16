@@ -1,14 +1,13 @@
 mantra ohm-law
 
   "circuit-varga-vishesa"
+  "physics-mantra-varga"
   "voltage-swarupa current-yukta resistance-yukta"
   "niyama-sthita"
+  "ohm-expr-kriya"
+  "current-janya"
+  "resistance-janya"
 
-  -- V = IR: Ohm's law
-  "multiplication-krama"
-
-  "execute-chain-kriya"
-
-  shabda name:ohm-law krama-lhs-unit:volt degree:1 krama-lhs:voltage krama-rhs:current,resistance
+  shabda name:ohm-law unit:volt
 
 done

@@ -1,16 +1,13 @@
 mantra electric-power-mantra
 
   "circuit-varga-vishesa"
+  "physics-mantra-varga"
   "electric-power-swarupa"
-
-  -- P = VI: multiply voltage by current
-  "multiplication-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "electric-power-phala"
+  "electric-power-expr-kriya"
   "voltage-janya"
   "current-janya"
 
-  shabda name:electric-power krama-lhs-unit:watt degree:1 krama-lhs:power krama-rhs:voltage,current
+  shabda name:electric-power unit:watt
 
 done

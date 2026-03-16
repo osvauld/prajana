@@ -3,7 +3,7 @@ tantra unit-of-concept
   -- find the canonical unit for a concept node.
   -- three paths tried in order:
   --
-  -- 1. swarupa: concept has a mantra as its swarupa — the mantra's krama-lhs-unit
+  -- 1. swarupa: concept has a mantra as its swarupa — the mantra's unit
   --    is the canonical unit.
   --
   -- 2. yukta: unit nodes directly linked to this concept, filtered to matra members.
@@ -18,9 +18,9 @@ tantra unit-of-concept
   -- path 1: swarupa
   swarupa-nodes   = walk-in concept "swarupa"
   swarupa-mantras = filter swarupa-nodes
-                      (fn m -> gt (string-length (shabda m "krama-lhs-unit")) 0)
+                      (fn m -> gt (string-length (shabda m "unit")) 0)
   swarupa-unit    = cond (gt (length swarupa-mantras) 0)
-                      (shabda (nth swarupa-mantras 0) "krama-lhs-unit")
+                      (shabda (nth swarupa-mantras 0) "unit")
                     otherwise _none
 
   -- path 2: yukta
@@ -37,7 +37,7 @@ tantra unit-of-concept
 
   -- path 3: sthita
   sthita-mantras = filter (walk-in concept "sthita")
-                     (fn m -> gt (string-length (shabda m "krama-lhs-unit")) 0)
+                     (fn m -> gt (string-length (shabda m "unit")) 0)
   sthita-unit    = reduce sthita-mantras _none (fn acc m ->
     cond (acc exists) acc
     otherwise

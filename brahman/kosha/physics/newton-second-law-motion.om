@@ -1,13 +1,12 @@
 mantra newton-second-law-motion
 
   "dynamics-varga-vishesa"
+  "physics-mantra-varga"
   "equations-of-motion-abheda mass-sthita acceleration-sthita force-phala"
+  "newton-expr-kriya"
+  "mass-janya"
+  "acceleration-janya"
 
-  -- F = ma
-  "multiplication-krama"
-
-  "execute-chain-kriya"
-
-  shabda newton-second-law-motion / F-equals-ma-force-is-mass-times-acceleration degree:1 krama-lhs:force krama-rhs:mass,acceleration
+  shabda name:newton-second-law-motion newton-second-law-motion / F-equals-ma-force-is-mass-times-acceleration unit:newton
 
 done

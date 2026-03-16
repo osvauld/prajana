@@ -1,0 +1,53 @@
+tantra rashi-anuvada
+
+  -- P8b.6 bridge: propagates rashi instance sankhya up to the concept level.
+  --
+  -- After rashi-viveka, the graph contains:
+  --   [v1, vishesa, velocity]    <- instance v1 is a velocity
+  --   [v1, sankhya, 20.]         <- instance v1 has value 20
+  --
+  -- derive-step and match-mantra look for [velocity, sankhya, val] in
+  -- bound-concepts. Without this bridge they find [v1, sankhya, val] only,
+  -- so velocity appears unbound and mantras that need velocity don't fire.
+  --
+  -- This tantra emits [concept, sankhya, val] for every rashi instance that
+  -- has both a [instance, vishesa, concept] and a [instance, sankhya, val].
+  -- Concepts already directly bound are not overwritten.
+
+  takes graph
+
+  -- build map: instance -> concept  (exclude rashi itself as concept)
+  inst-concept = from graph
+    where [inst, e, concept]
+    and e is vishesa
+    and concept is not rashi
+    collect [inst, concept]
+
+  -- build map: instance -> sankhya value
+  inst-val = from graph
+    where [inst, e, val]
+    and e is sankhya
+    collect [inst, val]
+
+  -- concepts already directly bound (guard: don't overwrite)
+  directly-bound = from graph
+    where [s, e, o]
+    and e is sankhya
+    collect s
+
+  -- for each (inst, concept) pair, find the inst's val and emit [concept, sankhya, val]
+  new-triples = reduce inst-concept [] (fn acc [inst, concept] ->
+    let vals = from inst-val
+      where [label, v]
+      and label is inst
+      collect v
+    cond (vals is empty) acc
+    otherwise
+      (cond (member concept directly-bound) acc
+       otherwise
+         (append acc [[concept, sankhya, (nth vals 0)]])))
+
+  result = reduce new-triples graph (fn g t -> append g [t])
+
+  return result
+done

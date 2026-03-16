@@ -232,10 +232,259 @@ let eval_response (expr_str : string) (result_str : string) (elapsed_ms : int) :
     "{\"status\":\"ok\",\"command\":\"eval\",\"expr\":%s,\"result\":%s,\"passed\":%s,\"elapsed_ms\":%d}"
     (je expr_str) (je result_str) (if passed then "true" else "false") elapsed_ms
 
+(* ---- inspect-node: return one node with both outgoing and incoming edges ---- *)
+
+let inspect_node_response (k : proof_graph) (name : string) : string =
+  match Hashtbl.find_opt k.nodes name with
+  | None ->
+    error_response "" "" "" "NOT_FOUND"
+      (Printf.sprintf "node not found: %s" name)
+  | Some n ->
+    (* incoming edges: scan all nodes for edges pointing at `name` *)
+    let in_edges = Hashtbl.fold (fun src node acc ->
+      List.fold_left (fun a e ->
+        if e.target = name then
+          (Printf.sprintf "{\"source\":%s,\"relation\":%s}"
+            (je src) (je (string_of_visheshanam e.relation))) :: a
+        else a
+      ) acc node.edges
+    ) k.nodes [] in
+    let buf = Buffer.create 512 in
+    Buffer.add_string buf "{\"status\":\"ok\",\"command\":\"inspect-node\",\"name\":";
+    Buffer.add_string buf (je name);
+    Buffer.add_string buf ",\"satya\":";
+    Buffer.add_string buf (Printf.sprintf "%.4f" n.satya);
+    Buffer.add_string buf ",\"out_edges\":[";
+    List.iteri (fun i e ->
+      if i > 0 then Buffer.add_char buf ',';
+      Buffer.add_string buf
+        (Printf.sprintf "{\"target\":%s,\"relation\":%s}"
+          (je e.target) (je (string_of_visheshanam e.relation)))
+    ) n.edges;
+    Buffer.add_string buf "],\"in_edges\":[";
+    List.iteri (fun i s ->
+      if i > 0 then Buffer.add_char buf ',';
+      Buffer.add_string buf s
+    ) in_edges;
+    Buffer.add_string buf "]}";
+    Buffer.contents buf
+
+(* ---- list-tantras: enumerate all loaded tantras by name ---- *)
+
+let list_tantras_response (yantra_idx : tantra_index) : string =
+  let names = List.map (fun t -> je t.t_name) !(yantra_idx.all_tantras) in
+  let names_sorted = List.sort String.compare names in
+  Printf.sprintf "{\"status\":\"ok\",\"command\":\"list-tantras\",\"count\":%d,\"tantras\":[%s]}"
+    (List.length names_sorted)
+    (String.concat "," names_sorted)
+
+(* ---- triples-of: all triples involving a node (as subj or obj) ---- *)
+
+let triples_of_response (k : proof_graph) (name : string) : string =
+  (* outgoing: [name, rel, target] for each edge from name *)
+  (* incoming: [source, rel, name] for each edge to name *)
+  let buf = Buffer.create 512 in
+  let triples = ref [] in
+  (match Hashtbl.find_opt k.nodes name with
+   | None -> ()
+   | Some n ->
+     List.iter (fun e ->
+       triples := (Printf.sprintf "[%s,%s,%s]"
+         (je name)
+         (je (string_of_visheshanam e.relation))
+         (je e.target)) :: !triples
+     ) n.edges);
+  Hashtbl.iter (fun src node ->
+    if src <> name then
+      List.iter (fun e ->
+        if e.target = name then
+          triples := (Printf.sprintf "[%s,%s,%s]"
+            (je src)
+            (je (string_of_visheshanam e.relation))
+            (je name)) :: !triples
+      ) node.edges
+  ) k.nodes;
+  Buffer.add_string buf "{\"status\":\"ok\",\"command\":\"triples-of\",\"node\":";
+  Buffer.add_string buf (je name);
+  Buffer.add_string buf ",\"triples\":[";
+  let sorted = List.sort String.compare !triples in
+  List.iteri (fun i s ->
+    if i > 0 then Buffer.add_char buf ',';
+    Buffer.add_string buf s
+  ) sorted;
+  Buffer.add_string buf "]}";
+  Buffer.contents buf
+
+(* ---- pipeline-trace: run avrti-refine stage-by-stage, return graph delta per stage ---- *)
+
+let pipeline_trace_response (k : proof_graph) (yantra_idx : tantra_index)
+    (yantra_session : session) (sentence : string) : string =
+  let stages = [
+    "build-question-graph";
+    "sandhi-kosha";
+    "sandhi-avastha";
+    "sandhi-bandhana";
+    "vibhakti-shashthi";
+    "vishesa-instance";
+    "rashi-viveka";
+    "vishesa-bandhana";
+    "rashi-anuvada";
+    "sankhya-bandha";
+  ] in
+  (* helper: eval one tantra call, passing previous result as input *)
+  let eval_stage stage_name arg_json =
+    (* build expression: stage_name arg  OR  build-question-graph sentence *)
+    let expr = if stage_name = "build-question-graph" then
+      Printf.sprintf "build-question-graph \"%s\"" (String.escaped sentence)
+    else
+      (* arg_json is the JSON repr of previous stage result — eval it inline *)
+      Printf.sprintf "%s %s" stage_name arg_json
+    in
+    let env  = Yantra.new_env () in
+    Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
+    (try
+      let parsed = Yantra.parse_expr_string expr in
+      let result = Yantra.eval k env parsed in
+      Yantra.eval_ctx := None;
+      (Yantra.val_to_json result, result)
+    with exn ->
+      Yantra.eval_ctx := None;
+      let msg = Printf.sprintf "\"error: %s\"" (String.escaped (Printexc.to_string exn)) in
+      (msg, Yantra.VList []))
+  in
+  let buf = Buffer.create 2048 in
+  Buffer.add_string buf "{\"status\":\"ok\",\"command\":\"pipeline-trace\",\"sentence\":";
+  Buffer.add_string buf (je sentence);
+  Buffer.add_string buf ",\"stages\":[";
+  let prev_json = ref "null" in
+  List.iteri (fun i stage ->
+    if i > 0 then Buffer.add_char buf ',';
+    let (result_json, _result_val) = eval_stage stage !prev_json in
+    prev_json := result_json;
+    Buffer.add_string buf "{\"stage\":";
+    Buffer.add_string buf (je stage);
+    Buffer.add_string buf ",\"triples\":";
+    Buffer.add_string buf result_json;
+    Buffer.add_char buf '}'
+  ) stages;
+  Buffer.add_string buf "]}";
+  Buffer.contents buf
+
+(* ---- mantra-status: show all mantras + coverage for a sentence ---- *)
+
+let mantra_status_response (k : proof_graph) (yantra_idx : tantra_index)
+    (yantra_session : session) (sentence : string) : string =
+  (* step 1: build refined graph *)
+  let refined_json =
+    let expr = Printf.sprintf
+      "fixpoint (build-question-graph \"%s\") avrti-refine"
+      (String.escaped sentence) in
+    let env = Yantra.new_env () in
+    Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
+    (try
+      let parsed = Yantra.parse_expr_string expr in
+      let result = Yantra.eval k env parsed in
+      Yantra.eval_ctx := None;
+      Yantra.val_to_json result
+    with exn ->
+      Yantra.eval_ctx := None;
+      Printf.eprintf "[mantra-status] refine error: %s\n%!" (Printexc.to_string exn);
+      "[]")
+  in
+  (* step 2: extract bound-concepts from refined graph via debug-bound-concepts tantra *)
+  let bound_json =
+    let expr = Printf.sprintf "debug-bound-concepts %s" refined_json in
+    let env = Yantra.new_env () in
+    Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
+    (try
+      let parsed = Yantra.parse_expr_string expr in
+      let result = Yantra.eval k env parsed in
+      Yantra.eval_ctx := None;
+      Yantra.val_to_json result
+    with _exn ->
+      Yantra.eval_ctx := None;
+      "[]")
+  in
+  (* step 3: for each mantra, check coverage via mantra-coverage tantra *)
+  let mantras_json =
+    let expr = Printf.sprintf "mantra-coverage %s" refined_json in
+    let env = Yantra.new_env () in
+    Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
+    (try
+      let parsed = Yantra.parse_expr_string expr in
+      let result = Yantra.eval k env parsed in
+      Yantra.eval_ctx := None;
+      Yantra.val_to_json result
+    with _exn ->
+      Yantra.eval_ctx := None;
+      "[]")
+  in
+  Printf.sprintf
+    "{\"status\":\"ok\",\"command\":\"mantra-status\",\"sentence\":%s,\
+\"refined_graph\":%s,\"bound_concepts\":%s,\"mantras\":%s}"
+    (je sentence) refined_json bound_json mantras_json
+
+(* ---- attach: incrementally add one .om or .tantra file to the live graph ---- *)
+
+let attach_file (k : proof_graph) (yantra_idx : tantra_index) (path : string) : string =
+  let ext = Filename.extension path in
+  match ext with
+  | ".tantra" ->
+    (match Yantra_tantra_file.parse_tantra_file path with
+     | None ->
+       error_response "" "" "" "ATTACH_ERROR"
+         (Printf.sprintf "could not parse tantra file: %s" path)
+     | Some t ->
+       Yantra_index.register_tantra ~graph:k yantra_idx t;
+       Printf.printf "[attach] tantra: %s\n%!" t.t_name;
+       Printf.sprintf "{\"status\":\"ok\",\"command\":\"attach\",\"kind\":\"tantra\",\
+\"name\":%s,\"path\":%s}" (je t.t_name) (je path))
+  | ".om" ->
+    (* derive known names from the live graph — no disk re-scan needed *)
+    let known_names = Hashtbl.fold (fun name _ acc -> name :: acc) k.nodes [] in
+    (match Om_parser.parse_file known_names path with
+     | None ->
+       error_response "" "" "" "ATTACH_ERROR"
+         (Printf.sprintf "could not parse om file: %s" path)
+     | Some n ->
+       ignore (Proof_graph.join k n);
+       Proof_graph.init_satya k;
+       Proof_graph.materialize_csr k;
+       Printf.printf "[attach] om: %s\n%!" n.name;
+       Printf.sprintf "{\"status\":\"ok\",\"command\":\"attach\",\"kind\":\"om\",\
+\"name\":%s,\"path\":%s}" (je n.name) (je path))
+  | _ ->
+    error_response "" "" "" "ATTACH_ERROR"
+      (Printf.sprintf "unsupported file type '%s' — expected .om or .tantra" ext)
+
+(* ---- reload-all: re-read all tantra files from disk into the live index ---- *)
+
+let reload_tantras (k : proof_graph) (yantra_idx : tantra_index) (dirs : string list) : string =
+  (* clear all tantra index tables *)
+  Hashtbl.clear yantra_idx.by_name;
+  Hashtbl.clear yantra_idx.by_output;
+  Hashtbl.clear yantra_idx.by_input;
+  Hashtbl.clear yantra_idx.by_output;
+  Hashtbl.clear yantra_idx.constants;
+  Hashtbl.clear yantra_idx.conversions;
+  Hashtbl.clear yantra_idx.word_index;
+  yantra_idx.all_tantras := [];
+  (* re-scan arities and re-register all tantras *)
+  let tantra_dirs = Yantra_index.collect_tantra_dirs dirs in
+  Yantra_index.pre_scan_arities tantra_dirs;
+  List.iter (fun dir ->
+    Yantra_index.load_tantra_dir ~graph:k yantra_idx dir
+  ) tantra_dirs;
+  (* rebuild word index from the live graph — needed for lookup-word *)
+  Yantra_index.build_word_index k yantra_idx;
+  let n = List.length !(yantra_idx.all_tantras) in
+  Printf.printf "[reload-all] %d tantras loaded from %d dirs\n%!" n (List.length tantra_dirs);
+  Printf.sprintf "{\"status\":\"ok\",\"command\":\"reload-all\",\"tantras_loaded\":%d}" n
+
 (* ---- handle one client connection ---- *)
 
 let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session : session)
-    (ic : in_channel) (oc : out_channel) : unit =
+    (dirs : string list) (ic : in_channel) (oc : out_channel) : unit =
   (try
     while true do
       let line = input_line ic in
@@ -282,6 +531,75 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                with exn ->
                  Yantra.eval_ctx := None;
                  error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn))
+          | Some "inspect-node" ->
+            (* return one node with outgoing + incoming edges.
+               request: {"command": "inspect-node", "name": "velocity"}
+               response: {"status":"ok","name":"velocity","satya":...,"out_edges":[...],"in_edges":[...]} *)
+            (match json_string_field line "name" with
+             | None ->
+               error_response "" "" "" "INVALID_REQUEST" "missing required field: name"
+             | Some name ->
+               (try inspect_node_response k name
+                with exn ->
+                  error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn)))
+          | Some "list-tantras" ->
+            (* return names of all loaded tantras.
+               request: {"command": "list-tantras"}
+               response: {"status":"ok","count":N,"tantras":["avrti-refine",...]} *)
+            (try list_tantras_response yantra_idx
+             with exn ->
+               error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn))
+          | Some "triples-of" ->
+            (* return all triples where node appears as subject or object.
+               request: {"command": "triples-of", "node": "velocity"}
+               response: {"status":"ok","node":"velocity","triples":[[s,p,o],...]} *)
+            (match json_string_field line "node" with
+             | None ->
+               error_response "" "" "" "INVALID_REQUEST" "missing required field: node"
+             | Some name ->
+               (try triples_of_response k name
+                with exn ->
+                  error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn)))
+          | Some "pipeline-trace" ->
+            (* run avrti-refine stage-by-stage; return graph after each stage.
+               request: {"command": "pipeline-trace", "sentence": "ball has mass m1 of 5"}
+               response: {"status":"ok","stages":[{"stage":"sandhi-kosha","triples":[...]}, ...]} *)
+            (match json_string_field line "sentence" with
+             | None ->
+               error_response "" "" "" "INVALID_REQUEST" "missing required field: sentence"
+             | Some sentence ->
+               (try pipeline_trace_response k yantra_idx yantra_session sentence
+                with exn ->
+                  error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn)))
+          | Some "mantra-status" ->
+            (* show all mantras with janya coverage for a sentence.
+               request: {"command": "mantra-status", "sentence": "ball has mass m1 of 5 and velocity v1 of 20"}
+               response: {"status":"ok","refined_graph":[...],"bound_concepts":[...],"mantras":[...]} *)
+            (match json_string_field line "sentence" with
+             | None ->
+               error_response "" "" "" "INVALID_REQUEST" "missing required field: sentence"
+             | Some sentence ->
+               (try mantra_status_response k yantra_idx yantra_session sentence
+                with exn ->
+                  error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn)))
+          | Some "attach" ->
+            (* incrementally load one .om or .tantra file into the live graph.
+               request: {"command": "attach", "path": "/abs/path/to/file.tantra"}
+               response: {"status":"ok","command":"attach","kind":"tantra"|"om","name":...} *)
+            (match json_string_field line "path" with
+             | None ->
+               error_response "" "" "" "INVALID_REQUEST" "missing required field: path"
+             | Some path ->
+               (try attach_file k yantra_idx path
+                with exn ->
+                  error_response "" "" "" "ATTACH_ERROR" (Printexc.to_string exn)))
+          | Some "reload-all" ->
+            (* re-read all tantra files from disk — picks up edits to existing tantras.
+               request: {"command": "reload-all"}
+               response: {"status":"ok","command":"reload-all","tantras_loaded":N} *)
+            (try reload_tantras k yantra_idx dirs
+             with exn ->
+               error_response "" "" "" "RELOAD_ERROR" (Printexc.to_string exn))
           | Some "end-session" ->
             (* explicit session teardown — clears session state from store *)
             let ses_id = Option.value ~default:"" (json_string_field line "session_id") in
@@ -294,7 +612,7 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
             let question   = json_string_field line "question" in
             let max_passes = json_int_field line "max_passes" in
             (* resolve per-session yantra context when session_id is present *)
-            let _active_session =
+            let (_active_session, _prior_graph, _has_session) =
               if ses_id <> "" then
                 let entry = get_or_create_session ses_id in
                 entry.se_turn    <- entry.se_turn + 1;
@@ -303,8 +621,13 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                 | 1 -> Printf.printf "[session %s / %s]\n%!" ses_id entry.se_turn_id
                 | n -> Printf.printf "[session %s / %s ← parampara: prashna-%d]\n%!"
                          ses_id entry.se_turn_id (n - 1));
-                entry.se_yantra
-              else yantra_session
+                (* build prior_graph from session bindings accumulated by session-anuvada *)
+                let prior = List.map (fun b ->
+                  (b.Yantra_types.b_name, "sankhya",
+                   string_of_float b.Yantra_types.b_value)
+                ) entry.se_yantra.Yantra_types.bindings in
+                (entry.se_yantra, prior, true)
+              else (yantra_session, [], false)
             in
             (match question with
               | None ->
@@ -316,14 +639,20 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
               | Some q ->
                 (try
                   ignore max_passes;
-                  (match Yantra.run_anuvada_ganana k yantra_idx _active_session q with
+                  let run_result =
+                    if _has_session then
+                      Yantra.run_session_anuvada k yantra_idx _active_session _prior_graph q
+                    else
+                      Yantra.run_anuvada_ganana k yantra_idx _active_session q
+                  in
+                  (match run_result with
                    | Some r ->
                      if String.length r.Yantra.yr_raw_output > 0 then
                        Printf.printf "[socket] %s\n  %s\n%!" q r.Yantra.yr_raw_output;
                      ok_response req_id ses_id trn_id r.Yantra.yr_raw_output
                    | None ->
                      error_response req_id ses_id trn_id
-                       "ENGINE_ERROR" "anuvada-ganana tantra not loaded")
+                       "ENGINE_ERROR" "session-anuvada or anuvada-ganana tantra not loaded")
                 with exn ->
                   error_response req_id ses_id trn_id
                     "ENGINE_ERROR" (Printexc.to_string exn)))
@@ -338,7 +667,7 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
 (* ---- main server loop ---- *)
 
 let serve (k : proof_graph) (yantra_idx : tantra_index) (yantra_session : session)
-    (socket_path : string) : unit =
+    (dirs : string list) (socket_path : string) : unit =
   (* remove stale socket *)
   (try Unix.unlink socket_path with Unix.Unix_error _ -> ());
   let sock = Unix.socket Unix.PF_UNIX Unix.SOCK_STREAM 0 in
@@ -350,7 +679,7 @@ let serve (k : proof_graph) (yantra_idx : tantra_index) (yantra_session : sessio
     let (client, _) = Unix.accept sock in
     let ic = Unix.in_channel_of_descr client in
     let oc = Unix.out_channel_of_descr client in
-    (try handle_client k yantra_idx yantra_session ic oc
+    (try handle_client k yantra_idx yantra_session dirs ic oc
      with exn ->
        Printf.eprintf "client error: %s\n%!" (Printexc.to_string exn));
     (try Unix.close client with Unix.Unix_error _ -> ())

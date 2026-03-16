@@ -26,6 +26,33 @@ Usage in tests:
 
         # session questions
         answer = vy.ask("what is force", session_id="s1")
+
+        # attach a new tantra or .om file without restarting the server
+        vy.attach("/abs/path/brahman/yantra/vishesa/rashi-anuvada.tantra")
+
+        # --- debug helpers ---
+
+        # inspect a single node (outgoing + incoming edges)
+        node = vy.inspect("velocity")
+        # node == {"name": "velocity", "satya": 0.9, "out_edges": [...], "in_edges": [...]}
+
+        # list all loaded tantra names
+        names = vy.list_tantras()   # ["avrti-refine", "rashi-viveka", ...]
+
+        # all triples touching a node (as subj or obj)
+        triples = vy.triples_of("velocity")   # [["velocity","sankhya","20."], ...]
+
+        # run avrti-refine stage-by-stage and see graph after each step
+        trace = vy.pipeline_trace("ball has mass m1 of 5 and velocity v1 of 20")
+        # trace == [{"stage": "sandhi-kosha", "triples": [...]}, ...]
+
+        # show mantra coverage: which mantras fire and why
+        status = vy.mantra_status("ball has mass m1 of 5 and velocity v1 of 20")
+        # status["bound_concepts"] == [["mass","5."],["velocity","20."]]  (after bridge)
+        # status["mantras"]        == [["kinetic-energy-mantra", True, [...], []], ...]
+
+        # bound-concepts shortcut (just the [concept, value] pairs from a graph)
+        bc = vy.bound_concepts(g)   # [["mass","5."],["velocity","20."]]
 """
 
 import json
@@ -155,6 +182,201 @@ class Client:
             except Exception:
                 pass
             self._sock = None
+
+    def reload_all(self) -> dict:
+        """Re-read all tantra files from disk into the live server index.
+
+        Use this after editing an existing tantra to pick up the changes
+        without restarting the server.  All tantra dirs from the original
+        startup are rescanned; the index is fully rebuilt in place.
+
+        Returns the parsed response dict with key:
+            tantras_loaded — count of tantras now registered
+
+        Example:
+            # edit brahman/yantra/vibhakti/vibhakti-shashthi.tantra
+            vy.reload_all()   # server picks up the change immediately
+        """
+        resp = self._send_with_retry({"command": "reload-all"})
+        if resp.get("status") == "error":
+            err = resp.get("error", {})
+            raise VyakaranaError(
+                err.get("code", "UNKNOWN"),
+                err.get("message", repr(resp)),
+            )
+        assert resp.get("status") == "ok", f"unexpected status in: {resp}"
+        return resp
+
+    def inspect(self, name: str) -> dict:
+        """Return one kosha node with both outgoing and incoming edges.
+
+        Replaces the pattern of calling walk() + walk_in() separately.
+        Returns a dict with keys: name, satya, out_edges, in_edges.
+
+        Each edge is {"target": str, "relation": str} (out_edges) or
+        {"source": str, "relation": str} (in_edges).
+
+        Raises VyakaranaError if the node is not found.
+
+            node = vy.inspect("velocity")
+            # {"name": "velocity", "satya": 0.9,
+            #  "out_edges": [{"target": "displacement", "relation": "kramanusara"}],
+            #  "in_edges":  [{"source": "v1", "relation": "vishesa"}]}
+        """
+        resp = self._send_with_retry({"command": "inspect-node", "name": name})
+        if resp.get("status") == "error":
+            err = resp.get("error", {})
+            raise VyakaranaError(
+                err.get("code", "UNKNOWN"), err.get("message", repr(resp))
+            )
+        assert resp.get("status") == "ok", f"unexpected status: {resp}"
+        return resp
+
+    def list_tantras(self) -> list[str]:
+        """Return the names of all currently loaded tantras (sorted).
+
+        Use this to confirm that attach() or reload_all() registered a tantra.
+
+            names = vy.list_tantras()
+            assert "rashi-anuvada" in names
+        """
+        resp = self._send_with_retry({"command": "list-tantras"})
+        if resp.get("status") == "error":
+            err = resp.get("error", {})
+            raise VyakaranaError(
+                err.get("code", "UNKNOWN"), err.get("message", repr(resp))
+            )
+        assert resp.get("status") == "ok", f"unexpected status: {resp}"
+        return resp.get("tantras", [])
+
+    def triples_of(self, node: str) -> list[list]:
+        """Return all triples where `node` appears as subject or object.
+
+        More convenient than separate walk() + walk_in() calls when you want
+        everything touching a node at once.
+
+            ts = vy.triples_of("velocity")
+            # [["velocity","sankhya","20."], ["v1","vishesa","velocity"], ...]
+        """
+        resp = self._send_with_retry({"command": "triples-of", "node": node})
+        if resp.get("status") == "error":
+            err = resp.get("error", {})
+            raise VyakaranaError(
+                err.get("code", "UNKNOWN"), err.get("message", repr(resp))
+            )
+        assert resp.get("status") == "ok", f"unexpected status: {resp}"
+        return resp.get("triples", [])
+
+    def pipeline_trace(self, sentence: str) -> list[dict]:
+        """Run avrti-refine stage by stage and return the graph after each stage.
+
+        Invaluable for debugging which pipeline stage added (or failed to add)
+        a particular triple.
+
+        Returns a list of dicts: [{"stage": str, "triples": list}, ...]
+        Stages in order:
+          build-question-graph → sandhi-kosha → sandhi-avastha →
+          sandhi-bandhana → vibhakti-shashthi → vishesa-instance →
+          rashi-viveka → vishesa-bandhana → sankhya-bandha
+
+            trace = vy.pipeline_trace("ball has mass m1 of 5 and velocity v1 of 20")
+            for step in trace:
+                print(step["stage"], "→", len(step["triples"]), "triples")
+        """
+        resp = self._send_with_retry(
+            {"command": "pipeline-trace", "sentence": sentence}
+        )
+        if resp.get("status") == "error":
+            err = resp.get("error", {})
+            raise VyakaranaError(
+                err.get("code", "UNKNOWN"), err.get("message", repr(resp))
+            )
+        assert resp.get("status") == "ok", f"unexpected status: {resp}"
+        return resp.get("stages", [])
+
+    def mantra_status(self, sentence: str) -> dict:
+        """Show mantra coverage for a sentence — which mantras fire and why.
+
+        Runs the full avrti-refine pipeline on the sentence, then for every
+        loaded mantra reports which janya concepts are bound, which are missing,
+        and whether it would fire.
+
+        Returns a dict with keys:
+            sentence        — echo of the input
+            refined_graph   — list of triples after avrti-refine fixpoint
+            bound_concepts  — list of [concept, value] pairs (from debug-bound-concepts)
+            mantras         — list of [name, fires, covered, missing] per mantra
+                              (from mantra-coverage tantra, if loaded)
+
+        Example (before rashi-anuvada bridge):
+            s = vy.mantra_status("ball has mass m1 of 5 and velocity v1 of 20")
+            s["bound_concepts"]  # []  — rashi instances not yet propagated
+            # kinetic-energy-mantra fires=False, missing=["mass","velocity"]
+
+        Example (after bridge):
+            s["bound_concepts"]  # [["mass","5."],["velocity","20."]]
+            # kinetic-energy-mantra fires=True, covered=["mass","velocity"]
+        """
+        resp = self._send_with_retry({"command": "mantra-status", "sentence": sentence})
+        if resp.get("status") == "error":
+            err = resp.get("error", {})
+            raise VyakaranaError(
+                err.get("code", "UNKNOWN"), err.get("message", repr(resp))
+            )
+        assert resp.get("status") == "ok", f"unexpected status: {resp}"
+        return resp
+
+    def bound_concepts(self, graph: list) -> list[list]:
+        """Extract [concept, value] pairs from a refined graph.
+
+        Shortcut for calling debug-bound-concepts tantra via eval. Returns
+        only nodes that have a sankhya triple — i.e. what derive-step sees
+        as bound inputs.
+
+            g = vy.eval('fixpoint (build-question-graph "ball has mass m1 of 5") avrti-refine')
+            bc = vy.bound_concepts(g)   # [["m1", "5."]] before bridge
+                                        # [["m1","5."],["mass","5."]] after bridge
+        """
+        result = self.eval(f"debug-bound-concepts {self._graph_to_expr(graph)}")
+        if result is None:
+            return []
+        return result if isinstance(result, list) else []
+
+    @staticmethod
+    def _graph_to_expr(graph: list) -> str:
+        """Serialise a graph (list of triples) back to a tantra-evaluable JSON literal."""
+        import json
+
+        return json.dumps(graph)
+
+    def attach(self, path: str) -> dict:
+        """Incrementally load a single .om or .tantra file into the live server.
+
+        For .tantra files the new tantra is registered immediately — no server
+        restart needed.  For .om files the node is joined into the graph and
+        the CSR adjacency matrix is rebuilt.
+
+        The path must be absolute and accessible by the server process.
+
+        Returns the parsed response dict with keys:
+            kind   — "tantra" or "om"
+            name   — the tantra/node name that was registered
+
+        Raises VyakaranaError on server errors (bad path, parse failure, etc).
+
+        Example:
+            vy.attach("/abs/path/brahman/yantra/vishesa/rashi-anuvada.tantra")
+            vy.attach("/abs/path/brahman/sangati/prashna/new-signal.om")
+        """
+        resp = self._send_with_retry({"command": "attach", "path": path})
+        if resp.get("status") == "error":
+            err = resp.get("error", {})
+            raise VyakaranaError(
+                err.get("code", "UNKNOWN"),
+                err.get("message", repr(resp)),
+            )
+        assert resp.get("status") == "ok", f"unexpected status in: {resp}"
+        return resp
 
     # ── graph helpers ────────────────────────────────────────────────────────
 

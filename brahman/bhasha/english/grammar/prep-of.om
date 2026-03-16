@@ -1,13 +1,12 @@
 bhasha prep-of
 
   "preposition-swarupa sambandha-sthita"
-  "shashthi-vibhakti-sthita"
-  -- genitive/possessive relation: "mass OF the ball", "momentum OF the system"
-  -- of IS shashthi-vibhakti expressed as an English preposition
-  -- context-dependent: if followed by known entity → role:possession (R8 fires)
-  --                    if structural ("square root of", "half of") → role:grammar
-  -- avrti guard: check whether what follows "of" is a known entity name
+  "rashi-bandha-sthita"
+  -- value-assignment: "v1 OF 20", "v2 OF 30" — connects rashi label to its magnitude
+  -- distinct from has/have/with (shashthi-vibhakti) which signal entity ownership
+  -- sandhi-viveka promotes this to [of, rashi-bandha, rashi-bandha]
+  -- consumed by sankhya-bandha: asprista-sankhya after rashi-bandha binds to preceding label
 
-  shabda word:of  role:possession
+  shabda word:of  role:rashi-bandha
 
 done

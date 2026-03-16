@@ -32,10 +32,7 @@ tantra build-question-graph
     otherwise with-word)
 
   -- sandhi-viveka: promote grammar mithya words to typed dimension triples
-  after-sandhi = sandhi-viveka graph
-
-  -- kosha-expand: PPR-based kosha expansion
-  result = kosha-expand after-sandhi
+  result = sandhi-viveka graph
 
   return result
 done

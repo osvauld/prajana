@@ -1,0 +1,17 @@
+tantra angular-velocity-expr
+
+  -- ω = v/r
+  -- forward: given velocity, radius → angular-velocity
+
+  inputs
+    velocity  number
+    radius    number
+
+  let
+
+  value = div velocity radius
+
+  return
+    value  any
+
+done

@@ -811,50 +811,6 @@ let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : val
         in
         (match op with
 
-        (* execute-chain: mantra-name × [arg-vals] → value
-           runs a stack machine over the krama edges of a mantra node.
-           krama edges are read in node-edge-list order (= file order).
-           stack starts with args reversed (first arg at bottom, last at top). *)
-        | "execute-chain" ->
-          let mantra_name = as_string (e_eval k e (List.nth args 0)) in
-          let arg_vals = as_list (e_eval k e (List.nth args 1)) in
-          (match Proof_graph.find k mantra_name with
-           | None -> VString ("no-mantra-" ^ mantra_name)
-           | Some n ->
-             (match Proof_graph.visheshanam_of_string "krama" with
-              | None -> VString "krama-not-registered"
-              | Some krama_rel ->
-                let steps = List.filter_map (fun edge ->
-                  if edge.source = mantra_name && edge.relation = krama_rel
-                  then Some edge.target else None
-                ) n.edges in
-                let stack = ref (List.rev arg_vals) in
-                let pop () = match !stack with
-                  | v :: rest -> stack := rest; v
-                  | [] -> VFloat 0.0
-                in
-                let get_shabda_key node_name key =
-                  match Proof_graph.find k node_name with
-                  | None -> None
-                  | Some op_n ->
-                    let sh = Setu_shabda.parse_shabda op_n.shabda in
-                    List.assoc_opt key sh
-                in
-                List.iter (fun step_name ->
-                  let arity = match get_shabda_key step_name "arity" with
-                    | Some s -> (try int_of_string (String.trim s) with _ -> 1)
-                    | None -> 1
-                  in
-                  let prim_name = match get_shabda_key step_name "eval" with
-                    | Some s -> String.trim s
-                    | None -> step_name
-                  in
-                  let op_args = List.init arity (fun _ -> pop ()) in
-                  let result = apply_op_vals prim_name op_args in
-                  stack := result :: !stack
-                ) steps;
-                (match !stack with v :: _ -> v | [] -> VNone)))
-
         (* apply-op: op-name × [arg-vals] → value
            looks up eval: name from op node's shabda, then dispatches. *)
         | "apply-op" ->
@@ -934,7 +890,6 @@ let register_primitive_arities () =
   r "word-node"           1;   (* word → node or VNone *)
   r "lookup-word"         1;   (* word → node via bhasha word: key *)
   (* pipeline ops *)
-  r "execute-chain"       2;   (* mantra args → value *)
   r "apply-op"            2;   (* op-name args → value *)
   r "call-tantra"         2;   (* tantra-name [args] → value *)
   r "split-numeric"       1;   (* "5kg" → ["5.0","kg"] *)
@@ -949,6 +904,10 @@ let register_primitive_arities () =
   r "square"              1;   (* x → x² *)
   r "half"                1;   (* x → x/2 *)
   r "double"              1;   (* x → x*2 *)
+  r "reciprocal"          1;   (* x → 1/x *)
+  r "reverse"             1;   (* [a,b,c] → [c,b,a] *)
+  r "take"                2;   (* list n → first n items *)
+  r "drop"                2;   (* list n → list without first n items *)
   r "abs"                 1;   (* float → float *)
   r "sqrt"                1;   (* float → float *)
   r "floor"               1;   (* float → float *)
@@ -981,6 +940,7 @@ let register_primitive_arities () =
   r "nth"                 2;   (* list idx → element *)
   r "length"              1;   (* list → float *)
   r "append"              2;   (* list item → list *)
+  r "zip"                 2;   (* [a..] [b..] → [[a,b]..] *)
   r "flatten"             1;   (* [[...]] → [...] *)
   r "unique"              1;   (* list → dedup *)
   r "member"              2;   (* value list → bool *)

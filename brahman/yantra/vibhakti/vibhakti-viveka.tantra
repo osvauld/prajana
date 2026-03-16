@@ -22,6 +22,24 @@ tantra sandhi-viveka
 
   sthita-len = string-length "-sthita"
 
+  -- build a set of words that are in rashi-label position:
+  -- a mithya word whose immediately preceding triple has edge=satya.
+  -- these words should NOT have matra promoted — they are instance labels.
+  -- zip graph with itself offset by one to get [prev, curr] pairs.
+  -- rashi-label-words: mithya words immediately following a satya triple
+  -- these should not have matra promoted — they are instance labels not units
+  rashi-label-words = reduce graph ["", []]
+    (fn state triple ->
+      let last-e = nth state 0
+      let acc    = nth state 1
+      let c-edge = nth triple 1
+      let c-word = nth triple 0
+      cond (and (eq c-edge "mithya") (eq last-e "satya"))
+        [c-edge, (append acc [c-word])]
+        otherwise [c-edge, acc])
+
+  rashi-labels = nth rashi-label-words 1
+
   result = map graph (fn [word, edge, obj] ->
     let gnode  = cond (edge is mithya) (lookup-word word) otherwise _none
     let slokas = cond (exists gnode) (node-slokas (to-string gnode)) otherwise []
@@ -35,8 +53,7 @@ tantra sandhi-viveka
           (substr w 0 (sub (string-length w) sthita-len))
           otherwise "")
       otherwise "")
-    cond (gt (string-length root) 0) [word, root, root]
-    otherwise [word, edge, obj])
+    cond (and (gt (string-length root) 0) (not (and (eq root "matra") (member word rashi-labels)))) [word, root, root] otherwise [word, edge, obj])
 
   return result
 done

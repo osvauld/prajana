@@ -199,7 +199,6 @@ let () =
       Om_parser.load_dirs ~emit_meta:(not quiet_startup) dirs k0
   in
   let yantra_idx = Yantra.build_index ~graph:k0 dirs in
-  Yantra.register_mantra_nodes k0 yantra_idx;
   Proof_graph.materialize_csr k0;
   Proof_graph.compute_visheshanam_entropy_weights k0;
   if not quiet_startup then begin
@@ -214,5 +213,5 @@ let () =
   end;
   let yantra_session = Yantra.new_session () in
   match socket_path with
-  | Some path -> Socket.serve k0 yantra_idx yantra_session path
+  | Some path -> Socket.serve k0 yantra_idx yantra_session dirs path
   | None      -> madakkal k0 yantra_idx yantra_session emit_only

@@ -342,44 +342,6 @@ let apply_relation_axioms (k : proof_graph) : int * (string * int * int) list =
   let total = List.fold_left (fun acc (_, a, _) -> acc + a) 0 summary in
   (total, summary)
 
-(* register_mantra_nodes: scan all mantra-layer graph nodes and register each one
-   that has krama-lhs/krama-rhs shabda fields as a synthetic tantra.
-   the synthetic tantra body calls execute-chain, which runs the stack machine
-   over the node's krama edges.
-   call after build_index so all .tantra files are already indexed. *)
-let register_mantra_nodes (k : proof_graph) (idx : tantra_index) : unit =
-  Hashtbl.iter (fun name n ->
-    if n.Proof_graph.layer = "mantra"
-    && not (Hashtbl.mem idx.by_name name) then begin
-      let sh = Setu_shabda.parse_shabda n.Proof_graph.shabda in
-      match List.assoc_opt "krama-lhs" sh, List.assoc_opt "krama-rhs" sh with
-      | Some lhs, Some rhs ->
-        let lhs = String.trim lhs in
-        let rhs_vars = String.split_on_char ',' (String.trim rhs)
-                       |> List.map String.trim
-                       |> List.filter (fun s -> String.length s > 0) in
-        let mk_param v = {
-          tp_name      = v;
-          tp_type      = "float";
-          tp_canonical = v;
-          tp_unit      = None;
-          tp_avastha   = None;
-        } in
-        let t : tantra = {
-          t_name    = name;
-          t_file    = name ^ ".om";
-          t_inputs  = List.map mk_param rhs_vars;
-          t_lets    = [(lhs,
-                        Call ("execute-chain",
-                              [StrLit name;
-                               ListExpr (List.map (fun v -> Var v) rhs_vars)]))];
-          t_returns = [mk_param lhs];
-        } in
-        register_tantra ~graph:k idx t
-      | _ -> ()
-    end
-  ) k.Proof_graph.nodes
-
 (* build_word_index: scan all graph nodes for word: key in their shabda.
    populates idx.word_index with word → node-name mappings.
    comma-separated word: values (e.g. "word:and,both") register all words.

@@ -59,7 +59,8 @@ kosha visheshanam-ring
   "prathama-vibhakti-yukta"   -- entity declaration: nominative — this word names a physical object
   "vidhi-kaala-yukta"         -- query intent: imperative — solve-for / define / verify
   "naama-mudra-yukta"         -- symbolic label: concept referred to by variable name
-  "asprista-sankhya-yukta"    -- pending number: unattached numeric value awaiting binding
+   "asprista-sankhya-yukta"    -- pending number: unattached numeric value awaiting binding
+   "rashi-bandha-yukta"        -- value-assignment: 'of' connecting rashi label to its magnitude
   "viraam-yukta"              -- punctuation: structural boundary marker
   "dvandva-yukta"             -- dvandva group: co-equal set membership (comma/and)
   "naama-pratibodha-yukta"    -- pronoun reference: cross-group reference to entity (antisymmetric, non-transitive)

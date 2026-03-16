@@ -2,6 +2,7 @@
 # format — name: value unit
 # readable via: shabda "physics-constants" "name"
 
+pi:                              3.14159265358979 dimensionless
 gravitational-acceleration:     9.80665   metre-per-second-squared
 speed-of-light:                 299792458 metre-per-second
 planck-constant:                6.62607015e-34 joule-second

@@ -21,15 +21,9 @@ Run:
 import pytest
 from vy import VyakaranaError
 
-_XFAIL_NO_ANUVADA = pytest.mark.xfail(
-    reason="anuvada-ganana.tantra not yet authored; question command returns ENGINE_ERROR",
-    strict=True,
-)
-
 # ── basic question mechanics ──────────────────────────────────────────────────
 
 
-@_XFAIL_NO_ANUVADA
 def test_question_returns_non_empty_answer(vy):
     # A sentence with a known concept should produce non-empty answer_text
     answer = vy.ask("find force", session_id="test-basic-1")
@@ -39,7 +33,6 @@ def test_question_returns_non_empty_answer(vy):
     assert len(answer) > 0, "expected non-empty answer for 'find force'"
 
 
-@_XFAIL_NO_ANUVADA
 def test_question_known_concept_has_content(vy):
     answer = vy.ask(
         "find kinetic energy given mass 5 and velocity 10", session_id="test-ke-1"
@@ -49,7 +42,6 @@ def test_question_known_concept_has_content(vy):
     )
 
 
-@_XFAIL_NO_ANUVADA
 def test_question_different_sessions_both_get_answers(vy):
     # Two independent sessions can both get answers
     a1 = vy.ask("find force", session_id="sess-a-unique")
@@ -87,7 +79,6 @@ def test_server_remains_responsive_after_eval(vy):
 # ── end-session ───────────────────────────────────────────────────────────────
 
 
-@_XFAIL_NO_ANUVADA
 def test_end_session_command_succeeds(vy):
     # Send a question, then end the session, then send another question
     vy.ask("find force", session_id="sess-end-test")
@@ -98,7 +89,6 @@ def test_end_session_command_succeeds(vy):
     assert resp.get("status") == "ok", f"end-session should succeed: {resp!r}"
 
 
-@_XFAIL_NO_ANUVADA
 def test_after_end_session_new_question_works(vy):
     vy.ask("find force", session_id="sess-reset-test")
     vy._send_with_retry({"command": "end-session", "session_id": "sess-reset-test"})
@@ -110,7 +100,6 @@ def test_after_end_session_new_question_works(vy):
 # ── session independence ───────────────────────────────────────────────────────
 
 
-@_XFAIL_NO_ANUVADA
 def test_two_sessions_independent_answers(vy):
     # Two sessions with different questions get different answers
     a1 = vy.ask(
@@ -131,7 +120,6 @@ def test_two_sessions_independent_answers(vy):
 # ── multi-turn continuity (current implementation) ───────────────────────────
 
 
-@_XFAIL_NO_ANUVADA
 def test_multi_turn_session_both_succeed(vy):
     # Two turns in the same session both return answers
     a1 = vy.ask("find force", session_id="multi-turn-test-x")
@@ -143,7 +131,6 @@ def test_multi_turn_session_both_succeed(vy):
 # ── multi-turn binding carry (not yet built) ─────────────────────────────────
 
 
-@_XFAIL_NO_ANUVADA
 def test_multi_turn_answer_references_concept(vy):
     # Turn 2 can reference a concept that appeared in turn 1's question,
     # because each turn independently runs BQG → avrti. (Not cross-turn binding —
@@ -158,7 +145,6 @@ def test_multi_turn_answer_references_concept(vy):
     )
 
 
-@_XFAIL_NO_ANUVADA
 def test_different_sessions_answer_independently(vy):
     # Two sessions answer their own questions independently
     a_sess = "sess-ind-A-unique"
@@ -174,13 +160,6 @@ def test_different_sessions_answer_independently(vy):
 # ── actual cross-turn binding (not yet implemented) ───────────────────────────
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="cross-turn numeric binding not implemented: turn 2 cannot complete "
-    "match-mantra using a value provided in turn 1 (e.g. mass=5 in turn 1, "
-    "then velocity=10 in turn 2 → KE match in turn 3). This requires "
-    "_active_session to be threaded through anuvada_query.",
-)
 def test_cross_turn_binding_completes_match(vy):
     # Turn 1: provide mass=5; Turn 2: provide velocity=10 and ask for KE
     # Only possible if the server accumulates bindings across turns

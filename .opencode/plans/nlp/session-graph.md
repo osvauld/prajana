@@ -255,7 +255,7 @@ avrti-refine / fixpoint                     (tantra — existing, reaches sphoTa
     ↓
 match-mantra                                (tantra — existing, implication identified)
     ↓
-execute-chain (compute) / implication-walk (theoretical)
+eval-mantra (compute/inverse/clarify) / implication-walk (theoretical)
     ↓
 assert-samskaara (mantra)                   (prashna-N → bhuta-kaala, answer → theorem)
     ↓
@@ -392,9 +392,20 @@ Terminal: `[eval] test-avrti-fixpoint → true (14ms)`
 
 ---
 
-## Dialogue Generation (later)
+## Dialogue Generation — Clarification as Question Graph
 
-When a derivation cannot complete because a slot is unfilled, the system generates the question needed to continue. This is a natural consequence of `formalize-question`: an open `proposition` with no matching `axiom` in the session graph → `generate-question` tantra produces the follow-up.
+When a derivation cannot complete because a slot is unfilled or context is ambiguous,
+`eval-mantra` takes the clarification path. `generate-question` tantra produces a
+proper question graph — not an error message — targeting the specific gap.
+
+Three triggers:
+- **Missing janya**: ke-mantra needs mass and velocity, neither bound → ask for each
+- **Ambiguous entity**: ball-A and ball-B both match, question unspecified → "which object?"
+- **Ambiguous concept**: "energy" matches ke-mantra, pe-mantra, work-mantra → ask which
+
+The clarification IS a session turn. The answer fills the open slot as a new axiom.
+The original computation then completes on the enriched graph. The session never fails —
+every dead end produces a question.
 
 ```
 "calculate kinetic energy"
@@ -447,7 +458,7 @@ Steps 13+ gate on the tantra pipeline being complete (P7/P8).
 | `build-question-graph` | standalone tantra called from tests | called by `build-session-graph` internally |
 | `avrti-refine` / `fixpoint` | standalone refinement | final compression pass within `build-session-graph` |
 | `match-mantra` | standalone tantra | receives sphoTa graph, identifies implication |
-| `execute-chain` | runs physics formula | IS substitution (logic type asserted) |
+| `eval-mantra` | runs physics formula (forward/inverse/clarify) | IS substitution (logic type asserted) |
 | `anuvada_query` (OCaml) | full inline pipeline | thin wrapper → will call `build-session-graph` at P7/P8 |
 | `yantra_resolver.ml` | BFS chain resolve | removed after `match-mantra` walking implication edges |
 | `yantra_inverter.ml` | symbolic algebra | removed after `inversion` mantra handles it |
@@ -467,7 +478,7 @@ Steps 13+ gate on the tantra pipeline being complete (P7/P8).
 
 2. **Expansion → connection → compression = sphoTa.** One movement, three phases. No shortcut.
 
-3. **The act of answering collapses the question into bhuta-kaala.** Not the arrival of the next question. Within the same turn, after execute-chain returns.
+3. **The act of answering collapses the question into bhuta-kaala.** Not the arrival of the next question. Within the same turn, after eval-mantra returns.
 
 4. **The answered question becomes parampara.** It is the ground the next question stands on. Its samskaara is the inherited context.
 

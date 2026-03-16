@@ -1,0 +1,17 @@
+tantra ke-expr
+
+  -- KE = ½mv²
+  -- forward: given mass and velocity, compute kinetic energy
+
+  inputs
+    mass      number
+    velocity  number
+
+  let
+
+  value = half (mul mass (square velocity))
+
+  return
+    value  any
+
+done

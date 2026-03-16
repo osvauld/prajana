@@ -12,6 +12,7 @@ type tantra_param = {
 (* expression tree for the let-block RHS *)
 type scan_stmt =
   | SEmit    of expr                               (* emit <expr> or emit triple *)
+  | SSkip                                          (* skip — suppress emission of current triple *)
   | SSet     of string * expr                      (* set <var> to <expr> *)
   | SClear   of string                             (* clear <var> — sets to "" *)
   | SLet     of string * expr                      (* let <name> = <expr> *)

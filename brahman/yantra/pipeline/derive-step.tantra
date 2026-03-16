@@ -1,0 +1,45 @@
+tantra derive-step
+
+  -- one derivation pass over a question graph.
+  -- fires every callable mantra whose janya inputs are all bound (sankhya)
+  -- and whose phala output is not yet bound.
+  -- appends new [concept, sankhya, value] triples to the graph.
+  -- used by fixpoint in anuvada-ganana: fixpoint refined derive-step
+  -- fixpoint stops when the graph stops changing (no new triples added).
+
+  takes graph
+
+  bound-vals = reduce graph [[], []] (fn acc [s, e, o] ->
+    cond (e is sankhya)
+      [(append (nth acc 0) [s]),
+       (append (nth acc 1) [[s, o]])]
+    otherwise acc)
+
+  bound-concepts = nth bound-vals 0
+  val-pairs      = nth bound-vals 1
+
+  all-mantras = walk-in "physics-mantra" "varga"
+
+  new-triples = reduce all-mantras [] (fn acc mantra ->
+    let janya = walk mantra "janya"
+    let phala = cond (gt (length (walk mantra "phala")) 0)
+      (nth (walk mantra "phala") 0)
+      otherwise (shabda mantra "name")
+
+    cond (member phala bound-concepts) acc
+
+    otherwise
+      (let all-ok = reduce janya true (fn a r ->
+         and a (or (member r bound-concepts)
+                   (gt (string-length (shabda r "constants-key")) 0)))
+
+       cond (not all-ok) acc
+
+       otherwise
+         (let fired = execute-chain mantra val-pairs
+          append acc [[phala, sankhya, fired]])))
+
+  result = reduce new-triples graph (fn g t -> append g [t])
+
+  return result
+done

@@ -5,7 +5,7 @@
    Category A (irreducible — stay here forever):
      scalar: add mul sub div sqrt power abs neg floor ceil mod min max
      trig:   sin cos tan asin acos atan2 log exp
-     list:   map filter reduce fixpoint nth length range flatten append unique sum
+      list:   map filter reduce fixpoint nth length range flatten append unique sum zip
      string: split join concat substr starts-with ends-with member char-at
              string-length to-string to-number split-numeric
      bool:   eq neq lt le gt ge and or not
@@ -69,13 +69,32 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     let s = as_string (e_eval k e (List.nth args 0)) in
     Some (match float_of_string_opt s with Some f -> VFloat f | None -> VNone)
 
-  (* split-numeric: "5kg" → ["5.0", "kg"], "3.5m/s" → ["3.5", "m/s"], "42" → ["42.0", ""] *)
+  (* split-numeric: "5kg" → ["5.0", "kg"], "3.5m/s" → ["3.5", "m/s"], "42" → ["42.0", ""]
+     also handles scientific notation: "1e6" → ["1000000.", ""], "1.6e-19" → ["1.6e-19", ""] *)
   | "split-numeric" ->
     let s = as_string (e_eval k e (List.nth args 0)) in
+    let n = String.length s in
     let i = ref 0 in
-    while !i < String.length s && (s.[!i] = '-' || s.[!i] = '.' || (s.[!i] >= '0' && s.[!i] <= '9')) do incr i done;
+    (* consume leading sign *)
+    if !i < n && s.[!i] = '-' then incr i;
+    (* consume digits and decimal point *)
+    while !i < n && (s.[!i] = '.' || (s.[!i] >= '0' && s.[!i] <= '9')) do incr i done;
+    (* consume scientific notation exponent: e/E followed by optional sign and digits *)
+    if !i < n && (s.[!i] = 'e' || s.[!i] = 'E') then begin
+      let j = !i + 1 in
+      if j < n && (s.[j] = '+' || s.[j] = '-') then begin
+        let k2 = j + 1 in
+        if k2 < n && s.[k2] >= '0' && s.[k2] <= '9' then begin
+          i := k2;
+          while !i < n && s.[!i] >= '0' && s.[!i] <= '9' do incr i done
+        end
+      end else if j < n && s.[j] >= '0' && s.[j] <= '9' then begin
+        i := j;
+        while !i < n && s.[!i] >= '0' && s.[!i] <= '9' do incr i done
+      end
+    end;
     let num_part = String.sub s 0 !i in
-    let alpha_part = String.sub s !i (String.length s - !i) in
+    let alpha_part = String.sub s !i (n - !i) in
     let num_val = match float_of_string_opt num_part with Some f -> string_of_float f | None -> "" in
     Some (VList [VString num_val; VString alpha_part])
 
@@ -243,6 +262,13 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     let a = as_list (e_eval k e (List.nth args 0)) in
     let b = as_list (e_eval k e (List.nth args 1)) in
     Some (VList (a @ b))
+
+  (* zip: [a,b,c] [x,y,z] → [[a,x],[b,y],[c,z]]  pairs corresponding elements *)
+  | "zip" ->
+    let a = as_list (e_eval k e (List.nth args 0)) in
+    let b = as_list (e_eval k e (List.nth args 1)) in
+    let n = min (List.length a) (List.length b) in
+    Some (VList (List.init n (fun i -> VList [List.nth a i; List.nth b i])))
 
   (* range: n → [0, 1, ..., n-1]  so tantras can map over variable-length sequences *)
   | "range" ->
@@ -452,5 +478,25 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
   | "double" ->
     let a = as_float (e_eval k e (List.nth args 0)) in
     Some (VFloat (a *. 2.0))
+
+  | "reciprocal" ->
+    let a = as_float (e_eval k e (List.nth args 0)) in
+    Some (VFloat (1.0 /. a))
+
+  | "reverse" ->
+    let lst = as_list (e_eval k e (List.nth args 0)) in
+    Some (VList (List.rev lst))
+
+  | "take" ->
+    let lst = as_list (e_eval k e (List.nth args 0)) in
+    let n   = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let n'  = max 0 (min n (List.length lst)) in
+    Some (VList (List.filteri (fun i _ -> i < n') lst))
+
+  | "drop" ->
+    let lst = as_list (e_eval k e (List.nth args 0)) in
+    let n   = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let n'  = max 0 (min n (List.length lst)) in
+    Some (VList (List.filteri (fun i _ -> i >= n') lst))
 
   | _ -> None

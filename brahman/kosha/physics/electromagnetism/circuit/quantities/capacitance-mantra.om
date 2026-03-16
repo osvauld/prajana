@@ -1,16 +1,13 @@
 mantra capacitance-mantra
 
   "circuit-varga-vishesa"
+  "physics-mantra-varga"
   "capacitance-swarupa"
-
-  -- C = Q / V: charge stored per unit voltage
-  "division-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "capacitance-phala"
+  "capacitance-expr-kriya"
   "charge-janya"
   "voltage-janya"
 
-  shabda name:capacitance krama-lhs-unit:farad degree:1 krama-lhs:capacitance krama-rhs:charge,voltage
+  shabda name:capacitance unit:farad
 
 done

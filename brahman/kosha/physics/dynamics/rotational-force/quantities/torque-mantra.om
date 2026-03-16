@@ -1,16 +1,13 @@
 mantra torque-mantra
 
   "rotational-force-varga-vishesa"
+  "physics-mantra-varga"
   "torque-swarupa"
-
-  -- τ = Iα: multiply moment-of-inertia by angular-acceleration
-  "multiplication-krama"
-
-  "execute-chain-kriya"
-  "implication-sthita"
+  "torque-phala"
+  "torque-expr-kriya"
   "moment-of-inertia-janya"
   "angular-acceleration-janya"
 
-  shabda name:torque krama-lhs-unit:newton-metre degree:1 krama-lhs:torque krama-rhs:moment-of-inertia,angular-acceleration
+  shabda name:torque unit:newton-metre
 
 done

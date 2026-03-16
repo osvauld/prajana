@@ -1,0 +1,43 @@
+tantra anuvada-ganana
+
+  -- orchestrator: natural-language sentence -> answer string.
+  -- pure: no session state. sentence in, answer out.
+  -- session management is handled by session-anuvada (the caller).
+  --
+  -- pipeline:
+  --   1. build-question-graph: sentence words -> triple graph
+  --   2. fixpoint avrti-refine: refine until stable
+  --   3. kosha-expand: pull in relevant kosha structure
+  --   4. match-mantra: find the ONE mantra the user is asking for (solve-for driven)
+  --   5. if match found: execute-chain -> format answer
+  --   6. if no match: derive-step fixpoint, try match-mantra again
+
+  takes sentence
+
+  raw-graph = build-question-graph sentence
+  refined   = fixpoint raw-graph avrti-refine
+  expanded  = kosha-expand refined
+  match     = match-mantra expanded
+
+  enriched = cond (gt (length match) 0)
+    expanded
+  otherwise
+    (fixpoint expanded derive-step)
+
+  final-match = cond (gt (length match) 0)
+    match
+  otherwise
+    (match-mantra enriched)
+
+  result = cond (gt (length final-match) 0)
+    (let mantra  = nth final-match 0
+     let valpairs = nth final-match 1
+     let value   = execute-chain mantra valpairs
+     let phala   = walk mantra "phala"
+     let label   = cond (gt (length phala) 0) (nth phala 0) otherwise mantra
+     concat label " = " (to-string value))
+  otherwise
+    "no match"
+
+  return result
+done

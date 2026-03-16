@@ -1,6 +1,7 @@
 # Linguistic Graph & NLP Plan — Index
 
-**Status**: P0–P6c done. Codebase cleanup done (2026-03-14). P7 (tokeniser tantra) is next.
+**Status**: P0–P6c + anuvada-ganana done (2026-03-14). Baseline: 273 pytest passing / 4 xfailed.
+P8 (chain-implication) is next — no P7 blocker, all primitives available.
 
 ## Key decisions (quick reference)
 
@@ -77,6 +78,15 @@
   (destructuring eliminates the need for 2-element list literals).
 - **Dynamic mantras**: Mantras should resolve at call time from the graph, not be pre-registered
   as synthetic tantras. `eval_call` fallback checks for mantra-layer nodes.
+- **Physics mantras ARE logical implications.** Every physics mantra has `sthita: implication`.
+  `modus-ponens` is a mantra: `inference-swarupa implication-janya`. The physics/logic split
+  is surface only — the graph unifies them. `viveka` (aneka-ahara eka-phala) IS the dependency
+  resolver. `nyaya` IS the verification. The tantra just makes the walk explicit.
+- **Chain-implication = viveka made executable.** Given a target: walk `implication-sthita`
+  from target → find mantra → check `janya` inputs covered → fire or recurse on missing.
+  Repeat at fixpoint. This is P8 and does NOT depend on P7.
+- **`match-mantra` stays as-is.** Correct single-step matcher. Called per iteration inside
+  chain-implication. No changes needed to existing tantras except `anuvada-ganana`.
 - **Tantra syntax refactor**: Clean break. `scan/when/emit` for stateful triple processing,
   `from/where/collect` for filtering, triple destructuring, bare node references, `is`/`exists`
   infix operators. Full spec in `tantra-syntax-refactor.md`.

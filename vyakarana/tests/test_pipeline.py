@@ -135,11 +135,18 @@ def test_pipeline_satya_bridge_mass_to_kilogram(vy):
 
 
 def test_pipeline_kosha_expand_in_bqg_surfaces_momentum(vy):
-    # BQG already runs kosha-expand — mass+velocity graph has kosha-janya for related concepts
-    raw, _ = full_pipeline(vy, "find mass velocity")
-    janya_objs = {t[2] for t in raw if t[1] == "kosha-janya"}
+    # kosha-expand runs after avrti-refine in anuvada-ganana, not inside BQG
+    # the enriched graph (post kosha-expand) surfaces related concepts
+    enriched = vy.eval(
+        'kosha-expand (fixpoint (build-question-graph "find mass velocity") avrti-refine)'
+    )
+    janya_objs = {
+        t[2]
+        for t in enriched
+        if isinstance(t, list) and len(t) >= 3 and t[1] == "kosha-janya"
+    }
     assert "momentum" in janya_objs or "kinetic-energy" in janya_objs, (
-        f"expected momentum or kinetic-energy in kosha-janya expansion"
+        f"expected momentum or kinetic-energy in kosha-janya expansion after kosha-expand, got {janya_objs}"
     )
 
 
