@@ -1,0 +1,35 @@
+tantra2 sankhya-bandha
+
+-- binds floating asprista-sankhya (unattached numbers) to their preceding satya concept.
+-- asprista-sankhya arises when a number appears without a unit in direct proximity.
+-- example: "mass 10 and acceleration 2" → mass=10, acceleration=2
+--
+-- rashi-viveka (earlier avrti pass) handles the named-instance case:
+--   "velocity v1 of 20" → [v1, vishesa, velocity], [v1, sankhya, 20.]
+-- by the time sankhya-bandha runs, rashi-bandha signals are already consumed.
+--
+-- guards (must NOT bind):
+--   concept already has a sankhya triple → already bound, skip
+
+takes graph
+
+-- concepts already bound to a numeric value
+already-bound = graph | where [s, e, o] | and (eq e "sankhya") | collect s
+
+result = scan graph [last-active: str = ""]:
+
+  [word, satya, obj] ->
+    last-active = (to-string word)
+    emit
+
+  [word, asprista-sankhya, obj]
+    when (neq last-active "")
+    when (not (member last-active already-bound))
+    ->
+      emit [last-active, "sankhya", obj]
+
+  _ -> emit
+
+return result
+
+done

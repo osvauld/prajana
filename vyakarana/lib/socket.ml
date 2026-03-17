@@ -529,7 +529,8 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                  let elapsed_ms = int_of_float ((t1 -. t0) *. 1000.0) in
                  let result_str = Yantra.as_string result in
                  let result_json = Yantra.val_to_json result in
-                 Printf.printf "[eval] %s → %s (%dms)\n%!" expr_str result_str elapsed_ms;
+                 if String.length result_str <= 200 then
+                   Printf.printf "[eval] %s → %s (%dms)\n%!" expr_str result_str elapsed_ms;
                  if as_json then
                    Printf.sprintf
                      "{\"status\":\"ok\",\"command\":\"eval-json\",\"expr\":%s,\"result\":%s,\"elapsed_ms\":%d}"

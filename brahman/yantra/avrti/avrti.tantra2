@@ -1,0 +1,14 @@
+tantra2 avrti
+
+-- spreading activation over a tightly scoped word frontier.
+-- each pass: frontier nodes are replaced by their neighbors, deduplicated.
+-- terminates at fixpoint — when no new nodes are added.
+
+takes seeds
+
+result = fixpoint seeds (fn frontier ->
+  unique (flatten (map frontier (fn nd -> neighbors nd))))
+
+return result
+
+done

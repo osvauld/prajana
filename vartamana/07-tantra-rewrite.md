@@ -529,6 +529,46 @@ After Gap 2 and P8e are stable. One tantra at a time.
 
 ---
 
+---
+
+## Layer 2 — current state (2026-03-17)
+
+Layer 2 is no longer a future plan. It is partially implemented and in use.
+
+**Parser:** `vyakarana/lib/yantra_tantra_file2.ml` (~900 lines). Produces the same
+`tantra` AST type as Layer 1. The eval engine (`yantra_eval.ml`) is unchanged.
+
+**Migrated tantras (3 of 12):**
+- `vishesa-instance.tantra2` — typed scan state, Tension 3 resolved
+- `rashi-viveka.tantra2` — gate-edge scan
+- `vishesa-bandhana.tantra2` — reduce lambda, pipe filters
+
+**Tensions resolved by Layer 2:**
+
+| Tension | Status |
+|---------|--------|
+| 1 (one grammar two semantics) | `parse2_pipe` is separate from `parse2_primary` — pipe ops and expression ops don't collide |
+| 2 (arity table drives parsing) | Still partially present — Layer 2 still consults `op_arity` for backward compat during migration |
+| 3 (outer let invisible in scan) | **Resolved.** Typed scan state `[name: type = init-expr]` initializes from outer scope |
+| 7 (let inside fn body) | **Resolved.** File parser tracks `in_scan_body` depth — assignments inside body are `SSet`, not new bindings |
+
+**Tensions NOT YET resolved:**
+- Tension 2 (arity table) — still active for calling Layer 1 tantras from Layer 2 context
+- Tension 4 (emit/emit-triple) — scan emit works but no formal fix
+- Tension 5 (string equality) — still uses `as_string` comparison
+- Tension 6 (flat name-based lookup) — still flat; `sthita-viveka` needed
+
+**Key authoring rules for Layer 2 (full list in `10-layer2-rewrite.md`):**
+
+1. `| where` patterns are ALL variables — use `| and (eq e "sankhya")` for filtering
+2. Never use `value`, `pair`, or any kosha op name as a variable — causes silent mis-parse
+3. Use `_it` not `_` in `| collect` expressions for the current item
+4. Avoid nested parens in `fn` body inside `(fn ...)` — use `{fn ...}` braces for complex lambdas
+5. Put `->` on its own line after multi-line `when` guards
+6. `or` is infix — `(member x list) or flag` works. `and` is NOT infix — use separate `when` lines
+
+---
+
 ## What has changed
 
 For baseline and session progress see [changelog.md](changelog.md).
@@ -538,3 +578,4 @@ For baseline and session progress see [changelog.md](changelog.md).
 | 2026-03-17 | Initial writing — three-layer architecture, Tensions 1–2. |
 | 2026-03-17 | Tensions 3–6 added from regression investigation. |
 | 2026-03-17 | Tensions 7–9 added from boot pass investigation. Boot/reboot architecture section added. Tantra author rules table added. |
+| 2026-03-17 | Layer 2 current state section added. Tensions 1/3/7 marked resolved. Authoring rules from migration experience. |

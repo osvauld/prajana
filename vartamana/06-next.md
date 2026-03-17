@@ -55,7 +55,13 @@
 
 ---
 
-## Priority order — REVISED 2026-03-17
+## Priority order — REVISED 2026-03-17 (superseded by Layer 2 rewrite)
+
+**The immediate active plan is [10-layer2-rewrite.md](10-layer2-rewrite.md).**
+Layer 2 tantra rewrite first. Everything below waits until Phase 4 cleanup is complete.
+After Phase 4: sthita-viveka closes dvandva + gravitational force. Gap 2 closes. Pratibimba unblocks.
+
+## Priority order — post Layer 2 rewrite
 
 ### 1. P8f — Expression subgraph + math-domain unification (NEW TOP PRIORITY)
 

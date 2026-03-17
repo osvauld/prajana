@@ -1,0 +1,75 @@
+tantra2 agra-bandha
+
+-- agra: the foremost. the one currently at the front.
+--
+-- proximity binding via a moving anchor: as the scan moves forward through
+-- the graph, agra-map tracks the most recently seen instance for each
+-- concept. bindings (sankhya, matra, shashthi-vibhakti, mithya, etc.)
+-- attach to whatever agra currently holds for their concept.
+--
+-- parameters:
+--   graph        -- the graph to scan
+--   anchor-edge  -- edge type that updates agra (e.g. "vishesa", "satya")
+--   anchor-obj   -- slot used as map key: "obj" or "word"
+--   anchor-val   -- slot stored as agra value: "word" or "obj"
+--   bind-edges   -- list of edge types whose subject gets redirected to agra
+--   gate-edge    -- if non-empty: this edge must be seen before bind fires
+--   exclude-obj  -- if non-empty: anchor only fires when obj is NOT this value
+--   exclude-bind -- list of words that must not be used as bind subjects
+--   skip-bound   -- list of subjects already bound (idempotence guard)
+--   require-key  -- if non-empty: list of keys; anchor only fires when
+--                   word (the bind subject) is a member of this list
+
+takes graph
+takes anchor-edge
+takes anchor-obj
+takes anchor-val
+takes bind-edges
+takes gate-edge
+takes exclude-obj
+takes exclude-bind
+takes skip-bound
+takes require-key
+
+has-gate    = gt (string-length gate-edge) 0
+has-exclude = gt (string-length exclude-obj) 0
+has-require = gt (length require-key) 0
+
+result = scan graph [agra-map: list = [], saw-gate: bool = false]:
+
+  -- anchor: update agra-map for this concept
+  [word, edge, obj]
+    when (eq (to-string edge) anchor-edge)
+    when (cond has-exclude (neq (to-string obj) exclude-obj) otherwise true)
+    ->
+      let k = cond (eq anchor-obj "obj") (to-string obj) otherwise (to-string word)
+      let v = cond (eq anchor-val "word") (to-string word) otherwise (to-string obj)
+      agra-map = (append (agra-map | where [mk, mv] | and (neq (to-string mk) k) | collect [mk, mv]) [[k, v]])
+      saw-gate = false
+      emit
+
+  -- gate: consume the gate-edge triple, set saw-gate flag
+  [word, edge, obj]
+    when has-gate
+    when (eq (to-string edge) gate-edge)
+    ->
+      saw-gate = true
+
+  -- bind: redirect subject from concept to its current agra
+  [word, edge, obj]
+    when (member (to-string edge) bind-edges)
+    ->
+      let concept = to-string word
+      let agra    = nth (agra-map | where [mk, mv] | and (eq (to-string mk) concept) | collect mv) 0
+      let gated   = cond has-gate saw-gate otherwise true
+      let allowed = (and gated (neq agra "") (not (member concept exclude-bind)) (not (member agra skip-bound)) (cond has-require (member concept require-key) otherwise true))
+      emit (cond allowed [agra, edge, obj] otherwise [word, edge, obj])
+      saw-gate = false
+
+  _ ->
+    saw-gate = false
+    emit
+
+return result
+
+done

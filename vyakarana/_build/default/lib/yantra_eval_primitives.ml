@@ -810,6 +810,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
 let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : value =
   let e_eval = !_eval_ref in
+
   match eval_graph_op e_eval k e op args with
   | Some v -> v
   | None ->
@@ -954,6 +955,7 @@ let register_primitive_arities () =
   (* string *)
   r "string-length"       1;   (* string → float *)
   r "to-string"           1;   (* value → string *)
+  r "debug-print"         1;   (* val → val  (prints to stderr) *)
   r "to-number"           1;   (* string → float *)
   r "concat"             (-1); (* variadic string concat *)
   r "substr"              3;   (* string start len → string *)

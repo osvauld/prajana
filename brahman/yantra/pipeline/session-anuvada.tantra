@@ -59,11 +59,27 @@ tantra session-anuvada
     otherwise (nth sf-state 1)
 
   -- remember this turn's NEW sankhya concepts (from refined only, not prior-graph)
-  -- so the socket can build prior-graph for the next turn
-  this-turn-concepts = from refined
+  -- so the socket can build prior-graph for the next turn.
+  -- collect direct sankhya bindings (e.g. [mass, sankhya, 5])
+  direct-bindings = from refined
     where [s, e, o]
     and e is sankhya
     collect [s, o]
+  -- also store bindings under shashthi-vibhakti concept subjects
+  -- e.g. "electron has mass 9.109e-31" → [mass, shashthi-vibhakti, electron]
+  -- + [electron-mass, sankhya, 9.109e-31] → store mass = 9.109e-31
+  sv-concepts = from refined
+    where [concept, e, entity]
+    and e is shashthi-vibhakti
+    collect concept
+  sv-vals = from refined
+    where [s, e, o]
+    and e is sankhya
+    collect o
+  sv-bindings = cond (and (gt (length sv-concepts) 0) (gt (length sv-vals) 0))
+    (map sv-concepts (fn c -> [c, (nth sv-vals 0)]))
+    otherwise []
+  this-turn-concepts = append direct-bindings sv-bindings
   _stored = remember-bindings (map this-turn-concepts (fn p -> bind (nth p 0) (nth p 1)))
 
   result = cond (gt (length final-match) 0)
