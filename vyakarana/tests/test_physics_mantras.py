@@ -1,17 +1,16 @@
-"""test_physics_mantras.py — end-to-end computation tests for physics mantras.
+"""test_physics_mantras.py — physics mantra end-to-end computation.
 
-Tests that each mantra produces the correct numeric result via the full pipeline:
-natural language question → BQG → avrti → derive-step → answer.
+A mantra is a relation. Not a formula — a relation that was always true,
+waiting to be recognised. V = IR. E = hf. F = ma.
+These are not invented. They are discovered. The kosha holds them as
+structure: janya edges name what is needed, phala names what follows.
 
-These tests cover mantras that use division or subtraction, which are affected
-by the List.rev stack machine bug in execute-chain. The fix is to correct the
-krama-rhs arg order in each .om file so the reversed stack yields the right result.
+Each test here is the full asking: a natural language question arrives,
+the pipeline fires, nam arises, a number emerges. The number is either
+what the relation demands or the instrument is wrong.
 
-Status:
-  - acceleration, mass-density, pressure, angular-velocity,
-    centripetal, capacitance: fixed by krama-rhs swap (P8a)
-  - frequency, period, gravitational: structural fix deferred to P8f
-    (expression graph replaces stack machine entirely)
+The mantra does not compute. It recognises. The computation is the
+recognition made numeric.
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_physics_mantras.py -v --socket /tmp/vy.sock
@@ -89,11 +88,6 @@ def test_capacitance(vy):
 # f = 1 / T  (structural fix needed: missing constant 1 in krama-rhs — deferred to P8f)
 
 
-@pytest.mark.xfail(
-    reason="structural: frequency-mantra needs constant 1 in krama-rhs; "
-    "deferred to P8f (expression graph)",
-    strict=True,
-)
 def test_frequency(vy):
     """f = 1 / T: T=0.5 → f=2"""
     answer = vy.ask("find frequency given period 0.5")
@@ -130,3 +124,62 @@ def test_gravitational_force(vy):
     assert "1.98" in answer or "1.984" in answer, (
         f"expected ~1.98e20 in answer, got {answer!r}"
     )
+
+
+# ── photon energy (P8f Way 2 sandhi + math-domain) ───────────────────────────
+# E = h * f  — planck-constant auto-supplied from physics-constants.shabda
+
+
+def test_photon_energy_from_frequency(vy):
+    """E = h*f: h=6.626e-34, f=5e14 → E≈3.313e-19 J"""
+    answer = vy.ask("find photon energy given frequency 5e14")
+    # 6.62607015e-34 * 5e14 = 3.31303508e-19
+    assert "3.31" in answer or "3.313" in answer, (
+        f"expected ~3.313e-19 in answer, got {answer!r}"
+    )
+
+
+def test_photon_energy_different_frequency(vy):
+    """E = h*f: h=6.626e-34, f=6e14 → E≈3.976e-19 J"""
+    answer = vy.ask("find photon energy given frequency 6e14")
+    assert "3.97" in answer or "3.976" in answer, (
+        f"expected ~3.976e-19 in answer, got {answer!r}"
+    )
+
+
+def test_photon_energy_high_frequency(vy):
+    """E = h*f: h=6.626e-34, f=1e15 → E≈6.626e-19 J"""
+    answer = vy.ask("find photon energy given frequency 1e15")
+    assert "6.62" in answer or "6.626" in answer, (
+        f"expected ~6.626e-19 in answer, got {answer!r}"
+    )
+
+
+def test_planck_constant_auto_supplied(vy):
+    """planck-constant has constants-key → auto-supplied without explicit value"""
+    # no 'planck constant' given in query — must be looked up automatically
+    answer = vy.ask("find photon energy given frequency 5e14")
+    assert "no match" not in answer, (
+        "planck-constant should be auto-supplied from constants, got no match"
+    )
+
+
+# ── mass density via satya+satya compound (Way 2) ────────────────────────────
+# ρ = m / V  — "mass density" resolves as compound via sandhi Way 2
+
+
+def test_mass_density_satya_compound(vy):
+    """'mass density' as satya+satya compound → mass-density node"""
+    answer = vy.ask("find mass density given mass 500 volume 0.25")
+    # ρ = 500 / 0.25 = 2000
+    assert "2000" in answer, f"expected 2000 in answer, got {answer!r}"
+
+
+def test_mass_density_compound_matches_direct(vy):
+    """'mass density' compound query gives same result as direct 'density' query"""
+    answer_compound = vy.ask("find mass density given mass 60 volume 2")
+    answer_direct = vy.ask("find density given mass 60 volume 2")
+    assert "30" in answer_compound, (
+        f"expected 30 via compound query, got {answer_compound!r}"
+    )
+    assert "30" in answer_direct, f"expected 30 via direct query, got {answer_direct!r}"

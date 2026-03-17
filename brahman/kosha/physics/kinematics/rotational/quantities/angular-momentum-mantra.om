@@ -4,10 +4,9 @@ mantra angular-momentum-mantra
   "physics-mantra-varga"
   "angular-momentum-swarupa"
   "angular-momentum-phala"
-  "angular-momentum-expr-kriya"
   "moment-of-inertia-janya"
   "angular-velocity-janya"
 
-  shabda name:angular-momentum unit:kilogram-metre-squared-per-second
+  shabda name:angular-momentum unit:kilogram-metre-squared-per-second math-op:multiplication
 
 done

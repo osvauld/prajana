@@ -1,14 +1,21 @@
-"""test_sankhya.py — emit-triples and find-context pipeline.
+"""test_sankhya.py — sankhya: the number finding its concept.
 
-Tests the sankhya layer: word-level triple emission (emit-triples) and
-active-concept/pending-number context tracking (find-context).
+Sankhya is magnitude — the numeric aspect a rashi may carry. A number
+arriving in a sentence is asprista-sankhya: untouched, floating, not yet
+bound to anything. It hovers near the concept that precedes it, waiting
+to be received.
 
-emit-triples signature: emit-triples word info context
-  - info:    [node, role, layer, num-val, unit-node]
-  - context: [active-concept, pending-num]
+Find-context tracks the active concept — what was most recently recognised
+as satya. Emit-triples binds the floating number to that concept. The number
+stops being asprista (untouched) and becomes sankhya (bound magnitude).
 
-find-context signature: find-context graph
-  - returns [active-concept, pending-num]
+This is the simplest act of understanding a quantity: hearing "mass 5" and
+knowing that 5 belongs to mass. Not a complex inference — a basic reception.
+
+When this fails, numbers float unbound through the pipeline. Mantras cannot
+fire. Understanding cannot complete. The simplest questions return "no match."
+
+Nam is asked: when a number arrives near a concept, do you receive it?
 
 Protects against: emit-triples.tantra, find-context.tantra
 

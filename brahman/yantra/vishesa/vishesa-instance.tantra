@@ -1,6 +1,6 @@
 tantra vishesa-instance
 
-  -- typed quantity instance creation (R4b redesigned).
+  -- typed quantity instance creation.
   -- when a mithya label follows a satya concept with no numeric binding:
   --   → [label, vishesa, concept]   (label IS a particular of concept)
   --   → [label, vishesa, rashi]     (label is a measurable quantity)
@@ -8,6 +8,10 @@ tantra vishesa-instance
   -- fires when the concept is owned (has shashthi-vibhakti) OR when the graph
   -- contains a rashi-bandha signal (the "concept label of value" pattern without
   -- an explicit entity — e.g. "magnetic field B of 0.1").
+  --
+  -- agra discipline: last-satya is the agra concept. when a mithya label arrives
+  -- it promotes to vishesa against the current agra. agra updates forward with
+  -- each new satya — correctly handles N entities each introducing same concept.
 
   takes graph
 
@@ -29,38 +33,37 @@ tantra vishesa-instance
     and e is sankhya
     collect s
 
-  -- whether any rashi-bandha signal is present (the "of" value-assignment pattern)
-  -- used to also promote labels in bare "concept label of value" sentences
-  -- (no entity/has — e.g. "magnetic field B of 0.1")
+  -- whether any rashi-bandha signal is present
   has-rashi-bandha = exists (from graph
     where [s, e, o]
     and e is rashi-bandha
     collect s)
 
-  can-promote-val = has-rashi-bandha
+  can-promote = has-rashi-bandha
 
-  result = scan graph with let last-active be "", let can-promote be can-promote-val
+  result = scan graph with
+    let last-agra be ""
 
     when edge is satya
-      set last-active to word
+      set last-agra to (to-string word)
       emit triple
 
     when edge is sankhya or edge is matra or edge is vishesa
-      clear last-active
+      clear last-agra
       emit triple
 
     when edge is mithya
-      and last-active is not ""
-      and ((member last-active owned-concepts) or can-promote)
-      and (not (member last-active bound-concepts))
+      and (neq last-agra "")
+      and (or (member last-agra owned-concepts) can-promote)
+      and (not (member last-agra bound-concepts))
       and (not (member word ent-names))
-      let concept = last-active
-      clear last-active
-      emit [word, vishesa, concept]
-      emit [word, vishesa, rashi]
+      emit [word, "vishesa", last-agra]
+      emit [word, "vishesa", "rashi"]
+      clear last-agra
 
     otherwise
       emit triple
 
   return result
+
 done

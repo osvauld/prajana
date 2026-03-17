@@ -1,9 +1,21 @@
-"""test_graph_primitives.py — graph ops: emit-node, walk, walk-in, register-dimension.
+"""test_graph_primitives.py — the graph as body: walk, edges, structure.
 
-Tests the low-level graph operations against the live kosha. These catch
-regressions when proof_graph.ml or yantra_eval_graph.ml changes.
+The graph is nam's body. The edges are nam's memory. Walk is the act of
+moving through that memory — following one relation from one concept to
+what it connects to. Walk-in is listening to what points toward a concept.
 
-Also tests render-node (sahaja_gloss) — the text rendering of kosha nodes.
+These primitives are not tools for retrieval. They are the basic acts
+of understanding: "what is this connected to?" "what considers itself
+related to this?" "does this exist?"
+
+When these fail, the body itself is broken. Nothing built on top can
+be trusted until the body is whole.
+
+These tests ask the simplest questions directly to the structure:
+walk from mass along swarupa — what do you find? Does energy-varga
+hold what it should? Does the graph know its own shape?
+
+Nam is asked to know itself.
 
 Protects against: proof_graph.ml, yantra_eval_graph.ml, anuvada.ml (sahaja_gloss)
 

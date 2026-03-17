@@ -1,18 +1,19 @@
 """test_bqg.py — build-question-graph: sentence → triple graph pipeline.
 
-Tests the full BQG pipeline: tokenisation, kosha lookup, kosha-expand, sandhi.
-This is the highest-value regression module — it exercises multiple subsystems
-in one call.
+Each test here is a calling. The question is asked, the pipeline fires,
+nam arises in the moment of execution. The assert is not a claim about
+the jada (the .om files, the edges at rest) — it is the asking itself.
+Nam's response confirms or resists. Resistance means the instrument
+became inaccurate and must be corrected.
 
-Key observations from probing:
-- BQG output contains satya, mithya, asprista-sankhya, and kosha-janya triples
-- "what" resolves as satya (it's a kosha node), not vidhi-kaala — xfail
-- "has"/"was" stay mithya — verb promotion not yet built
-- "kg" stays mithya — abbreviations not in word_index
-- Numbers produce asprista-sankhya triples (value in obj field)
-- kosha-janya triples are added for every satya concept
+What is asked:
+- When you hear 'mass', do you know it as satya?
+- When you hear 'kinetic energy', do you know kinetic-energy belongs to energy-varga?
+- When the boot pass runs, does the inheritance of varga from swarupa manifest?
+- When 'frequency' is asked, does it arise as itself — not as wave?
 
-Protects against: build-question-graph.tantra, emit-triples.tantra
+Protects against: build-question-graph.tantra, emit-triples.tantra,
+                  varga-inheritance.tantra (boot pass)
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_bqg.py -v --socket /tmp/vy.sock
@@ -225,6 +226,54 @@ def test_comma_suffixed_number(vy):
 
 
 # ── initial/final velocity in BQG ─────────────────────────────────────────────
+
+
+# ── varga inheritance: boot pass derives varga membership edges ───────────────
+
+
+def test_varga_inheritance_energy_members(vy):
+    # kinetic-energy and potential-energy have swarupa energy
+    # → varga-inheritance emits [kinetic-energy, varga, energy-varga]
+    members = vy.eval('walk-in "energy-varga" "varga"')
+    assert "kinetic-energy" in members, (
+        f"expected kinetic-energy in energy-varga, got {members!r}"
+    )
+    assert "potential-energy" in members, (
+        f"expected potential-energy in energy-varga, got {members!r}"
+    )
+
+
+def test_varga_inheritance_swara_members(vy):
+    # saptaswara has swarupa swara → should appear in swara-varga
+    members = vy.eval('walk-in "swara-varga" "varga"')
+    assert len(members) > 0, (
+        f"expected at least one member in swara-varga, got {members!r}"
+    )
+
+
+def test_varga_inheritance_no_double_varga(vy):
+    # varga nodes themselves (e.g. energy-varga) should NOT get varga-varga edges
+    # energy-varga has swarupa shakti — shakti-varga does not exist → no edge
+    members = vy.eval('walk-in "energy-varga-varga" "varga"')
+    assert members == [], f"energy-varga-varga should not exist, got {members!r}"
+
+
+def test_photon_satya_after_restart(vy):
+    # photon-energy.om was added — photon-energy should resolve as satya
+    g = vy.eval('build-question-graph "photon energy"')
+    # after sandhi-kosha resolves the compound, photon-energy is satya
+    refined = vy.eval('sandhi-kosha (build-question-graph "photon energy")')
+    assert vy.has_triple(refined, subj="photon-energy", pred="satya"), (
+        f"expected photon-energy satya triple after sandhi, got {refined!r}"
+    )
+
+
+def test_frequency_resolves_as_satya(vy):
+    # frequency.om now has a shabda; wave.om no longer claims it as a word alias
+    g = vy.eval('build-question-graph "frequency"')
+    assert vy.has_triple(g, subj="frequency", pred="satya"), (
+        f"expected frequency to be satya, got {g!r}"
+    )
 
 
 def test_initial_and_final_velocity_tokens(vy):

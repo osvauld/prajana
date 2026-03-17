@@ -4,10 +4,9 @@ mantra pressure-mantra
   "physics-mantra-varga"
   "pressure-swarupa"
   "pressure-phala"
-  "pressure-expr-kriya"
   "force-janya"
   "area-janya"
 
-  shabda name:pressure unit:pascal
+  shabda name:pressure unit:pascal math-op:division
 
 done

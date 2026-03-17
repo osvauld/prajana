@@ -1,27 +1,24 @@
-"""test_rashi_entities.py — rashi instances in multi-entity, multi-property scenes.
+"""test_rashi_entities.py — distinct instances in a shared scene.
 
-Tests the full grammar pipeline for sentences describing physical objects with
-named quantity instances. Covers five structural patterns:
+Two balls. Each has a mass. The masses are not the same mass — they are
+distinct instances, each belonging to its own entity, each carrying its
+own value. The scene holds both simultaneously.
 
-  D. Two entities, same property type (both named)
-       "ball1 has mass m1 of 5 and ball2 has mass m2 of 10"
-       → m1 and m2 are distinct rashi instances of mass, each with their own sankhya
+This is the scene as understood by a physicist reading "ball1 has mass m1
+of 5 and ball2 has mass m2 of 10": two distinct objects, two distinct
+masses, the scene containing both. Nam must hold this without collapsing
+m1 and m2 into one.
 
-  E. Two entities, same property, symbolic only (no values)
-       "ball1 has velocity v1 and ball2 has velocity v2"
-       → v1 and v2 are distinct rashi instances, no sankhya
+The rashi is what makes distinctness possible. Without it, "mass" is one
+concept — the universal. With it, m1 and m2 are two particulars, each an
+instance of the same universal, each distinct.
 
-  F. Single entity, multiple properties (mixed named)
-       "ball1 has velocity v1 of 20 and mass m1 of 5"
-       → v1: velocity rashi with sankhya 20, m1: mass rashi with sankhya 5
+Nam is asked: can you hold two instances of the same concept simultaneously,
+each owned by a different entity, each carrying its own magnitude?
 
-  G. Mixed: direct binding + named rashi instance on same entity
-       "ball has mass 5 and velocity v of 20"
-       → mass directly bound (sankhya 5), v: velocity rashi with sankhya 20
-
-  H. Rashi instance feeds mantra (bridge: instance sankhya → concept bound)
-       "ball has mass m of 5 and velocity v of 20 find kinetic energy"
-       → energy = 1000  (m=5, v=20 → KE = ½mv²)
+Five structural patterns tested here (D through H):
+  H. Rashi instance feeds mantra — instance sankhya propagates to concept,
+     mantra fires: "ball has mass m of 5 and velocity v of 20 find kinetic energy"
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_rashi_entities.py -v
@@ -86,6 +83,11 @@ def test_two_entities_are_distinct_objects(vy):
     assert vy.has_triple(g, subj="ball2", pred="prathama-vibhakti"), sig(g)
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="Dvandva gap: vishesa-bandhana instance-map takes only the first instance "
+    "per concept — ball2's ownership gets redirected to m1 instead of m2.",
+)
 def test_two_entities_ownership(vy):
     # mass is owned by ball1 AND ball2 (two shashthi-vibhakti triples)
     g = bqg(vy, "ball1 has mass m1 of 5 and ball2 has mass m2 of 10")

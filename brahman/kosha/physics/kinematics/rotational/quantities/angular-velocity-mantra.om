@@ -4,10 +4,9 @@ mantra angular-velocity-mantra
   "physics-mantra-varga"
   "angular-velocity-swarupa"
   "angular-velocity-phala"
-  "angular-velocity-expr-kriya"
   "velocity-janya"
   "radius-janya"
 
-  shabda name:angular-velocity unit:radian-per-second
+  shabda name:angular-velocity unit:radian-per-second math-op:division
 
 done

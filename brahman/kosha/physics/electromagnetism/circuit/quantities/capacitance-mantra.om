@@ -4,10 +4,9 @@ mantra capacitance-mantra
   "physics-mantra-varga"
   "capacitance-swarupa"
   "capacitance-phala"
-  "capacitance-expr-kriya"
   "charge-janya"
   "voltage-janya"
 
-  shabda name:capacitance unit:farad
+  shabda name:capacitance unit:farad math-op:division
 
 done

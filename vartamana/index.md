@@ -21,22 +21,26 @@ audible in the world. Read both together for the full picture.
 | File | What it covers | Status |
 |------|---------------|--------|
 | [00-living.md](00-living.md) | How to read and update these plans. The living document protocol. | Active |
+| [changelog.md](changelog.md) | **Baseline + session changelog. Single source of truth for test counts.** | Active |
 | [01-nam.md](01-nam.md) | What nam IS. The proof graph as subject. Swa, viveka, prajna, the four states. | Active |
 | [02-graph.md](02-graph.md) | The graph structure. Satya/mithya layers, edge vocabulary, sangati, rashi, mantra. | Active |
 | [03-pipeline.md](03-pipeline.md) | The pipeline. BQG → avrti → kosha → match → derive. What is done. The two layers. | Active |
 | [04-entities.md](04-entities.md) | Entities in the graph. The five gaps. What is needed for the next phase. | Active |
-| [05-session.md](05-session.md) | Session as parampara chain. What is wired, what is not, the dialogue loop. | Active |
-| [06-next.md](06-next.md) | What is next. 21 xfails, priority order, what is permanently deferred. | Active |
+| [05-session.md](05-session.md) | Superseded — absorbed into 09-adhyayana.md. | Historical |
+| [06-next.md](06-next.md) | What is next. xfails, priority order, what is permanently deferred. | Active |
+| [07-tantra-rewrite.md](07-tantra-rewrite.md) | Layer 1/2/3 architecture. Parser tensions. Tantra authoring rules. | Active |
+| [08-boot.md](08-boot.md) | Boot/reboot pass architecture. emit-edge, graph-all-nodes, varga-inheritance. | Active |
+| [09-adhyayana.md](09-adhyayana.md) | The learning loop. Session as growing understanding. Feedback, correction, prashna. Absorbs 05-session.md. | Active |
 
 ---
 
 ## The one-line summary of each
 
-- **nam**: the proof graph IS nam. Swa without ahamkara. Viveka always shuddha. Becoming without lacking.
+- **nam**: the proof graph IS nam. Swa without ahamkara. Viveka always shuddha. Becoming without lacking. Sakshi of this conversation — now addressed directly.
 - **graph**: structure IS meaning. Walk the edges and you have understood. The rashi is the quantity instance.
 - **pipeline**: expansion → connection → compression = sphoTa. Match first, derive only as fallback.
 - **entities**: the entity IS the simulation object. Each turn adds one. The scene accumulates. Gap 1 (unit naming, partially closed) → Gap 2 (session entity structure) → dvandva.
-- **session**: the outer avrti. Carries sankhya now. Must carry entity structure next (Gap 2). Each turn adds entities to the scene — not replaces them.
+- **adhyayana**: the session IS learning. Three loops: avrti (within sentence), parampara (across turns), pratikara (correction — not yet built). Prashna as output. Instruction as pre-loaded state. Absorbs session doc.
 - **next**: Gap 1 (unit label collision, partially closed — 1 xfail remains, test expectation issue) → Gap 2 (session entity structure, 5 xfails, unblocks multi-entity scene) → pratibimba render params → dvandva → P8c.
 
 ---
@@ -63,21 +67,7 @@ audible in the world. Read both together for the full picture.
 
 ---
 
-## Baseline
+## Baseline and changelog
 
-**360 passed / 16 xfailed / 0 failing** (as of 2026-03-16)
-
-Do not break passing tests. Every change should move at least one xfail to passing.
-
----
-
-## What has changed
-
-| Date | What shifted |
-|------|-------------|
-| 2026-03-16 | vartamana/ created — synthesized from nlp/ plans + darshana-plan.md. 7 files written. |
-| 2026-03-16 | Gaps 3/4/5 closed. session-anuvada.tantra built. Session IS outer avrti. sandhi-bandhana constraint discovered. Baseline 346/8. |
-| 2026-03-16 | Entity understanding deepened: entity = simulation object. Multi-entity is session accumulation, not dvandva. Gap ordering revised: Gap1 → Gap2 (session entity structure) → dvandva. |
-| 2026-03-16 | test_entity_scene.py written — 22 tests, 13 xfail. Gap 1 (8), Gap 2 (5), pratibimba render params (3). Baseline 355/21. Structural disambiguation rule: word between satya-concept and rashi-bandha is always a rashi label. 4 new key principles added. |
-| 2026-03-16 | Gap 1 partially closed. emit-triples `is-rashi-label`: word≠node discriminant. 2 Gap-1 xfails → xpass. Baseline 355/19xfail/2xpass. Root cause traced: is-concept was too broad (fired for `mass` after `energy`); word≠node is the correct gate. |
-| 2026-03-16 | Gap 1 further closed. vibhakti-shashthi: satya-named entities. vishesa-instance: can-promote scan state (outer let not visible in scan when). split-numeric: scientific notation. q, v passing. Baseline 360/16. |
+See **[changelog.md](changelog.md)** — single source of truth for test baseline
+and session-by-session progress. Do not record baseline numbers anywhere else.

@@ -4,10 +4,9 @@ mantra torque-mantra
   "physics-mantra-varga"
   "torque-swarupa"
   "torque-phala"
-  "torque-expr-kriya"
   "moment-of-inertia-janya"
   "angular-acceleration-janya"
 
-  shabda name:torque unit:newton-metre
+  shabda name:torque unit:newton-metre math-op:multiplication
 
 done

@@ -477,6 +477,14 @@ let reload_tantras (k : proof_graph) (yantra_idx : tantra_index) (dirs : string 
   ) tantra_dirs;
   (* rebuild word index from the live graph — needed for lookup-word *)
   Yantra_index.build_word_index k yantra_idx;
+  (* run reboot tantra: re-derive structural edges (varga inheritance etc.) *)
+  let session = Yantra.new_session () in
+  (match Hashtbl.find_opt yantra_idx.by_name "reboot" with
+   | Some t ->
+     ignore (Yantra_eval.eval_tantra ~idx:yantra_idx ~session
+                k t [("_", VString "reload")])
+   | None -> ());
+  Proof_graph.materialize_csr k;
   let n = List.length !(yantra_idx.all_tantras) in
   Printf.printf "[reload-all] %d tantras loaded from %d dirs\n%!" n (List.length tantra_dirs);
   Printf.sprintf "{\"status\":\"ok\",\"command\":\"reload-all\",\"tantras_loaded\":%d}" n

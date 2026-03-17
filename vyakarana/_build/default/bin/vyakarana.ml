@@ -201,6 +201,15 @@ let () =
   let yantra_idx = Yantra.build_index ~graph:k0 dirs in
   Proof_graph.materialize_csr k0;
   Proof_graph.compute_visheshanam_entropy_weights k0;
+  (* run boot tantra: graph enrichment passes (varga inheritance etc.) *)
+  let yantra_session = Yantra.new_session () in
+  (match Hashtbl.find_opt yantra_idx.Yantra.by_name "reboot" with
+   | Some t ->
+     ignore (Yantra_eval.eval_tantra ~idx:yantra_idx ~session:yantra_session
+                k0 t [("_", Yantra_types.VString "boot")])
+   | None -> ());
+  (* re-materialize after boot tantra may have added edges *)
+  Proof_graph.materialize_csr k0;
   if not quiet_startup then begin
     let n_nodes = Hashtbl.length k0.Proof_graph.nodes in
     let n_edges = List.length !(k0.Proof_graph.all_edges) in
@@ -211,7 +220,6 @@ let () =
       Printf.printf "dimensions (visheshanam): %d (10 core + %d dynamic)\n%!" ndims (ndims - 10);
     Printf.printf "space (akasham) ready.\n%!"
   end;
-  let yantra_session = Yantra.new_session () in
   match socket_path with
   | Some path -> Socket.serve k0 yantra_idx yantra_session dirs path
   | None      -> madakkal k0 yantra_idx yantra_session emit_only

@@ -4,10 +4,9 @@ mantra momentum-mantra
   "physics-mantra-varga"
   "momentum-swarupa"
   "momentum-phala"
-  "momentum-expr-kriya"
   "mass-janya"
   "velocity-janya"
 
-  shabda name:momentum unit:kilogram-metre-per-second
+  shabda name:momentum unit:kilogram-metre-per-second math-op:multiplication
 
 done

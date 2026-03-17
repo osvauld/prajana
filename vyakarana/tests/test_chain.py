@@ -1,8 +1,19 @@
-"""test_chain.py — multi-step chaining via derive-step fixpoint.
+"""test_chain.py — chained derivation: understanding building on itself.
 
-Tests that require intermediate derivations before the target mantra can fire.
-derive-step.tantra fires all fully-covered mantras each pass; fixpoint in
-anuvada-ganana accumulates bindings until the target is reachable.
+Some relations cannot fire until others have established their phala.
+To find kinetic energy from initial conditions, velocity must first be derived.
+The chain is: axioms → velocity-mantra → kinetic-energy-mantra → answer.
+
+This is not sequential computation. It is the accumulation of understanding.
+Each mantra that fires adds its phala to what is known. The next mantra
+recognises that the new knowledge satisfies its janya. Understanding deepens
+until the target is reachable.
+
+Derive-step runs to fixpoint — the same spiral as avrti, but at the mantra
+level. Each pass: fire what is fully covered. Stop when nothing new can fire.
+
+These tests ask: when the direct path is blocked, does nam find the chain?
+Does understanding accumulate correctly across multiple mantra firings?
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_chain.py -v --socket /tmp/vy.sock

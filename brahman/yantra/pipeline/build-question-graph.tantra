@@ -7,13 +7,13 @@ tantra build-question-graph
   sent-punct = [".", "?", "!", ","]
 
   words  = split sentence " "
+
   graph  = reduce words [] (fn g word ->
     let wlen     = string-length word
     let last-ch  = cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise ""
     let has-punct = member last-ch sent-punct
     let clean    = cond has-punct (substr word 0 (sub wlen 1)) otherwise word
     let punct    = cond has-punct last-ch otherwise ""
-
     let node     = cond (gt (string-length clean) 0) (lookup-word clean) otherwise _none
     let role     = cond (exists node) (shabda node "role")  otherwise ""
     let layer    = cond (exists node) (node-layer node)     otherwise ""
@@ -25,11 +25,11 @@ tantra build-question-graph
     let ctx      = find-context g
     let info     = [(to-string node), role, layer, num-val, (to-string uni-nod)]
     let triples  = emit-triples clean info ctx
-
     let with-word = append g triples
-    cond (gt (string-length punct) 0)
+    let with-punct = cond (gt (string-length punct) 0)
       (append with-word [[punct, viraam, punct]])
-    otherwise with-word)
+      otherwise with-word
+    with-punct)
 
   -- sandhi-viveka: promote grammar mithya words to typed dimension triples
   result = sandhi-viveka graph

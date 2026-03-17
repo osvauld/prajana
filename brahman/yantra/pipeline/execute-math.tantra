@@ -1,0 +1,35 @@
+tantra execute-math
+
+  -- execute a math-backed mantra forward.
+  -- reads math-op shabda from mantra, resolves janya to values,
+  -- calls the math op's eval primitive directly.
+  --
+  -- applies to mantras with shabda math-op:X where X is a math kosha node
+  -- (multiplication, division, etc.) that has shabda eval:op_name.
+
+  inputs
+    mantra    string
+    bindings  list
+
+  let
+
+  math-op = shabda mantra "math-op"
+  op-eval  = shabda math-op "eval"
+
+  janya = walk mantra "janya"
+
+  args = reduce janya [] (fn acc concept ->
+    let ck = shabda concept "constants-key"
+    let v  = cond (gt (string-length ck) 0)
+      (nth (split-numeric (shabda "physics-constants" ck)) 0)
+      otherwise
+        (reduce bindings "" (fn a2 kv ->
+          cond (eq (nth kv 0) concept) (nth kv 1) otherwise a2))
+    append acc [v])
+
+  value = apply-op op-eval args
+
+  return
+    value  any
+
+done

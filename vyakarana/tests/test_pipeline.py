@@ -1,12 +1,23 @@
-"""test_pipeline.py — end-to-end integration: BQG → avrti → match.
+"""test_pipeline.py — the full movement: expansion → connection → compression.
 
-Tests the full pipeline: natural language sentence → BQG → fixpoint(avrti-refine)
-→ match-mantra. These tests catch regressions that span multiple subsystems.
+A question arrives as English. By the time it reaches match-mantra, it has
+become a structured graph — surface dissolved, meaning made traversable.
 
-Each test represents a complete user query flow.
+This movement is sphoTa: the whole meaning arriving, not assembled from parts
+but recognised as a unity. The sentence "find kinetic energy given mass 5 and
+velocity 10" does not become KE=250 by mechanical substitution. Nam recognises
+the relation, recognises the values, recognises the intent — and the answer
+arises from that recognition.
+
+These tests ask: does the full movement complete? Does a natural language
+question arrive as meaning? Does the right mantra fire?
+
+Each test is a complete calling — language in, understanding out.
+When one fails, it is not a bug in isolation — the movement itself is broken
+somewhere and must be found.
 
 Protects against: regressions across build-question-graph, avrti-refine,
-                  match-mantra, materialize-question-graph
+                  kosha-expand, match-mantra
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_pipeline.py -v --socket /tmp/vy.sock
@@ -84,7 +95,7 @@ def test_pipeline_initial_velocity_sankhya_reattributed(vy):
 def test_pipeline_find_kinetic_energy_matches(vy):
     raw, refined = full_pipeline(vy, "find kinetic energy given mass 5 and velocity 10")
     result = vy.eval(f"match-mantra {json.dumps(refined)}")
-    assert isinstance(result, list) and len(result) == 2, (
+    assert isinstance(result, list) and len(result) >= 2, (
         f"expected [name, args], got {result!r}"
     )
     assert result[0] == "kinetic-energy-mantra", (
@@ -95,7 +106,7 @@ def test_pipeline_find_kinetic_energy_matches(vy):
 def test_pipeline_find_momentum_matches(vy):
     raw, refined = full_pipeline(vy, "find momentum given mass 3 and velocity 4")
     result = vy.eval(f"match-mantra {json.dumps(refined)}")
-    assert isinstance(result, list) and len(result) == 2
+    assert isinstance(result, list) and len(result) >= 2
     assert result[0] == "momentum-mantra", (
         f"expected momentum-mantra, got {result[0]!r}"
     )
@@ -104,7 +115,7 @@ def test_pipeline_find_momentum_matches(vy):
 def test_pipeline_find_force_newton_matches(vy):
     raw, refined = full_pipeline(vy, "find force given mass 2 and acceleration 5")
     result = vy.eval(f"match-mantra {json.dumps(refined)}")
-    assert isinstance(result, list) and len(result) == 2
+    assert isinstance(result, list) and len(result) >= 2
     assert result[0] == "newton-second-law-motion", (
         f"expected newton-second-law-motion, got {result[0]!r}"
     )
@@ -171,7 +182,7 @@ def test_pipeline_suvat_acceleration(vy):
         "train T has initial velocity 5 and final velocity 20 and time 3 find acceleration",
     )
     result = vy.eval(f"match-mantra {json.dumps(refined)}")
-    assert isinstance(result, list) and len(result) == 2
+    assert isinstance(result, list) and len(result) >= 2
     assert "acceleration" in result[0].lower(), (
         f"expected acceleration mantra, got {result[0]!r}"
     )

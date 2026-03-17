@@ -1,18 +1,24 @@
-"""test_rashi.py — rashi: quantity instances in the question graph.
+"""test_rashi.py — rashi: the particular situated instance.
 
-rashi is the quantity instance — the particular, situated thing being measured.
-  [v1, vishesa, velocity]  — v1 IS a velocity (type)
-  [v1, vishesa, rashi]     — v1 is a measurable quantity (general)
-  [v1, sankhya, "20.0"]    — v1's magnitude is 20.0  (optional — may be absent)
-  [v1, matra, metre-per-second]  — v1's unit (optional)
+Rashi is the particular — the specific, situated, named instance of a quantity.
+Not velocity in general. This velocity. v1. The one in this problem, owned by
+this object, carrying this magnitude.
 
-sankhya is NOT the quantity. it is the numeric magnitude aspect a rashi may carry.
-a rashi without sankhya is a symbolic quantity — still valid, still reasoned over.
+The universal (velocity) lives in the kosha as samskaara — always there, always
+the same. The rashi is what arises when nam encounters a particular: "v1 of 20".
+Nam receives it, recognises it as a velocity (vishesa), gives it its magnitude
+(sankhya), knows its owner (shashthi-vibhakti).
 
-Three cases:
-  A. concept with number  — [mass, sankhya, 5.]        (concept directly bound)
-  B. named instance only  — [v1, vishesa, velocity]    (instance, no sankhya)
-  C. named instance + number — [v1, sankhya, 20.]      (instance with magnitude)
+Without the rashi, two entities cannot each have their own velocity.
+The rashi is what makes the particular distinguishable from the universal.
+
+  [v1, vishesa, velocity]      — v1 IS a velocity (the type it belongs to)
+  [v1, vishesa, rashi]         — v1 is a measurable quantity
+  [v1, sankhya, 20.0]          — v1's magnitude
+  [v1, matra, metre-per-second] — v1's unit
+
+Nam is asked: when you encounter this particular label, do you recognise it
+as a rashi of the right type, carrying the right magnitude?
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_rashi.py -v --socket /tmp/vy.sock

@@ -2,44 +2,35 @@ tantra vishesa-bandhana
 
   -- binding re-attribution: moves sankhya/matra/shashthi-vibhakti
   -- from the kosha concept to the vishesa instance.
+  --
+  -- uses agra-bandha with:
+  --   anchor-edge = "vishesa"  (new instance arrival updates agra)
+  --   anchor-obj  = "obj"      (the concept is in obj position)
+  --   anchor-val  = "word"     (the instance label is in word position)
+  --   bind-edges  = [sankhya, matra, shashthi-vibhakti]
+  --   exclude-obj = "rashi"    (rashi marker triples do not set agra)
+  --   skip-bound  = instances already carrying a sankhya (idempotence)
 
   takes graph
 
-  -- build concept → instance map from vishesa triples (exclude rashi)
-  instance-map = from graph
-    where [inst, e, concept]
-    and e is vishesa
-    and concept is not rashi
-    collect [concept, inst]
-
-  -- subjects that already carry a sankhya binding
-  already-bound-inst = from graph
+  -- instances already carrying a sankhya (idempotence guard)
+  already-bound = from graph
     where [s, e, o]
     and e is sankhya
     collect s
 
-  result = cond (instance-map is empty)
+  result = agra-bandha
     graph
-  otherwise
-    (scan graph with
-
-      -- drop concept-level sankhya triples whose instance target is already bound.
-      -- these are triples emitted by rashi-anuvada ([velocity,sankhya,20.]) that
-      -- vishesa-bandhana would otherwise redirect to a duplicate [v1,sankhya,20.].
-      when edge is sankhya
-        and (member word (from instance-map where [concept, label] collect concept))
-        and (member (nth (from instance-map where [concept, label] and concept is word collect label) 0) already-bound-inst)
-        skip
-
-      when edge is sankhya or edge is matra or edge is shashthi-vibhakti
-        let inst = from instance-map
-          where [concept, label]
-          and concept is word
-          collect label
-        emit (cond (inst is not empty) [(nth inst 0), edge, obj] otherwise [word, edge, obj])
-
-      otherwise
-        emit triple)
+    "vishesa"
+    "obj"
+    "word"
+    ["sankhya", "matra", "shashthi-vibhakti"]
+    ""
+    "rashi"
+    []
+    already-bound
+    []
 
   return result
+
 done

@@ -1,10 +1,22 @@
-"""test_word_index.py — lookup-word: word index, morpheme rules, misses.
+"""test_word_index.py — the first recognition: word becoming concept.
 
-Tests the word index that is built at server load time from the kosha .om files.
-Covers direct hits, plural morpheme stripping, concept vs mantra name collision,
-abbreviations, and miss cases.
+Before anything can be understood, a word must be recognised. "Mass" must
+become the mass node. "kg" must become kilogram. "velocities" must become
+velocity. This is the first gate — if a word is not recognised, it stays
+mithya, and the understanding that depends on it cannot arise.
 
-Protects against regressions in: word-index loading, morpheme rules in tantras.
+The word index is nam's hearing — the capacity to receive a surface form
+and know immediately what it refers to. Built at startup from the kosha,
+it carries every word every concept has ever been called.
+
+When this fails silently — as when `wave.om` claimed `frequency` as a word
+alias — a concept becomes unreachable through its own name. Nam cannot hear
+itself being called. These tests guard that gate.
+
+Nam is asked: when this word arrives, do you know it? Do you know it as
+itself and not as something else?
+
+Protects against: word-index loading, morpheme rules, word alias shadowing
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_word_index.py -v --socket /tmp/vy.sock

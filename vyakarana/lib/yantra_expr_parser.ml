@@ -271,7 +271,7 @@ and parse_scan (tokens : string list) : expr * string list =
     | [] -> (List.rev acc, [])
     | "let" :: name :: "be" :: rest ->
       let rec collect_init iacc = function
-        | ("," | "when" | "otherwise") :: _ as r -> (List.rev iacc, r)
+        | ("," | "let" | "when" | "otherwise") :: _ as r -> (List.rev iacc, r)
         | tok :: rest -> collect_init (tok :: iacc) rest
         | [] -> (List.rev iacc, [])
       in
@@ -310,10 +310,38 @@ and parse_scan (tokens : string list) : expr * string list =
     match toks with
     | "when" :: rest ->
       let (guard, rest') = parse_expr rest in
+      (* parse one guard atom then absorb any trailing infix "or" chains.
+         "or" is safe as infix here — scan guards never contain "let x = e in body".
+         e.g. "member x lst or can-promote" → or(member x lst, can-promote) *)
+      let parse_guard_atom toks =
+        let (g, rest) = parse_expr toks in
+        let rec absorb_or g toks =
+          match toks with
+          | "or" :: rest ->
+            let (g2, rest') = parse_expr rest in
+            absorb_or (Call ("or", [g; g2])) rest'
+          | _ -> (g, toks)
+        in
+        absorb_or g rest
+      in
+      (* absorb_or: fold any trailing "or atom" onto g before collect_and_guards.
+         This handles the case where the initial guard after "when" ends with
+         "or something" — e.g. "when edge is mithya and member x lst or flag":
+         parse_expr gives "member(x, lst)", then absorb_or gives
+         "or(member(x,lst), flag)", then collect_and_guards sees "and ...". *)
+      let rec absorb_or g toks =
+        match toks with
+        | "or" :: rest ->
+          let (g2, rest') = parse_expr rest in
+          absorb_or (Call ("or", [g; g2])) rest'
+        | _ -> (g, toks)
+      in
+      let (guard, rest') = absorb_or guard rest' in
       let rec collect_and_guards g toks =
         match toks with
         | "and" :: rest ->
-          let (g2, rest') = parse_expr rest in
+          (* parse_guard_atom handles absorb_or within each atom *)
+          let (g2, rest') = parse_guard_atom rest in
           collect_and_guards (Call ("and", [g; g2])) rest'
         | _ -> (g, toks)
       in

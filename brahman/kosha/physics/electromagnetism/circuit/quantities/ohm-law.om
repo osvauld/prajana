@@ -4,10 +4,9 @@ mantra ohm-law
   "physics-mantra-varga"
   "voltage-swarupa current-yukta resistance-yukta"
   "niyama-sthita"
-  "ohm-expr-kriya"
   "current-janya"
   "resistance-janya"
 
-  shabda name:ohm-law unit:volt
+  shabda name:ohm-law unit:volt math-op:multiplication
 
 done

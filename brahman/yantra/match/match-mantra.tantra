@@ -3,10 +3,12 @@ tantra match-mantra
   -- given a question graph, find the best matching mantra:
   -- 1. extract solve-for concept (satya concept named as vidhi-kaala target)
   -- 2. filter mantras to those whose name: or phala edge matches the solve-for concept
-  -- 3. among those, find first whose janya edges are fully covered by bound concepts
+  -- 3a. forward: all janya covered → execute (via execute-chain or execute-math)
+  -- 3b. inverse: solve-for is a janya, phala + all other janya covered → invert-math
   -- 4. if no solve-for, fall back to any mantra with full janya coverage
-  -- returns [mantra-node, val-pairs] or [] if no match.
-  -- val-pairs = [[concept, val], ...] — passed to execute-chain for dispatch.
+  -- returns [mantra-node, val-pairs, mode] or [] if no match.
+  -- mode is "forward" or "inverse" — used by anuvada-ganana to pick executor.
+  -- val-pairs = [[concept, val], ...] — passed to execute-chain/execute-math.
 
   takes graph
 
@@ -16,6 +18,9 @@ tantra match-mantra
       [(append (nth acc 0) [s]),
        (append (nth acc 1) [[s, o]])]
     otherwise acc)
+
+  bound-concepts = nth bound-vals 0
+  val-pairs      = nth bound-vals 1
 
   -- extract solve-for: first satya after vidhi-kaala, or first satya overall
   sf-state = reduce graph [false, "", ""] (fn acc [s, e, o] ->
@@ -32,6 +37,9 @@ tantra match-mantra
       otherwise
         acc)
 
+  -- has-intent: true only if vidhi-kaala was explicitly present
+  has-intent = nth sf-state 0
+
   solve-for = cond (gt (string-length (nth sf-state 2)) 0)
     (nth sf-state 2)
     otherwise (nth sf-state 1)
@@ -39,24 +47,65 @@ tantra match-mantra
   -- all mantra nodes
   mantras = walk-in "physics-mantra" "varga"
 
-  -- filter to those matching solve-for (by name: shabda or phala edge)
+  -- filter candidates by solve-for matching phala, swarupa, name, or janya (inverse)
   candidates = cond (gt (string-length solve-for) 0)
     (filter mantras (fn m ->
-      let mname  = shabda m "name"
-      let mphala = nth (walk m "phala") 0
-      or (mname is solve-for) (mphala is solve-for)))
+      let mname    = shabda m "name"
+      let mphala   = nth (walk m "phala") 0
+      let mswarupa = nth (walk m "swarupa") 0
+      let mjanya   = walk m "janya"
+      or (mname is solve-for)
+         (mphala is solve-for)
+         (mswarupa is solve-for)
+         (member solve-for mjanya)))
     otherwise mantras
 
-  -- find first candidate whose entire janya set is covered
-  match = reduce candidates [] (fn acc m ->
+  -- try forward match first: all janya covered and solve-for is phala/swarupa
+  forward-match = reduce candidates [] (fn acc m ->
     cond (gt (length acc) 0) acc
     otherwise
-      (let janya  = walk m "janya"
+      (let janya    = walk m "janya"
+       let mphala   = nth (walk m "phala") 0
+       let mswarupa = nth (walk m "swarupa") 0
+       let sf-is-janya = member solve-for janya
        let all-ok = reduce janya true (fn a r ->
-         and a (or (member r (nth bound-vals 0))
+         and a (or (member r bound-concepts)
                    (gt (string-length (shabda r "constants-key")) 0)))
-       cond all-ok [m, (nth bound-vals 1)]
+       cond (and all-ok (not sf-is-janya)) [m, val-pairs, "forward"]
        otherwise []))
+
+  -- try inverse match: only when solve-for is explicitly stated
+  -- solve-for is a janya, phala + all other janya covered
+  inverse-match = cond (gt (length forward-match) 0) forward-match
+    otherwise
+    (cond (not has-intent) []
+    otherwise
+    (reduce candidates [] (fn acc m ->
+      cond (gt (length acc) 0) acc
+      otherwise
+        (let janya   = walk m "janya"
+         let mphala  = nth (walk m "phala") 0
+         let mswarupa = nth (walk m "swarupa") 0
+         let phala-concept = cond (gt (string-length mphala) 0) mphala otherwise mswarupa
+         let math-op = shabda m "math-op"
+         -- only try inverse if mantra is math-backed
+         let has-math-op = gt (string-length math-op) 0
+         let sf-is-janya = member solve-for janya
+         -- all other janya covered
+         let other-janya = filter janya (fn j -> not (eq j solve-for))
+         let others-ok = reduce other-janya true (fn a r ->
+           and a (or (member r bound-concepts)
+                     (gt (string-length (shabda r "constants-key")) 0)))
+         -- phala value is bound (by phala/swarupa name or mantra name)
+         let phala-bound = (or (member mphala bound-concepts)
+                               (member mswarupa bound-concepts)
+                               (member (shabda m "name") bound-concepts))
+         cond (and has-math-op sf-is-janya others-ok phala-bound)
+           [m, val-pairs, "inverse"]
+         otherwise [])))
+
+  match = cond (gt (length forward-match) 0) forward-match
+          otherwise inverse-match
 
   return match
 done

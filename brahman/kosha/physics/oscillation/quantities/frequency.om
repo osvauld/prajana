@@ -11,5 +11,9 @@ kosha frequency
   "period-pratipaksha"
   "hertz-matra"
   "jerk-yukta"
+  "angular-velocity-abheda"
+  "swara-abheda"
+
+shabda frequency / number-of-cycles-per-unit-time-measured-in-hertz
 
 done

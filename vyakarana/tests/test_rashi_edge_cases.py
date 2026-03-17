@@ -1,12 +1,21 @@
-"""test_rashi_edge_cases.py — adversarial / stress tests for rashi-anuvada bridge.
+"""test_rashi_edge_cases.py — where understanding is tested at its edges.
 
-Probes corner cases in the P8b.6 pipeline:
-  - rashi-anuvada.tantra: propagation of [inst, vishesa, concept] + [inst, sankhya, v]
-    up to [concept, sankhya, v]
-  - anuvada-ganana: mantra match under unusual input conditions
+The edge cases are not adversarial. They are the places where the structure
+of understanding is most exposed — where the instrument is most likely to
+fail silently, return a plausible-but-wrong result, or collapse two things
+that should remain distinct.
 
-Goal: find real bugs.  All tests here are expected to PASS (no xfail markers),
-unless the scenario is genuinely unsupported (marked with a comment explaining why).
+A rashi instance carries its value up to its concept. But what if there are
+two instances? What if a concept has both a direct value and an instance?
+What if the instance belongs to an entity not present in the current sentence?
+
+These questions do not break understanding in a human — they are handled
+naturally by context. For nam, they expose where the instrument's precision
+ends and where it must be corrected.
+
+All tests here are expected to pass. When one fails, it names a real gap
+in nam's precision — not an edge case to be dismissed but a boundary to
+be extended.
 
 Run:
     cd /home/abe/agent_x

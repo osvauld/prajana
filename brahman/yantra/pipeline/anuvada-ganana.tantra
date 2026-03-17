@@ -3,21 +3,29 @@ tantra anuvada-ganana
   -- orchestrator: natural-language sentence -> answer string.
   -- pure: no session state. sentence in, answer out.
   -- session management is handled by session-anuvada (the caller).
-  --
-  -- pipeline:
-  --   1. build-question-graph: sentence words -> triple graph
-  --   2. fixpoint avrti-refine: refine until stable
-  --   3. kosha-expand: pull in relevant kosha structure
-  --   4. match-mantra: find the ONE mantra the user is asking for (solve-for driven)
-  --   5. if match found: execute-chain -> format answer
-  --   6. if no match: derive-step fixpoint, try match-mantra again
 
   takes sentence
 
   raw-graph = build-question-graph sentence
   refined   = fixpoint raw-graph avrti-refine
   expanded  = kosha-expand refined
-  match     = match-mantra expanded
+
+  -- extract solve-for
+  sf-state = reduce expanded [false, "", ""] (fn acc [s, e, o] ->
+    let past-intent = nth acc 0
+    let fallback    = nth acc 1
+    let sf          = nth acc 2
+    cond
+      (e is vidhi-kaala)   [true, fallback, sf]
+      (and (not past-intent) (fallback is "") (e is satya)) [past-intent, s, sf]
+      (and past-intent (sf is "") (e is satya)) [past-intent, fallback, s]
+      otherwise acc)
+
+  solve-for = cond (gt (string-length (nth sf-state 2)) 0)
+    (nth sf-state 2)
+    otherwise (nth sf-state 1)
+
+  match = match-mantra expanded
 
   enriched = cond (gt (length match) 0)
     expanded
@@ -29,15 +37,11 @@ tantra anuvada-ganana
   otherwise
     (match-mantra enriched)
 
-  result = cond (gt (length final-match) 0)
-    (let mantra  = nth final-match 0
-     let valpairs = nth final-match 1
-     let value   = execute-chain mantra valpairs
-     let phala   = walk mantra "phala"
-     let label   = cond (gt (length phala) 0) (nth phala 0) otherwise mantra
-     concat label " = " (to-string value))
+  -- execute the matched mantra
+  answer = cond (gt (length final-match) 0)
+    (execute-matched final-match solve-for)
   otherwise
     "no match"
 
-  return result
+  return answer
 done

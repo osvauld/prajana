@@ -38,9 +38,11 @@ Do not update for:
 ## How to update an existing file
 
 1. Edit the relevant section where the understanding has shifted
-2. Add an entry to the **What has changed** table at the bottom of that file
-3. If the change affects other files, note which ones
-4. Update index.md **What has changed** table with a one-line summary
+2. Add a brief entry to the **What has changed** table at the bottom of that file
+   — doc-level structural changes only, not baseline numbers
+3. Update **[changelog.md](changelog.md)** with session progress + new baseline
+   — this is the single source of truth for test counts and what was done
+4. Update **index.md** files table if a new file was added
 
 If a file becomes substantially wrong, mark it at the top:
 ```

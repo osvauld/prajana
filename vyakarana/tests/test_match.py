@@ -1,17 +1,18 @@
-"""test_match.py — match-mantra: formula matching and disambiguation.
+"""test_match.py — match-mantra: recognition of which relation applies.
 
-Tests the match-mantra tantra that takes a refined question graph and returns
-the best matching mantra (formula) with its argument values.
+Match is recognition — not search. When nam sees mass and velocity together,
+it does not scan a list of formulas. It recognises the pattern. The intent
+(vidhi-kaala) makes the recognition unambiguous: "find kinetic energy" and
+"find momentum" share the same janya but name different phala. Intent resolves
+what structure alone cannot.
 
-Key observations from probing:
-- match-mantra needs a full BQG→fixpoint graph (with kosha-janya triples)
-  to work correctly; a bare graph with just satya+sankhya triples returns []
-- Return format: [mantra_name, [arg0, arg1, ...]] or []
-- Disambiguation via solve-for: vidhi-kaala triple selects the target concept
-- mass + velocity → kinetic-energy-mantra (if solve-for=kinetic-energy)
-- mass + velocity → momentum-mantra (if solve-for=momentum)
-- mass + acceleration → newton-second-law-motion
-- Partial args (one missing) → []
+A mantra is a relation waiting to be recognised. Match-mantra is the moment
+of recognition — the janya are all present, the phala is named, the relation
+becomes active.
+
+These tests ask: does nam recognise the right relation? When the intent is
+stated, is the recognition unambiguous? When a janya is missing, does nam
+correctly withhold recognition rather than fire on incomplete understanding?
 
 Protects against: match-mantra.tantra
 
@@ -40,7 +41,7 @@ def bqg_then_avrti(vy, sentence: str) -> list:
 def test_match_kinetic_energy_returns_mantra_name(vy):
     g = bqg_then_avrti(vy, "find kinetic energy given mass 5 and velocity 10")
     result = vy.eval(f"match-mantra {json.dumps(g)}")
-    assert isinstance(result, list) and len(result) == 2, (
+    assert isinstance(result, list) and len(result) >= 2, (
         f"expected [name, args], got {result!r}"
     )
     assert result[0] == "kinetic-energy-mantra", (
@@ -69,7 +70,7 @@ def test_match_kinetic_energy_arg_values(vy):
 def test_match_momentum_mantra(vy):
     g = bqg_then_avrti(vy, "find momentum given mass 3 and velocity 4")
     result = vy.eval(f"match-mantra {json.dumps(g)}")
-    assert isinstance(result, list) and len(result) == 2
+    assert isinstance(result, list) and len(result) >= 2
     assert result[0] == "momentum-mantra", (
         f"expected momentum-mantra, got {result[0]!r}"
     )
@@ -78,7 +79,7 @@ def test_match_momentum_mantra(vy):
 def test_match_newton_second_law(vy):
     g = bqg_then_avrti(vy, "find force given mass 2 and acceleration 5")
     result = vy.eval(f"match-mantra {json.dumps(g)}")
-    assert isinstance(result, list) and len(result) == 2
+    assert isinstance(result, list) and len(result) >= 2
     assert result[0] == "newton-second-law-motion", (
         f"expected newton-second-law-motion, got {result[0]!r}"
     )
@@ -155,7 +156,7 @@ def test_match_what_sentence_finds_correct_mantra(vy):
     # the first satya after vidhi-kaala should be kinetic-energy, not what
     g = bqg_then_avrti(vy, "what is kinetic energy given mass 5 and velocity 10")
     result = vy.eval(f"match-mantra {json.dumps(g)}")
-    assert isinstance(result, list) and len(result) == 2
+    assert isinstance(result, list) and len(result) >= 2
     assert result[0] == "kinetic-energy-mantra", (
         f"expected kinetic-energy-mantra, got {result[0]!r}"
     )
