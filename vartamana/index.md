@@ -31,6 +31,7 @@ audible in the world. Read both together for the full picture.
 | [07-tantra-rewrite.md](07-tantra-rewrite.md) | Layer 1/2/3 architecture. Parser tensions. Tantra authoring rules. | Active |
 | [08-boot.md](08-boot.md) | Boot/reboot pass architecture. emit-edge, graph-all-nodes, varga-inheritance. | Active |
 | [09-adhyayana.md](09-adhyayana.md) | The learning loop. Session as growing understanding. Feedback, correction, prashna. Absorbs 05-session.md. | Active |
+| [10-layer2-rewrite.md](10-layer2-rewrite.md) | **IMMEDIATE ACTIVE PLAN.** Layer 2 tantra rewrite. Four phases: OCaml bootstrap, parser, migration, cleanup. sthita-viveka, varga-viveka, dvandva-setu. | Active |
 
 ---
 
@@ -41,7 +42,8 @@ audible in the world. Read both together for the full picture.
 - **pipeline**: expansion → connection → compression = sphoTa. Match first, derive only as fallback.
 - **entities**: the entity IS the simulation object. Each turn adds one. The scene accumulates. Gap 1 (unit naming, partially closed) → Gap 2 (session entity structure) → dvandva.
 - **adhyayana**: the session IS learning. Three loops: avrti (within sentence), parampara (across turns), pratikara (correction — not yet built). Prashna as output. Instruction as pre-loaded state. Absorbs session doc.
-- **next**: Gap 1 (unit label collision, partially closed — 1 xfail remains, test expectation issue) → Gap 2 (session entity structure, 5 xfails, unblocks multi-entity scene) → pratibimba render params → dvandva → P8c.
+- **next**: superseded by 10-layer2-rewrite.md as immediate active plan. Layer 2 rewrite first. Everything else after.
+- **layer2-rewrite**: Phase 0 (OCaml bootstrap) → Phase 1 (parser) → Phase 2 (migrate 12 tantras) → Phase 3 (sthita-viveka, varga-viveka, dvandva-setu) → Phase 4 (full Layer 1 cleanup). Breaking changes expected. Tests hold the contract.
 
 ---
 
@@ -64,6 +66,9 @@ audible in the world. Read both together for the full picture.
 15. **Rashi label discrimination is `word ≠ node`** — `m` resolves to `metre` (word≠node) → label; `mass` resolves to `mass` (word=node) → concept. The alias/abbreviation test is the correct and sufficient discriminant.
 16. **Outer `let` bindings are not visible in `scan ... when` guards** — computed values (e.g. `has-rashi-bandha`) must be threaded into scans as state variables: `let flag be computed-value`.
 17. **Satya-named entities need explicit last-label tracking** — `vibhakti-shashthi` only detects entities from mithya words by default; kosha concepts used as entity names (`electron has ...`) require the satya branch to also set `last-label`.
+18. **Agra is the foremost** — proximity binding tracks the most recently seen instance of a concept. Bindings attach to agra. Agra updates forward as new instances arrive. The sequence IS the scope. N entities work because the sentence encodes entity order.
+19. **Subanta / tinanta / varga** — the three kinds of kosha nodes. Subanta: a quantity, owned by one entity. Tinanta: a process/interaction, has `sthita` slots and `phala`. Varga: a containment, members via `vishesa` or `varga` edges. The pipeline must read all three kinds, not treat them as flat concepts.
+20. **sthita IS the interaction scope** — a tinanta's `sthita` slots are its required member-scopes. The pipeline finds quantities by walking sthita members' owned properties, not by flat concept lookup. This is `sthita-viveka` — the scope-aware lookup that unblocks all multi-entity computation.
 
 ---
 

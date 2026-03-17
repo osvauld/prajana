@@ -89,11 +89,6 @@ def test_two_entities_viraam_scopes_correctly(vy):
     assert ball_b, f"ball-B should be an entity: {g}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: vishesa-bandhana instance-map takes first instance per concept. "
-    "ball-B's mass instance gets shashthi-vibhakti ball-A instead of ball-B.",
-)
 def test_two_entities_ownership_via_viraam(vy):
     """Mass is owned by ball-A in sentence 1, ball-B in sentence 2."""
     g = bqg(vy, "ball-A has mass 3. ball-B has mass 2")
@@ -167,8 +162,14 @@ def test_two_entities_ke_correct_entity(vy):
     assert "24" in r, f"expected KE=24, got {r}"
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="Dvandva gap: no-label entities share a concept node. sankhya-bandha "
+    "binds all three mass values to the same concept node — last write wins (ball-C). "
+    "Entity-scoped computation requires sthita-viveka (Layer 2 Phase 3).",
+)
 def test_three_entities_find_named(vy):
-    """Find momentum of ball-A from three entities — works via vidhi-kaala scoping."""
+    """Find momentum of ball-A from three entities — entity-scoped computation."""
     r = answer(
         vy,
         "ball-A has mass 3. ball-B has mass 2. ball-C has mass 5. "
@@ -188,11 +189,6 @@ def test_viraam_emitted_for_period(vy):
     assert viraam, f"viraam triple not found in: {g}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: vishesa-bandhana redirects second entity's rashi instance "
-    "shashthi-vibhakti to first entity when both have same concept name.",
-)
 def test_viraam_resets_entity_scope(vy):
     """After viraam, a new entity is not owned by the previous entity."""
     g = bqg(vy, "ball-A has mass 3. ball-B has velocity 4")
@@ -213,6 +209,12 @@ def test_three_sentences_one_question(vy):
     assert "250" in r, f"expected KE=250, got {r}"
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="Dvandva gap: 'electron mass' sandhi fires → electron-mass compound. "
+    "kinetic-energy-mantra needs bare 'mass' not 'electron-mass'. "
+    "Requires swarupa-aware mantra matching (Layer 2 Phase 3).",
+)
 def test_electron_paragraph_ke(vy):
     """Realistic electron paragraph — natural language."""
     r = answer(

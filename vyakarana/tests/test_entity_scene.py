@@ -269,12 +269,6 @@ def test_electron_and_field_across_turns(vy):
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Multi-entity: three entities across three turns. "
-    "The scene should hold all three simultaneously. "
-    "Requires Gap 2.",
-)
 def test_three_entities_accumulate(vy):
     """Three separate turns each adding one entity. All three visible after turn 3."""
     sid = "three-entity-scene-unique"

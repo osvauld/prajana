@@ -80,6 +80,8 @@ and eval_from (k : proof_graph) (e : env) (list_expr : expr)
       let v = if i < List.length item_list then List.nth item_list i else VNone in
       Hashtbl.replace sub_env name v
     ) pat_names;
+    (* "_it" binds the whole current item — used by simple | collect expressions *)
+    Hashtbl.replace sub_env "_it" item;
     ignore n_pat;
     (* check all guards *)
     let pass = List.for_all (fun g -> as_bool (eval k sub_env g)) guards in

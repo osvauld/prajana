@@ -98,6 +98,19 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     let num_val = match float_of_string_opt num_part with Some f -> string_of_float f | None -> "" in
     Some (VList [VString num_val; VString alpha_part])
 
+  | "debug-print" ->
+    (* debug-print val — prints to stderr and returns val unchanged *)
+    let v = e_eval k e (List.nth args 0) in
+    let rec show = function
+      | VString s -> Printf.sprintf "'%s'" s
+      | VBool b   -> string_of_bool b
+      | VFloat f  -> string_of_float f
+      | VNone     -> "none"
+      | VList l   -> "[" ^ String.concat ", " (List.map show l) ^ "]"
+      | _         -> "?" in
+    Printf.eprintf "[debug-print] %s\n%!" (show v);
+    Some v
+
   | "to-string" ->
     Some (VString (as_string (e_eval k e (List.nth args 0))))
 

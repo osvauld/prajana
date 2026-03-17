@@ -16,6 +16,7 @@
    yantra_sentence_parser
    yantra_expr_parser
    yantra_tantra_file
+   yantra_tantra_file2
    yantra_index
    yantra_ops
    yantra_eval_primitives

@@ -14,7 +14,8 @@ let tantra_files_recursive (root : string) : string list =
         let path = Filename.concat dir entry in
         try
           if Sys.is_directory path then walk path
-          else if Filename.check_suffix path ".tantra" then
+          else if Filename.check_suffix path ".tantra"
+               || Filename.check_suffix path ".tantra2" then
             files := path :: !files
         with _ -> ()
       ) entries
@@ -117,11 +118,17 @@ let register_tantra ?(graph : proof_graph option) (idx : tantra_index) (t : tant
 
 let load_tantra_dir ?(graph : proof_graph option) (idx : tantra_index) (dir : string) : unit =
   let files = tantra_files_recursive dir in
+  (* load .tantra files first, then .tantra2 — so .tantra2 always wins on name collision *)
+  let tantra1 = List.filter (fun p -> not (Filename.check_suffix p ".tantra2")) files in
+  let tantra2 = List.filter (fun p -> Filename.check_suffix p ".tantra2") files in
   List.iter (fun path ->
     match Yantra_tantra_file.parse_tantra_file path with
-    | None -> ()
-    | Some t -> register_tantra ?graph idx t
-  ) files
+    | None -> () | Some t -> register_tantra ?graph idx t
+  ) tantra1;
+  List.iter (fun path ->
+    match Yantra_tantra_file2.parse_tantra2_file path with
+    | None -> () | Some t -> register_tantra ?graph idx t
+  ) tantra2
 
 (* collect all tantra directories from the given dirs list *)
 let collect_tantra_dirs (dirs : string list) : string list =
@@ -158,6 +165,7 @@ let pre_scan_arities (tantra_dirs : string list) : unit =
   List.iter (fun dir ->
     let files = tantra_files_recursive dir in
     List.iter (fun path ->
+      (* both .tantra and .tantra2 use same header format for name/arity *)
       match Yantra_arity.pre_scan_tantra_file path with
       | Some (name, arity) ->
         Yantra_arity.register_tantra_arity name arity

@@ -83,18 +83,12 @@ def test_two_entities_are_distinct_objects(vy):
     assert vy.has_triple(g, subj="ball2", pred="prathama-vibhakti"), sig(g)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: vishesa-bandhana instance-map takes only the first instance "
-    "per concept — ball2's ownership gets redirected to m1 instead of m2.",
-)
 def test_two_entities_ownership(vy):
-    # mass is owned by ball1 AND ball2 (two shashthi-vibhakti triples)
+    # each rashi instance is owned by its entity (instance-level ownership)
+    # vishesa-bandhana redirects [mass, shashthi-vibhakti, ball1] → [m1, shashthi-vibhakti, ball1]
     g = bqg(vy, "ball1 has mass m1 of 5 and ball2 has mass m2 of 10")
-    ownership = vy.all_triples(g, subj="mass", pred="shashthi-vibhakti")
-    owners = {t[2] for t in ownership}
-    assert "ball1" in owners, f"mass not owned by ball1: {ownership}"
-    assert "ball2" in owners, f"mass not owned by ball2: {ownership}"
+    assert vy.has_triple(g, subj="m1", pred="shashthi-vibhakti", obj="ball1"), sig(g)
+    assert vy.has_triple(g, subj="m2", pred="shashthi-vibhakti", obj="ball2"), sig(g)
 
 
 # ── Pattern E: two entities, symbolic rashi only (no values) ─────────────────
