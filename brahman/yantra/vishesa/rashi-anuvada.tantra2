@@ -23,7 +23,7 @@ inst-concept = graph | where [inst, e, concept] | and (eq e "vishesa") | and (ne
 inst-val = graph | where [inst, e, val] | and (eq e "sankhya") | collect [inst, val]
 
 -- concepts already directly bound (guard: don't overwrite)
-directly-bound = graph | where [s, e, o] | and (eq e "sankhya") | collect s
+directly-bound = map (bound-concepts graph) (fn kv -> nth kv 0)
 
 -- for each (inst, concept) pair, find the inst's val and emit [concept, sankhya, val]
 new-triples = reduce inst-concept [] (fn acc kv ->

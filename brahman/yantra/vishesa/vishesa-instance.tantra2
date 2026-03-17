@@ -17,7 +17,7 @@ tantra2 vishesa-instance
 takes graph
 
 owned    = graph | where [s, e, _] | and (eq e "shashthi-vibhakti") | collect s
-bound    = graph | where [s, e, _] | and (eq e "sankhya") | collect s
+bound    = map (bound-concepts graph) (fn kv -> nth kv 0)
 entities = graph | where [s, e, _] | and (eq e "prathama-vibhakti") | collect s
 can-promote = exists (graph | where [_, e, _] | and (eq e "rashi-bandha") | collect _it)
 

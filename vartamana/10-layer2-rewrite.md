@@ -288,51 +288,65 @@ With Layer 2 stable and `sthita-viveka` + `varga-viveka` written:
 
 ---
 
-## Current state (2026-03-17, session 3)
+## Current state (2026-03-17, session 4)
 
-**412 passed / 19 xfailed / 0 failing** (was 407 / 20 / 4 at start of session 2)
-
-All tests pass. Two pre-existing failures fixed. Two xfail markers removed.
+**412 passed / 19 xfailed / 0 failing**
 
 ### Completed
 
 **Phase 0** — OCaml bootstrap ✓
-- `yantra_tantra_file2.ml` — variadic op (`arity=-1`) parsing fixed
-- `yantra_index.ml` — two-pass loading (`.tantra` first, `.tantra2` last)
-- `yantra_arity.ml` — `"tantra2 "` prefix in pre-scan
-- `debug-print` op added to `yantra_ops.ml`
-- `_it` binding added to `eval_from` for `| collect (nth _it 0)` pattern
+- `yantra_tantra_file2.ml` — variadic op (`arity=-1`) parsing, zero-input tantra body parse, `debug-print`
+- `yantra_index.ml` — two-pass loading, `yantra_arity.ml` — tantra2 prefix
 
-**Phase 2 Steps 1-6** — Six tantras migrated ✓
-- `vishesa-instance.tantra2` — typed scan state, Tension 3 fixed
-- `rashi-viveka.tantra2` — gate-edge scan, `qty` instead of reserved `value`
-- `vishesa-bandhana.tantra2` — reduce lambda fully working, ownership redirects correct
-- `agra-bandha.tantra2` — generic proximity-binding scan, `agra-map` state, variadic `(and ...)` guards
-- `sankhya-bandha.tantra2` — simple scan with `last-active` state
-- `rashi-anuvada.tantra2` — instance→concept sankhya bridge via `reduce`
+**Phase 2** — Pipeline tantras migrated ✓
 
-Old `.tantra` originals removed for all six.
-
-**Non-migration fixes:**
-- `session-anuvada.tantra` — stores bindings under `shashthi-vibhakti` concept subjects, enabling cross-turn KE with kosha constants (e.g. `electron-mass → mass`)
-- `test_rashi_entities.py::test_two_entities_ownership` — corrected assertion to check instance-level ownership (`m1 --shashthi-vibhakti--> ball1`) not concept-level
-
-### Phase 2 remaining steps
-
-| Step | File | Status |
+| File | Status | Notes |
 |---|---|---|
-| 1 | `vishesa-bandhana.tantra2` | ✓ |
-| 2 | `vishesa-instance.tantra2` | ✓ |
-| 3 | `rashi-viveka.tantra2` | ✓ |
-| 4 | `agra-bandha.tantra2` | ✓ |
-| 5 | `sankhya-bandha.tantra2` | ✓ |
-| 6 | `rashi-anuvada.tantra2` | ✓ |
-| 7 | `avrti-refine.tantra2` | not started |
-| 8 | `build-question-graph.tantra2` | not started |
-| 9 | `match-mantra.tantra2` | not started |
-| 10 | `derive-step.tantra2` | not started |
-| 11 | remaining pipeline tantras | not started |
-| 12 | remaining utility tantras | not started |
+| `vishesa-instance.tantra2` | ✓ | typed scan state |
+| `rashi-viveka.tantra2` | ✓ | gate-edge scan |
+| `vishesa-bandhana.tantra2` | ✓ | reduce lambda |
+| `agra-bandha.tantra2` | ✓ | generic proximity-binding |
+| `sankhya-bandha.tantra2` | ✓ | simple last-active scan |
+| `rashi-anuvada.tantra2` | ✓ | instance→concept bridge |
+| `avrti.tantra2` | ✓ | spreading activation |
+| `avrti-refine.tantra2` | ✓ | pipeline orchestrator |
+| `match-mantra.tantra2` | ✓ | mantra matching with forward/inverse |
+| `derive-step.tantra2` | ✓ | forward chaining |
+| `execute-math.tantra2` | ✓ | math-op execution |
+| `execute-chain.tantra2` | ✓ | kriya-tantra dispatch |
+| `invert-math.tantra2` | ✓ | pratipaksha inversion |
+| `physics-mantras.tantra2` | ✓ | all physics mantra nodes |
+
+**New shared tantras extracted:**
+| File | Replaces |
+|---|---|
+| `extract-solve-for.tantra2` | identical block in anuvada-ganana, session-anuvada, match-mantra |
+| `bound-vals.tantra2` | identical block in derive-step, match-mantra |
+| `bound-concepts.tantra2` | identical pattern in 5 tantras |
+| `resolve-janya-args.tantra2` | identical block in execute-math, execute-chain, invert-math |
+| `physics-mantras.tantra2` | `walk-in "physics-mantra" "varga"` in 3 tantras |
+
+**Updated to call new shared tantras:**
+- `anuvada-ganana.tantra`, `session-anuvada.tantra` → `extract-solve-for`
+- `derive-step.tantra2`, `match-mantra.tantra2` → `bound-vals`, `physics-mantras`
+- `execute-math.tantra`, `execute-chain.tantra` → `resolve-janya-args`
+- `mantra-coverage.tantra`, `vishesa-instance.tantra2` etc. → `bound-concepts`
+
+### Remaining to migrate
+
+| File | Priority |
+|---|---|
+| `build-question-graph.tantra` | high — entry point for every query |
+| `kosha-expand.tantra` | medium |
+| `anuvada-ganana.tantra` | medium — already calls new shared tantras |
+| `session-anuvada.tantra` | medium |
+| `execute-matched.tantra` | medium |
+| sandhi/*.tantra (3 files) | low |
+| vibhakti/*.tantra (2 files) | low |
+| debug/*.tantra (2 files) | low |
+| boot/*.tantra (2 files) | low |
+| equations/*.tantra (10 files) | low — may delete if execute-math covers all |
+| lookup/*.tantra (2 files) | low |
 
 ---
 

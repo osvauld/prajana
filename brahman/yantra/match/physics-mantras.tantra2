@@ -1,0 +1,10 @@
+tantra2 physics-mantras
+
+-- return all physics mantra nodes.
+-- mantras live under "physics-mantra" in the varga hierarchy.
+
+result = walk-in "physics-mantra" "varga"
+
+return result
+
+done

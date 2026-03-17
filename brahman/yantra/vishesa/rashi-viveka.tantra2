@@ -25,7 +25,7 @@ tantra2 rashi-viveka
 takes graph
 
 rashi-labels  = graph | where [s, e, o] | and (eq e "vishesa") | and (eq o "rashi") | collect s
-already-bound = graph | where [s, e, _] | and (eq e "sankhya") | collect s
+already-bound = map (bound-concepts graph) (fn kv -> nth kv 0)
 
 result = scan graph [last-rashi: str = "", saw-gate: bool = false, rashi-labels: list = rashi-labels, already-bound: list = already-bound]:
 
