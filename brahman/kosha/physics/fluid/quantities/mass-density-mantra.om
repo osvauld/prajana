@@ -4,10 +4,9 @@ mantra mass-density-mantra
   "physics-mantra-varga"
   "mass-density-swarupa"
   "mass-density-phala"
-  "mass-density-expr-kriya"
   "mass-janya"
   "volume-janya"
 
-  shabda name:density unit:kilogram-per-cubic-metre
+  shabda name:density unit:kilogram-per-cubic-metre math-op:division
 
 done

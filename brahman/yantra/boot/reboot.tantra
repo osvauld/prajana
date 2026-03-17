@@ -1,0 +1,18 @@
+tantra reboot
+
+  -- runs all boot-time graph enrichment passes.
+  -- called at startup (after kosha load) and on every reload-all.
+  -- order matters: each pass may depend on edges added by prior passes.
+
+  inputs
+    _  string
+
+  let
+
+  -- pass 1: derive varga membership edges from vishesa classification
+  _ = varga-inheritance ""
+
+  return
+    "ok"  any
+
+done

@@ -113,10 +113,14 @@ they must be threaded through as scan state variables.
 
 **What remains:**
 
-- `test_field_instance_named_B` — `"magnetic field B of 0.1"`, `B` still mithya.
-  `can-promote` is true but `vishesa-instance` still not promoting. Under investigation.
-- `test_electron_natural_labels` — blocked on `B` resolution.
-- `test_unit_in_rate_not_stolen` — `"velocity is 5 m/s"`, `m/s` has no word index entry.
+- `test_unit_in_rate_not_stolen` — `"velocity is 5 m/s"`, `m/s` compound unit has no
+  word index entry. Needs composite unit parser or `m/s → metre-per-second` mapping.
+
+**Closed (2026-03-17):**
+
+- `test_field_instance_named_B` — fixed. Root cause: `or` was not infix in scan guards.
+  `((member last-active owned-concepts) or can-promote)` paren form required.
+- `test_electron_natural_labels` — fixed alongside B.
 
 **Files:**
 - `brahman/yantra/sankhya/emit-triples.tantra` (is-rashi-label)
@@ -137,19 +141,25 @@ This means turn 2 does not know that `electron-A` from turn 1 exists as an
 entity, only that `mass = 9.109e-31` exists as a floating value. The entity
 identity and its ownership structure are lost between turns.
 
-**What is needed:** `session-anuvada` must carry structural triples — not just
-sankhya values but the full entity context: who owns what, what is an entity.
-This is the difference between the session knowing "mass is 9.109e-31" and
-knowing "electron-A is an entity that has mass 9.109e-31".
+**Key insight (2026-03-17):** A session is a paragraph where sentences arrive
+at different times. The paragraph case must work first. We verified:
 
-The current path (as noted in `pratibimba/07-simulation.md`): describe one
-entity per turn. Turn 1 establishes the entity structure, turn 2 refines it.
-This works with the current session — each turn's entity is established fresh.
-Cross-entity reference across turns requires Gap 2 to be closed.
+- Paragraph viraam (`"ball-A has mass 3. ball-B has mass 2"`) now correctly
+  scopes entities: both `ball-A prathama-vibhakti` and `ball-B prathama-vibhakti`
+  are detected separately. `vibhakti-shashthi` correctly resets on viraam.
+- The remaining paragraph gap is `vishesa-bandhana` — its instance-map collapses
+  multiple instances of the same concept to the first one found. This is the
+  dvandva issue, separate from the session issue.
+- `test_paragraph.py` documents the paragraph baseline: 15 passing, 4 xfailed (dvandva).
 
-**After Gap 1:** Fix `session-anuvada` to also carry `prathama-vibhakti` and
-`shashthi-vibhakti` triples from `refined` (post-avrti) into the session store,
-and inject them alongside sankhya triples in the next turn's `prior-graph`.
+**What is needed for Gap 2:**
+1. Fix `vishesa-bandhana` instance-map to handle multiple instances of same concept
+   (the dvandva gap) — this makes paragraphs fully work first
+2. Then wire `session-anuvada` to carry structural triples via `se_graph`:
+   - Store `prathama-vibhakti`, `shashthi-vibhakti`, `vishesa`, `sankhya` triples
+     from `refined` into `se_graph` after each turn
+   - Socket injects `se_graph` alongside sankhya `prior-graph` on next turn
+   - Same sandhi-bandhana constraint applies: inject after `avrti-refine`
 
 ---
 
@@ -215,3 +225,5 @@ exactly where sankhya triples are currently appended.
 | 2026-03-16 | Gap 3 reframed: multi-entity is primarily a session accumulation problem, not a one-sentence problem. Each turn adds entities. Dvandva is Phase 4 convenience on top. |
 | 2026-03-16 | Gap 1 partially closed. emit-triples `is-rashi-label` guard: word≠node discriminant. `m`-as-mass-instance and KE-with-m-instance now work (2 xfails → xpass). One xfail remains (test checks wrong node for sankhya). |
 | 2026-03-16 | Gap 1 further closed. Root cause for q/v: vibhakti-shashthi missed satya-named entities (electron → satya, not mithya). Fixed. Scientific notation fixed in split-numeric. can-promote scan-state pattern discovered. q, v xfails removed. B, electron_natural_labels, unit_in_rate still pending. |
+| 2026-03-17 | Gap 1 closed for B and electron_natural_labels. Root cause: `or` operator was not infix in scan guards — `((member x lst) or flag)` paren form was required. Fixed via `parse_guard_atom` + `absorb_or` in `collect_and_guards`. Also fixed: outer `let` bindings invisible in scan guards — must pass as scan state. `vishesa-instance` rewired to use paren form with outer-let constraint. Baseline 362/14. |
+| 2026-03-17 | Paragraph / viraam foundation. `build-question-graph.tantra` was silently dropping viraam triples — final `cond` in lambda body not reached due to `parse_let_block` truncation of bare expressions. Fixed: assign to `let with-punct = cond ...` and return explicitly. Viraam now emitted. `vibhakti-shashthi` correctly resets entity scope on viraam. Two entities in a paragraph are now separately scoped at the `vibhakti-shashthi` stage. Remaining gap: `vishesa-bandhana` instance-map still collapses multiple instances of same concept to first — dvandva gap, not viraam gap. `test_paragraph.py` added: 15 passing, 4 xfailed (dvandva). |

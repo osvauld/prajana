@@ -37,7 +37,9 @@ build-question-graph          ✓ done — word-by-word stateful reduce → trip
   find-context                ✓ done — tracks active concept, pending number
 
   ↓ avrti-refine (fixpoint)
-  compound resolution         ✓ done — "kinetic energy" → kinetic-energy
+  compound resolution         ✓ done — Way 1: mithya+satya "kinetic energy" → kinetic-energy
+                                     Way 2: satya+satya "mass density" → mass-density,
+                                             "photon energy" → photon-energy
   avastha resolution          ✓ done — "initial velocity" → velocity+bhuta-kaala
   rashi-viveka                ✓ done — "v1 of 20" → rashi instance with sankhya
   vishesa-bandhana            ✓ done — [v1, vishesa, velocity] binding
@@ -57,7 +59,7 @@ match-mantra                  ✓ done — find mantra whose janya are all cover
 anuvada                       ✓ done — result → English answer text
 ```
 
-**Baseline: 358 passed / 18 xfailed / 0 failing.**
+**Baseline: see [changelog.md](changelog.md).**
 
 ---
 
@@ -100,18 +102,38 @@ Both layers use identical edge vocabulary: janya/phala/krama/sthita.
 
 ## Inversion — finding the unknown
 
-When the solve-for target is an input (not an output) of a mantra — "find mass
-given KE=250 and velocity=10" — the mantra fires in reverse.
+When the solve-for target is an input (not an output) of a mantra — "find
+current given voltage=5 and resistance=10" — the mantra fires in reverse.
 
-The `pratipaksha` edges on each operation node encode the inverse operation:
+**The math kosha already encodes all inversions.** Every arithmetic operation
+node has `pratipaksha` shabda entries:
+- `multiplication` → `pratipaksha-0: div`, `pratipaksha-1: div`
+- `division` → `pratipaksha-0: mul`, `pratipaksha-1: div` (+ flip)
+- `addition` → `pratipaksha-0: sub`, `pratipaksha-1: sub`
+- `subtraction` → `pratipaksha-0: add`, `pratipaksha-1: sub` (+ flip)
 - `square` → `pratipaksha-0: sqrt`
-- `multiplication` → `pratipaksha-0: div` (solve for arg0)
-- `multiplication` → `pratipaksha-1: div` (solve for arg1)
-- `subtraction` → `pratipaksha-0: add`, `pratipaksha-1: sub`
+- `power` → `pratipaksha-0: logarithm`
+- `sine` → `pratipaksha-0: arcsine`, etc.
 
-Walking the expression subgraph top-down, applying pratipaksha at each op,
-isolates the unknown without any per-formula authored inverse.
-One generic `invert-expr` works for all mantras. Not yet built (P8e).
+**The architecture (P8f):** Physics mantras declare which math operation they
+use (`shabda math-op:multiplication`). The math operation node knows how to
+execute forward (`eval: mul`) and how to invert (`pratipaksha-0: div`).
+
+For simple mantras (`V = IR`, `p = mv`): `invert-math.tantra` reads `math-op`
+from the mantra, looks up `pratipaksha-N` for the solve-for janya position,
+applies the inverse op with remaining bound values.
+
+For composed mantras (`KE = ½mv²`): the expression subgraph (P8f Phase B)
+encodes the composition as graph nodes. `invert-math.tantra` walks the graph
+top-down, applying `pratipaksha` at each node, isolating the unknown.
+
+**One generic `invert-math.tantra` works for all mantras.** No per-formula
+authored inverse. The math kosha is the algebra engine. Physics mantras are
+pure knowledge — no computation code.
+
+This also applies to vector/matrix operations (`vec-scale`, `dot-product`) and
+SAS/DSP formulas (`dB = 20×log(gain)`, `τ = RC`, `ω = 2πf`) — all use the
+same math kosha nodes with the same `pratipaksha` structure.
 
 ---
 
@@ -148,8 +170,10 @@ The session graph (05-session.md) extends the pipeline across turns.
 
 ## What has changed
 
-| Date | What shifted |
+For baseline and session progress see [changelog.md](changelog.md).
+
+| Date | What shifted in this doc |
 |------|-------------|
 | 2026-03-16 | Initial writing — synthesized from nyaya-plan.md P8a–P8b.6, scene-understanding.md |
-| 2026-03-16 | Baseline updated to 346/8. Chain via rashi instances confirmed working. Session architecture added. |
-| 2026-03-16 | emit-triples rashi-label guard implemented. Baseline 355/19xfail/2xpass. |
+| 2026-03-17 | Inversion section rewritten. P8e subsumed by P8f. Math kosha pratipaksha algebra documented. |
+| 2026-03-17 | Sandhi Way 2 added to pipeline stages. Boot/reboot pass added to startup sequence. |

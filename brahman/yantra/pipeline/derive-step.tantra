@@ -36,7 +36,10 @@ tantra derive-step
        cond (not all-ok) acc
 
        otherwise
-         (let fired = execute-chain mantra val-pairs
+         (let math-op = shabda mantra "math-op"
+          let has-math = gt (string-length math-op) 0
+          let fired = cond has-math (execute-math mantra val-pairs)
+            otherwise (execute-chain mantra val-pairs)
           append acc [[phala, sankhya, fired]])))
 
   result = reduce new-triples graph (fn g t -> append g [t])

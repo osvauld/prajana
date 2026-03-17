@@ -4,10 +4,9 @@ mantra spring-force-mantra
   "physics-mantra-varga"
   "spring-force-swarupa"
   "spring-force-phala"
-  "spring-force-expr-kriya"
   "spring-constant-janya"
   "displacement-janya"
 
-  shabda name:spring-force unit:newton
+  shabda name:spring-force unit:newton math-op:multiplication
 
 done

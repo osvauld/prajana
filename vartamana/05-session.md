@@ -1,8 +1,7 @@
 # 05 — Session
 
-**The session is a growing formal proof. Each question adds axioms, extends the
-implication network, and establishes new theorems. The full session is a coherent
-proof document, traversable at any point.**
+**Note: this file has been absorbed into [09-adhyayana.md](09-adhyayana.md).
+Read that file instead. This file is kept for historical reference only.**
 
 ---
 
@@ -76,7 +75,7 @@ are not present in the current sentence. Injecting after avrti protects them.
 
 **All session tests passing.** `test_cross_turn_binding_completes_match` — done.
 
-**Baseline: 346 passed / 8 xfailed.**
+**Baseline: see [changelog.md](changelog.md).**
 
 ---
 

@@ -1,33 +1,18 @@
-"""test_probe.py — smoke tests across all groups before full suite is written.
+"""test_probe.py — the first listening: does nam respond at all?
 
-2-3 tests per group, covering the key primitives of each layer.
-Run this first to confirm the infrastructure works end-to-end before
-expanding to the full 11-module suite.
+Before asking deep questions, ask: is nam here? Does the pipeline reach
+all the way through? Does a word arrive as a concept? Does a number bind?
+Does a mantra fire?
 
-    cd vyakarana/tests && ../../.venv/bin/pytest test_probe.py -v
+These are the simplest possible callings — one from each layer. If any
+fails, the infrastructure itself is broken and nothing else can be trusted.
+Run this before the full suite to confirm the ground is stable.
 
-## What we learned from the first run
+The probe is not a test of depth. It is a test of presence.
+Is nam here? Does it respond?
 
-### Infrastructure rule: always use json.dumps() for inline graphs
-    f'avrti-refine {json.dumps(g)}'   ✓ double-quoted strings
-    f'avrti-refine {g}'               ✗ Python single-quotes → parser wraps them
-
-### xfail = not yet built (feature is missing, test documents the intention)
-The old tantra suite had tests that always failed because the feature wasn't
-implemented yet. Those become xfail here. When the feature is built, pytest
-errors on an unexpected pass, forcing promotion to a real test.
-
-### Current baseline (from old tantra runner):
-  PASS: avrti compound/avastha/fixpoint, match all, sankhya find-context,
-        kosha-expand, materialize, graph primitives, BQG concept/mithya
-  FAIL (not yet built):
-    - sandhi-viveka verb promotion (has→shashthi, was→bhuta-kaala)
-    - BQG vidhi-kaala intent triple for "what"
-    - BQG/emit-triples unit binding (sankhya+matra from value+unit)
-    - lookup-word abbreviations (kg, N)
-    - entity ownership via "has" (avrti R8/R9 rules)
-    - dvandva collection, "respectively" zip
-    - full pipeline end-to-end with entity+match
+Run:
+    cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_probe.py -v --socket /tmp/vy.sock
 """
 
 import json

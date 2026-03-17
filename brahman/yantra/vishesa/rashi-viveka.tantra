@@ -16,15 +16,9 @@ tantra rashi-viveka
   --
   -- consuming both the rashi-bandha and asprista-sankhya triples.
   --
-  -- example: "ball1 has velocity v1 of 20 and ball2 has velocity v2 of 30"
-  --   input (post vishesa-instance):
-  --     [v1, vishesa, velocity], [v1, vishesa, rashi],
-  --     [of, rashi-bandha, ...], [20, asprista-sankhya, 20.]
-  --     [v2, vishesa, velocity], [v2, vishesa, rashi],
-  --     [of, rashi-bandha, ...], [30, asprista-sankhya, 30.]
-  --   output:
-  --     [v1, vishesa, velocity], [v1, vishesa, rashi], [v1, sankhya, 20.]
-  --     [v2, vishesa, velocity], [v2, vishesa, rashi], [v2, sankhya, 30.]
+  -- agra discipline: last-rashi tracks the most recently seen rashi instance label.
+  -- agra updates forward with each new [label, vishesa, rashi] triple — correctly
+  -- handles N entities each introducing rashi instances of the same concept.
 
   takes graph
 
@@ -46,24 +40,26 @@ tantra rashi-viveka
   otherwise
     (scan graph with
       let last-rashi be ""
-      let saw-rashi-bandha be false
+      let saw-gate be false
 
       when edge is vishesa and (member word rashi-labels)
-        set last-rashi to word
+        set last-rashi to (to-string word)
+        set saw-gate to false
         emit triple
 
-      when edge is rashi-bandha and last-rashi is not ""
-        set saw-rashi-bandha to true
+      when edge is rashi-bandha and (neq last-rashi "")
+        set saw-gate to true
 
-      when edge is asprista-sankhya and saw-rashi-bandha and last-rashi is not ""
+      when edge is asprista-sankhya and saw-gate and (neq last-rashi "")
         and (not (member last-rashi already-bound))
-        emit [last-rashi, sankhya, obj]
+        emit [last-rashi, "sankhya", obj]
         clear last-rashi
-        set saw-rashi-bandha to false
+        set saw-gate to false
 
       otherwise
-        set saw-rashi-bandha to false
+        set saw-gate to false
         emit triple)
 
   return result
+
 done

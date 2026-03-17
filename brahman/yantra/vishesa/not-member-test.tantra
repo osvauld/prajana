@@ -1,0 +1,22 @@
+tantra not-member-test
+
+  takes graph
+
+  bound = from graph where [s, e, o] and e is sankhya collect s
+
+  result = scan graph with let last be ""
+
+    when edge is satya
+      set last to word
+      emit ["SAW-SATYA", word]
+
+    when edge is mithya
+      and last is not ""
+      and not member last bound
+      emit ["PROMOTED", word, last]
+
+    otherwise
+      emit ["OTHER", word, edge]
+
+  return result
+done

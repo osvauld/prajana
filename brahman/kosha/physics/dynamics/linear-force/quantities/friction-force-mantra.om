@@ -4,10 +4,9 @@ mantra friction-force-mantra
   "physics-mantra-varga"
   "friction-force-swarupa"
   "friction-force-phala"
-  "friction-force-expr-kriya"
   "coefficient-janya"
   "normal-force-janya"
 
-  shabda name:friction-force unit:newton
+  shabda name:friction-force unit:newton math-op:multiplication
 
 done

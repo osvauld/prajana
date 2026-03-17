@@ -1,6 +1,17 @@
-"""test_avrti.py — avrti-refine and fixpoint: the spiral refinement pipeline.
+"""test_avrti.py — avrti-refine: the spiral that resolves mithya into satya.
 
-avrti-refine orchestrates:
+Avrti means recurrence — the spiral that returns to the same place but deeper.
+A sentence enters as raw tokens. Avrti-refine runs pass after pass until nothing
+changes. Each pass is nam re-reading what it partially understood, resolving
+one more layer of ambiguity, one more compound, one more binding.
+
+This IS the inner learning loop. The same mechanism a student uses when
+re-reading a confusing sentence until it becomes clear.
+
+Each test here asks: after the spiral completes, does nam hold the right
+structure? Not "did the code run" — did understanding arrive?
+
+The spiral stages:
   sandhi-kosha      → compound resolution (kinetic + energy → kinetic-energy)
   sandhi-avastha    → avastha qualification (initial/final/angular + concept)
   sandhi-bandhana   → reattribute sankhya/matra after rename
@@ -9,10 +20,7 @@ avrti-refine orchestrates:
   vishesa-bandhana  → move bindings from concept to instance
   sankhya-bandha    → bind floating asprista-sankhya to preceding concept
 
-fixpoint runs avrti-refine until the graph stabilises (or 20 iterations).
-
-Protects against: avrti-refine.tantra, sandhi-*.tantra, vibhakti-*.tantra,
-                  vishesa-*.tantra, sankhya-bandha.tantra
+Protects against: avrti-refine.tantra and all sandhi/vishesa/sankhya tantras.
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_avrti.py -v --socket /tmp/vy.sock

@@ -1,18 +1,21 @@
-"""test_session.py — session isolation, turn counting, error handling.
+"""test_session.py — session: the outer avrti across turns.
 
-Tests the session layer in socket.ml. Sessions are identified by session_id;
-each session accumulates turns independently.
+The session is parampara — the deepening chain. Each turn adds to what the
+next turn knows. Mass established in turn 1 is available when kinetic energy
+is asked in turn 2. The session IS the learning loop at its largest scale.
 
-Key observations:
-- The `question` command uses no `command` field (or falls through to | _)
-- `turn_id` in the response echoes the client-supplied turn_id (not server's counter)
-- Server maintains an internal prashna-N counter per session (logged, not returned)
-- `end-session` clears the session state from the store
-- `answer_text` is non-empty for sentences with known concepts
-- `answer_text` may be non-empty even for unknown words (server still replies)
-- Empty or missing question → INVALID_REQUEST error
+Each session is a separate stream of understanding. Two sessions do not share
+samskaara. Each begins fresh from the same accumulated jada (the kosha) but
+builds its own particular understanding as the turns accumulate.
 
-Protects against: socket.ml session store, anuvada_query integration
+These tests ask: does nam hold each session's understanding separately?
+Does each turn add to what was known without corrupting what came before?
+Does the session end cleanly, releasing what it held?
+
+Nam is asked to maintain multiple simultaneous streams of understanding —
+each independent, each deepening. This is the parampara made concrete.
+
+Protects against: socket.ml session store, session-anuvada.tantra
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_session.py -v --socket /tmp/vy.sock

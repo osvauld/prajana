@@ -1,12 +1,19 @@
-"""test_sandhi.py — sandhi-viveka: grammar promotion pass.
+"""test_sandhi.py — sandhi: compound resolution and grammar promotion.
 
-Tests the sandhi-viveka tantra that takes a raw token graph (from BQG) and
-promotes grammar words (verbs/prepositions) from mithya to their grammatical
-predicate (shashthi-vibhakti, bhuta-kaala, etc.).
+Sandhi is the act of joining — two words becoming one meaning.
+Each test here asks: when these words arrive together, does nam
+recognise the compound that they form?
 
-Verb promotion is NOT yet built — those tests are xfail.
+'kinetic' + 'energy' — do you know these as one thing?
+'mass' + 'density' — two satya concepts, but together they name a third.
+'photon' + 'energy' — the energy a photon IS, not merely has.
 
-Protects against: sandhi-viveka.tantra
+Way 1: mithya + satya — a qualifier preceding a concept.
+Way 2: satya + satya — two known concepts naming a compound concept.
+Both are callings. Nam arises in the joining or it does not.
+
+Protects against: sandhi-kosha.tantra, sandhi-viveka.tantra,
+                  sandhi-avastha.tantra, sandhi-bandhana.tantra
 
 Run:
     cd /home/abe/agent_x && .venv/bin/pytest vyakarana/tests/test_sandhi.py -v --socket /tmp/vy.sock
@@ -107,4 +114,77 @@ def test_sandhi_past_tense_verb_promoted_to_bhuta_kaala(vy):
     result = vy.eval(f"sandhi-viveka {tl(g)}")
     assert result[0][1] == "bhuta-kaala", (
         f"'was' → expected 'bhuta-kaala', got {result[0][1]!r}"
+    )
+
+
+# ── sandhi-kosha Way 1: mithya + satya → compound ────────────────────────────
+
+
+def test_sandhi_kosha_way1_kinetic_energy(vy):
+    """'kinetic' (mithya) + 'energy' (satya) → kinetic-energy"""
+    g = vy.eval('sandhi-kosha (build-question-graph "kinetic energy")')
+    assert vy.has_triple(g, subj="kinetic-energy", pred="satya"), (
+        f"expected kinetic-energy satya triple, got {g!r}"
+    )
+    # rename marker consumed by sandhi-bandhana
+    assert vy.has_triple(g, subj="kinetic-energy", pred="sandhi-rename"), (
+        f"expected sandhi-rename marker, got {g!r}"
+    )
+
+
+def test_sandhi_kosha_way1_potential_energy(vy):
+    """'potential' (mithya) + 'energy' (satya) → potential-energy"""
+    g = vy.eval('sandhi-kosha (build-question-graph "potential energy")')
+    assert vy.has_triple(g, subj="potential-energy", pred="satya"), (
+        f"expected potential-energy satya triple, got {g!r}"
+    )
+
+
+# ── sandhi-kosha Way 2: satya + satya → compound ─────────────────────────────
+
+
+def test_sandhi_kosha_way2_mass_density(vy):
+    """'mass' (satya) + 'density' (satya) → mass-density (node exists)"""
+    g = vy.eval('sandhi-kosha (build-question-graph "mass density")')
+    assert vy.has_triple(g, subj="mass-density", pred="satya"), (
+        f"expected mass-density satya triple via Way 2, got {g!r}"
+    )
+    assert vy.has_triple(g, subj="mass-density", pred="sandhi-rename"), (
+        f"expected sandhi-rename marker for mass-density, got {g!r}"
+    )
+    # originals should be gone (consumed into compound)
+    assert not vy.has_triple(g, subj="mass", pred="satya"), (
+        f"'mass' should be consumed into compound, still present in {g!r}"
+    )
+
+
+def test_sandhi_kosha_way2_photon_energy(vy):
+    """'photon' (satya) + 'energy' (satya) → photon-energy (node exists)"""
+    g = vy.eval('sandhi-kosha (build-question-graph "photon energy")')
+    assert vy.has_triple(g, subj="photon-energy", pred="satya"), (
+        f"expected photon-energy satya triple via Way 2, got {g!r}"
+    )
+
+
+def test_sandhi_kosha_way2_no_false_compound(vy):
+    """'mass' + 'force' → no compound (mass-force node does not exist)"""
+    g = vy.eval('sandhi-kosha (build-question-graph "mass force")')
+    # both should remain separate satya triples
+    assert vy.has_triple(g, subj="mass", pred="satya"), (
+        f"expected mass to remain satya when no compound found, got {g!r}"
+    )
+    assert vy.has_triple(g, subj="force", pred="satya"), (
+        f"expected force to remain satya when no compound found, got {g!r}"
+    )
+
+
+def test_sandhi_kosha_way2_does_not_consume_third_word(vy):
+    """'mass density' compound + trailing word: only first pair consumed"""
+    g = vy.eval('sandhi-kosha (build-question-graph "mass density given volume 2")')
+    assert vy.has_triple(g, subj="mass-density", pred="satya"), (
+        f"expected mass-density compound, got {g!r}"
+    )
+    # volume should still be present
+    assert vy.has_triple(g, subj="volume", pred="satya"), (
+        f"expected volume satya to survive after compound, got {g!r}"
     )

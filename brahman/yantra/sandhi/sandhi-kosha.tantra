@@ -2,19 +2,26 @@ tantra sandhi-kosha
 
   -- compound word resolution via kosha lookup.
   -- scans left-to-right with a pending mithya buffer.
-  -- when a mithya word immediately precedes a satya concept:
-  --   try lookup(last-mithya + "-" + concept)
-  --   if kosha hit → emit [compound, satya, compound]
-  --                + [compound, sandhi-rename, concept]  (consumed by sandhi-bandhana)
-  --   if miss → pass both through unchanged
-  -- example: "kinetic" (mithya) + "energy" (satya) → "kinetic-energy" (satya)
+  --
+  -- Way 1: mithya + satya → try lookup(last-mithya + "-" + concept)
+  --   example: "kinetic" (mithya) + "energy" (satya) → "kinetic-energy"
+  --
+  -- Way 2: satya + satya → try lookup(prev-satya + "-" + current-satya)
+  --   example: "mass" (satya) + "density" (satya) → "mass-density"
+  --   example: "photon" (satya) + "energy" (satya) → "photon-energy" (if node exists)
+  --
+  -- on kosha hit → emit [compound, satya, compound]
+  --             + [compound, sandhi-rename, second-word]  (consumed by sandhi-bandhana)
+  -- on miss     → pass both through unchanged
 
   takes graph
 
-  pass = reduce graph [[], []] (fn acc [word, edge, obj] ->
-    let pending  = nth acc 0
-    let out      = nth acc 1
-    let n-pend   = length pending
+  -- accumulator: [pending-mithya, out-triples, last-satya-word]
+  pass = reduce graph [[], [], ""] (fn acc [word, edge, obj] ->
+    let pending    = nth acc 0
+    let out        = nth acc 1
+    let last-satya = nth acc 2
+    let n-pend     = length pending
 
     let last-pend = cond (gt n-pend 0) (nth pending (sub n-pend 1)) otherwise ""
 
@@ -26,29 +33,48 @@ tantra sandhi-kosha
     let full-flush = reduce pending out (fn pacc w ->
       append pacc [[w, mithya, w]])
 
-    let compound-str = cond (and (gt (string-length last-pend) 0) (edge is satya))
-                         (concat last-pend "-" word)
-                       otherwise ""
-    let comp-node = cond (gt (string-length compound-str) 0)
-                      (lookup compound-str)
-                    otherwise _none
+    -- Way 1: mithya-pending + satya
+    let compound-way1 = cond (and (gt (string-length last-pend) 0) (edge is satya))
+                          (concat last-pend "-" word)
+                        otherwise ""
+    let comp-node-1 = cond (gt (string-length compound-way1) 0)
+                        (lookup compound-way1)
+                      otherwise _none
 
-    -- kosha hit: emit compound satya + sandhi-rename marker
-    cond (exists comp-node)
+    -- Way 2: prev-satya + current-satya (no pending mithya)
+    let compound-way2 = cond (and (eq n-pend 0) (and (gt (string-length last-satya) 0) (edge is satya)))
+                          (concat last-satya "-" word)
+                        otherwise ""
+    let comp-node-2 = cond (gt (string-length compound-way2) 0)
+                        (lookup compound-way2)
+                      otherwise _none
+
+    -- Way 1 hit: mithya+satya compound found
+    cond (exists comp-node-1)
       [[], (append prefix-out
-             [[(to-string comp-node), satya,         (to-string comp-node)],
-              [(to-string comp-node), sandhi-rename,  word]])]
+             [[(to-string comp-node-1), satya,         (to-string comp-node-1)],
+              [(to-string comp-node-1), sandhi-rename,  word]]),
+       ""]
 
-    -- mithya: accumulate into pending
+    -- Way 2 hit: satya+satya compound found
+    -- remove last-satya triple from out, replace with compound
+    (exists comp-node-2)
+      [[], (append
+             (reduce (range (sub (length out) 1)) [] (fn pacc i -> append pacc [(nth out i)]))
+             [[(to-string comp-node-2), satya,         (to-string comp-node-2)],
+              [(to-string comp-node-2), sandhi-rename,  word]]),
+       ""]
+
+    -- mithya: accumulate into pending, clear last-satya
     (edge is mithya)
-      [(append pending [word]), out]
+      [(append pending [word]), out, ""]
 
-    -- non-compound satya or other: flush pending, pass current through
+    -- satya with no compound: flush pending, pass current through, record last-satya
     (gt n-pend 0)
-      [[], (append full-flush [[word, edge, obj]])]
+      [[], (append full-flush [[word, edge, obj]]), word]
 
     otherwise
-      [[], (append out [[word, edge, obj]])])
+      [[], (append out [[word, edge, obj]]), word])
 
   pending-list = nth pass 0
   rough        = nth pass 1

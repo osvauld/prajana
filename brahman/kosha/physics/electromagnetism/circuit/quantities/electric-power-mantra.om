@@ -4,10 +4,9 @@ mantra electric-power-mantra
   "physics-mantra-varga"
   "electric-power-swarupa"
   "electric-power-phala"
-  "electric-power-expr-kriya"
   "voltage-janya"
   "current-janya"
 
-  shabda name:electric-power unit:watt
+  shabda name:electric-power unit:watt math-op:multiplication
 
 done

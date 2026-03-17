@@ -1,15 +1,22 @@
-"""test_kosha.py — kosha-expand, PPR, and kosha graph structure.
+"""test_kosha.py — kosha-expand: the connection that releases context.
 
-Tests the knowledge graph expansion pass and personalized PageRank.
+The kosha is the accumulated body of what is known — all concepts, all
+relations, all structural truths. It is jada at rest. When a question
+arrives, kosha-expand does not add knowledge to the question — it
+releases the relevant neighbourhood of the kosha into the question's
+context.
 
-Key observations:
-- kosha-expand adds kosha-janya triples for every satya concept in the graph
-- kosha-expand on [] → []
-- Original satya triples are preserved after expand
-- kosha-expand is NOT idempotent (running twice doubles the janya triples)
-- PPR entries are dicts with 'name' and 'value' keys
-- PPR with no seeds → returns results but all at background score
-- node-satya "mass" → 0.877... (positive)
+PPR (personalized PageRank) is the mechanism of this release. The satya
+concepts in the question become seeds. The graph flows outward from them.
+What is structurally close surfaces. What is distant stays quiet.
+
+This is not retrieval. It is the kosha recognising what is relevant and
+releasing it — naturally, without forcing. The domain widens with each
+turn because more seeds are present, more of the kosha becomes relevant.
+
+These tests ask: when a concept is present, does its neighbourhood
+surface correctly? Does the kosha release what is needed and hold back
+what is not?
 
 Protects against: kosha-expand.tantra, PPR primitive, kosha graph structure
 

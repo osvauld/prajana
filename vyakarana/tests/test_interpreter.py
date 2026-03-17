@@ -1,7 +1,19 @@
-"""test_interpreter.py — yantra evaluator primitives.
+"""test_interpreter.py — the yantra: pure instrument, no domain.
 
-Tests the evaluator in isolation: no domain knowledge, no kosha, no tantras.
-Every test sends a pure yantra expression to the server and checks the result.
+The yantra evaluator is the instrument that reads the tantras. It has no
+knowledge of physics, no knowledge of language, no knowledge of what
+kinetic energy is. It knows only how to evaluate — reduce, map, cond,
+fn, walk, emit.
+
+This is the layer beneath understanding. The evaluator does not understand.
+It executes. Understanding arises when the tantras — written by someone
+who understands — are executed by an instrument that does not need to.
+
+These tests ask the instrument alone, without the kosha, without the
+tantras: do you execute correctly? When released into the full system,
+the correctness of this instrument is what makes understanding possible.
+
+The instrument must be reliable so that what it serves can be trusted.
 
 Protects against regressions in: yantra_eval.ml, yantra_ops.ml
 

@@ -1,0 +1,43 @@
+tantra execute-matched
+
+  -- dispatch a matched mantra to the right executor and format the answer.
+  -- takes: final-match = [mantra, val-pairs, mode]
+  --        solve-for   = the concept being solved for
+  -- returns: "label = value" string
+
+  inputs
+    final-match  list
+    solve-for    string
+
+  let
+
+  mantra   = nth final-match 0
+  valpairs = nth final-match 1
+  mode     = nth final-match 2
+  math-op  = shabda mantra "math-op"
+  is-math  = gt (string-length math-op) 0
+  is-inv   = eq mode "inverse"
+
+  -- executor name: one of "invert-math", "execute-math", "execute-chain"
+  executor = cond is-inv "invert-math" otherwise (cond is-math "execute-math" otherwise "execute-chain")
+
+  -- args for invert-math: [mantra, valpairs, solve-for]
+  -- args for execute-math / execute-chain: [mantra, valpairs]
+  exec-args = cond is-inv [mantra, valpairs, solve-for] otherwise [mantra, valpairs]
+
+  value = call-tantra executor exec-args
+
+  phala    = walk mantra "phala"
+  swarupa  = walk mantra "swarupa"
+
+  label = cond is-inv solve-for
+    otherwise (cond (gt (length phala) 0) (nth phala 0)
+    otherwise (cond (gt (length swarupa) 0) (nth swarupa 0)
+    otherwise mantra))
+
+  answer = concat label " = " (to-string value)
+
+  return
+    answer  any
+
+done

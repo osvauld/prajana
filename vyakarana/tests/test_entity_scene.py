@@ -1,4 +1,17 @@
-"""test_entity_scene.py — entity structure, scene accumulation, and unit naming.
+"""test_entity_scene.py — entities, scene accumulation, and what nam releases.
+
+Nam's ultimate movement is release — understanding received, processed,
+and given back as a scene that can be rendered, reasoned over, shared.
+The scene is what is released. Not just numbers — entities with owned
+properties, each distinct, each situated.
+
+An electron is not "an object with mass 9.109e-31". It is an electron —
+with a name, a mass, a charge, a velocity, all owned by it, all
+distinguishable from the proton's mass, the field's strength.
+
+The scene accumulates across turns. Each turn adds one entity. By turn 3,
+three objects exist simultaneously in nam's understanding — ready to be
+released as a rendering.
 
 Three concerns tracked here:
 
@@ -92,11 +105,6 @@ def test_velocity_instance_named_v(vy):
     assert vy.approx_eq(t[2], 1e6), f"expected 1e6, got {t[2]}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Gap 1: 'B' may resolve to a kosha node before vishesa-instance. "
-    "'magnetic field B of 0.1' — B should be [B, vishesa, magnetic-field-strength].",
-)
 def test_field_instance_named_B(vy):
     """'magnetic field B of 0.1' — B is a rashi label for field strength."""
     g = bqg(vy, "magnetic field B of 0.1")

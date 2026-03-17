@@ -1,8 +1,18 @@
-"""test_mantra_rashi.py — rashi instances feeding mantra derivation.
+"""test_mantra_rashi.py — the particular instance meeting the universal relation.
 
-After the P8b.6 bridge (rashi-anuvada.tantra) is wired in, rashi instances
-propagate their sankhya up to the concept level so derive-step and match-mantra
-can see them as bound concepts.
+A rashi is the particular. A mantra is the universal relation. This file
+tests the meeting point — when a named instance (v1, m1, r of 5) carries
+its value up to the concept level, does the mantra recognise that its
+janya are satisfied?
+
+The rashi-anuvada bridge is this meeting: `[v1, vishesa, velocity]` +
+`[v1, sankhya, 20]` → `[velocity, sankhya, 20]`. The particular instance
+releases its value to the universal concept. The mantra, which knows only
+concepts, can then fire.
+
+This is not data propagation. It is the particular being released back into
+the universal — the instance serving its purpose and dissolving into the
+relation it was always an instance of.
 
 Three tiers of tests:
 

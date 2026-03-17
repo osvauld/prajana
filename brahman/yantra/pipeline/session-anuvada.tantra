@@ -43,6 +43,21 @@ tantra session-anuvada
   otherwise
     (match-mantra enriched)
 
+  -- extract solve-for for execute-matched
+  sf-state = reduce expanded [false, "", ""] (fn acc [s, e, o] ->
+    let past-intent = nth acc 0
+    let fallback    = nth acc 1
+    let sf          = nth acc 2
+    cond
+      (e is vidhi-kaala)   [true, fallback, sf]
+      (and (not past-intent) (fallback is "") (e is satya)) [past-intent, s, sf]
+      (and past-intent (sf is "") (e is satya)) [past-intent, fallback, s]
+      otherwise acc)
+
+  solve-for = cond (gt (string-length (nth sf-state 2)) 0)
+    (nth sf-state 2)
+    otherwise (nth sf-state 1)
+
   -- remember this turn's NEW sankhya concepts (from refined only, not prior-graph)
   -- so the socket can build prior-graph for the next turn
   this-turn-concepts = from refined
@@ -52,12 +67,7 @@ tantra session-anuvada
   _stored = remember-bindings (map this-turn-concepts (fn p -> bind (nth p 0) (nth p 1)))
 
   result = cond (gt (length final-match) 0)
-    (let mantra  = nth final-match 0
-     let valpairs = nth final-match 1
-     let value   = execute-chain mantra valpairs
-     let phala   = walk mantra "phala"
-     let label   = cond (gt (length phala) 0) (nth phala 0) otherwise mantra
-     concat label " = " (to-string value))
+    (execute-matched final-match solve-for)
   otherwise
     "no match"
 

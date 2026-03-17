@@ -4,10 +4,9 @@ mantra photon-energy-mantra
   "physics-mantra-varga"
   "photon-swarupa"
   "photon-energy-phala"
-  "photon-energy-expr-kriya"
   "planck-constant-janya"
   "frequency-janya"
 
-  shabda name:photon-energy unit:joule
+  shabda name:photon-energy unit:joule math-op:multiplication
 
 done

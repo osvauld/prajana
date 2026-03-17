@@ -1,0 +1,17 @@
+tantra ke-inv-mass
+
+  -- inverse of KE = half * mass * velocity^2
+  -- solves for mass: mass = 2*KE / velocity^2
+
+  inputs
+    kinetic-energy  number
+    velocity        number
+
+  let
+
+  result = div (double kinetic-energy) (square velocity)
+
+  return
+    result  any
+
+done

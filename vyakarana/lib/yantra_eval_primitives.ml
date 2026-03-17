@@ -578,6 +578,11 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   | "graph-node-count" ->
     Some (VFloat (float_of_int (Hashtbl.length k.nodes)))
 
+  (* graph-all-nodes: () → [node-name ...] — all node names in proof graph *)
+  | "graph-all-nodes" ->
+    let names = Hashtbl.fold (fun name _ acc -> VNode name :: acc) k.nodes [] in
+    Some (VList names)
+
   (* graph-edge-count: () → float — number of edges in the proof graph *)
   | "graph-edge-count" ->
     Some (VFloat (float_of_int (List.length !(k.all_edges))))
@@ -624,6 +629,25 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     Hashtbl.replace k.nodes name { n with satya = r };
     ignore all_names;
     Some (VNode name)
+
+  (* emit-edge: source × relation × target → VNode source
+     adds a single typed edge to the live graph. idempotent via join.
+     used by boot/reboot tantras to add derived structural edges. *)
+  | "emit-edge" ->
+    let source   = as_string (e_eval k e (List.nth args 0)) in
+    let rel_name = as_string (e_eval k e (List.nth args 1)) in
+    let target   = as_string (e_eval k e (List.nth args 2)) in
+    (match Proof_graph.visheshanam_of_string rel_name with
+     | None -> Some VNone
+     | Some rel ->
+       let edge : Proof_graph.typed_edge = { source; target; relation = rel } in
+       (* join a minimal nigamana carrying just this edge *)
+       let n : Proof_graph.nigamana = {
+         name = source; layer = "kosha"; slokas = []; edges = [edge];
+         satya = 0.0; shabda = "";
+       } in
+       ignore (Proof_graph.join k n);
+       Some (VNode source))
 
   (* register-dimension: name → int index
      registers a new graph dimension at runtime. idempotent. *)
@@ -877,9 +901,11 @@ let register_primitive_arities () =
   r "resolve-node"        1;   (* node → [names] *)
   r "ppr"                 3;   (* seeds target bindings → [(name,score)] *)
   r "emit-node"           4;   (* name layer slokas shabda → VNode *)
+  r "emit-edge"           3;   (* source relation target → VNode source *)
   r "register-dimension"  1;   (* name → float *)
   r "dimension-count"    (-1); (* () → float *)
   r "graph-node-count"   (-1); (* () → float *)
+  r "graph-all-nodes"    (-1); (* () → [node-name ...] *)
   r "graph-edge-count"   (-1); (* () → float *)
   (* field accessors *)
   r "shabda"              2;   (* node key → string *)
@@ -923,8 +949,8 @@ let register_primitive_arities () =
   r "le"                  2;   (* a b → bool *)
   r "gt"                  2;   (* a b → bool *)
   r "ge"                  2;   (* a b → bool *)
-  r "and"                 2;   (* a b → bool *)
-  r "or"                  2;   (* a b → bool *)
+  r "and"                (-1); (* variadic bool conjunction — (and a b c ...) *)
+  r "or"                 (-1); (* variadic bool disjunction — (or a b c ...) *)
   (* string *)
   r "string-length"       1;   (* string → float *)
   r "to-string"           1;   (* value → string *)

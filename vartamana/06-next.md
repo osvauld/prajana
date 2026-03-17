@@ -1,6 +1,6 @@
 # 06 — What Is Next
 
-**Baseline: 360 passed / 16 xfailed / 0 failing.** (q, v xfail markers removed)
+**Baseline: see [changelog.md](changelog.md).**
 **Do not break passing tests. Every step here should move at least one xfail to passing.**
 
 ---
@@ -14,161 +14,211 @@
 | Gap 5 (session wiring) — 1 strict xfail | Done. `session-anuvada.tantra` built. Cross-turn sankhya binding working. |
 | Session understanding deepened | Multi-entity is session accumulation. Each turn adds one entity. |
 | `test_entity_scene.py` written | 22 tests covering Gap 1, Gap 2, multi-entity accumulation, pratibimba render params. |
+| Gap 1 fully closed (B, electron_natural_labels) | Parser: `or` infix in scan guards. Outer-let visibility. Baseline 362/14. |
+| Paragraph / viraam foundation | `build-question-graph.tantra` fixed. Viraam emitted. `test_paragraph.py` 15/4. Baseline 376/19. |
+| Boot/reboot architecture | `emit-edge` + `graph-all-nodes` OCaml primitives. `reboot.tantra` + `varga-inheritance.tantra`. Runs at startup and on `reload-all`. See `08-boot.md`. |
+| Varga inheritance working | `walk-in "energy-varga" "varga"` → `["kinetic-energy", "potential-energy", ...]`. `swara-varga`, `oscillation-varga` etc. all populated. |
+| Sandhi Way 2 (satya+satya) | `sandhi-kosha` now tries `word1-word2` lookup when both words are `satya`. `mass density` → `mass-density`, `photon energy` → `photon-energy`. |
+| `photon-energy.om` authored | `photon-energy` concept node with `energy-swarupa`, `photon-yukta`, `frequency-yukta`. |
+| `planck-constant.om` fixed | Added `shabda constants-key:planck-constant` — now auto-supplied in `photon-energy-mantra`. |
+| `frequency.om` fixed | Added `shabda frequency / ...` line — `frequency` now resolves as `satya`, not `mithya`. |
+| `wave.om` fixed | Removed `frequency` from word alias list — was shadowing `frequency` kosha node. |
+| `test_frequency` xfail removed | Frequency now works — `f = 1/T` computes correctly. Down to 18 xfails. |
+| Tests added | `test_bqg.py`: varga inheritance, photon-energy satya, frequency satya. `test_sandhi.py`: Way 1 + Way 2 sandhi. `test_physics_mantras.py`: photon energy (3 cases), planck constant auto-supply, mass density satya+satya compound. |
+| Baseline | see [changelog.md](changelog.md) |
+| Tantra authoring rules documented | Tensions 7–9 in `07-tantra-rewrite.md`. Boot pitfalls in `08-boot.md`. |
 
 ---
 
-## The 16 xfails — where they come from
+## The 19 xfails — where they come from
 
 | Group | test | Notes |
 |---|---|---|
-| Gap 1 — B label | `test_field_instance_named_B` | B still mithya — `can-promote` fires but vishesa-instance not promoting |
-| Gap 1 — full electron | `test_electron_natural_labels` | blocked on B |
-| Gap 1 — unit rate | `test_unit_in_rate_not_stolen` | `m/s` not in word index |
-| Gap 2 — entity identity | `test_session_entity_identity_persists` |
-| Gap 2 — multi-entity | `test_two_entities_across_turns_both_present` |
-| Gap 2 — multi-entity | `test_two_entities_across_turns_scoped` |
-| Gap 2 — multi-entity | `test_electron_and_field_across_turns` |
-| Gap 2 — multi-entity | `test_three_entities_accumulate` |
-| Pratibimba — sphere | `test_sphere_shape_swarupa` |
-| Pratibimba — position | `test_position_ownership` |
-| Pratibimba — simulation | `test_electron_simulation_scene_full` |
-| Dvandva | `test_avrti_dvandva_collection_of_two_values` |
-| Dvandva | `test_tier2_two_entities_ke_each` |
-| Dvandva | `test_two_entity_rashi_feeds_mantra` |
-| P8f — constants | `test_frequency` |
-| P8f — constants | `test_gravitational_force` |
+| Gap 1 — unit rate | `test_unit_in_rate_not_stolen` | `m/s` compound unit not in word index |
+| Gap 2 — entity identity | `test_session_entity_identity_persists` | session doesn't carry prathama/shashthi triples |
+| Gap 2 — multi-entity | `test_two_entities_across_turns_both_present` | |
+| Gap 2 — multi-entity | `test_two_entities_across_turns_scoped` | |
+| Gap 2 — multi-entity | `test_electron_and_field_across_turns` | |
+| Gap 2 — multi-entity | `test_three_entities_accumulate` | |
+| Pratibimba — sphere | `test_sphere_shape_swarupa` | |
+| Pratibimba — position | `test_position_ownership` | |
+| Pratibimba — simulation | `test_electron_simulation_scene_full` | |
+| Dvandva — rashi entities | `test_two_entities_ownership_via_viraam` | vishesa-bandhana collapses to first instance |
+| Dvandva — rashi entities | `test_viraam_resets_entity_scope` | same — instance-map issue |
+| Dvandva — computation | `test_two_entities_compute_correct_entity` | entity-scoped mantra not yet implemented |
+| Dvandva — computation | `test_two_entities_ke_correct_entity` | same |
+| Dvandva — session | `test_avrti_dvandva_collection_of_two_values` | |
+| Dvandva — session | `test_tier2_two_entities_ke_each` | |
+| Dvandva — session | `test_two_entity_rashi_feeds_mantra` | |
+| Dvandva — session | `test_two_entities_ownership` | vishesa-bandhana |
+| P8f — constants | `test_gravitational_force` | G constant + r² composition — deferred to P8f Phase B |
 
 ---
 
-## Priority order
+## Priority order — REVISED 2026-03-17
 
-### 1. Gap 1 — Unit label collision (partially closed — 6 xfails remain)
+### 1. P8f — Expression subgraph + math-domain unification (NEW TOP PRIORITY)
 
-**What:** Single-letter instance labels `m`, `v`, `q`, `B` are stolen by unit lookups.
-`m` → metre, `v` → volt. These are exactly the labels a user writes for physics —
-mass `m`, velocity `v`, charge `q`, field `B`. Without this, the natural language
-path to the electron simulation is broken.
+**What changed:** Investigating inversion (P8e) revealed that the math kosha already
+has the complete algebra — `multiplication`, `division`, `power`, `logarithm`,
+`exponential`, `sine`, `cosine` — all with `pratipaksha` edges encoding their inverses.
 
-**What is fixed so far:**
+The physics expr tantras (`ohm-expr.tantra`, `ke-expr.tantra`, etc.) are redundant.
+They encode computation that the math kosha already knows how to do and invert.
 
-- `emit-triples.tantra` `is-rashi-label`: `word ≠ node` — `m → metre` treated as label
-- `vibhakti-shashthi.tantra`: satya-named entities (`electron has ...`) now detected
-- `vishesa-instance.tantra`: bare `concept label of value` (no `has`) promoted via `can-promote` scan state
-- `yantra_ops.ml` `split-numeric`: scientific notation (`1.6e-19`, `1e6`) now parsed correctly
-- Test cleanup: m-instance, q, v xfail markers all removed
+**The insight:** Physics mantras should say WHAT the relationship is.
+The math domain says HOW to compute and invert it. This unification:
+- Eliminates 13+ expr tantras immediately (all simple `mul a b` / `div a b`)
+- Gives free inversion for all those mantras via `pratipaksha` walk
+- Unlocks Kirchhoff, Ohm's law inverse, SAS/DSP questions automatically
+- The remaining 9 complex expr tantras (KE, velocity, acceleration, etc.)
+  follow once the expression subgraph is in place
 
-**Key insight discovered:** outer tantra `let` bindings are not visible inside `scan ... when`
-guards. Must pass computed values as scan state: `let flag be computed-value`.
+**What P8f means:**
 
-**What remains (3 xfails):**
+Each expr tantra gets replaced by a graph structure in the kosha:
 
-- `test_field_instance_named_B`: `"magnetic field B of 0.1"` — `B` still mithya.
-  `can-promote = true` confirmed, but `vishesa-instance` not promoting. Root cause unknown.
-- `test_electron_natural_labels`: blocked on B.
-- `test_unit_in_rate_not_stolen`: `"velocity is 5 m/s"` — `m/s` is a compound unit string
-  with no word index entry. Needs either a composite unit parser or `m/s → metre-per-second` mapping.
+```
+-- current (ohm-expr.tantra):
+value = mul current resistance
 
-**Files:** emit-triples, vibhakti-shashthi, vishesa-instance, yantra_ops.ml
+-- P8f (ohm-law.om):
+shabda math-op:multiplication
+-- janya order encodes arg0=current, arg1=resistance
+-- phala=voltage
+-- no kriya edge, no expr tantra
+```
+
+For compositions (`ke = half(mul(mass, square(velocity)))`):
+
+```
+-- P8f expression subgraph:
+ke-expr-root → [op: half, arg: ke-mul-node]
+ke-mul-node  → [op: multiplication, arg0: mass, arg1: ke-sq-node]
+ke-sq-node   → [op: square, arg0: velocity]
+```
+
+`execute-math.tantra` walks this subgraph forward.
+`invert-math.tantra` walks it backward using `pratipaksha` edges at each node.
+
+**Two phases:**
+
+**Phase A — Simple mantras (13 mantras, no composition):**
+Wire `math-op` shabda directly on mantra. Write `execute-math.tantra` +
+`invert-math.tantra`. Delete 13 expr tantras. Update `match-mantra` to use
+`invert-math` when solve-for is a janya.
+
+Mantras: `ohm-law`, `momentum`, `newton`, `angular-momentum`, `electric-power`,
+`friction-force`, `spring-force`, `torque`, `photon-energy` (multiplication),
+`angular-velocity`, `capacitance`, `mass-density`, `pressure` (division).
+
+**Phase B — Composed mantras (9 mantras, expression subgraph):**
+Build kosha expression subgraph nodes. Write `execute-math-composed.tantra` +
+`invert-math-composed.tantra`. Delete remaining expr tantras.
+
+Mantras: `ke`, `velocity`, `acceleration`, `potential-energy`, `centripetal-force`,
+`gravitational-force`, `work`, `period`, `frequency`.
+
+**Also applies to:**
+- Vector/matrix math: `vec-scale`, `vec-dot`, `mat-mul` — same path via math kosha
+- SAS/DSP: `dB = 20×log(gain)`, `τ = RC`, `ω = 2πf` — new kosha nodes + math path
+- Kirchhoff: `V_total = V1 + V2 + ...` — addition chain, math kosha handles it
+
+**Files to delete (Phase A):**
+```
+brahman/yantra/equations/ohm-expr.tantra
+brahman/yantra/equations/momentum-expr.tantra
+brahman/yantra/equations/newton-expr.tantra
+brahman/yantra/equations/angular-momentum-expr.tantra
+brahman/yantra/equations/electric-power-expr.tantra
+brahman/yantra/equations/friction-force-expr.tantra
+brahman/yantra/equations/spring-force-expr.tantra
+brahman/yantra/equations/torque-expr.tantra
+brahman/yantra/equations/photon-energy-expr.tantra
+brahman/yantra/equations/angular-velocity-expr.tantra
+brahman/yantra/equations/capacitance-expr.tantra
+brahman/yantra/equations/mass-density-expr.tantra
+brahman/yantra/equations/pressure-expr.tantra
+brahman/yantra/equations/inv-mul-arg0.tantra  (stub, not needed)
+brahman/yantra/equations/inv-mul-arg1.tantra  (stub, not needed)
+brahman/yantra/equations/inv-div-arg0.tantra  (stub, not needed)
+brahman/yantra/equations/inv-div-arg1.tantra  (stub, not needed)
+```
+
+**Changes to physics `.om` files (Phase A):**
+- Remove `"X-expr-kriya"` sloka
+- Add `shabda math-op:multiplication` or `shabda math-op:division`
+
+**New tantras:**
+- `brahman/yantra/pipeline/execute-math.tantra`
+- `brahman/yantra/pipeline/invert-math.tantra`
+
+**Change to `match-mantra.tantra`:**
+- When solve-for is a janya and all other janya + phala are bound → call `invert-math`
+
+**xfails this directly closes:**
+- `test_frequency` — once `frequency-mantra` wired to `reciprocal` math node
+- `test_gravitational_force` — once G constant handled (Phase B)
+- All future inversion tests (Ohm's law, photon energy, etc.)
 
 ---
 
-### 2. Gap 2 — Session entity structure (unblocks multi-entity scenes)
+### 2. Dvandva / vishesa-bandhana instance-map
 
-**What:** `session-anuvada` currently carries `[concept, sankhya, val]` triples
-across turns. It must also carry:
+**What:** `vishesa-bandhana` collapses multiple instances of same concept to first one.
+Two entities both owning `mass` → only first entity's mass survives.
+
+**Why second:** Paragraphs with two entities must work before sessions can accumulate
+two entities. Same mechanism — just timing differs.
+
+**The fix:** Per-entity instance-map instead of per-concept. Each
+`[concept, shashthi-vibhakti, entity]` pair gets its own instance label.
+
+**Tests unblocked:** 4 paragraph xfails + 5 dvandva session xfails
+
+---
+
+### 3. Gap 2 — Session entity structure
+
+**What:** `session-anuvada` carries sankhya values only. Must carry:
 - `[entity, prathama-vibhakti, object]` — entity identity
-- `[property, shashthi-vibhakti, entity]` — ownership edges
+- `[property, shashthi-vibhakti, entity]` — ownership
 - `[entity, vishesa, rashi]` — rashi type
 
-Each turn can introduce a NEW entity. By turn 3, the scene has three objects.
-The session must accumulate them — not replace them.
+**Gate:** Dvandva fix must come first — same structural issue in accumulated graph.
 
-**Why second:** This is the primary multi-entity path. Dvandva (one sentence) is
-a convenience on top of this. Without session entity structure, the scene cannot
-grow across turns — pratibimba cannot accumulate a scene.
-
-**The change:** `session-anuvada.tantra` currently calls `remember-bindings` for
-sankhya only. It must also store structural triples from `refined` into
-`se_graph` in the session entry. The socket reads `se_graph` on next turn
-and injects alongside `prior-graph` sankhya triples — after avrti-refine.
-
-**Sandhi-bandhana constraint applies:** Entity triples must be injected after
-`avrti-refine` exactly as sankhya triples are — not before.
+**Tests unblocked:** 5 Gap 2 xfails + 3 pratibimba xfails
 
 ---
 
-### 3. Dvandva — two entities in one sentence (Phase 4, after Gap 2)
+### 4. Pratibimba blockers (after Gap 2)
 
-**What:** `"electron and proton both in field B"` — two entities in one sentence
-rather than across two turns. Convenience on top of session accumulation.
-
-**Why after Gap 2:** Session accumulation IS the multi-entity architecture.
-Dvandva is the optimisation. One entity per turn already works once Gap 2 is done.
-
-**Architecture:** A tantra that walks `prathama-vibhakti` nodes, scopes
-`shashthi-vibhakti` per entity, fires match-mantra within each scope.
-
-**Tests:** `test_tier2_two_entities_ke_each`, `test_two_entity_rashi_feeds_mantra`,
-`test_avrti_dvandva_collection_of_two_values`
-
----
-
-## What is permanently deferred (P8f)
-
-`frequency-mantra`, `gravitational-force-mantra` — constants (`1`, `pi`, `G`)
-not representable in the current flat krama step list.
-Fixed by the expression subgraph architecture (P8f).
-
----
-
-## What comes after the gaps
-
-**Pratibimba blockers** (unblocked by Gap 1 + Gap 2):
-- `sphere` → `gola` word index entry — 1 kosha change
+- `sphere` → `gola` word index entry
 - Spatial position binding (`bindu` as owned vector value)
-- Orbital radius mantra (`lorentz-force.om`, `r = mv/qB`)
+- Orbital radius mantra (`r = mv/qB`) — needs P8f Phase A (division)
 - EpochOutput generation from graph entity enumeration
 
-**P8c — Satya phala layer:** `[concept, known, satya]` after each derivation.
-Enables logical questions. Gated on Gap 1 + Gap 2 being stable.
-
-**P8d — Nyaya mantras:** `nyaya-step.tantra`, logical inference, fixpoint after derive-step.
-
-**P8e — Inversion:** `invert-expr.tantra`. Generic inverter via `pratipaksha` walk.
-"Find mass given KE and velocity." Currently only forward computation supported.
-
-**P8f — Expression subgraph:** Replace flat krama with `kriya` edge → expression
-subgraph root. Fixes constants. No more arg-order issues.
-
-**P7 — Tokenise-question.tantra:** Replace OCaml char loop with graph-native tantra.
-Prerequisite for P8 composition pipeline.
-
-**Session graph (formal):** `build-session-graph.tantra`, `formalize-question.tantra`,
-`assert-samskaara.tantra` — full logical session as proof document. Gated on P7+P8.
-
 ---
 
-## What the session plan got wrong
+## What is permanently deferred
 
-The plan said Gap 5 was "one OCaml change — pass `se_graph` into `anuvada_query`."
+**P8c — Satya phala layer:** `[concept, known, satya]` after each derivation.
+Enables logical questions. Gated on P8f stable.
 
-What was actually needed was an architectural understanding:
-the session IS the outer avrti of anuvada-ganana. This led to `session-anuvada.tantra`
-as the correct structure — not a wiring fix, but a new scale of the same spiral.
+**P8d — Nyaya mantras:** logical inference, `nyaya-step.tantra`.
 
-The other thing the plan missed: `sandhi-bandhana` corrupts prior-turn triples
-when they are injected before `avrti-refine`. Prior-graph must be injected **after**
-`avrti-refine`, before `kosha-expand`. This is a constraint that the architecture
-must preserve going forward — any session graph expansion must respect it.
+**P7 — Tokenise-question.tantra:** Replace OCaml char loop.
+
+**Session graph (formal):** `build-session-graph`, `formalize-question`, `assert-samskaara`.
 
 ---
 
 ## What has changed
 
-| Date | What shifted |
+For baseline and session progress see [changelog.md](changelog.md).
+
+| Date | What shifted in this doc |
 |------|-------------|
-| 2026-03-16 | Initial writing — synthesized from nyaya-plan.md xfail table, test analysis |
-| 2026-03-16 | Updated: Gaps 3/4/5 done. Baseline 346/8. sandhi-bandhana constraint documented. Priority reordered. |
-| 2026-03-16 | Baseline 355/21. test_entity_scene.py written — Gap 1 (8 xfails), Gap 2 (5 xfails), pratibimba render params (3 xfails). Structural disambiguation rule defined: word between satya-concept and rashi-bandha is always a rashi label. |
-| 2026-03-16 | Gap 1 partially closed. emit-triples `word≠node` discriminant. 2 xfails → xpass. Baseline 355/19xfail/2xpass. Immediate cleanup: remove xfail markers from 2 xpassed tests; update `test_instance_named_m_does_not_collide_with_metre` assertion. |
-| 2026-03-16 | Gap 1 further closed. vibhakti-shashthi: satya-named entities. vishesa-instance: can-promote scan state. split-numeric: scientific notation. q, v now passing. Baseline 360/16xfail. B and unit-rate still open. |
+| 2026-03-16 | Initial writing — xfail table, priority order, deferred items. |
+| 2026-03-17 | P8f reprioritized to top. Dvandva before Gap 2. 08-boot.md added. |
+| 2026-03-17 | `test_frequency` xfail removed (now passing). `test_gravitational_force` remains. Boot/reboot, sandhi Way 2, photon-energy, planck-constant, frequency fixes added to completed table. |
