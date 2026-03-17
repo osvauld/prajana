@@ -20,11 +20,10 @@ tantra mantra-coverage
   takes graph
 
   -- collect bound concepts (nodes with sankhya triple)
-  bound = reduce graph [] (fn acc [s, e, o] ->
-    cond (e is sankhya) (append acc [s]) otherwise acc)
+  bound = map (bound-concepts graph) (fn kv -> nth kv 0)
 
   -- all mantra nodes
-  all-mantras = walk-in "physics-mantra" "varga"
+  all-mantras = physics-mantras
 
   result = map all-mantras (fn m ->
     let janya    = walk m "janya"

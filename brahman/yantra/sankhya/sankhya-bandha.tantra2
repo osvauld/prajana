@@ -14,7 +14,7 @@ tantra2 sankhya-bandha
 takes graph
 
 -- concepts already bound to a numeric value
-already-bound = graph | where [s, e, o] | and (eq e "sankhya") | collect s
+already-bound = map (bound-concepts graph) (fn kv -> nth kv 0)
 
 result = scan graph [last-active: str = ""]:
 

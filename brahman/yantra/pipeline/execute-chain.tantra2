@@ -1,0 +1,15 @@
+tantra2 execute-chain
+
+-- dispatch to a mantra's equation tantra via its kriya edge.
+-- resolves janya to values, then calls the equation tantra with those args.
+
+takes mantra
+takes bindings
+
+args        = resolve-janya-args mantra bindings
+expr-tantra = nth (walk mantra "kriya") 0
+result      = call-tantra expr-tantra args
+
+return result
+
+done

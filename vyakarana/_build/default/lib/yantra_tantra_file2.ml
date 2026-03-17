@@ -819,15 +819,26 @@ let parse_tantra2_file (path : string) : tantra option =
         end else begin
           match st.section with
           | "header" | "inputs" ->
-            let parts = String.split_on_char ' ' trimmed
-                       |> List.filter (fun s -> String.length s > 0) in
-            (match parts with
-             | pname :: _ ->
-               st.inputs <- { tp_name = pname; tp_canonical = pname;
-                              tp_type = "list"; tp_unit = None; tp_avastha = None }
-                            :: st.inputs;
-               st.section <- "body"
-             | [] -> ())
+            (* if the line contains '=', it's a body binding, not a param *)
+            if String.contains trimmed '=' then begin
+              flush_binding st;
+              st.section <- "body";
+              (match try_binding_start trimmed with
+               | Some (bname, _) ->
+                 st.cur_name <- bname;
+                 st.cur_lines <- [trimmed]
+               | None -> ())
+            end else begin
+              let parts = String.split_on_char ' ' trimmed
+                         |> List.filter (fun s -> String.length s > 0) in
+              (match parts with
+               | pname :: _ ->
+                 st.inputs <- { tp_name = pname; tp_canonical = pname;
+                                tp_type = "list"; tp_unit = None; tp_avastha = None }
+                              :: st.inputs;
+                 st.section <- "body"
+               | [] -> ())
+            end
           | "return" ->
             let parts = String.split_on_char ' ' trimmed
                        |> List.filter (fun s -> String.length s > 0) in

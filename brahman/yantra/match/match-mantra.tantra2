@@ -1,0 +1,54 @@
+tantra2 match-mantra
+
+-- given a question graph, find the best matching mantra.
+-- returns [mantra-node, val-pairs, mode] or [] if no match.
+-- mode is "forward" or "inverse" — used by anuvada-ganana to pick executor.
+-- val-pairs = [[concept, val], ...] — passed to execute-math/execute-chain.
+--
+-- Layer 2 note: cond predicates that close all parens leave depth=0.
+-- Consequence must be on SAME line as predicate, or wrapped in outer parens.
+
+takes graph
+
+bv   = bound-vals graph
+bcs  = nth bv 0
+vps  = nth bv 1
+
+sf-result  = extract-solve-for graph
+has-intent = nth sf-result 0
+solve-for  = nth sf-result 1
+
+mantras = physics-mantras
+
+-- all candidates: filtered by solve-for when present, otherwise all mantras
+candidates = cond (gt (string-length solve-for) 0) (filter mantras (fn m -> let mname = shabda m "name" let mphala = nth (walk m "phala") 0 let mswarupa = nth (walk m "swarupa") 0 let mjanya = walk m "janya" (or (eq mname solve-for) (eq mphala solve-for) (eq mswarupa solve-for) (member solve-for mjanya)))) otherwise mantras
+
+-- forward: all janya covered, solve-for is phala/swarupa
+forward-match = reduce candidates [] (fn acc m ->
+  let janya       = walk m "janya"
+  let sf-is-janya = member solve-for janya
+  let all-ok      = reduce janya true (fn a r -> (and a (or (member r bcs) (gt (string-length (shabda r "constants-key")) 0))))
+  cond (or (gt (length acc) 0) (not all-ok) sf-is-janya) acc otherwise [m, vps, "forward"])
+
+-- inverse: solve-for is janya, phala + other janya covered, math-backed
+inv-candidates = cond has-intent candidates otherwise []
+
+inverse-match = (cond (gt (length forward-match) 0) forward-match
+  otherwise (reduce inv-candidates [] (fn acc m ->
+    let janya        = walk m "janya"
+    let mphala       = nth (walk m "phala") 0
+    let mswarupa     = nth (walk m "swarupa") 0
+    let phala-concept = cond (gt (string-length mphala) 0) mphala otherwise mswarupa
+    let has-math-op  = gt (string-length (shabda m "math-op")) 0
+    let sf-is-janya  = member solve-for janya
+    let other-janya  = filter janya (fn j -> not (eq j solve-for))
+    let others-ok    = reduce other-janya true (fn a r -> (and a (or (member r bcs) (gt (string-length (shabda r "constants-key")) 0))))
+    let phala-bound  = (or (member mphala bcs) (member mswarupa bcs) (member (shabda m "name") bcs))
+    cond (or (gt (length acc) 0) (not has-math-op) (not sf-is-janya) (not others-ok) (not phala-bound)) acc
+    otherwise [m, vps, "inverse"])))
+
+result = cond (gt (length forward-match) 0) forward-match otherwise inverse-match
+
+return result
+
+done

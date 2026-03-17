@@ -1,0 +1,24 @@
+tantra2 bound-vals
+
+-- extract bound-concepts and val-pairs from a question graph in one pass.
+-- bound-concepts: list of subjects that have a sankhya triple
+-- val-pairs:      list of [subject, value] for each sankhya triple
+--
+-- returns [bound-concepts, val-pairs]
+--
+-- used by match-mantra and derive-step to check coverage and resolve values.
+
+takes graph
+
+result = reduce graph [[], []] (fn acc kv ->
+  let s = nth kv 0
+  let e = nth kv 1
+  let o = nth kv 2
+  cond (eq e "sankhya")
+    [(append (nth acc 0) [s]),
+     (append (nth acc 1) [[s, o]])]
+  otherwise acc)
+
+return result
+
+done
