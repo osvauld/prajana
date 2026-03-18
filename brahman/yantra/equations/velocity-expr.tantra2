@@ -1,0 +1,13 @@
+tantra2 velocity-expr
+
+-- v = u + at
+
+takes initial-velocity
+takes acceleration
+takes time
+
+val = add initial-velocity (mul acceleration time)
+
+return val
+
+done

@@ -32,6 +32,10 @@ audible in the world. Read both together for the full picture.
 | [08-boot.md](08-boot.md) | Boot/reboot pass architecture. emit-edge, graph-all-nodes, varga-inheritance. | Active |
 | [09-adhyayana.md](09-adhyayana.md) | The learning loop. Session as growing understanding. Feedback, correction, prashna. Absorbs 05-session.md. | Active |
 | [10-layer2-rewrite.md](10-layer2-rewrite.md) | **IMMEDIATE ACTIVE PLAN.** Layer 2 tantra rewrite. Four phases: OCaml bootstrap, parser, migration, cleanup. sthita-viveka, varga-viveka, dvandva-setu. | Active |
+| [11-tantra2-philosophy.md](11-tantra2-philosophy.md) | The grammar of understanding. How humans give meaning to words. Pointing, scope, clarification. Why tantra2 was discovered not designed. | Active |
+| [12-tantra2-notation.md](12-tantra2-notation.md) | Every symbol in tantra2 — its English grammar equivalent, Sanskrit root, function in reasoning. The notation as grammar. | Active |
+| [13-tantra2-mathematics.md](13-tantra2-mathematics.md) | Monotone endomorphisms. Knaster-Tarski fixpoints. Finite state transducers. Datalog. The Madhava connection. Updates toward prabandham. | Active |
+| [tantra2-spec.md](tantra2-spec.md) | Technical reference. File structure, expression syntax, scan syntax, safety rules, naming conventions. | Active |
 
 ---
 

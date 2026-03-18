@@ -1,0 +1,13 @@
+tantra2 centripetal-force-expr
+
+-- F = mv²/r
+
+takes mass
+takes velocity
+takes radius
+
+val = div (mul mass (square velocity)) radius
+
+return val
+
+done

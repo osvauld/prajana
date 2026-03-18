@@ -9,12 +9,9 @@ Do not update this mid-session — only when a session is complete and tests pas
 
 ## Current baseline
 
-**412 passed / 19 xfailed / 0 failing** (2026-03-17, session 3)
+**412 passed / 19 xfailed / 0 failing** (2026-03-17, session 4 — no change in test count)
 
-Previous baseline was 409 passed / 20 xfailed / 2 failing.
-Net: **+3 passing tests**, 1 former xfail now passing (xfail marker removed), 0 failures.
-
-**All tests pass.**
+All tests pass. Session 4 was refactoring only — same test count, far cleaner code.
 
 **Former regressions now fixed by Layer 2:**
 - `given` word promoted to rashi instance — fixed by typed scan state (Tension 3)
@@ -26,6 +23,41 @@ Net: **+3 passing tests**, 1 former xfail now passing (xfail marker removed), 0 
 ---
 
 ## Sessions
+
+### 2026-03-17 — Session 4: extraction + migration of core pipeline tantras
+
+**Started:** 412 passed / 19 xfailed / 0 failing
+**Ended:** 412 passed / 19 xfailed / 0 failing (refactoring only)
+
+**New shared tantras extracted (eliminates duplication):**
+- `extract-solve-for.tantra2` — identical 10-line reduce block from anuvada-ganana, session-anuvada, match-mantra
+- `bound-vals.tantra2` — `[bound-concepts, val-pairs]` from derive-step + match-mantra
+- `bound-concepts.tantra2` — sankhya subjects list from 5 tantras
+- `resolve-janya-args.tantra2` — janya→args resolution from execute-math, execute-chain, invert-math
+- `physics-mantras.tantra2` — `walk-in "physics-mantra" "varga"` from 3 tantras
+
+**Tantras migrated to Layer 2:**
+- `avrti.tantra2`, `avrti-refine.tantra2` — `fn nd ->` (not `node` — reserved op)
+- `match-mantra.tantra2` — forward/inverse matching, all candidates/forward/inverse logic
+- `derive-step.tantra2` — forward chaining with phala/janya checks
+- `execute-math.tantra2`, `execute-chain.tantra2`, `invert-math.tantra2`
+
+**Key bugs found and fixed:**
+
+1. **Zero-input tantra body mis-parsed as param** — `result = walk-in ...` in `"header"` section
+   was being parsed as param name `"result"`. Fix: lines containing `=` in `"header"` section
+   are now treated as body bindings, not param declarations.
+
+2. **Local variable name clashing with tantra name** — `bound-concepts = nth bv 0` in
+   `match-mantra` caused `Var"bound-concepts"` to resolve to the `bound-concepts.tantra2` tantra
+   (returning `VFn`) instead of the local list. Fix: renamed to `bcs`.
+
+3. **`cond` predicate closing to depth 0** — the line-joiner thought the binding was complete
+   after `cond (gt ...) 0)` (depth=0), splitting the consequence onto a "new binding".
+   Fix: keep consequence on same line, or wrap entire `cond` in outer `(...)`.
+
+4. **`debug-print` shows `VNode` as `?`** — `show` function doesn't handle `VNode`.
+   Not a bug — use `debug-print (to-string mynode)` to see the node name.
 
 ### 2026-03-17 — Session 3: variadic fix, Phase 2 Steps 4-6, pre-existing failures fixed
 

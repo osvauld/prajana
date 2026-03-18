@@ -1,0 +1,58 @@
+tantra2 sandhi-kosha
+
+-- compound word resolution via kosha lookup.
+-- Way 1: mithya + satya → lookup(last-mithya + "-" + word)
+-- Way 2: satya + satya  → lookup(prev-satya + "-" + word)
+-- on hit → emit [compound, satya, compound] + [compound, sandhi-rename, word]
+-- on miss → pass through unchanged
+
+takes graph
+
+pass = reduce graph [[], [], ""] (fn acc tri ->
+  let word       = nth tri 0
+  let edge       = nth tri 1
+  let obj        = nth tri 2
+  let pend       = nth acc 0
+  let out        = nth acc 1
+  let last-satya = nth acc 2
+  let n-pend     = length pend
+
+  let last-pend   = (cond (gt n-pend 0) (nth pend (sub n-pend 1)) otherwise "")
+  let prefix-list = map (range (max 0 (sub n-pend 1))) (fn i -> nth pend i)
+  let prefix-out  = flush-pending-mithya prefix-list out
+  let full-flush  = flush-pending-mithya pend out
+
+  -- Way 1: last pending mithya + current satya
+  let cw1    = (cond (and (gt (string-length last-pend) 0) (eq edge "satya"))
+    (concat last-pend "-" word) otherwise "")
+  let cn1    = (cond (gt (string-length cw1) 0) (lookup cw1) otherwise _none)
+
+  -- Way 2: prev satya + current satya (no pending mithya)
+  let cw2    = (cond (and (eq n-pend 0) (and (gt (string-length last-satya) 0) (eq edge "satya")))
+    (concat last-satya "-" word) otherwise "")
+  let cn2    = (cond (gt (string-length cw2) 0) (lookup cw2) otherwise _none)
+
+  -- drop-last: out without the final element (for Way 2 replacement)
+  let drop-last = map (range (max 0 (sub (length out) 1))) (fn i -> nth out i)
+
+  (cond (exists cn1)
+    [[], (append prefix-out [[(to-string cn1), "satya", (to-string cn1)],
+                              [(to-string cn1), "sandhi-rename", word]]), ""]
+  otherwise (cond (exists cn2)
+    [[], (append drop-last [[(to-string cn2), "satya", (to-string cn2)],
+                             [(to-string cn2), "sandhi-rename", word]]), ""]
+  otherwise (cond (eq edge "mithya")
+    [(append pend [word]), out, ""]
+  otherwise (cond (gt n-pend 0)
+    [[], (append full-flush [[word, edge, obj]]), word]
+  otherwise
+    [[], (append out [[word, edge, obj]]), word])))))
+
+pending-list = nth pass 0
+rough        = nth pass 1
+
+result = flush-pending-mithya pending-list rough
+
+return result
+
+done

@@ -1,0 +1,39 @@
+tantra2 unit-of-concept
+
+-- find the canonical unit for a concept node.
+-- three paths tried in order:
+-- 1. swarupa: concept has a mantra as swarupa — use mantra's unit shabda
+-- 2. yukta: unit nodes linked to concept, filtered to matra members, prefer SI (scale=1)
+-- 3. sthita: mantras that use concept as input — walk back to find unit
+
+takes concept
+
+-- path 1: swarupa
+swarupa-nodes   = walk-in concept "swarupa"
+swarupa-mantras = filter swarupa-nodes (fn m -> gt (string-length (shabda m "unit")) 0)
+swarupa-unit    = (cond (gt (length swarupa-mantras) 0) (shabda (nth swarupa-mantras 0) "unit") otherwise _none)
+
+-- path 2: yukta
+yukta-nodes = walk-in concept "yukta"
+yukta-units = filter yukta-nodes (fn u -> member "matra" (walk u "sthita"))
+yukta-si    = filter yukta-units (fn u ->
+  let dv = dim-vector u
+  (cond (gt (length dv) 0) (eq (nth dv (sub (length dv) 1)) 1) otherwise false))
+yukta-unit  = (cond (gt (length yukta-si) 0) (nth yukta-si 0)
+  otherwise (cond (gt (length yukta-units) 0) (nth yukta-units 0) otherwise _none))
+
+-- path 3: sthita
+sthita-mantras = filter (walk-in concept "sthita") (fn m -> gt (string-length (shabda m "unit")) 0)
+sthita-unit    = reduce sthita-mantras _none (fn acc m ->
+  (cond (exists acc) acc
+  otherwise (let direct = filter (walk-in concept "yukta") (fn u -> member "matra" (walk u "sthita"))
+    in (cond (gt (length direct) 0) (nth direct 0) otherwise _none))))
+
+result = (cond (exists swarupa-unit) swarupa-unit
+  otherwise (cond (exists yukta-unit) yukta-unit
+  otherwise (cond (exists sthita-unit) sthita-unit
+  otherwise _none)))
+
+return result
+
+done

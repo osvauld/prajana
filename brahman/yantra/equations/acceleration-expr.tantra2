@@ -1,0 +1,13 @@
+tantra2 acceleration-expr
+
+-- a = (v - u) / t
+
+takes final-velocity
+takes initial-velocity
+takes time
+
+val = div (sub final-velocity initial-velocity) time
+
+return val
+
+done

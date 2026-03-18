@@ -16,9 +16,13 @@ tantra2 avrti-refine
 
 takes graph
 
-after-sandhi-kosha    = sandhi-kosha      graph
-after-sandhi-avastha  = sandhi-avastha    after-sandhi-kosha
-after-sandhi-bandhana = sandhi-bandhana   after-sandhi-avastha
+-- fast path: if no mithya triples remain, avastha/vishesa passes are no-ops
+-- sandhi-kosha still runs (Way 2: satya+satya compound needs no mithya)
+has-mithya = gt (length (graph | where [s, e, o] | and (eq e "mithya") | collect s)) 0
+
+after-sandhi-kosha    = sandhi-kosha graph
+after-sandhi-avastha  = (cond has-mithya (sandhi-avastha  after-sandhi-kosha) otherwise after-sandhi-kosha)
+after-sandhi-bandhana = sandhi-bandhana after-sandhi-avastha
 after-vibhakti        = vibhakti-shashthi after-sandhi-bandhana
 after-vishesa-inst    = vishesa-instance  after-vibhakti
 after-rashi-viveka    = rashi-viveka      after-vishesa-inst

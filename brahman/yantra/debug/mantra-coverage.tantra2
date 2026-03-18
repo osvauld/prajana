@@ -1,0 +1,21 @@
+tantra2 mantra-coverage
+
+-- given a refined question graph, return coverage info for every mantra:
+--   [mantra-name, fires, covered, missing]
+-- fires = true if all janya are bound
+
+takes graph
+
+bcs         = bound-concept-names graph
+all-mantras = physics-mantras
+
+result = map all-mantras (fn m ->
+  let janya   = walk m "janya"
+  let covered = filter janya (fn r -> member r bcs)
+  let missing = filter janya (fn r -> not (member r bcs))
+  let fires   = eq (length missing) 0
+  [m, fires, covered, missing])
+
+return result
+
+done

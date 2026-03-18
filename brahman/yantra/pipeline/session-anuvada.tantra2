@@ -1,0 +1,39 @@
+tantra2 session-anuvada
+
+-- session-aware wrapper around anuvada-ganana.
+-- prior-graph injected after avrti-refine, before kosha-expand.
+
+takes sentence
+takes prior-graph
+
+raw-graph = build-question-graph sentence
+refined   = fixpoint raw-graph (fn g -> avrti-refine g)
+
+merged = (cond (and (exists prior-graph) (gt (length prior-graph) 0)) (append prior-graph refined) otherwise refined)
+
+expanded = kosha-expand merged
+mm       = match-mantra expanded
+enriched = (cond (gt (length mm) 0) expanded otherwise (fixpoint expanded (fn g -> derive-step g)))
+final-m  = (cond (gt (length mm) 0) mm otherwise (match-mantra enriched))
+
+sf-result = extract-solve-for expanded
+sf        = nth sf-result 1
+
+-- remember this turn's sankhya concepts (from refined only, not prior-graph)
+direct-bindings = refined | where [s, e, o] | and (eq e "sankhya") | collect [s, o]
+
+sv-concepts = refined | where [concept, e, _] | and (eq e "shashthi-vibhakti") | collect concept
+sv-vals     = refined | where [_, e, o] | and (eq e "sankhya") | collect o
+
+sv-bindings = (cond (and (gt (length sv-concepts) 0) (gt (length sv-vals) 0))
+  (map sv-concepts (fn c -> [c, (nth sv-vals 0)]))
+  otherwise [])
+
+this-turn = append direct-bindings sv-bindings
+_stored   = remember-bindings (map this-turn (fn p -> bind (nth p 0) (nth p 1)))
+
+result = (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match")
+
+return result
+
+done
