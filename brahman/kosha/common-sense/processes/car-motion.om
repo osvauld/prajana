@@ -1,0 +1,39 @@
+kosha car-motion
+
+  -- the energy conversion chain of a car.
+  -- chemical bonds (fuel) → heat (combustion) → mechanical rotation (engine)
+  -- → linear KE (tyre friction) → heat (brake friction) → rest.
+  --
+  -- driving: tyre static friction is the force that moves the car forward.
+  --   engine torque → wheel rotation → contact patch pushes backward on road
+  --   → Newton 3: road pushes forward on car = driving force.
+  --   no friction = no motion. a car on ice cannot accelerate.
+  --
+  -- braking: brake pad kinetic friction converts KE → heat.
+  --   Q = ½mv² (all KE) if braking to rest.
+  --   ABS keeps friction static (higher μ) → shorter stopping distance.
+  --
+  -- janya: fuel (hydrocarbon), mass, velocity, friction-coefficient.
+  -- phala: velocity-change (acceleration or deceleration), heat.
+
+  "common-sense-varga-vishesa"
+  "processes-varga-vishesa"
+  "tinanta-swarupa bhave-prayoga-swarupa"
+
+  -- energy chain nodes
+  "combustion-yukta"
+  "mechanical-energy-varga-yukta"
+  "kinetic-energy-yukta"
+  "friction-force-yukta"
+  "heat-transfer-yukta"
+
+  -- governing laws
+  "first-law-yukta second-law-yukta"
+  "newton-second-law-motion-yukta"
+
+  -- materials
+  "hydrocarbon-yukta rubber-yukta steel-yukta"
+
+  shabda word:car,vehicle,drives,driving,brakes,braking / combustion-mechanical-KE-via-tyre-friction
+
+done

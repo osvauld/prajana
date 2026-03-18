@@ -1,0 +1,28 @@
+kosha water-material
+
+  -- H2O as a common-sense material — the everyday substance.
+  -- bridges to: chemistry/water (molecular structure) + liquid (thermodynamic state).
+  -- the same node from two perspectives: H2O is the chemistry, liquid is the phase.
+  --
+  -- everyday properties:
+  --   liquid at 0-100°C (at 1 atm). solid below 0°C (ice). gas above 100°C (steam).
+  --   transparent and colourless (thin layers). blue in bulk (selective absorption).
+  --   refraction index 1.33 — bends light (apparent depth, rainbows).
+  --   surface tension: 72 mN/m at 20°C. insects walk on it.
+  --   high heat capacity: 4186 J/kg·K — resists temperature change.
+  --   universal solvent: dissolves more substances than any other liquid.
+  --   density maximum at 4°C — ice floats (unusual: most solids sink in liquid).
+  --   coefficient of restitution: ~0 (liquid — no bounce, splashes).
+
+  "common-sense-varga-vishesa"
+  "materials-varga-vishesa"
+
+  "water-abheda"
+  "liquid-sthita"
+  "transparent-swarupa"
+  "solvent-swarupa"
+  "domain-3d-yukta pbr-yukta"
+
+  shabda word:water / H2O-liquid-transparent-universal-solvent-high-heat-capacity
+
+done

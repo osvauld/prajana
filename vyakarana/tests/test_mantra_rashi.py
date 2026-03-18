@@ -123,7 +123,7 @@ def test_tier1_force_answer(vy):
 def test_tier1_does_not_fire_without_all_janya(vy):
     """Mantra must not fire if only one janya is bound (mass only, no velocity)."""
     result = run(vy, "ball has mass m1 of 5")
-    assert result == "no match", f"expected no match (only one janya), got: {result}"
+    assert "no match" in result, f"expected no match (only one janya), got: {result}"
 
 
 # ── Tier 2: solve-for / match-mantra path ────────────────────────────────────
@@ -159,7 +159,7 @@ def test_tier2_solve_for_prefers_target_mantra(vy):
     # We need acceleration too; without it → no match.
     result = run(vy, "find force ball has mass m1 of 5 and velocity v1 of 20")
     # no acceleration → force mantra can't fire → no match
-    assert result == "no match", (
+    assert "no match" in result, (
         f"without acceleration, find-force should yield no match, got: {result}"
     )
 

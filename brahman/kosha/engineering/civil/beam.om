@@ -1,0 +1,35 @@
+kosha beam
+
+  -- a horizontal structural element that carries load by bending.
+  -- the beam is the fundamental element of floor and roof construction.
+  -- load from above → beam bends → internal stresses develop:
+  --   top surface: compression (being squeezed)
+  --   bottom surface: tension (being stretched)
+  --   neutral axis: middle — no stress
+  --
+  -- bending moment M: the moment of force that causes bending. M = F × d.
+  -- bending stress: σ = My/I where y = distance from neutral axis, I = second moment of area.
+  -- deflection: how much the beam sags under load.
+  --
+  -- I-beam (H-beam): material concentrated at top and bottom flanges.
+  -- maximises I (second moment of area) for minimum material.
+  -- the web (vertical part) resists shear. the flanges resist bending.
+  -- this is why steel structures use I-beams: efficient use of material.
+  --
+  -- materials: steel beams (strong in tension and compression), reinforced concrete
+  -- beams (steel rebar at the bottom where tension occurs), timber beams.
+
+  "civil-varga-vishesa"
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  "horizontal-swarupa"
+  "compression-yukta tension-yukta shear-yukta"
+  "bending-swarupa"
+  "steel-yukta concrete-yukta wood-yukta"
+  "normal-force-yukta"
+  "domain-3d-yukta"
+
+  shabda word:beam,girder,joist / horizontal-structural-element-bending-compression-top-tension-bottom
+
+done

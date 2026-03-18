@@ -1,0 +1,54 @@
+kosha electrical-varga
+
+  -- electrical engineering: power systems at scale.
+  -- the discipline of generating, transmitting, and converting electrical energy.
+  -- distinguishing from electronics: electrical = power (watts to megawatts).
+  --                                  electronics = signal (milliwatts, information).
+  --
+  -- the power chain:
+  --   generation:    turbine (steam, water, wind) → generator → AC voltage.
+  --                  generator: mechanical rotation → electromagnetic induction → EMF.
+  --                  Faraday: EMF = -dΦ/dt. rotating coil in magnetic field.
+  --   transmission:  step-up transformer → high voltage (11kV, 132kV, 400kV).
+  --                  high voltage → low current → P=IV → low I²R losses in cables.
+  --   distribution:  step-down transformers → 11kV → 415V (3-phase) → 230V (single phase).
+  --   consumption:   motors, heaters, lighting, electronics.
+  --
+  -- three-phase power: three AC voltages 120° apart.
+  --   used for all large-scale transmission and industrial motors.
+  --   advantages: constant total power (no pulsation), smaller conductors.
+  --   star connection: neutral wire. delta connection: no neutral.
+  --
+  -- transformer: the device that makes AC power distribution possible.
+  --   V1/V2 = N1/N2 (turns ratio). P1 = P2 (ideal, no losses).
+  --   works ONLY with AC — changing flux induces EMF.
+  --   DC through a transformer: constant flux → no EMF → short circuit.
+  --
+  -- power factor: cos φ. ratio of real power to apparent power.
+  --   unity power factor (pf=1): purely resistive load. all energy useful.
+  --   inductive load (motors, transformers): pf < 1. current lags voltage.
+  --   capacitive correction: capacitors cancel inductance → pf → 1.
+  --
+  -- protection:
+  --   fuse: melts at overcurrent. one-time use.
+  --   circuit breaker: trips and resets. magnetic or thermal-magnetic.
+  --   earth leakage (RCD/GFCI): detects current imbalance → shock protection.
+  --   lightning arrester: diverts surge to earth.
+
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  -- physics connections
+  "electromagnetism-yukta"
+  "circuit-varga-yukta"
+  "magnetic-field-yukta"
+  "faraday-induction-yukta"
+
+  -- key quantities
+  "voltage-yukta current-yukta power-yukta"
+  "resistance-yukta inductance-yukta capacitance-yukta"
+  "transformer-yukta motor-yukta generator-yukta"
+
+shabda electrical-varga / power-systems-generation-transmission-distribution-transformer-motor-generator
+
+done

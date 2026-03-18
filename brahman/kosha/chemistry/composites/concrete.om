@@ -1,0 +1,32 @@
+kosha concrete
+
+  -- calcium silicate hydrate matrix + aggregate (sand, gravel, crushed stone).
+  -- made by mixing: cement (CaO + SiO2, calcined) + water + aggregate.
+  -- hydration reaction: CaO + SiO2 + H2O → calcium silicate hydrate gel.
+  -- the gel fills pores and binds aggregate → stone-like solid.
+  --
+  -- properties:
+  --   compressive strength: ~30-50 MPa (normal). ~100 MPa (high strength).
+  --   tensile strength: very low (~3 MPa) — concrete cracks under tension.
+  --   solution: steel reinforcement (rebar) carries the tensile load.
+  --   reinforced concrete: the dominant structural material of the modern world.
+  --
+  -- the chemistry: C-S-H (calcium silicate hydrate) is a poorly-ordered polymer.
+  -- it grows as needles that interlock and fill space — micro-scale composite.
+  -- water/cement ratio determines strength: lower w/c → stronger (fewer pores).
+  --
+  -- CO2 footprint: cement production = ~8% of global CO2 emissions.
+  -- CaCO3 → CaO + CO2 at 900°C — each tonne of cement releases ~0.7 tonne CO2.
+
+  "composites-varga-vishesa"
+  "chemistry-varga-vishesa"
+
+  "calcium-yukta silicon-yukta water-yukta"
+  "solid-sthita"
+  "compressive-strength-yukta"
+  "steel-yukta reinforcement-yukta"
+  "domain-chemistry-sthita"
+
+  shabda word:concrete,cement / calcium-silicate-hydrate-strong-in-compression-weak-in-tension-reinforced-with-steel
+
+done

@@ -1,0 +1,31 @@
+kosha aromatic
+
+  -- benzene ring and its derivatives. 4n+2 π electrons (Hückel rule). special stability.
+  -- C6H6: 6 carbons in a ring, alternating single/double bonds — but actually
+  -- fully delocalised: each carbon contributes one p-electron to a π cloud above
+  -- and below the ring. no single bond, no double bond — something in between.
+  -- this delocalisation IS the aromaticity. it makes benzene far more stable
+  -- than a simple triene (cyclohexatriene) would be.
+  --
+  -- reactions: electrophilic aromatic substitution (EAS) — NOT addition.
+  -- adding to the ring would break aromaticity. substitution preserves it.
+  -- nitration, halogenation, sulfonation, Friedel-Crafts (alkylation/acylation).
+  --
+  -- benzene: C6H6. carcinogenic. solvent. precursor to almost all aromatics.
+  -- toluene: C6H5-CH3. less toxic. paint thinner. TNT precursor.
+  -- phenol: C6H5-OH. antiseptic. phenolic resins. aspirin is acetylsalicylic acid.
+  -- aniline: C6H5-NH2. dye industry. rubber accelerators.
+  --
+  -- biological aromatics: amino acids (Phe, Tyr, Trp), DNA bases, heme, chlorophyll.
+  -- pi-pi stacking: aromatic rings stack face-to-face — drives protein folding, DNA.
+
+  "organic-varga-vishesa"
+  "ring-swarupa delocalised-pi-swarupa"
+  "huckel-siddha stability-yukta"
+  "electrophilic-substitution-yukta"
+  "benzene-drishthanta toluene-drishthanta phenol-drishthanta"
+  "amino-acid-yukta dna-yukta heme-yukta"
+
+  shabda word:aromatic,benzene,aromatic-ring / delocalized-pi-electrons-huckel-4n-plus-2-EAS-stable
+
+done

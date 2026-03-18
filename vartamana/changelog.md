@@ -9,20 +9,57 @@ Do not update this mid-session — only when a session is complete and tests pas
 
 ## Current baseline
 
-**412 passed / 19 xfailed / 0 failing** (2026-03-17, session 4 — no change in test count)
+**419 passed / 12 xfailed / 0 failing** (2026-03-18, session 5)
 
-All tests pass. Session 4 was refactoring only — same test count, far cleaner code.
-
-**Former regressions now fixed by Layer 2:**
-- `given` word promoted to rashi instance — fixed by typed scan state (Tension 3)
-- `test_three_entities_find_named` — now passing
-- `test_electron_paragraph_ke` — now passing
-- Previous xfails `test_two_entities_ownership_via_viraam`, `test_viraam_resets_entity_scope`,
-  `test_two_entities_ownership` — all now passing (xfail markers auto-promoted)
+**xfails closed this session (7):**
+- `test_two_entities_compute_correct_entity` — proton momentum correct despite electron in graph
+- `test_two_entities_ke_correct_entity` — ball-A KE correct despite ball-B
+- `test_three_entities_find_named` — three entities, correct entity's mass used
+- `test_electron_paragraph_ke` — natural language electron paragraph fires correctly
+- `test_three_entities_no_labels_momentum_first`
+- `test_two_entities_labelled_answer_correct_entity`
+- `test_three_entities_labelled_answer_first`
 
 ---
 
 ## Sessions
+
+### 2026-03-18 — Session 5: entity-scoped computation + subject/modifier distinction
+
+**Started:** 412 passed / 19 xfailed / 0 failing
+**Ended:** 419 passed / 12 xfailed / 0 failing
+
+**What was done:**
+
+`extract-solve-for.tantra2` extended — now returns `[has-intent, solve-for, scope-entity]`.
+Scope entity is the named entity after the solve-for concept: "find KE of ball-A" → scope is ball-A.
+Detects both mithya entities (unlabelled: `ball-A`) and satya entities used as subjects (`electron`, `proton`).
+
+`match-mantra.tantra2` updated — when scope entity present, builds entity-scoped val-pairs:
+- Instance path: `[inst, shashthi-vibhakti, entity]` + `[inst, vishesa, concept]` + `[inst, sankhya, val]`
+- Concept path: `[concept, shashthi-vibhakti, entity]` + `[concept, sankhya, val]`
+- Supplements with flat vals for constants and given-clause inputs not owned by the entity.
+
+`sandhi-kosha.tantra2` — entity-subject guard added to Way 2 compounding.
+When the preceding satya word was followed by a shashthi-vibhakti signal (`has`, `with`),
+it is a subject, not a modifier. `electron has mass` stays as ownership — does not compound to `electron-mass`.
+`kinetic energy`, `mass density`, `photon energy` still compound correctly — no subject signal precedes them.
+
+**Philosophical insight recorded in `11-tantra2-philosophy.md`:**
+- "The question names the perspective" — solve-for is direction of inquiry; scope entity is viewpoint.
+  The question declares which perspective the graph is read from. Not search. Perspectival reading.
+- "Subject vs modifier — the shashthi-vibhakti signal" — ownership and qualification are distinct
+  structures of knowing. The possession signal marks the subject, preventing it from being read
+  as a modifier of what it owns. The species universal (electron-mass) and the owned property
+  (electron's mass) are genuinely different kinds of knowing.
+
+**Key discovery:**
+- `sandhi-kosha` ran before `vibhakti-shashthi` within each avrti pass, so `prathama-vibhakti`
+  entities were not yet established when sandhi fired on pass 1. Fix was to track the subject
+  signal inline in the reduce state — when `[_, shashthi-vibhakti, shashthi-vibhakti]` is seen,
+  the `last-satya` at that moment is a subject. No dependency on prathama-vibhakti needed.
+
+---
 
 ### 2026-03-17 — Session 4: extraction + migration of core pipeline tantras
 

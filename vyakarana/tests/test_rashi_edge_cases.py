@@ -89,7 +89,7 @@ def test_float_ke_answer(vy):
 def test_find_momentum_needs_velocity_not_acceleration(vy):
     """momentum = m*v; mass+acceleration without velocity → no match."""
     result = run(vy, "find momentum ball has mass m1 of 5 and acceleration a1 of 3")
-    assert result == "no match", (
+    assert "no match" in result, (
         f"mass+acceleration cannot give momentum, got: {result}"
     )
 
@@ -99,13 +99,13 @@ def test_find_ke_needs_velocity_not_acceleration(vy):
     result = run(
         vy, "find kinetic energy ball has mass m1 of 5 and acceleration a1 of 3"
     )
-    assert result == "no match", f"mass+acceleration cannot give KE, got: {result}"
+    assert "no match" in result, f"mass+acceleration cannot give KE, got: {result}"
 
 
 def test_find_force_needs_acceleration_not_velocity(vy):
     """F = m*a; mass+velocity without acceleration → no match (already in tier2 but good to have here too)."""
     result = run(vy, "find force ball has mass m1 of 5 and velocity v1 of 20")
-    assert result == "no match", (
+    assert "no match" in result, (
         f"mass+velocity without acceleration cannot give force, got: {result}"
     )
 
@@ -245,6 +245,6 @@ def test_negative_velocity_ke(vy):
 def test_no_solve_for_mass_velocity_is_ambiguous(vy):
     """mass+velocity without find → ambiguous (momentum vs KE) → no match."""
     result = run(vy, "ball has mass m1 of 5 and velocity v1 of 20")
-    assert result == "no match", (
+    assert "no match" in result, (
         f"ambiguous scene without solve-for should yield no match, got: {result}"
     )

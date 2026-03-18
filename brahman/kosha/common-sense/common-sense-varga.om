@@ -1,0 +1,39 @@
+kosha common-sense-varga
+
+  -- the root cluster for all common-sense knowing.
+  -- common-sense is not physics. it is the structural grammar of everyday
+  -- experience — the patterns anyone recognises before any formal study.
+  -- a city is north of another. the ocean contains water.
+  -- the bridge holds the car. the train is at the station.
+  -- these are not equations. they are the pointing that precedes equations.
+  --
+  -- four sub-clusters:
+  --
+  --   location-varga      where things are — place, region, direction, proximity.
+  --                       delhi is in india. the airport is north of the city.
+  --                       the key is near the door. the sun is above the horizon.
+  --                       location is always wrt a reference entity, named or implied.
+  --                       bridges to: physics (displacement, position, apeksha)
+  --
+  --   containment-varga   inside, outside, part-of, member-of, belongs-to.
+  --                       india contains delhi. the ocean contains the sea.
+  --                       the room is part of the house. the atom is inside the nucleus.
+  --                       bridges to: math (set, subset, element, membership)
+  --
+  --   support-varga       what holds what up — resting, hanging, attached, balanced.
+  --                       the ground supports the building. the bridge holds the car.
+  --                       the shelf carries the books. the chain suspends the lamp.
+  --                       bridges to: physics (normal-force, contact, constraint)
+  --
+  --   orientation-varga   how things face — above/below, left/right, north/south,
+  --                       upright/inverted, facing-towards/facing-away.
+  --                       the mountain is taller than the hill. the plane flies above the clouds.
+  --                       the compass points north. the door faces east.
+  --                       bridges to: physics (direction, vector, coordinate)
+
+  "domain-common-sense-sthita"
+  "physics-yukta math-yukta"
+
+shabda common-sense-varga / root-cluster-for-everyday-structural-patterns-location-containment-support-orientation
+
+done

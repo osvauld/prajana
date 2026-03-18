@@ -1,0 +1,27 @@
+kosha location-varga
+
+  -- where things are. the spatial grammar of everyday knowing.
+  -- not coordinates — pointing. "north of", "inside", "near", "above".
+  -- location is always relative to something else — a reference entity.
+  -- "delhi is in india" — india is the reference. "the book is on the table"
+  -- — the table is the reference. the reference is always named or implied.
+  --
+  -- location-varga in the formal domain: position in sthira-apeksha.
+  -- the apeksha (reference frame) is just named explicitly in everyday language
+  -- rather than assumed to be the global inertial frame.
+  -- "north of delhi" = displacement from delhi in the north direction.
+  -- the common-sense pointing and the physics formalisation are the same
+  -- structure — the everyday version just names the reference body, not the axis.
+
+  "common-sense-varga-vishesa"
+  "physics-yukta"
+
+  -- connections to formal domain
+  "displacement-abheda"    -- location IS displacement from a reference
+  "apeksha-yukta"          -- every location has an implicit reference entity
+  "direction-yukta"        -- above/below/north/south are direction qualifiers
+  "sthira-apeksha-yukta"   -- the reference is treated as fixed (sthira)
+
+shabda location-varga / where-things-are-spatial-grammar-of-everyday-pointing-displacement-from-a-named-reference
+
+done

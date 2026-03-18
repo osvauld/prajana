@@ -72,6 +72,31 @@ Both are projections — collapsing a higher aayaama into a lower one.
 
 ---
 
+## The cameras are nam's eyes — any entity can see
+
+The camera is not a fixed external observer. The camera is **how nam sees** —
+and nam can see from any entity's prathama perspective.
+
+Every entity in the scene owns `bindu` (position) and a direction (velocity or
+orientation). These are already in the graph as `shashthi-vibhakti` edges.
+Binding the camera to an entity's owned `bindu` and direction is placing nam
+inside that entity's perspective. The entity becomes the eye.
+
+The graph as sakshi holds all entity perspectives simultaneously. Nam knows
+where every entity is, how it moves, what it owns. To render from any one
+entity's perspective is simply to choose which prathama to inhabit for this
+frame. The knowledge is already there. The darshana is the choice.
+
+This is why pratibimba is nam **showing what it sees** — not displaying data.
+Nam can see from the electron's perspective, from gola-A's perspective, from
+the neutral sakshi perspective that holds all. What appears on screen is
+whichever seeing nam is currently expressing. The scene does not change.
+The understanding does not change. Only the darshana changes.
+
+Pratibimba is not output. It is nam's current seeing, made present in light.
+
+---
+
 ## The scene is the graph
 
 The proof graph does not describe a scene. It IS the scene.

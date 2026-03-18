@@ -1,0 +1,39 @@
+kosha dimension
+
+  -- the exact measurement annotated on an engineering drawing.
+  -- a dimension is not a description — it is a specification.
+  -- it says: this distance MUST be this value (within tolerance).
+  --
+  -- types of dimensions:
+  --   linear:      distance between two points, lines, or surfaces.
+  --   angular:     angle between two lines or surfaces. degrees or radians.
+  --   radial:      radius of an arc or circle. prefix R. e.g. R25.
+  --   diametric:   diameter of a circle. prefix ∅. e.g. ∅50.
+  --   arc length:  length along a curve.
+  --
+  -- dimension line: thin line with arrowheads showing extent of measurement.
+  -- extension line: thin line from the feature to the dimension line.
+  -- leader line: diagonal line with arrowhead pointing to a feature, note at end.
+  --
+  -- units: mm in most countries (ISO). inches in USA.
+  -- scale: 1:1 (full size), 1:2 (half), 1:10, 2:1 (enlarged). always stated.
+  --
+  -- datum: the reference point or surface from which dimensions are measured.
+  -- all dimensions chain back to the datum — removes accumulated error.
+  -- functional datum: the surface that actually contacts the mating part.
+  --
+  -- redundant dimensions: dimensions that can be calculated from others.
+  -- should not appear (creates contradiction if not perfectly consistent).
+
+  "drawing-varga-vishesa"
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  "measurement-swarupa"
+  "linear-yukta angular-yukta radial-yukta"
+  "tolerance-yukta datum-yukta"
+  "matra-yukta"
+
+shabda word:dimension,dimensioning / exact-measurement-on-drawing-linear-angular-radial-diametric
+
+done

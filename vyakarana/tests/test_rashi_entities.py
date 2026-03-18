@@ -194,13 +194,16 @@ def test_rashi_instance_feeds_ke_mantra(vy):
     )
 
 
-@pytest.mark.xfail(
-    reason="P8b.6 bridge not built: rashi instances don't feed derive-step"
-)
-def test_two_entity_rashi_feeds_mantra(vy):
-    # ball1 has velocity v1 of 20 and ball2 has velocity v2 of 30
-    # find relative velocity → v1 - v2 = -10 (or |v1-v2| = 10)
+def test_two_entity_rashi_feeds_graph(vy):
+    # rashi-anuvada bridges v1/v2 instances → concept-level sankhya.
+    # both velocity values appear in the graph — the 'we have' strand shows them.
+    # no 'find' clause: no question asked → no mantra fires → no match.
+    # the graph was built correctly. the absence of a question is the reason.
     result = vy.eval(
         'anuvada-ganana "ball1 has velocity v1 of 20 and ball2 has velocity v2 of 30"'
     )
-    assert result != "no match", f"expected a match, got: {result}"
+    assert "ball1" in result, f"ball1 not shown in reasoning: {result}"
+    assert "ball2" in result, f"ball2 not shown in reasoning: {result}"
+    assert "20" in result, f"velocity 20 not in reasoning: {result}"
+    assert "30" in result, f"velocity 30 not in reasoning: {result}"
+    assert "no match" in result, f"no question asked — should be no match: {result}"

@@ -1,0 +1,35 @@
+kosha dissolution
+
+  -- a solute dissolves in a solvent to form a homogeneous solution.
+  -- "like dissolves like": polar solvents dissolve polar/ionic solutes.
+  --                        non-polar solvents dissolve non-polar solutes.
+  --
+  -- ionic dissolution: NaCl → Na⁺ + Cl⁻ in water.
+  -- water molecules surround each ion (hydration shell) — ion-dipole forces.
+  -- lattice energy vs hydration energy determines solubility.
+  -- if hydration energy > lattice energy → dissolves. otherwise → insoluble.
+  --
+  -- solubility: grams of solute per 100g solvent at given temperature.
+  -- solubility of solids in water: generally increases with temperature.
+  -- solubility of gases in water: decreases with temperature (fizzy drinks go flat).
+  --
+  -- Henry's law: gas solubility ∝ partial pressure of gas above solution.
+  -- Raoult's law: vapour pressure of solution < vapour pressure of pure solvent.
+  -- colligative properties: depend on amount of solute, not its identity.
+  --   boiling point elevation, freezing point depression, osmotic pressure.
+  --
+  -- concentration units: molarity (mol/L), molality (mol/kg), mass fraction.
+  -- saturation: maximum dissolved solute at equilibrium.
+  -- supersaturation: more solute than equilibrium — unstable.
+
+  "chemistry-varga-vishesa"
+  "reaction-swarupa"
+  "tinanta-swarupa bhave-prayoga-swarupa"
+  "solvent-swarupa solute-yukta"
+  "polar-yukta ionic-bond-yukta"
+  "water-yukta NaCl-drishthanta sugar-drishthanta"
+  "concentration-yukta solubility-yukta"
+
+  shabda word:dissolves,dissolving,dissolution,soluble / solute-in-solvent-like-dissolves-like-ionic-polar-NaCl-in-water
+
+done

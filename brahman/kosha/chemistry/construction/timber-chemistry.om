@@ -1,0 +1,45 @@
+kosha timber-chemistry
+
+  -- the chemistry of wood as a construction material.
+  --
+  -- COMPOSITION:
+  --   cellulose:    40-50%. (C6H10O5)n linear polymer. provides tensile strength.
+  --                 microfibrils wound helically — like steel rope structure.
+  --   hemicellulose: 20-35%. branched polysaccharides. matrix between cellulose.
+  --   lignin:       20-30%. complex aromatic polymer. binds fibres. waterproofs.
+  --                 gives wood its brown colour. very resistant to biodegradation.
+  --   water:        20-50% (green wood). 10-15% (seasoned). affects all properties.
+  --
+  -- MOISTURE:
+  --   wood is hygroscopic — absorbs water from air.
+  --   cell walls swell when wet, shrink when dry → warping, cracking.
+  --   fibre saturation point ~30% moisture: below this, strength increases as it dries.
+  --   equilibrium moisture content: wood equilibrates with ambient humidity.
+  --   kiln drying: removes moisture to 8-12% for stable structural timber.
+  --
+  -- COMBUSTION:
+  --   pyrolysis begins at 200°C — cellulose breaks down to volatiles + char.
+  --   ignition at ~300°C — volatiles ignite.
+  --   char (carbon residue) insulates remaining wood — timber burns slowly.
+  --   a 300mm timber beam retains structural integrity much longer than steel
+  --   (which loses strength rapidly at 500°C). fire rating of timber is predictable.
+  --
+  -- BIODEGRADATION:
+  --   fungi (white rot, brown rot) secrete cellulase and lignase enzymes.
+  --   white rot: attacks lignin + cellulose → white stringy residue.
+  --   brown rot: attacks cellulose only → brown cuboid pieces. rapid structural loss.
+  --   prevention: keep dry (below 20% moisture), use preservatives (copper, boron),
+  --               naturally durable species (teak, cedar, oak — high lignin/extractives).
+
+  "construction-varga-vishesa"
+  "chemistry-varga-vishesa"
+  "organic-varga-vishesa"
+
+  "polymer-swarupa"
+  "cellulose-yukta lignin-yukta"
+  "water-yukta combustion-yukta"
+  "wood-yukta"
+
+  shabda word:timber,lumber,timber-chemistry / cellulose-lignin-hemicellulose-moisture-combustion-biodegradation
+
+done

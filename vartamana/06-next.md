@@ -25,43 +25,32 @@
 | `wave.om` fixed | Removed `frequency` from word alias list — was shadowing `frequency` kosha node. |
 | `test_frequency` xfail removed | Frequency now works — `f = 1/T` computes correctly. Down to 18 xfails. |
 | Tests added | `test_bqg.py`: varga inheritance, photon-energy satya, frequency satya. `test_sandhi.py`: Way 1 + Way 2 sandhi. `test_physics_mantras.py`: photon energy (3 cases), planck constant auto-supply, mass density satya+satya compound. |
+| Dvandva — entity-scoped computation | Done. `extract-solve-for` returns scope entity. `match-mantra` reads through the named entity's owned properties only. `sandhi-kosha` no longer compounds entity-subjects with what they own (`electron has mass` stays as electron owning mass — not `electron-mass`). 7 xfails → passing. Baseline 419/12. |
 | Baseline | see [changelog.md](changelog.md) |
 | Tantra authoring rules documented | Tensions 7–9 in `07-tantra-rewrite.md`. Boot pitfalls in `08-boot.md`. |
 
 ---
 
-## The 19 xfails — where they come from
+## The 12 xfails — where they come from
 
 | Group | test | Notes |
 |---|---|---|
 | Gap 1 — unit rate | `test_unit_in_rate_not_stolen` | `m/s` compound unit not in word index |
 | Gap 2 — entity identity | `test_session_entity_identity_persists` | session doesn't carry prathama/shashthi triples |
-| Gap 2 — multi-entity | `test_two_entities_across_turns_both_present` | |
+| Gap 2 — multi-entity | `test_two_entities_across_turns_both_present` | gated on session entity structure |
 | Gap 2 — multi-entity | `test_two_entities_across_turns_scoped` | |
 | Gap 2 — multi-entity | `test_electron_and_field_across_turns` | |
-| Gap 2 — multi-entity | `test_three_entities_accumulate` | |
-| Pratibimba — sphere | `test_sphere_shape_swarupa` | |
-| Pratibimba — position | `test_position_ownership` | |
-| Pratibimba — simulation | `test_electron_simulation_scene_full` | |
-| Dvandva — rashi entities | `test_two_entities_ownership_via_viraam` | vishesa-bandhana collapses to first instance |
-| Dvandva — rashi entities | `test_viraam_resets_entity_scope` | same — instance-map issue |
-| Dvandva — computation | `test_two_entities_compute_correct_entity` | entity-scoped mantra not yet implemented |
-| Dvandva — computation | `test_two_entities_ke_correct_entity` | same |
-| Dvandva — session | `test_avrti_dvandva_collection_of_two_values` | |
-| Dvandva — session | `test_tier2_two_entities_ke_each` | |
-| Dvandva — session | `test_two_entity_rashi_feeds_mantra` | |
-| Dvandva — session | `test_two_entities_ownership` | vishesa-bandhana |
+| Pratibimba — sphere | `test_sphere_shape_swarupa` | `sphere` not in word index → gola |
+| Pratibimba — position | `test_position_ownership` | spatial position binding not implemented |
+| Pratibimba — simulation | `test_electron_simulation_scene_full` | gated on Gap 2 |
+| Dvandva — session | `test_avrti_dvandva_collection_of_two_values` | dvandva grouping not implemented |
+| Dvandva — session | `test_tier2_two_entities_ke_each` | two-entity session, gated on Gap 2 |
+| Dvandva — session | `test_two_entity_rashi_feeds_mantra` | relative velocity not yet in kosha |
 | P8f — constants | `test_gravitational_force` | G constant + r² composition — deferred to P8f Phase B |
 
 ---
 
-## Priority order — REVISED 2026-03-17 (superseded by Layer 2 rewrite)
-
-**The immediate active plan is [10-layer2-rewrite.md](10-layer2-rewrite.md).**
-Layer 2 tantra rewrite first. Everything below waits until Phase 4 cleanup is complete.
-After Phase 4: sthita-viveka closes dvandva + gravitational force. Gap 2 closes. Pratibimba unblocks.
-
-## Priority order — post Layer 2 rewrite
+## Priority order
 
 ### 1. P8f — Expression subgraph + math-domain unification (NEW TOP PRIORITY)
 
@@ -228,3 +217,4 @@ For baseline and session progress see [changelog.md](changelog.md).
 | 2026-03-16 | Initial writing — xfail table, priority order, deferred items. |
 | 2026-03-17 | P8f reprioritized to top. Dvandva before Gap 2. 08-boot.md added. |
 | 2026-03-17 | `test_frequency` xfail removed (now passing). `test_gravitational_force` remains. Boot/reboot, sandhi Way 2, photon-energy, planck-constant, frequency fixes added to completed table. |
+| 2026-03-18 | Dvandva entity-scoped computation done. xfail table updated 19→12. Stale priority note removed. |

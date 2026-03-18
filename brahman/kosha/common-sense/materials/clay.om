@@ -1,0 +1,29 @@
+kosha clay
+
+  -- aluminosilicate mineral with layered structure. plastic when wet, hard when fired.
+  -- water enters between silicate layers → layers slide → material deforms.
+  -- firing (sintering at 800-1200°C): water leaves, layers bond → ceramic.
+  --
+  -- properties:
+  --   plastic when wet: coefficient of restitution ≈ 0 (perfectly inelastic)
+  --   deformable without fracture (unlike brittle materials)
+  --   fired clay (ceramic): hard (7 Mohs), brittle, chemically inert
+  --   low thermal conductivity in wet form
+  --   ion exchange: clay particles carry negative charge → hold nutrients in soil
+  --
+  -- types: kaolinite (white clay, porcelain), montmorillonite (swelling clay),
+  --        illite (common soil clay), smectite (cat litter, drilling mud).
+
+  "common-sense-varga-vishesa"
+  "materials-varga-vishesa"
+  "minerals-varga-vishesa"
+
+  "clay-mineral-swarupa"
+  "solid-sthita"
+  "inelastic-swarupa deformable-swarupa"
+  "water-yukta"
+  "domain-3d-yukta pbr-yukta"
+
+  shabda word:clay / aluminosilicate-plastic-when-wet-inelastic-e-zero-fires-to-ceramic
+
+done

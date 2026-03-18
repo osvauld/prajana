@@ -1,0 +1,36 @@
+tantra3 pancavayava
+
+-- pancavayava: the five-limbed utterance. the proof graph speaking.
+--
+-- pancavayava (Sanskrit) = five-limbed, panca (five) + avayava (limb/member).
+-- in nyaya: the classical Indian syllogism has five members:
+--   1. pratijna   — the thesis: "there is fire on the hill"
+--   2. hetu       — the reason: "because there is smoke"
+--   3. udaharana  — the universal example: "wherever smoke, there fire, as in a kitchen"
+--   4. upanaya    — the application: "there is smoke here"
+--   5. nigamana   — the conclusion: "therefore there is fire here"
+--
+-- in nam, the five members become:
+--   1. pratijna   (we have)  — what was given: entities and their values
+--   2. hetu       (we seek)  — what the question asks: the target concept + scope
+--   3. udaharana  (we know)  — the universal rule: which mantra / which comparison rule
+--   4. upanaya    (we see)   — the rule applied here: specific values substituted
+--   5. nigamana   (we find)  — the conclusion: the derived result
+--
+-- pancavayava receives the assembled proof graph (from pramana).
+-- it delegates entirely to emit-reasoning.
+-- emit-reasoning is a pure graph walker — no external context passed in.
+-- the graph IS the reasoning. the walk IS the speech.
+-- this is sphota at the level of utterance:
+-- the whole proof arrived whole, spoken from the structure that holds it.
+--
+-- "uttama-purusa-bahu-vachana kartari: we (nam + human + LLM) find..."
+-- the first person inclusive: none of the three alone, all three together.
+
+takes proof-graph
+
+result = emit-reasoning proof-graph
+
+return result
+
+done

@@ -68,7 +68,7 @@ let parse_argv () : string option * bool * bool * string list =
         go socket_path quiet_startup emit_only dirs rest
       end
   in
-  go None false false [] args
+  go (Some "/tmp/vy.sock") false false [] args
 
 (* default corpus: brahman/sangati + brahman/kosha + brahman/bhasha + brahman/engine *)
 let find_default_corpus () : string list =

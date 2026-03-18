@@ -1,0 +1,90 @@
+tantra3 pramana
+
+-- pramana: the proof graph assembled — ground truth made explicit.
+--
+-- pramana (Sanskrit) = ground-truth, means of valid knowledge, proof.
+-- in nyaya: pramana is one of the four: pratyaksha (perception),
+-- anumana (inference), upamana (comparison), shabda (testimony/authority).
+-- here: the assembled proof graph that carries ALL reasoning as typed edges.
+-- not the result alone — the PROOF of the result. the full structure.
+--
+-- pramana takes:
+--   base-graph   — the expanded proof graph (from sphota)
+--   enriched     — the derivation-enriched graph (from jnana)
+--   final-match  — the matched mantra + val-pairs + mode
+--   viveka-raw   — viveka result (comparison) if applicable
+--   iccha-result — the intention [has-intent, solve-for, scope-entity]
+--   is-viveka    — whether this is a comparison question
+--   result       — the computed result string
+--
+-- pramana injects reasoning edges into the proof graph:
+--   viveka path:  [winner, greater-than, loser]
+--                 [winner, viveka-concept, concept]
+--                 [winner, viveka-direction, max/min]
+--                 [entity, viveka-sankhya, val]
+--   physics path: [solve-for, sankhya, result]
+--                 [solve-for, derived-by, mantra]
+--                 [janya, derived-sankhya, val]  (scoped values for emission)
+--
+-- then sought-bandha inscribes the question itself:
+--   [solve-for, sought, label]        — what was asked
+--   [solve-for, sought-of, scope]     — whose frame (optional)
+--
+-- the returned proof-graph IS pramana:
+-- not a description of the proof — the proof itself, traversable.
+-- emit-reasoning walks it. pratibodha speaks from it.
+
+takes base-graph
+takes enriched
+takes final-match
+takes viveka-raw
+takes iccha-result
+takes is-viveka
+takes result
+takes comp-word
+
+solve-for    = nth iccha-result 1
+scope-entity = nth iccha-result 2
+
+viveka-winner     = cond is-viveka (nth viveka-raw 0) otherwise ""
+viveka-gt-triples = cond is-viveka (nth viveka-raw 5) otherwise []
+viveka-ev-pairs   = cond is-viveka (nth viveka-raw 4) otherwise []
+
+result-mantra   = cond (gt (length final-match) 0) (nth final-match 0) otherwise ""
+result-valpairs = cond (gt (length final-match) 0) (nth final-match 1) otherwise []
+
+-- viveka: entity sankhya for we-have and upanaya
+viveka-sankhya-triples = cond is-viveka
+  (reduce viveka-ev-pairs [] (fn acc kv ->
+    append acc [[(nth kv 0), "viveka-sankhya", (nth kv 1)]]))
+  otherwise []
+
+-- physics/count: scoped val-pairs for we-see (correct entity scope)
+scoped-sankhya-triples = cond (and (not is-viveka) (gt (length result-valpairs) 0))
+  (reduce result-valpairs [] (fn acc kv ->
+    append acc [[(nth kv 0), "derived-sankhya", (nth kv 1)]]))
+  otherwise []
+
+-- the result fact + its proof edge
+result-triples = cond (and (not is-viveka)
+                           (gt (string-length (to-string result)) 0)
+                           (neq (to-string result) "no match")
+                           (gt (string-length (to-string solve-for)) 0))
+  (append
+    [[(to-string solve-for), "sankhya",    result],
+     [(to-string solve-for), "derived-by", result-mantra]]
+    scoped-sankhya-triples)
+  otherwise []
+
+-- assemble: viveka path uses expanded graph; physics path uses enriched
+assembled = cond is-viveka
+  (append (append base-graph viveka-gt-triples) viveka-sankhya-triples)
+  otherwise (append enriched result-triples)
+
+-- inscribe the question: sought-bandha
+sought-cw    = cond is-viveka (to-string comp-word) otherwise ""
+proof-graph  = sought-bandha assembled solve-for scope-entity sought-cw
+
+return proof-graph
+
+done

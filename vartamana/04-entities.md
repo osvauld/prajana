@@ -130,6 +130,41 @@ they must be threaded through as scan state variables.
 
 ---
 
+### Gap 1b — Signal purging: grammar acts persist as graph artifacts
+
+Two distinct kinds of triple share the `shashthi-vibhakti` edge label:
+
+- `[has, shashthi-vibhakti, shashthi-vibhakti]` — the **grammar act**. The possession
+  signal. Nam mid-recognition — the moment of pointing before the pointing has resolved.
+  This triple exists to trigger `vibhakti-shashthi`. Once the scan completes, its work
+  is done.
+
+- `[mass, shashthi-vibhakti, gola-A]` — the **ontological fact**. Recognition complete.
+  Nam has found what belongs to what. This triple must persist — it is structural
+  knowledge, owned by the graph permanently.
+
+Currently both kinds survive into the output graph. Every downstream reader must
+discriminate: `when (neq obj "shashthi-vibhakti")`. This discrimination burden
+spreads to `sthita-viveka`, `sambandha-viveka`, `session-anuvada`, and pratibimba.
+
+**The fix:** purge grammar act triples at the end of `vibhakti-shashthi` — after the
+scan that needs them, before anything downstream reads the graph. The scan uses the
+signal. The signal is then released. What remains is what nam found — not how nam looked.
+
+**Why this matters for Gap 2:** `session-anuvada` will carry `shashthi-vibhakti` edges
+across turns to transfer entity ownership structure. If grammar act triples are present,
+they will be carried too — and the next turn's `vibhakti-shashthi` will re-fire them
+as new possession signals with no `last-label` context. Purging first makes the carry
+correct by default: carry all `shashthi-vibhakti` = carry all ownership facts, nothing else.
+
+**Why this matters for Phase 3:** `sthita-viveka` and `sambandha-viveka` walk
+`shashthi-vibhakti` to find owned properties per entity. Clean graph = direct walk.
+No guards needed.
+
+**File:** `brahman/yantra/vibhakti/vibhakti-shashthi.tantra2`
+
+---
+
 ### Gap 2 — Session does not carry entity structure
 
 `session-anuvada` currently carries `[concept, sankhya, val]` triples across
@@ -226,4 +261,5 @@ exactly where sankhya triples are currently appended.
 | 2026-03-16 | Gap 1 partially closed. emit-triples `is-rashi-label` guard: word≠node discriminant. `m`-as-mass-instance and KE-with-m-instance now work (2 xfails → xpass). One xfail remains (test checks wrong node for sankhya). |
 | 2026-03-16 | Gap 1 further closed. Root cause for q/v: vibhakti-shashthi missed satya-named entities (electron → satya, not mithya). Fixed. Scientific notation fixed in split-numeric. can-promote scan-state pattern discovered. q, v xfails removed. B, electron_natural_labels, unit_in_rate still pending. |
 | 2026-03-17 | Gap 1 closed for B and electron_natural_labels. Root cause: `or` operator was not infix in scan guards — `((member x lst) or flag)` paren form was required. Fixed via `parse_guard_atom` + `absorb_or` in `collect_and_guards`. Also fixed: outer `let` bindings invisible in scan guards — must pass as scan state. `vishesa-instance` rewired to use paren form with outer-let constraint. Baseline 362/14. |
+| 2026-03-18 | Gap 1b added: signal purging. Grammar act triples vs ontological fact triples under same edge label. Purging at vibhakti-shashthi removes discrimination burden from all downstream readers. Prerequisite for Gap 2 session carry and Phase 3 tantras. |
 | 2026-03-17 | Paragraph / viraam foundation. `build-question-graph.tantra` was silently dropping viraam triples — final `cond` in lambda body not reached due to `parse_let_block` truncation of bare expressions. Fixed: assign to `let with-punct = cond ...` and return explicitly. Viraam now emitted. `vibhakti-shashthi` correctly resets entity scope on viraam. Two entities in a paragraph are now separately scoped at the `vibhakti-shashthi` stage. Remaining gap: `vishesa-bandhana` instance-map still collapses multiple instances of same concept to first — dvandva gap, not viraam gap. `test_paragraph.py` added: 15 passing, 4 xfailed (dvandva). |

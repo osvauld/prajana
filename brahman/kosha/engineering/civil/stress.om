@@ -1,0 +1,29 @@
+kosha stress
+
+  -- force per unit area inside a material. σ = F/A. unit: pascal (Pa).
+  -- the internal force that a material develops to resist external load.
+  -- three types:
+  --   normal stress: force perpendicular to cross-section (compression or tension).
+  --   shear stress: force parallel to cross-section (sliding).
+  --   bearing stress: stress at a contact point.
+  --
+  -- the fundamental civil engineering quantity.
+  -- a bridge must not be stressed beyond its yield strength.
+  -- design: σ_working = σ_ultimate / safety_factor.
+  --
+  -- stress and pressure are dimensionally identical (Pa = N/m²).
+  -- difference: pressure is isotropic (same in all directions) — fluid.
+  --             stress is directional — solid material.
+
+  "civil-varga-vishesa"
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  "force-yukta area-yukta"
+  "pressure-abheda"              -- dimensionally identical, directional unlike pressure
+  "strain-yukta young-modulus-yukta"
+  "yield-strength-yukta safety-factor-yukta"
+
+  shabda word:stress / force-per-unit-area-internal-resistance-of-material-sigma-equals-F-over-A
+
+done

@@ -1,0 +1,97 @@
+# chemistry-constants: atomic masses, melting/boiling points, bond energies, common values
+# format — name: value unit
+# readable via: shabda "chemistry-constants" "name"
+
+# ── atomic masses (unified atomic mass units, u = Da) ────────────────────────
+hydrogen-mass:              1.008      u
+helium-mass:                4.003      u
+lithium-mass:               6.941      u
+beryllium-mass:             9.012      u
+boron-mass:                 10.811     u
+carbon-mass:                12.011     u
+nitrogen-mass:              14.007     u
+oxygen-mass:                15.999     u
+fluorine-mass:              18.998     u
+neon-mass:                  20.180     u
+sodium-mass:                22.990     u
+magnesium-mass:             24.305     u
+aluminium-mass:             26.982     u
+silicon-mass:               28.086     u
+phosphorus-mass:            30.974     u
+sulfur-mass:                32.065     u
+chlorine-mass:              35.453     u
+argon-mass:                 39.948     u
+potassium-mass:             39.098     u
+calcium-mass:               40.078     u
+iron-mass:                  55.845     u
+copper-mass:                63.546     u
+zinc-mass:                  65.38      u
+silver-mass:                107.868    u
+gold-mass:                  196.967    u
+lead-mass:                  207.2      u
+
+# ── melting points (°C) ──────────────────────────────────────────────────────
+water-melting-point:        0.0        celsius
+iron-melting-point:         1538.0     celsius
+copper-melting-point:       1085.0     celsius
+aluminium-melting-point:    660.3      celsius
+gold-melting-point:         1064.0     celsius
+silver-melting-point:       961.8      celsius
+lead-melting-point:         327.5      celsius
+sodium-melting-point:       97.8       celsius
+silicon-melting-point:      1414.0     celsius
+carbon-melting-point:       3550.0     celsius
+
+# ── boiling points (°C) ──────────────────────────────────────────────────────
+water-boiling-point:        100.0      celsius
+nitrogen-boiling-point:     -195.8     celsius
+oxygen-boiling-point:       -183.0     celsius
+ethanol-boiling-point:      78.4       celsius
+methane-boiling-point:      -161.5     celsius
+
+# ── bond energies (kJ/mol) ───────────────────────────────────────────────────
+bond-energy-C-C:            347.0      kilojoule-per-mole
+bond-energy-C-H:            413.0      kilojoule-per-mole
+bond-energy-C-O:            358.0      kilojoule-per-mole
+bond-energy-C-N:            305.0      kilojoule-per-mole
+bond-energy-O-H:            463.0      kilojoule-per-mole
+bond-energy-N-H:            391.0      kilojoule-per-mole
+bond-energy-C=C:            614.0      kilojoule-per-mole
+bond-energy-C=O:            799.0      kilojoule-per-mole
+bond-energy-C-triple-C:     839.0      kilojoule-per-mole
+bond-energy-O=O:            498.0      kilojoule-per-mole
+bond-energy-N-triple-N:     945.0      kilojoule-per-mole
+
+# ── standard enthalpies of combustion (kJ/mol) ───────────────────────────────
+combustion-methane:         -890.3     kilojoule-per-mole
+combustion-ethane:          -1559.7    kilojoule-per-mole
+combustion-propane:         -2220.0    kilojoule-per-mole
+combustion-glucose:         -2803.0    kilojoule-per-mole
+combustion-ethanol:         -1366.8    kilojoule-per-mole
+combustion-hydrogen:        -285.8     kilojoule-per-mole
+
+# ── electronegativity (Pauling scale) ────────────────────────────────────────
+electronegativity-H:        2.20       dimensionless
+electronegativity-C:        2.55       dimensionless
+electronegativity-N:        3.04       dimensionless
+electronegativity-O:        3.44       dimensionless
+electronegativity-F:        3.98       dimensionless
+electronegativity-Cl:       3.16       dimensionless
+electronegativity-Na:       0.93       dimensionless
+electronegativity-K:        0.82       dimensionless
+electronegativity-Fe:       1.83       dimensionless
+electronegativity-Cu:       1.90       dimensionless
+
+# ── acid dissociation constants (pKa) ────────────────────────────────────────
+pKa-acetic-acid:            4.76       dimensionless
+pKa-carbonic-acid:          6.35       dimensionless
+pKa-ammonium:               9.25       dimensionless
+pKa-HCl:                    -7.0       dimensionless
+pKa-water:                  15.74      dimensionless
+
+# ── physical chemistry constants ─────────────────────────────────────────────
+faraday-constant:           96485.3    coulomb-per-mole
+gas-constant:               8.31446    joule-per-mole-per-kelvin
+standard-temperature:       298.15     kelvin
+standard-pressure:          101325.0   pascal
+avogadro-number:            6.02214076e23 per-mole

@@ -60,7 +60,7 @@ import os
 import socket
 from typing import Any
 
-DEFAULT_SOCKET = os.environ.get("VYAKARANA_SOCKET", "/tmp/vyakarana.sock")
+DEFAULT_SOCKET = os.environ.get("VYAKARANA_SOCKET", "/tmp/vy.sock")
 
 
 class VyakaranaError(Exception):

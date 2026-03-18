@@ -1,0 +1,20 @@
+kosha count-total
+
+  -- count-total: the result of adding two counts together.
+  -- "how many total", "how many altogether", "sum of counts"
+  -- → solve-for = count-total → matches count-add-mantra (phala: count-total)
+  --
+  -- this is distinct from bare "count" so that match-mantra can
+  -- discriminate addition from subtraction.
+
+  "number-varga-vishesa"
+  "math-varga-vishesa"
+  "count-yukta"
+  "addition-yukta"
+
+  "sankhya-swarupa"
+  "count-abheda"         -- count-total IS-A count
+
+  shabda word:total,altogether,combined,sum / the-total-of-two-counts-added-together
+
+done

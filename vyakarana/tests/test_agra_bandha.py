@@ -199,10 +199,6 @@ def test_two_entities_no_labels_distinct_values(vy):
     assert vals == {3.0, 2.0}, f"expected values {{3.0, 2.0}}, got {vals}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: same as above — three entities, last-write-wins at concept level.",
-)
 def test_three_entities_no_labels_momentum_first(vy):
     """Three entities no labels — find momentum of ball-A uses ball-A's mass."""
     r = answer(
@@ -285,12 +281,6 @@ def test_agra_cross_concept_no_bleed(vy):
 # ── Section 6: The answer is correct when agra is correct ────────────────────
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: rashi-anuvada propagates ALL instance sankhya values "
-    "to the concept level — last write wins. match-mantra picks ball-B's values. "
-    "Entity-scoped mantra matching requires sthita-viveka (Layer 2 Phase 3).",
-)
 def test_two_entities_labelled_answer_correct_entity(vy):
     """With agra working, computing for ball-A uses ball-A's values."""
     r = answer(
@@ -303,12 +293,6 @@ def test_two_entities_labelled_answer_correct_entity(vy):
     assert "24" in r, f"expected KE=24 for ball-A, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: same as above — three entities, rashi-anuvada last-write-wins "
-    "at concept level. match-mantra picks ball-C's values. "
-    "Entity-scoped mantra matching requires sthita-viveka (Layer 2 Phase 3).",
-)
 def test_three_entities_labelled_answer_first(vy):
     """With three entities, computing for ball-A uses ball-A's mass."""
     r = answer(

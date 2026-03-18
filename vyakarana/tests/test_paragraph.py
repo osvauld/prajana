@@ -128,12 +128,6 @@ def test_multi_property_single_entity_paragraph(vy):
 # the last write wins. Entity-scoped computation is not yet supported.
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: two entities sharing concept names (mass, velocity). "
-    "rashi-anuvada overwrites concept-level sankhya — last entity wins. "
-    "Entity-scoped mantra matching not yet implemented.",
-)
 def test_two_entities_compute_correct_entity(vy):
     """Find momentum of proton when both proton and electron are described."""
     r = answer(
@@ -145,11 +139,6 @@ def test_two_entities_compute_correct_entity(vy):
     assert "3.34e-21" in r, f"expected proton momentum=3.34e-21, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: same as above — electron's mass overwrites proton's "
-    "at the concept level. Wrong entity's properties used.",
-)
 def test_two_entities_ke_correct_entity(vy):
     """Find KE of ball-A when both ball-A and ball-B are described."""
     r = answer(
@@ -162,12 +151,6 @@ def test_two_entities_ke_correct_entity(vy):
     assert "24" in r, f"expected KE=24, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Dvandva gap: no-label entities share a concept node. sankhya-bandha "
-    "binds all three mass values to the same concept node — last write wins (ball-C). "
-    "Entity-scoped computation requires sthita-viveka (Layer 2 Phase 3).",
-)
 def test_three_entities_find_named(vy):
     """Find momentum of ball-A from three entities — entity-scoped computation."""
     r = answer(
@@ -209,12 +192,6 @@ def test_three_sentences_one_question(vy):
     assert "250" in r, f"expected KE=250, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=False,
-    reason="Dvandva gap: 'electron mass' sandhi fires → electron-mass compound. "
-    "kinetic-energy-mantra needs bare 'mass' not 'electron-mass'. "
-    "Requires swarupa-aware mantra matching (Layer 2 Phase 3).",
-)
 def test_electron_paragraph_ke(vy):
     """Realistic electron paragraph — natural language."""
     r = answer(

@@ -1,0 +1,25 @@
+kosha transition-metals-varga
+
+  -- d-block elements: Sc through Zn, and the rows below.
+  -- what makes transition metals special: partially filled d-orbitals.
+  -- this gives them:
+  --   variable valence:    Fe²⁺/Fe³⁺, Cu⁺/Cu²⁺, Mn²⁺/Mn⁴⁺/Mn⁷⁺ etc.
+  --   coloured compounds:  d-d electron transitions absorb visible light
+  --                        Fe²⁺ = pale green, Fe³⁺ = orange, Cu²⁺ = blue
+  --   catalytic activity:  partially filled d-orbitals bind substrates
+  --                        Fe in haemoglobin, Cu in cytochrome c oxidase
+  --   magnetic properties: unpaired d-electrons → paramagnetism, ferromagnetism
+  --                        Fe, Co, Ni are ferromagnetic at room temperature
+  -- most important industrial metals are here: Fe, Cu, Zn, Ti, Ni, Cr, Mn.
+
+  "metals-varga-vishesa"
+  "chemistry-varga-vishesa"
+
+  "d-orbital-swarupa variable-valence-yukta"
+  "coloured-compound-swarupa catalytic-swarupa"
+  "magnetic-yukta"
+  "iron-drishthanta copper-drishthanta zinc-drishthanta"
+
+shabda transition-metals-varga / d-block-elements-variable-valence-coloured-catalytic-magnetic
+
+done

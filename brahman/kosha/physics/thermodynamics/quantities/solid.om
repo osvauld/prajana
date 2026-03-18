@@ -1,0 +1,42 @@
+kosha solid
+
+  -- definite shape and definite volume. the atoms/molecules are fixed in place.
+  -- thermal motion is vibration around equilibrium positions — not translation.
+  -- the binding energy between particles exceeds thermal energy: kT < bond energy.
+  --
+  -- two types:
+  --   crystalline: atoms in ordered periodic lattice. definite melting point.
+  --                most metals, ionic compounds, many minerals.
+  --                unit cell repeats in 3D — the symmetry determines all properties.
+  --   amorphous:   no long-range order. glass transition temperature, not melting point.
+  --                glass, most plastics, rubber, gels.
+  --
+  -- mechanical properties of solids:
+  --   elastic deformation:  stress removed → returns to shape (Hooke's law)
+  --   plastic deformation:  stress exceeds yield point → permanent deformation
+  --   fracture:             stress exceeds fracture point → breaks
+  --   hardness:             resistance to indentation (Mohs scale, Vickers)
+  --
+  -- in 3d / pratibimba: solid objects have fixed mesh geometry.
+  -- the mesh does not flow or deform under gravity in real time.
+  -- collision: coefficient-of-restitution applies. normal-force applies.
+
+  "thermodynamics-varga-vishesa"
+  "subanta-swarupa"
+
+  "definite-shape-swarupa definite-volume-swarupa"
+  "crystalline-drishthanta amorphous-drishthanta"
+  "vibration-swarupa"
+
+  -- physics connections
+  "normal-force-yukta"
+  "coefficient-of-restitution-yukta"
+  "phase-change-freeze-phala"
+  "phase-change-boil-ahara"
+
+  -- 3d / pratibimba
+  "mesh-yukta domain-3d-yukta"
+
+  shabda word:solid / definite-shape-and-volume-atoms-vibrate-around-fixed-positions
+
+done

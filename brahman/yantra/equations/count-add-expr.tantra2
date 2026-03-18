@@ -1,0 +1,12 @@
+tantra2 count-add-expr
+
+-- total = count1 + count2
+
+takes count1
+takes count2
+
+val = add count1 count2
+
+return val
+
+done

@@ -11,7 +11,7 @@ bv   = bound-vals graph
 bcs  = nth bv 0
 vps  = nth bv 1
 
-all-mantras = physics-mantras
+all-mantras = append (physics-mantras) (math-mantras)
 
 new-triples = reduce all-mantras [] (fn acc mantra ->
   let janya    = walk mantra "janya"
@@ -23,7 +23,9 @@ new-triples = reduce all-mantras [] (fn acc mantra ->
   let has-math = gt (string-length math-op) 0
   let fired    = cond has-math (execute-math mantra vps) otherwise (execute-chain mantra vps)
   cond (or (member phala bcs) (not all-ok)) acc
-  otherwise (append acc [[phala, "sankhya", fired]]))
+  -- emit both the value and which mantra produced it
+  otherwise (append acc [[phala, "sankhya", fired],
+                         [phala, "derived-by", mantra]]))
 
 result = reduce new-triples graph (fn g t -> (append g [t]))
 

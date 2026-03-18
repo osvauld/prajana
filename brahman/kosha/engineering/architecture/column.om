@@ -1,0 +1,43 @@
+kosha column
+
+  -- a vertical structural element carrying compressive load.
+  -- the column is the most fundamental element of the frame structural system.
+  -- load path: floor → beam → column → foundation → ground.
+  -- the column does one thing: carry the load downward.
+  --
+  -- buckling: the critical failure mode of columns (not crushing).
+  --   a long slender column fails by bowing sideways before the material crushes.
+  --   Euler's formula: Pcr = π²EI / (KL)²
+  --   Pcr: critical buckling load. E: Young's modulus. I: second moment of area.
+  --   K: effective length factor (end conditions). L: column length.
+  --   slenderness ratio: KL/r (r = radius of gyration). high = buckling risk.
+  --   a fat short column: crushes (compression failure). tall thin column: buckles.
+  --
+  -- classical column orders (Greek and Roman):
+  --   Doric:      simplest. no base. plain circular capital. Parthenon.
+  --   Ionic:      scroll (volute) capital. more slender.
+  --   Corinthian: most ornate. acanthus leaf capital. tallest.
+  --   Tuscan:     Roman simplification of Doric. no fluting.
+  --   Composite:  Roman combination of Ionic + Corinthian.
+  --   the order determines proportions: column height = N × diameter (N varies by order).
+  --
+  -- column proportions encode structural logic:
+  --   Doric: 6-8 diameters tall (stubby, strong impression).
+  --   Corinthian: 9-10 diameters (slender, elegant).
+  --   the proportion communicates structural confidence.
+
+  "architecture-varga-vishesa"
+  "civil-varga-vishesa"
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  "vertical-swarupa compression-swarupa"
+  "stress-yukta strain-yukta"
+  "steel-yukta concrete-yukta stone-yukta"
+  "beam-yukta foundation-yukta"
+  "buckling-yukta"
+  "pole-abheda"               -- a column is a structural pole
+
+shabda word:column,pillar,post,pier / vertical-compression-member-buckling-Euler-classical-orders
+
+done
