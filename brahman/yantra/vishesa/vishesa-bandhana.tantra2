@@ -13,7 +13,7 @@ tantra2 vishesa-bandhana
 
 takes graph
 
-already-bound = map (bound-concepts graph) (fn kv -> nth kv 0)
+already-bound = bound-concept-names graph
 
 after-sankhya = agra-bandha graph "vishesa" "obj" "word" ["sankhya", "matra"] "" "rashi" [] already-bound []
 

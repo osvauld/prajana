@@ -1,0 +1,13 @@
+tantra2 satya-concepts
+
+-- extract the object of every satya triple from a graph.
+-- returns the list of active concept node names.
+-- used by kosha-expand (PPR seeds) and sthita-viveka (Phase 3).
+
+takes graph
+
+result = graph | where [s, e, o] | and (eq e "satya") | collect o
+
+return result
+
+done

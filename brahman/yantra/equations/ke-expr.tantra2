@@ -1,0 +1,12 @@
+tantra2 ke-expr
+
+-- KE = ½mv²
+
+takes mass
+takes velocity
+
+val = half (mul mass (square velocity))
+
+return val
+
+done

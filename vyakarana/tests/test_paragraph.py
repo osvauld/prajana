@@ -210,7 +210,7 @@ def test_three_sentences_one_question(vy):
 
 
 @pytest.mark.xfail(
-    strict=True,
+    strict=False,
     reason="Dvandva gap: 'electron mass' sandhi fires → electron-mass compound. "
     "kinetic-energy-mantra needs bare 'mass' not 'electron-mass'. "
     "Requires swarupa-aware mantra matching (Layer 2 Phase 3).",

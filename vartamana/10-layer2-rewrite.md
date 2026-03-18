@@ -288,7 +288,7 @@ With Layer 2 stable and `sthita-viveka` + `varga-viveka` written:
 
 ---
 
-## Current state (2026-03-17, session 4)
+## Current state (2026-03-18, session 7)
 
 **412 passed / 19 xfailed / 0 failing**
 
@@ -316,6 +316,22 @@ With Layer 2 stable and `sthita-viveka` + `varga-viveka` written:
 | `execute-chain.tantra2` | ✓ | kriya-tantra dispatch |
 | `invert-math.tantra2` | ✓ | pratipaksha inversion |
 | `physics-mantras.tantra2` | ✓ | all physics mantra nodes |
+| `anuvada-ganana.tantra2` | ✓ | outer pipeline orchestrator |
+| `session-anuvada.tantra2` | ✓ | session-aware wrapper |
+| `execute-matched.tantra2` | ✓ | executor dispatch + answer formatting |
+| `build-question-graph.tantra2` | ✓ | entry point for every query |
+| `emit-triples.tantra2` | ✓ | word→triple dispatch |
+| `find-context.tantra2` | ✓ | active-concept + pending-num |
+| `sandhi-viveka.tantra2` | ✓ | grammar structure discernment |
+| `kosha-expand.tantra2` | ✓ | PPR expansion |
+| `sandhi-kosha.tantra2` | ✓ | compound word resolution |
+| `sandhi-avastha.tantra2` | ✓ | avastha qualification |
+| `sandhi-bandhana.tantra2` | ✓ | binding reattribution after compound |
+
+**New shared tantras (session 7):**
+| `flush-pending-mithya.tantra2` | ✓ | drain mithya buffer → triples |
+| `satya-concepts.tantra2` | ✓ | extract satya node names from graph |
+| `bound-concept-names.tantra2` | ✓ | concept names with sankhya bindings |
 
 **New shared tantras extracted:**
 | File | Replaces |
@@ -332,21 +348,31 @@ With Layer 2 stable and `sthita-viveka` + `varga-viveka` written:
 - `execute-math.tantra`, `execute-chain.tantra` → `resolve-janya-args`
 - `mantra-coverage.tantra`, `vishesa-instance.tantra2` etc. → `bound-concepts`
 
-### Remaining to migrate
+### Remaining to migrate (Phase 2 tail)
 
-| File | Priority |
-|---|---|
-| `build-question-graph.tantra` | high — entry point for every query |
-| `kosha-expand.tantra` | medium |
-| `anuvada-ganana.tantra` | medium — already calls new shared tantras |
-| `session-anuvada.tantra` | medium |
-| `execute-matched.tantra` | medium |
-| sandhi/*.tantra (3 files) | low |
-| vibhakti/*.tantra (2 files) | low |
-| debug/*.tantra (2 files) | low |
-| boot/*.tantra (2 files) | low |
-| equations/*.tantra (10 files) | low — may delete if execute-math covers all |
-| lookup/*.tantra (2 files) | low |
+| File | Priority | Notes |
+|---|---|---|
+| `vibhakti-shashthi.tantra` | medium | 8-branch scan, 3 state vars |
+| `materialize-question-graph.tantra` | low | 12-branch edge dispatch |
+| `unit-of-concept.tantra` | low | 3-path kosha walk |
+| `try-morpheme-rules.tantra` | low | morpheme inversion |
+| `lookup-word.tantra` | low | 3-step lookup chain |
+| `varga-inheritance.tantra` | low | boot pass |
+| `reboot.tantra` | low | calls varga-inheritance |
+| `mantra-coverage.tantra` | low | debug — uses bound-concept-names |
+| `debug-bound-concepts.tantra` | low | debug only |
+| equations/*.tantra (10 files) | delete | execute-math covers these |
+| debug tantras (4 files) | delete | guard-test, not-member-test, etc |
+
+### Phase 3 — New tantras (not yet built)
+
+| Tantra | What it does | Unblocks |
+|---|---|---|
+| `sthita-viveka.tantra2` | Scope-aware slot resolution for tinanta interactions | All dvandva xfails, gravitational-force, N-entity |
+| `varga-viveka.tantra2` | Domain routing from active concept varga membership | Self-directing pipeline, cross-domain queries |
+| `sambandha-viveka.tantra2` | Discover possible interactions from co-present entities | Group formation, aneka-eka recognition |
+| `dvandva-setu.tantra2` | Create interaction entity from co-present bodies | Multi-body mantras |
+| `match-or-derive.tantra2` | Extract shared match→enrich→rematch from anuvada-ganana + session-anuvada | Code deduplication |
 
 ---
 
@@ -468,6 +494,147 @@ The fix: also store bindings under `shashthi-vibhakti` concept subjects from `re
 These are the concepts the user explicitly named. "electron has mass 9.109e-31" has
 `[mass, shashthi-vibhakti, electron]` → store `mass = 9.109e-31`.
 
+### 12. Local variable name must not clash with a tantra name
+
+When `eval` looks up `Var "bound-concepts"` and the local env doesn't have it,
+it falls through to `eval_ctx.ctx_index.by_name` and finds the `bound-concepts`
+tantra — returning `VFn(...)` instead of the local list. `length VFn = 0`.
+
+**Wrong:** `bound-concepts = nth bv 0` (clashes with `bound-concepts.tantra2`)  
+**Right:** `bcs = nth bv 0` (safe short name)
+
+**Rule:** Never name a local binding the same as a loaded tantra. Safe short names:
+`bcs` (bound-concepts), `bv` (bound-vals), `vps` (val-pairs), `sf` (solve-for).
+
+### 13. Zero-input tantras: body must start with `=` or `takes`
+
+A tantra with no `takes` and no `inputs` has its first body line mistakenly parsed
+as an input parameter if it doesn't contain `=`. The parser fixed: if a line in
+`"header"` section contains `=`, it's treated as a body binding (not a param).
+
+**Safe pattern:**
+```
+tantra2 my-tantra
+result = walk-in "physics-mantra" "varga"
+return result
+done
+```
+The `result = ...` line contains `=` → parsed as body. ✓
+
+### 14. `cond` predicate that closes to depth 0 — consequence must be on same line
+
+The line-joiner tracks paren depth. A `cond` whose predicate is a balanced
+paren expression (`(gt (length x) 0)`) closes back to depth 0. The next line
+then starts a NEW binding, not the cond consequence.
+
+**Wrong:**
+```
+candidates = cond (gt (string-length solve-for) 0)
+  (filter mantras ...)    ← depth=0 here, treated as new binding
+  otherwise mantras
+```
+
+**Right — keep consequence on same line as predicate:**
+```
+candidates = cond (gt (string-length solve-for) 0) (filter mantras ...) otherwise mantras
+```
+
+**Right — wrap entire cond in outer parens:**
+```
+result = (cond (gt (length x) 0) forward-match
+  otherwise inverse-match)
+```
+
+The outer `(` keeps depth > 0 across lines until the outer `)`.
+
+### 16. Tantra names used as function values must be wrapped in a lambda
+
+When passing a tantra as a value to `fixpoint`, `map`, or `reduce`, the tantra name
+has arity > 0 in the pre-scan table. The parser will try to consume the next token
+as the tantra's argument, not leave it as a value.
+
+**Wrong:** `refined = fixpoint raw-graph avrti-refine`
+— `avrti-refine` has arity 1. Parser tries to consume next token as arg. If none
+  available, throws `parse2_primary: empty` → binding silently dropped → `VNone`.
+
+**Right:** `refined = fixpoint raw-graph (fn g -> avrti-refine g)`
+— explicit lambda wraps the call. `fixpoint` receives a `VFn`, applies it each step.
+
+Same applies to `derive-step`, `match-mantra`, and any other arity-1 tantra.
+
+### 18. Graph op names as local bindings cause silent Failure("nth")
+
+The arity table has two sources: tantra pre-scan AND graph op nodes (registered via
+`register_graph_op_arity` from kosha nodes with `kriya` → class with `parse-arity`).
+
+Known graph op names with arity > 0 that LOOK like ordinary words:
+- `node` — arity 1
+- `role` — arity 1
+- `layer` — arity 1
+- `value` — arity 1 (documented in Rule 2)
+
+When these appear in the RHS of a binding as operands (not call targets), the parser
+treats them as function calls and consumes the next token as their argument. This
+silently corrupts the expression tree. The `Failure("nth")` at runtime is the
+symptom — it means a later `nth` call received fewer args than expected because a
+prior token was stolen.
+
+**Fix**: use short safe abbreviations. For `emit-triples` and similar tantras:
+- `node` → `nd`
+- `role` → `rl`  
+- `layer` → `ly`
+- `num-val` → `nv`
+- `unit-node` → `un`
+- `active` → `ac`
+- `pending` → `pn`
+
+**Detection**: `c.eval('node "x"')` returns `None` (not `'node'`) → arity > 0.
+`c.eval('nd "x"')` returns `'nd'` → arity 0 → safe.
+
+### 19. Variadic ops (`append`, `concat`, `add`) consume across `let` boundaries inside lambdas
+
+Inside a `fn` body, variadic ops collect tokens until a boundary keyword. The
+boundary list (line 304 of `yantra_tantra_file2.ml`) includes `let`, `return`,
+`done`, `)`, `]`, `}`, `|`, `->`, `when`, `otherwise`, `in`. But NOT bare
+expressions like `(cond ...)`.
+
+**Wrong (inside fn body):**
+```
+let with-word = append g triples
+(cond ...)
+```
+`append` is variadic and greedily consumes `(cond ...)` as a third arg. The
+`LetIn` body becomes empty → lambda returns `")"` (the leftover close paren).
+
+**Right:**
+```
+let with-word = (append g triples)
+(cond ...)
+```
+The outer parens bound `append`'s arg collection. `(cond ...)` is then the `LetIn` body.
+
+**Rule**: any variadic op call that appears in a `let` binding where the NEXT
+thing is NOT a boundary keyword must be wrapped in parens.
+
+### 17. Reserved or computed names: avoid `executor`, `exec-args`, `solve-for` as local vars
+
+Variable names that silently mismatch with primitives or arity-table entries cause
+wrong parse trees. Discovered via systematic isolation:
+- `executor` — caused `call-tantra executor ea` to fail even when both vars had correct values
+- `exec-args` — similar issue in certain positions
+- `solve-for` — is the second param of `execute-matched`; using it as a local in the
+  caller causes env shadowing
+
+**Safe names used:** `exe`, `ea`, `sf` (for solve-for), `mm` (for match result).
+
+### 15. `debug-print` shows `VNode` as `?`
+
+The `show` function in `debug-print` only handles `VString`, `VBool`, `VFloat`,
+`VNone`, `VList`. Graph node values (`VNode`) print as `?`. This is correct —
+the actual node IS there, just not human-readable via debug-print.
+
+To see the node name: `debug-print (to-string mynode)`.
+
 ---
 
 ## What has changed
@@ -477,4 +644,8 @@ These are the concepts the user explicitly named. "electron has mass 9.109e-31" 
 | 2026-03-17 | Initial writing. Layer 2 decision made. agra-bandha/sthita-viveka/dvandva architecture understood. Full four-phase plan written. |
 | 2026-03-17 | Phase 0 + Phase 2 Steps 1-3 completed. 407 passing (+15). 10+ parser bugs found and fixed. Layer 2 authoring rules documented from experience. |
 | 2026-03-17 | Session 2: variadic arity=-1 bug fixed. 409 passing. |
-| 2026-03-17 | Session 3: Phase 2 Steps 4-6 migrated. Session binding fixed. 412 passing / 0 failing. All tests green. |
+| 2026-03-17 | Session 3: Phase 2 Steps 4-6 migrated. Session binding fixed. 412 passing / 0 failing. |
+| 2026-03-17 | Session 4: avrti, match-mantra, derive-step, execute-* migrated. 5 shared tantras extracted. 4 new authoring rules (12-15). 412 passing. |
+| 2026-03-18 | Session 5: anuvada-ganana, session-anuvada, execute-matched migrated. 2 new authoring rules (16-17). 412 passing. |
+| 2026-03-18 | Session 6: build-question-graph, emit-triples, find-context, sandhi-viveka migrated. 2 new authoring rules (18-19). parse-error sentinel added to OCaml. 412 passing. |
+| 2026-03-18 | Session 7: kosha-expand, sandhi-kosha, sandhi-avastha, sandhi-bandhana migrated. 3 shared tantras extracted (flush-pending-mithya, satya-concepts, bound-concept-names). 6 callers updated. 2 new authoring rules (20-21). 412 passing. |

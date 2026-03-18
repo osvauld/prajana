@@ -1,0 +1,13 @@
+tantra2 flush-pending-mithya
+
+-- emit all words in pending as [w, mithya, w] triples, appended to out.
+-- used by sandhi-kosha and sandhi-avastha to drain the pending buffer.
+
+takes pending
+takes out
+
+result = reduce pending out (fn acc w -> (append acc [[w, "mithya", w]]))
+
+return result
+
+done

@@ -748,9 +748,16 @@ let compile_let_lines (name : string) (lines : string list) : (string * expr) op
     else
       try Some (name, parse2_expr_string all_text)
       with exn ->
-        Printf.printf "warning: tantra2 could not parse '%s': %s [%s]\n%!"
-          name (Printexc.to_string exn) all_text;
-        None
+        let reason = Printexc.to_string exn in
+        (* truncate raw text for readability *)
+        let raw_short = if String.length all_text > 80
+                        then String.sub all_text 0 80 ^ "..."
+                        else all_text in
+        Printf.eprintf "[tantra2 PARSE_ERROR] binding '%s': %s  raw: [%s]\n%!"
+          name reason raw_short;
+        (* inject sentinel so the error is visible at runtime, not silent VNone *)
+        let msg = Printf.sprintf "[PARSE_ERROR in '%s': %s]" name reason in
+        Some (name, StrLit msg)
   end
 
 (* ---- main file parser ----------------------------------------------------- *)
@@ -911,5 +918,5 @@ let parse_tantra2_file (path : string) : tantra option =
       }
     else None
   with exn ->
-    Printf.printf "warning: tantra2 parse error in %s: %s\n%!" path (Printexc.to_string exn);
+    Printf.eprintf "[tantra2 PARSE_ERROR] file %s: %s\n%!" path (Printexc.to_string exn);
     None

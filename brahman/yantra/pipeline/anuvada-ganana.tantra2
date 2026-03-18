@@ -1,0 +1,22 @@
+tantra2 anuvada-ganana
+
+-- orchestrator: natural-language sentence -> answer string.
+-- pure: no session state. sentence in, answer out.
+
+takes sentence
+
+raw-graph = build-question-graph sentence
+refined   = fixpoint raw-graph (fn g -> avrti-refine g)
+expanded  = kosha-expand refined
+
+sf-result = extract-solve-for expanded
+sf        = nth sf-result 1
+
+mm       = match-mantra expanded
+enriched = (cond (gt (length mm) 0) expanded otherwise (fixpoint expanded (fn g -> derive-step g)))
+final-m  = (cond (gt (length mm) 0) mm otherwise (match-mantra enriched))
+answer   = (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match")
+
+return answer
+
+done

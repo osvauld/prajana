@@ -247,7 +247,12 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     let rec loop s fuel =
       if fuel <= 0 then s
       else let s' = apply_fn s in
-           if s' = s then s' else loop s' (fuel - 1)
+           (* pipeline fns only append triples — equal length means stable *)
+           let stable = match s, s' with
+             | VList a, VList b -> List.length a = List.length b
+             | _ -> s' = s
+           in
+           if stable then s' else loop s' (fuel - 1)
     in
     Some (loop state0 20)
 
