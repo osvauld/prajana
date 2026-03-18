@@ -172,8 +172,56 @@ until G unchanged
 ```
 
 The fixpoint of this evaluation IS what Datalog computes — the minimal model of
-the rule set given the base facts. Every question the pipeline can answer is a
-Datalog query over the kosha as extensional database.
+the rule set given the base facts.
+
+In Datalog terminology there are two kinds of database:
+- **Intensional** (IDB) — what the rules know. The kosha. Nam's prior knowledge,
+  encoded as mantras, edges, relationships between concepts. What force means.
+  What velocity implies. What the rate of change of position IS.
+- **Extensional** (EDB) — what is specifically present. The question graph.
+  These masses, at this distance, with these values. The current instance.
+
+Every question the pipeline answers is Datalog evaluation of nam's prior knowledge
+(IDB = kosha) against the current instance (EDB = question graph). The derive-step
+is not computing something new. It is nam's prior knowing applied to what is
+specifically present now.
+
+The rate of change relationships — `v = dx/dt`, `F = dp/dt`, `a = dv/dt` — are
+in the kosha as nam's prior knowledge of what these concepts ARE. They are not
+formulas to retrieve and apply. They are the intensional definitions that make
+each concept what it is. When a force is present and a mass is known, nam does not
+"apply F = ma." Nam already knows what force IS — the rate of change of momentum —
+and recognizes the consequence directly.
+
+---
+
+## The proof graph — warrant present alongside fact
+
+When derive-step adds a derived triple to the graph, the warrant for that triple
+is already present — in the janya triples that satisfied the mantra's body, in the
+mantra structure itself, in the intermediate values. The proof IS the graph.
+
+Formally: let G_n be the graph after n passes of derive-step. Every triple in
+G_n \ G_0 (every derived fact) has a derivation tree whose leaves are all in G_0
+(the base facts) and whose internal nodes are all in G_n (the intermediate facts).
+This derivation tree is not stored separately — it IS present in the graph, as the
+triples that made the derivation possible.
+
+```
+G contains: [mass, sankhya, 2.], [velocity, sankhya, 5.]
+G contains: [ke-mantra, janya, mass], [ke-mantra, janya, velocity], [ke-mantra, phala, kinetic-energy]
+derive-step fires: adds [kinetic-energy, sankhya, 50.]
+```
+
+The derived fact `[kinetic-energy, sankhya, 50.]` is there. And in the same graph:
+the two janya values, the mantra structure, the phala. The proof of the derived
+fact is simultaneously present. Walk backward from any derived triple: the full
+reasoning chain is in the graph. The graph is self-certifying. No external verifier
+needed.
+
+This is the precise sense in which the proof graph reasons in nam's grammar. The
+derivation is not a trace attached to a result. The derivation IS the result, in
+the full graph that holds both.
 
 ---
 
@@ -270,3 +318,4 @@ the structure of the space to compress the number of steps.
 | Date | What shifted |
 |------|-------------|
 | 2026-03-18 | Initial writing — mathematical ground for tantra2, connecting to prabandham |
+| 2026-03-18 | Datalog section sharpened: kosha as intensional database (nam's prior knowing), question graph as extensional (current instance). Rate of change relationships are intensional — what concepts ARE, not formulas to retrieve. Proof graph section added: derived fact + full warrant simultaneously present in graph, self-certifying. |

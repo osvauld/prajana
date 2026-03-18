@@ -1,0 +1,53 @@
+kosha electronic-varga
+
+  -- electronics: the engineering of signal processing and control using
+  -- semiconductor devices. operates at low power — information, not energy.
+  --
+  -- the semiconductor revolution:
+  --   1947: transistor (Bardeen, Brattain, Shockley at Bell Labs).
+  --   1958: integrated circuit (Kilby, Noyce).
+  --   Moore's law: transistor count doubles every ~2 years.
+  --   2023: ~50 billion transistors on a single chip (Apple M2 Ultra).
+  --
+  -- fundamental devices:
+  --   diode:       current flows one way only (p-n junction).
+  --                rectification (AC → DC), protection, LEDs, solar cells.
+  --   transistor:  current-controlled switch or amplifier.
+  --                BJT: base current controls collector current. hFE = Ic/Ib.
+  --                MOSFET: gate voltage controls drain current. fundamental digital switch.
+  --   op-amp:      ideal voltage amplifier. inverting, non-inverting, summing, diff.
+  --                virtual ground, negative feedback — the grammar of analog design.
+  --
+  -- analog vs digital:
+  --   analog:  continuous voltage signals. audio amplifiers, sensors, RF circuits.
+  --            noise accumulates. bandwidth limited.
+  --   digital: discrete voltage levels (0 and 1). logic gates. noise immune.
+  --            can be copied perfectly. the basis of all computation.
+  --
+  -- the analog-digital boundary:
+  --   ADC (analog-to-digital converter): sample + quantise. Nyquist: fs > 2fmax.
+  --   DAC (digital-to-analog converter): reconstruct signal from digital values.
+  --   this boundary is where signal processing lives.
+  --
+  -- PCB (printed circuit board): the physical substrate of electronic systems.
+  --   copper traces on fibreglass (FR4) substrate.
+  --   layers: 2, 4, 6, 8... layers for complex routing.
+  --   SMD (surface mount) vs through-hole components.
+
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  -- physics connections
+  "electromagnetism-yukta"
+  "circuit-varga-yukta"
+  "quantum-yukta"             -- semiconductor physics is quantum mechanics
+
+  -- key concepts
+  "transistor-yukta diode-yukta op-amp-yukta"
+  "analog-yukta digital-yukta"
+  "semiconductor-yukta"
+  "domain-computation-yukta"  -- electronics → computation
+
+shabda electronic-varga / semiconductor-signal-transistor-diode-op-amp-analog-digital-PCB
+
+done

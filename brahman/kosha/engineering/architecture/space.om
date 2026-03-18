@@ -1,0 +1,41 @@
+kosha architectural-space
+
+  -- the primary material of architecture: space itself.
+  -- architecture does not build walls — it creates space bounded by walls.
+  -- the wall is the means; the space is the end.
+  --
+  -- qualities of architectural space:
+  --   enclosure:    how bounded the space feels. open field vs narrow alley vs cave.
+  --   proportion:   ratio of dimensions. a room 3×3×3m feels different from 3×3×9m.
+  --   scale:        relationship to human body. monumental vs intimate.
+  --   light:        direction, quality, colour, intensity. natural vs artificial.
+  --                 north light: cool, diffuse, consistent. south light: warm, directional.
+  --   acoustic:     reverberation time. hard surfaces reflect, soft absorb.
+  --   circulation:  how people move through and between spaces. the path.
+  --
+  -- space types:
+  --   served space:   the room you inhabit. living, sleeping, working.
+  --   servant space:  staircase, corridor, bathroom, mechanical room.
+  --   threshold:      doorway, entrance, transition between spaces.
+  --   void:           deliberate absence — courtyard, atrium, lightwell.
+  --
+  -- the section: architecture is understood in section (vertical cut) not just plan.
+  --   plan shows horizontal arrangement. section shows spatial experience.
+  --   a cathedral section: nave, triforium, clerestory — each a distinct space layer.
+  --
+  -- the promenade architecturale (Le Corbusier): movement through space as experience.
+  -- the path is designed as a sequence of spatial events.
+  -- entry → compression → release → compression → release → destination.
+
+  "architecture-varga-vishesa"
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  "geometry-yukta"
+  "human-yukta"
+  "light-yukta acoustic-yukta"
+  "room-yukta wall-yukta floor-yukta ceiling-yukta"
+
+shabda word:space,room,enclosure,void / the-primary-material-of-architecture-bounded-by-structure
+
+done

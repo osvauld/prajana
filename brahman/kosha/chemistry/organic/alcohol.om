@@ -1,0 +1,32 @@
+kosha alcohol
+
+  -- hydroxyl group -OH attached to a carbon chain.
+  -- general formula: R-OH where R is a carbon chain.
+  -- the -OH group makes alcohols hydrophilic — hydrogen bonds with water.
+  -- short chain (C1-C4) fully miscible with water.
+  -- longer chain — hydrophobic tail dominates — less water soluble.
+  --
+  -- primary: -OH on carbon with 1 other carbon. e.g. ethanol CH3CH2OH
+  -- secondary: -OH on carbon with 2 carbons. e.g. isopropanol.
+  -- tertiary: -OH on carbon with 3 carbons. less reactive.
+  --
+  -- reactions:
+  --   oxidation of primary → aldehyde → carboxylic acid
+  --   oxidation of secondary → ketone
+  --   dehydration → alkene + water (acid catalysis)
+  --   esterification: alcohol + acid → ester + water
+  --
+  -- ethanol: CH3CH2OH. fermentation product. fuel additive. solvent.
+  -- methanol: CH3OH. toxic. industrial solvent. fuel cell.
+  -- glycerol: C3H8O3. 3 OH groups. backbone of fats (triglycerides).
+  -- glucose: C6H12O6. polyol. primary metabolic fuel.
+
+  "organic-varga-vishesa"
+  "functional-group-sthita hydroxyl-swarupa"
+  "hydrophilic-swarupa hydrogen-bond-yukta"
+  "oxidation-yukta esterification-yukta dehydration-yukta"
+  "ethanol-drishthanta methanol-drishthanta glycerol-drishthanta"
+
+  shabda word:alcohol,hydroxyl / R-OH-hydrophilic-hydrogen-bonds-oxidises-to-aldehyde-or-ketone
+
+done

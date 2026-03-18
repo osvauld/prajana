@@ -1,0 +1,31 @@
+kosha heating
+
+  -- applying heat to a substance over time.
+  -- gravity is not the actor here — thermal energy is.
+  -- janya: heat-source, mass, material (determines specific heat capacity).
+  -- phala: temperature rise → at phase-change threshold → new phase.
+  --
+  -- the chain the tantra implements:
+  --   Q added → ΔT = Q/(mc) while T < T_phase
+  --   at T = T_boil: latent heat absorbed, phase → gas, T stays constant
+  --   at T = T_melt: latent heat absorbed, phase → liquid, T stays constant
+  --
+  -- the chemistry underneath:
+  --   temperature rise = bonds vibrating faster (not breaking).
+  --   at phase change = bonds breaking (H-bonds in water: 20 kJ/mol).
+  --   this is why temperature plateaus at 100°C — energy goes to bonds, not KE.
+  --   bond energy is in chemistry-constants.shabda.
+
+  "common-sense-varga-vishesa"
+  "processes-varga-vishesa"
+  "tinanta-swarupa bhave-prayoga-swarupa"
+
+  "heat-transfer-janya mass-janya"
+  "temperature-phala phase-change-boil-phala phase-change-freeze-phala"
+  "hydrogen-bond-yukta latent-heat-yukta"
+  "thermodynamics-varga-yukta"
+  "water-drishthanta"            -- paradigm case: water on a stove
+
+  shabda word:heating,heated,boiling,boils,melts,melting,evaporates,freezes,condenses / Q-to-deltaT-to-phase-change
+
+done

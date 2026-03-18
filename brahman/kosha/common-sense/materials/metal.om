@@ -1,0 +1,27 @@
+kosha metal
+
+  -- generic metal node. the common-sense entry point for metallic materials.
+  -- bridges to: metals-varga (chemistry) + solid (thermodynamics) + pbr (3d).
+  -- specific metals: iron, copper, aluminium, gold, silver — each has own node.
+  -- alloys (steel, brass, bronze) are in composites.
+  --
+  -- everyday properties:
+  --   solid at room temperature (except mercury Hg)
+  --   shiny (lustrous) — free electrons reflect photons
+  --   conducts electricity and heat
+  --   malleable and ductile — can be shaped, drawn
+  --   relatively high density (except aluminium, lithium)
+  --   coefficient of restitution: varies by metal (steel ~0.65, aluminium ~0.5)
+
+  "common-sense-varga-vishesa"
+  "materials-varga-vishesa"
+  "metals-varga-vishesa"
+
+  "solid-sthita"
+  "conductor-swarupa lustrous-swarupa malleable-swarupa"
+  "coefficient-of-restitution-yukta"
+  "domain-3d-yukta pbr-yukta"
+
+  shabda word:metal,metallic / solid-conductor-lustrous-malleable-free-electron-sea
+
+done

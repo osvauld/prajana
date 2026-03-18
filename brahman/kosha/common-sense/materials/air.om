@@ -1,0 +1,27 @@
+kosha air
+
+  -- the gas mixture of earth's atmosphere.
+  -- composition: N2 78%, O2 21%, Ar 0.93%, CO2 0.04%, trace gases.
+  -- essential for combustion (O2), respiration (O2), and life.
+  --
+  -- properties:
+  --   gas: no fixed shape or volume. fills any container.
+  --   density: 1.225 kg/m³ at sea level, 20°C. decreases with altitude.
+  --   thermal insulator: k = 0.025 W/mK (lowest of common materials).
+  --   transparent and invisible (no absorption in visible range).
+  --   Rayleigh scattering: shorter wavelengths scatter more → blue sky.
+  --   sound: propagates at 343 m/s in air at 20°C.
+  --   pressure: 101325 Pa (1 atm) at sea level. decreases with altitude.
+  --   humidity: water vapour content. 100% = saturated = fog/cloud/rain.
+
+  "common-sense-varga-vishesa"
+  "materials-varga-vishesa"
+
+  "gas-sthita"
+  "nitrogen-yukta oxygen-yukta"
+  "transparent-swarupa insulator-swarupa"
+  "domain-3d-yukta"
+
+  shabda word:air,atmosphere / N2-O2-gas-mixture-transparent-insulator-sound-medium
+
+done

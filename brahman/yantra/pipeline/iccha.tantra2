@@ -1,0 +1,41 @@
+tantra3 iccha
+
+-- iccha: intention, will, the directive force.
+--
+-- iccha (Sanskrit) = wish, will, intention.
+-- in samkhya: one of the three fundamental forces alongside jnana (knowing)
+-- and kriya (doing). iccha fires first — it is the direction-setter.
+-- without iccha, jnana has no target. kriya has no purpose.
+--
+-- here: the question's intention extracted from the expanded proof graph.
+-- vidhi-kaala (imperative tense) IS the iccha-marker in the graph.
+-- [find, vidhi-kaala, solve-for] means: "this is what we seek."
+--
+-- iccha returns three things:
+--   has-intent   — was there an explicit vidhi-kaala? (true = the question was asked)
+--   solve-for    — which concept is sought? (the target of the derivation)
+--   scope-entity — whose frame? (whose owned properties to look through)
+--
+-- has-intent is the crucial discriminant.
+-- "mass is 5 velocity is 10" → has-intent = false, solve-for = "mass" (fallback)
+-- "find kinetic energy given mass 5 velocity 10" → has-intent = true, solve-for = "kinetic-energy"
+--
+-- when has-intent is false:
+--   the question is ambiguous. "mass is 5, velocity is 10" could mean
+--   KE or momentum — both are valid derivations from these janya.
+--   without vidhi-kaala, the system should NOT pick arbitrarily.
+--   the correct response is "no match" (awaiting clarification).
+--
+-- scope-entity is the lens:
+--   "find KE of ball-A" — look only through ball-A's owned properties.
+--   without scope: look through all flat graph sankhya values.
+--
+-- iccha calls extract-solve-for.
+
+takes graph
+
+result = extract-solve-for graph
+
+return result
+
+done

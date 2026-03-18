@@ -1,0 +1,28 @@
+kosha surface
+
+  -- the interface between two regions — the place where contact happens.
+  -- every collision involves a surface (or two surfaces meeting).
+  -- surfaces are characterised by:
+  --   orientation: horizontal (floor, ground), vertical (wall), inclined (ramp, slope)
+  --   material: determines coefficient of restitution and friction coefficient
+  --   roughness: smooth surface → low friction. rough → high friction.
+  --
+  -- the surface is the mediator of all contact forces:
+  --   normal force: perpendicular to surface. prevents penetration.
+  --   friction force: parallel to surface. opposes relative motion.
+  --
+  -- in chemistry: surface area matters — reactions happen at surfaces.
+  -- finely divided materials have huge surface area → react faster.
+  -- iron powder burns; iron block does not (same mass, different surface area).
+
+  "structures-varga-vishesa"
+  "common-sense-varga-vishesa"
+
+  "interface-swarupa"
+  "normal-force-yukta friction-force-yukta"
+  "collision-varga-yukta contact-yukta"
+  "domain-3d-yukta"
+
+  shabda word:surface / interface-where-contact-happens-normal-force-friction
+
+done

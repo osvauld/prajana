@@ -1,0 +1,29 @@
+kosha stone
+
+  -- generic term for naturally occurring hard mineral aggregates.
+  -- granite: interlocked crystals of quartz + feldspar + mica.
+  -- limestone: CaCO3 — sedimentary. marble: metamorphic limestone.
+  -- sandstone: SiO2 grains cemented by silica or calcite.
+  -- basalt: volcanic. fine-grained. dense.
+  --
+  -- properties:
+  --   very hard (7+ Mohs for granite, quartz)
+  --   brittle — fractures without plastic deformation
+  --   high compressive strength, low tensile strength (like concrete)
+  --   coefficient of restitution: ~0.2-0.4
+  --   thermal insulator at everyday scale (k ≈ 2-4 W/mK)
+  --   high density (granite ≈ 2700 kg/m³)
+  --   chemically stable (except limestone in acid)
+
+  "common-sense-varga-vishesa"
+  "materials-varga-vishesa"
+  "minerals-varga-vishesa"
+
+  "solid-sthita"
+  "hard-swarupa brittle-swarupa dense-swarupa"
+  "coefficient-of-restitution-yukta"
+  "domain-3d-yukta pbr-yukta"
+
+  shabda word:stone,rock,granite,marble,limestone / hard-brittle-mineral-aggregate-high-compressive-strength
+
+done

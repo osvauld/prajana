@@ -300,12 +300,6 @@ def test_three_entities_accumulate(vy):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="'sphere' not yet in the word index — no gola shabda mapping. "
-    "'sphere' stays mithya; does not resolve to gola satya. "
-    "Fix: add 'sphere' to gola.om shabda list or bhasha/english word index.",
-)
 def test_sphere_shape_swarupa(vy):
     """'sphere' maps to gola — the entity gets swarupa edge to gola."""
     g = bqg(vy, "sphere has radius 0.3")

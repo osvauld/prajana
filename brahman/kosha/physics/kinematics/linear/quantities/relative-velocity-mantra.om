@@ -1,0 +1,22 @@
+mantra relative-velocity-mantra
+
+  "linear-motion-varga-vishesa"
+  "physics-mantra-varga"
+  "relative-velocity-swarupa"
+  "relative-velocity-phala"
+  "relative-velocity-expr-kriya"
+
+  -- the proof graph is the third observer — sthira-apeksha holding all entities.
+  -- it supplies two velocity values: the scope entity's (observer) and the
+  -- other entity's (observed). both are named "velocity" — same concept,
+  -- different owners. the graph holds both. the expr receives them in order:
+  -- first = observer's velocity (from scope entity), second = other entity's.
+  -- v_rel = v_observer - v_observed.
+  -- this is not a special case — it is the same structure as any two-participant
+  -- mantra. the proof graph supplies both participants' values.
+  "velocity-janya"
+  "velocity-janya"
+
+  shabda name:relative-velocity unit:metre-per-second math-op:subtraction
+
+done

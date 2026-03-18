@@ -1,0 +1,47 @@
+kosha projection
+
+  -- the method of representing a 3D object on a 2D drawing surface.
+  -- the fundamental act of engineering drawing: collapsing 3D to 2D systematically.
+  --
+  -- orthographic projection: parallel rays of light. no perspective distortion.
+  --   viewer is at infinity — parallel lines stay parallel.
+  --   produces true shape and size on each view — measurable.
+  --   multiple views needed to fully define 3D object.
+  --
+  -- first-angle projection (ISO, Europe, Asia):
+  --   object between viewer and projection plane.
+  --   front view: viewer looks from front → image on plane behind object.
+  --   top view placed BELOW front view (projected downward).
+  --   right-side view placed to the LEFT of front view.
+  --   symbol: circle with cone pointing left.
+  --
+  -- third-angle projection (ASME, USA, Canada):
+  --   projection plane between viewer and object.
+  --   top view placed ABOVE front view (where it was seen from).
+  --   right-side view placed to the RIGHT of front view.
+  --   symbol: circle with cone pointing right.
+  --   more intuitive (view placed where viewer stood).
+  --
+  -- isometric projection: 3D view. axes at 120° to each other.
+  --   all three dimensions visible simultaneously.
+  --   foreshortening factor 0.816 — in isometric drawing, full size used.
+  --   parallel lines remain parallel (not perspective).
+  --   exploded views: parts pulled apart along isometric axes.
+  --
+  -- section view: object cut by a plane to show internal features.
+  --   cutting plane line shows where cut is made.
+  --   hatching (angled lines) shows cut surfaces — material cross-section.
+  --   full section, half section, revolved section, removed section.
+
+  "drawing-varga-vishesa"
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  "geometry-yukta"
+  "orthographic-swarupa isometric-swarupa"
+  "coordinate-yukta"
+  "domain-3d-yukta"          -- CAD projections are automated versions of this
+
+shabda word:projection,orthographic,isometric,first-angle,third-angle / 3D-to-2D-representation-method
+
+done

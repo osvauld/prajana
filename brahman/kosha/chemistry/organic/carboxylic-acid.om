@@ -1,0 +1,30 @@
+kosha carboxylic-acid
+
+  -- carboxyl group -COOH: a carbonyl C=O and hydroxyl -OH on the same carbon.
+  -- the most important acidic functional group in organic chemistry.
+  -- donates H⁺ to water: R-COOH ⇌ R-COO⁻ + H⁺ (weak acid, pKa ~ 4-5)
+  -- the carboxylate R-COO⁻ is the conjugate base — resonance stabilised.
+  --
+  -- naming: methanoic (formic) HCOOH, ethanoic (acetic) CH3COOH,
+  --         propanoic CH3CH2COOH. suffix: -oic acid or -ic acid.
+  --
+  -- reactions:
+  --   esterification: -COOH + -OH → -COO- + H2O (with acid catalyst)
+  --   amide formation: -COOH + -NH2 → -CONH- + H2O (peptide bond!)
+  --   reduction: -COOH → -CHO (aldehyde) → -CH2OH (alcohol)
+  --   decarboxylation: -COOH → -H + CO2 (beta-keto acids, metabolic)
+  --
+  -- acetic acid: CH3COOH. vinegar. pKa 4.76.
+  -- fatty acids: long-chain carboxylic acids. palmitic C16, stearic C18.
+  -- amino acids: all contain -COOH + -NH2. zwitterion at physiological pH.
+  -- citric acid: tricarboxylic acid. Krebs cycle. lemon juice.
+
+  "organic-varga-vishesa"
+  "functional-group-sthita carboxyl-swarupa"
+  "acid-swarupa proton-donor-swarupa"
+  "esterification-yukta amide-bond-yukta"
+  "fatty-acid-drishthanta amino-acid-drishthanta acetic-acid-drishthanta"
+
+  shabda word:carboxylic-acid,carboxyl / R-COOH-weak-acid-pKa-4-to-5-esterification-peptide-bond
+
+done

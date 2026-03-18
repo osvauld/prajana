@@ -21,7 +21,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--socket",
         default=None,
-        help="Path to vyakarana Unix socket (default: $VYAKARANA_SOCKET or /tmp/vyakarana.sock)",
+        help="Path to vyakarana Unix socket (default: $VYAKARANA_SOCKET or /tmp/vy.sock)",
     )
 
 

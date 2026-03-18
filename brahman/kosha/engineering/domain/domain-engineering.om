@@ -1,0 +1,49 @@
+kosha domain-engineering
+
+  -- engineering is applied physics and chemistry — knowledge made into artefact.
+  -- physics describes what IS. chemistry describes what IS made of.
+  -- engineering asks: given what we know, what can we BUILD?
+  --
+  -- the difference between physics and engineering:
+  --   physics: F = ma is true universally.
+  --   engineering: given F and m, design a structure that holds without fracturing.
+  --   physics gives the law. engineering gives the design within the law.
+  --
+  -- domains under engineering:
+  --
+  --   civil:        structures that shape space — bridges, buildings, roads, dams.
+  --                 materials: concrete, steel, stone. key: will it stand?
+  --
+  --   mechanical:   machines that move — engines, gears, turbines, vehicles.
+  --                 key: will it work efficiently?
+  --
+  --   electrical:   power systems — generation, transmission, motors, transformers.
+  --                 operates at power scale (watts, kilowatts, megawatts).
+  --
+  --   electronic:   signal and control — transistors, ICs, amplifiers, sensors.
+  --                 operates at signal scale (millivolts, microamps).
+  --                 electrical engineering deals with power; electronic with information.
+  --
+  --   signal:       DSP — sampling, filtering, FFT, convolution, feedback control.
+  --                 the mathematics of signals in time and frequency domain.
+  --                 SAS (signal and systems) is its theoretical foundation.
+  --
+  --   computation:  digital systems — logic gates, processors, software, algorithms.
+  --                 information processed by machines. classical and quantum.
+  --
+  --   chemical:     industrial chemistry — reactors, separation, mass and heat balance.
+  --                 bridges chemistry and manufacturing.
+  --
+  -- all engineering domains share:
+  --   safety factor:   design for more than required (typically 2-10×)
+  --   failure mode:    understand how it breaks before building it
+  --   optimisation:    minimum material, maximum performance, minimum cost
+  --   constraint:      the laws of physics are not negotiable
+
+  "domain-kosha-sthita"
+  "physics-yukta chemistry-yukta math-yukta"
+  "domain-physics-yukta domain-chemistry-yukta domain-computation-yukta"
+
+  shabda engineering / applied-physics-chemistry-knowledge-made-into-artefact
+
+done

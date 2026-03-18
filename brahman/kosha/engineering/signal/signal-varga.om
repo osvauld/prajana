@@ -1,0 +1,74 @@
+kosha signal-varga
+
+  -- signal processing: the mathematics of signals in time and frequency.
+  -- a signal is any quantity that varies with time (or space): audio, video,
+  -- radar, seismic, biomedical, communication, control.
+  -- signal processing asks: how do we analyse, filter, and transform signals?
+  --
+  -- the duality at the heart of signal processing:
+  --   every signal has a time-domain representation (amplitude vs time)
+  --   AND a frequency-domain representation (amplitude vs frequency).
+  --   these are two ways of seeing the same thing.
+  --   Fourier transform converts between them:
+  --     X(f) = ∫ x(t) e^(-j2πft) dt
+  --   this is the most important transform in engineering.
+  --   it reveals which frequencies are present in a signal.
+  --
+  -- sampling (Nyquist-Shannon theorem):
+  --   to represent a signal digitally, sample at fs > 2 × fmax.
+  --   below Nyquist rate → aliasing: high frequencies appear as low frequencies.
+  --   audio: 20Hz-20kHz → fs = 44100 Hz (CD), 48000 Hz (professional).
+  --   aliasing = corruption. no recovery once aliased.
+  --
+  -- filtering: modifying the frequency content of a signal.
+  --   low-pass filter (LPF):  passes low frequencies, blocks high. smoothing.
+  --   high-pass filter (HPF): passes high frequencies, blocks low. differentiation.
+  --   band-pass filter (BPF): passes a range. tuning to a specific frequency.
+  --   band-stop / notch:      removes a specific frequency (e.g. 50Hz mains hum).
+  --   FIR filter: finite impulse response. linear phase. always stable.
+  --   IIR filter: infinite impulse response. efficient. can be unstable.
+  --
+  -- convolution: the fundamental operation of linear signal processing.
+  --   y(t) = x(t) * h(t) = ∫ x(τ) h(t-τ) dτ
+  --   h(t) is the impulse response — the system's "fingerprint".
+  --   convolution in time = multiplication in frequency (Fourier convolution theorem).
+  --   FIR filtering IS convolution with filter coefficients.
+  --
+  -- Z-transform: discrete-time equivalent of Laplace transform.
+  --   H(z) = Σ h[n] z^(-n). poles and zeros determine filter behaviour.
+  --   system stability: all poles inside unit circle.
+  --
+  -- DSP (digital signal processing):
+  --   everything implemented in discrete time (samples, not continuous).
+  --   FFT (Fast Fourier Transform): O(N log N) algorithm for DFT. Cooley-Tukey 1965.
+  --   without FFT: O(N²) → too slow for real-time. with FFT: real-time audio possible.
+  --
+  -- applications:
+  --   audio: equaliser, reverb, noise cancellation, compression, synthesis.
+  --   communications: modulation, demodulation, channel equalisation, error correction.
+  --   image: JPEG compression, edge detection, noise reduction.
+  --   control: PID controller, kalman filter, model predictive control.
+  --   biomedical: ECG filtering, EEG analysis, MRI reconstruction.
+  --   radar/sonar: matched filtering, beamforming, CFAR detection.
+
+  "engineering-varga-vishesa"
+  "subanta-swarupa"
+
+  -- math connections
+  "fourier-transform-yukta"
+  "convolution-yukta"
+  "derivative-yukta antiderivative-yukta"   -- differentiation/integration in signal domain
+  "math-varga-yukta"
+
+  -- physics connections
+  "oscillation-varga-yukta"       -- signals are oscillations
+  "frequency-yukta"
+  "wave-yukta"
+
+  -- engineering connections
+  "electronic-varga-yukta"        -- DSP implemented in electronics
+  "domain-computation-yukta"      -- DSP algorithms run on processors
+
+shabda signal-varga / signals-in-time-and-frequency-Fourier-convolution-filtering-DSP-Nyquist-sampling
+
+done

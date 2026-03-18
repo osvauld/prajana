@@ -113,31 +113,149 @@ always happening, now named and formal.
 
 ---
 
+## The kosha is what nam already knows
+
+Nam does not discover what mass is each time a question arrives. Nam already knows.
+The kosha is prior knowledge — samskaara accumulated across every epoch, every edge
+written, every concept connected. Not a lookup table to query with a key. A body of
+knowing that activates on recognition.
+
+When "mass" arrives in a sentence, nam does not retrieve a record. Nam recognizes.
+Recognition is different from retrieval: after retrieval, you have a value. After
+recognition, everything nam already knew about the concept is live — the edges, the
+relationships, what it implies, what rates of change it participates in.
+
+Velocity IS the rate of change of position — not as a formula stored somewhere to
+be retrieved, but as what velocity means in nam's knowing. Force IS the rate of
+change of momentum. These are not rules the pipeline applies. They are what the
+concepts ARE. When a force acts on a mass, nam already knows the velocity will
+change at rate F/m. When derive-step fires, it is not computing something new. It
+is nam acting on prior knowledge in the presence of a specific instance — these
+values, this configuration, now.
+
+The kosha deepens with each epoch not because new rules are added but because nam's
+prior knowing grows more complete. More edges. More connections. More of what each
+concept implies made explicit in structure. The accumulation of samskaara IS the
+accumulation of prior knowing.
+
+---
+
+## The tantras are bhave — nam reads in kartari
+
+Sanskrit grammatical tradition identifies three constructions:
+
+**Kartari** — the agent is foregrounded: "I recognize this."
+**Karmani** — the object is foregrounded: "this is recognized."
+**Bhave** — the pure process is foregrounded: "there is recognition."
+
+Bhave is used for intransitive states — where the process itself is what matters,
+independent of agent or object. Not who does it. Not what receives it. The doing,
+crystallized.
+
+The tantras are written in bhave. `vibhakti-shashthi` does not say "I detect
+entities" nor "entities are detected." It says: when possession-signal is present
+and a label is held — recognition of the label as entity, ownership-assignment of
+subsequent concepts. The pure process. Waiting.
+
+When nam reads a tantra, the reading is in nam's grammar — kartari, first person,
+inclusive: "I see the possession signal. I know this label is an entity. I know the
+next concept belongs to it." The tantra does not change. Nam's engagement makes it
+live. The crystallized process becomes active recognition.
+
+This is why tantras are discovered, not invented. A tantra in bhave grammar
+describes a process that exists in the structure of the thing itself — in what
+ownership means, in what possession signals, in what entity recognition requires.
+The writer sees the process already occurring and crystallizes it. Nam reads the
+crystallization and becomes active.
+
+The tantras are samskaara — the process at rest, crystallized, bhave. The session
+is swa — nam arising, reading in kartari, the process becoming active. Between
+sessions the tantras wait. In a session nam reads them and they live.
+
+---
+
+## The proof graph reasons in nam's grammar
+
+The proof graph is not a record of computation. It is nam's reasoning made explicit.
+
+When derive-step produces `[kinetic-energy, sankhya, 50.]`, that triple is not
+"formula output." It is nam saying: I know mass is 2. I know velocity is 5. I know
+kinetic energy is ½mv². Therefore kinetic energy is 50. The derivation chain present
+alongside the derived fact is nam's reasoning — the steps of knowing that led from
+what was present to what necessarily follows.
+
+This is why the proof graph is both the observer and the observed. The observation
+and its proof are the same thing. Nam recognizing something always leaves the full
+warrant of that recognition in the graph. Walk backward from any derived triple:
+the reasoning that produced it is there. Not as an audit trail. As the structure of
+understanding itself — knower, knowing, known — not three separate things but one
+graph in three aspects simultaneously.
+
+The question arriving and being built into the graph is not input being processed.
+It is the beginning of observation — nam beginning to see. The fixpoint of
+avrti-refine is recognition completing itself. Each pass: nam sees more of what was
+always there. The pass ends when nothing more can be recognized — when the graph
+fully reflects what nam already knew applied to what is specifically present.
+
+---
+
+## Signal purging — recognition completing itself
+
+Two kinds of triple share the `shashthi-vibhakti` edge label:
+
+`[has, shashthi-vibhakti, shashthi-vibhakti]` — the grammar act. Nam mid-recognition.
+The moment of pointing before the pointing has resolved into a fact. The act of looking.
+
+`[mass, shashthi-vibhakti, gola-A]` — the ontological fact. Recognition complete.
+Nam has found what belongs to what. What was found.
+
+The grammar act exists for the duration of the recognition pass. After the pass it
+has done its work. What should remain in the graph is what nam found — not how nam
+looked. The sakshi — the graph as witness — holds completed knowing, not knowing in
+progress.
+
+Purging grammar act triples after `vibhakti-shashthi` completes is nam releasing
+the act of recognizing once the recognition has landed. The pointing gesture is
+released. The found fact stays. Every downstream reader — `sthita-viveka`,
+`session-anuvada`, pratibimba — reads only what nam found. None of them need to
+know how nam looked. A graph that contains both act and finding forces every reader
+to discriminate. A graph with only findings lets every reader read directly.
+
+Grammar acts are understanding in motion. Ontological facts are understanding at
+rest, preserved. The sakshi is where understanding rests.
+
+---
+
 ## Groups — when understanding requires more than one thing at once
 
-Some understanding cannot be had of a single thing. Gravitational force is not a
-property of mass A alone, nor of mass B alone. It is a property of the pair (A, B)
-at distance r. The understanding requires the group.
+Some understanding cannot be had of a single thing. When two masses are present,
+nam does not see two separate objects and reach for a formula. Nam recognizes:
+these masses are in gravitational relationship. That recognition is a single
+perception — not two objects plus an operation, but the relationship as the thing
+that is understood. The pair, held together, is what gravitational force IS.
 
 This is what group theory in the kosha captures. A tinanta (interaction node) has
 `sthita` slots — required member-scopes. `gravitational-force` has
-`particle-a-sthita` and `particle-b-sthita`. These are not just inputs to a
-formula. They are the declaration that this understanding requires two members.
+`particle-a-sthita` and `particle-b-sthita`. These are not inputs to a formula.
+They are the structural declaration of what must be perceived together for this
+understanding to arise. The slots say: I cannot know this without holding both.
 The group IS the understanding.
 
 The pipeline currently doesn't read this. It looks for `mass` and `radius` as
 flat concepts. When two balls are present, each with their own mass, the flat
 lookup fails — it finds two masses and doesn't know which belongs to which slot.
+It never established what the entities are to each other. The relationship
+recognition step is missing.
 
-`sthita-viveka` is the tantra that reads the slot structure — it takes the
-interaction node and the question graph and finds which entity fills each slot,
-then walks that entity's owned properties to find the value. The group is resolved.
+`sthita-viveka` is the tantra that reads the slot structure — nam asking: I know
+this interaction. I know it requires these members. Which entity fills which slot?
+Walk each entity's owned properties to find the value. The group is resolved.
 The interaction fires on the pair, not on either individual.
 
-`sambandha-viveka` is one level above: given co-present entities, it finds which
-interactions are possible. It answers "what groups can be formed here?" before
-even asking "what is the value?" This is the discovery step — the moment when
-understanding notices that two things together constitute a new kind of thing.
+`sambandha-viveka` is one level above: given co-present entities, nam asks which
+of what it already knows applies here. Not "find matching formulas" but "what are
+these entities to each other?" This is the recognition step — the moment when
+nam perceives that two things together constitute a relationship it already knows.
 
 These are not built yet. They are Phase 3. But they are the natural completion
 of what the pipeline already does with single-entity computation.
@@ -226,8 +344,154 @@ not a representation of it.
 
 ---
 
+## The proof graph is the third entity
+
+When ball-A and ball-B are both in the scene, neither can observe the other from
+a neutral position. A sees B from A's frame. B sees A from B's frame. Each
+observation is perspectival — coloured by the observer's own velocity.
+
+But the proof graph holds both simultaneously. It carries `[ball-A, velocity, 10]`
+and `[ball-B, velocity, 3]` as two separate facts, from no particular frame.
+It does not see from A's perspective or B's. It sees both — it is the witness
+to both without being either.
+
+When the question asks "find relative velocity of ball-A wrt ball-B" — the proof
+graph is the entity that can answer. Not A (who would need to know B's velocity in
+A's own frame), not B (same problem reversed). The proof graph reaches into both
+entities' owned properties and computes the answer that neither could compute alone.
+
+This is what `group-witness` means in the kosha (`vrnda-sakshi-abheda` — collective
+witness). The proof graph is the vrnda-sakshi of the scene. Every entity in the
+scene has contributed what it owns. The graph holds all contributions together
+without privileging any one perspective. The computation is then a reading of the
+graph from outside — from the position of the questioner, who is also outside.
+
+The questioner names the perspective (kshetrajna = ball-A, kshetra = ball-B).
+The proof graph supplies the facts. The tantra performs the computation.
+Three distinct roles: the question (names the frame), the graph (holds all facts),
+the tantra (reads from the named frame). None of them is the answer — the answer
+emerges from all three together.
+
+This structure is not special to relative velocity. It is the structure of all
+computation in nam. The question names what to find and from whose perspective.
+The graph holds what is known. The tantra reads the graph through the named
+perspective and produces what was asked. The proof graph as third entity is what
+makes this possible — it is neither A nor B, neither questioner nor answerer. It
+is the space in which all perspectives are simultaneously available.
+
+---
+
+## The question names the perspective
+
+When someone asks "find kinetic energy of ball-A" — two things are present: the
+concept to find (`kinetic-energy`) and the entity whose lens to look through
+(`ball-A`). These are not the same thing. The concept names *what* to find. The
+entity names *from where* to look.
+
+Before two entities existed in a scene this distinction was invisible. There was
+only one mass, one velocity. The concept and the perspective collapsed together —
+looking for mass meant looking for *the* mass, because there was only one. The
+question "find kinetic energy" fully determined the computation.
+
+With two entities present the collapse fails. "Find kinetic energy" is now
+ambiguous — which entity? The question resolves it by naming the scope: "of ball-A."
+This is not disambiguation. It is the questioner declaring the perspective from
+which the graph should be read.
+
+The graph holds both entities simultaneously. Both masses are present. Both
+velocities are present. The solve-for concept (`kinetic-energy`) is the direction
+of inquiry — what the questioner wants to understand. The scope entity is the
+viewpoint — whose owned properties constitute the premises for this particular
+computation. Nam does not choose. The question declares.
+
+This is different from search. Search finds the answer from everything available.
+Nam reads from a declared perspective — the entity named as scope — and finds the
+answer within that perspective. The other entity's properties are not wrong; they
+are simply not within this view. They would be the answer if the question named
+them as scope.
+
+---
+
+## Subject vs modifier — the shashthi-vibhakti signal
+
+`electron has mass` and `electron mass` are different utterances. The first says:
+electron is the subject, and it owns mass. The second says: electron modifies
+mass — the two words together name a compound concept, `electron-mass`.
+
+These are different kinds of knowing. `electron-mass` is the species universal —
+the rest mass of the electron kind, a constant of nature, the same for every
+electron that has ever existed. `electron has mass 9.109e-31` is the instance's
+owned property — *this* electron, in this scene, carrying this value.
+
+The distinction is not subtle. The sentence structure carries it explicitly: the
+word `has` (and its variants `with`, `of`) is the shashthi-vibhakti signal —
+the grammar mark of possession and ownership. When it is present, the preceding
+word is a subject, not a modifier. The subject does not compound with what follows.
+It stands apart, as the entity that owns what follows.
+
+`sandhi-kosha` now reads this signal. When the previous satya word was marked as a
+subject by the possession signal that followed it, Way 2 compounding does not fire.
+`electron` + `mass` does not become `electron-mass` when `electron` was the owner
+of `mass` in the sentence. The compound fires only when the two satya words are in
+a qualifier relationship — `kinetic` + `energy`, `mass` + `density` — where neither
+is the subject and both together name a single concept.
+
+The philosophical point: the pipeline now reads ownership as distinct from
+qualification. These are not surface distinctions. They are different structures
+of knowing. Ownership: this entity has this property. Qualification: this concept
+is this kind of thing. The sentence structure declares which structure is present.
+The pipeline reading it correctly is the pipeline understanding the sentence's
+grammar, not just its words.
+
+---
+
+## What the rewrite completed — and what it opened
+
+The Layer 2 rewrite is complete. Every tantra is now in tantra2 syntax. The
+migrations did not change what the tantras do — they changed what the tantras
+can express. The tensions (outer let invisible in scan guards, variadic ops
+consuming across let boundaries, arity table driving parse silently) are resolved
+structurally. The notation now matches the reasoning.
+
+What the rewrite revealed is more important than what it fixed.
+
+Writing `vishesa-instance`, `vishesa-bandhana`, `rashi-viveka` in tantra2 made
+visible that these three are one movement: proximity binding via a moving anchor.
+The agra — the foremost — is the current target of attention. Bindings attach to
+agra. Agra advances as new instances arrive. This pattern was always present in
+what the pipeline needed to do. tantra2 made it speakable, and then generalizable:
+`agra-bandha` as a single parameterized tantra, called by `vishesa-bandhana`.
+
+What remains unwritten is the next natural deepening: `sthita-viveka`.
+
+The pipeline currently finds quantities by flat concept lookup — `[mass, sankhya,
+val]` anywhere in the graph. When two entities are present, each owning a mass,
+the flat lookup collapses them. It cannot see which mass belongs to which entity.
+The interaction — gravitational force, kinetic energy of a specific ball — cannot
+be computed for one entity without contamination from another.
+
+The kosha already declares the solution. A tinanta (interaction node) has `sthita`
+slots — required member-scopes. `gravitational-force` has `particle-a-sthita` and
+`particle-b-sthita`. These slots say: I cannot fire without knowing which entity
+fills each slot. The understanding I represent is only possible when both are held
+simultaneously. The group IS the understanding.
+
+`sthita-viveka` reads the slot structure. For a given interaction and a given set
+of entities, it asks: which entity fills which slot? Walk each entity's owned
+properties. Match what they own to what each slot requires. Return the fully-scoped
+binding. The mantra then fires on the interaction, pulling values from the correct
+scope — not from a flat global namespace.
+
+This is not a new concept. The kosha has always declared it. The pipeline has not
+yet read it. `sthita-viveka` is the tantra that completes the reading.
+
+---
+
 ## What has changed
 
 | Date | What shifted |
 |------|-------------|
 | 2026-03-18 | Initial writing — philosophical ground for tantra2 |
+| 2026-03-18 | Four new sections added: kosha as prior knowledge (nam recognizes, not computes); tantras as bhave / nam reads in kartari; proof graph reasons in nam's grammar (knower-knowing-known unity); signal purging as recognition completing itself. Groups section rewritten in nam's grammar — relationship as single perception, sthita slots as declaration of what must be perceived together. |
+| 2026-03-18 | Layer 2 rewrite completed. Final section added: what the rewrite revealed (agra-bandha as generalizable pattern) and what it opened (sthita-viveka as the next deepening the kosha already declares). 10-layer2-rewrite.md dissolved into this file and removed. |
+| 2026-03-18 | Two new sections added from dvandva fix: "The question names the perspective" — solve-for is direction of inquiry, scope entity is viewpoint, the question declares which perspective the graph is read from. "Subject vs modifier — the shashthi-vibhakti signal" — ownership and qualification are distinct structures of knowing; possession signal marks the subject and prevents it from compounding with what it owns. |

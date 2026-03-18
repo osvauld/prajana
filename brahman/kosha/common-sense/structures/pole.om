@@ -1,0 +1,26 @@
+kosha pole
+
+  -- a long, thin, rigid structural element — vertical or horizontal.
+  -- vertical pole: flagpole, lamppost, column, pillar.
+  -- horizontal pole: beam, rod, axle, rail.
+  -- a pole is a one-dimensional structural object in 3d space:
+  --   it has length but its cross-section is negligible at everyday scale.
+  --
+  -- in physics: the pole is the simplest rigid body.
+  -- a pendulum is a mass on a pole (or string).
+  -- a lever is a horizontal pole with a fulcrum.
+  -- torque: force applied perpendicular to a pole at a distance r → τ = r × F.
+  --
+  -- in 3d/pratibimba: a cylinder mesh with high length/width ratio.
+
+  "structures-varga-vishesa"
+  "common-sense-varga-vishesa"
+
+  "rigid-swarupa elongated-swarupa"
+  "torque-yukta lever-yukta"
+  "solid-sthita"
+  "domain-3d-yukta"
+
+  shabda word:pole,rod,column,pillar,post / rigid-elongated-structural-element-lever-pendulum-torque
+
+done

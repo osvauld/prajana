@@ -1,0 +1,12 @@
+kosha chemistry-constants
+
+  -- atomic masses, melting/boiling points, bond energies, pKa values,
+  -- enthalpies of combustion, electronegativity, physical chemistry constants.
+  -- all values at standard conditions (298.15 K, 1 atm) unless noted.
+
+  "chemistry-varga-vishesa"
+  "matra-sthita niyama-sthita"
+
+  shabda shabda-tmpl:chemistry/chemistry-constants.shabda
+
+done

@@ -1,0 +1,47 @@
+kosha glass-chemistry
+
+  -- the chemistry of glass formation and types.
+  --
+  -- FORMATION: silica network + network modifiers
+  --   pure SiO2: melts at 1700°C. too high for industrial production.
+  --   Na2O added (soda): breaks Si-O-Si network → lowers melting point to 850°C.
+  --   CaO added (lime): restores chemical durability (soda glass is water-soluble).
+  --   soda-lime glass: 72% SiO2, 14% Na2O, 9% CaO — window and bottle glass.
+  --
+  -- NETWORK STRUCTURE:
+  --   SiO4 tetrahedra linked at corners — 3D covalent network (like quartz).
+  --   Na⁺, Ca²⁺ ions sit in the network gaps as network modifiers.
+  --   no long-range order (amorphous) — no crystal lattice.
+  --   this is why glass has no sharp melting point: softens gradually (Tg ≈ 550°C).
+  --   glass is a supercooled liquid: the network is frozen in disordered state.
+  --
+  -- TYPES:
+  --   soda-lime:     windows, bottles, jars. cheap. Tg ≈ 550°C.
+  --   borosilicate:  B2O3 added. lower thermal expansion. Pyrex. lab glassware.
+  --                  resists thermal shock: can heat rapidly without cracking.
+  --   lead crystal:  PbO added. high refractive index (1.56+). heavy. optical.
+  --   tempered:      rapid quench from 650°C → surface compression → 4× stronger.
+  --                  breaks into small cubes (safe) not shards. car windows.
+  --   laminated:     two glass layers + PVB polymer interlayer. breaks but holds together.
+  --                  windscreens. safety glass.
+  --   low-e:         thin metallic coating reflects infrared → insulating glazing.
+  --
+  -- PROPERTIES:
+  --   transparent: photon energies below bandgap → no absorption in visible range.
+  --   hard (6-7 Mohs) but brittle: no plastic deformation, crack propagates.
+  --   chemically inert: resists most acids (except HF which attacks Si-O bonds).
+  --   excellent thermal insulator in bulk (k = 1.0 W/mK).
+
+  "construction-varga-vishesa"
+  "chemistry-varga-vishesa"
+
+  "silicon-yukta oxygen-yukta sodium-yukta calcium-yukta"
+  "covalent-bond-sthita"
+  "amorphous-swarupa"
+  "silica-yukta"
+  "glass-yukta"
+  "transparent-swarupa"
+
+  shabda word:glass-chemistry / SiO2-network-amorphous-soda-lime-borosilicate-tempered
+
+done

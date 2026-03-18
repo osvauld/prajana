@@ -1,0 +1,37 @@
+kosha reaction
+
+  -- a chemical reaction: reactants → products with bond breaking and forming.
+  -- the fundamental act of chemistry — the sandhi that produces something new.
+  --
+  -- what is conserved: atoms (mass). charge. energy (first law).
+  -- what changes: bonds, molecular structure, energy distribution.
+  --
+  -- four measures of a reaction:
+  --   enthalpy ΔH:   heat released (exothermic, ΔH<0) or absorbed (endothermic, ΔH>0)
+  --   entropy ΔS:    change in disorder — gases have high entropy
+  --   Gibbs ΔG:      ΔH - TΔS. ΔG<0 → spontaneous. the combined criterion.
+  --   rate k:        how fast. activation energy Ea. catalyst lowers Ea.
+  --
+  -- reaction types:
+  --   synthesis:       A + B → AB
+  --   decomposition:   AB → A + B
+  --   single replacement: A + BC → AC + B
+  --   double replacement: AB + CD → AD + CB
+  --   combustion:      fuel + O2 → CO2 + H2O + heat
+  --   acid-base:       H⁺ donor + H⁺ acceptor → salt + water
+  --   oxidation-reduction (redox): electron transfer between species
+  --
+  -- equilibrium: most reactions are reversible. at equilibrium, forward rate = reverse rate.
+  -- K = [products]/[reactants] (equilibrium constant). K>>1 favours products.
+  -- Le Chatelier: a system at equilibrium responds to stress by minimising it.
+
+  "chemistry-varga-vishesa"
+  "tinanta-swarupa bhave-prayoga-swarupa"
+  "sandhi-swarupa vivartana-swarupa"
+  "conservation-yukta enthalpy-yukta entropy-yukta"
+  "gibbs-yukta equilibrium-yukta"
+  "combustion-drishthanta dissolution-drishthanta oxidation-drishthanta"
+
+  shabda word:reaction,reacts,react / bond-breaking-and-forming-atoms-conserved-energy-exchanged
+
+done

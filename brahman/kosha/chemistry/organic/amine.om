@@ -1,0 +1,30 @@
+kosha amine
+
+  -- amino group -NH2 attached to carbon. nitrogen with lone pair.
+  -- the lone pair makes amines basic — accepts H⁺ from water.
+  -- R-NH2 + H2O ⇌ R-NH3⁺ + OH⁻ (weak base)
+  --
+  -- primary: R-NH2. secondary: R2-NH. tertiary: R3-N. quaternary: R4-N⁺.
+  -- amines have distinctive smell: fish (trimethylamine), putrefaction (cadaverine).
+  --
+  -- reactions:
+  --   amide formation: -NH2 + -COOH → -CONH- + H2O (the peptide bond)
+  --   alkylation: -NH2 + R-X → -NHR + HX
+  --   acylation: -NH2 + acyl → amide
+  --
+  -- amino acids: contain both -NH2 and -COOH. the building blocks of proteins.
+  --   at physiological pH: -NH3⁺ (protonated) and -COO⁻ (deprotonated) → zwitterion
+  -- neurotransmitters: dopamine, serotonin, adrenaline — all amines.
+  -- DNA bases: adenine, guanine, cytosine — all contain amino groups.
+  -- aniline: C6H5-NH2. aromatic amine. dye industry.
+
+  "organic-varga-vishesa"
+  "functional-group-sthita amino-swarupa"
+  "base-swarupa proton-acceptor-swarupa lone-pair-yukta"
+  "amide-bond-yukta peptide-bond-yukta"
+  "amino-acid-drishthanta neurotransmitter-drishthanta"
+  "domain-chemistry-sthita domain-biology-sthita"
+
+  shabda word:amine,amino / R-NH2-basic-lone-pair-peptide-bond-amino-acid-neurotransmitter
+
+done

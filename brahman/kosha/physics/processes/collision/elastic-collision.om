@@ -1,0 +1,49 @@
+kosha elastic-collision
+
+  -- e = 1. both momentum and kinetic energy are conserved.
+  -- this is the ideal collision — no energy lost to heat, sound, deformation.
+  -- billiard balls, atomic collisions, photon-electron scattering.
+  --
+  -- conservation equations for two bodies (m1, u1) and (m2, u2):
+  --
+  --   momentum:       m1*u1 + m2*u2 = m1*v1 + m2*v2
+  --   kinetic energy: ½m1*u1² + ½m2*u2² = ½m1*v1² + ½m2*v2²
+  --
+  -- these two equations together determine v1 and v2 uniquely:
+  --
+  --   v1 = ((m1-m2)*u1 + 2*m2*u2) / (m1+m2)
+  --   v2 = ((m2-m1)*u2 + 2*m1*u1) / (m1+m2)
+  --
+  -- special cases (the common-sense intuitions that everyone knows):
+  --   m1 = m2  : velocities exchange. the moving ball stops; the stationary one moves.
+  --              this is why billiard balls behave the way they do.
+  --   m1 >> m2 : heavy body barely changes speed; light body bounces back at ~2*v1.
+  --              a bowling ball hitting a ping-pong ball.
+  --   m2 >> m1 : light body bounces back at approximately its original speed (reversed).
+  --              a tennis ball hitting a wall.
+  --
+  -- the group structure: elastic collision in 1D is a group action on velocity pairs.
+  -- momentum is the invariant (the niyama that is not violated).
+  -- KE is also invariant — the additional constraint that makes the case elastic.
+
+  "collision-varga-vishesa"
+  "tinanta-swarupa bhave-prayoga-swarupa"
+
+  -- conservation: both niyama hold
+  "momentum-yukta conservation-yukta"          -- samvega: always
+  "kinetic-energy-yukta conservation-yukta"    -- shakti: only here, e=1
+
+  -- two-body slots
+  "particle-a-sthita particle-b-sthita"
+  "mass1-janya mass2-janya"
+  "velocity1-janya velocity2-janya"             -- initial velocities of both bodies
+
+  -- result: two final velocities
+  "velocity1-phala velocity2-phala"
+
+  -- coefficient of restitution at this end of the spectrum
+  "coefficient-of-restitution-sthita"          -- e = 1
+
+  shabda elastic-collision, elastic-impact / e-equals-1-both-momentum-and-kinetic-energy-conserved-billiard-balls-atomic-collisions
+
+done

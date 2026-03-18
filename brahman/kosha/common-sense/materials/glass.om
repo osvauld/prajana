@@ -1,0 +1,32 @@
+kosha glass
+
+  -- amorphous solid: SiO2 + Na2O + CaO (soda-lime glass).
+  -- not a crystal — no long-range order. technically a supercooled liquid.
+  -- glass transition temperature Tg ≈ 550°C. below Tg: rigid. above: viscous.
+  --
+  -- properties:
+  --   transparent: photon energy below bandgap → passes through
+  --   hard (6-7 Mohs) but brittle — cracks propagate without plastic deformation
+  --   coefficient of restitution: ~0.4-0.6 (shatters at high impact)
+  --   thermal insulator (poor conductor: k = 1.0 W/mK)
+  --   chemically inert (resists most acids except HF)
+  --
+  -- types: soda-lime (windows), borosilicate (Pyrex, heatproof),
+  --        lead crystal (optical, high refractive index), tempered (safety).
+  -- refraction index: 1.5 (standard). lead glass: 1.8+.
+  --
+  -- in 3d: roughness ≈ 0, metallic = 0, transparency high, refraction 1.5.
+
+  "common-sense-varga-vishesa"
+  "materials-varga-vishesa"
+  "minerals-varga-vishesa"
+
+  "silica-swarupa amorphous-swarupa"
+  "solid-sthita"
+  "transparent-swarupa brittle-swarupa"
+  "coefficient-of-restitution-yukta"
+  "domain-3d-yukta pbr-yukta"
+
+  shabda word:glass / amorphous-silica-transparent-hard-brittle-refraction-1.5
+
+done

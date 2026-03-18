@@ -14,21 +14,116 @@ bv   = bound-vals graph
 bcs  = nth bv 0
 vps  = nth bv 1
 
-sf-result  = extract-solve-for graph
-has-intent = nth sf-result 0
-solve-for  = nth sf-result 1
+sf-result    = extract-solve-for graph
+has-intent   = nth sf-result 0
+solve-for    = nth sf-result 1
+scope-entity = nth sf-result 2
 
-mantras = physics-mantras
+-- when a scope entity is named ("find KE of ball-A"), look through its
+-- owned properties only.
+--
+-- Two ownership patterns in the graph:
+--   Instance path:  [inst, shashthi-vibhakti, entity] + [inst, vishesa, concept] + [inst, sankhya, val]
+--                   → used when rashi labels are given ("mass m1 of 3")
+--   Concept path:   [concept, shashthi-vibhakti, entity] + [concept, sankhya, val]
+--                   → used when no labels ("ball has mass 3")
+--
+-- Build scoped val-pairs from whichever pattern is present for this entity.
+scoped-vps = cond (gt (string-length scope-entity) 0)
+  (reduce (graph | where [s, e, owner] | and (eq e "shashthi-vibhakti") | and (eq (to-string owner) (to-string scope-entity)) | collect s)
+    []
+    (fn acc owned ->
+      -- instance path: owned is a rashi instance — resolve concept via vishesa
+      let inst-concept = nth (graph | where [i, e, c] | and (eq (to-string i) (to-string owned)) | and (eq e "vishesa") | and (neq (to-string c) "rashi") | collect c) 0
+      -- concept path: owned IS the concept — it has sankhya directly
+      let direct-val   = nth (graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v) 0
+      let concept      = cond (gt (string-length (to-string inst-concept)) 0) inst-concept otherwise owned
+      let val          = cond (gt (string-length (to-string inst-concept)) 0)
+        (nth (graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v) 0)
+        otherwise direct-val
+      cond (gt (string-length (to-string val)) 0)
+        (append acc [[concept, val]])
+      otherwise acc))
+  otherwise vps
 
--- all candidates: filtered by solve-for when present, otherwise all mantras
-candidates = cond (gt (string-length solve-for) 0) (filter mantras (fn m -> let mname = shabda m "name" let mphala = nth (walk m "phala") 0 let mswarupa = nth (walk m "swarupa") 0 let mjanya = walk m "janya" (or (eq mname solve-for) (eq mphala solve-for) (eq mswarupa solve-for) (member solve-for mjanya)))) otherwise mantras
+-- effective val-pairs:
+-- when scope entity present: scoped-vps first, supplement with flat for
+--   constants and given-clause values NOT owned by any entity (unambiguous).
+--   dedup by concept name — scope entity's value wins, other entities excluded.
+--   this is correct for single-participant mantras (KE, momentum, force).
+--
+-- for relative-velocity (two-participant, same concept from two entities):
+--   handled by relative-vps below — separate path, not eff-vps.
+--
+-- when no scope: flat vps, dedup by concept name (last write wins — unchanged).
+eff-vps = cond (gt (string-length scope-entity) 0)
+  (reduce vps scoped-vps (fn acc kv ->
+    let concept = nth kv 0
+    let already = acc | where [c, v] | and (eq (to-string c) (to-string concept)) | collect c
+    cond (gt (length already) 0) acc otherwise (append acc [kv])))
+  otherwise vps
+
+eff-bcs = cond (gt (string-length scope-entity) 0)
+  (eff-vps | collect (nth _it 0))
+  otherwise bcs
+
+-- relative-velocity: proof graph as third observer supplies both velocities.
+-- only active when solve-for is relative-velocity AND scope entity is named.
+-- builds [(observer-velocity, v_scope), (observed-velocity, v_other)].
+other-entities = cond (and (eq (to-string solve-for) "relative-velocity") (gt (string-length scope-entity) 0))
+  (graph | where [s, e, o] | and (eq e "prathama-vibhakti") | and (neq (to-string s) (to-string scope-entity)) | collect s)
+  otherwise []
+
+relative-vps = cond (gt (length other-entities) 0)
+  (let other-entity    = nth other-entities 0
+   let v-observer-list = scoped-vps | where [c, v] | and (eq (to-string c) "velocity") | collect v
+   let v-observer      = nth v-observer-list 0
+   let v-observed-val  = nth (graph | where [s, e, owner] | and (eq e "shashthi-vibhakti") | and (eq (to-string owner) (to-string other-entity)) | and (eq (to-string s) "velocity") | collect s
+     | reduce _it "" (fn acc inst ->
+         let val = nth (graph | where [i2, e2, v2] | and (eq (to-string i2) (to-string inst)) | and (eq e2 "sankhya") | collect v2) 0
+         cond (gt (string-length (to-string val)) 0) (to-string val) otherwise acc)) 0
+   let v-observed-direct = nth (graph | where [s, e, owner] | and (eq e "shashthi-vibhakti") | and (eq (to-string owner) (to-string other-entity)) | and (eq (to-string s) "velocity") | collect s) 0
+   let v-other = cond (gt (string-length (to-string v-observed-val)) 0)
+     v-observed-val
+     otherwise (nth (graph | where [i, e, v] | and (eq (to-string i) (to-string v-observed-direct)) | and (eq e "sankhya") | collect v) 0)
+   cond (and (gt (string-length (to-string v-observer)) 0) (gt (string-length (to-string v-other)) 0))
+     [["observer-velocity", v-observer], ["observed-velocity", v-other]]
+   otherwise [])
+  otherwise []
+
+final-vps = cond (gt (length relative-vps) 0) relative-vps otherwise eff-vps
+final-bcs = cond (gt (length relative-vps) 0) (relative-vps | collect (nth _it 0)) otherwise eff-bcs
+
+-- mantra-viveka: which family does this question belong to?
+-- physics-mantras: velocity, force, energy, momentum...
+-- math-mantras:    count, total, remaining, sum, difference
+-- both families tried — primary first, fallback second.
+-- this is artha-viveka at the mantra level: which relation fits this question?
+
+physics-ms = physics-mantras
+math-ms    = math-mantras
+
+count-concepts = ["count", "count-total", "count-remaining", "total", "remaining", "sum", "difference"]
+is-count-question = member (to-string solve-for) count-concepts
+
+mantras          = cond is-count-question math-ms otherwise (append physics-ms math-ms)
+
+-- all candidates: filtered by solve-for when present
+candidates = cond (gt (string-length solve-for) 0)
+  (filter mantras (fn m ->
+    let mname    = shabda m "name"
+    let mphala   = nth (walk m "phala") 0
+    let mswarupa = nth (walk m "swarupa") 0
+    let mjanya   = walk m "janya"
+    (or (eq mname solve-for) (eq mphala solve-for) (eq mswarupa solve-for) (member solve-for mjanya))))
+  otherwise mantras
 
 -- forward: all janya covered, solve-for is phala/swarupa
 forward-match = reduce candidates [] (fn acc m ->
   let janya       = walk m "janya"
   let sf-is-janya = member solve-for janya
-  let all-ok      = reduce janya true (fn a r -> (and a (or (member r bcs) (gt (string-length (shabda r "constants-key")) 0))))
-  cond (or (gt (length acc) 0) (not all-ok) sf-is-janya) acc otherwise [m, vps, "forward"])
+  let all-ok      = reduce janya true (fn a r -> (and a (or (member r final-bcs) (gt (string-length (shabda r "constants-key")) 0))))
+  cond (or (gt (length acc) 0) (not all-ok) sf-is-janya) acc otherwise [m, final-vps, "forward"])
 
 -- inverse: solve-for is janya, phala + other janya covered, math-backed
 inv-candidates = cond has-intent candidates otherwise []
@@ -38,14 +133,13 @@ inverse-match = (cond (gt (length forward-match) 0) forward-match
     let janya        = walk m "janya"
     let mphala       = nth (walk m "phala") 0
     let mswarupa     = nth (walk m "swarupa") 0
-    let phala-concept = cond (gt (string-length mphala) 0) mphala otherwise mswarupa
     let has-math-op  = gt (string-length (shabda m "math-op")) 0
     let sf-is-janya  = member solve-for janya
     let other-janya  = filter janya (fn j -> not (eq j solve-for))
-    let others-ok    = reduce other-janya true (fn a r -> (and a (or (member r bcs) (gt (string-length (shabda r "constants-key")) 0))))
-    let phala-bound  = (or (member mphala bcs) (member mswarupa bcs) (member (shabda m "name") bcs))
+    let others-ok    = reduce other-janya true (fn a r -> (and a (or (member r final-bcs) (gt (string-length (shabda r "constants-key")) 0))))
+    let phala-bound  = (or (member mphala final-bcs) (member mswarupa final-bcs) (member (shabda m "name") final-bcs))
     cond (or (gt (length acc) 0) (not has-math-op) (not sf-is-janya) (not others-ok) (not phala-bound)) acc
-    otherwise [m, vps, "inverse"])))
+    otherwise [m, final-vps, "inverse"])))
 
 result = cond (gt (length forward-match) 0) forward-match otherwise inverse-match
 

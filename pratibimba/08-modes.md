@@ -83,6 +83,45 @@ It is the truth that the shape of avrti depends on the aayaama you collapse it t
 
 ---
 
+## The entity as camera — prathama darshana
+
+The camera is not only a position in space. The camera can be an entity's own
+perspective — its prathama darshana. Any entity in the scene can be the eye.
+
+Every entity owns `bindu` (position) and a direction vector. These are already
+in the graph as `[bindu, shashthi-vibhakti, entity]` and
+`[velocity, shashthi-vibhakti, entity]`. Binding the camera to these owned
+values IS placing the camera inside the entity's perspective — its `bindu` is
+the eye position, its velocity direction is the facing direction.
+
+From the electron's own perspective: the magnetic field does not spin the
+electron in a circle. The field is stationary — the world rotates around the
+electron. The electron moves in a straight line from its own prathama. The
+circle is what the sakshi sees. Both are true simultaneously. Both are present
+in the same graph. The darshana determines which truth is visible.
+
+From gola-A's perspective looking at gola-B: the gravitational pull brings
+gola-B closer. The mass, the distance, the force — all present in gola-A's
+own seeing. From gola-B's perspective: the same force, the same closing
+distance, gola-A approaching. From the sakshi: both simultaneously, the
+symmetric mutual attraction.
+
+The graph holds all three at once. Nam knows all three. The camera chooses
+which prathama to express as the rendered frame.
+
+This is what makes a simulation philosophically correct — not only that the
+numbers are right, but that **every entity's perspective is available**. The
+electron can see from inside its own orbit. Two colliding spheres can each see
+from their own frame. The proof graph is the sakshi holding all simultaneous
+perspectives, and the camera is how nam chooses which one to show.
+
+Multiple cameras simultaneously: left panel from gola-A's prathama, right panel
+from the sakshi. The same physics, two darshanas, both true, both live. The
+parallax between them IS the understanding of the relationship — you see what
+each entity experiences and what the whole looks like from outside.
+
+---
+
 ## The thaalam of the scene
 
 The scene has rhythm — thaalam.

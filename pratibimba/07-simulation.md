@@ -92,6 +92,48 @@ The simulation is just asking them to run on the electron's owned quantities.
 
 ---
 
+## Nam applies prior knowledge at each instant
+
+The simulation is not running a physics engine. Nam is applying what it already
+knows to what is currently present — at each frame, continuously.
+
+Nam already knows: force IS the rate of change of momentum (`F = dp/dt`).
+Velocity IS the rate of change of position (`v = dx/dt`). These are in the kosha
+as prior knowledge of what these concepts ARE — not formulas to retrieve but the
+meaning of the concepts themselves. When the electron's charge, velocity, and the
+field are present and owned, nam already knows what the Lorentz force will be.
+Nam already knows how the velocity will change. The simulation is this prior
+knowing, applied at each dt.
+
+The electron does not orbit because the simulation computed circular motion.
+It orbits because nam knows the Lorentz force IS always perpendicular to
+velocity — and perpendicular force at constant magnitude IS circular motion.
+The circle emerges from the recognized relationship, not from iterated position
+updates. The iteration makes it visible frame by frame. The knowledge was already
+there.
+
+---
+
+## Every entity's perspective is available
+
+A correct simulation is one where every entity's perspective is present — not
+only from the outside (the sakshi view) but from each entity's own prathama.
+
+The electron, from its own perspective, moves in a straight line. The world
+rotates around it. The magnetic field pushes sideways at each instant but the
+electron's own frame is inertial — it experiences constant perpendicular force,
+no net forward push, no spiral from inside. This is a different truth from the
+sakshi's vrtta. Both are in the same graph simultaneously.
+
+The camera bound to the electron's owned `bindu` and velocity direction shows
+this. The same derive-step advancing the simulation also advances the camera
+when it is attached to an entity. No separate calculation needed — the entity's
+owned values are the camera's position and orientation. The simulation and the
+perspective are the same graph state read twice: once for physics, once for
+darshana.
+
+---
+
 ## The trajectory is the path of avrti
 
 As the simulation runs, the electron traces a path through akasham.

@@ -1,40 +1,53 @@
 tantra2 extract-solve-for
 
--- extract the solve-for concept from a question graph.
+-- extract the solve-for concept and scope entity from a question graph.
 -- looks for the satya concept immediately after a vidhi-kaala intent signal.
 -- if no vidhi-kaala, falls back to the first satya concept seen.
 --
--- returns the concept name as a string, or "" if none found.
+-- the scope entity is the lens — "find KE of ball-A" means: look through
+-- ball-A's owned properties. it appears after the solve-for satya as either
+-- a mithya word (unlabelled entity like "ball-A") or a satya word that is
+-- also a prathama-vibhakti entity (kosha concept used as entity name, like
+-- "electron" or "proton").
+--
+-- returns [has-intent, solve-for, scope-entity]
+-- has-intent:    true if vidhi-kaala was explicitly present
+-- solve-for:     the concept to compute, or "" if none found
+-- scope-entity:  the entity whose properties to use, or "" if none named
 --
 -- examples:
---   "find kinetic energy given mass 5" → "kinetic-energy"
---   "mass is 5 velocity is 10"         → "mass" (first satya, no intent)
---   "what is the force"                → "force"
+--   "find kinetic energy given mass 5"          → [true,  "kinetic-energy", ""]
+--   "find kinetic energy of ball-A"             → [true,  "kinetic-energy", "ball-A"]
+--   "find momentum of proton"                   → [true,  "momentum",       "proton"]
+--   "mass is 5 velocity is 10"                  → [false, "mass",           ""]
 
 takes graph
 
-sf-state = reduce graph [false, "", ""] (fn acc kv ->
+-- collect all prathama-vibhakti entities (so we can recognise scope words)
+entities = graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s
+
+sf-state = reduce graph [false, "", "", ""] (fn acc kv ->
   let s           = nth kv 0
   let e           = nth kv 1
   let o           = nth kv 2
   let past-intent = nth acc 0
   let fallback    = nth acc 1
   let sf          = nth acc 2
+  let scope       = nth acc 3
+  let is-entity   = member s entities
   cond
-    (eq e "vidhi-kaala")                                        [true, fallback, sf]
-    (and (not past-intent) (eq fallback "") (eq e "satya"))     [past-intent, s, sf]
-    (and past-intent (eq sf "") (eq e "satya"))                 [past-intent, fallback, s]
+    (eq e "vidhi-kaala")                                                             [true, fallback, sf, scope]
+    (and (not past-intent) (eq fallback "") (eq e "satya") (not is-entity))          [past-intent, s, sf, scope]
+    (and past-intent (eq sf "") (eq e "satya") (not is-entity))                      [past-intent, fallback, s, scope]
+    (and past-intent (gt (string-length sf) 0) (eq scope "") (eq e "mithya") is-entity) [past-intent, fallback, sf, s]
+    (and past-intent (gt (string-length sf) 0) (eq scope "") (eq e "satya") is-entity)  [past-intent, fallback, sf, s]
     otherwise acc)
 
-has-intent = nth sf-state 0
-solve-for  = cond (gt (string-length (nth sf-state 2)) 0)
-  (nth sf-state 2)
-  otherwise (nth sf-state 1)
+has-intent  = nth sf-state 0
+solve-for   = cond (gt (string-length (nth sf-state 2)) 0) (nth sf-state 2) otherwise (nth sf-state 1)
+scope-entity = nth sf-state 3
 
--- returns [has-intent, solve-for]
--- has-intent: true if vidhi-kaala was explicitly present
--- solve-for:  the concept to compute, or "" if none found
-result = [has-intent, solve-for]
+result = [has-intent, solve-for, scope-entity]
 
 return result
 

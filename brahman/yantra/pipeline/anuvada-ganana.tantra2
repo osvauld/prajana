@@ -2,6 +2,19 @@ tantra2 anuvada-ganana
 
 -- orchestrator: natural-language sentence -> answer string.
 -- pure: no session state. sentence in, answer out.
+--
+-- the proof graph carries all reasoning via typed edges:
+--   [concept, derived-by, mantra]    — which mantra produced this value
+--   [winner,  greater-than, loser]   — viveka comparison result
+--   [winner,  viveka-concept, mass]  — what concept was compared
+--   [winner,  viveka-direction, max] — which direction (max/min)
+--   [winner,  viveka-sankhya, val]   — winner's value
+--   [loser,   viveka-sankhya, val]   — loser's value
+--   [sf,      sought, label]         — what is being sought
+--   [sf,      sought-of, entity]     — whose frame (optional)
+--
+-- emit-reasoning is a pure graph walker over these edges.
+-- no viveka-ctx, no chain-steps passed to it.
 
 takes sentence
 
@@ -9,13 +22,99 @@ raw-graph = build-question-graph sentence
 refined   = fixpoint raw-graph (fn g -> avrti-refine g)
 expanded  = kosha-expand refined
 
-sf-result = extract-solve-for expanded
-sf        = nth sf-result 1
+sf-result    = extract-solve-for expanded
+sf           = nth sf-result 1
+scope-entity = nth sf-result 2
 
-mm       = match-mantra expanded
-enriched = (cond (gt (length mm) 0) expanded otherwise (fixpoint expanded (fn g -> derive-step g)))
-final-m  = (cond (gt (length mm) 0) mm otherwise (match-mantra enriched))
-answer   = (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match")
+-- ── viveka detection ──────────────────────────────────────────────────────────
+entities         = expanded | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s
+all-subjects     = unique (expanded | where [s, e, o] | collect (to-string s))
+viveka-max-word  = nth (filter all-subjects (fn w -> eq (to-string (lookup-word w)) "viveka-max")) 0
+viveka-min-word  = nth (filter all-subjects (fn w -> eq (to-string (lookup-word w)) "viveka-min")) 0
+viveka-max-present = gt (string-length (to-string viveka-max-word)) 0
+viveka-min-present = gt (string-length (to-string viveka-min-word)) 0
+is-viveka        = (and (gt (length entities) 1) (or viveka-max-present viveka-min-present))
+viveka-dir       = cond (and viveka-min-present (not viveka-max-present)) "min" otherwise "max"
+comp-word        = cond viveka-max-present viveka-max-word otherwise viveka-min-word
+comp-concept     = nth (expanded | where [s, e, o]
+  | and (eq (to-string s) (to-string comp-word))
+  | and (eq e "vishesa")
+  | and (neq (to-string o) "rashi")
+  | collect o) 0
+
+-- ── viveka path ───────────────────────────────────────────────────────────────
+viveka-raw        = cond is-viveka
+  (viveka-ganana expanded comp-concept comp-word viveka-dir)
+  otherwise []
+
+viveka-winner     = cond is-viveka (nth viveka-raw 0) otherwise ""
+viveka-loser      = cond is-viveka (nth viveka-raw 1) otherwise ""
+viveka-gt-triples = cond is-viveka (nth viveka-raw 5) otherwise []
+viveka-ev-pairs   = cond is-viveka (nth viveka-raw 4) otherwise []
+
+-- ── standard math/physics path ────────────────────────────────────────────────
+chain-raw   = cond is-viveka [[], expanded] otherwise (derive-chain expanded)
+enriched    = nth chain-raw 1
+
+mm-direct   = cond is-viveka [] otherwise (match-mantra expanded)
+chain-steps = nth chain-raw 0
+
+final-m = cond (gt (length mm-direct) 0)
+  mm-direct
+  otherwise (cond (gt (length chain-steps) 0)
+    (nth (nth chain-steps (sub (length chain-steps) 1)) 2)
+    otherwise [])
+
+result = cond is-viveka
+  (cond (gt (string-length (to-string viveka-winner)) 0) (to-string viveka-winner) otherwise "no match")
+  otherwise (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match")
+
+-- ── build proof graph with all reasoning edges ────────────────────────────────
+-- viveka-sankhya: entity's value for we-have and upanaya
+viveka-sankhya-triples = cond is-viveka
+  (reduce viveka-ev-pairs [] (fn acc kv ->
+    append acc [[(nth kv 0), "viveka-sankhya", (nth kv 1)]]))
+  otherwise []
+
+-- inject result into graph so emit-reasoning finds it via sankhya walk.
+-- for physics/count: [sf, sankhya, result] + [sf, derived-by, mantra]
+-- for inverse match: same — result computed, needs to appear in graph.
+result-mantra = cond (gt (length final-m) 0) (nth final-m 0) otherwise ""
+-- also inject the scoped val-pairs as [janya, derived-sankhya, val] triples
+-- so emit-reasoning's we-see shows the correct values used in derivation
+-- (not all flat graph sankhya which may include other entities' values)
+result-valpairs = cond (gt (length final-m) 0) (nth final-m 1) otherwise []
+scoped-sankhya-triples = cond (and (not is-viveka) (gt (length result-valpairs) 0))
+  (reduce result-valpairs [] (fn acc kv ->
+    append acc [[(nth kv 0), "derived-sankhya", (nth kv 1)]]))
+  otherwise []
+
+result-triples = cond (and (not is-viveka)
+                           (gt (string-length (to-string result)) 0)
+                           (neq (to-string result) "no match")
+                           (gt (string-length (to-string sf)) 0))
+  (append
+    [[(to-string sf), "sankhya",    result],
+     [(to-string sf), "derived-by", result-mantra]]
+    scoped-sankhya-triples)
+  otherwise []
+
+-- proof graph = enriched (has derived-by from derive-step)
+--             + viveka gt/concept/direction/sankhya triples
+--             + result triple for inverse/direct matches
+base-graph = cond is-viveka expanded otherwise enriched
+
+proof-graph = cond is-viveka
+  (append (append base-graph viveka-gt-triples) viveka-sankhya-triples)
+  otherwise (append base-graph result-triples)
+
+-- ── inject sought edge ────────────────────────────────────────────────────────
+-- comp-word for viveka ("heavier"), solve-for for physics/count
+sought-cw   = cond is-viveka (to-string comp-word) otherwise ""
+proof-graph2 = sought-bandha proof-graph sf scope-entity sought-cw
+
+-- ── emit: pure graph walk ─────────────────────────────────────────────────────
+answer = emit-reasoning proof-graph2
 
 return answer
 

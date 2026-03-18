@@ -1,0 +1,36 @@
+kosha structures-varga
+
+  -- the built and natural objects that define the space where physics happens.
+  -- not materials (what things are made of) — structural roles (what things do).
+  -- a wall is a vertical barrier. a floor is a horizontal support below.
+  -- a ground is the earth's surface. a ceiling is a horizontal barrier above.
+  -- these are the boundary conditions of everyday physical reasoning.
+  --
+  -- structural objects have two roles in physics:
+  --   1. constraint: they define where things cannot go. the ball cannot pass the wall.
+  --   2. support:    they exert normal force. the floor pushes up on the ball.
+  --
+  -- gravity is always acting downward. structural objects resist it.
+  -- things rest on floors because normal-force balances gravity.
+  -- things fall until they hit a surface — then collision occurs.
+  -- this is the default physics of everyday reality:
+  --   gravity + surface = rest (if coefficient of restitution is low enough)
+  --   gravity + surface = bounce (if coefficient of restitution is high)
+  --
+  -- in 3d / pratibimba: structural objects are static rigid bodies.
+  -- they have collision meshes. they do not move. gravity acts on other things
+  -- relative to them. they are the kshetra (field) in which the kshetrajna moves.
+
+  "common-sense-varga-vishesa"
+  "subanta-swarupa"
+
+  "normal-force-yukta"           -- structural objects exert normal force
+  "constraint-yukta"             -- define spatial boundaries
+  "gravity-sthita"               -- gravity acts against structural objects
+  "collision-varga-yukta"        -- things collide with structural objects
+  "solid-sthita"                 -- structural objects are solid
+  "domain-3d-yukta"
+
+shabda structures-varga / the-boundary-conditions-of-everyday-physics-floor-wall-ground-ceiling
+
+done

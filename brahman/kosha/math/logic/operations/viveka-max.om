@@ -1,0 +1,21 @@
+kosha viveka-max
+
+  -- viveka-max: the comparative that selects the greater value.
+  -- "heavier", "faster", "bigger", "taller" etc. all express this:
+  --   given two values of the same concept, find the one that is greater.
+  --
+  -- viveka = discernment. max = the greater side of the discernment.
+  -- the proof graph holds both — viveka-max names the direction.
+  --
+  -- when this word appears in a question with two entities, the pipeline
+  -- dispatches to viveka-ganana with direction="max".
+
+  "logic-varga-vishesa"
+  "viveka-swarupa"
+  "max-abheda"
+  "comparison-yukta"
+  "inference-yukta"
+
+  shabda word:heavier,faster,bigger,taller,stronger,greater,more,higher,longer,wider,deeper,larger,denser,brighter,louder,warmer,hotter,colder,older,newer,richer,heaviest,fastest,biggest,tallest,strongest,greatest,most,highest,longest,widest,largest,densest,brightest,loudest,warmest,hottest,coldest,oldest,newest,richest / comparative-selecting-the-greater-value
+
+done

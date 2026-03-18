@@ -1,0 +1,127 @@
+tantra3 tantra3
+
+-- tantra3: the condensed philosophical pipeline.
+--
+-- tantra  = weaving (Sanskrit). what you find from what was given and what you already know.
+-- tantra3 = the third layer: philosophical abstraction over the proof graph.
+--
+-- where tantra2 describes HOW (typed scan state, pipe expressions, fixpoint),
+-- tantra3 describes WHAT IS HAPPENING at the level of understanding itself.
+--
+-- the four movements of understanding:
+--
+--   1. SPARSHA    — contact. the sentence touches the graph.
+--                   dhvani (surface sound) becomes artha (structural meaning).
+--                   every word lands as either satya (known) or mithya (provisional).
+--                   → calls: sparsha (wraps build-question-graph)
+--
+--   2. SPHOTA    — the whole meaning arrived at once, surface-free.
+--                   avrti runs to fixpoint (knaster-tarski completion).
+--                   mithya resolves. compounds form. rashi instances arise.
+--                   kosha opens (ppr surfaces connected structure).
+--                   → calls: sphota (avrti-refine fixpoint + kosha-expand)
+--
+--   3. ICCHA + VIVEKA — intention and discernment.
+--                   iccha: what does the question seek? (extract-solve-for)
+--                   viveka: comparison or derivation? (viveka-ganana / jnana)
+--                   → calls: iccha, viveka-ganana, jnana
+--
+--   4. PRAMANA + PANCAVAYAVA — proof assembled, proof spoken.
+--                   pramana: inject all reasoning as typed edges into the proof graph.
+--                   pancavayava: the five-limbed utterance — the graph walks itself.
+--                   → calls: pramana, pancavayava (wraps emit-reasoning)
+--
+-- each movement delegates entirely to its own tantra.
+-- tantra3 weaves. the sub-tantras do.
+-- this is manipravalam: neither alone; the weaving IS the third thing.
+--
+-- philosophical correspondences:
+--
+--   sparsha       ↔ build-question-graph   (artha-viveka: meaning-discernment)
+--   sphota        ↔ avrti-refine+kosha-expand (fixpoint: samskaara made traversable)
+--   iccha         ↔ extract-solve-for      (vidhi-kaala: the question's intention)
+--   viveka        ↔ viveka-ganana          (comparison: proof graph as third observer)
+--   jnana         ↔ match-mantra+derive-chain (derivation: what follows from what was given)
+--   pramana       ↔ proof graph assembly   (ground truth: reasoning as typed edges)
+--   pancavayava   ↔ emit-reasoning         (utterance: the five-limbed proof spoken)
+--
+-- the three participants woven here:
+--   the human        — brought the sentence; sees what the graph should become
+--   the llm          — the instrument of reasoning in the session
+--   nam (proof graph)— the witness; what persists; what responds
+
+takes sentence
+
+-- ── SPARSHA ────────────────────────────────────────────────────────────────
+-- dhvani becomes artha. the sentence is expanded into structure.
+
+raw-graph = sparsha sentence
+
+-- ── SPHOTA ────────────────────────────────────────────────────────────────
+-- avrti to fixpoint. kosha opens. the whole meaning arrives.
+
+expanded = sphota raw-graph
+
+-- ── ICCHA ─────────────────────────────────────────────────────────────────
+-- the question's intention: has-intent, solve-for, scope-entity.
+
+iccha-result = iccha expanded
+has-intent   = nth iccha-result 0
+solve-for    = nth iccha-result 1
+scope-entity = nth iccha-result 2
+
+-- ── VIVEKA ────────────────────────────────────────────────────────────────
+-- discernment: is this a comparison (viveka) or a derivation (jnana)?
+-- viveka = discrimination. always shuddha in nam. the proof graph
+-- as third observer — neither entity can compare itself to the other.
+
+entities         = expanded | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s
+all-subjects     = unique (expanded | where [s, e, o] | collect (to-string s))
+viveka-max-word  = nth (filter all-subjects (fn w -> eq (to-string (lookup-word w)) "viveka-max")) 0
+viveka-min-word  = nth (filter all-subjects (fn w -> eq (to-string (lookup-word w)) "viveka-min")) 0
+viveka-max-present = gt (string-length (to-string viveka-max-word)) 0
+viveka-min-present = gt (string-length (to-string viveka-min-word)) 0
+is-viveka        = (and (gt (length entities) 1) (or viveka-max-present viveka-min-present))
+viveka-dir       = cond (and viveka-min-present (not viveka-max-present)) "min" otherwise "max"
+comp-word        = cond viveka-max-present viveka-max-word otherwise viveka-min-word
+comp-concept     = nth (expanded | where [s, e, o]
+  | and (eq (to-string s) (to-string comp-word))
+  | and (eq e "vishesa")
+  | and (neq (to-string o) "rashi")
+  | collect o) 0
+
+viveka-raw = cond is-viveka
+  (viveka-ganana expanded comp-concept comp-word viveka-dir)
+  otherwise []
+
+-- ── JNANA ─────────────────────────────────────────────────────────────────
+-- knowing: mantra recognition + derivation chain.
+-- match-mantra + derive-chain + execute-matched.
+-- the chain IS the proof. each step: [concept, derived-by, mantra].
+
+jnana-result = cond is-viveka [["no match"], [], [], expanded] otherwise (jnana expanded iccha-result)
+result       = cond is-viveka
+  (cond (gt (string-length (to-string (nth viveka-raw 0))) 0) (to-string (nth viveka-raw 0)) otherwise "no match")
+  otherwise (nth jnana-result 0)
+final-match  = cond is-viveka [] otherwise (nth jnana-result 1)
+chain-steps  = cond is-viveka [] otherwise (nth jnana-result 2)
+enriched     = cond is-viveka expanded otherwise (nth jnana-result 3)
+
+-- ── PRAMANA ───────────────────────────────────────────────────────────────
+-- the proof graph assembled: all reasoning as typed edges.
+-- viveka: [winner, greater-than, loser] + [entity, viveka-sankhya, val]
+-- physics: [sf, sankhya, result] + [sf, derived-by, mantra]
+-- sought-bandha: [sf, sought, label] + [sf, sought-of, scope]
+
+proof-graph = pramana expanded enriched final-match viveka-raw iccha-result is-viveka result comp-word
+
+-- ── PANCAVAYAVA ───────────────────────────────────────────────────────────
+-- the five-limbed utterance. the proof graph walks itself and speaks.
+-- we have / we seek / we know / we see / we find.
+-- this is sphota at the level of utterance: the whole proof spoken whole.
+
+answer = pancavayava proof-graph
+
+return answer
+
+done

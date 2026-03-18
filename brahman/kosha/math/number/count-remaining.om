@@ -1,0 +1,20 @@
+kosha count-remaining
+
+  -- count-remaining: the result of subtracting one count from another.
+  -- "how many remaining", "how many left", "how many after giving away"
+  -- → solve-for = count-remaining → matches count-sub-mantra (phala: count-remaining)
+  --
+  -- this is distinct from bare "count" so that match-mantra can
+  -- discriminate subtraction from addition.
+
+  "number-varga-vishesa"
+  "math-varga-vishesa"
+  "count-yukta"
+  "subtraction-yukta"
+
+  "sankhya-swarupa"
+  "count-abheda"         -- count-remaining IS-A count
+
+  shabda word:remaining,left,after,rest,leftover / the-remaining-count-after-subtraction
+
+done
