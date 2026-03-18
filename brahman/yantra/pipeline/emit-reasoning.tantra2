@@ -191,13 +191,18 @@ viveka-found = cond is-viveka
   otherwise ""
 
 -- physics/count nigamana: the sought concept's final sankhya value
--- only show if it was derived (has derived-by edge)
+-- only show if it was actually derived (has derived-by edge) — not just given
+sf-was-derived = gt (length (graph | where [s, e, o]
+  | and (eq (to-string s) sought-sf)
+  | and (eq e "derived-by")
+  | collect o)) 0
+
 sf-val = nth (graph | where [s, e, o]
   | and (eq (to-string s) sought-sf)
   | and (eq e "sankhya")
   | collect (to-string o)) 0
 
-physics-found = cond (and (not is-viveka) (gt (string-length (to-string sf-val)) 0))
+physics-found = cond (and (not is-viveka) sf-was-derived (gt (string-length (to-string sf-val)) 0))
   (concat say-found ": " sought-sf " " rel-sankhya " " (to-string sf-val))
   otherwise ""
 
