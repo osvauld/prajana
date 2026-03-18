@@ -1,7 +1,9 @@
 """vy.py — thin client for the vyakarana Unix socket.
 
-Provides the `Client` class used by all pytest tests via the `vy` fixture
-in conftest.py.
+SHIM: The canonical implementation is now in interface/client.py.
+      This file re-exports everything from there so all existing test
+      imports (from vy import Client, DEFAULT_SOCKET, VyakaranaError)
+      continue to work without any changes.
 
 Protocol: newline-delimited JSON over a Unix domain socket.
 - `eval-json` command: server evaluates a tantra expression and returns
@@ -58,6 +60,7 @@ Usage in tests:
 import json
 import os
 import socket
+import sys
 from typing import Any
 
 DEFAULT_SOCKET = os.environ.get("VYAKARANA_SOCKET", "/tmp/vy.sock")

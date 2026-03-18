@@ -45,12 +45,6 @@ def test_chain_shows_intermediate_result(vy):
     assert "we find" in r, f"we find missing: {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Chained emission not implemented. When derive-step fires two rules "
-    "(e.g. v=u+at then KE=½mv²), only the final result is emitted. "
-    "Each intermediate step should appear as its own we-know/we-see pair.",
-)
 def test_chain_emits_both_knows(vy):
     """Two-step chain: both rules named in we-know."""
     r = answer(

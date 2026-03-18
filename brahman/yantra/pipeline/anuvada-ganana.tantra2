@@ -52,11 +52,19 @@ viveka-loser      = cond is-viveka (nth viveka-raw 1) otherwise ""
 viveka-gt-triples = cond is-viveka (nth viveka-raw 5) otherwise []
 viveka-ev-pairs   = cond is-viveka (nth viveka-raw 4) otherwise []
 
+-- ── has-intent guard ──────────────────────────────────────────────────────────
+-- without an explicit vidhi-kaala (find / calculate / what is ...) the question
+-- is ambiguous. "ball has mass 5 velocity 10" could be KE or momentum or neither.
+-- without intent, no derivation fires — return "no match" immediately.
+-- viveka questions (heavier / lighter / more / less) carry their own intent signal
+-- and bypass this guard via is-viveka.
+has-intent  = nth sf-result 0
+
 -- ── standard math/physics path ────────────────────────────────────────────────
-chain-raw   = cond is-viveka [[], expanded] otherwise (derive-chain expanded)
+chain-raw   = cond (or is-viveka has-intent) (cond is-viveka [[], expanded] otherwise (derive-chain expanded)) otherwise [[], expanded]
 enriched    = nth chain-raw 1
 
-mm-direct   = cond is-viveka [] otherwise (match-mantra expanded)
+mm-direct   = cond (or is-viveka has-intent) (cond is-viveka [] otherwise (match-mantra expanded)) otherwise []
 chain-steps = nth chain-raw 0
 
 final-m = cond (gt (length mm-direct) 0)
@@ -67,7 +75,8 @@ final-m = cond (gt (length mm-direct) 0)
 
 result = cond is-viveka
   (cond (gt (string-length (to-string viveka-winner)) 0) (to-string viveka-winner) otherwise "no match")
-  otherwise (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match")
+  otherwise (cond (not has-intent) "no match"
+  otherwise (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match"))
 
 -- ── build proof graph with all reasoning edges ────────────────────────────────
 -- viveka-sankhya: entity's value for we-have and upanaya
@@ -99,10 +108,15 @@ result-triples = cond (and (not is-viveka)
     scoped-sankhya-triples)
   otherwise []
 
--- proof graph = enriched (has derived-by from derive-step)
---             + viveka gt/concept/direction/sankhya triples
---             + result triple for inverse/direct matches
-base-graph = cond is-viveka expanded otherwise enriched
+-- proof graph base selection:
+--   viveka path:       use expanded (viveka-ganana works on clean graph)
+--   direct mm match:   use expanded (mm-direct found without derive-chain;
+--                       enriched has contaminated intermediate sankhya values
+--                       from derive-step that would shadow the correct result)
+--   chain-derived match: use enriched (derive-step produced the needed janya)
+base-graph = cond is-viveka expanded
+  otherwise (cond (gt (length mm-direct) 0) expanded
+  otherwise enriched)
 
 proof-graph = cond is-viveka
   (append (append base-graph viveka-gt-triples) viveka-sankhya-triples)

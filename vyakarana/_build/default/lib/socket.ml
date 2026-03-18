@@ -609,6 +609,35 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
             (try reload_tantras k yantra_idx dirs
              with exn ->
                error_response "" "" "" "RELOAD_ERROR" (Printexc.to_string exn))
+          | Some "dump-ast" ->
+            (* parse a tantra file and return its AST as JSON for external analysis.
+               request:  {"command": "dump-ast", "path": "/abs/path/to/file.tantra2"}
+               response: {"status":"ok","command":"dump-ast","tantra":{...ast...}}
+               the "tantra" field is the full json_of_tantra serialization:
+                 name, file, inputs, returns, bindings (list of {name, expr})
+               each expr node has a "kind" discriminant for consumer pattern-matching.
+               supports both .tantra (layer 1) and .tantra2 (layer 2) files. *)
+            (match json_string_field line "path" with
+             | None ->
+               error_response "" "" "" "INVALID_REQUEST" "missing required field: path"
+             | Some path ->
+               (try
+                 let t_opt =
+                   if Filename.check_suffix path ".tantra2" then
+                     Yantra_tantra_file2.parse_tantra2_file path
+                   else
+                     Yantra_tantra_file.parse_tantra_file path
+                 in
+                 (match t_opt with
+                  | None ->
+                    error_response "" "" "" "PARSE_ERROR"
+                      (Printf.sprintf "could not parse tantra file: %s" path)
+                  | Some t ->
+                    Printf.sprintf
+                      "{\"status\":\"ok\",\"command\":\"dump-ast\",\"tantra\":%s}"
+                      (Yantra_types.json_of_tantra t))
+                with exn ->
+                  error_response "" "" "" "PARSE_ERROR" (Printexc.to_string exn)))
           | Some "end-session" ->
             (* explicit session teardown — clears session state from store *)
             let ses_id = Option.value ~default:"" (json_string_field line "session_id") in

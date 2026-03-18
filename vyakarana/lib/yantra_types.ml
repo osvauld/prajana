@@ -216,6 +216,96 @@ let rec val_to_json = function
   | VList items ->
     "[" ^ String.concat "," (List.map val_to_json items) ^ "]"
 
+(* ---- AST → JSON serialization ---- *)
+(* Converts the parsed tantra AST into JSON for external analysis tools.
+   Each expr node carries a "kind" discriminant so consumers can pattern-match
+   without knowing OCaml variant names. scan_branch guards use "otherwise":true
+   for the default branch. Binding names are the tantra-level variable names. *)
+
+let je s = "\"" ^ json_escape s ^ "\""
+
+let rec json_of_expr = function
+  | Lit f ->
+    Printf.sprintf "{\"kind\":\"lit\",\"value\":%s}" (val_to_json (VFloat f))
+  | Var s ->
+    Printf.sprintf "{\"kind\":\"var\",\"name\":%s}" (je s)
+  | StrLit s ->
+    Printf.sprintf "{\"kind\":\"str\",\"value\":%s}" (je s)
+  | BoolLit b ->
+    Printf.sprintf "{\"kind\":\"bool\",\"value\":%s}" (if b then "true" else "false")
+  | ListExpr items ->
+    Printf.sprintf "{\"kind\":\"list\",\"items\":[%s]}"
+      (String.concat "," (List.map json_of_expr items))
+  | Call (op, args) ->
+    Printf.sprintf "{\"kind\":\"call\",\"op\":%s,\"args\":[%s]}"
+      (je op) (String.concat "," (List.map json_of_expr args))
+  | Lambda (params, body) ->
+    Printf.sprintf "{\"kind\":\"lambda\",\"params\":[%s],\"body\":%s}"
+      (String.concat "," (List.map je params)) (json_of_expr body)
+  | Cond (branches, otherwise) ->
+    let branches_json = String.concat "," (List.map (fun (g, b) ->
+      Printf.sprintf "{\"guard\":%s,\"body\":%s}" (json_of_expr g) (json_of_expr b)
+    ) branches) in
+    Printf.sprintf "{\"kind\":\"cond\",\"branches\":[%s],\"otherwise\":%s}"
+      branches_json (json_of_expr otherwise)
+  | LetIn (name, e1, e2) ->
+    Printf.sprintf "{\"kind\":\"let_in\",\"name\":%s,\"value\":%s,\"body\":%s}"
+      (je name) (json_of_expr e1) (json_of_expr e2)
+  | From (src, pattern, guards, collect) ->
+    Printf.sprintf "{\"kind\":\"from\",\"source\":%s,\"pattern\":[%s],\"guards\":[%s],\"collect\":%s}"
+      (json_of_expr src)
+      (String.concat "," (List.map je pattern))
+      (String.concat "," (List.map json_of_expr guards))
+      (json_of_expr collect)
+  | Scan (src, state_decls, branches) ->
+    let state_json = String.concat "," (List.map (fun (name, init) ->
+      Printf.sprintf "{\"name\":%s,\"init\":%s}" (je name) (json_of_expr init)
+    ) state_decls) in
+    let branches_json = String.concat "," (List.map json_of_scan_branch branches) in
+    Printf.sprintf "{\"kind\":\"scan\",\"source\":%s,\"state\":[%s],\"branches\":[%s]}"
+      (json_of_expr src) state_json branches_json
+
+and json_of_scan_stmt = function
+  | SEmit e ->
+    Printf.sprintf "{\"kind\":\"emit\",\"expr\":%s}" (json_of_expr e)
+  | SSkip ->
+    "{\"kind\":\"skip\"}"
+  | SSet (name, e) ->
+    Printf.sprintf "{\"kind\":\"set\",\"name\":%s,\"expr\":%s}" (je name) (json_of_expr e)
+  | SClear name ->
+    Printf.sprintf "{\"kind\":\"clear\",\"name\":%s}" (je name)
+  | SLet (name, e) ->
+    Printf.sprintf "{\"kind\":\"slet\",\"name\":%s,\"expr\":%s}" (je name) (json_of_expr e)
+  | SWhen (guard, body, otherwise) ->
+    Printf.sprintf "{\"kind\":\"when\",\"guard\":%s,\"body\":[%s],\"otherwise\":[%s]}"
+      (json_of_expr guard)
+      (String.concat "," (List.map json_of_scan_stmt body))
+      (String.concat "," (List.map json_of_scan_stmt otherwise))
+
+and json_of_scan_branch b =
+  let guard_json = match b.sb_guard with
+    | None   -> "null"
+    | Some g -> json_of_expr g
+  in
+  Printf.sprintf "{\"guard\":%s,\"otherwise\":%s,\"body\":[%s]}"
+    guard_json
+    (if b.sb_guard = None then "true" else "false")
+    (String.concat "," (List.map json_of_scan_stmt b.sb_body))
+
+let json_of_tantra (t : tantra) : string =
+  let lets_json = String.concat "," (List.map (fun (name, e) ->
+    Printf.sprintf "{\"name\":%s,\"expr\":%s}" (je name) (json_of_expr e)
+  ) t.t_lets) in
+  let inputs_json = String.concat "," (List.map (fun p ->
+    Printf.sprintf "{\"name\":%s,\"type\":%s}" (je p.tp_name) (je p.tp_type)
+  ) t.t_inputs) in
+  let returns_json = String.concat "," (List.map (fun p ->
+    Printf.sprintf "{\"name\":%s,\"type\":%s}" (je p.tp_name) (je p.tp_type)
+  ) t.t_returns) in
+  Printf.sprintf
+    "{\"name\":%s,\"file\":%s,\"inputs\":[%s],\"returns\":[%s],\"bindings\":[%s]}"
+    (je t.t_name) (je t.t_file) inputs_json returns_json lets_json
+
 let as_bool = function
   | VBool b -> b
   | VNone -> false
