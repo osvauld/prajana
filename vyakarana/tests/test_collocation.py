@@ -184,7 +184,8 @@ def test_total_kinetic_energy_resolves(vy):
 
 
 @pytest.mark.xfail(
-    reason="Gap 4: 'find total momentum' — total left as count concept", strict=True
+    reason="Gap 4: 'total' still resolves to count concept via shabda alias",
+    strict=True,
 )
 def test_total_momentum_resolves(vy):
     """'find total momentum' → solve-for is momentum not count"""

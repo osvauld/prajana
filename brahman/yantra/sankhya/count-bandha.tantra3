@@ -1,0 +1,101 @@
+tantra3 count-bandha
+
+-- binds two floating asprista-sankhya values to count1 and count2
+-- when count is a recognised satya concept in the graph.
+-- also replaces [count, satya, count] with a disambiguated triple:
+--   addition signals ("total", "altogether", "combined") →
+--     [count-total, satya, count-total]
+--   subtraction signals ("remaining", "left", "rest", "away") →
+--     [count-remaining, satya, count-remaining]
+--   default (no signal): [count-total, satya, count-total]
+--
+-- emits: [count1, sankhya, N1] and [count2, sankhya, N2]
+-- guard: if count1/count2 already bound, skip.
+
+takes graph
+
+has-count = gt (length (graph | where [s, e, o] | and (eq (to-string s) "count") | and (eq e "satya") | collect s)) 0
+
+loose-nums = graph | where [s, e, o] | and (eq e "asprista-sankhya") | collect o
+
+already-c1 = gt (length (graph | where [s, e, o] | and (eq (to-string s) "count1") | and (eq e "sankhya") | collect s)) 0
+already-c2 = gt (length (graph | where [s, e, o] | and (eq (to-string s) "count2") | and (eq e "sankhya") | collect s)) 0
+
+-- bound sankhya values on non-count concepts (already consumed by sankhya-bandha)
+-- exclude count1/count2 themselves, and concepts that are the count signal
+bound-sankhyas = graph | where [s, e, o]
+  | and (eq e "sankhya")
+  | and (neq (to-string s) "count1")
+  | and (neq (to-string s) "count2")
+  | and (neq (to-string s) "count")
+  | and (neq (to-string s) "count-total")
+  | and (neq (to-string s) "count-remaining")
+  | collect o
+
+-- operands: prefer two loose nums; fall back to loose + bound when only one loose
+-- this handles "8 birds. 3 flew away" → asprista=8, bird.sankhya=3
+has-one-loose = (and (eq (length loose-nums) 1) (gt (length bound-sankhyas) 0))
+
+n1 = cond (gt (length loose-nums) 1)
+  (nth loose-nums 0)
+  otherwise (cond has-one-loose
+    (nth loose-nums 0)
+    otherwise "")
+
+n2 = cond (gt (length loose-nums) 1)
+  (nth loose-nums 1)
+  otherwise (cond has-one-loose
+    (nth bound-sankhyas 0)
+    otherwise "")
+
+-- signal words in the graph (as mithya tokens)
+add-signals = ["total", "altogether", "combined", "together", "both"]
+-- subtraction: departure/consumption/transfer-away verbs and result words
+sub-signals = ["remaining", "left", "rest", "leftover", "away",
+               "ate", "eaten", "lost", "used", "broke", "broken",
+               "flew", "gone", "spent", "gave", "give", "sold", "dropped"]
+
+mithya-words = graph | where [s, e, o] | and (eq e "mithya") | collect (to-string s)
+
+-- structural subtraction signals:
+-- (a) departure verb present: flew/away/left/lost/ate etc.
+-- (b) transfer verb + named entity in query (gave X to Y, how many does X have)
+has-gave     = (or (member "gave" mithya-words) (member "give" mithya-words))
+has-you      = member "you" mithya-words
+gave-you-sub = (and has-gave has-you)
+
+-- query entity present (prathama-vibhakti) + gave/transfer = subtraction for that entity
+query-entities = graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect (to-string s)
+has-query-entity = gt (length query-entities) 0
+gave-entity-sub  = (and has-gave has-query-entity)
+
+has-sub-signal = (or gave-you-sub (or gave-entity-sub
+  (reduce sub-signals false (fn acc w -> or acc (member w mithya-words)))))
+has-add-signal = reduce add-signals false (fn acc w -> or acc (member w mithya-words))
+
+-- subtraction wins when only sub-signal present; addition is the default
+resolved-count = cond (and has-sub-signal (not has-add-signal)) "count-remaining" otherwise "count-total"
+
+-- act when: count signal + two operands (loose or loose+bound) + not already bound
+has-two-operands = (or (gt (length loose-nums) 1) has-one-loose)
+should-act = (and has-count (and has-two-operands (and (not already-c1) (not already-c2))))
+
+-- step 1: replace [count, satya, count] with resolved concept
+replaced-graph = cond should-act
+  (reduce graph [] (fn acc triple ->
+    let s = nth triple 0
+    let e = nth triple 1
+    cond (and (eq (to-string s) "count") (eq e "satya"))
+      (append acc [[resolved-count, "satya", resolved-count]])
+    otherwise
+      (append acc [triple])))
+  otherwise graph
+
+-- step 2: append count1/count2 bindings
+result = cond should-act
+  (append replaced-graph [["count1", "sankhya", n1], ["count2", "sankhya", n2]])
+  otherwise replaced-graph
+
+return result
+
+done

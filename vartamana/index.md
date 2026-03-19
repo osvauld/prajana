@@ -34,6 +34,10 @@ audible in the world. Read both together for the full picture.
 | [11-tantra2-philosophy.md](11-tantra2-philosophy.md) | The grammar of understanding. How humans give meaning to words. Pointing, scope, clarification. Why tantra2 was discovered not designed. What the rewrite revealed and what it opened. | Active |
 | [12-tantra2-notation.md](12-tantra2-notation.md) | Every symbol in tantra2 — its English grammar equivalent, Sanskrit root, function in reasoning. The notation as grammar. | Active |
 | [13-tantra2-mathematics.md](13-tantra2-mathematics.md) | Monotone endomorphisms. Knaster-Tarski fixpoints. Finite state transducers. Datalog. The Madhava connection. Updates toward prabandham. | Active |
+| [14-tantra3.md](14-tantra3.md) | **Tantra3: the om graph as active interface.** The six suffixes as instruction set. Om-driven matching, derive-chain, pipeline ordering. The declaration IS the execution. Supersedes tantra2 as the target architecture. | Active |
+| [15-tantra3-implementation.md](15-tantra3-implementation.md) | **Tantra3 implementation plan.** Steps 1+2 complete. All tantra2 deleted. 63 active tantra3 files. Dissolution complete. Baseline: 511 passed / 63 xfailed (session 9). | Reference |
+| [16-let-binding-resolution.md](16-let-binding-resolution.md) | **Scan body escape fix.** The file parser's `in_scan_body` flag never reset — every line after a scan header was absorbed. Fix: indentation check (only column-0 lines escape scan body). Completed session 9. | Completed |
+| [17-scan-ref-patterns.md](17-scan-ref-patterns.md) | **Working document.** Architecture after scan-ref. Ten natural groups across 72 tantras (by what they ARE, not by directory). Four phases: complete broken cycles → dissolve monolith → merge fragments → build new thoughts. The principle: every tantra = one complete sparsha → viveka → bandha cycle. Dissolution IS abstraction. Composition replaces orchestration. | **Active** |
 | [tantra2-spec.md](tantra2-spec.md) | Technical reference. File structure, expression syntax, scan syntax, safety rules, naming conventions. | Active |
 
 ---
@@ -49,6 +53,9 @@ audible in the world. Read both together for the full picture.
 - **tantra2-philosophy**: the grammar of understanding. Why the notation was found, not invented. What the Layer 2 rewrite revealed: agra-bandha as the generalizable pattern. What it opened: sthita-viveka as the next deepening.
 - **tantra2-notation**: every symbol explained — English grammar, Sanskrit root, function in reasoning.
 - **tantra2-mathematics**: the pipeline as monotone endomorphisms, FSTs, Datalog, Madhava series. The proof graph as self-certifying reasoning.
+- **tantra3**: the om graph IS the program. 109 nodes already declare janya/phala contracts. The six suffixes form an instruction set. The tantras are manual transcriptions of what the om graph already says — tantra3 eliminates the transcription. Supersedes tantra2 as target.
+- **tantra3-implementation**: the engineering companion. 77 xfails classified into 8 categories. 4 steps from om-contract primitive through swarupa-chain. Seven unnamed structures (sankhya-sparsha 16×, shashthi-sparsha 43×, iccha-viveka 9×, pramana-bandha 4×, varga-viveka, eval_arg 72×, with_node 34×) mapped to tantra3 steps. "No match" anatomy: 42/77 xfails produce it, 29 passing tests produce it correctly. Manipravalam: the code speaks the same language as the knowledge. Test cache analysis: 549 cached results, 197 graph traces, performance profile (chain derivations are the bottleneck).
+- **scan-ref-patterns (17)**: **active working document.** Architecture after scan-ref. Every tantra = one complete sparsha → viveka → bandha cycle. Ten natural groups by what they ARE. Four phases: complete broken cycles → dissolve monolith → merge fragments → build new thoughts. Dissolution IS abstraction. Composition replaces orchestration.
 - **tantra2-spec**: technical reference. Authoring rules, syntax, safety rules. The working guide for writing new tantras.
 
 ---
@@ -75,6 +82,8 @@ audible in the world. Read both together for the full picture.
 18. **Agra is the foremost** — proximity binding tracks the most recently seen instance of a concept. Bindings attach to agra. Agra updates forward as new instances arrive. The sequence IS the scope. N entities work because the sentence encodes entity order.
 19. **Subanta / tinanta / varga** — the three kinds of kosha nodes. Subanta: a quantity, owned by one entity. Tinanta: a process/interaction, has `sthita` slots and `phala`. Varga: a containment, members via `vishesa` or `varga` edges. The pipeline must read all three kinds, not treat them as flat concepts.
 20. **sthita IS the interaction scope** — a tinanta's `sthita` slots are its required member-scopes. The pipeline finds quantities by walking sthita members' owned properties, not by flat concept lookup. This is `sthita-viveka` — the scope-aware lookup that unblocks all multi-entity computation.
+21. **The om graph IS the program** — janya/phala/kriya/yukta/sthita/swarupa edges on om nodes are not metadata; they are the complete specification of what each concept needs, produces, does, has, sits in, and IS. The runtime should read these edges directly rather than hardcoding the same logic in tantras. This is tantra3.
+22. **Manipravalam — the code speaks the language of the knowledge** — tantra2 translates om declarations into machine operations. Tantra3 eliminates the translation. `om-yukta "rashi"` says the same thing as `"sankhya-yukta"` in the om file — the gem and the coral on one string. Every unnamed structure found by `analyze_pipeline.py` (sankhya-sparsha 16×, shashthi-sparsha 43×, iccha-viveka 9×, pramana-bandha 4×) is a place where tantra code translates what the om graph already says more naturally. Tantra3 is the moment when the code uses the om graph's own names.
 
 ---
 

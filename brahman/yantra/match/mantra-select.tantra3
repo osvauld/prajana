@@ -1,0 +1,40 @@
+tantra3 mantra-select
+
+-- mantra-select: solve-for → [mantra, ...]
+-- om-driven mantra candidate filtering via varga walk.
+-- walks physics-mantra and math-mantra vargas (O(25) not O(2210)).
+-- replaces the physics-mantras / math-mantras indirection.
+--
+-- the varga hierarchy IS the narrowing:
+--   physics-mantra (23 members) ← all physics mantras sit here
+--   math-mantra (2 members)     ← count-add, count-sub
+--
+-- future: sub-varga narrowing via solve-for concept's own varga
+--   solve-for → concept.varga → energy-varga → only energy mantras
+--
+-- when solve-for is empty: returns all mantras from both vargas.
+-- when solve-for is given: filters to mantras whose phala, swarupa,
+-- janya, or shabda name matches solve-for.
+
+takes solve-for
+
+-- varga walk: O(25) instead of graph-all-nodes O(2210)
+mantra-nodes = append (walk-in "physics-mantra" "varga") (walk-in "math-mantra" "varga")
+
+-- when no solve-for, return all
+result = cond (not (exists solve-for))
+  mantra-nodes
+  otherwise (filter mantra-nodes (fn m ->
+    let ms      = to-string m
+    let janya   = map (om-janya ms) (fn j -> to-string j)
+    let phala   = map (om-phala ms) (fn p -> to-string p)
+    let swarupa = map (om-swarupa ms) (fn s -> to-string s)
+    let mname   = shabda ms "name"
+    (or (eq mname solve-for)
+        (member solve-for phala)
+        (member solve-for swarupa)
+        (member solve-for janya))))
+
+return result
+
+done

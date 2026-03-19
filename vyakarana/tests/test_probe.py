@@ -56,27 +56,27 @@ def test_div_by_zero_returns_zero(vy):
 
 
 def test_lookup_direct_hit(vy):
-    assert vy.eval('lookup-word "mass"') == "mass"
+    assert vy.eval('shabda-anveshana "mass"') == "mass"
 
 
 def test_lookup_direct_hit_kilogram(vy):
-    assert vy.eval('lookup-word "kilogram"') == "kilogram"
+    assert vy.eval('shabda-anveshana "kilogram"') == "kilogram"
 
 
 def test_lookup_plural_ies(vy):
-    assert vy.eval('lookup-word "velocities"') == "velocity"
+    assert vy.eval('shabda-anveshana "velocities"') == "velocity"
 
 
 def test_lookup_plural_s(vy):
-    assert vy.eval('lookup-word "metres"') == "metre"
+    assert vy.eval('shabda-anveshana "metres"') == "metre"
 
 
 def test_lookup_miss_returns_null(vy):
-    assert vy.eval('lookup-word "xyzfoobar"') is None
+    assert vy.eval('shabda-anveshana "xyzfoobar"') is None
 
 
 def test_lookup_abbreviation_kg(vy):
-    assert vy.eval('lookup-word "kg"') == "kilogram"
+    assert vy.eval('shabda-anveshana "kg"') == "kilogram"
 
 
 # ── Group 3: graph primitives ─────────────────────────────────────────────────

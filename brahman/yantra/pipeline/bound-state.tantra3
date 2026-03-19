@@ -1,0 +1,27 @@
+tantra3 bound-state
+
+-- bound-state: graph → [concept-names, val-pairs]
+-- the understander's epistemic position: what is known right now.
+--
+-- concept-names: list of concept name strings that have sankhya bindings
+-- val-pairs:     list of [concept, value] for each binding
+--
+-- replaces: bound-vals, bound-concepts, bound-concept-names
+-- all three were asking the same question three ways.
+-- one perception: I know this.
+--
+-- callers:
+--   match-mantra, derive-step, derive-chain (need both bcs and vps)
+--   mantra-coverage, vishesa-instance, rashi-viveka, sankhya-bandha (need names)
+--   scope-vps, entity-props-str (need val lookup by concept)
+
+takes graph
+
+vps = sankhya-sparsha graph
+bcs = map vps (fn kv -> nth kv 0)
+
+result = [bcs, vps]
+
+return result
+
+done

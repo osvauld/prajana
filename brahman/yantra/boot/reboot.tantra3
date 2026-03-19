@@ -1,0 +1,12 @@
+tantra3 reboot
+
+-- runs all boot-time graph enrichment passes.
+-- called at startup and on every reload-all.
+
+takes _
+
+result = varga-inheritance ""
+
+return result
+
+done

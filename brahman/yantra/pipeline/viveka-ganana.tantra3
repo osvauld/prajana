@@ -1,0 +1,94 @@
+tantra3 viveka-ganana
+
+-- comparison: given a proof graph with two or more entities and a shared
+-- concept, finds which entity has the greater (or lesser) value.
+--
+-- viveka = discernment. the proof graph is the third observer —
+-- neither entity can compare itself to the other.
+-- the proof graph sees both simultaneously from sthira-apeksha.
+--
+-- value-per-entity: scan in insertion order.
+-- track last prathama-vibhakti entity. when a sankhya appears,
+-- pair it with the active entity — but only once per entity.
+-- "seen-vals" tracks which entities already have a sankhya recorded.
+--
+-- direction: max (heavier/faster/more) or min (lighter/slower/less)
+--
+-- returns: [winner, loser, winner-val, loser-val, all-pairs]
+--   winner     = entity name with the max/min value
+--   loser      = entity name with the opposite value (for two-entity case)
+--   winner-val = numeric value of the winner
+--   loser-val  = numeric value of the loser
+--   all-pairs  = [[entity, val], ...] sorted winner-first (for 3+ entities)
+--
+-- safety: avoid "pair" (arity -1), "value" (arity 1) — use "pr", "kv", "val"
+
+takes graph
+takes concept
+takes cw
+takes direction
+
+is-max = (not (eq (to-string direction) "min"))
+
+-- scan: state = [pairs-so-far, active-entity, seen-vals]
+scan-result = reduce graph [[], "", []] (fn acc tri ->
+  let pairs     = nth acc 0
+  let active    = nth acc 1
+  let seen-vals = nth acc 2
+  let s = nth tri 0
+  let e = nth tri 1
+  let o = nth tri 2
+  cond (eq e "prathama-vibhakti")
+    [pairs, (to-string s), seen-vals]
+  otherwise (cond (and (eq e "sankhya")
+                       (gt (string-length active) 0)
+                       (not (member active seen-vals)))
+    [(append pairs [[active, o]]), active, (append seen-vals [active])]
+  otherwise acc))
+
+ev-pairs = nth scan-result 0
+
+-- find winner: entity with max (or min) sankhya value
+best-pr = cond (gt (length ev-pairs) 0)
+  (reduce ev-pairs (nth ev-pairs 0) (fn best kv ->
+    let best-val = to-number (nth best 1)
+    let kv-val   = to-number (nth kv 1)
+    cond (and is-max (gt kv-val best-val)) kv
+    otherwise (cond (and (not is-max) (lt kv-val best-val)) kv
+    otherwise best)))
+  otherwise []
+
+winner     = cond (gt (length best-pr) 0) (to-string (nth best-pr 0)) otherwise ""
+winner-val = cond (gt (length best-pr) 0) (to-string (nth best-pr 1)) otherwise ""
+
+-- find loser: entity with opposite value (for two-entity case, the other one)
+-- for 3+ entities: the one with the opposite extreme
+worst-pr = cond (gt (length ev-pairs) 0)
+  (reduce ev-pairs (nth ev-pairs 0) (fn worst kv ->
+    let worst-val = to-number (nth worst 1)
+    let kv-val    = to-number (nth kv 1)
+    cond (and is-max (lt kv-val worst-val)) kv
+    otherwise (cond (and (not is-max) (gt kv-val worst-val)) kv
+    otherwise worst)))
+  otherwise []
+
+loser     = cond (gt (length worst-pr) 0) (to-string (nth worst-pr 0)) otherwise ""
+loser-val = cond (gt (length worst-pr) 0) (to-string (nth worst-pr 1)) otherwise ""
+
+-- emit greater-than edge into the proof graph — the comparison IS the relation.
+-- emission walks this edge rather than being told via viveka-ctx.
+-- [winner, greater-than, loser] — readable in both directions:
+--   "ball-A is greater-than ball-B in mass"
+-- also emit the concept and direction so emission knows what was compared.
+-- these triples make emit-reasoning a pure graph walker — no external ctx needed.
+gt-triples = cond (and (gt (string-length winner) 0) (gt (string-length loser) 0))
+  [[winner, "greater-than", loser],
+   [winner, "viveka-concept", concept],
+   [winner, "viveka-direction", direction]]
+  otherwise []
+
+result = [winner, loser, winner-val, loser-val, ev-pairs, gt-triples]
+
+return result
+
+done

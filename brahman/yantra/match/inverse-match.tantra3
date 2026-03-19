@@ -1,0 +1,32 @@
+tantra3 inverse-match
+
+-- inverse-match: candidates × vps × bcs × solve-for → [mantra, vps, "inverse"] or []
+-- checks each candidate mantra: if solve-for is one of its janya,
+-- the phala (or swarupa or name) is in bound-concepts,
+-- all OTHER janya are covered, and the mantra has a math-op (invertible),
+-- then the mantra matches in inverse mode (compute missing input from output).
+
+takes candidates
+takes vps
+takes bcs
+takes solve-for
+
+result = reduce candidates [] (fn acc m ->
+  let ms          = to-string m
+  let janya       = om-janya ms
+  let phala-l     = om-phala ms
+  let swarupa-l   = om-swarupa ms
+  let mphala      = cond (gt (length phala-l) 0) (nth phala-l 0) otherwise ""
+  let mswarupa    = cond (gt (length swarupa-l) 0) (nth swarupa-l 0) otherwise ""
+  let has-math-op = gt (string-length (shabda ms "math-op")) 0
+  let sf-is-janya = member solve-for janya
+  let other-janya = filter janya (fn j -> not (eq j solve-for))
+  let others-ok   = reduce other-janya true (fn a r ->
+    (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
+  let phala-bound = (or (member mphala bcs) (member mswarupa bcs) (member (shabda ms "name") bcs))
+  cond (or (gt (length acc) 0) (not has-math-op) (not sf-is-janya) (not others-ok) (not phala-bound)) acc
+  otherwise [m, vps, "inverse"])
+
+return result
+
+done

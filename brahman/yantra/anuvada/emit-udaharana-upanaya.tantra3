@@ -1,0 +1,75 @@
+tantra3 emit-udaharana-upanaya
+
+-- udaharana + upanaya: "we know" + "we see"
+-- the universal rule and its application to this case.
+-- these are paired — every "we know" is immediately followed by its "we see".
+--
+-- viveka: udaharana = "greater mass means heavier"
+--         upanaya   = "5 > 3 (ball-A mass > ball-B mass)"
+-- physics/count: walks derived-by edges → mantra-known-str + mantra-seen-str
+--
+-- returns: list of strings [know1, see1, know2, see2, ...]
+
+takes graph
+takes is-viveka
+
+say-known = shabda "anuvada-setu" "speech-known"
+say-seen  = shabda "anuvada-setu" "speech-seen"
+say-gt    = shabda "anuvada-setu" "speech-greater-than"
+say-lt    = shabda "anuvada-setu" "speech-less-than"
+
+gt-triples = graph | where [s, e, o] | and (eq e "greater-than") | collect [s, o]
+
+-- viveka udaharana + upanaya
+vc-concept   = nth (graph | where [s, e, o] | and (eq e "viveka-concept") | collect (to-string o)) 0
+vk-direction = nth (graph | where [s, e, o] | and (eq e "viveka-direction") | collect (to-string o)) 0
+vk-winner    = cond (gt (length gt-triples) 0) (to-string (nth (nth gt-triples 0) 0)) otherwise ""
+vk-loser     = cond (gt (length gt-triples) 0) (to-string (nth (nth gt-triples 0) 1)) otherwise ""
+
+sought-label = nth (graph | where [s, e, o] | and (eq e "sought") | collect (to-string o)) 0
+
+viveka-known-str = cond is-viveka
+  (cond (eq (to-string vk-direction) "max")
+    (concat say-known ": greater " (to-string vc-concept) " means " (to-string sought-label))
+    otherwise (concat say-known ": lesser " (to-string vc-concept) " means " (to-string sought-label)))
+  otherwise ""
+
+vk-wval = nth (graph | where [s, e, o] | and (eq (to-string s) vk-winner) | and (eq e "viveka-sankhya") | collect (to-string o)) 0
+vk-lval = nth (graph | where [s, e, o] | and (eq (to-string s) vk-loser)  | and (eq e "viveka-sankhya") | collect (to-string o)) 0
+
+viveka-seen-str = cond is-viveka
+  (let cmp-sym = cond (eq (to-string vk-direction) "max") say-gt otherwise say-lt
+   let cmp-str = (concat (to-string vk-wval) " " cmp-sym " " (to-string vk-lval))
+   let ctx-str = (concat vk-winner " " (to-string vc-concept) " " cmp-sym " " vk-loser " " (to-string vc-concept))
+   (concat say-seen ": " cmp-str " (" ctx-str ")"))
+  otherwise ""
+
+-- physics/count: unique derived-by mantras in graph order
+deriving-mantras = unique (graph | where [s, e, o] | and (eq e "derived-by") | collect (to-string o))
+
+derived-vp = graph | where [s, e, o] | and (eq e "derived-sankhya") | collect [s, o]
+has-derived-vp = gt (length derived-vp) 0
+
+chain-know-see = cond (and (not is-viveka) (gt (length deriving-mantras) 0))
+  (reduce deriving-mantras [] (fn acc mn ->
+    let produced = graph | where [s, e, o]
+      | and (eq e "derived-by")
+      | and (eq (to-string o) mn)
+      | collect (to-string s)
+    let vp = cond has-derived-vp derived-vp
+      otherwise (sankhya-sparsha graph)
+    let mm = [mn, vp, "forward"]
+    let kstr = (mantra-known-str mm)
+    let sstr = (mantra-seen-str mm produced)
+    cond (gt (string-length kstr) 0)
+      (append acc [kstr, sstr])
+    otherwise acc))
+  otherwise []
+
+result = cond is-viveka
+  (filter [viveka-known-str, viveka-seen-str] (fn s -> gt (string-length s) 0))
+  otherwise chain-know-see
+
+return result
+
+done

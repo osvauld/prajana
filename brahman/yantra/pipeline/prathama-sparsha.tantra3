@@ -1,0 +1,14 @@
+tantra3 prathama-sparsha
+
+-- prathama-sparsha: graph → [entity, ...]
+-- returns all subjects marked as prathama-vibhakti (named entities).
+-- replaces the inline pattern:
+--   graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s
+
+takes graph
+
+result = graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s
+
+return result
+
+done

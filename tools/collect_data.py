@@ -488,6 +488,28 @@ def collect_scan_machines(sock_path, yantra_dir):
     return True
 
 
+def collect_graph_patterns(sock_path, brahman_dir):
+    """Graph patterns from live test sentences — kosha gaps, birth events, clusters."""
+    out_path = os.path.join(OUT_DIR, "graph_patterns.json")
+    print("  collecting graph_patterns.json...", end=" ", flush=True)
+    script = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "collect_graph_patterns.py"
+    )
+    import subprocess
+
+    result = subprocess.run(
+        [sys.executable, script, "--socket", sock_path, "--out", out_path],
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    if result.returncode != 0 or not os.path.exists(out_path):
+        print(f"FAILED: {result.stderr[:200]}")
+        return False
+    print(f"done ({os.path.getsize(out_path):,} bytes)")
+    return True
+
+
 def collect_dep_order(sock_path, yantra_dir):
     """Topological migration order + zero-satya stub data."""
     out_path = os.path.join(OUT_DIR, "dep_order.json")
@@ -600,7 +622,9 @@ if __name__ == "__main__":
     parser.add_argument("--socket", default=SOCKET_DEFAULT)
     parser.add_argument("--brahman", default=None)
     parser.add_argument(
-        "--only", default=None, choices=["analysis", "graph", "vocab", "scan", "deps"]
+        "--only",
+        default=None,
+        choices=["analysis", "graph", "vocab", "scan", "deps", "patterns"],
     )
     args = parser.parse_args()
 
@@ -626,6 +650,8 @@ if __name__ == "__main__":
         ok &= collect_scan_machines(args.socket, yantra_dir)
     if args.only in (None, "deps"):
         ok &= collect_dep_order(args.socket, yantra_dir)
+    if args.only in (None, "patterns"):
+        ok &= collect_graph_patterns(args.socket, args.brahman)
 
     print(f"\n{'All done.' if ok else 'Some collections failed.'}")
     print(f"Run: python3 tools/generate_reports.py")

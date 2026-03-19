@@ -1,38 +1,29 @@
 kosha count
 
-  -- count: how many of a thing there are.
+  -- count: the numeric measure of a collection after all events.
   -- the bridge between everyday language and arithmetic.
-  -- "4 apples" → count of apples = 4.
-  -- "10 birds, 3 fly away" → count was 10, 3 subtracted, count is 7.
+  -- "4 apples" → count = 4
+  -- "8 birds, 3 flew away, 2 came back" → count = 7
   --
-  -- count IS sankhya — the numeric value of a collection.
-  -- sankhya in the pipeline is the edge type carrying numeric values.
-  -- count as a concept is what receives that value when the thing being
-  -- counted is not a physics quantity — just things.
+  -- count IS sankhya of a vrnda (collection) — not a physics quantity.
+  -- count-chain.tantra3 scans the event sequence and emits [count, sankhya, result].
+  -- no separate count-total or count-remaining — the chain computes the right answer.
+  -- the result word (total/remaining/left) is just a language alias for count.
   --
-  -- count connects to all arithmetic operations:
-  --   addition:    4 apples + 3 more = 7 apples
-  --   subtraction: 10 birds - 3 flew = 7 birds
-  --   multiplication: 3 boxes of 5 = 15 things
-  --
-  -- vrnda-ganita: group arithmetic. counting IS vrnda-ganita.
-  -- the vrnda (group/collection) has a sankhya (count/number).
-  -- the sankhya of the vrnda is what count declares.
+  -- the structure IS the reasoning:
+  --   departure verbs (flew, ate, lost, gave) → subtract next operand
+  --   arrival verbs (came, bought, found, got) → add next operand
+  --   no verb → add (default: accumulation)
 
   "number-varga-vishesa"
   "math-varga-vishesa"
   "common-sense-varga-yukta"
 
-  "sankhya-swarupa"              -- count IS the numeric measure of a collection
-  "vrnda-yukta"                  -- a count belongs to a collection (vrnda)
-  "arithmetic-yukta"             -- arithmetic operations apply to counts
-  "addition-yukta subtraction-yukta multiplication-yukta"
-  "matra-abheda"                 -- count is a form of measurement
+  "sankhya-swarupa"
+  "vrnda-yukta"
+  "arithmetic-yukta"
+  "vrnda-ganita-abheda"
 
-  -- sangati connections
-  "sankhya-swarupa"              -- sankhya = count/number — the sangati ground
-  "vrnda-ganita-abheda"          -- group arithmetic — what counting IS
-
-  shabda word:count,number,many,how-many,quantity,total,remaining,left / how-many-of-a-thing-the-numeric-measure-of-a-collection
+  shabda word:count,number,many,how-many,quantity,total,remaining,left,sum,altogether,combined,rest,leftover / how-many-of-a-thing-after-all-events
 
 done

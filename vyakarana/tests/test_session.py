@@ -75,7 +75,7 @@ def test_unknown_expression_returns_identifier(vy):
 def test_server_remains_responsive_after_eval(vy):
     # After any eval (including unknown identifiers), server stays responsive
     vy.eval("unknown-identifier-xyzabc")
-    result = vy.eval('lookup-word "mass"')
+    result = vy.eval('shabda-anveshana "mass"')
     assert result == "mass", f"server should stay responsive, got {result!r}"
 
 

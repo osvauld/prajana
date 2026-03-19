@@ -40,6 +40,8 @@ let pre_scan_tantra_file (path : string) : (string * int) option =
       in
       if String.length trimmed >= 8 && String.sub trimmed 0 8 = "tantra2 " then
         name := String.trim (String.sub trimmed 8 (String.length trimmed - 8))
+      else if String.length trimmed >= 8 && String.sub trimmed 0 8 = "tantra3 " then
+        name := String.trim (String.sub trimmed 8 (String.length trimmed - 8))
       else if trimmed = "inputs" || trimmed = "takes" then
         section := "inputs"
       else if trimmed = "let" || trimmed = "return" || trimmed = "done" then

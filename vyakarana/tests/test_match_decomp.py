@@ -37,11 +37,11 @@ def bqg(vy, sentence: str) -> list:
 # Given a graph and a named entity, return only that entity's val-pairs.
 
 
-@pytest.mark.xfail(reason="decomp: scope-vps not yet a named tantra", strict=True)
 def test_scope_vps_returns_only_named_entity_values(vy):
     """scope-vps ball-A returns mass=3, velocity=4 not ball-B's values"""
     g = bqg(vy, "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5")
-    vps = vy.eval(f'scope-vps {json.dumps(g)} "ball-A"')
+    # scope-vps returns [eff-vps, eff-bcs]; extract vps with nth ... 0
+    vps = vy.eval(f'nth (scope-vps {json.dumps(g)} "ball-A") 0')
     assert isinstance(vps, list), f"expected list, got {vps!r}"
     concepts = {kv[0]: kv[1] for kv in vps}
     assert concepts.get("mass") in ("3", "3."), f"expected mass=3, got {concepts!r}"
@@ -53,11 +53,10 @@ def test_scope_vps_returns_only_named_entity_values(vy):
     )
 
 
-@pytest.mark.xfail(reason="decomp: scope-vps not yet a named tantra", strict=True)
 def test_scope_vps_second_entity(vy):
     """scope-vps ball-B returns mass=2, velocity=5"""
     g = bqg(vy, "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5")
-    vps = vy.eval(f'scope-vps {json.dumps(g)} "ball-B"')
+    vps = vy.eval(f'nth (scope-vps {json.dumps(g)} "ball-B") 0')
     concepts = {kv[0]: kv[1] for kv in vps}
     assert concepts.get("mass") in ("2", "2."), f"expected mass=2, got {concepts!r}"
     assert concepts.get("velocity") in ("5", "5."), (
@@ -65,11 +64,10 @@ def test_scope_vps_second_entity(vy):
     )
 
 
-@pytest.mark.xfail(reason="decomp: scope-vps not yet a named tantra", strict=True)
 def test_scope_vps_empty_entity_returns_all(vy):
     """scope-vps with empty entity returns all val-pairs (flat mode)"""
     g = bqg(vy, "mass is 4 and velocity is 3")
-    vps = vy.eval(f'scope-vps {json.dumps(g)} ""')
+    vps = vy.eval(f'nth (scope-vps {json.dumps(g)} "") 0')
     concepts = {kv[0]: kv[1] for kv in vps}
     assert "mass" in concepts and "velocity" in concepts, (
         f"expected mass+velocity, got {concepts!r}"
@@ -81,23 +79,18 @@ def test_scope_vps_empty_entity_returns_all(vy):
 # Filter all loaded mantras to those whose phala/swarupa/janya match solve-for.
 
 
-@pytest.mark.xfail(reason="decomp: mantra-select not yet a named tantra", strict=True)
 def test_mantra_select_ke_returns_ke_mantra(vy):
     """mantra-select 'kinetic-energy' → list containing kinetic-energy-mantra"""
     result = vy.eval('mantra-select "kinetic-energy"')
     assert isinstance(result, list) and len(result) > 0, (
         f"expected non-empty list, got {result!r}"
     )
-    names = [vy.eval(f'shabda "{m}" "name"') for m in result]
-    assert "kinetic-energy-mantra" in names, (
-        f"expected kinetic-energy-mantra in candidates, got {names!r}"
+    # mantra-select returns node IDs; the KE mantra node is 'kinetic-energy-mantra'
+    assert "kinetic-energy-mantra" in result, (
+        f"expected kinetic-energy-mantra in candidates, got {result!r}"
     )
 
 
-@pytest.mark.xfail(
-    reason="decomp: mantra-select not yet a named tantra — returns string not list",
-    strict=True,
-)
 def test_mantra_select_velocity_returns_multiple(vy):
     """mantra-select 'velocity' → list of ≥2 mantras where velocity is a janya"""
     result = vy.eval('mantra-select "velocity"')
@@ -107,10 +100,6 @@ def test_mantra_select_velocity_returns_multiple(vy):
     )
 
 
-@pytest.mark.xfail(
-    reason="decomp: mantra-select not yet a named tantra — returns string not list",
-    strict=True,
-)
 def test_mantra_select_unknown_returns_all(vy):
     """mantra-select '' returns all loaded mantras as a list"""
     result = vy.eval('mantra-select ""')
@@ -124,11 +113,22 @@ def test_mantra_select_unknown_returns_all(vy):
 # Tantra: forward-match candidates vps bcs solve-for → [mantra, vps, "forward"] or []
 
 
-@pytest.mark.xfail(reason="decomp: forward-match not yet a named tantra", strict=True)
 def test_forward_match_ke_when_mass_velocity_present(vy):
     """forward-match with mass+velocity → kinetic-energy-mantra forward"""
     g = bqg(vy, "mass is 4 and velocity is 3. find kinetic energy")
-    result = vy.eval(f"forward-match {json.dumps(g)}")
+    # forward-match takes: candidates vps bcs solve-for
+    # compose the same way match-mantra.tantra3 does
+    expr = f"""
+      let g        = {json.dumps(g)}
+      let sf-res   = extract-solve-for g
+      let sf       = nth sf-res 1
+      let svps     = scope-vps g (nth sf-res 2)
+      let vps      = nth svps 0
+      let bcs      = nth svps 1
+      let cands    = mantra-select sf
+      forward-match cands vps bcs sf
+    """
+    result = vy.eval(expr)
     assert isinstance(result, list) and len(result) == 3, (
         f"expected [mantra, vps, mode], got {result!r}"
     )
@@ -138,11 +138,20 @@ def test_forward_match_ke_when_mass_velocity_present(vy):
     assert result[2] == "forward", f"expected forward mode, got {result[2]!r}"
 
 
-@pytest.mark.xfail(reason="decomp: forward-match not yet a named tantra", strict=True)
 def test_forward_match_returns_empty_when_janya_missing(vy):
     """forward-match with only mass (no velocity) → [] for ke"""
     g = bqg(vy, "mass is 4. find kinetic energy")
-    result = vy.eval(f"forward-match {json.dumps(g)}")
+    expr = f"""
+      let g        = {json.dumps(g)}
+      let sf-res   = extract-solve-for g
+      let sf       = nth sf-res 1
+      let svps     = scope-vps g (nth sf-res 2)
+      let vps      = nth svps 0
+      let bcs      = nth svps 1
+      let cands    = mantra-select sf
+      forward-match cands vps bcs sf
+    """
+    result = vy.eval(expr)
     assert result == [], f"expected [] when janya incomplete, got {result!r}"
 
 
@@ -151,13 +160,24 @@ def test_forward_match_returns_empty_when_janya_missing(vy):
 
 
 @pytest.mark.xfail(
-    reason="decomp: inverse-match not yet a named tantra — also fixes inverse-math gate",
+    reason="inverse-match gate: ke-mantra uses kriya not math-op; invert-math cannot invert kriya-based mantras yet",
     strict=True,
 )
 def test_inverse_match_ke_find_velocity(vy):
     """inverse-match with ke=50 mass=2 solve-for=velocity → ke-mantra inverse"""
     g = bqg(vy, "kinetic energy is 50 and mass is 2. find velocity")
-    result = vy.eval(f"inverse-match {json.dumps(g)}")
+    # inverse-match takes: candidates vps bcs solve-for
+    expr = f"""
+      let g        = {json.dumps(g)}
+      let sf-res   = extract-solve-for g
+      let sf       = nth sf-res 1
+      let svps     = scope-vps g (nth sf-res 2)
+      let vps      = nth svps 0
+      let bcs      = nth svps 1
+      let cands    = mantra-select sf
+      inverse-match cands vps bcs sf
+    """
+    result = vy.eval(expr)
     assert isinstance(result, list) and len(result) == 3, (
         f"expected [mantra, vps, mode], got {result!r}"
     )
@@ -167,24 +187,46 @@ def test_inverse_match_ke_find_velocity(vy):
     )
 
 
-@pytest.mark.xfail(reason="decomp: inverse-match not yet a named tantra", strict=True)
+@pytest.mark.xfail(
+    reason="inverse-match gate: no suvat-mantra node; velocity/acceleration mantras use kriya not math-op",
+    strict=True,
+)
 def test_inverse_match_suvat_find_time(vy):
     """inverse-match with u=0 a=5 v=20 solve-for=time → suvat-mantra inverse"""
     g = bqg(
         vy, "initial velocity is 0. acceleration is 5. final velocity is 20. find time"
     )
-    result = vy.eval(f"inverse-match {json.dumps(g)}")
+    expr = f"""
+      let g        = {json.dumps(g)}
+      let sf-res   = extract-solve-for g
+      let sf       = nth sf-res 1
+      let svps     = scope-vps g (nth sf-res 2)
+      let vps      = nth svps 0
+      let bcs      = nth svps 1
+      let cands    = mantra-select sf
+      inverse-match cands vps bcs sf
+    """
+    result = vy.eval(expr)
     assert isinstance(result, list) and len(result) == 3, (
         f"expected [mantra, vps, mode], got {result!r}"
     )
     assert result[2] == "inverse", f"expected inverse mode, got {result[2]!r}"
 
 
-@pytest.mark.xfail(reason="decomp: inverse-match not yet a named tantra", strict=True)
 def test_inverse_match_returns_empty_when_phala_missing(vy):
     """inverse-match with only partial janya, no phala → []"""
     g = bqg(vy, "mass is 2. find velocity")
-    result = vy.eval(f"inverse-match {json.dumps(g)}")
+    expr = f"""
+      let g        = {json.dumps(g)}
+      let sf-res   = extract-solve-for g
+      let sf       = nth sf-res 1
+      let svps     = scope-vps g (nth sf-res 2)
+      let vps      = nth svps 0
+      let bcs      = nth svps 1
+      let cands    = mantra-select sf
+      inverse-match cands vps bcs sf
+    """
+    result = vy.eval(expr)
     assert result == [], f"expected [] when phala not bound, got {result!r}"
 
 
@@ -192,7 +234,6 @@ def test_inverse_match_returns_empty_when_phala_missing(vy):
 # Tantra: relative-vps graph scope-entity → [[observer-velocity, v], [observed-velocity, v]]
 
 
-@pytest.mark.xfail(reason="decomp: relative-vps not yet a named tantra", strict=True)
 def test_relative_vps_returns_two_velocity_pairs(vy):
     """relative-vps ball-A → observer=10, observed=3"""
     g = bqg(
@@ -208,7 +249,6 @@ def test_relative_vps_returns_two_velocity_pairs(vy):
     assert "observed-velocity" in concepts, f"missing observed-velocity in {concepts!r}"
 
 
-@pytest.mark.xfail(reason="decomp: relative-vps not yet a named tantra", strict=True)
 def test_relative_vps_empty_when_no_scope(vy):
     """relative-vps with no scope entity → []"""
     g = bqg(vy, "ball-A has velocity 10. ball-B has velocity 3. find relative velocity")

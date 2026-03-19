@@ -1,0 +1,21 @@
+tantra3 varga-inheritance
+
+-- derives traversable varga edges from swarupa IS-A edges.
+-- when a node N has swarupa X, and node "X-varga" exists in the graph,
+-- emits [N, varga, X-varga] so that walk-in "X-varga" "varga" returns N.
+-- run at boot and on reload-all via reboot.tantra2.
+
+takes _
+
+nodes = graph-all-nodes
+
+result = reduce nodes "ok" (fn acc nd ->
+  let _ = reduce (walk nd "swarupa") acc (fn a2 parent ->
+    (cond (exists (lookup (concat (to-string parent) "-varga")))
+      (let _ = emit-edge (to-string nd) "varga" (concat (to-string parent) "-varga") in a2)
+      otherwise a2))
+  in acc)
+
+return result
+
+done

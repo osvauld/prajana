@@ -1,0 +1,51 @@
+tantra3 emit-triples
+
+-- given word sense and context, return triples to add to the question graph.
+-- info:    [node, role, layer, num-val, unit-node]
+-- context: [active-concept, pending-num]
+
+takes word
+takes info
+takes context
+
+nd   = nth info 0
+rl   = nth info 1
+ly   = nth info 2
+nv   = nth info 3
+un   = nth info 4
+
+ac   = nth context 0
+pn   = nth context 1
+
+has-num  = gt (string-length nv) 0
+has-unit = exists un
+has-act  = exists ac
+has-pend = neq pn ""
+
+is-concept = (and (exists nd)
+  (neq rl "grammar")
+  (neq rl "intent")
+  (neq rl "boundary")
+  (neq rl "possession")
+  (neq rl "rashi-bandha")
+  (neq ly "mantra"))
+
+-- rashi-label: concept in label position (follows concept, no pending num, alias not self)
+is-rashi-label = (and has-act (not has-pend) is-concept (neq word (to-string nd)))
+
+triples = (cond (eq rl "intent") [[word, "vidhi-kaala", "solve-for"]]
+  otherwise (cond (eq rl "grammar") []
+  otherwise (cond (and has-num has-unit has-act)
+    [[(to-string ac), "sankhya", nv], [(to-string ac), "matra", (to-string un)]]
+  otherwise (cond (and has-num has-unit)
+    [["_", "sankhya", nv], ["_", "matra", (to-string un)]]
+  otherwise (cond has-num [[word, "asprista-sankhya", nv]]
+  otherwise (cond (and has-pend is-concept has-act (exists (word-node word)))
+    [[(to-string ac), "sankhya", pn], [(to-string ac), "matra", (to-string nd)]]
+  otherwise (cond is-rashi-label [[word, "mithya", word]]
+  otherwise (cond is-concept [[(to-string nd), "satya", (to-string nd)]]
+  otherwise [[word, "mithya", word]]))))))))
+
+return triples
+
+done

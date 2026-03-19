@@ -1,0 +1,11 @@
+kosha mammal
+
+  -- the concept 'mammal' — distinct from mammal-varga (the container).
+  -- mammal IS-A animal: [mammal, swarupa, animal]
+  -- boot pass: mammal-swarupa on mammal → animal-varga exists → [mammal, varga, animal-varga]
+  "animal-swarupa"
+  "taxonomy-varga-sthita"
+
+shabda word:mammal,mammals name:mammal / a-warm-blooded-vertebrate-that-nurses-its-young
+
+done

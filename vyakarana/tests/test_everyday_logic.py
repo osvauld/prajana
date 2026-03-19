@@ -251,13 +251,6 @@ def test_transitive_greater_than(vy):
     assert "yes" in r.lower() or "a" in r, f"expected yes/a > c, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Syllogistic inference not implemented. 'all cats are animals, "
-    "all animals breathe → cats breathe' requires walking class-membership "
-    "edges (swarupa/varga) plus predicate inheritance. "
-    "Needs: syllogism tantra that walks IS-A chains and inherits predicates.",
-)
 def test_syllogism_cats_breathe(vy):
     """All cats are animals. All animals breathe. Do cats breathe?"""
     r = answer(

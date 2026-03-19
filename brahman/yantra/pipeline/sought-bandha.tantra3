@@ -1,0 +1,45 @@
+tantra3 sought-bandha
+
+-- emits [solve-for, sought, comp-word-or-solve-for] into the proof graph.
+-- this makes the question explicit as a typed graph edge so emit-reasoning
+-- can walk it directly — no special scanning of vidhi-kaala needed.
+--
+-- for physics/count: [solve-for, sought, solve-for]
+--   e.g. [force, sought, force]
+--
+-- for viveka: [solve-for, sought, comp-word]
+--   e.g. [mass, sought, heavier]  — "which is heavier" → sought mass via heavier
+--
+-- scope-entity also recorded when present:
+--   [solve-for, sought-of, scope-entity]
+--   e.g. [kinetic-energy, sought-of, ball-A]
+--
+-- guard: if a sought triple already exists, skip.
+
+takes graph
+takes solve-for
+takes scope-entity
+takes comp-word
+
+already = gt (length (graph | where [s, e, o] | and (eq e "sought") | collect s)) 0
+
+has-sf    = exists solve-for
+has-scope = exists scope-entity
+has-cw    = exists comp-word
+
+-- the "sought" label: comp-word for viveka, solve-for for physics/count
+sought-label = cond has-cw (to-string comp-word) otherwise (to-string solve-for)
+
+new-triples = cond (and has-sf (not already))
+  (append
+    [[(to-string solve-for), "sought", sought-label]]
+    (cond has-scope
+      [[(to-string solve-for), "sought-of", (to-string scope-entity)]]
+      otherwise []))
+  otherwise []
+
+result = append graph new-triples
+
+return result
+
+done

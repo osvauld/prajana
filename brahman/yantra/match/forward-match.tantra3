@@ -1,0 +1,24 @@
+tantra3 forward-match
+
+-- forward-match: candidates × vps × bcs × solve-for → [mantra, vps, "forward"] or []
+-- checks each candidate mantra: if all janya are covered by bound-concepts
+-- (or have a constants-key for auto-supply), and solve-for is not itself a janya,
+-- then the mantra matches in forward mode (all inputs present, compute phala).
+
+takes candidates
+takes vps
+takes bcs
+takes solve-for
+
+result = reduce candidates [] (fn acc m ->
+  let ms          = to-string m
+  let janya       = om-janya ms
+  let sf-is-janya = member solve-for janya
+  let all-ok      = reduce janya true (fn a r ->
+    (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
+  cond (or (gt (length acc) 0) (not all-ok) sf-is-janya) acc
+  otherwise [m, vps, "forward"])
+
+return result
+
+done

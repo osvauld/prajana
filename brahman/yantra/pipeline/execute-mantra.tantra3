@@ -1,0 +1,47 @@
+tantra3 execute-mantra
+
+-- execute-mantra: fire a matched mantra and return the computed value.
+-- kriya — the act. one act, three paths:
+--   forward + math-op  → apply-op with resolved args
+--   forward + kriya    → call equation tantra with resolved args
+--   inverse            → invert via pratipaksha
+--
+-- the mantra declares how it fires (math-op shabda or kriya edge).
+-- this tantra reads that declaration and dispatches.
+-- replaces: execute-matched, execute-math, execute-chain, invert-math
+
+takes mantra
+takes bindings
+takes mode
+takes solve-for
+
+math-op  = shabda mantra "math-op"
+is-math  = gt (string-length math-op) 0
+is-inv   = eq mode "inverse"
+
+-- ── resolve janya → values ────────────────────────────────────────────────────
+args = resolve-janya-args mantra bindings
+
+-- ── forward: math-op path ─────────────────────────────────────────────────────
+forward-math = cond (and is-math (not is-inv))
+  (apply-op (shabda math-op "eval") args)
+  otherwise _none
+
+-- ── forward: kriya/equation path ──────────────────────────────────────────────
+kriya-nodes = walk mantra "kriya"
+forward-kriya = cond (and (not is-math) (not is-inv) (gt (length kriya-nodes) 0))
+  (call-tantra (nth kriya-nodes 0) args)
+  otherwise _none
+
+-- ── inverse path ──────────────────────────────────────────────────────────────
+inverse-val = cond is-inv (invert-math mantra bindings solve-for) otherwise _none
+
+-- ── dispatch ──────────────────────────────────────────────────────────────────
+result = cond (exists forward-math) forward-math
+  otherwise (cond (exists forward-kriya) forward-kriya
+  otherwise (cond (exists inverse-val) inverse-val
+  otherwise _none))
+
+return result
+
+done

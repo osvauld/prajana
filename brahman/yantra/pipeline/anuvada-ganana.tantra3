@@ -1,0 +1,118 @@
+tantra3 anuvada-ganana
+
+-- orchestrator: natural-language sentence -> answer string.
+-- pure: no session state. sentence in, answer out.
+--
+-- the proof graph carries all reasoning via typed edges:
+--   [concept, derived-by, mantra]    — which mantra produced this value
+--   [winner,  greater-than, loser]   — viveka comparison result
+--   [winner,  viveka-concept, mass]  — what concept was compared
+--   [winner,  viveka-direction, max] — which direction (max/min)
+--   [winner,  viveka-sankhya, val]   — winner's value
+--   [loser,   viveka-sankhya, val]   — loser's value
+--   [sf,      sought, label]         — what is being sought
+--   [sf,      sought-of, entity]     — whose frame (optional)
+--
+-- emit-reasoning is a pure graph walker over these edges.
+-- no viveka-ctx, no chain-steps passed to it.
+
+takes sentence
+
+raw-graph  = build-question-graph sentence
+asserted   = assertion-bandha raw-graph
+refined    = fixpoint asserted (fn g -> avrti-refine g)
+expanded  = kosha-expand refined
+
+sf-result    = extract-solve-for expanded
+sf           = nth sf-result 1
+scope-entity = nth sf-result 2
+
+-- ── viveka detection ──────────────────────────────────────────────────────────
+entities         = prathama-sparsha expanded
+all-subjects     = unique (expanded | where [s, e, o] | collect (to-string s))
+viveka-max-word  = nth (filter all-subjects (fn w -> eq (to-string (shabda-anveshana w)) "viveka-max")) 0
+viveka-min-word  = nth (filter all-subjects (fn w -> eq (to-string (shabda-anveshana w)) "viveka-min")) 0
+viveka-max-present = exists viveka-max-word
+viveka-min-present = exists viveka-min-word
+is-viveka        = (and (gt (length entities) 1) (or viveka-max-present viveka-min-present))
+viveka-dir       = cond (and viveka-min-present (not viveka-max-present)) "min" otherwise "max"
+comp-word        = cond viveka-max-present viveka-max-word otherwise viveka-min-word
+comp-concept     = nth (expanded | where [s, e, o]
+  | and (eq (to-string s) (to-string comp-word))
+  | and (eq e "vishesa")
+  | and (neq (to-string o) "rashi")
+  | collect o) 0
+
+-- ── viveka path ───────────────────────────────────────────────────────────────
+viveka-raw        = cond is-viveka
+  (viveka-ganana expanded comp-concept comp-word viveka-dir)
+  otherwise []
+
+viveka-winner     = cond is-viveka (nth viveka-raw 0) otherwise ""
+viveka-loser      = cond is-viveka (nth viveka-raw 1) otherwise ""
+viveka-gt-triples = cond is-viveka (nth viveka-raw 5) otherwise []
+viveka-ev-pairs   = cond is-viveka (nth viveka-raw 4) otherwise []
+
+-- ── has-intent guard ──────────────────────────────────────────────────────────
+-- without an explicit vidhi-kaala (find / calculate / what is ...) the question
+-- is ambiguous. "ball has mass 5 velocity 10" could be KE or momentum or neither.
+-- without intent, no derivation fires — return "no match" immediately.
+-- viveka questions (heavier / lighter / more / less) carry their own intent signal
+-- and bypass this guard via is-viveka.
+has-intent  = nth sf-result 0
+
+-- ── anumana detection ─────────────────────────────────────────────────────────
+-- ── anumana detection ─────────────────────────────────────────────────────────
+-- parallel to extract-solve-for. reads the categorical question structure.
+-- returns [is-anumana, query-entity, assert-entity, mode]
+anumana-ctx    = anumana-sparsha refined
+is-anumana     = nth anumana-ctx 0
+anumana-query  = nth anumana-ctx 1
+anumana-assert = nth anumana-ctx 2
+anumana-mode   = nth anumana-ctx 3
+
+anumana-result = cond is-anumana
+  (cond (eq anumana-mode "varga")
+    (anumana-viveka-yukta refined anumana-query anumana-assert)
+    otherwise (anumana-viveka refined anumana-query anumana-assert))
+  otherwise ""
+
+-- ── standard math/physics path ────────────────────────────────────────────────
+chain-raw   = cond (or is-viveka has-intent) (cond is-viveka [[], expanded] otherwise (derive-chain expanded)) otherwise [[], expanded]
+enriched    = nth chain-raw 1
+
+mm-direct   = cond (or is-viveka has-intent) (cond is-viveka [] otherwise (match-mantra expanded)) otherwise []
+chain-steps = nth chain-raw 0
+
+final-m = cond (gt (length mm-direct) 0)
+  mm-direct
+  otherwise (cond (gt (length chain-steps) 0)
+    (nth (nth chain-steps (sub (length chain-steps) 1)) 2)
+    otherwise [])
+
+result = cond is-anumana
+  anumana-result
+  otherwise (cond is-viveka
+    (cond (exists viveka-winner) (to-string viveka-winner) otherwise "no match")
+    otherwise (cond (not has-intent) "no match"
+    otherwise (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match")))
+
+-- ── proof graph base selection ─────────────────────────────────────────────────
+--   viveka path:        use expanded (viveka-ganana works on clean graph)
+--   direct mm match:    use expanded (no derive-chain contamination)
+--   chain-derived match: use enriched (derive-step produced the needed janya)
+base-graph = cond is-viveka expanded
+  otherwise (cond (gt (length mm-direct) 0) expanded
+  otherwise enriched)
+
+-- ── pramana-bandha: bind proof edges into graph ───────────────────────────────
+proof-graph = pramana-bandha base-graph final-m result sf scope-entity is-viveka viveka-ev-pairs viveka-gt-triples comp-word
+
+-- ── emit: pure graph walk ─────────────────────────────────────────────────────
+answer = cond is-anumana
+  (emit-anumana refined anumana-query anumana-assert anumana-mode anumana-result)
+  otherwise (emit-reasoning proof-graph)
+
+return answer
+
+done

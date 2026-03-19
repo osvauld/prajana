@@ -1,0 +1,59 @@
+tantra3 emit-nigamana
+
+-- nigamana: "we find" — the conclusion.
+-- states the final derived result or the comparison winner.
+--
+-- viveka: "we find: ball-A is heavier than ball-B"
+-- physics/count: "we find: kinetic-energy = 18"
+-- no match: "no match"
+--
+-- returns: string
+
+takes graph
+takes is-viveka
+
+say-found    = shabda "anuvada-setu" "speech-found"
+say-no-match = shabda "anuvada-setu" "speech-no-match"
+say-is       = shabda "anuvada-setu" "speech-is"
+say-than     = shabda "anuvada-setu" "speech-than"
+rel-sankhya  = shabda "anuvada-setu" "rel-sankhya"
+
+gt-triples = graph | where [s, e, o] | and (eq e "greater-than") | collect [s, o]
+
+-- viveka nigamana
+vk-winner = cond (gt (length gt-triples) 0) (to-string (nth (nth gt-triples 0) 0)) otherwise ""
+vk-loser  = cond (gt (length gt-triples) 0) (to-string (nth (nth gt-triples 0) 1)) otherwise ""
+sought-label = nth (graph | where [s, e, o] | and (eq e "sought") | collect (to-string o)) 0
+vk-ev-count = length (graph | where [s, e, o] | and (eq e "viveka-sankhya") | collect s)
+
+viveka-found = cond is-viveka
+  (cond (eq vk-ev-count 2)
+    (concat say-found ": " vk-winner " " say-is " " (to-string sought-label) " " say-than " " vk-loser)
+    otherwise (concat say-found ": " vk-winner " " say-is " the " (to-string sought-label)))
+  otherwise ""
+
+-- physics/count nigamana
+sought-entries = graph | where [s, e, o] | and (eq e "sought") | collect [s, o]
+sought-sf = cond (gt (length sought-entries) 0) (to-string (nth (nth sought-entries 0) 0)) otherwise ""
+
+sf-was-derived = gt (length (graph | where [s, e, o]
+  | and (eq (to-string s) sought-sf)
+  | and (eq e "derived-by")
+  | collect o)) 0
+
+sf-val = nth (graph | where [s, e, o]
+  | and (eq (to-string s) sought-sf)
+  | and (eq e "sankhya")
+  | collect (to-string o)) 0
+
+physics-found = cond (and (not is-viveka) sf-was-derived (exists sf-val))
+  (concat say-found ": " sought-sf " " rel-sankhya " " (to-string sf-val))
+  otherwise ""
+
+result = cond is-viveka viveka-found
+  otherwise (cond (gt (string-length physics-found) 0) physics-found
+  otherwise (to-string say-no-match))
+
+return result
+
+done

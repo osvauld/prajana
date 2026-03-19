@@ -1,0 +1,46 @@
+tantra3 anumana-viveka-yukta
+
+-- checks if a predicate is yukta-reachable via entity's varga inheritance chain.
+-- path C anumana: "do cats breathe?" — cat has varga chain → living-varga → breathing-yukta
+--
+-- this is the same inheritance container mechanism as physics:
+--   "does kinetic-energy have mass?" → KE has mass-yukta directly → yes
+--   "do cats breathe?"               → cat → mammal-varga → living-varga → breathing-yukta → yes
+--
+-- no swarupa path needed. the varga chain IS the inheritance. yukta IS the property.
+-- the predicate word resolves to a kosha concept. if that concept appears as yukta
+-- anywhere in the varga chain → yes.
+
+takes graph
+takes entity
+takes predicate
+
+-- collect varga nodes level by level (same as anumana-viveka)
+l1-varga = map (walk entity "varga") (fn nd -> to-string nd)
+l2-varga = reduce l1-varga [] (fn acc nd -> append acc (map (walk nd "varga") (fn x -> to-string x)))
+l3-varga = reduce l2-varga [] (fn acc nd -> append acc (map (walk nd "varga") (fn x -> to-string x)))
+l4-varga = reduce l3-varga [] (fn acc nd -> append acc (map (walk nd "varga") (fn x -> to-string x)))
+
+all-vargas = append l1-varga (append l2-varga (append l3-varga l4-varga))
+
+-- check yukta on each varga node — does any contain the predicate?
+has-yukta = reduce all-vargas false (fn found vnd ->
+  let ys = map (om-yukta vnd) (fn y -> to-string y)
+  (or found (member predicate ys)))
+
+-- also check direct yukta on the entity itself
+direct-yukta = member predicate (map (om-yukta entity) (fn y -> to-string y))
+
+-- also check swarupa targets' yukta (for direct concept nodes like animal, mammal)
+swarupa-nodes = map (walk entity "swarupa") (fn nd -> to-string nd)
+swarupa-yukta = reduce swarupa-nodes false (fn found nd ->
+  let ys = map (om-yukta nd) (fn y -> to-string y)
+  (or found (member predicate ys)))
+
+found = (or direct-yukta (or swarupa-yukta has-yukta))
+
+result = cond found "yes" otherwise "no"
+
+return result
+
+done
