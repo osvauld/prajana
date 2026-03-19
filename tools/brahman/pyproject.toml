@@ -1,0 +1,4 @@
+[tool.pytest.ini_options]
+# Anchor pytest rootdir to tools/brahman/ so conftest.py is always found
+# and cache writes to tools/brahman/.pytest_cache/vyakarana/
+testpaths = ["v2"]

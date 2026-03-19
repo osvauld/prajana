@@ -228,6 +228,35 @@ let neighbors (k : proof_graph) (name : string) : string list =
 let edges_of (k : proof_graph) (name : string) : typed_edge list =
   List.filter (fun e -> e.source = name || e.target = name) !(k.all_edges)
 
+(* ---- json_of_nigamana: serialize one om node for dump-om ---- *)
+
+let json_escape_pg s =
+  let buf = Buffer.create (String.length s) in
+  String.iter (fun c ->
+    match c with
+    | '"'  -> Buffer.add_string buf "\\\""
+    | '\\' -> Buffer.add_string buf "\\\\"
+    | '\n' -> Buffer.add_string buf "\\n"
+    | '\r' -> Buffer.add_string buf "\\r"
+    | '\t' -> Buffer.add_string buf "\\t"
+    | c    -> Buffer.add_char buf c
+  ) s;
+  Buffer.contents buf
+
+let je_pg s = "\"" ^ json_escape_pg s ^ "\""
+
+let json_of_nigamana (n : nigamana) : string =
+  let slokas_json = String.concat ","
+    (List.map (fun s -> je_pg s) n.slokas) in
+  let edges_json = String.concat ","
+    (List.map (fun e ->
+      Printf.sprintf "{\"source\":%s,\"target\":%s,\"relation\":%s}"
+        (je_pg e.source) (je_pg e.target) (je_pg (string_of_visheshanam e.relation))
+    ) n.edges) in
+  Printf.sprintf
+    "{\"name\":%s,\"layer\":%s,\"satya\":%.4f,\"slokas\":[%s],\"edges\":[%s],\"shabda\":%s}"
+    (je_pg n.name) (je_pg n.layer) n.satya slokas_json edges_json (je_pg n.shabda)
+
 (* ---- satya: raw structural prior ---- *)
 
 (* raw_satya: pure function of local topology — sloka count, edge count, type diversity.

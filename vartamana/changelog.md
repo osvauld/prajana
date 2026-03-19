@@ -22,42 +22,44 @@ Do not update this mid-session — only when a session is complete and tests pas
 
 **What was done:**
 
-Architectural analysis — re-examined all 72 tantras not from "what test does this fix"
-but from "is this tantra one complete thought?"
+Two architectural discoveries:
 
-Key discovery: sparsha → viveka → bandha (the three operations) appear at every scale:
-inside each tantra, across tantras (10 natural groups), and across the pipeline. The
-scan-ref fix completed the cycle at the tantra scale — before, a tantra could perceive
-(scan) but couldn't reflect on its perception (post-scan binding). This forced fragmentation
-(one thought split across files) and monoliths (orchestrators carrying state between fragments).
+**Discovery 1: Structural analysis of all 72 tantras.** Identified 10 natural
+groups by what they ARE (not by directory). sparsha → viveka → bandha at every
+scale. The scan-ref fix completed the cycle at the tantra scale.
 
-Ten natural groups identified (by what tantras ARE, not by directory):
-1. Orchestrators (5) — anuvada-ganana is the monolith to dissolve
-2. Perception (8) — the system's eyes, well-structured
-3. Refinement (14) — the understanding passes, count-bandha dissolves
-4. Derivation (11) — the math engine, derive-chain simplifies
-5. Proof emission (11) — panchaavayava, architecturally sound
-6. Comparison (3) — all three absorb internal repetition
-7. Graph construction (4) — intake system, keep
-8. Equations (11) — pure math, the template form
-9. Infrastructure (6) — boot/lookup/debug, keep
-10. Counting (3) — the broken group, rewrite count-chain
+**Discovery 2: The math kosha is an unused library.** 83 mantra-layer math nodes
+declared but not connected to the pipeline. The pipeline uses 23 physics mantras
+and hardcodes everything else. Mapped the full math operation graph:
+- Level 1: Operations — addition (eval:add), subtraction (eval:sub), max, min,
+  sum (variadic), product (variadic). All fireable via apply-op.
+- Level 2: Properties — commutativity, pratipaksha (inverse), associativity,
+  distributivity. Structural properties the pipeline can use.
+- Level 3: Structures — ring (kriya: addition, multiplication), lattice (kriya:
+  join, meet), graph-walk (phala: path), modus-ponens (janya: implication).
+- Bridges: ganana-setu maps eval names to math concepts. viveka-max → abheda → max.
+  viveka-min → abheda → min.
 
-Four-phase plan written:
-1. Complete broken cycles (count-chain, derive-chain, anumana-viveka, viveka-ganana)
-2. Dissolve the monolith (anuvada-ganana → composable pieces)
-3. Merge fragments (sandhi-kosha + sandhi-avastha, optional)
-4. Build new complete thoughts (viveka-derive, dvandva-ganana, krama-viveka)
+Key insight: ONE mechanism (read kosha → find operation → apply-op) unifies
+count, viveka, syllogism, transitive reasoning, and dvandva aggregation.
+The physics path (execute-mantra reads math-op, calls apply-op) IS the template.
+
+Bug found: emit-triples misclassifies kosha word aliases as rashi labels.
+"many" (alias for count) becomes mithya when preceded by satya concept.
+Root cause: `word ≠ node` conflates aliases with labels.
+
+Nine-step implementation order written. Phase 1 renamed from "Complete broken
+cycles" to "Connect the Math Kosha" — the pattern of reading the kosha for
+operations applies to count, viveka, derive-chain, and anumana-viveka equally.
 
 Documents:
-- `17-scan-ref-patterns.md` rewritten — now architecture-driven, not test-driven.
-  Title: "Completing the Tantra: Architecture After Scan-Ref"
-- `index.md` updated — doc 17 description reflects new direction
+- `17-scan-ref-patterns.md` rewritten with math kosha discovery, one-mechanism
+  principle, and bug documentation.
+- `index.md` updated.
 
-**Philosophical principle:** Dissolution IS abstraction. When we dissolve
-anuvada-ganana, we name what was unnamed (viveka-sparsha, ganana-dispatch).
-Composition replaces orchestration. A new question type = one new tantra,
-not a new branch in a monolith.
+**Philosophical principle:** The math kosha IS the library. monoid → abheda →
+op-class-monoid means the tantra parser's own monoid IS the kosha's monoid.
+The code IS the math. Manipravalam.
 
 ### 2026-03-19 — Session 9: scan body escape fix + pattern analysis
 

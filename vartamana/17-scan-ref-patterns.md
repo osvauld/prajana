@@ -4,29 +4,110 @@
 
 ---
 
-## The Discovery
+## Two Discoveries
+
+### Discovery 1: The scan-ref fix completes the tantra cycle
 
 The scan-ref fix (doc 16) was a parser bug fix. But what it revealed is
-architectural: every tantra in the system was constrained to an incomplete
-cycle. A tantra could perceive (scan the graph) but could not reflect on
-its perception (reference the scan output for further processing). This
-forced two structural distortions:
+architectural: every tantra was constrained to an incomplete cycle. A
+tantra could perceive (scan the graph) but could not reflect on its
+perception (reference the scan output for further processing). This
+forced fragmentation (one thought split across files) and monoliths
+(orchestrators carrying state between fragments).
 
-1. **Fragmentation** — one thought split across two or more files because
-   the second half needed the first half's scan output
-2. **Monoliths** — orchestrator tantras that exist solely to carry state
-   between fragments that should be self-contained
+The fix completes the cycle: **perceive → reflect → act**
+(sparsha → viveka → bandha) within a single file.
 
-The fix removes both constraints. A tantra can now complete the full cycle:
-**perceive → reflect → act** (sparsha → viveka → bandha) within a single
-file. This changes what a tantra IS — not a fragment of logic, but a
-complete unit of thought.
+### Discovery 2: The math kosha is an unused library of operations
+
+83 mantra-layer nodes in the math domain are declared but not connected
+to the pipeline. The pipeline uses 23 physics mantras. It hardcodes the
+same logic the math kosha already declares:
+
+```
+addition   → eval:add, arity:2, pratipaksha:subtraction
+subtraction → eval:sub, arity:2, pratipaksha:addition
+max        → eval:max, arity:2  (viveka-max --[abheda]--> max)
+min        → eval:min, arity:2  (viveka-min --[abheda]--> min)
+sum        → eval:add, arity:-1 (variadic addition)
+product    → eval:mul, arity:-1 (variadic multiplication)
+```
+
+And the algebraic structure behind them:
+
+```
+ring    --[kriya]--> addition, multiplication
+ring    --[siddha]--> distributivity
+lattice --[kriya]--> join, meet
+monoid  --[abheda]--> op-class-monoid (the tantra parser's own monoid!)
+commutativity --[drishthanta]--> addition, multiplication
+```
+
+And the reasoning operations:
+
+```
+modus-ponens --[janya]--> implication  (syllogism as a mantra)
+inference    --[yukta]--> viveka-max, viveka-min
+graph-walk   --[phala]--> path         (transitive closure)
+viveka-max   --[swarupa]--> viveka     (comparison IS viveka)
+```
+
+And the bridge:
+
+```
+ganana-setu: add → addition, sub → subtraction, mul → multiplication, ...
+```
+
+The pipeline hardcodes what the kosha already says. Every tantric
+improvement should read the kosha, not re-implement it.
+
+---
+
+## The Unifying Principle
+
+### One mechanism for all reasoning types
+
+Every question the pipeline answers follows the same structure:
+
+1. **Detect** the question type by reading `swarupa` edges from
+   concepts in the graph
+2. **Find** the operation by following abheda/kriya/yukta edges to
+   a math operation node
+3. **Read** the operation's `eval` shabda to get the primitive
+4. **Collect** the operands (scan-ref: perceive, then post-scan collect)
+5. **Fire** via `apply-op eval operands`
+6. **Emit** the result back into the graph
+
+This is ONE mechanism, not five separate ones:
+
+| Question type | Kosha concept | Operation | eval |
+|---------------|---------------|-----------|------|
+| Count addition | count → arithmetic → addition | addition | add |
+| Count subtraction | count → arithmetic → subtraction | subtraction | sub |
+| Comparison (more) | viveka-max → abheda → max | max | max |
+| Comparison (less) | viveka-min → abheda → min | min | min |
+| Total (dvandva) | sum | sum | add (variadic) |
+| Syllogism | modus-ponens → janya → implication | modus-ponens | (chain) |
+| Transitive | graph-walk → phala → path | graph-walk | (closure) |
+| Physics | momentum-mantra → math-op → multiplication | multiplication | mul |
+
+Physics already works this way (mantras have `math-op:multiplication`,
+execute-mantra reads it, calls `apply-op "mul" args`). The other types
+just need the same wiring.
+
+### The Manipravalam principle realized
+
+Writing `viveka-max --[abheda]--> max` in the kosha IS writing the
+comparison capability. Writing `addition --[eval]--> add` IS writing
+the count-addition capability. The pipeline reads these declarations
+and fires. Adding a new question type = writing an .om file, not
+modifying tantra code.
 
 ---
 
 ## Current baseline
 
-**511 passed / 63 xfailed / 0 failed** (2026-03-19, session 9)
+**511 passed / 63 xfailed / 0 failed** (2026-03-19, session 10)
 
 ---
 
@@ -42,36 +123,18 @@ The three operations appear identically at every level:
 - bandha: an emit/append writes the result
 
 **Across tantras:**
-- Group 2 (prathama-sparsha, shashthi-sparsha, ...) = sparsha at tantra scale
-- Group 6 (viveka-ganana, anumana-viveka, ...) = viveka at tantra scale
-- Group 3 (refinement passes) + Group 5 (proof emission) = bandha at tantra scale
+- Group 2 (prathama-sparsha, shashthi-sparsha, ...) = sparsha
+- Group 6 (viveka-ganana, anumana-viveka, ...) = viveka
+- Group 3 (refinement passes) + Group 5 (proof emission) = bandha
 
 **Across the whole pipeline:**
-- anuvada-ganana sequences: perceive (build+refine+expand), discriminate
-  (viveka? anumana? physics?), bind (execute+prove+emit)
-
-The scan-ref fix completes the cycle at the tantra scale. Before, a tantra
-could only do sparsha (scan) without subsequent viveka (filter the output)
-or bandha (emit from the filtered output). That forced the cycle to be
-broken across files. Now each tantra can be one complete thought.
+- anuvada-ganana sequences: perceive → discriminate → bind
 
 ### What a tantra should feel like
 
-The equation tantras are the template:
-
-```
-tantra3 ke-expr
-takes mass
-takes velocity
-result = mul mass (mul velocity (div velocity 2))
-return result
-done
-```
-
-12 lines. Takes inputs, returns output. One thought. Every tantra should
-approach this clarity — not in line count, but in conceptual unity. A
-tantra should be one complete sparsha → viveka → bandha cycle, not a
-fragment requiring an orchestrator to complete it.
+The equation tantras are the template: 12 lines, one thought. Every
+tantra should approach this clarity — not in line count, but in
+conceptual unity. One complete sparsha → viveka → bandha cycle.
 
 ---
 
@@ -85,114 +148,59 @@ Not by directory — by what the tantras ARE.
 | Tantra | Lines | Role |
 |--------|-------|------|
 | anuvada-ganana | 119 | sentence → answer (dispatches everything) |
-| session-anuvada | 40 | session wrapper, duplicates half of anuvada-ganana |
+| session-anuvada | 40 | session wrapper, duplicates half of above |
 | avrti-refine | 37 | sequences 10 sub-passes in refinement loop |
 | emit-reasoning | 41 | sequences 5 proof limbs into speech |
 | reboot | 13 | sequences boot passes |
 
-**Problem:** anuvada-ganana is a 119-line dispatch table. Every new question
-type (viveka, anumana, count, transitive) requires adding a `cond` branch
-to the monolith. It carries state between fragments that should be
-self-contained.
+**Problem:** anuvada-ganana is a 119-line dispatch table with hardcoded
+question-type detection. The kosha already declares question types via
+swarupa edges (viveka-max → swarupa → viveka). The orchestrator should
+read the graph, not hardcode branches.
 
-**Action:** Dissolve anuvada-ganana into composable pieces. Each piece
-completes its own sparsha → viveka → bandha cycle. The orchestrator
-becomes thin wiring — or disappears entirely if composition is clean
-enough. avrti-refine stays (already thin). emit-reasoning stays (already
-a weaver, not a thinker).
+**Action:** Dissolve. Question-type detection reads swarupa. Dispatch
+becomes thin wiring. avrti-refine and emit-reasoning stay.
 
 ### Group 2: PERCEPTION (8 tantras, ~310 lines)
 **Pure readers. No side effects. The system's eyes.**
 
-| Tantra | Lines | What it perceives |
-|--------|-------|-------------------|
-| prathama-sparsha | 15 | entities |
-| shashthi-sparsha | 25 | ownership |
-| sankhya-sparsha | 15 | numeric values |
-| bound-state | 28 | what concepts have values |
-| extract-solve-for | 55 | intent + solve-for + scope |
-| anumana-sparsha | 83 | categorical question structure |
-| scope-vps | 68 | entity-scoped value pairs |
-| mantra-coverage | 23 | which mantras could fire |
+prathama-sparsha, shashthi-sparsha, sankhya-sparsha, bound-state,
+extract-solve-for, anumana-sparsha, scope-vps, mantra-coverage
 
-**Action:** Keep. These are well-named, complete thoughts. Each one IS
-a sparsha — contact with a specific aspect of the graph. The naming IS
-the abstraction. extract-solve-for and anumana-sparsha could be simplified
-later but work now.
+**Action:** Keep. These are well-named complete thoughts.
 
 ### Group 3: REFINEMENT (14 tantras, ~830 lines)
-**Transform the graph within the avrti loop. The understanding passes.**
+**Transform the graph within the avrti loop.**
 
-| Tantra | Lines | What it refines |
-|--------|-------|----------------|
-| sandhi-kosha | 80 | mithya → compound lookup |
-| sandhi-avastha | 45 | mithya → avastha compound |
-| sandhi-bandhana | 50 | reattribute values after rename |
-| vibhakti-shashthi | 74 | detect entities + ownership |
-| sandhi-viveka | 50 | grammar structure from mithya words |
-| vishesa-instance | 57 | create typed rashi instances |
-| rashi-viveka | 60 | bind value to rashi instance |
-| vishesa-bandhana | 51 | redirect bindings to instances |
-| rashi-anuvada | 41 | propagate instance value to concept |
-| sankhya-bandha | 36 | bind floating numbers to concepts |
-| count-bandha | 102 | count operand assignment (WORKAROUND) |
-| assertion-bandha | 93 | IS-A assertions → swarupa edges |
-| flush-pending-mithya | 14 | helper for sandhi |
-| agra-bandha | 76 | generic proximity binding |
+sandhi-kosha, sandhi-avastha, sandhi-bandhana, vibhakti-shashthi,
+sandhi-viveka, vishesa-instance, rashi-viveka, vishesa-bandhana,
+rashi-anuvada, sankhya-bandha, count-bandha, assertion-bandha,
+flush-pending-mithya, agra-bandha
 
-**Problem:** count-bandha (102 lines) is a workaround for the broken cycle.
-It splits the continuous act of counting into two discrete steps (bind
-operands, then fire mantra) because the system couldn't hold intermediate
-state within a scan. sandhi-kosha + sandhi-avastha are two passes over
-the same word sequence for the same purpose (compound resolution).
+**Problem:** count-bandha (102 lines) hardcodes signal-word lists and
+synthetic count1/count2 concepts. The math kosha already has addition
+(eval:add) and subtraction (eval:sub) with pratipaksha relationships.
 
-**Action:** Dissolve count-bandha — replaced by count-chain. Consider
-merging sandhi-kosha + sandhi-avastha (which dissolves flush-pending-mithya
-too). The rest stay.
+**Action:** Dissolve count-bandha → count-chain reads the math kosha.
+Consider merging sandhi-kosha + sandhi-avastha. The rest stay.
 
 ### Group 4: DERIVATION (11 tantras, ~470 lines)
 **Compute new values from existing ones. The math engine.**
 
-| Tantra | Lines | What it does |
-|--------|-------|-------------|
-| derive-step | 39 | one pass: fire all ready mantras |
-| derive-chain | 79 | iterate derive-step, record changes |
-| mantra-select | 41 | filter mantra candidates |
-| match-mantra | 52 | find best matching mantra |
-| forward-match | 25 | all janya bound → forward |
-| inverse-match | 33 | phala bound → inverse |
-| execute-mantra | 48 | fire a mantra (3 dispatch paths) |
-| execute-matched | 31 | dispatch + format answer |
-| invert-math | 56 | solve for missing input |
-| resolve-janya-args | 27 | resolve mantra inputs |
-| relative-vps | 42 | paired velocity values |
+derive-step, derive-chain, mantra-select, match-mantra, forward-match,
+inverse-match, execute-mantra, execute-matched, invert-math,
+resolve-janya-args, relative-vps
 
-**Problem:** derive-chain (79 lines) manually unrolls 3 identical steps
-because it needed to record what changed at each step and the system
-couldn't do scan-then-analyze.
+**Note:** This group already uses the kosha correctly for physics.
+execute-mantra reads `math-op` shabda, calls `apply-op`. invert-math
+reads `pratipaksha` edges. This IS the pattern for all other groups.
 
-**Action:** Simplify derive-chain — 3 unrolled steps → one loop with
-scan-ref. The rest are clean and well-decomposed.
+**Action:** Simplify derive-chain (3 steps → loop). The rest stay.
 
 ### Group 5: PROOF EMISSION (11 tantras, ~620 lines)
 **Turn the proof graph into speech. The panchaavayava.**
 
-| Tantra | Lines | What it emits |
-|--------|-------|--------------|
-| emit-pratijna | 68 | "we have: ..." |
-| emit-hetu | 34 | "we seek: ..." |
-| emit-udaharana-upanaya | 76 | "we know: ... we see: ..." |
-| emit-nigamana | 60 | "we find: ..." |
-| emit-anumana | 100 | categorical proof |
-| mantra-known-str | 33 | "we know: mantra (j → p)" |
-| mantra-seen-str | 66 | "we see: applying j=val" |
-| entity-props-str | 34 | "entity (c=val)" |
-| list-join | 42 | Oxford comma join |
-| pramana-bandha | 65 | bind proof edges into graph |
-| sought-bandha | 46 | bind sought edges |
-
-**Action:** Keep. The five-limbed proof structure is well-decomposed.
-Each limb is its own tantra. This group is architecturally sound.
+**Action:** Keep. Architecturally sound.
 
 ### Group 6: COMPARISON (3 tantras, ~200 lines)
 **Discriminate: which is more, which is ancestor.**
@@ -203,40 +211,33 @@ Each limb is its own tantra. This group is architecturally sound.
 | anumana-viveka | 54 | does entity inherit from ancestor |
 | anumana-viveka-yukta | 47 | does entity have property via varga |
 
-**Problem:** All three contain copy-pasted structure. viveka-ganana uses
-reduce as a poor scan. anumana-viveka and anumana-viveka-yukta manually
-unroll 4 levels of chain walking because the system couldn't collect
-then iterate.
+**Problem:** viveka-ganana hardcodes gt/lt comparison. The kosha declares
+`viveka-max --[abheda]--> max --[eval]--> max`. The comparison should
+use `apply-op` via the kosha, same as physics mantras.
 
-**Action:** All three absorb their internal repetition using scan-ref.
+anumana-viveka manually unrolls 4 swarupa levels. The kosha declares
+`graph-walk --[phala]--> path` — chain walking IS graph traversal.
+
+**Action:** viveka-ganana uses kosha-driven max/min. anumana-viveka
+uses scan-ref loop (unlimited depth).
 
 ### Group 7: GRAPH CONSTRUCTION (4 tantras, ~180 lines)
 **Words in, graph out. The intake system.**
 
-| Tantra | Lines | What it builds |
-|--------|-------|---------------|
-| build-question-graph | 36 | sentence → raw triples |
-| emit-triples | 52 | word + context → triples |
-| kosha-expand | 39 | add PPR-related concepts |
-| materialize-question-graph | 50 | triples → traversable nodes |
+**Bug found:** emit-triples misclassifies kosha word aliases as rashi
+labels when active concept exists. "many" (alias for count) becomes
+mithya instead of satya when preceded by any satya word. Fix: check
+`word-node` to distinguish aliases from labels.
 
-**Action:** Keep. These use reduce/map correctly for their purpose.
+**Action:** Fix emit-triples alias bug. Keep structure.
 
 ### Group 8: EQUATIONS (11 tantras, ~150 lines)
 **Pure math. The irreducible transformations.**
 
-ke-expr, velocity-expr, acceleration-expr, work-expr,
-potential-energy-expr, period-expr, frequency-expr,
-centripetal-force-expr, gravitational-force-expr, ke-inv-mass,
-relative-velocity-expr
-
-**Action:** Keep. Add new ones as needed (area-expr, distance-expr).
+**Action:** Keep. Add new ones as needed.
 
 ### Group 9: INFRASTRUCTURE (6 tantras, ~150 lines)
 **Boot, lookup, debug, fixpoint.**
-
-reboot, varga-inheritance, shabda-anveshana, avrti, unit-of-concept,
-mantra-coverage
 
 **Action:** Keep.
 
@@ -246,186 +247,246 @@ mantra-coverage
 | Tantra | Lines | Status |
 |--------|-------|--------|
 | count-bandha | 102 | Workaround. Dissolve. |
-| count-chain | 17 | Stub. Rewrite. |
+| count-chain | 17 | Stub. Rewrite with kosha-driven ops. |
 | sankhya-bandha | 36 | Works for non-count case. Keep. |
 
-**Action:** Rewrite count-chain as a complete thought (scan events, track
-running total, emit). Dissolve count-bandha.
+**Action:** Rewrite count-chain using the math kosha's addition/subtraction.
+Dissolve count-bandha.
+
+---
+
+## The Math Kosha Connection
+
+### What exists but is not connected (83 mantra-layer nodes)
+
+**Level 1 — Operations (directly fireable via apply-op):**
+
+| Node | eval | arity | pratipaksha | Pipeline use |
+|------|------|-------|-------------|-------------|
+| addition | add | 2 | subtraction | Count total |
+| subtraction | sub | 2 | addition | Count remaining |
+| multiplication | mul | 2 | division | Physics (connected) |
+| division | div | 2 | multiplication | Physics inverse (connected) |
+| max | max | 2 | — | Viveka "which has more" |
+| min | min | 2 | — | Viveka "which has less" |
+| sum | add | -1 | — | Dvandva "total of all" |
+| product | mul | -1 | — | Dvandva "product of all" |
+| square | square | 1 | square-root | Expression (connected) |
+| half | half | 1 | double | Expression (connected) |
+
+**Level 2 — Properties (reasoning shortcuts):**
+
+| Property | What it declares | Pipeline implication |
+|----------|-----------------|---------------------|
+| commutativity → drishthanta → addition | a+b = b+a | Operand order doesn't matter in count |
+| pratipaksha: addition ↔ subtraction | They're inverses | If total and part known, find the other |
+| associativity → drishthanta → addition | (a+b)+c = a+(b+c) | Can accumulate left-to-right |
+| distributivity → kriya → mul, add | a(b+c) = ab+ac | Per-entity derive then sum (dvandva) |
+
+**Level 3 — Structures (deep reasoning):**
+
+| Structure | What it declares | Pipeline implication |
+|-----------|-----------------|---------------------|
+| ring → kriya → addition, multiplication | Integers form a ring | Count arithmetic is ring arithmetic |
+| lattice → kriya → join, meet | Comparison is lattice | Transitive comparison is join |
+| graph-walk → phala → path | Walk produces paths | Transitive closure is graph walk |
+| modus-ponens → janya → implication | Syllogism needs IF-THEN | Detect implications, fire MP |
+| inference → yukta → viveka-max, viveka-min | Inference contains comparison | Comparison is a kind of inference |
+
+**Level 4 — Bridges:**
+
+| Bridge | What it maps | Purpose |
+|--------|-------------|---------|
+| ganana-setu | add→addition, sub→subtraction, ... | Eval name ↔ math concept |
+| viveka-max → abheda → max | Comparative word → operation | "heavier" → max operation |
+| viveka-min → abheda → min | Comparative word → operation | "lighter" → min operation |
+
+### What's already connected (template for the rest)
+
+The physics path IS the pattern:
+
+```
+momentum-mantra → math-op:multiplication → apply-op "mul" [mass, velocity]
+kinetic-energy-mantra → kriya:ke-expr → call-tantra ke-expr [mass, velocity]
+invert-math → pratipaksha walk → find inverse operation
+```
+
+execute-mantra reads the kosha. invert-math reads the kosha.
+The rest of the pipeline should do the same.
+
+---
+
+## Known Bugs To Fix
+
+### emit-triples alias bug
+
+**Root cause:** `is-rashi-label` check at line 34 uses `neq word (to-string nd)`
+to distinguish labels from concepts. But kosha word aliases (declared via
+`shabda word:many,...` in .om files) also have word ≠ node. "many" (→ count)
+gets classified as a rashi label when active concept exists.
+
+**Effect:** "how many birds are left" → "many" becomes `[many, mithya, many]`
+instead of `[count, satya, count]`. count-bandha never fires. Blocks count
+tests where a satya concept precedes "how many".
+
+**Fix:** Check `word-node word` — if it returns the same node as
+shabda-anveshana, the word is a declared alias, not a label.
+
+### sankhya-bandha number-before-noun
+
+In "10 birds", the number precedes the concept. sankhya-bandha tracks
+`last-active` left-to-right, so 10 has no preceding satya to bind to.
+In "3 fly away" after "tree", 3 wrongly binds to tree.
+
+count-chain addresses this by computing the count directly from the event
+sequence rather than relying on individual number→concept binding.
 
 ---
 
 ## The Dissolution Plan
 
-### Phase 1: Complete Thoughts (fix the broken cycles)
+### Phase 1: Connect the Math Kosha
 
-Make each affected tantra a complete sparsha → viveka → bandha cycle.
-This is the structural work — not test-driven, architecture-driven.
+The first phase is not just "fix count" — it's "establish the pattern of
+reading the kosha for operations." count-chain is the first connection.
+viveka-ganana is the second. Both use the same mechanism.
 
-#### 1a. count-chain rewrite (Group 10)
+#### 1a. Fix emit-triples alias bug (Group 7)
+
+Add alias detection: if `word-node word` equals `nd`, the word is a
+declared alias, not a label. This unblocks count detection for all
+sentence patterns where satya concepts precede "how many."
+
+#### 1b. count-chain rewrite (Group 10)
 
 **Dissolves:** count-bandha (102 lines)
-**Creates:** count-chain rewrite (~40 lines)
+**Creates:** count-chain rewrite (~50 lines)
 
-The sentence IS a number line. The scan walks events in order, tracking
-a running total. Post-scan, extract the total and emit:
+One thought: walk the graph as a number line.
 
 ```
 "8 birds. 3 flew away. 2 came back. how many remaining."
- └─ +8    └─ -3        └─ +2        └─ emit total (7)
+ └─ +8    └─ −3        └─ +2        └─ emit total (7)
 ```
 
-One thought: perceive the events (scan), discriminate add/subtract
-(verb signals), bind the total (emit). Complete cycle.
+The scan perceives numbers and verb signals. Post-scan:
+- Look up the operation: count → arithmetic → addition or subtraction
+  (based on verb signals → kosha concept → `eval` shabda)
+- Fire: `apply-op eval [accumulated-operands]`
+- Emit: `[count, sankhya, result]` into the graph
+
+The verb signal → operation mapping:
+- Departure verbs (gave, flew, away, lost...) → subtraction
+- Arrival verbs (came, bought, found...) → addition
+- Default (no verb) → addition (accumulation)
+- The signal list stays in the tantra (it's sentence perception, not math)
+- But the OPERATION comes from the kosha: addition.eval = "add"
 
 Wire into avrti-refine: line 32, count-bandha → count-chain.
 
-#### 1b. derive-chain simplification (Group 4)
+For the pipeline to fire the result: count-chain emits the result
+directly as `[count, sankhya, 7]` (or `[count-total, sankhya, 7]`).
+The solve-for concept already has a value. The proof path needs to
+handle "value already computed" — or we create count-add-mantra and
+count-sub-mantra .om files so the existing match→execute path fires.
 
-**Absorbs:** 3 manually unrolled steps → 1 loop (~40 lines from 79)
+**Decision point:** Direct emission vs. mantra. Direct emission is
+simpler. Mantra is more compositional (proof emission works for free).
+Start with direct emission; add mantras if proof quality demands it.
 
-One thought: keep deriving until nothing new appears. Record what
-changed at each step for reasoning emission. The loop IS the thought
-— not three copies of it.
+#### 1c. viveka-ganana → kosha-driven comparison (Group 6)
 
-#### 1c. anumana-viveka simplification (Group 6)
+Currently: hardcoded reduce + gt/lt.
 
-**Absorbs:** 4 copy-pasted levels → scan + iterate (~25 lines from 54)
-**Same for:** anumana-viveka-yukta (~25 lines from 47)
+After: scan-ref collects per-entity values. Post-scan: look up
+viveka-max.abheda → max → eval:max. Fire: `apply-op "max" [val1, val2]`.
+Return the entity that wins.
 
-One thought: walk up the inheritance chain until you find the target
-or exhaust the chain. Any depth, not just 4.
+Same mechanism as count-chain — read kosha, find operation, fire.
 
-#### 1d. viveka-ganana cleanup (Group 6)
+#### 1d. derive-chain simplification (Group 4)
 
-**Absorbs:** reduce-as-poor-scan → proper scan + post-comparison
-(~70 lines from 95)
+3 manually unrolled steps → 1 scan-ref loop.
+composition --[swarupa]--> parampara — the chain IS composition.
 
-One thought: collect per-entity values (scan), then compare them
-(post-scan viveka). Two phases, one file.
+#### 1e. anumana-viveka simplification (Group 6)
+
+4 copy-pasted levels → scan-ref loop over swarupa edges.
+graph-walk --[phala]--> path — the chain walk IS graph traversal.
 
 ### Phase 2: Dissolve the Monolith (Group 1)
 
-anuvada-ganana today is 119 lines of dispatch:
+anuvada-ganana → thin wiring that reads graph swarupa edges to
+determine question type. The kosha declares the types:
+- viveka-max --[swarupa]--> viveka → comparison path
+- modus-ponens --[swarupa]--> inference → syllogism path
+- count --[yukta]--> arithmetic → count path
+- momentum-mantra --[varga]--> physics-mantra → physics path
 
-```
-lines 21-24:  perceive (build → assert → refine → expand)
-lines 26-29:  extract intent (solve-for, scope)
-lines 31-44:  detect viveka (is this a comparison question?)
-lines 47-54:  execute viveka path
-lines 62-63:  detect intent gate
-lines 65-78:  detect anumana (is this a categorical question?)
-lines 74-78:  execute anumana path
-lines 81-91:  execute physics/math path
-lines 93-98:  select result from paths
-lines 100-106: select base graph for proof
-lines 109:    build proof graph
-lines 112-114: emit speech
-```
+Dispatch reads the graph and routes. No hardcoded branches.
 
-Each block is a distinct thought. The dissolution:
-
-#### 2a. Extract viveka-sparsha (lines 31-44 → new tantra)
-
-The 14 lines that detect whether this is a comparison question.
-Currently embedded inside anuvada-ganana. This IS a perception —
-it looks at the graph and says "this is a viveka question about
-concept X in direction Y." Complete sparsha.
-
-#### 2b. Extract ganana-dispatch (lines 81-98 → new tantra or simplify)
-
-The result-selection cascade:
-```
-if anumana → anumana-result
-if viveka → viveka-winner
-if no-intent → "no match"
-if has-match → execute
-else → "no match"
-```
-
-This is pure viveka — discriminating which path produced the answer.
-Could become a generic pattern: given N candidate results, return the
-first non-empty one.
-
-#### 2c. Extract pramana-siddhi (lines 100-114 → absorb into existing)
-
-Proof graph selection + emission. This might fold into pramana-bandha
-or emit-reasoning rather than becoming its own tantra.
-
-#### 2d. The residual anuvada-ganana
-
-After extraction, what remains is thin wiring:
-```
-graph = build → assert → refine → expand
-intent = extract-solve-for graph
-type = question-type graph  (viveka-sparsha + anumana-sparsha)
-result = dispatch type graph intent
-proof = pramana-bandha graph result
-answer = emit-reasoning proof
-```
-
-~20 lines. Pure composition. Adding a new question type means writing
-a new tantra, not modifying the orchestrator.
-
-#### 2e. session-anuvada unification
-
-session-anuvada currently duplicates half of anuvada-ganana. With the
-dissolution, session-anuvada becomes: inject prior-graph after refine,
-then call the same composable pieces. The duplication vanishes.
+~20 lines after extraction. session-anuvada duplication vanishes.
 
 ### Phase 3: Merge Fragments (Group 3)
 
-#### 3a. Unify sandhi-kosha + sandhi-avastha (optional, risky)
+sandhi-kosha + sandhi-avastha → one compound-resolution pass.
+Optional, risky, defer.
 
-Both do compound resolution. sandhi-kosha checks the kosha for
-registered compounds. sandhi-avastha checks for avastha qualifiers
-(initial, final). The thought is ONE: "these adjacent words form one
-concept." With scan-ref, a single compound-resolution scan could
-handle both, checking kosha first then avastha as fallback.
+### Phase 4: New Complete Thoughts
 
-This dissolves flush-pending-mithya (14 lines) automatically.
+Each one follows the same pattern: detect via swarupa, find operation
+via kosha, collect operands via scan-ref, fire via apply-op.
 
-**Risk:** High. Both work. The merge could introduce subtle ordering
-bugs. Defer unless the architecture demands it.
+#### 4a. viveka-derive
 
-### Phase 4: New Complete Thoughts (what scan-ref enables for xfails)
+**Thought:** For each entity, compute derived values, then compare.
 
-These aren't patches — they're new tantras, each expressing one
-complete thought that was previously impossible.
+"Which has more KE" = derive KE per entity (multiplication path),
+then compare (max path). Uses both physics mantras AND viveka-max.
 
-#### 4a. viveka-derive (new)
+Unlocks: 4 xfails (viveka compute-then-compare)
 
-**Thought:** For each entity, compute its derived values, then compare.
+#### 4b. dvandva-ganana
 
-Currently viveka can only compare values already in the graph.
-"Which has more KE" requires computing KE per entity first. This is
-scan → derive-per-entity → compare. One complete cycle.
+**Thought:** For each entity, compute a value, then aggregate.
 
-**Unlocks:** 4 xfails (viveka compute-then-compare)
+"Total momentum of two balls" = compute momentum per entity, then sum.
+Uses: per-entity derive (same as viveka-derive) + `sum` (eval:add, arity:-1).
+distributivity --[kriya]--> multiplication, addition — per entity
+multiply, then add.
 
-#### 4b. dvandva-ganana (new)
+total-momentum is already a kosha concept with `swarupa: momentum,
+sthita: samgraha (collection)`.
 
-**Thought:** For each entity, compute a value, then aggregate (sum).
+Unlocks: 4 xfails (dvandva per-entity)
 
-"Total momentum of two balls" = compute momentum per ball, then sum.
-Same per-entity derive infrastructure as viveka-derive, but aggregates
-instead of comparing.
-
-**Unlocks:** 4 xfails (dvandva per-entity)
-
-#### 4c. krama-viveka (new)
+#### 4c. krama-viveka
 
 **Thought:** Given comparison edges, build transitive closure.
 
-"A > B, B > C, who is greatest?" Scan for comparison edges, collect
-as pairs, iterate until the closure is complete.
+"A > B, B > C, who is greatest?" = scan comparison edges, collect as
+pairs, compute closure. lattice --[kriya]--> join, meet — the answer
+is the lattice join. graph-walk --[phala]--> path — the closure IS
+a graph walk.
 
-**Unlocks:** 8 xfails (transitive reasoning)
+Unlocks: 8 xfails (transitive reasoning)
+
+#### 4d. anumana-ganana (syllogism)
+
+**Thought:** Given implication + instance, fire modus ponens.
+
+"All birds have wings. 3 animals are birds. How many have wings?"
+modus-ponens --[janya]--> implication. The implication is "bird → wings".
+The instance is "3 are birds." The conclusion: those 3 have wings.
+
+The kosha declares the rule structure. The pipeline needs to detect
+implications in the graph, match them with instances, fire MP.
+
+Unlocks: subset of transitive/logic xfails
 
 ---
 
-## What Does NOT Need Scan-Ref
-
-These xfail gates are blocked by other things entirely:
+## What Does NOT Need Scan-Ref or Math Kosha
 
 | Gate | Count | Blocked by |
 |------|-------|-----------|
@@ -445,24 +506,23 @@ Total: ~23 xfails not addressable by this plan.
 
 ## Implementation Order
 
-The order follows the structural principle: complete the broken cycles
-first, then dissolve the monolith, then build new thoughts.
-
-| Order | What | Group | Nature | Tests |
-|-------|------|-------|--------|-------|
-| 1 | count-chain rewrite + wire | 10, 3 | Complete a broken cycle | +6 |
-| 2 | derive-chain simplification | 4 | Absorb repetition | 0 (quality) |
-| 3 | anumana-viveka simplification | 6 | Absorb repetition | 0 (quality) |
-| 4 | viveka-ganana cleanup | 6 | Absorb repetition | 0 (quality) |
-| 5 | Dissolve anuvada-ganana | 1 | Dissolve monolith | 0 (architecture) |
-| 6 | viveka-derive | new | New complete thought | +4 |
-| 7 | dvandva-ganana | new | New complete thought | +4 |
-| 8 | krama-viveka | new | New complete thought | +8 |
+| Order | What | Mechanism | Tests |
+|-------|------|-----------|-------|
+| 1 | Fix emit-triples alias bug | word-node check | 0 (unblocks count) |
+| 2 | count-chain rewrite | kosha: addition/subtraction | +6 |
+| 3 | viveka-ganana → kosha max/min | kosha: max/min via abheda | 0 (quality) |
+| 4 | derive-chain simplification | scan-ref loop | 0 (quality) |
+| 5 | anumana-viveka simplification | scan-ref loop | 0 (quality) |
+| 6 | Dissolve anuvada-ganana | swarupa-driven dispatch | 0 (architecture) |
+| 7 | viveka-derive | kosha: derive + max | +4 |
+| 8 | dvandva-ganana | kosha: derive + sum (variadic) | +4 |
+| 9 | krama-viveka | kosha: lattice join | +8 |
 
 **Best case: 22 xfails promoted, 63 → 41.**
-**But the real win is structural**: every tantra becomes a complete thought,
-composition replaces orchestration, and new capabilities emerge from
-writing new tantras — not from modifying existing ones.
+
+**The real win:** one mechanism (read kosha → find operation → fire) for
+all reasoning types. New capabilities emerge from .om declarations, not
+from tantra modifications.
 
 ---
 
@@ -470,51 +530,50 @@ writing new tantras — not from modifying existing ones.
 
 | | Before | After |
 |---|---|---|
-| Total tantras | 72 | ~74 (−2 dissolved, +4 new/extracted) |
+| Total tantras | 72 | ~74 (−2 dissolved, +4 new) |
+| Math kosha nodes connected | 23 (physics only) | ~35 (+ count, viveka, logic) |
 | Monolith lines (anuvada-ganana) | 119 | ~20 (thin wiring) |
-| Copy-pasted code | 4 swarupa levels, 3 derive steps, 102-line count workaround | Eliminated |
-| New question type cost | Modify anuvada-ganana + write tantra | Write tantra only |
-| Tantra completeness | Many fragments (scan without reflect) | Each tantra = full cycle |
+| Question type dispatch | Hardcoded branches | Kosha swarupa-driven |
+| New question type cost | Modify orchestrator + write tantra | Write .om + write tantra |
+| Tantra completeness | Fragments (scan without reflect) | Each tantra = full cycle |
+| Hardcoded operations | gt/lt in viveka, add/sub lists in count | apply-op via kosha eval |
 
 ---
 
 ## Philosophical Direction
 
-### The equation tantras ARE the target form
+### The math kosha IS the library
 
-ke-expr is 12 lines. It takes inputs, returns output. It IS one thought.
-Not every tantra can be 12 lines. But every tantra should be one thought
-— one complete sparsha → viveka → bandha cycle. The question is never
-"how many lines" but "how many thoughts." If the answer is more than one,
-the tantra should be dissolved.
+The kosha declares `addition --[eval]--> add` and `max --[eval]--> max`.
+These are not metadata. They are the complete specification of how to
+compute. The pipeline should read them, not re-implement them.
 
-### Dissolution IS abstraction
+invert-math already does this: it walks pratipaksha edges to find the
+inverse operation. This IS the pattern. Every other operation (count,
+viveka, syllogism) should follow the same pattern.
 
-When we dissolve anuvada-ganana, we're not just splitting a file. We're
-naming what was unnamed. The viveka detection block becomes viveka-sparsha
-— a perception with a name, callable from anywhere. The dispatch block
-becomes visible as a pattern (first non-empty result wins) rather than
-hidden inside a monolith. Naming the fragments is the abstraction.
+### The algebra is not decorative
 
-### Composition replaces orchestration
+`ring --[kriya]--> addition, multiplication` declares that integer
+arithmetic has both operations. `commutativity --[drishthanta]--> addition`
+declares that operand order doesn't matter. `distributivity --[kriya]-->
+multiplication, addition` declares that per-entity multiply then add is
+valid. These are not facts-about-math stored in the kosha. They are
+structural properties that the pipeline can USE — to optimize operation
+order, validate transformations, or choose between equivalent paths.
 
-The goal: adding a new question type (say, proportional reasoning) should
-require writing ONE new tantra that expresses one complete thought. That
-tantra composes with existing pieces naturally — it doesn't require
-modifying anuvada-ganana to add a new `cond` branch. The pipeline
-discovers it and routes to it. This is what doc 14 (tantra3 philosophy)
-describes: the om graph declares the capability, the pipeline reads it.
+### monoid --[abheda]--> op-class-monoid
 
-### The three operations at every scale — the unifying insight
+The tantra parser's own `op-class-monoid` (which `append`, `pair`, `or`,
+`concat` inherit from, giving them arity=-1) IS the same algebraic
+structure as the kosha's `monoid`. The code IS the math. Manipravalam.
 
-sparsha, viveka, bandha are not just useful categories. They are the
-structure of understanding itself. Every act of understanding follows the
-same cycle: contact (what is here?), discrimination (what does it mean?),
-binding (what do I do with it?). The codebase should reflect this at
-every level — inside each tantra, across tantras, and across the pipeline.
-When it does, the architecture becomes self-similar. A new contributor
-can read any tantra and know where they are in the cycle. The structure
-IS the documentation.
+### One mechanism
+
+Count, comparison, syllogism, transitive reasoning, dvandva aggregation
+— they look different in natural language but follow the same structure:
+detect the operation in the kosha, collect operands, fire. The math
+kosha is the unifying layer. Writing an .om file IS writing a capability.
 
 ---
 
@@ -523,4 +582,5 @@ IS the documentation.
 | Date | Session | Event |
 |------|---------|-------|
 | 2026-03-19 | 9 | Document created. Five scan-ref patterns identified. 22 xfails mapped across 4 tiers. |
-| 2026-03-19 | 10 | **Document rewritten.** Shifted from test-driven to architecture-driven plan. Ten natural groups identified across all 72 tantras (not by directory — by what they ARE). Four phases: complete broken cycles → dissolve monolith → merge fragments → build new thoughts. The unifying principle: every tantra should be one complete sparsha → viveka → bandha cycle. Dissolution IS abstraction. Composition replaces orchestration. |
+| 2026-03-19 | 10 | **Document rewritten.** Architecture-driven plan. Ten natural groups. Four phases. Principle: every tantra = one complete cycle. |
+| 2026-03-19 | 10 | **Math kosha discovery.** 83 mantra-layer math nodes unused. The pipeline hardcodes what the kosha declares. One mechanism (read kosha → find operation → fire) unifies count, viveka, syllogism, transitive, dvandva. Three levels: operations (eval:add), properties (commutativity, pratipaksha), structures (ring, lattice, graph-walk). ganana-setu bridges eval names to math concepts. invert-math is the existing template. emit-triples alias bug found (word ≠ node conflates aliases with labels). |
