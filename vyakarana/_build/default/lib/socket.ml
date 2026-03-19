@@ -613,7 +613,29 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                       (Yantra_types.json_of_tantra t))
                 with exn ->
                   error_response "" "" "" "PARSE_ERROR" (Printexc.to_string exn)))
-          | Some "end-session" ->
+           | Some "dump-om" ->
+            (* parse an .om file and return its nigamana as JSON.
+               request:  {"command": "dump-om", "path": "/abs/path/to/file.om"}
+               response: {"status":"ok","command":"dump-om","nigamana":{name,layer,satya,slokas,edges,shabda}}
+               uses the live graph's known_names for sloka decomposition. *)
+            (match json_string_field line "path" with
+             | None ->
+               error_response "" "" "" "INVALID_REQUEST" "missing required field: path"
+             | Some path ->
+               (try
+                 let known_names = Hashtbl.fold (fun name _ acc -> name :: acc) k.nodes [] in
+                 let n_opt = Om_parser.parse_file known_names path in
+                 (match n_opt with
+                  | None ->
+                    error_response "" "" "" "PARSE_ERROR"
+                      (Printf.sprintf "could not parse om file: %s" path)
+                  | Some n ->
+                    Printf.sprintf
+                      "{\"status\":\"ok\",\"command\":\"dump-om\",\"nigamana\":%s}"
+                      (Proof_graph.json_of_nigamana n))
+                with exn ->
+                  error_response "" "" "" "PARSE_ERROR" (Printexc.to_string exn)))
+           | Some "end-session" ->
              (* explicit session teardown — clears session state from store *)
              let ses_id = opt_field line "session_id" in
              if ses_id <> "" then Hashtbl.remove session_store ses_id;

@@ -6,14 +6,15 @@ kosha count
   -- "8 birds, 3 flew away, 2 came back" → count = 7
   --
   -- count IS sankhya of a vrnda (collection) — not a physics quantity.
-  -- count-chain.tantra3 scans the event sequence and emits [count, sankhya, result].
-  -- no separate count-total or count-remaining — the chain computes the right answer.
-  -- the result word (total/remaining/left) is just a language alias for count.
+  -- count-chain.tantra3 walks the event sequence and emits [count, sankhya, result].
+  -- the result word (total/remaining/left) determines the operation:
+  --   total/altogether/combined → addition (eval:add via kosha)
+  --   remaining/left/rest → subtraction (eval:sub via kosha)
   --
-  -- the structure IS the reasoning:
-  --   departure verbs (flew, ate, lost, gave) → subtract next operand
-  --   arrival verbs (came, bought, found, got) → add next operand
-  --   no verb → add (default: accumulation)
+  -- the operation comes from the math kosha:
+  --   count → yukta → arithmetic
+  --   addition → eval:add → apply-op "add"
+  --   subtraction → eval:sub → apply-op "sub"
 
   "number-varga-vishesa"
   "math-varga-vishesa"
