@@ -49,7 +49,7 @@ is-viveka  = gt (length gt-triples) 0
 -- viveka: show entity (concept=val) from viveka-sankhya edges
 -- physics/count: show owned entities, then flat unowned given values
 
-entities = graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s
+entities = prathama-sparsha graph
 
 -- viveka-concept for grouping label
 vc-concept = nth (graph | where [s, e, o] | and (eq e "viveka-concept") | collect (to-string o)) 0
@@ -158,7 +158,7 @@ chain-know-see = cond (and (not is-viveka) (gt (length deriving-mantras) 0))
       | collect (to-string s)
     -- prefer scoped derived-sankhya; fall back to all sankhya
     let vp = cond has-derived-vp derived-vp
-      otherwise (graph | where [s, e, o] | and (eq e "sankhya") | collect [s, o])
+      otherwise (sankhya-sparsha graph)
     let mm = [mn, vp, "forward"]
     let kstr = (mantra-known-str mm)
     let sstr = (mantra-seen-str mm produced)
@@ -202,7 +202,7 @@ sf-val = nth (graph | where [s, e, o]
   | and (eq e "sankhya")
   | collect (to-string o)) 0
 
-physics-found = cond (and (not is-viveka) sf-was-derived (gt (string-length (to-string sf-val)) 0))
+physics-found = cond (and (not is-viveka) sf-was-derived (exists sf-val))
   (concat say-found ": " sought-sf " " rel-sankhya " " (to-string sf-val))
   otherwise ""
 

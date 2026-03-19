@@ -29,19 +29,36 @@ scope-entity = nth sf-result 2
 --                   → used when no labels ("ball has mass 3")
 --
 -- Build scoped val-pairs from whichever pattern is present for this entity.
-scoped-vps = cond (gt (string-length scope-entity) 0)
-  (reduce (graph | where [s, e, owner] | and (eq e "shashthi-vibhakti") | and (eq (to-string owner) (to-string scope-entity)) | collect s)
+-- entity ownership order for each concept: [concept, entity] pairs in graph order.
+-- e.g. mass owned by [ball-A, ball-B] in order → ball-A=index 0, ball-B=index 1.
+concept-entity-order = shashthi-sparsha graph ""
+
+scoped-vps = cond (exists scope-entity)
+  (reduce (shashthi-sparsha graph scope-entity)
     []
     (fn acc owned ->
       -- instance path: owned is a rashi instance — resolve concept via vishesa
       let inst-concept = nth (graph | where [i, e, c] | and (eq (to-string i) (to-string owned)) | and (eq e "vishesa") | and (neq (to-string c) "rashi") | collect c) 0
-      -- concept path: owned IS the concept — it has sankhya directly
-      let direct-val   = nth (graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v) 0
-      let concept      = cond (gt (string-length (to-string inst-concept)) 0) inst-concept otherwise owned
-      let val          = cond (gt (string-length (to-string inst-concept)) 0)
+      let concept      = cond (exists inst-concept) inst-concept otherwise owned
+      -- instance path: sankhya is on the instance label itself
+      let inst-val = cond (exists inst-concept)
         (nth (graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v) 0)
-        otherwise direct-val
-      cond (gt (string-length (to-string val)) 0)
+        otherwise ""
+      -- direct-concept path: owned IS the concept.
+      -- graph has [concept, sankhya, v] once per entity that owns it, in graph order.
+      -- scope-entity's value is at index N where N = number of owners before scope-entity.
+      let all-sankhyas = graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v
+      let owners       = concept-entity-order | where [c, ent] | and (eq (to-string c) (to-string owned)) | collect ent
+      let owner-idx    = nth (reduce owners [0, false] (fn st ent ->
+                           cond (nth st 1) st
+                           otherwise (cond (eq (to-string ent) (to-string scope-entity))
+                             [(nth st 0), true]
+                             otherwise [(add (nth st 0) 1), false]))) 0
+      let direct-val   = cond (lt owner-idx (length all-sankhyas))
+        (nth all-sankhyas owner-idx)
+        otherwise (nth all-sankhyas 0)
+      let val = cond (exists inst-val) inst-val otherwise direct-val
+      cond (exists val)
         (append acc [[concept, val]])
       otherwise acc))
   otherwise vps
@@ -70,8 +87,8 @@ eff-bcs = cond (gt (string-length scope-entity) 0)
 -- relative-velocity: proof graph as third observer supplies both velocities.
 -- only active when solve-for is relative-velocity AND scope entity is named.
 -- builds [(observer-velocity, v_scope), (observed-velocity, v_other)].
-other-entities = cond (and (eq (to-string solve-for) "relative-velocity") (gt (string-length scope-entity) 0))
-  (graph | where [s, e, o] | and (eq e "prathama-vibhakti") | and (neq (to-string s) (to-string scope-entity)) | collect s)
+other-entities = cond (and (eq (to-string solve-for) "relative-velocity") (exists scope-entity))
+  ((prathama-sparsha graph) | where [s] | and (neq (to-string s) (to-string scope-entity)) | collect s)
   otherwise []
 
 relative-vps = cond (gt (length other-entities) 0)
@@ -81,12 +98,11 @@ relative-vps = cond (gt (length other-entities) 0)
    let v-observed-val  = nth (graph | where [s, e, owner] | and (eq e "shashthi-vibhakti") | and (eq (to-string owner) (to-string other-entity)) | and (eq (to-string s) "velocity") | collect s
      | reduce _it "" (fn acc inst ->
          let val = nth (graph | where [i2, e2, v2] | and (eq (to-string i2) (to-string inst)) | and (eq e2 "sankhya") | collect v2) 0
-         cond (gt (string-length (to-string val)) 0) (to-string val) otherwise acc)) 0
-   let v-observed-direct = nth (graph | where [s, e, owner] | and (eq e "shashthi-vibhakti") | and (eq (to-string owner) (to-string other-entity)) | and (eq (to-string s) "velocity") | collect s) 0
-   let v-other = cond (gt (string-length (to-string v-observed-val)) 0)
+         cond (exists val) (to-string val) otherwise acc)) 0
+   let v-other = cond (exists v-observed-val)
      v-observed-val
      otherwise (nth (graph | where [i, e, v] | and (eq (to-string i) (to-string v-observed-direct)) | and (eq e "sankhya") | collect v) 0)
-   cond (and (gt (string-length (to-string v-observer)) 0) (gt (string-length (to-string v-other)) 0))
+   cond (and (exists v-observer) (exists v-other))
      [["observer-velocity", v-observer], ["observed-velocity", v-other]]
    otherwise [])
   otherwise []

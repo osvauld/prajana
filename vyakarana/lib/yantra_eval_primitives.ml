@@ -75,23 +75,60 @@ let pair_field (items : value list) (key : string) : value option =
     | _ -> None
   ) items
 
+(* ---- with_node: collapse the node_lookup match ----
+   Before (14+ occurrences, always 3–5 lines):
+     match Hashtbl.find_opt k.nodes name with
+     | None -> default
+     | Some n -> f n
+   After:
+     with_node k name default (fun n -> ...) *)
+
+let with_node (k : proof_graph) (name : string) (default : 'a)
+    (f : Proof_graph.nigamana -> 'a) : 'a =
+  match Proof_graph.find k name with
+  | None   -> default
+  | Some n -> f n
+
+(* ---- call_tantra_opt: collapse the find_opt by_name + eval_tantra pattern ----
+   Before (8+ occurrences):
+     match !eval_ctx with
+     | Some ctx ->
+       (match Hashtbl.find_opt ctx.ctx_index.by_name name with
+        | Some t -> !_eval_tantra_ref k t inputs
+        | None -> default)
+     | None -> default
+   After:
+     call_tantra_opt k name inputs ~default *)
+
+let call_tantra_opt (k : proof_graph) (name : string)
+    (inputs : (string * value) list) ~(default : value) : value =
+  match !eval_ctx with
+  | Some ctx ->
+    (match Hashtbl.find_opt ctx.ctx_index.by_name name with
+     | Some t -> !_eval_tantra_ref k t inputs
+     | None   -> default)
+  | None -> default
+
 (* ---- eval_graph_op: graph, field-accessor, and context operations ---- *)
 
 let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     (k : proof_graph) (e : env) (op : string) (args : expr list) : value option =
+  let (eval_arg, eval_str, eval_flt, eval_lst, eval_int) =
+    make_eval_arg e_eval k e args in
+  ignore (eval_arg, eval_flt, eval_lst, eval_int); (* silence unused-var warnings for ops that don't use all *)
   match op with
 
   (* lookup: string → VNode if found, VNone if not — raw table hit only *)
   | "lookup" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     Some (match Proof_graph.find k name with
      | Some _ -> VNode name
      | None   -> VNone)
 
   (* walk: node × relation → [node] — follow edges of a given type *)
   | "walk" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
-    let rel_name = as_string (e_eval k e (List.nth args 1)) in
+    let node_name = eval_str 0 in
+    let rel_name = eval_str 1 in
     let rel = Proof_graph.visheshanam_of_string rel_name in
     Some (match rel with
      | None -> VList []
@@ -106,8 +143,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* walk-in: node × relation → [node] — follow INCOMING edges *)
   | "walk-in" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
-    let rel_name = as_string (e_eval k e (List.nth args 1)) in
+    let node_name = eval_str 0 in
+    let rel_name = eval_str 1 in
     let rel = Proof_graph.visheshanam_of_string rel_name in
     Some (match rel with
      | None -> VList []
@@ -123,8 +160,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   (* has: node × edge-pattern → bool
      edge-pattern is "relation-target" e.g. "matra-sthita" *)
   | "has" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
-    let pattern = as_string (e_eval k e (List.nth args 1)) in
+    let node_name = eval_str 0 in
+    let pattern = eval_str 1 in
     let edges = Proof_graph.edges_of k node_name in
     let parts = String.split_on_char '-' pattern in
     let found = match List.rev parts with
@@ -151,7 +188,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* edges: node → [(source, relation, target)] as list of strings *)
   | "edges" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
+    let node_name = eval_str 0 in
     let edges = Proof_graph.edges_of k node_name in
     Some (VList (List.map (fun edge ->
       VList [VString edge.source;
@@ -163,12 +200,12 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   (* ancestors-of: node-name → [ancestor-names] via inheritance edges (vishesa/abheda/swarupa/dhatu).
      depth-limited to 4 hops (same as walk_inheritance). *)
   | "ancestors-of" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
+    let node_name = eval_str 0 in
     let ancestors = Proof_graph.walk_inheritance k node_name in
     Some (VList (List.map (fun a -> VNode a) ancestors))
 
   | "outgoing-edges" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
+    let node_name = eval_str 0 in
     let edges = List.filter (fun e -> e.source = node_name) !(k.all_edges) in
     Some (VList (List.map (fun edge ->
       VList [VString edge.source;
@@ -189,7 +226,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      dispatches to to-english.tantra if loaded; falls back to shabda "name" field,
      then node name if node exists, otherwise returns "asprista". *)
   | "to-english" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     Some (match !eval_ctx with
      | Some ctx ->
        (match Hashtbl.find_opt ctx.ctx_index.by_name "to-english" with
@@ -210,19 +247,17 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* describe: node-name → shabda description string (the part after /) *)
   | "describe" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    Some (match Hashtbl.find_opt k.nodes name with
-     | None -> VString ""
-     | Some n ->
-       let s = n.shabda in
-       match String.split_on_char '/' s with
-       | _ :: rest when rest <> [] ->
-         VString (String.trim (String.concat "/" rest))
-       | _ -> VString "")
+    let name = eval_str 0 in
+    Some (with_node k name (VString "") (fun n ->
+      let s = n.shabda in
+      match String.split_on_char '/' s with
+      | _ :: rest when rest <> [] ->
+        VString (String.trim (String.concat "/" rest))
+      | _ -> VString ""))
 
   (* to-english-relation: visheshanam-string → English phrase *)
   | "to-english-relation" ->
-    let rel_str = as_string (e_eval k e (List.nth args 0)) in
+    let rel_str = eval_str 0 in
     let vish = Proof_graph.visheshanam_of_string rel_str in
     Some (match vish with
      | Some v -> VString (Anuvada.english_of_visheshanam_from_graph k v)
@@ -230,34 +265,34 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* in-degree: node-name → float (count of incoming edges) *)
   | "in-degree" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     Some (VFloat (float_of_int (Proof_graph.in_degree k name)))
 
   (* out-degree: node-name → float (count of outgoing edges) *)
   | "out-degree" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     Some (VFloat (float_of_int (Proof_graph.out_degree k name)))
 
   (* neighbors: node-name → [neighbor-names] (all adjacent nodes, in + out) *)
   | "neighbors" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     Some (VList (List.map (fun n -> VNode n) (Proof_graph.neighbors k name)))
 
   (* walk-chain: node × depth → [node-names]
      BFS N hops over kriya/phala/swarupa/abheda edges *)
   | "walk-chain" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    let depth = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let name = eval_str 0 in
+    let depth = eval_int 1 in
     Some (VList (List.map (fun n -> VNode n) (Setu.walk_chain k name depth [])))
 
   (* resolve-node: node-name → [node + abheda aliases] *)
   | "resolve-node" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     Some (VList (List.map (fun n -> VString n) (Setu.resolve k name)))
 
   (* incoming-to: node-name -> incoming typed edges [source, relation, target]. *)
   | "incoming-to" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     let edges = Proof_graph.edges_of k name in
     let incoming = List.filter_map (fun edge ->
       if edge.Proof_graph.target = name && edge.Proof_graph.source <> name then
@@ -272,71 +307,61 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   (* domain-of: node-name -> list of domain-* names linked to this node.
      delegates to domain-of.tantra when loaded; OCaml fallback otherwise. *)
   | "domain-of" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    (match !eval_ctx with
-     | Some ctx when Hashtbl.mem ctx.ctx_index.by_name "domain-of" ->
-       let t = Hashtbl.find ctx.ctx_index.by_name "domain-of" in
-       Some (!_eval_tantra_ref k t [("n", VString name)])
-     | _ ->
-       let is_domain_name n =
-          String.length n >= 7 && String.sub n 0 7 = "domain-"
-        in
-        let own = if is_domain_name name then [name] else [] in
-        let domains_for node_name =
-          match Hashtbl.find_opt k.nodes node_name with
-          | None -> []
-          | Some n ->
-            let from_outgoing = List.filter_map (fun edge ->
-              if edge.Proof_graph.source = node_name
-                  && edge.Proof_graph.relation = Proof_graph.sthita
-                 && is_domain_name edge.Proof_graph.target
-              then Some edge.Proof_graph.target
-              else None
-            ) n.edges in
-            let from_incoming = List.filter_map (fun edge ->
-              if edge.Proof_graph.target = node_name && is_domain_name edge.Proof_graph.source
-              then Some edge.Proof_graph.source
-              else None
-            ) (Proof_graph.edges_of k node_name) in
-            from_outgoing @ from_incoming
-        in
-        let ancestors = Proof_graph.walk_inheritance k name in
-        let all = own @ domains_for name @ List.concat_map domains_for ancestors in
-        Some (VList (List.map (fun d -> VString d) (List.sort_uniq String.compare all))))
+    let name = eval_str 0 in
+    Some (call_tantra_opt k "domain-of" [("n", VString name)]
+            ~default:(
+              let is_domain_name n =
+                String.length n >= 7 && String.sub n 0 7 = "domain-"
+              in
+              let own = if is_domain_name name then [name] else [] in
+              let domains_for node_name =
+                with_node k node_name [] (fun n ->
+                  let from_outgoing = List.filter_map (fun edge ->
+                    if edge.Proof_graph.source = node_name
+                        && edge.Proof_graph.relation = Proof_graph.sthita
+                       && is_domain_name edge.Proof_graph.target
+                    then Some edge.Proof_graph.target
+                    else None
+                  ) n.edges in
+                  let from_incoming = List.filter_map (fun edge ->
+                    if edge.Proof_graph.target = node_name && is_domain_name edge.Proof_graph.source
+                    then Some edge.Proof_graph.source
+                    else None
+                  ) (Proof_graph.edges_of k node_name) in
+                  from_outgoing @ from_incoming)
+              in
+              let ancestors = Proof_graph.walk_inheritance k name in
+              let all = own @ domains_for name @ List.concat_map domains_for ancestors in
+              VList (List.map (fun d -> VString d) (List.sort_uniq String.compare all))))
 
   (* context-score: node-name x [seed-names] -> edge connectivity score.
      delegates to context-score.tantra when loaded; OCaml fallback otherwise. *)
   | "context-score" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    let seeds_v = e_eval k e (List.nth args 1) in
-    (match !eval_ctx with
-      | Some ctx when Hashtbl.mem ctx.ctx_index.by_name "context-score-impl" ->
-        let t = Hashtbl.find ctx.ctx_index.by_name "context-score-impl" in
-        Some (!_eval_tantra_ref k t [("n", VString name); ("seeds", seeds_v)])
-     | _ ->
-       let seeds = List.map as_string (as_list seeds_v) in
-       let seed_set = Hashtbl.create 16 in
-       List.iter (fun s -> Hashtbl.replace seed_set s true) seeds;
-       let edges = Proof_graph.edges_of k name in
-       let score = List.fold_left (fun acc edge ->
-         if Hashtbl.mem seed_set edge.Proof_graph.source
-            || Hashtbl.mem seed_set edge.Proof_graph.target
-         then acc + 1
-         else acc
-       ) 0 edges in
-       Some (VFloat (Float.of_int score)))
+    let name = eval_str 0 in
+    let seeds_v = eval_arg 1 in
+    Some (call_tantra_opt k "context-score-impl"
+            [("n", VString name); ("seeds", seeds_v)]
+            ~default:(
+              let seeds = List.map as_string (as_list seeds_v) in
+              let seed_set = Hashtbl.create 16 in
+              List.iter (fun s -> Hashtbl.replace seed_set s true) seeds;
+              let edges = Proof_graph.edges_of k name in
+              let score = List.fold_left (fun acc edge ->
+                if Hashtbl.mem seed_set edge.Proof_graph.source
+                   || Hashtbl.mem seed_set edge.Proof_graph.target
+                then acc + 1
+                else acc
+              ) 0 edges in
+              VFloat (Float.of_int score)))
 
   (* node-satya: node-name -> float — structural importance score *)
   | "node-satya" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    let satya = match Hashtbl.find_opt k.nodes name with
-      | Some n -> n.Proof_graph.satya
-      | None   -> 0.0 in
-    Some (VFloat satya)
+    let name = eval_str 0 in
+    Some (VFloat (with_node k name 0.0 (fun n -> n.Proof_graph.satya)))
 
   (* edge-weight: relation-name-string -> float — vp_satya_weight conductance *)
   | "edge-weight" ->
-    let rel_str = as_string (e_eval k e (List.nth args 0)) in
+    let rel_str = eval_str 0 in
     let w = match Proof_graph.visheshanam_of_string rel_str with
       | Some v -> (Proof_graph.vish_props_of v).vp_satya_weight
       | None   -> 0.0 in
@@ -344,53 +369,39 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* iccha-status: node-name -> "sthita" | "rahita" | "none" *)
   | "iccha-status" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    let has_sthita =
-      match Hashtbl.find_opt k.nodes name with
-      | None -> false
-      | Some n ->
-        List.exists (fun edge ->
-          edge.Proof_graph.source = name
-          && edge.Proof_graph.target = "iccha"
-          && edge.Proof_graph.relation = Proof_graph.sthita
-        ) n.edges
-    in
-    let has_rahita =
-      match Hashtbl.find_opt k.nodes name with
-      | None -> false
-      | Some n ->
-        List.exists (fun sloka ->
-          let marker = "iccha-rahita" in
-          let s = String.lowercase_ascii sloka in
-          let m = String.lowercase_ascii marker in
-          try
-            ignore (Str.search_forward (Str.regexp_string m) s 0);
-            true
-          with Not_found -> false
-        ) n.slokas
-    in
+    let name = eval_str 0 in
+    let has_sthita = with_node k name false (fun n ->
+      List.exists (fun edge ->
+        edge.Proof_graph.source = name
+        && edge.Proof_graph.target = "iccha"
+        && edge.Proof_graph.relation = Proof_graph.sthita
+      ) n.edges) in
+    let has_rahita = with_node k name false (fun n ->
+      List.exists (fun sloka ->
+        let marker = "iccha-rahita" in
+        let s = String.lowercase_ascii sloka in
+        let m = String.lowercase_ascii marker in
+        try ignore (Str.search_forward (Str.regexp_string m) s 0); true
+        with Not_found -> false
+      ) n.slokas) in
     Some (VString (if has_sthita then "sthita" else if has_rahita then "rahita" else "none"))
 
   (* abheda-of: node-name -> outgoing abheda targets. *)
   | "abheda-of" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    let targets =
-      match Hashtbl.find_opt k.nodes name with
-      | None -> []
-      | Some n ->
-        List.filter_map (fun edge ->
-          if edge.Proof_graph.source = name
-              && edge.Proof_graph.relation = Proof_graph.abheda
-          then Some edge.Proof_graph.target
-          else None
-        ) n.edges
-    in
+    let name = eval_str 0 in
+    let targets = with_node k name [] (fun n ->
+      List.filter_map (fun edge ->
+        if edge.Proof_graph.source = name
+            && edge.Proof_graph.relation = Proof_graph.abheda
+        then Some edge.Proof_graph.target
+        else None
+      ) n.edges) in
     Some (VList (List.map (fun t -> VString t) (List.sort_uniq String.compare targets)))
 
   (* avrti: seed-names × max-passes -> flat triples [source-raw, relation-name, [target-raws]] *)
   | "avrti" ->
-    let seeds = as_list (e_eval k e (List.nth args 0)) in
-    let max_passes = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let seeds = eval_lst 0 in
+    let max_passes = eval_int 1 in
     let seed_names = List.map as_string seeds in
     let (pass_groups, _) = Anuvada.avrti_anuvada k seed_names max_passes in
     let connections = List.concat_map (fun (_pass_num, triples) ->
@@ -404,7 +415,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* render-node: name → formatted node inspection text *)
   | "render-node" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     let rname =
       match Proof_graph.find k name with
       | Some _ -> name
@@ -459,7 +470,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* role: look up what grammar role a word has via english-grammar shabda *)
   | "role" ->
-    let v = e_eval k e (List.nth args 0) in
+    let v = eval_arg 0 in
     let word = as_string v in
     let pairs = Setu.read_shabda k "english-grammar" in
     Some (match List.find_opt (fun (w, _) -> w = word) pairs with
@@ -468,8 +479,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* shabda: node × key → string — read shabda data (with inheritance) *)
   | "shabda" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
-    let key = as_string (e_eval k e (List.nth args 1)) in
+    let node_name = eval_str 0 in
+    let key = eval_str 1 in
     let pairs = Setu.read_shabda k node_name in
     Some (match List.find_opt (fun (k, _) -> k = key) pairs with
      | Some (_, v) -> VString v
@@ -479,8 +490,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      use this when you need the node's own classification (role:, word:, name:)
      without bleed from IS-A ancestors. *)
   | "raw-shabda" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
-    let key = as_string (e_eval k e (List.nth args 1)) in
+    let node_name = eval_str 0 in
+    let key = eval_str 1 in
     let pairs = Setu_shabda.raw_shabda_for_node k node_name in
     Some (match List.assoc_opt key pairs with
      | Some v -> VString v
@@ -489,27 +500,24 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   (* node-layer: node-name → "kosha" | "bhasha" | "sangati" | ""
      reads n.layer directly — no inheritance, no shabda walk. *)
   | "node-layer" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    Some (match Proof_graph.find k name with
-     | None -> VString ""
-     | Some n -> VString n.Proof_graph.layer)
+    let name = eval_str 0 in
+    Some (with_node k name (VString "") (fun n -> VString n.Proof_graph.layer))
 
   (* node-slokas: node-name → [sloka-string, ...]
      returns the raw slokas list of a node as a list of strings.
      tantras use this to inspect the grammar structure of a node —
      e.g. filter for "-sthita" suffix to find vibhakti/kaala roots. *)
   | "node-slokas" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    Some (match Proof_graph.find k name with
-     | None   -> VList []
-     | Some n -> VList (List.map (fun s -> VString s) n.Proof_graph.slokas))
+    let name = eval_str 0 in
+    Some (with_node k name (VList []) (fun n ->
+      VList (List.map (fun s -> VString s) n.Proof_graph.slokas)))
 
   (* shabda-pairs: node-name → [[key, value], ...]
      returns all key:value pairs from a node's shabda field as a list of
      [VString key, VString value] pairs. tantras use this to iterate over
      lookup tables stored in kosha nodes (e.g. goal-words, unit-aliases). *)
   | "shabda-pairs" ->
-    let node_name = as_string (e_eval k e (List.nth args 0)) in
+    let node_name = eval_str 0 in
     let pairs = Setu.read_shabda k node_name in
     Some (VList (List.map (fun (k_s, v_s) ->
       VList [VString k_s; VString v_s]
@@ -517,12 +525,11 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* exists: value → bool — true unless VNone or empty *)
   | "exists" ->
-    let v = e_eval k e (List.nth args 0) in
-    Some (VBool (as_bool v))
+    Some (VBool (as_bool (eval_arg 0)))
 
   (* op-to-tantra: operator symbol → tantra name or VNone *)
   | "op-to-tantra" ->
-    let op = as_string (e_eval k e (List.nth args 0)) in
+    let op = eval_str 0 in
     let pairs = Setu.read_shabda k "chihna-ganaka" in
     let tname = List.assoc_opt op pairs in
     Some (match tname with Some n -> VString n | None -> VNone)
@@ -530,7 +537,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   (* is-tantra: name → bool — does a tantra with this name exist?
      also resolves through graph: "plus" → abheda → "addition" → true *)
   | "is-tantra" ->
-    let tname = as_string (e_eval k e (List.nth args 0)) in
+    let tname = eval_str 0 in
     Some (match !eval_ctx with
      | Some ctx ->
         let direct = Hashtbl.mem ctx.ctx_index.by_name tname in
@@ -553,9 +560,9 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      or VBinding(name,weight)]. binding-names is a list of VString.
      returns VList of VBinding(name, score) sorted by score descending. *)
   | "ppr" ->
-    let seeds_v    = as_list (e_eval k e (List.nth args 0)) in
-    let target     = as_string (e_eval k e (List.nth args 1)) in
-    let bindings_v = as_list (e_eval k e (List.nth args 2)) in
+    let seeds_v    = eval_lst 0 in
+    let target     = eval_str 1 in
+    let bindings_v = eval_lst 2 in
     let seed_nodes = List.filter_map (fun v ->
       match v with
       | VList [VString nm; w]  -> Some (nm, as_float w)
@@ -592,10 +599,10 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      edges are decomposed from slokas using the current dimension registry.
      used by unit-generation tantra and learning tantras. *)
   | "emit-node" ->
-    let name   = as_string (e_eval k e (List.nth args 0)) in
-    let layer  = as_string (e_eval k e (List.nth args 1)) in
-    let slokas = List.map as_string (as_list (e_eval k e (List.nth args 2))) in
-    let shabda = as_string (e_eval k e (List.nth args 3)) in
+    let name   = eval_str 0 in
+    let layer  = eval_str 1 in
+    let slokas = List.map as_string (eval_lst 2) in
+    let shabda = eval_str 3 in
     (* decompose slokas into edges using the full dimension registry *)
     let all_names = Hashtbl.fold (fun n _ acc -> n :: acc) k.nodes [] in
     let edges = List.concat_map (fun sloka ->
@@ -634,9 +641,9 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      adds a single typed edge to the live graph. idempotent via join.
      used by boot/reboot tantras to add derived structural edges. *)
   | "emit-edge" ->
-    let source   = as_string (e_eval k e (List.nth args 0)) in
-    let rel_name = as_string (e_eval k e (List.nth args 1)) in
-    let target   = as_string (e_eval k e (List.nth args 2)) in
+    let source   = eval_str 0 in
+    let rel_name = eval_str 1 in
+    let target   = eval_str 2 in
     (match Proof_graph.visheshanam_of_string rel_name with
      | None -> Some VNone
      | Some rel ->
@@ -652,7 +659,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   (* register-dimension: name → int index
      registers a new graph dimension at runtime. idempotent. *)
   | "register-dimension" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
+    let name = eval_str 0 in
     let idx = Proof_graph.register_dimension name in
     Some (VFloat (float_of_int idx))
 
@@ -664,7 +671,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      reads the SI dimension exponent vector from matra-aayaama.
      the exponent vector IS the unit. kramanusara depth = |T exponent|. *)
   | "dim-vector" ->
-    let unit_name = as_string (e_eval k e (List.nth args 0)) in
+    let unit_name = eval_str 0 in
     let pairs = Setu.read_shabda k "matra-aayaama" in
     Some (match List.find_opt (fun (name, _) -> name = unit_name) pairs with
      | Some (_, dims_str) ->
@@ -682,10 +689,10 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      op = "sama-kalana" → add [0,0,1,0,0,0,0] to vector-a (∫dt)
      the result IS the unit of the composed quantity. *)
   | "dim-op" ->
-    let va = as_list (e_eval k e (List.nth args 0)) in
-    let vb = if List.length args > 1 then as_list (e_eval k e (List.nth args 1)) else [] in
-    let op_name = if List.length args > 2 then as_string (e_eval k e (List.nth args 2))
-      else if List.length args > 1 then as_string (e_eval k e (List.nth args 1))
+    let va = eval_lst 0 in
+    let vb = if List.length args > 1 then as_list (eval_arg 1) else [] in
+    let op_name = if List.length args > 2 then as_string (eval_arg 2)
+      else if List.length args > 1 then as_string (eval_arg 1)
       else "" in
     let fa = List.map as_float va in
     let fb = List.map as_float vb in
@@ -733,7 +740,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      reverse lookup: find the unit whose exponent vector matches.
      compares only the 7 dimension exponents (not scale). *)
   | "dim-to-unit" ->
-    let vr = as_list (e_eval k e (List.nth args 0)) in
+    let vr = eval_lst 0 in
     let fr = List.map as_float vr in
     let target_dims = if List.length fr >= 7 then
       List.filteri (fun i _ -> i < 7) fr else fr in
@@ -764,7 +771,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      returns the absolute value of the T exponent — how many times
      rate-of-change has been applied. *)
   | "dim-kramanusara-depth" ->
-    let v = as_list (e_eval k e (List.nth args 0)) in
+    let v = eval_lst 0 in
     let floats = List.map as_float v in
     let t_exp = if List.length floats > 2 then List.nth floats 2 else 0.0 in
     Some (VFloat (Float.abs t_exp))
@@ -773,7 +780,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      O(1) lookup in the word_index built from all nodes' word: shabda keys.
      "word-node "squared"" → "square", "word-node "was"" → "copula-was" *)
   | "word-node" ->
-    let word = as_string (e_eval k e (List.nth args 0)) in
+    let word = eval_str 0 in
     Some (match !eval_ctx with
      | Some ctx ->
        (match Hashtbl.find_opt ctx.ctx_index.word_index word with
@@ -785,8 +792,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      calls a tantra by name, mapping args positionally to tantra inputs.
      enables tantras to invoke other tantras by name at runtime. *)
   | "call-tantra" ->
-    let tname = as_string (e_eval k e (List.nth args 0)) in
-    let arg_list = as_list (e_eval k e (List.nth args 1)) in
+    let tname = eval_str 0 in
+    let arg_list = eval_lst 1 in
     Some (match !eval_ctx with
      | Some ctx ->
        (match Hashtbl.find_opt ctx.ctx_index.by_name tname with

@@ -48,12 +48,6 @@ module Yantra_ops = Vyakarana_lib__Yantra_ops
 (** @canonical Vyakarana_lib.Yantra_pipeline_ops *)
 module Yantra_pipeline_ops = Vyakarana_lib__Yantra_pipeline_ops
 
-(** @canonical Vyakarana_lib.Yantra_sentence_parser *)
-module Yantra_sentence_parser = Vyakarana_lib__Yantra_sentence_parser
-
-(** @canonical Vyakarana_lib.Yantra_tantra_file *)
-module Yantra_tantra_file = Vyakarana_lib__Yantra_tantra_file
-
 (** @canonical Vyakarana_lib.Yantra_tantra_file2 *)
 module Yantra_tantra_file2 = Vyakarana_lib__Yantra_tantra_file2
 

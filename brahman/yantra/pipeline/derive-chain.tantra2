@@ -19,8 +19,8 @@ all-ms = append (physics-mantras) (math-mantras)
 -- find mantras that explain a new concept in a given graph
 -- a mantra explains concept C if: C in phala AND all janya were bound before
 producing-for = (fn new-cs prev-g cur-g ->
-  let prev-bcs = prev-g | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)
-  let cur-vp   = cur-g  | where [s, e, o] | and (eq e "sankhya") | collect [s, o]
+  let prev-bcs = (sankhya-sparsha prev-g) | collect (to-string (nth _it 0))
+  let cur-vp   = sankhya-sparsha cur-g
   reduce all-ms [] (fn acc m ->
     let ph = walk m "phala"
     let jy = walk m "janya"
@@ -35,8 +35,8 @@ producing-for = (fn new-cs prev-g cur-g ->
 
 -- step 1
 step1-g     = derive-step graph
-prev-bcs0   = graph   | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)
-step1-bcs   = step1-g | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)
+prev-bcs0   = (sankhya-sparsha graph)   | collect (to-string (nth _it 0))
+step1-bcs   = (sankhya-sparsha step1-g) | collect (to-string (nth _it 0))
 step1-new   = gt (length step1-bcs) (length prev-bcs0)
 step1-added = filter step1-bcs (fn c -> not (member c prev-bcs0))
 step1-prod  = cond step1-new (producing-for step1-added graph step1-g) otherwise []
@@ -45,7 +45,7 @@ step1-entry = cond step1-new [[step1-added, step1-prod, step1-sm]] otherwise []
 
 -- step 2
 step2-g     = cond step1-new (derive-step step1-g) otherwise step1-g
-step2-bcs   = step2-g | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)
+step2-bcs   = (sankhya-sparsha step2-g) | collect (to-string (nth _it 0))
 step2-new   = (and step1-new (gt (length step2-bcs) (length step1-bcs)))
 step2-added = filter step2-bcs (fn c -> not (member c step1-bcs))
 step2-prod  = cond step2-new (producing-for step2-added step1-g step2-g) otherwise []
@@ -54,7 +54,7 @@ step2-entry = cond step2-new [[step2-added, step2-prod, step2-sm]] otherwise []
 
 -- step 3
 step3-g     = cond step2-new (derive-step step2-g) otherwise step2-g
-step3-bcs   = step3-g | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)
+step3-bcs   = (sankhya-sparsha step3-g) | collect (to-string (nth _it 0))
 step3-new   = (and step2-new (gt (length step3-bcs) (length step2-bcs)))
 step3-added = filter step3-bcs (fn c -> not (member c step2-bcs))
 step3-prod  = cond step3-new (producing-for step3-added step2-g step3-g) otherwise []

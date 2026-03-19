@@ -201,6 +201,24 @@ let eval_tantra ?(idx : tantra_index option) ?(session : session option)
 let new_session () : session =
   { bindings = []; last_result = []; history = []; context_seeds = [] }
 
+(* ---- with_eval_ctx: exception-safe eval_ctx set/restore ----
+   Before (15+ occurrences in socket.ml, always three lines):
+     eval_ctx := Some { ctx_index = idx; ctx_session = ses };
+     (try let r = f () in eval_ctx := None; r
+      with exn -> eval_ctx := None; default)
+   After:
+     with_eval_ctx idx ses f ~default
+
+   Restores the previous context (not just None) for safe re-entrance. *)
+let with_eval_ctx (idx : tantra_index) (ses : session) (f : unit -> 'a) ~(default : 'a) : 'a =
+  let prev = !eval_ctx in
+  eval_ctx := Some { ctx_index = idx; ctx_session = ses };
+  let r =
+    try let v = f () in eval_ctx := prev; v
+    with _ -> eval_ctx := prev; default
+  in
+  r
+
 (* ---- wire up forward references ---- *)
 let () =
   _eval_ref := eval;

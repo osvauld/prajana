@@ -322,3 +322,25 @@ let as_list = function
   | VNone -> []
   | v -> [v]
 
+(* ---- make_eval_arg: collapse the arg_extract pattern ----
+   Defines five typed accessors that close over (e_eval, k, e, args).
+   Use inside any eval_*_op function to replace:
+     let name = as_string (e_eval k e (List.nth args 0))
+   with:
+     let name = eval_str 0
+
+   Polymorphic in the graph type 'g so it works in both yantra_ops.ml
+   (which defines its own proof_graph alias) and yantra_eval_primitives.ml.
+
+   Returns: (eval_arg, eval_str, eval_flt, eval_lst, eval_int)
+   Callers that don't use all five can shadow with ignore to silence warnings. *)
+let make_eval_arg
+    (e_eval : 'g -> env -> expr -> value)
+    (k : 'g) (e : env) (args : expr list) =
+  let eval_arg n  = e_eval k e (List.nth args n) in
+  let eval_str n  = as_string (eval_arg n) in
+  let eval_flt n  = as_float  (eval_arg n) in
+  let eval_lst n  = as_list   (eval_arg n) in
+  let eval_int n  = int_of_float (eval_flt n) in
+  (eval_arg, eval_str, eval_flt, eval_lst, eval_int)
+

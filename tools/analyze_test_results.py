@@ -122,55 +122,35 @@ def slowest_calls(entries: list[dict], top_n: int = 20) -> list[dict]:
 
 def xfail_reason_groups(entries: list[dict]) -> dict[str, list[str]]:
     """
-    Group xfailed/skipped tests by their xfail reason string.
-    Reads the failure.message field which contains the xfail reason
-    when pytest marks the test as expected-failure.
-    Also groups by the XFAIL_GROUPS categories from analyze_tantras.
+    Group xfailed tests by their stored gate field (from conftest xfail marker).
+    Falls back to file-based grouping for tests without a stored gate.
     """
-    # Map test name → gate/group using the xfail groups table
-    XFAIL_GATE = {
-        # dvandva
-        "test_avrti_dvandva_collection_of_two_values": "dvandva: per-entity instance-map",
-        "test_tier2_two_entities_ke_each": "dvandva: per-entity instance-map",
-        "test_two_entity_rashi_feeds_mantra": "dvandva: per-entity instance-map",
-        # session gap 2
-        "test_session_entity_identity_persists": "session_gap2: prathama/shashthi across turns",
-        "test_two_entities_across_turns_both_present": "session_gap2: prathama/shashthi across turns",
-        "test_two_entities_across_turns_scoped": "session_gap2: prathama/shashthi across turns",
-        "test_electron_and_field_across_turns": "session_gap2: prathama/shashthi across turns",
-        # pratibimba
-        "test_sphere_shape_swarupa": "pratibimba: gated on Gap 2",
-        "test_position_ownership": "pratibimba: gated on Gap 2",
-        "test_electron_simulation_scene_full": "pratibimba: gated on Gap 2",
-        # gravity P8f Phase B
-        "test_gravitational_force": "p8f_gravity: G + r² composition",
-        "test_gravitational_force_two_entities": "p8f_gravity: G + r² composition",
-        "test_gravitational_force_earth_moon": "p8f_gravity: G + r² composition",
-        # unit rate
-        "test_unit_in_rate_not_stolen": "unit_rate: m/s compound unit",
-        # nyaya
-        "test_syllogism_cats_breathe": "logic_nyaya: P8d anumana not built",
-        "test_syllogism_dogs_mammals": "logic_nyaya: P8d anumana not built",
-        "test_transitive_greater_than": "logic_nyaya: P8d anumana not built",
-        "test_transitive_mass_ordering": "logic_nyaya: P8d anumana not built",
-        "test_more_apples_or_oranges": "logic_nyaya: P8d anumana not built",
-        "test_rank_three_balls_by_mass": "logic_nyaya: P8d anumana not built",
-    }
-
     groups: dict[str, list[str]] = defaultdict(list)
-    ungrouped = []
     for e in entries:
         if e.get("outcome") not in ("skipped", "xfailed"):
             continue
-        test_name = e["test"].split("::")[-1]
-        gate = XFAIL_GATE.get(test_name)
-        if gate:
-            groups[gate].append(e["test"])
-        else:
-            # fall back to grouping by test file
+        # prefer stored gate from conftest xfail capture
+        gate = (e.get("xfail") or {}).get("gate", "")
+        if not gate:
+            # fall back to file-based group
             file_part = e["test"].split("::")[0].split("/")[-1].replace(".py", "")
-            groups[f"other:{file_part}"].append(e["test"])
+            gate = f"other:{file_part}"
+        groups[gate].append(e["test"])
     return dict(groups)
+
+
+def xfailed_node_ids_for_gate(entries: list[dict], gate: str) -> list[str]:
+    """Return pytest node IDs for xfailed tests whose gate contains the given string."""
+    result = []
+    for e in entries:
+        if e.get("outcome") not in ("skipped", "xfailed"):
+            continue
+        stored_gate = (e.get("xfail") or {}).get("gate", "")
+        file_part = e["test"].split("::")[0].split("/")[-1].replace(".py", "")
+        match_gate = stored_gate or f"other:{file_part}"
+        if gate.lower() in match_gate.lower():
+            result.append(e["test"])
+    return result
 
 
 # ── sentence extraction ────────────────────────────────────────────────────────
@@ -315,6 +295,100 @@ def failed_node_ids(entries: list[dict]) -> list[str]:
     return [e["test"] for e in entries if e.get("outcome") in ("failed", "error")]
 
 
+def xpassed_node_ids(entries: list[dict]) -> list[str]:
+    """Return pytest node IDs for xpassed tests (strict xfail now passing)."""
+    return [e["test"] for e in entries if e.get("outcome") == "xpassed"]
+
+
+def fix_xpass_markers(entries: list[dict], dry_run: bool = False) -> list[str]:
+    """
+    Remove @pytest.mark.xfail(...) decorators from tests that now pass (xpassed).
+
+    For each xpassed entry, reads file + line from the stored xfail metadata,
+    finds the @pytest.mark.xfail block immediately above the def, and removes it.
+
+    Returns list of (file:line) locations that were fixed.
+    """
+    import re
+
+    fixed = []
+    for e in entries:
+        if e.get("outcome") != "xpassed":
+            continue
+        xf = e.get("xfail") or {}
+        fpath = xf.get("file", "")
+        def_line = xf.get("line", 0)  # 1-based line of the def
+        if not fpath or not def_line:
+            print(f"  no file/line stored for {e['test']} — run suite first")
+            continue
+
+        try:
+            src = open(fpath).read()
+            lines = src.splitlines(keepends=True)
+        except Exception as ex:
+            print(f"  cannot read {fpath}: {ex}")
+            continue
+
+        # stored line is 1-based; may point at the @pytest.mark.xfail line OR the def line
+        # search in a window around it for the @pytest.mark.xfail start
+        start = None
+        search_center = def_line - 1  # 0-based
+        for delta in range(0, 12):
+            for candidate in [search_center - delta, search_center + delta]:
+                if 0 <= candidate < len(lines):
+                    s = lines[candidate].strip()
+                    if s.startswith("@pytest.mark.xfail") or s.startswith("@xfail"):
+                        start = candidate
+                        break
+            if start is not None:
+                break
+
+        if start is None:
+            print(f"  no @pytest.mark.xfail found near line {def_line} in {fpath}")
+            continue
+
+        # find the def line: scan forward from start until we hit 'def '
+        def_idx = None
+        for j in range(start, min(start + 20, len(lines))):
+            if lines[j].strip().startswith("def "):
+                def_idx = j
+                break
+        if def_idx is None:
+            print(f"  cannot find def after xfail at line {start + 1} in {fpath}")
+            continue
+
+        # find end of the xfail decorator block (may span multiple lines with parens)
+        end = start
+        depth = 0
+        in_decorator = False
+        for j in range(start, def_idx):
+            stripped_j = lines[j].strip()
+            if stripped_j.startswith("@pytest.mark.xfail") or stripped_j.startswith(
+                "@xfail"
+            ):
+                in_decorator = True
+            if in_decorator:
+                depth += lines[j].count("(") - lines[j].count(")")
+                end = j
+                if depth <= 0 and j > start:
+                    break
+
+        removed_lines = lines[start : end + 1]
+        location = f"{fpath}:{start + 1}"
+        print(f"  {'[dry-run] ' if dry_run else ''}removing xfail at {location}:")
+        for ln in removed_lines:
+            print(f"    - {ln.rstrip()}")
+
+        if not dry_run:
+            new_lines = lines[:start] + lines[end + 1 :]
+            open(fpath, "w").writelines(new_lines)
+            fixed.append(location)
+        else:
+            fixed.append(location)
+
+    return fixed
+
+
 def run_pytest(
     node_ids: list[str] | None, label: str, extra_args: list[str] | None = None
 ) -> int:
@@ -378,6 +452,7 @@ def run_pipeline(
     full: bool = False,
     auto_server: bool = False,
     brahman_dir: str | None = None,
+    gate: str | None = None,
 ) -> int:
     """
     The controlled test pipeline:
@@ -414,6 +489,27 @@ def run_pipeline(
     print("  TEST PIPELINE")
     print(SEP)
     print(f"  cache: {cache_dir}")
+
+    # gate mode: run only tests belonging to one xfail group
+    if gate:
+        gate_ids = xfailed_node_ids_for_gate(entries, gate)
+        print(f"  gate: {gate!r} → {len(gate_ids)} test(s)")
+        for t in gate_ids:
+            print(f"    ? {t.split('::')[-1]}")
+        print()
+        if not gate_ids:
+            print(f"  no xfailed tests match gate {gate!r}")
+            print("  available gates:")
+            groups = xfail_reason_groups(entries)
+            for g in sorted(groups):
+                print(f"    {g}  ({len(groups[g])} tests)")
+            return 0
+        rc = run_pytest(gate_ids, f"gate run — {gate!r}")
+        summary_g, entries_g = load_cache(cache_dir)
+        analysis = load_tantra_analysis()
+        print_report(summary_g, entries_g, analysis)
+        return rc
+
     print(f"  failures in cache: {len(failures)}")
     if failures:
         for f in failures:
@@ -473,19 +569,21 @@ def print_report(
     SEP = "═" * 72
 
     by_outcome = entries_by_outcome(entries)
-    skipped = by_outcome.get("skipped", [])
+    # xfailed entries now stored as "xfailed"; "skipped" is legacy fallback
+    skipped = by_outcome.get("xfailed", []) + by_outcome.get("skipped", [])
     failed = by_outcome.get("failed", []) + by_outcome.get("error", [])
     passed = by_outcome.get("passed", [])
 
     print(SEP)
     print("  TEST RESULTS ANALYSIS")
     print(SEP)
+    xpassed_entries = by_outcome.get("xpassed", [])
     print(f"""
   total:   {len(entries)}
   passed:  {len(passed)}
   failed:  {len(failed)}
-  xfailed: {len(skipped)}  (skipped/xfail)
-  xpassed: {summary.get("xpassed", 0)}
+  xfailed: {len(skipped)}
+  xpassed: {len(xpassed_entries)}
 """)
 
     # diff if available
@@ -560,13 +658,19 @@ def print_report(
             print(f"  {cat:<35} {count}×")
 
     # xpassed (strict xfails that now pass — need marker update)
-    xpass = by_outcome.get("xpassed", [])
+    xpass = xpassed_entries
     if xpass:
         print(
             f"\n── XPASSED (remove xfail marker) ─────────────────────────────────────"
         )
         for e in xpass:
-            print(f"  {e['test']}")
+            xf = e.get("xfail") or {}
+            loc = (
+                f"  {xf.get('file', '?')}:{xf.get('line', '?')}"
+                if xf.get("file")
+                else ""
+            )
+            print(f"  {e['test']}{loc}")
 
     # xfail groups — what gate is each waiting on
     if skipped:
@@ -639,12 +743,44 @@ if __name__ == "__main__":
     parser.add_argument(
         "--brahman", default=None, help="brahman dir (for --auto-server)"
     )
+    parser.add_argument(
+        "--gate",
+        default=None,
+        metavar="NAME",
+        help="run only xfailed tests whose gate contains NAME (e.g. 'session_gap2', 'inverse')",
+    )
+    parser.add_argument(
+        "--fix-xpass",
+        action="store_true",
+        help="remove @pytest.mark.xfail decorators from tests that now pass (xpassed)",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="with --fix-xpass: show what would be removed without writing files",
+    )
     args = parser.parse_args()
 
     cache_dir = Path(args.cache)
 
+    # fix-xpass mode: strip markers from xpassed tests
+    if args.fix_xpass:
+        if not cache_dir.exists():
+            print(f"Cache not found: {cache_dir}", file=sys.stderr)
+            sys.exit(1)
+        _, entries = load_cache(cache_dir)
+        xpassed = [e for e in entries if e.get("outcome") == "xpassed"]
+        if not xpassed:
+            print("No xpassed tests in cache. Run the suite first.")
+            sys.exit(0)
+        print(f"Found {len(xpassed)} xpassed test(s):")
+        fixed = fix_xpass_markers(xpassed, dry_run=args.dry_run)
+        if fixed and not args.dry_run:
+            print(f"\nFixed {len(fixed)} marker(s). Re-run suite to confirm.")
+        sys.exit(0)
+
     # pipeline mode: run tests then report
-    if args.run or args.full:
+    if args.run or args.full or args.gate:
         if not cache_dir.exists():
             cache_dir.mkdir(parents=True, exist_ok=True)
         sys.exit(
@@ -653,6 +789,7 @@ if __name__ == "__main__":
                 full=args.full,
                 auto_server=args.auto_server,
                 brahman_dir=args.brahman,
+                gate=args.gate,
             )
         )
 

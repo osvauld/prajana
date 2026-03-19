@@ -37,7 +37,7 @@ other-val = reduce other-janya "" (fn a concept ->
     (nth (split-numeric (shabda "physics-constants" ck)) 0)
     otherwise (reduce bindings "" (fn a2 kv ->
       cond (eq (nth kv 0) concept) (nth kv 1) otherwise a2))
-  cond (gt (string-length (to-string v)) 0) v otherwise a)
+  cond (exists v) v otherwise a)
 
 -- look up inverse op and flip flag
 idx-str  = to-string solve-idx

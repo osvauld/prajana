@@ -35,7 +35,6 @@ Usage:
 Sections: all, tantra, om, philosophical, bridge, tests
 """
 
-import socket as socket_mod
 import json
 import os
 import sys
@@ -45,14 +44,93 @@ import argparse
 from collections import defaultdict, Counter
 from typing import Any
 
+# ── vy client import ───────────────────────────────────────────────────────────
+# Use the canonical vy.Client from vyakarana/tests/vy.py so tools share the
+# same persistent connection, retry logic, and rich API as the test suite.
+# Falls back to a minimal inline implementation if vy.py is not reachable
+# (e.g. running tools standalone without a checkout of vyakarana/tests).
 
-# ── socket client ──────────────────────────────────────────────────────────────
+
+def _load_vy_client():
+    _here = os.path.dirname(os.path.abspath(__file__))
+    _vy_path = os.path.join(_here, "..", "vyakarana", "tests")
+    if os.path.isdir(_vy_path) and _vy_path not in sys.path:
+        sys.path.insert(0, _vy_path)
+    try:
+        from vy import Client as _Client
+
+        return _Client
+    except ImportError:
+        pass
+    # minimal fallback — one-shot socket call per request
+    import socket as _socket_mod
+
+    class _Client:
+        def __init__(self, socket_path):
+            self._path = socket_path
+
+        def _call(self, payload):
+            with _socket_mod.socket(_socket_mod.AF_UNIX, _socket_mod.SOCK_STREAM) as s:
+                s.connect(self._path)
+                s.sendall((json.dumps(payload) + "\n").encode())
+                data = b""
+                while True:
+                    chunk = s.recv(65536)
+                    if not chunk:
+                        break
+                    data += chunk
+                    try:
+                        return json.loads(data.decode())
+                    except json.JSONDecodeError:
+                        continue
+            return {"status": "error"}
+
+        def eval(self, expr):
+            r = self._call({"command": "eval-json", "expr": expr})
+            return r.get("result") if r.get("status") == "ok" else None
+
+        def inspect(self, name):
+            r = self._call({"command": "inspect-node", "name": name})
+            return r if r.get("status") == "ok" else None
+
+        def walk(self, node, rel):
+            r = self.eval(f'walk "{node}" "{rel}"')
+            return [str(n) for n in r] if isinstance(r, list) else []
+
+        def walk_in(self, node, rel):
+            r = self.eval(f'walk-in "{node}" "{rel}"')
+            return [str(n) for n in r] if isinstance(r, list) else []
+
+        def list_tantras(self):
+            r = self._call({"command": "list-tantras"})
+            return r.get("tantras", []) if r.get("status") == "ok" else []
+
+        def close(self):
+            pass
+
+    return _Client
 
 
-def send_command(sock_path: str, cmd: dict) -> dict:
-    with socket_mod.socket(socket_mod.AF_UNIX, socket_mod.SOCK_STREAM) as s:
-        s.connect(sock_path)
-        s.sendall((json.dumps(cmd) + "\n").encode())
+VyClient = _load_vy_client()
+
+
+# ── thin wrappers used by analysis functions (accept either sock_path str or Client) ──
+
+
+def _client(sock_path_or_client) -> Any:
+    """Return a VyClient, creating one from a path string if needed."""
+    if isinstance(sock_path_or_client, str):
+        return VyClient(sock_path_or_client)
+    return sock_path_or_client
+
+
+def dump_ast(sock_path, path):
+    import socket as _sm, json as _j
+
+    # dump-ast is not in vy.Client API — keep a direct call for this one
+    with _sm.socket(_sm.AF_UNIX, _sm.SOCK_STREAM) as s:
+        s.connect(sock_path if isinstance(sock_path, str) else sock_path._path)
+        s.sendall((_j.dumps({"command": "dump-ast", "path": path}) + "\n").encode())
         data = b""
         while True:
             chunk = s.recv(65536)
@@ -60,31 +138,19 @@ def send_command(sock_path: str, cmd: dict) -> dict:
                 break
             data += chunk
             try:
-                return json.loads(data.decode())
-            except json.JSONDecodeError:
+                r = _j.loads(data.decode())
+                return r.get("tantra") if r.get("status") == "ok" else None
+            except _j.JSONDecodeError:
                 continue
-    return {"status": "error", "message": "empty response"}
-
-
-def dump_ast(sock_path, path):
-    r = send_command(sock_path, {"command": "dump-ast", "path": path})
-    if r.get("status") == "ok":
-        return r.get("tantra")
     return None
 
 
 def inspect_node(sock_path, name):
-    r = send_command(sock_path, {"command": "inspect-node", "name": name})
-    if r.get("status") == "ok":
-        return r
-    return None
+    return _client(sock_path).inspect(name)
 
 
 def eval_expr(sock_path, expr):
-    r = send_command(sock_path, {"command": "eval-json", "expr": expr})
-    if r.get("status") == "ok":
-        return r.get("result")
-    return None
+    return _client(sock_path).eval(expr)
 
 
 # ── tantra AST traversal (same as before, extended) ───────────────────────────
@@ -441,17 +507,19 @@ SUFFIX_TO_EDGE = {
 }
 
 
-def analyze_philosophical(sock_path, om_nodes, tantra_edge_refs):
+def analyze_philosophical(sock_path_or_client, om_nodes, tantra_edge_refs):
     """
     The deep philosophical analysis.
+    Accepts either a socket path string or a VyClient instance.
     Returns a dict of named insights.
     """
+    vy = _client(sock_path_or_client)
     result = {}
 
     # 1. Satya scores of philosophical nodes — the graph's self-knowledge
     node_satyas = {}
     for node in PHILOSOPHICAL_NODES:
-        n = inspect_node(sock_path, node)
+        n = vy.inspect(node)
         if n:
             node_satyas[node] = {
                 "satya": n.get("satya", 0),
@@ -581,12 +649,12 @@ def analyze_philosophical(sock_path, om_nodes, tantra_edge_refs):
 
     # 6. Pratipaksha completeness: which concepts lack their inverse?
     # The math kosha should have pratipaksha for every operation
-    math_ops = eval_expr(sock_path, 'walk-in "math-varga" "varga"')
+    math_ops = vy.eval('walk-in "math-varga" "varga"')
     pratipaksha_check = {}
     if isinstance(math_ops, list):
         for op in math_ops[:20]:
             op_name = op if isinstance(op, str) else str(op)
-            n = inspect_node(sock_path, op_name)
+            n = vy.inspect(op_name)
             if n:
                 has_pratipaksha = any(
                     e.get("relation") == "pratipaksha" for e in n.get("out_edges", [])
@@ -932,6 +1000,408 @@ def analyze_test_gaps(sock_path, brahman_dir, tantra_cache):
     }
 
 
+# ── micro-pattern analysis ───────────────────────────────────────────────────
+#
+# Finds concrete repeated expressions across tantra source files that are
+# candidates for named micro-tantras. Works on raw source text (no server).
+# Each pattern has:
+#   name        — proposed tantra name (philosophical)
+#   sanskrit    — what the Sanskrit root names
+#   regex       — what to find in source
+#   replaces    — the expression it would replace
+#   hits        — [{file, lineno, text}]
+#   note        — why this is the right abstraction
+
+
+MICRO_PATTERNS = [
+    {
+        "name": "sattva",
+        "sanskrit": "sattva — existence, being",
+        "regex": r"gt \(string-length \(to-string [^\)]+\)\) 0",
+        "replaces": "gt (string-length (to-string X)) 0",
+        "note": "OCaml 'exists' primitive already does this — tantras don't use it consistently",
+        # graph grounding: satya (truth/existence) is spanda-janya, brahman-phala.
+        # the OCaml 'exists' op implements: as_bool v. sattva = that check, named.
+        "graph_node": "satya",  # sattva (being) IS satya in this graph
+        "graph_meaning": "satya: spanda-janya brahman-phala — existence is what spanda produces. "
+        "The check 'does this value exist?' is asking 'has contact (sparsha) produced structure?'",
+        "body": "takes x\nresult = exists x\nreturn result",
+    },
+    {
+        "name": "prathama",
+        "sanskrit": "prathama — the nominative subjects (kartri, the agents)",
+        "regex": r'\| where \[[^\]]+\] \| and \(eq e "prathama-vibhakti"\) \| collect s',
+        "replaces": 'graph | where [s,e,o] | and (eq e "prathama-vibhakti") | collect s',
+        "note": "pure graph reader — who are the named entities in this question",
+        # graph grounding: prathama-vibhakti is the nominative case.
+        # vibhakti swarupa = sambandha (relation). the nominative IS the relation of being a subject.
+        # prathama-vibhakti is yukta:vakya (sentence) and yukta:visheshanam-ring (dimension registry).
+        "graph_node": "prathama-vibhakti",
+        "graph_meaning": "prathama-vibhakti: vibhakti-amsha, yukta:vakya — the subject-relation in a sentence. "
+        "Querying it extracts kartri: the agents who own the question's quantities.",
+        "body": 'takes graph\nresult = graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s\nreturn result',
+    },
+    {
+        "name": "sankhya-sparsha",
+        "sanskrit": "sankhya-sparsha — number-contact, the bound numeric values",
+        "regex": r'\| where \[[^\]]+\] \| and \(eq e "sankhya"\) \| collect',
+        "replaces": 'graph | where [s,e,o] | and (eq e "sankhya") | collect [s,o]',
+        "note": "bound-concepts already IS this — callers should use bound-concepts instead of inlining",
+        # graph grounding: sankhya has swarupa = [count, dvaya, traya] and yukta = [rashi, matra, parampara].
+        # sankhya is the number. sparsha is the contact. sankhya-sparsha = the moment a number
+        # lands on a concept — the touch of measurement.
+        "graph_node": "sankhya",  # the numeric-binding concept
+        "graph_meaning": "sankhya: rashi-yukta matra-yukta — number is always yukta with measure and instance. "
+        "sankhya-sparsha = the contact that binds a float to its concept. "
+        "bound-concepts is already the canonical tantra for this — inline queries should call it.",
+        "body": 'takes graph\nresult = graph | where [s, e, o] | and (eq e "sankhya") | collect [s, o]\nreturn result',
+    },
+    {
+        "name": "shashthi-sparsha",
+        "sanskrit": "shashthi-sparsha — genitive contact, what belongs to an entity",
+        "regex": r'\| and \(eq e "shashthi-vibhakti"\) \| and \(eq \(to-string [^\)]+\) \(to-string [^\)]+\)\) \| collect',
+        "replaces": 'graph | where [s,e,owner] | and (eq e "shashthi-vibhakti") | and (eq (to-string owner) ENTITY) | collect s',
+        "note": "ownership lookup — which concepts does this entity own",
+        # graph grounding: shashthi-vibhakti (genitive case) is triggered by verb-have/verb-has/prep-with.
+        # vibhakti swarupa = sambandha. shashthi IS the relation of possession/belonging.
+        # sparsha = the contact event. shashthi-sparsha = the contact of possession.
+        "graph_node": "shashthi-vibhakti",
+        "graph_meaning": "shashthi-vibhakti: sthita←verb-have,verb-has,prep-with — the genitive is possession. "
+        "shashthi-sparsha = querying what a named entity owns. "
+        "The graph's ownership structure is already there; this tantra makes the query named.",
+        "body": 'takes graph\ntakes entity\nresult = graph | where [s, e, owner]\n  | and (eq e "shashthi-vibhakti")\n  | and (eq (to-string owner) (to-string entity))\n  | collect s\nreturn result',
+    },
+    {
+        "name": "agra",
+        "sanskrit": "agra — the foremost, safe head of list",
+        "regex": r"cond \(gt \(length [^\)]+\) 0\) \(nth [^\)]+0\) otherwise",
+        "replaces": "cond (gt (length lst) 0) (nth lst 0) otherwise fallback",
+        "note": "safe list head — appears wherever a single result is extracted from a query",
+        # graph grounding: agra means 'foremost, tip, front'. satya=0.0 in graph (not yet grounded).
+        # agra yukta = shakha (branch). agra is the tip of the branch — the first element.
+        # This tantra gives the 'safe first' operation its proper name: agra.
+        "graph_node": "agra",
+        "graph_meaning": "agra: the foremost, the tip (yukta:shakha). "
+        "In list operations: the first valid element. In the question graph: "
+        "the first match. agra(list, fallback) = the safe head with a named default.",
+        "body": "takes lst\ntakes fallback\nresult = cond (gt (length lst) 0) (nth lst 0) otherwise fallback\nreturn result",
+    },
+    {
+        "name": "bandha-triples",
+        "sanskrit": "bandha-triples — binding pairs lifted to typed graph triples",
+        "regex": r"append acc \[\[\(nth kv 0\), \"[^\"]+\", \(nth kv 1\)\]\]",
+        "replaces": 'append acc [[(nth kv 0), "EDGE", (nth kv 1)]]',
+        "note": "kv-pairs → graph triples — only the edge label differs each time",
+        # graph grounding: bandha = binding (Rasayana: shodhana→mardana→jarana→bandha).
+        # bandha is fixation, the step that makes something permanent.
+        # kv-pairs are mutable; triples are bandha — fixed in the proof graph.
+        "graph_node": None,  # bandha is a rasayana concept, not a simple kosha node
+        "graph_meaning": "bandha (Rasayana): the fixation step — binding volatile material into permanent form. "
+        "kv-pairs are provisional; lifting them to [s, edge, o] triples IS the bandha. "
+        "The edge label is the relation that holds the binding.",
+        "body": "takes pairs\ntakes edge\nresult = reduce pairs [] (fn acc kv ->\n  append acc [[(nth kv 0), edge, (nth kv 1)]])\nreturn result",
+    },
+    {
+        "name": "graph-samskaara",
+        "sanskrit": "graph-samskaara — graph impression, fold derived triples in",
+        "regex": r"reduce [a-z-]+ graph \(fn \w+ t -> .?append \w+ \[t\]\)",
+        "replaces": "reduce new-triples graph (fn g t -> append g [t])",
+        "note": "standard pattern for injecting derived triples back into the graph",
+        # graph grounding: samskaara = keyframe, impression, latent form.
+        # samskaara kriya = avrti (the graph knows: samskaara operates through avrti).
+        # samskaara swarupa = rachana (composition) + sthiti (stability).
+        # folding new triples into the graph IS samskaara: leaving an impression.
+        "graph_node": "samskaara",  # keyframe — kriya:avrti, swarupa:rachana+sthiti
+        "graph_meaning": "samskaara: keyframe — kriya:avrti, swarupa:rachana+sthiti. "
+        "Folding derived triples into the proof graph is leaving a samskaara: "
+        "a structural impression that persists. Each new triple is one keyframe added.",
+        "body": "takes graph\ntakes triples\nresult = reduce triples graph (fn g t -> append g [t])\nreturn result",
+    },
+]
+
+
+def _enrich_micro_patterns_from_graph(patterns: list, vy) -> None:
+    """
+    For each micro-pattern, query the live graph to verify its philosophical
+    grounding node exists, pull its satya score, and find how many tantras
+    currently query that graph node directly (vs inlining the pattern).
+
+    Mutates patterns in-place, adding 'graph_grounding' dict to each entry.
+    vy can be a VyClient instance or None (skips enrichment).
+    """
+    if vy is None:
+        return
+
+    for pat in patterns:
+        gnode = pat.get("graph_node")
+        if not gnode:
+            continue
+        try:
+            info = vy.inspect(gnode)
+            if not info or info.get("status") == "error":
+                pat["graph_grounding"] = {"found": False}
+                continue
+
+            satya = info.get("satya", 0.0)
+            out_edges = info.get("out_edges", [])
+            in_edges = info.get("in_edges", [])
+
+            # key structural edges — what does the graph say this concept IS?
+            swarupa = vy.walk(gnode, "swarupa")
+            kriya = vy.walk(gnode, "kriya")
+            janya = vy.walk(gnode, "janya")
+            phala = vy.walk(gnode, "phala")
+
+            # also check: does a tantra with this name already exist?
+            tantra_exists = gnode in (vy.list_tantras() or [])
+            proposed_name = pat["name"]
+            proposed_exists = proposed_name in (vy.list_tantras() or [])
+
+            pat["graph_grounding"] = {
+                "found": True,
+                "satya": satya,
+                "out_degree": len(out_edges),
+                "in_degree": len(in_edges),
+                "swarupa": swarupa[:4],
+                "kriya": kriya[:4],
+                "janya": janya[:4],
+                "phala": phala[:4],
+                "graph_node_exists": True,
+                "tantra_exists": tantra_exists,
+                "proposed_exists": proposed_exists,
+                "ready": satya > 0.3 and not proposed_exists,
+            }
+        except Exception as exc:
+            pat["graph_grounding"] = {"found": False, "error": str(exc)}
+
+
+def analyze_micro_patterns(yantra_dir: str, vy=None) -> dict:
+    """
+    Scan all tantra2 source files for recurring micro-expressions.
+    Returns per-pattern hit lists and a ranked summary.
+    No server required — pure text analysis.
+    """
+    files = sorted(
+        glob.glob(os.path.join(yantra_dir, "**", "*.tantra2"), recursive=True)
+    )
+
+    # load raw source per tantra
+    sources: dict[str, tuple[str, list[str]]] = {}  # name → (path, lines)
+    for f in files:
+        name = os.path.basename(f).replace(".tantra2", "")
+        try:
+            lines = open(f).readlines()
+            sources[name] = (f, lines)
+        except OSError:
+            pass
+
+    results = []
+    for pat in MICRO_PATTERNS:
+        rx = re.compile(pat["regex"])
+        hits = []
+        files_hit: set[str] = set()
+        for name, (path, lines) in sorted(sources.items()):
+            for lineno, line in enumerate(lines, 1):
+                stripped = line.strip()
+                if stripped.startswith("--"):
+                    continue
+                if rx.search(stripped):
+                    hits.append(
+                        {
+                            "tantra": name,
+                            "lineno": lineno,
+                            "text": stripped[:100],
+                        }
+                    )
+                    files_hit.add(name)
+
+        results.append(
+            {
+                "name": pat["name"],
+                "sanskrit": pat["sanskrit"],
+                "replaces": pat["replaces"],
+                "note": pat["note"],
+                "graph_node": pat.get("graph_node"),
+                "graph_meaning": pat.get("graph_meaning", ""),
+                "body": pat.get("body", ""),
+                "hit_count": len(hits),
+                "file_count": len(files_hit),
+                "files": sorted(files_hit),
+                "hits": hits,
+            }
+        )
+
+    # sort by hit_count descending
+    results.sort(key=lambda x: -x["hit_count"])
+
+    # enrich with live graph data if a client was passed
+    _enrich_micro_patterns_from_graph(results, vy)
+
+    # also find from-shapes that appear 3+ times (candidate micro-tantras via AST)
+    from_shape_files: dict[str, list[str]] = defaultdict(list)
+    for name, (path, lines) in sources.items():
+        src = "".join(l for l in lines if not l.strip().startswith("--"))
+        for m in re.finditer(
+            r'\| where \[[^\]]+\] \| and \(eq e "([^"]+)"\)(?: \| and [^\|]+)* \| collect ([^\n]+)',
+            src,
+        ):
+            shape = f'eq:"{m.group(1)}" → collect:{m.group(2).strip()[:40]}'
+            from_shape_files[shape].append(name)
+
+    repeated_shapes = [
+        {"shape": shape, "count": len(tnames), "tantras": sorted(tnames)}
+        for shape, tnames in from_shape_files.items()
+        if len(tnames) >= 3
+    ]
+    repeated_shapes.sort(key=lambda x: -x["count"])
+
+    return {
+        "patterns": results,
+        "repeated_query_shapes": repeated_shapes,
+        "total_tantras_scanned": len(sources),
+    }
+
+
+# ── tantra role classification ─────────────────────────────────────────────────
+#
+# Classifies each tantra by its structural role based on:
+#   - call graph (what it calls)
+#   - reverse graph (what calls it)
+#   - takes count (input arity)
+#   - body complexity (AST nodes)
+#
+# Roles:
+#   ENTRY      — sentence→answer, top-level entry point
+#   WRAPPER    — thin delegation to one or two core workers
+#   WORKER     — real logic, called by multiple others
+#   AVRTI-PASS — called only by avrti-refine (one refinement sub-step)
+#   QG-PASS    — called only by build-question-graph
+#   READER     — pure graph extraction, no side effects
+#   EQUATION   — pure math, no graph operations
+#   EMIT-HELPER — produces strings for pancavayava emission
+#   EXEC-HELPER — dispatches to equation tantras
+
+
+def analyze_tantra_roles(tantra_data: dict) -> dict:
+    """
+    Classify each tantra by structural role using its call graph and complexity.
+    tantra_data is the result of analyze_tantras().
+    """
+    call_graph = tantra_data["call_graph"]  # name → [callees]
+    reverse_graph = tantra_data["reverse_graph"]  # name → [callers]
+    complexity = tantra_data["complexity"]
+
+    # known structural anchors
+    AVRTI_PASS_CALLERS = {"avrti-refine"}
+    QG_PASS_CALLERS = {"build-question-graph", "sandhi-viveka"}
+    EMIT_HELPERS = {
+        "entity-props-str",
+        "list-join",
+        "mantra-known-str",
+        "mantra-seen-str",
+    }
+    EXEC_HELPERS = {"execute-chain", "execute-math"}
+    ENTRY_NAMES = {"anuvada-ganana", "tantra3", "session-anuvada"}
+    EQUATION_RE = re.compile(r"-expr$|-inv-")
+
+    def callers_of(name):
+        return set(reverse_graph.get(name, []))
+
+    def callees_of(name):
+        return set(call_graph.get(name, []))
+
+    def ast_nodes(name):
+        return complexity.get(name, {}).get("ast_nodes", 0)
+
+    def takes_count(name):
+        return len(
+            complexity.get(name, {}).get("file", "")
+        )  # proxy; real takes from AST
+
+    classified = {}
+    for name in sorted(call_graph.keys()):
+        callers = callers_of(name)
+        callees = callees_of(name)
+        nodes = ast_nodes(name)
+
+        if name in ENTRY_NAMES:
+            role = "ENTRY"
+            why = "top-level sentence→answer entry point"
+
+        elif name in EMIT_HELPERS:
+            role = "EMIT-HELPER"
+            why = "produces string fragments for pancavayava emission"
+
+        elif name in EXEC_HELPERS:
+            role = "EXEC-HELPER"
+            why = "dispatches to equation tantra, returns numeric result"
+
+        elif EQUATION_RE.search(name) or (
+            not callees and nodes < 20 and not callers - ENTRY_NAMES
+        ):
+            role = "EQUATION"
+            why = "pure math expression, no graph operations"
+
+        elif (
+            callers <= AVRTI_PASS_CALLERS | {"avrti-refine"}
+            and "avrti-refine" in callers
+        ):
+            role = "AVRTI-PASS"
+            why = f"called exclusively by avrti-refine (callers: {sorted(callers)})"
+
+        elif callers <= QG_PASS_CALLERS and callers:
+            role = "QG-PASS"
+            why = f"called exclusively by build-question-graph pipeline (callers: {sorted(callers)})"
+
+        elif not callees and nodes < 15:
+            role = "READER"
+            why = "pure graph extraction, no sub-calls, small body"
+
+        elif len(callees) <= 2 and nodes < 30:
+            role = "WRAPPER"
+            callees_str = ", ".join(sorted(callees)) if callees else "—"
+            why = f"thin delegation to: {callees_str}"
+
+        else:
+            role = "WORKER"
+            why = f"core logic — {nodes} AST nodes, calls {len(callees)} sub-tantras"
+
+        classified[name] = {
+            "role": role,
+            "why": why,
+            "callers": sorted(callers),
+            "callees": sorted(callees),
+            "ast_nodes": nodes,
+            "caller_count": len(callers),
+            "callee_count": len(callees),
+        }
+
+    # group by role
+    by_role: dict[str, list[str]] = defaultdict(list)
+    for name, info in classified.items():
+        by_role[info["role"]].append(name)
+
+    # find WRAPPER tantras that are pure renames (≤1 callee, ≤15 AST nodes)
+    pure_renames = [
+        name
+        for name, info in classified.items()
+        if info["role"] == "WRAPPER"
+        and info["callee_count"] <= 1
+        and info["ast_nodes"] <= 15
+    ]
+
+    # find redundant ENTRY points (more than one does the same thing)
+    entry_names = by_role.get("ENTRY", [])
+
+    return {
+        "classified": classified,
+        "by_role": {role: sorted(names) for role, names in sorted(by_role.items())},
+        "pure_renames": sorted(pure_renames),
+        "redundant_entries": entry_names,
+        "role_counts": {role: len(names) for role, names in sorted(by_role.items())},
+    }
+
+
 # ── tantra analysis ────────────────────────────────────────────────────────────
 
 _tantra_cache = {}  # name → {ast, file}
@@ -1091,6 +1561,9 @@ def analyze_om(brahman_dir):
 
 
 def run_full_analysis(sock_path, yantra_dir, brahman_dir):
+    # single persistent client shared across all analyses that need graph queries
+    vy = VyClient(sock_path)
+
     print("Running tantra analysis...", file=sys.stderr)
     tantra_result = analyze_tantras(sock_path, yantra_dir)
 
@@ -1099,16 +1572,25 @@ def run_full_analysis(sock_path, yantra_dir, brahman_dir):
 
     print("Running philosophical analysis...", file=sys.stderr)
     tantra_edge_refs = tantra_result["global_edges"]
-    phil_result = analyze_philosophical(sock_path, om_result["nodes"], tantra_edge_refs)
+    phil_result = analyze_philosophical(vy, om_result["nodes"], tantra_edge_refs)
 
     print("Running test gap analysis...", file=sys.stderr)
     test_result = analyze_test_gaps(sock_path, brahman_dir, _tantra_cache)
 
+    print("Running micro-pattern analysis...", file=sys.stderr)
+    micro_result = analyze_micro_patterns(yantra_dir, vy=vy)
+
+    print("Running tantra role classification...", file=sys.stderr)
+    roles_result = analyze_tantra_roles(tantra_result)
+
+    vy.close()
     return {
         "tantra": tantra_result,
         "om": {k: v for k, v in om_result.items() if k != "nodes"},
         "philosophical": phil_result,
         "tests": test_result,
+        "micro": micro_result,
+        "roles": roles_result,
     }
 
 
@@ -1319,11 +1801,140 @@ def print_report(result, section="all"):
                 for t in ginfo["missing"][:3]:
                     print(f"      {t}")
             print()
+    if section in ("all", "micro"):
+        m = result.get("micro", {})
+        header(
+            f"MICRO-PATTERN ANALYSIS  "
+            f"({m.get('total_tantras_scanned', 0)} tantras scanned)"
+        )
+
+        section_header("CANDIDATE MICRO-TANTRAS (ranked by hit count)")
+        print(
+            "  These repeated inline expressions are candidates for named philosophical\n"
+            "  micro-tantras — small, one-purpose tantras with Sanskrit names.\n"
+        )
+        print(f"  {'name':<20} {'hits':>4}  {'files':>5}  sanskrit root")
+        print(f"  {'─' * 70}")
+        for pat in m.get("patterns", []):
+            if pat["hit_count"] == 0:
+                continue
+            print(
+                f"  {pat['name']:<20} {pat['hit_count']:>4}  "
+                f"{pat['file_count']:>5}  {pat['sanskrit']}"
+            )
+
+        print()
+        for pat in m.get("patterns", []):
+            if pat["hit_count"] == 0:
+                continue
+            print(f"  ── {pat['name']}  ({pat['sanskrit']})")
+            print(f"     replaces: {pat['replaces']}")
+            print(f"     note:     {pat['note']}")
+
+            # graph grounding — what the live graph knows about this concept
+            gg = pat.get("graph_grounding", {})
+            if gg.get("found"):
+                satya = gg.get("satya", 0)
+                sw = ", ".join(gg.get("swarupa", []))
+                kr = ", ".join(gg.get("kriya", []))
+                ready = "✓ ready" if gg.get("ready") else "⚠ not ready"
+                exists = " (tantra already exists)" if gg.get("proposed_exists") else ""
+                print(
+                    f"     graph:    {pat['graph_node']}  satya={satya:.3f}  {ready}{exists}"
+                )
+                if sw:
+                    print(f"               swarupa: {sw}")
+                if kr:
+                    print(f"               kriya:   {kr}")
+                print(f"     meaning:  {pat['graph_meaning'][:120]}")
+            elif "graph_node" in pat:
+                print(f"     graph:    {pat['graph_node']}  (not found in live graph)")
+
+            print(f"     body:")
+            for line in pat.get("body", "").split("\n"):
+                print(f"       {line}")
+            print(f"     files ({pat['file_count']}): {', '.join(pat['files'])}")
+            for hit in pat["hits"][:3]:
+                print(f"       {hit['tantra']}:{hit['lineno']}  {hit['text'][:80]}")
+            if len(pat["hits"]) > 3:
+                print(f"       ... and {len(pat['hits']) - 3} more")
+            print()
+
+        section_header("REPEATED QUERY SHAPES (3+ tantras, candidate readers)")
+        print(
+            "  Same pipe-query pattern appearing across many tantras —\n"
+            "  each is a candidate named READER tantra.\n"
+        )
+        for shape in m.get("repeated_query_shapes", [])[:15]:
+            print(f"  {shape['count']:>3}×  {shape['shape']}")
+            print(f"       {', '.join(shape['tantras'])}")
+
+    if section in ("all", "roles"):
+        r = result.get("roles", {})
+        header("TANTRA ROLE CLASSIFICATION")
+
+        section_header("ROLE COUNTS")
+        for role, count in sorted(r.get("role_counts", {}).items()):
+            names = r.get("by_role", {}).get(role, [])
+            print(
+                f"  {role:<15} {count:>3}   {', '.join(names[:8])}"
+                + ("..." if len(names) > 8 else "")
+            )
+
+        section_header("PURE RENAMES (WRAPPER tantras with ≤1 callee, ≤15 AST nodes)")
+        print(
+            "  These WRAPPERs add only a philosophical name — no logic.\n"
+            "  They exist for tantra3's benefit. If tantra3 is retired or\n"
+            "  collapsed into anuvada-ganana, these become deletable.\n"
+        )
+        for name in r.get("pure_renames", []):
+            info = r["classified"].get(name, {})
+            print(f"  {name:<28} → {info.get('why', '')}")
+
+        section_header("REDUNDANT ENTRY POINTS")
+        print(
+            "  Multiple tantras do sentence→answer. Only one should be the\n"
+            "  canonical entry point. The others are candidates for deletion\n"
+            "  or consolidation.\n"
+        )
+        for name in r.get("redundant_entries", []):
+            info = r["classified"].get(name, {})
+            print(f"  {name:<28} {info.get('ast_nodes', 0)} AST nodes")
+            callees = info.get("callees", [])
+            print(f"    calls: {', '.join(callees[:8])}")
+
+        section_header("FULL CLASSIFICATION")
+        classified = r.get("classified", {})
+        role_order = [
+            "ENTRY",
+            "WORKER",
+            "WRAPPER",
+            "AVRTI-PASS",
+            "QG-PASS",
+            "READER",
+            "EQUATION",
+            "EMIT-HELPER",
+            "EXEC-HELPER",
+        ]
+        for role in role_order:
+            names = r.get("by_role", {}).get(role, [])
+            if not names:
+                continue
+            print(f"\n  {role} ({len(names)})")
+            for name in names:
+                info = classified.get(name, {})
+                callers_str = (
+                    f"  ← {', '.join(info['callers'][:3])}" if info["callers"] else ""
+                )
+                print(
+                    f"    {name:<30} {info['ast_nodes']:>4} nodes  {info.get('why', '')[:50]}{callers_str}"
+                )
 
     print()
 
 
 # ── entry point ───────────────────────────────────────────────────────────────
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -1335,7 +1946,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "--report",
         default="all",
-        choices=["all", "tantra", "om", "philosophical", "bridge", "tests"],
+        choices=[
+            "all",
+            "tantra",
+            "om",
+            "philosophical",
+            "bridge",
+            "tests",
+            "micro",
+            "roles",
+        ],
     )
     args = parser.parse_args()
 

@@ -20,10 +20,10 @@ sf-result = extract-solve-for expanded
 sf        = nth sf-result 1
 
 -- remember this turn's sankhya concepts (from refined only, not prior-graph)
-direct-bindings = refined | where [s, e, o] | and (eq e "sankhya") | collect [s, o]
+direct-bindings = sankhya-sparsha refined
 
-sv-concepts = refined | where [concept, e, _] | and (eq e "shashthi-vibhakti") | collect concept
-sv-vals     = refined | where [_, e, o] | and (eq e "sankhya") | collect o
+sv-concepts = (shashthi-sparsha refined "") | collect (nth _it 0)
+sv-vals     = (sankhya-sparsha refined)     | collect (nth _it 1)
 
 sv-bindings = (cond (and (gt (length sv-concepts) 0) (gt (length sv-vals) 0))
   (map sv-concepts (fn c -> [c, (nth sv-vals 0)]))
