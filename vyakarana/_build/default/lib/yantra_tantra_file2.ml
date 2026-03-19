@@ -185,6 +185,16 @@ and parse2_pipe (lhs : expr) (tokens : string list) : expr * string list =
     let (fn_e, rest') = parse2_primary rest in
     let map_e = Call ("map", [lhs; fn_e]) in
     parse2_pipe map_e rest'
+  | "|" :: "reduce" :: rest ->
+    (* pipe | reduce init fn — folds the LHS list into a single value.
+       init: the initial accumulator (parsed as a primary).
+       fn:   the fold function (fn acc item -> body), parsed as a primary.
+       This is the natural continuation of | collect | reduce without a
+       named intermediate binding. *)
+    let (init_e, rest') = parse2_primary rest in
+    let (fn_e, rest'') = parse2_primary rest' in
+    let reduce_e = Call ("reduce", [lhs; init_e; fn_e]) in
+    parse2_pipe reduce_e rest''
   | "is" :: "not" :: "empty" :: rest ->
     parse2_pipe (Call ("gt", [Call ("length", [lhs]); Lit 0.0])) rest
   | "is" :: "empty" :: rest ->

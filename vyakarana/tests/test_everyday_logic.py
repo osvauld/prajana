@@ -242,14 +242,6 @@ def test_which_is_faster(vy):
 # Needs: logical-chain tantra that recognises transitivity patterns.
 
 
-@pytest.mark.xfail(
-    strict=False,
-    reason="Transitive logical inference not implemented. The pipeline handles "
-    "physics implications (mantras) but not general logical transitivity. "
-    "'a > b and b > c → a > c' requires recognising the > relation as "
-    "transitive and walking the chain. Needs: transitivity-mantra or "
-    "logical-chain tantra.",
-)
 def test_transitive_greater_than(vy):
     """a > b, b > c → a > c."""
     r = answer(

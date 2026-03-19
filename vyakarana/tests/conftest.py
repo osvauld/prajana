@@ -268,6 +268,7 @@ def _write_cache(request, calls: list[dict], duration: float) -> None:
     if rep:
         outcome = rep
 
+    xfail_meta = getattr(request.node, "_xfail_meta", None)
     entry: dict = {
         "test": node_id,
         "outcome": outcome,
@@ -275,6 +276,8 @@ def _write_cache(request, calls: list[dict], duration: float) -> None:
         "failure": None,
         "duration": round(duration, 3),
     }
+    if xfail_meta:
+        entry["xfail"] = xfail_meta
 
     cache_dir = _cache_dir(request.config)
     cache_file = cache_dir / (_safe_node_id(node_id) + ".json")
@@ -287,22 +290,110 @@ def _write_cache(request, calls: list[dict], duration: float) -> None:
 # ── hook: capture outcome and failure details ─────────────────────────────────
 
 
+_GATE_KEYWORDS = {
+    # structural gaps — checked in order, first match wins
+    "sthita-viveka": "sthita-viveka: multi-slot entity assignment",
+    "relative-velocity": "relative-velocity: kosha concept missing",
+    "dvandva": "dvandva: per-entity instance-map",
+    "session_gap2": "session_gap2: prathama/shashthi across turns",
+    "session gap2": "session_gap2: prathama/shashthi across turns",
+    "prathama/shashthi": "session_gap2: prathama/shashthi across turns",
+    "prathama-vibhakti": "session_gap2: prathama/shashthi across turns",
+    "pratibimba": "pratibimba: gated on Gap 2",
+    "simulation scene": "pratibimba: gated on Gap 2",
+    "gravitational-force": "p8f_gravity: G + r² composition",
+    "gravitational force": "p8f_gravity: G + r² composition",
+    "expression graph": "p8f_gravity: G + r² composition",
+    "bound-vals": "inverse-math: bound-vals / invert-math path",
+    "invert-math": "inverse-math: bound-vals / invert-math path",
+    "inverse": "inverse-math: bound-vals / invert-math path",
+    "viraam boundary": "viraam: has-intent lost across period",
+    "viraam": "viraam: has-intent lost across period",
+    "syllogism": "logic_nyaya: P8d anumana not built",
+    "anumana": "logic_nyaya: P8d anumana not built",
+    "transitive": "logic_nyaya: P8d anumana not built",
+    "modus-ponens": "logic_nyaya: P8d anumana not built",
+    "compute-then-compare": "viveka: compute-then-compare not built",
+    "which has more": "viveka: compute-then-compare not built",
+    "proportional": "viveka: proportional reasoning",
+    "count addition": "arithmetic: plain count not in pipeline",
+    "count subtraction": "arithmetic: plain count not in pipeline",
+    "plain count": "arithmetic: plain count not in pipeline",
+    "distance = speed": "arithmetic: plain count not in pipeline",
+    "area =": "arithmetic: plain count not in pipeline",
+    "rectangle": "arithmetic: plain count not in pipeline",
+    "coulomb": "kosha: missing concept node",
+    "moves at": "kosha: missing concept node",
+    "motion verb": "kosha: missing concept node",
+    "period-mantra": "kosha: missing concept node",
+    "m/s compound": "unit_rate: m/s compound unit",
+    "gap 1": "unit_rate: m/s compound unit",
+    "gap 2": "session_gap2: prathama/shashthi across turns",
+    "rashi-anuvada bridge": "dvandva: per-entity instance-map",
+    "p8b": "dvandva: per-entity instance-map",
+    "article": "parsing: article before entity name",
+    "the'": "parsing: article before entity name",
+    "natural phrasing": "parsing: natural phrasing not handled",
+    "from rest": "parsing: natural phrasing not handled",
+}
+
+
+def _xfail_info(item) -> dict:
+    """Extract xfail marker metadata: reason, strict, file, line, gate."""
+    marker = item.get_closest_marker("xfail")
+    if not marker:
+        return {}
+    reason = marker.kwargs.get("reason", "") or (marker.args[0] if marker.args else "")
+    strict = marker.kwargs.get("strict", False)
+
+    # derive gate from keyword matching against the reason string
+    reason_lower = reason.lower()
+    gate = ""
+    for keyword, group in _GATE_KEYWORDS.items():
+        if keyword.lower() in reason_lower:
+            gate = group
+            break
+    if not gate:
+        # fall back to test file name
+        gate = f"other:{item.fspath.basename.replace('.py', '')}"
+
+    return {
+        "reason": reason,
+        "strict": strict,
+        "gate": gate,
+        "file": str(item.fspath),
+        "line": item.function.__code__.co_firstlineno,
+    }
+
+
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """Capture pass/fail outcome and failure message into the cache."""
+    """Capture pass/fail/xfail/xpass outcome and failure message into the cache."""
     outcome = yield
     rep = outcome.get_result()
 
+    cache_dir = item.config.rootpath / ".pytest_cache" / "vyakarana"
+    cache_file = cache_dir / (_safe_node_id(item.nodeid) + ".json")
+
     if rep.when == "call":
-        # record outcome on the item so _write_cache can read it
+        # xpassed: strict xfail that now passes — record as xpassed
+        if rep.passed and hasattr(rep, "wasxfail"):
+            item._last_outcome = "xpassed"
+            item._xfail_meta = _xfail_info(item)
+            return
+
+        # xfailed: test failed as expected
+        if rep.skipped and hasattr(rep, "wasxfail"):
+            item._last_outcome = "xfailed"
+            item._xfail_meta = _xfail_info(item)
+            return
+
+        # normal pass
         item._last_outcome = rep.outcome  # "passed" | "failed" | "error"
 
         # on failure: extract what was expected vs what was got
         if rep.failed and _recorder is not None:
             failure_info = _extract_failure(rep)
-            node_id = item.nodeid
-            cache_dir = item.config.rootpath / ".pytest_cache" / "vyakarana"
-            cache_file = cache_dir / (_safe_node_id(node_id) + ".json")
             if cache_file.exists():
                 try:
                     entry = json.loads(cache_file.read_text())
@@ -312,8 +403,14 @@ def pytest_runtest_makereport(item, call):
                 except Exception:
                     pass
 
-    elif rep.when == "setup" and rep.skipped:
-        item._last_outcome = "xfailed" if rep.wasxfail else "skipped"  # type: ignore[attr-defined]
+    elif rep.when == "setup":
+        if rep.skipped:
+            # setup-phase xfail (e.g. condition=True xfail)
+            item._last_outcome = (
+                "xfailed" if getattr(rep, "wasxfail", False) else "skipped"
+            )
+            if item._last_outcome == "xfailed":
+                item._xfail_meta = _xfail_info(item)
 
 
 def _extract_failure(rep) -> dict:
@@ -385,7 +482,7 @@ def pytest_sessionfinish(session, exitstatus):
             except Exception:
                 pass
 
-        counts = {
+        counts: dict[str, int] = {
             "passed": 0,
             "failed": 0,
             "error": 0,
@@ -395,9 +492,8 @@ def pytest_sessionfinish(session, exitstatus):
             "unknown": 0,
         }
         for e in entries:
-            counts[e.get("outcome", "unknown")] = (
-                counts.get(e.get("outcome", "unknown"), 0) + 1
-            )
+            k = e.get("outcome", "unknown")
+            counts[k] = counts.get(k, 0) + 1
 
         failed_tests = []
         for e in entries:
@@ -426,12 +522,26 @@ def pytest_sessionfinish(session, exitstatus):
                 )
 
         xfail_tests = [
-            {"test": e["test"], "duration": e.get("duration", 0)}
+            {
+                "test": e["test"],
+                "duration": e.get("duration", 0),
+                "reason": (e.get("xfail") or {}).get("reason", ""),
+                "gate": (e.get("xfail") or {}).get("gate", ""),
+                "strict": (e.get("xfail") or {}).get("strict", False),
+                "file": (e.get("xfail") or {}).get("file", ""),
+                "line": (e.get("xfail") or {}).get("line", 0),
+            }
             for e in entries
             if e.get("outcome") == "xfailed"
         ]
         xpass_tests = [
-            {"test": e["test"], "duration": e.get("duration", 0)}
+            {
+                "test": e["test"],
+                "duration": e.get("duration", 0),
+                "reason": (e.get("xfail") or {}).get("reason", ""),
+                "file": (e.get("xfail") or {}).get("file", ""),
+                "line": (e.get("xfail") or {}).get("line", 0),
+            }
             for e in entries
             if e.get("outcome") == "xpassed"
         ]

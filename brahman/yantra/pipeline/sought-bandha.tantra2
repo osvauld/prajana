@@ -23,9 +23,9 @@ takes comp-word
 
 already = gt (length (graph | where [s, e, o] | and (eq e "sought") | collect s)) 0
 
-has-sf    = gt (string-length (to-string solve-for)) 0
-has-scope = gt (string-length (to-string scope-entity)) 0
-has-cw    = gt (string-length (to-string comp-word)) 0
+has-sf    = exists solve-for
+has-scope = exists scope-entity
+has-cw    = exists comp-word
 
 -- the "sought" label: comp-word for viveka, solve-for for physics/count
 sought-label = cond has-cw (to-string comp-word) otherwise (to-string solve-for)

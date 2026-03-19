@@ -151,6 +151,20 @@ let json_bool_field (json : string) (key : string) : bool option =
   in
   scan 0
 
+(* ---- JSON field helpers — collapse Option.value ~default patterns ----
+   Before (21+ occurrences):
+     Option.value ~default:"" (json_string_field line "key")
+   After:
+     opt_field line "key"             -- defaults to ""
+     opt_field ~default:"x" line "key" -- custom default
+     req_field line "key"             -- "" when missing (same as opt_field) *)
+
+let opt_field ?(default="") (json : string) (key : string) : string =
+  Option.value ~default (json_string_field json key)
+
+let req_field (json : string) (key : string) : string =
+  opt_field json key
+
 (* ---- session store ---- *)
 (* in-memory per-session state, keyed by session_id string.
    each session has its own yantra evaluation context so bindings are isolated.
@@ -333,24 +347,20 @@ let pipeline_trace_response (k : proof_graph) (yantra_idx : tantra_index)
   ] in
   (* helper: eval one tantra call, passing previous result as input *)
   let eval_stage stage_name arg_json =
-    (* build expression: stage_name arg  OR  build-question-graph sentence *)
     let expr = if stage_name = "build-question-graph" then
       Printf.sprintf "build-question-graph \"%s\"" (String.escaped sentence)
     else
-      (* arg_json is the JSON repr of previous stage result — eval it inline *)
       Printf.sprintf "%s %s" stage_name arg_json
     in
-    let env  = Yantra.new_env () in
-    Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
-    (try
-      let parsed = Yantra.parse_expr_string expr in
-      let result = Yantra.eval k env parsed in
-      Yantra.eval_ctx := None;
-      (Yantra.val_to_json result, result)
-    with exn ->
-      Yantra.eval_ctx := None;
-      let msg = Printf.sprintf "\"error: %s\"" (String.escaped (Printexc.to_string exn)) in
-      (msg, Yantra.VList []))
+    let env = Yantra.new_env () in
+    Yantra_eval.with_eval_ctx yantra_idx yantra_session
+      (fun () ->
+        let parsed = Yantra.parse_expr_string expr in
+        let result = Yantra.eval k env parsed in
+        (Yantra.val_to_json result, result))
+      ~default:(
+        let msg = Printf.sprintf "\"error: eval_stage failed\"" in
+        (msg, Yantra.VList []))
   in
   let buf = Buffer.create 2048 in
   Buffer.add_string buf "{\"status\":\"ok\",\"command\":\"pipeline-trace\",\"sentence\":";
@@ -374,51 +384,26 @@ let pipeline_trace_response (k : proof_graph) (yantra_idx : tantra_index)
 
 let mantra_status_response (k : proof_graph) (yantra_idx : tantra_index)
     (yantra_session : session) (sentence : string) : string =
+  (* eval a tantra expr string, returning JSON string result *)
+  let eval_expr_json expr_str fallback =
+    let env = Yantra.new_env () in
+    Yantra_eval.with_eval_ctx yantra_idx yantra_session
+      (fun () ->
+        let parsed = Yantra.parse_expr_string expr_str in
+        Yantra.val_to_json (Yantra.eval k env parsed))
+      ~default:fallback
+  in
   (* step 1: build refined graph *)
   let refined_json =
-    let expr = Printf.sprintf
-      "fixpoint (build-question-graph \"%s\") avrti-refine"
-      (String.escaped sentence) in
-    let env = Yantra.new_env () in
-    Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
-    (try
-      let parsed = Yantra.parse_expr_string expr in
-      let result = Yantra.eval k env parsed in
-      Yantra.eval_ctx := None;
-      Yantra.val_to_json result
-    with exn ->
-      Yantra.eval_ctx := None;
-      Printf.eprintf "[mantra-status] refine error: %s\n%!" (Printexc.to_string exn);
-      "[]")
+    eval_expr_json
+      (Printf.sprintf "fixpoint (build-question-graph \"%s\") avrti-refine"
+         (String.escaped sentence))
+      "[]"
   in
   (* step 2: extract bound-concepts from refined graph via debug-bound-concepts tantra *)
-  let bound_json =
-    let expr = Printf.sprintf "debug-bound-concepts %s" refined_json in
-    let env = Yantra.new_env () in
-    Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
-    (try
-      let parsed = Yantra.parse_expr_string expr in
-      let result = Yantra.eval k env parsed in
-      Yantra.eval_ctx := None;
-      Yantra.val_to_json result
-    with _exn ->
-      Yantra.eval_ctx := None;
-      "[]")
-  in
+  let bound_json   = eval_expr_json (Printf.sprintf "debug-bound-concepts %s" refined_json) "[]" in
   (* step 3: for each mantra, check coverage via mantra-coverage tantra *)
-  let mantras_json =
-    let expr = Printf.sprintf "mantra-coverage %s" refined_json in
-    let env = Yantra.new_env () in
-    Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
-    (try
-      let parsed = Yantra.parse_expr_string expr in
-      let result = Yantra.eval k env parsed in
-      Yantra.eval_ctx := None;
-      Yantra.val_to_json result
-    with _exn ->
-      Yantra.eval_ctx := None;
-      "[]")
-  in
+  let mantras_json = eval_expr_json (Printf.sprintf "mantra-coverage %s" refined_json) "[]" in
   Printf.sprintf
     "{\"status\":\"ok\",\"command\":\"mantra-status\",\"sentence\":%s,\
 \"refined_graph\":%s,\"bound_concepts\":%s,\"mantras\":%s}"
@@ -426,19 +411,9 @@ let mantra_status_response (k : proof_graph) (yantra_idx : tantra_index)
 
 (* ---- attach: incrementally add one .om or .tantra file to the live graph ---- *)
 
-let attach_file (k : proof_graph) (yantra_idx : tantra_index) (path : string) : string =
+let attach_file (k : proof_graph) (_yantra_idx : tantra_index) (path : string) : string =
   let ext = Filename.extension path in
   match ext with
-  | ".tantra" ->
-    (match Yantra_tantra_file.parse_tantra_file path with
-     | None ->
-       error_response "" "" "" "ATTACH_ERROR"
-         (Printf.sprintf "could not parse tantra file: %s" path)
-     | Some t ->
-       Yantra_index.register_tantra ~graph:k yantra_idx t;
-       Printf.printf "[attach] tantra: %s\n%!" t.t_name;
-       Printf.sprintf "{\"status\":\"ok\",\"command\":\"attach\",\"kind\":\"tantra\",\
-\"name\":%s,\"path\":%s}" (je t.t_name) (je path))
   | ".om" ->
     (* derive known names from the live graph — no disk re-scan needed *)
     let known_names = Hashtbl.fold (fun name _ acc -> name :: acc) k.nodes [] in
@@ -455,7 +430,7 @@ let attach_file (k : proof_graph) (yantra_idx : tantra_index) (path : string) : 
 \"name\":%s,\"path\":%s}" (je n.name) (je path))
   | _ ->
     error_response "" "" "" "ATTACH_ERROR"
-      (Printf.sprintf "unsupported file type '%s' — expected .om or .tantra" ext)
+      (Printf.sprintf "unsupported file type '%s' — expected .om" ext)
 
 (* ---- reload-all: re-read all tantra files from disk into the live index ---- *)
 
@@ -511,35 +486,40 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                 "eval"      → result field is a string (as_string repr, legacy).
                 "eval-json" → result field is a JSON value (val_to_json repr). *)
              let as_json = (command = Some "eval-json") in
-             let expr_str = Option.value ~default:"" (json_string_field line "expr") in
+              let expr_str = opt_field line "expr" in
              if String.trim expr_str = "" then
                error_response "" "" "" "INVALID_REQUEST" "missing required field: expr"
              else
-               (try
-                 let t0 = Unix.gettimeofday () in
-                 let expr = Yantra.parse_expr_string expr_str in
-                 let env  = Yantra.new_env () in
-                 let tnames = List.map (fun t -> Yantra.VString t.t_name)
-                   !(yantra_idx.all_tantras) in
-                 Hashtbl.replace env "_tantra_index" (Yantra.VList tnames);
-                 Yantra.eval_ctx := Some { Yantra.ctx_index = yantra_idx; ctx_session = yantra_session };
-                 let result = Yantra.eval k env expr in
-                 Yantra.eval_ctx := None;
-                 let t1 = Unix.gettimeofday () in
-                 let elapsed_ms = int_of_float ((t1 -. t0) *. 1000.0) in
-                 let result_str = Yantra.as_string result in
-                 let result_json = Yantra.val_to_json result in
-                 if String.length result_str <= 200 then
-                   Printf.printf "[eval] %s → %s (%dms)\n%!" expr_str result_str elapsed_ms;
-                 if as_json then
-                   Printf.sprintf
-                     "{\"status\":\"ok\",\"command\":\"eval-json\",\"expr\":%s,\"result\":%s,\"elapsed_ms\":%d}"
-                     (je expr_str) result_json elapsed_ms
-                 else
-                   eval_response expr_str result_str elapsed_ms
-               with exn ->
-                 Yantra.eval_ctx := None;
-                 error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn))
+                let t0 = Unix.gettimeofday () in
+                let expr_ast =
+                  (try Some (Yantra.parse_expr_string expr_str)
+                   with exn ->
+                     error_response "" "" "" "ENGINE_ERROR" (Printexc.to_string exn)
+                     |> fun _ -> None)
+                in
+                (match expr_ast with
+                 | None -> error_response "" "" "" "PARSE_ERROR" ("cannot parse: " ^ expr_str)
+                 | Some expr_ast ->
+                   let env = Yantra.new_env () in
+                   let tnames = List.map (fun t -> Yantra.VString t.t_name) !(yantra_idx.all_tantras) in
+                   Hashtbl.replace env "_tantra_index" (Yantra.VList tnames);
+                   let result =
+                     Yantra_eval.with_eval_ctx yantra_idx yantra_session
+                       (fun () -> Yantra.eval k env expr_ast)
+                       ~default:Yantra.VNone
+                   in
+                   let t1 = Unix.gettimeofday () in
+                   let elapsed_ms = int_of_float ((t1 -. t0) *. 1000.0) in
+                   let result_str = Yantra.as_string result in
+                   let result_json = Yantra.val_to_json result in
+                   if String.length result_str <= 200 then
+                     Printf.printf "[eval] %s → %s (%dms)\n%!" expr_str result_str elapsed_ms;
+                   if as_json then
+                     Printf.sprintf
+                       "{\"status\":\"ok\",\"command\":\"eval-json\",\"expr\":%s,\"result\":%s,\"elapsed_ms\":%d}"
+                       (je expr_str) result_json elapsed_ms
+                   else
+                     eval_response expr_str result_str elapsed_ms)
           | Some "inspect-node" ->
             (* return one node with outgoing + incoming edges.
                request: {"command": "inspect-node", "name": "velocity"}
@@ -622,12 +602,7 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                error_response "" "" "" "INVALID_REQUEST" "missing required field: path"
              | Some path ->
                (try
-                 let t_opt =
-                   if Filename.check_suffix path ".tantra2" then
-                     Yantra_tantra_file2.parse_tantra2_file path
-                   else
-                     Yantra_tantra_file.parse_tantra_file path
-                 in
+                 let t_opt = Yantra_tantra_file2.parse_tantra2_file path in
                  (match t_opt with
                   | None ->
                     error_response "" "" "" "PARSE_ERROR"
@@ -639,14 +614,14 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                 with exn ->
                   error_response "" "" "" "PARSE_ERROR" (Printexc.to_string exn)))
           | Some "end-session" ->
-            (* explicit session teardown — clears session state from store *)
-            let ses_id = Option.value ~default:"" (json_string_field line "session_id") in
-            if ses_id <> "" then Hashtbl.remove session_store ses_id;
-            "{\"status\":\"ok\",\"command\":\"end-session\"}"
-          | _ ->
-            let req_id     = Option.value ~default:"" (json_string_field line "request_id") in
-            let ses_id     = Option.value ~default:"" (json_string_field line "session_id") in
-            let trn_id     = Option.value ~default:"" (json_string_field line "turn_id") in
+             (* explicit session teardown — clears session state from store *)
+             let ses_id = opt_field line "session_id" in
+             if ses_id <> "" then Hashtbl.remove session_store ses_id;
+             "{\"status\":\"ok\",\"command\":\"end-session\"}"
+           | _ ->
+             let req_id     = opt_field line "request_id" in
+             let ses_id     = opt_field line "session_id" in
+             let trn_id     = opt_field line "turn_id" in
             let question   = json_string_field line "question" in
             let max_passes = json_int_field line "max_passes" in
             (* resolve per-session yantra context when session_id is present *)

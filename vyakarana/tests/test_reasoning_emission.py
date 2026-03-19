@@ -225,15 +225,6 @@ def test_two_entities_momentum_first(vy):
     assert "15" in r, f"expected momentum=15 for ball-A, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Second entity scope with viraam: ball-B's properties (mass=2, velocity=7) "
-    "are overwritten by rashi-anuvada which propagates both entities' sankhya "
-    "to the concept level. The scope entity (ball-B) is the second entity but "
-    "the flat concept-level sankhya carries ball-A's values (last viraam-sentence "
-    "sankhya wins). Needs sthita-viveka: entity-owned concept lookup that reads "
-    "shashthi-vibhakti ownership directly rather than flat sankhya.",
-)
 def test_two_entities_momentum_second(vy):
     """p = mv of ball-B: m=2, v=7 → p=14 (viraam-separated ownership)"""
     r = answer(
@@ -326,13 +317,6 @@ def test_inverse_ke_find_velocity_viraam(vy):
     assert "30" in r, f"expected velocity=30, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Second entity scope across viraam: 'find kinetic energy of ball-B' "
-    "after two viraam-separated sentences. extract-solve-for loses has-intent "
-    "across viraam — same root cause as inverse_ke_find_velocity_viraam. "
-    "The scope entity detection also fails when ball-B appears after a period.",
-)
 def test_two_entities_viraam_scope_second(vy):
     """Scope second entity across viraam: ball-B KE = ½×2×64 = 64"""
     r = answer(

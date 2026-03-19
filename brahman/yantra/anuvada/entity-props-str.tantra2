@@ -16,16 +16,10 @@ takes entities
 rel-sankhya = shabda "anuvada-setu" "rel-sankhya"
 
 result = reduce entities [] (fn acc entity ->
-  let owned = graph | where [concept, e, owner]
-    | and (eq e "shashthi-vibhakti")
-    | and (eq (to-string owner) (to-string entity))
-    | collect concept
+  let owned = shashthi-sparsha graph entity
   let props = reduce owned [] (fn pacc concept ->
-    let val = nth (graph | where [s, e, v]
-      | and (eq (to-string s) (to-string concept))
-      | and (eq e "sankhya")
-      | collect v) 0
-    cond (gt (string-length (to-string val)) 0)
+    let val = nth (graph | where [s, e, v] | and (eq (to-string s) (to-string concept)) | and (eq e "sankhya") | collect v) 0
+    cond (exists val)
       (append pacc [(concat (to-string concept) rel-sankhya (to-string val))])
     otherwise pacc)
   cond (gt (length props) 0)

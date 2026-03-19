@@ -24,7 +24,7 @@ tantra2 extract-solve-for
 takes graph
 
 -- collect all prathama-vibhakti entities (so we can recognise scope words)
-entities = graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s
+entities = prathama-sparsha graph
 
 sf-state = reduce graph [false, "", "", ""] (fn acc kv ->
   let s           = nth kv 0

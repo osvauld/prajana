@@ -118,13 +118,7 @@ let register_tantra ?(graph : proof_graph option) (idx : tantra_index) (t : tant
 
 let load_tantra_dir ?(graph : proof_graph option) (idx : tantra_index) (dir : string) : unit =
   let files = tantra_files_recursive dir in
-  (* load .tantra files first, then .tantra2 — so .tantra2 always wins on name collision *)
-  let tantra1 = List.filter (fun p -> not (Filename.check_suffix p ".tantra2")) files in
   let tantra2 = List.filter (fun p -> Filename.check_suffix p ".tantra2") files in
-  List.iter (fun path ->
-    match Yantra_tantra_file.parse_tantra_file path with
-    | None -> () | Some t -> register_tantra ?graph idx t
-  ) tantra1;
   List.iter (fun path ->
     match Yantra_tantra_file2.parse_tantra2_file path with
     | None -> () | Some t -> register_tantra ?graph idx t

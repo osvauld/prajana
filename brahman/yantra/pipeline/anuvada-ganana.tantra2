@@ -27,12 +27,12 @@ sf           = nth sf-result 1
 scope-entity = nth sf-result 2
 
 -- ── viveka detection ──────────────────────────────────────────────────────────
-entities         = expanded | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s
+entities         = prathama-sparsha expanded
 all-subjects     = unique (expanded | where [s, e, o] | collect (to-string s))
 viveka-max-word  = nth (filter all-subjects (fn w -> eq (to-string (lookup-word w)) "viveka-max")) 0
 viveka-min-word  = nth (filter all-subjects (fn w -> eq (to-string (lookup-word w)) "viveka-min")) 0
-viveka-max-present = gt (string-length (to-string viveka-max-word)) 0
-viveka-min-present = gt (string-length (to-string viveka-min-word)) 0
+viveka-max-present = exists viveka-max-word
+viveka-min-present = exists viveka-min-word
 is-viveka        = (and (gt (length entities) 1) (or viveka-max-present viveka-min-present))
 viveka-dir       = cond (and viveka-min-present (not viveka-max-present)) "min" otherwise "max"
 comp-word        = cond viveka-max-present viveka-max-word otherwise viveka-min-word
@@ -74,15 +74,14 @@ final-m = cond (gt (length mm-direct) 0)
     otherwise [])
 
 result = cond is-viveka
-  (cond (gt (string-length (to-string viveka-winner)) 0) (to-string viveka-winner) otherwise "no match")
+  (cond (exists viveka-winner) (to-string viveka-winner) otherwise "no match")
   otherwise (cond (not has-intent) "no match"
   otherwise (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match"))
 
 -- ── build proof graph with all reasoning edges ────────────────────────────────
 -- viveka-sankhya: entity's value for we-have and upanaya
 viveka-sankhya-triples = cond is-viveka
-  (reduce viveka-ev-pairs [] (fn acc kv ->
-    append acc [[(nth kv 0), "viveka-sankhya", (nth kv 1)]]))
+  (map viveka-ev-pairs (fn kv -> [(nth kv 0), "viveka-sankhya", (nth kv 1)]))
   otherwise []
 
 -- inject result into graph so emit-reasoning finds it via sankhya walk.
@@ -94,14 +93,13 @@ result-mantra = cond (gt (length final-m) 0) (nth final-m 0) otherwise ""
 -- (not all flat graph sankhya which may include other entities' values)
 result-valpairs = cond (gt (length final-m) 0) (nth final-m 1) otherwise []
 scoped-sankhya-triples = cond (and (not is-viveka) (gt (length result-valpairs) 0))
-  (reduce result-valpairs [] (fn acc kv ->
-    append acc [[(nth kv 0), "derived-sankhya", (nth kv 1)]]))
+  (map result-valpairs (fn kv -> [(nth kv 0), "derived-sankhya", (nth kv 1)]))
   otherwise []
 
 result-triples = cond (and (not is-viveka)
-                           (gt (string-length (to-string result)) 0)
+                           (exists result)
                            (neq (to-string result) "no match")
-                           (gt (string-length (to-string sf)) 0))
+                           (exists sf))
   (append
     [[(to-string sf), "sankhya",    result],
      [(to-string sf), "derived-by", result-mantra]]

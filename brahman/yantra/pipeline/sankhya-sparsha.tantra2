@@ -1,0 +1,14 @@
+tantra2 sankhya-sparsha
+
+-- sankhya-sparsha: graph → [[concept, val], ...]
+-- returns all [s, sankhya, o] pairs in the graph.
+-- replaces the inline pattern:
+--   graph | where [s, e, o] | and (eq e "sankhya") | collect [s, o]
+
+takes graph
+
+result = graph | where [s, e, o] | and (eq e "sankhya") | collect [s, o]
+
+return result
+
+done

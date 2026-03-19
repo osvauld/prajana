@@ -18,8 +18,8 @@ ac   = nth context 0
 pn   = nth context 1
 
 has-num  = gt (string-length nv) 0
-has-unit = gt (string-length (to-string un)) 0
-has-act  = gt (string-length (to-string ac)) 0
+has-unit = exists un
+has-act  = exists ac
 has-pend = neq pn ""
 
 is-concept = (and (exists nd)

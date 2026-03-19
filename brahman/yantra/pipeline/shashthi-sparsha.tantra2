@@ -1,0 +1,24 @@
+tantra2 shashthi-sparsha
+
+-- shashthi-sparsha: graph → [[concept, entity], ...]
+-- returns all [s, shashthi-vibhakti, o] OWNERSHIP pairs (not signal triples).
+-- excludes reflexive signal triples [has, shashthi-vibhakti, shashthi-vibhakti]
+-- by filtering out rows where o = "shashthi-vibhakti" (the possession signal).
+--
+-- optional second arg: entity — if non-empty, filters to owned-by that entity
+-- and returns just the concept names (not pairs).
+--   shashthi-sparsha graph ""      → [[concept, entity], ...]
+--   shashthi-sparsha graph "ball-A" → [concept, ...]
+
+takes graph
+takes entity
+
+has-entity = exists entity
+
+result = cond has-entity
+  (graph | where [s, e, o] | and (eq e "shashthi-vibhakti") | and (eq (to-string o) (to-string entity)) | collect s)
+  otherwise (graph | where [s, e, o] | and (eq e "shashthi-vibhakti") | and (neq (to-string o) "shashthi-vibhakti") | collect [s, o])
+
+return result
+
+done

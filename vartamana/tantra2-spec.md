@@ -106,6 +106,7 @@ alternative follow on the same line or in the same paren group.
 graph | where [s, e, o] | and (eq e "satya") | collect o
 graph | where [s, e, o] | and (eq e "satya") | collect [s, o]
 graph | where [s, e, _] | and (eq e "sankhya") | collect _it
+graph | where [s, e, o] | and (eq e "sankhya") | collect o | reduce _it 0 (fn acc v -> add acc v)
 ```
 
 `| where [s, e, o]` — destructures each triple; all names are bound as
@@ -116,8 +117,48 @@ wildcard (discards). `_it` refers to the whole item.
 
 `| collect expr` — maps surviving items through `expr`. Returns a list.
 
+`| reduce init (fn acc item -> expr)` — folds the pipe result into a single
+value. `init` is the initial accumulator; `fn acc item -> expr` is the fold
+function. This is a first-class pipe continuation — no intermediate binding
+needed.
+
 Pipes can be chained: `... | collect x | collect (to-string _it)` etc.
 The pipe `|` is a hard boundary for variadic ops.
+
+#### Pipe inside expressions — the wrapping rule
+
+A pipe expression used as an **argument** to a function call or inside a
+`cond`/`let` body **must be wrapped in parentheses**:
+
+```
+-- Wrong: arg collector stops at '|', pipe never executes
+let n = length graph | where [s, e, o] | and (eq e "satya") | collect o
+
+-- Right: parens let the pipe run to completion first
+let n = length (graph | where [s, e, o] | and (eq e "satya") | collect o)
+
+-- Wrong: reduce sees only 'vals' as its list, '| where ...' is left dangling
+result = reduce (graph | where [s,e,o] | collect o) 0 (fn a v -> add a v)
+-- (the pipe IS at top-level here so it works — but inside a larger expr it wouldn't)
+
+-- Wrong inside fn body: '|' stops argument collection
+filter items (fn x -> graph | where [s,e,o] | and (eq e x) | collect o)
+
+-- Right:
+filter items (fn x -> (graph | where [s,e,o] | and (eq e x) | collect o))
+```
+
+**Root cause**: the argument collector in `parse2_primary` treats `|` as a
+hard stop (same as `)`, `]`, `done`, etc.). This is intentional — `|` as
+binary-or would otherwise be ambiguous. The cost is that any pipe appearing
+*inside* a function argument position needs parens to be parsed correctly.
+
+Top-level bindings (`name = pipe-expr`) are safe without parens because the
+binding parser calls `parse2_expr` which runs `parse2_pipe` to completion.
+
+**Quick test**: if a pipe binding gives a wrong result or the collect returns
+the list unevaluated, check whether the whole pipe is the direct RHS of `=`
+or is nested inside something. Add `(...)` around any nested pipe.
 
 ### Scan (stateful graph traversal)
 ```

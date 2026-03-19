@@ -29,13 +29,17 @@ and proof_graph = Proof_graph.proof_graph
 
 let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) (args : expr list)
     : value option =
+  (* use the shared eval_arg helpers from Yantra_types *)
+  let (eval_arg, eval_str, eval_flt, eval_lst, eval_int) =
+    make_eval_arg e_eval k e args in
+  ignore (eval_arg, eval_str, eval_flt, eval_lst, eval_int);
   match op with
 
   (* ---- string operations ---- *)
 
   | "split" ->
-    let s = as_string (e_eval k e (List.nth args 0)) in
-    let delim = as_string (e_eval k e (List.nth args 1)) in
+    let s = eval_str 0 in
+    let delim = eval_str 1 in
     let parts = if String.length delim = 1 then
       String.split_on_char delim.[0] s
       |> List.filter (fun p -> String.length (String.trim p) > 0)
@@ -52,27 +56,26 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     Some (VString (String.concat "" (List.map as_string vals)))
 
   | "join" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    let sep = as_string (e_eval k e (List.nth args 1)) in
+    let lst = eval_lst 0 in
+    let sep = eval_str 1 in
     Some (VString (String.concat sep (List.map as_string lst)))
 
   | "char-at" ->
-    let s = as_string (e_eval k e (List.nth args 0)) in
-    let i = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let s = eval_str 0 in
+    let i = eval_int 1 in
     Some (if i >= 0 && i < String.length s then VString (String.make 1 s.[i]) else VNone)
 
   | "string-length" ->
-    let s = as_string (e_eval k e (List.nth args 0)) in
-    Some (VFloat (Float.of_int (String.length s)))
+    Some (VFloat (Float.of_int (String.length (eval_str 0))))
 
   | "to-number" ->
-    let s = as_string (e_eval k e (List.nth args 0)) in
+    let s = eval_str 0 in
     Some (match float_of_string_opt s with Some f -> VFloat f | None -> VNone)
 
   (* split-numeric: "5kg" → ["5.0", "kg"], "3.5m/s" → ["3.5", "m/s"], "42" → ["42.0", ""]
      also handles scientific notation: "1e6" → ["1000000.", ""], "1.6e-19" → ["1.6e-19", ""] *)
   | "split-numeric" ->
-    let s = as_string (e_eval k e (List.nth args 0)) in
+    let s = eval_str 0 in
     let n = String.length s in
     let i = ref 0 in
     (* consume leading sign *)
@@ -100,7 +103,7 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
 
   | "debug-print" ->
     (* debug-print val — prints to stderr and returns val unchanged *)
-    let v = e_eval k e (List.nth args 0) in
+    let v = eval_arg 0 in
     let rec show = function
       | VString s -> Printf.sprintf "'%s'" s
       | VBool b   -> string_of_bool b
@@ -112,19 +115,19 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     Some v
 
   | "to-string" ->
-    Some (VString (as_string (e_eval k e (List.nth args 0))))
+    Some (VString (eval_str 0))
 
   | "upper" ->
-    Some (VString (String.uppercase_ascii (as_string (e_eval k e (List.nth args 0)))))
+    Some (VString (String.uppercase_ascii (eval_str 0)))
 
   | "lower" ->
-    Some (VString (String.lowercase_ascii (as_string (e_eval k e (List.nth args 0)))))
+    Some (VString (String.lowercase_ascii (eval_str 0)))
 
   (* substr: string × start × length → string  — clamps to string bounds *)
   | "substr" ->
-    let s   = as_string (e_eval k e (List.nth args 0)) in
-    let pos = int_of_float (as_float (e_eval k e (List.nth args 1))) in
-    let len = int_of_float (as_float (e_eval k e (List.nth args 2))) in
+    let s   = eval_str 0 in
+    let pos = eval_int 1 in
+    let len = eval_int 2 in
     let slen = String.length s in
     let pos' = max 0 (min pos slen) in
     let len' = max 0 (min len (slen - pos')) in
@@ -132,29 +135,29 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
 
   (* starts-with: string × prefix → bool *)
   | "starts-with" ->
-    let s   = as_string (e_eval k e (List.nth args 0)) in
-    let pre = as_string (e_eval k e (List.nth args 1)) in
+    let s   = eval_str 0 in
+    let pre = eval_str 1 in
     let n = String.length pre in
     Some (VBool (String.length s >= n && String.sub s 0 n = pre))
 
   | "ends-with" ->
-    let s   = as_string (e_eval k e (List.nth args 0)) in
-    let suf = as_string (e_eval k e (List.nth args 1)) in
+    let s   = eval_str 0 in
+    let suf = eval_str 1 in
     let slen = String.length s in
     let n    = String.length suf in
     Some (VBool (slen >= n && String.sub s (slen - n) n = suf))
 
   (* member: value × list → bool — O(n) membership test *)
   | "member" ->
-    let needle = as_string (e_eval k e (List.nth args 0)) in
-    let lst    = as_list (e_eval k e (List.nth args 1)) in
+    let needle = eval_str 0 in
+    let lst    = eval_lst 1 in
     Some (VBool (List.exists (fun v -> as_string v = needle) lst))
 
   (* ---- list operations ---- *)
 
   | "map" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    let fn_val = e_eval k e (List.nth args 1) in
+    let lst = eval_lst 0 in
+    let fn_val = eval_arg 1 in
     (match fn_val with
      | VFn (params, body, captured) ->
        let env_copy c =
@@ -170,8 +173,8 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
      | _ -> Some (VList []))
 
   | "filter" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    let fn_val = e_eval k e (List.nth args 1) in
+    let lst = eval_lst 0 in
+    let fn_val = eval_arg 1 in
     (match fn_val with
      | VFn (params, body, captured) ->
        let env_copy c =
@@ -187,8 +190,8 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
      | _ -> Some (VList []))
 
   | "first-match" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    let fn_val = e_eval k e (List.nth args 1) in
+    let lst = eval_lst 0 in
+    let fn_val = eval_arg 1 in
     (match fn_val with
      | VFn (params, body, captured) ->
        let env_copy c =
@@ -209,9 +212,9 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
      fold-pairs and fold-triples are specialisations of this.
      reduce list init (fn acc x -> ...) *)
   | "reduce" ->
-    let lst     = as_list (e_eval k e (List.nth args 0)) in
-    let init    = e_eval k e (List.nth args 1) in
-    let fn_val  = e_eval k e (List.nth args 2) in
+    let lst     = eval_lst 0 in
+    let init    = eval_arg 1 in
+    let fn_val  = eval_arg 2 in
     (match fn_val with
      | VFn (params, body, captured) ->
        let env_copy c =
@@ -231,8 +234,8 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
   (* fixpoint: state × fn → stable-state
      applies fn repeatedly until output = input. safety cap: 20 iterations. *)
   | "fixpoint" ->
-    let state0 = e_eval k e (List.nth args 0) in
-    let fn_val = e_eval k e (List.nth args 1) in
+    let state0 = eval_arg 0 in
+    let fn_val = eval_arg 1 in
     let env_copy c =
       let e2 = Hashtbl.create (Hashtbl.length c) in
       Hashtbl.iter (fun kk v -> Hashtbl.replace e2 kk v) c; e2
@@ -257,12 +260,11 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     Some (loop state0 20)
 
   | "length" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    Some (VFloat (Float.of_int (List.length lst)))
+    Some (VFloat (Float.of_int (List.length (eval_lst 0))))
 
   | "nth" ->
-    let container = e_eval k e (List.nth args 0) in
-    let idx = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let container = eval_arg 0 in
+    let idx = eval_int 1 in
     Some (match container with
      | VPair (n, v) ->
        if idx = 0 then VString n else if idx = 1 then v else VNone
@@ -273,28 +275,27 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
        if idx >= 0 && idx < List.length lst then List.nth lst idx else VNone)
 
   | "flatten" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    Some (VList (List.concat_map as_list lst))
+    Some (VList (List.concat_map as_list (eval_lst 0)))
 
   | "append" ->
-    let a = as_list (e_eval k e (List.nth args 0)) in
-    let b = as_list (e_eval k e (List.nth args 1)) in
+    let a = eval_lst 0 in
+    let b = eval_lst 1 in
     Some (VList (a @ b))
 
   (* zip: [a,b,c] [x,y,z] → [[a,x],[b,y],[c,z]]  pairs corresponding elements *)
   | "zip" ->
-    let a = as_list (e_eval k e (List.nth args 0)) in
-    let b = as_list (e_eval k e (List.nth args 1)) in
+    let a = eval_lst 0 in
+    let b = eval_lst 1 in
     let n = min (List.length a) (List.length b) in
     Some (VList (List.init n (fun i -> VList [List.nth a i; List.nth b i])))
 
   (* range: n → [0, 1, ..., n-1]  so tantras can map over variable-length sequences *)
   | "range" ->
-    let n = int_of_float (as_float (e_eval k e (List.nth args 0))) in
+    let n = eval_int 0 in
     Some (VList (List.init (max 0 n) (fun i -> VFloat (float_of_int i))))
 
   | "sort-desc" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
+    let lst = eval_lst 0 in
     let score_of_pair = function
       | VList [_; score] -> as_float score
       | VPair (_, score) -> as_float score
@@ -303,7 +304,7 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     Some (VList (List.sort (fun a b -> compare (score_of_pair b) (score_of_pair a)) lst))
 
   | "unique" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
+    let lst = eval_lst 0 in
     let seen = Hashtbl.create 16 in
     let unique = List.filter (fun v ->
       let key = as_string v in
@@ -314,13 +315,13 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
 
   (* sum: list of floats → float — reduces a list by addition *)
   | "sum" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
+    let lst = eval_lst 0 in
     let total = List.fold_left (fun acc v -> acc +. as_float v) 0.0 lst in
     Some (VFloat total)
 
   (* frequencies: list → [[value, count], ...] — count occurrences using hash table, O(n) *)
   | "frequencies" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
+    let lst = eval_lst 0 in
     let counts : (string, int) Hashtbl.t = Hashtbl.create 64 in
     let order = ref [] in
     List.iter (fun v ->
@@ -337,14 +338,10 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
   (* ---- boolean / comparison operations ---- *)
 
   | "eq" ->
-    let a = e_eval k e (List.nth args 0) in
-    let b = e_eval k e (List.nth args 1) in
-    Some (VBool (as_string a = as_string b))
+    Some (VBool (eval_str 0 = eval_str 1))
 
   | "neq" ->
-    let a = e_eval k e (List.nth args 0) in
-    let b = e_eval k e (List.nth args 1) in
-    Some (VBool (as_string a <> as_string b))
+    Some (VBool (eval_str 0 <> eval_str 1))
 
   | "and" ->
     Some (VBool (List.for_all Fun.id (List.map (fun arg -> as_bool (e_eval k e arg)) args)))
@@ -353,26 +350,26 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     Some (VBool (List.exists Fun.id (List.map (fun arg -> as_bool (e_eval k e arg)) args)))
 
   | "not" ->
-    Some (VBool (not (as_bool (e_eval k e (List.nth args 0)))))
+    Some (VBool (not (as_bool (eval_arg 0))))
 
-  | "lt" -> Some (VBool (as_float (e_eval k e (List.nth args 0)) <  as_float (e_eval k e (List.nth args 1))))
-  | "le" -> Some (VBool (as_float (e_eval k e (List.nth args 0)) <= as_float (e_eval k e (List.nth args 1))))
-  | "gt" -> Some (VBool (as_float (e_eval k e (List.nth args 0)) >  as_float (e_eval k e (List.nth args 1))))
-  | "ge" -> Some (VBool (as_float (e_eval k e (List.nth args 0)) >= as_float (e_eval k e (List.nth args 1))))
+  | "lt" -> Some (VBool (eval_flt 0 <  eval_flt 1))
+  | "le" -> Some (VBool (eval_flt 0 <= eval_flt 1))
+  | "gt" -> Some (VBool (eval_flt 0 >  eval_flt 1))
+  | "ge" -> Some (VBool (eval_flt 0 >= eval_flt 1))
 
   (* ---- constructors ---- *)
 
   | "pair" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    let v = e_eval k e (List.nth args 1) in
+    let name = eval_str 0 in
+    let v = eval_arg 1 in
     Some (match args with
      | [_; _] -> VPair (name, v)
-     | [_; _; _] -> VList [VString name; v; e_eval k e (List.nth args 2)]
+     | [_; _; _] -> VList [VString name; v; eval_arg 2]
      | _ -> VPair (name, v))
 
   | "bind" ->
-    let name = as_string (e_eval k e (List.nth args 0)) in
-    let v = as_float (e_eval k e (List.nth args 1)) in
+    let name = eval_str 0 in
+    let v = eval_flt 1 in
     Some (VBinding (name, v))
 
   (* ---- numeric operations ---- *)
@@ -383,75 +380,74 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
   | "mul"   ->
     (* monoid: variadic fold over multiplication; 1.0 is the identity *)
     Some (VFloat (List.fold_left (fun acc arg -> acc *. as_float (e_eval k e arg)) 1.0 args))
-  | "sub"   -> Some (VFloat (as_float (e_eval k e (List.nth args 0)) -. as_float (e_eval k e (List.nth args 1))))
+  | "sub"   -> Some (VFloat (eval_flt 0 -. eval_flt 1))
   | "div" ->
-    let b = as_float (e_eval k e (List.nth args 1)) in
-    Some (if b = 0.0 then VFloat 0.0 else VFloat (as_float (e_eval k e (List.nth args 0)) /. b))
-  | "power" -> Some (VFloat (as_float (e_eval k e (List.nth args 0)) ** as_float (e_eval k e (List.nth args 1))))
-  | "sqrt"  -> Some (VFloat (sqrt     (as_float (e_eval k e (List.nth args 0)))))
-  | "asin"  -> Some (VFloat (asin     (as_float (e_eval k e (List.nth args 0)))))
-  | "acos"  -> Some (VFloat (acos     (as_float (e_eval k e (List.nth args 0)))))
-  | "atan2" -> Some (VFloat (atan2    (as_float (e_eval k e (List.nth args 0)))
-                                       (as_float (e_eval k e (List.nth args 1)))))
-  | "sin"   -> Some (VFloat (sin      (as_float (e_eval k e (List.nth args 0)))))
-  | "cos"   -> Some (VFloat (cos      (as_float (e_eval k e (List.nth args 0)))))
-  | "tan"   -> Some (VFloat (tan      (as_float (e_eval k e (List.nth args 0)))))
-  | "log"   -> Some (VFloat (log      (as_float (e_eval k e (List.nth args 0)))))
-  | "exp"   -> Some (VFloat (exp      (as_float (e_eval k e (List.nth args 0)))))
-  | "abs"   -> Some (VFloat (abs_float(as_float (e_eval k e (List.nth args 0)))))
-  | "neg"   -> Some (VFloat (-.       (as_float (e_eval k e (List.nth args 0)))))
-  | "floor" -> Some (VFloat (floor    (as_float (e_eval k e (List.nth args 0)))))
-  | "ceil"  -> Some (VFloat (ceil     (as_float (e_eval k e (List.nth args 0)))))
-  | "mod"   -> Some (VFloat (mod_float (as_float (e_eval k e (List.nth args 0))) (as_float (e_eval k e (List.nth args 1)))))
-  | "min"   -> Some (VFloat (Float.min (as_float (e_eval k e (List.nth args 0))) (as_float (e_eval k e (List.nth args 1)))))
-  | "max"   -> Some (VFloat (Float.max (as_float (e_eval k e (List.nth args 0))) (as_float (e_eval k e (List.nth args 1)))))
+    let b = eval_flt 1 in
+    Some (if b = 0.0 then VFloat 0.0 else VFloat (eval_flt 0 /. b))
+  | "power" -> Some (VFloat (eval_flt 0 ** eval_flt 1))
+  | "sqrt"  -> Some (VFloat (sqrt  (eval_flt 0)))
+  | "asin"  -> Some (VFloat (asin  (eval_flt 0)))
+  | "acos"  -> Some (VFloat (acos  (eval_flt 0)))
+  | "atan2" -> Some (VFloat (atan2 (eval_flt 0) (eval_flt 1)))
+  | "sin"   -> Some (VFloat (sin   (eval_flt 0)))
+  | "cos"   -> Some (VFloat (cos   (eval_flt 0)))
+  | "tan"   -> Some (VFloat (tan   (eval_flt 0)))
+  | "log"   -> Some (VFloat (log   (eval_flt 0)))
+  | "exp"   -> Some (VFloat (exp   (eval_flt 0)))
+  | "abs"   -> Some (VFloat (abs_float (eval_flt 0)))
+  | "neg"   -> Some (VFloat (-. (eval_flt 0)))
+  | "floor" -> Some (VFloat (floor (eval_flt 0)))
+  | "ceil"  -> Some (VFloat (ceil  (eval_flt 0)))
+  | "mod"   -> Some (VFloat (mod_float (eval_flt 0) (eval_flt 1)))
+  | "min"   -> Some (VFloat (Float.min (eval_flt 0) (eval_flt 1)))
+  | "max"   -> Some (VFloat (Float.max (eval_flt 0) (eval_flt 1)))
 
   (* ---- n-dimensional vector operations ---- *)
   (* all operate on VList of VFloat — works for any n: 2D, 3D, nD *)
 
   (* vec-add: [a1..an] x [b1..bn] → [a1+b1..an+bn] *)
   | "vec-add" ->
-    let va = as_list (e_eval k e (List.nth args 0)) in
-    let vb = as_list (e_eval k e (List.nth args 1)) in
+    let va = eval_lst 0 in
+    let vb = eval_lst 1 in
     Some (VList (List.map2 (fun a b -> VFloat (as_float a +. as_float b)) va vb))
 
   (* vec-sub: [a1..an] x [b1..bn] → [a1-b1..an-bn] *)
   | "vec-sub" ->
-    let va = as_list (e_eval k e (List.nth args 0)) in
-    let vb = as_list (e_eval k e (List.nth args 1)) in
+    let va = eval_lst 0 in
+    let vb = eval_lst 1 in
     Some (VList (List.map2 (fun a b -> VFloat (as_float a -. as_float b)) va vb))
 
   (* vec-scale: scalar x [a1..an] → [s·a1..s·an] *)
   | "vec-scale" ->
-    let s  = as_float (e_eval k e (List.nth args 0)) in
-    let va = as_list (e_eval k e (List.nth args 1)) in
+    let s  = eval_flt 0 in
+    let va = eval_lst 1 in
     Some (VList (List.map (fun a -> VFloat (s *. as_float a)) va))
 
   (* vec-dot: [a1..an] x [b1..bn] → scalar sum of component products *)
   | "vec-dot" ->
-    let va = as_list (e_eval k e (List.nth args 0)) in
-    let vb = as_list (e_eval k e (List.nth args 1)) in
+    let va = eval_lst 0 in
+    let vb = eval_lst 1 in
     let s = List.fold_left2 (fun acc a b -> acc +. as_float a *. as_float b) 0.0 va vb in
     Some (VFloat s)
 
   (* vec-norm: [a1..an] → sqrt(a1²+...+an²) *)
   | "vec-norm" ->
-    let va = as_list (e_eval k e (List.nth args 0)) in
+    let va = eval_lst 0 in
     let s = List.fold_left (fun acc a -> acc +. as_float a *. as_float a) 0.0 va in
     Some (VFloat (sqrt s))
 
   (* vec-nth: [a1..an] x i → ai  (0-based index) *)
   | "vec-nth" ->
-    let va  = as_list (e_eval k e (List.nth args 0)) in
-    let idx = int_of_float (as_float (e_eval k e (List.nth args 1))) in
+    let va  = eval_lst 0 in
+    let idx = eval_int 1 in
     Some (if idx >= 0 && idx < List.length va then List.nth va idx else VNone)
 
   (* rot2d: angle x [x,y] → [x·cos θ - y·sin θ, x·sin θ + y·cos θ]
      applies a 2D rotation matrix to a 2D vector.
      generalises to any plane of rotation for higher dims. *)
   | "rot2d" ->
-    let theta = as_float (e_eval k e (List.nth args 0)) in
-    let v     = as_list (e_eval k e (List.nth args 1)) in
+    let theta = eval_flt 0 in
+    let v     = eval_lst 1 in
     let x = as_float (List.nth v 0) in
     let y = as_float (List.nth v 1) in
     let c = cos theta in
@@ -463,10 +459,10 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
      mat-mul A ncols B pcols → C
      used for homogeneous transform composition in kinematic chains. *)
   | "mat-mul" ->
-    let a_flat = as_list (e_eval k e (List.nth args 0)) in
-    let ncols_a = int_of_float (as_float (e_eval k e (List.nth args 1))) in
-    let b_flat = as_list (e_eval k e (List.nth args 2)) in
-    let ncols_b = int_of_float (as_float (e_eval k e (List.nth args 3))) in
+    let a_flat = eval_lst 0 in
+    let ncols_a = eval_int 1 in
+    let b_flat = eval_lst 2 in
+    let ncols_b = eval_int 3 in
     let a = List.map as_float a_flat in
     let b = List.map as_float b_flat in
     let nrows_a = List.length a / ncols_a in
@@ -486,35 +482,28 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
       Some (VList (Array.to_list (Array.map (fun f -> VFloat f) result)))
 
   | "square" ->
-    let a = as_float (e_eval k e (List.nth args 0)) in
-    Some (VFloat (a *. a))
+    let a = eval_flt 0 in Some (VFloat (a *. a))
 
   | "half" ->
-    let a = as_float (e_eval k e (List.nth args 0)) in
-    Some (VFloat (a *. 0.5))
+    Some (VFloat (eval_flt 0 *. 0.5))
 
   | "double" ->
-    let a = as_float (e_eval k e (List.nth args 0)) in
-    Some (VFloat (a *. 2.0))
+    Some (VFloat (eval_flt 0 *. 2.0))
 
   | "reciprocal" ->
-    let a = as_float (e_eval k e (List.nth args 0)) in
-    Some (VFloat (1.0 /. a))
+    Some (VFloat (1.0 /. eval_flt 0))
 
   | "reverse" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    Some (VList (List.rev lst))
+    Some (VList (List.rev (eval_lst 0)))
 
   | "take" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    let n   = int_of_float (as_float (e_eval k e (List.nth args 1))) in
-    let n'  = max 0 (min n (List.length lst)) in
+    let lst = eval_lst 0 in
+    let n'  = max 0 (min (eval_int 1) (List.length lst)) in
     Some (VList (List.filteri (fun i _ -> i < n') lst))
 
   | "drop" ->
-    let lst = as_list (e_eval k e (List.nth args 0)) in
-    let n   = int_of_float (as_float (e_eval k e (List.nth args 1))) in
-    let n'  = max 0 (min n (List.length lst)) in
+    let lst = eval_lst 0 in
+    let n'  = max 0 (min (eval_int 1) (List.length lst)) in
     Some (VList (List.filteri (fun i _ -> i >= n') lst))
 
   | _ -> None

@@ -20,7 +20,7 @@ janya-str = (reduce janya "" (fn acc j ->
   cond (eq (string-length acc) 0) (to-string j)
   otherwise (concat acc ", " (to-string j))))
 
-phala-str = (cond (gt (string-length (to-string phala)) 0)
+phala-str = (cond (exists phala)
   (concat " " arrow " " (to-string phala))
   otherwise "")
 

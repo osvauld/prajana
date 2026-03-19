@@ -43,13 +43,6 @@ def bqg(vy, sentence):
 # first entity detected is ball-A (which appears earlier as prathama-vibhakti).
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Scope detection finds first entity encountered in graph order, not "
-    "the one named after the solve-for. ball-A appears before ball-B so "
-    "scope is incorrectly set to ball-A. Needs positional scope detection: "
-    "the entity named immediately after the solve-for concept in the sentence.",
-)
 def test_find_second_entity_momentum(vy):
     """find momentum of ball-B when ball-A appears first in the scene."""
     r = answer(
@@ -62,10 +55,6 @@ def test_find_second_entity_momentum(vy):
     assert "30" in r, f"expected momentum=30 (ball-B), got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Same as above — second entity scope not yet positionally detected.",
-)
 def test_find_second_entity_ke(vy):
     """find kinetic energy of ball-B when ball-A appears first."""
     r = answer(
