@@ -208,12 +208,6 @@ def test_syllogism_shows_premises_in_reasoning(vy):
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Syllogism emission: two we-know strands (one per IS-A premise). "
-    "we know: cats are animals. we know: animals breathe. "
-    "we see: cat → animal → breathe. we find: yes.",
-)
 def test_syllogism_two_knows(vy):
     """Syllogism emits two we-know (one per IS-A premise)."""
     r = answer(vy, "all cats are animals. all animals breathe. do cats breathe.")

@@ -1,0 +1,64 @@
+tantra3 pramana-bandha
+
+-- pramana-bandha: binding of proof.
+-- takes the base graph, the final match, the result, and the viveka context,
+-- and produces the proof graph with all reasoning edges.
+--
+-- om graph declares: pramana: seva-janya, samskaara-phala, lekhana-kriya.
+-- pramana takes evidence (seva), produces proof (samskaara), acts by recording (lekhana).
+-- that IS what this tantra does.
+--
+-- proof edges recorded:
+--   [sf, sankhya, result]          — the derived value
+--   [sf, derived-by, mantra]       — which mantra produced it
+--   [janya, derived-sankhya, val]  — scoped inputs used
+--   [winner, viveka-sankhya, val]  — viveka entity values
+--   [winner, greater-than, loser]  — viveka comparison result
+--   [sf, sought, label]            — what was sought
+--   [sf, sought-of, entity]        — whose frame
+
+takes base-graph
+takes final-m
+takes result
+takes sf
+takes scope-entity
+takes is-viveka
+takes viveka-ev-pairs
+takes viveka-gt-triples
+takes comp-word
+
+-- ── viveka proof edges ────────────────────────────────────────────────────────
+viveka-sankhya-triples = cond is-viveka
+  (map viveka-ev-pairs (fn kv -> [(nth kv 0), "viveka-sankhya", (nth kv 1)]))
+  otherwise []
+
+-- ── physics/count proof edges ─────────────────────────────────────────────────
+result-mantra = cond (gt (length final-m) 0) (nth final-m 0) otherwise ""
+result-valpairs = cond (gt (length final-m) 0) (nth final-m 1) otherwise []
+
+scoped-sankhya-triples = cond (and (not is-viveka) (gt (length result-valpairs) 0))
+  (map result-valpairs (fn kv -> [(nth kv 0), "derived-sankhya", (nth kv 1)]))
+  otherwise []
+
+result-triples = cond (and (not is-viveka)
+                           (exists result)
+                           (neq (to-string result) "no match")
+                           (exists sf))
+  (append
+    [[(to-string sf), "sankhya",    result],
+     [(to-string sf), "derived-by", result-mantra]]
+    scoped-sankhya-triples)
+  otherwise []
+
+-- ── assemble proof graph ──────────────────────────────────────────────────────
+proof-graph = cond is-viveka
+  (append (append base-graph viveka-gt-triples) viveka-sankhya-triples)
+  otherwise (append base-graph result-triples)
+
+-- ── inject sought edge ────────────────────────────────────────────────────────
+sought-cw = cond is-viveka (to-string comp-word) otherwise ""
+proof-graph2 = sought-bandha proof-graph sf scope-entity sought-cw
+
+return proof-graph2
+
+done

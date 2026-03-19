@@ -1,0 +1,33 @@
+tantra3 emit-hetu
+
+-- hetu: "we seek" — the reason for inquiry.
+-- states what is being sought and from whose perspective.
+-- walks [sf, sought, label] and [sf, sought-of, entity] edges.
+--
+-- returns: string like "we seek: kinetic-energy of ball-A"
+
+takes graph
+takes is-viveka
+
+say-sought = shabda "anuvada-setu" "speech-sought"
+say-of     = shabda "anuvada-setu" "speech-of"
+say-is     = shabda "anuvada-setu" "speech-is"
+
+sought-entries = graph | where [s, e, o] | and (eq e "sought") | collect [s, o]
+scope-entries  = graph | where [s, e, o] | and (eq e "sought-of") | collect [s, o]
+
+sought-sf    = cond (gt (length sought-entries) 0) (to-string (nth (nth sought-entries 0) 0)) otherwise ""
+sought-label = cond (gt (length sought-entries) 0) (to-string (nth (nth sought-entries 0) 1)) otherwise ""
+scope-entity = cond (gt (length scope-entries)  0) (to-string (nth (nth scope-entries  0) 1)) otherwise ""
+
+result = cond is-viveka
+  (concat say-sought ": which " say-is " " sought-label)
+  otherwise (cond (gt (string-length sought-sf) 0)
+    (cond (gt (string-length scope-entity) 0)
+      (concat say-sought ": " sought-sf " " say-of " " scope-entity)
+      otherwise (concat say-sought ": " sought-sf))
+    otherwise "")
+
+return result
+
+done

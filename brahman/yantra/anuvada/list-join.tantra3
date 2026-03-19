@@ -1,0 +1,41 @@
+tantra3 list-join
+
+-- join a list of strings with Oxford-comma style:
+--   1 item:  "A"
+--   2 items: "A and B"
+--   3+items: "A; B; and C"
+--
+-- reads speech acts from anuvada-setu.shabda.
+-- sep-items = ";" (between non-final items)
+-- say-and   = "and" (before the last item)
+--
+-- used by emit-reasoning (we-have strand) and anywhere a list
+-- of items needs natural-language conjunction.
+
+takes items
+
+sep-items = shabda "anuvada-setu" "speech-separator"
+say-and   = shabda "anuvada-setu" "speech-and"
+
+n = length items
+
+result = cond (eq n 0) ""
+  otherwise (cond (eq n 1)
+    (nth items 0)
+    otherwise (cond (eq n 2)
+      (concat (nth items 0) " " say-and " " (nth items 1))
+      otherwise
+        -- 3+: join all but last with "; ", then "; and " before last
+        (let all-but-last = reduce items [] (fn acc s ->
+           cond (lt (length acc) (sub n 1))
+             (append acc [s])
+           otherwise acc)
+         let last-item = nth items (sub n 1)
+         let prefix = reduce all-but-last "" (fn acc s ->
+           cond (eq (string-length acc) 0) s
+           otherwise (concat acc sep-items " " s))
+         concat prefix sep-items " " say-and " " last-item)))
+
+return result
+
+done

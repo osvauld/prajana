@@ -32,77 +32,65 @@ def tl(graph: list) -> str:
     return json.dumps(graph)
 
 
-# ── find-context ──────────────────────────────────────────────────────────────
+# ── context tracking through the pipeline ──────────────────────────────────────
+# build-question-graph produces raw triples (asprista-sankhya for numbers).
+# sankhya-bandha (in avrti-refine) binds them to the active concept.
+# these tests verify the full path: word → context → binding.
 
 
-def test_find_context_empty_graph(vy):
-    result = vy.eval("find-context []")
-    assert result == ["", ""], f"expected ['', ''], got {result!r}"
+def bqg_refined(vy, sentence):
+    """Build question graph and run avrti-refine to fixpoint."""
+    import json
+
+    g = vy.eval(f'build-question-graph "{sentence}"')
+    return vy.eval(f"fixpoint {json.dumps(g)} avrti-refine")
 
 
-def test_find_context_returns_two_element_list(vy):
-    result = vy.eval("find-context []")
-    assert isinstance(result, list) and len(result) == 2, (
-        f"expected [active, pending], got {result!r}"
+def test_context_satya_concept_becomes_active(vy):
+    """When 'mass' is recognised as satya, a following number binds to it."""
+    g = bqg_refined(vy, "mass 5")
+    assert vy.has_triple(g, subj="mass", pred="sankhya"), (
+        f"'mass 5' should bind 5 to mass via context tracking, got {g!r}"
     )
 
 
-def test_find_context_satya_triple_sets_active(vy):
-    g = [["mass", "satya", "mass"]]
-    result = vy.eval(f"find-context {tl(g)}")
-    assert result[0] == "mass", f"expected active='mass', got {result!r}"
-    assert result[1] == "", f"expected pending='', got {result!r}"
-
-
-def test_find_context_asprista_sankhya_sets_pending(vy):
-    g = [["mass", "satya", "mass"], ["5", "asprista-sankhya", "5."]]
-    result = vy.eval(f"find-context {tl(g)}")
-    assert result[0] == "mass", f"expected active='mass', got {result[0]!r}"
-    assert vy.approx_eq(result[1], 5.0), f"expected pending≈5.0, got {result[1]!r}"
-
-
-def test_find_context_last_satya_is_active(vy):
-    # active is the MOST RECENT satya concept
-    g = [["mass", "satya", "mass"], ["velocity", "satya", "velocity"]]
-    result = vy.eval(f"find-context {tl(g)}")
-    assert result[0] == "velocity", (
-        f"expected last satya 'velocity' as active, got {result[0]!r}"
+def test_context_last_satya_wins(vy):
+    """The most recent satya concept receives the next number."""
+    g = bqg_refined(vy, "mass velocity 10")
+    # velocity is the last satya — 10 should bind to velocity, not mass
+    assert vy.has_triple(g, subj="velocity", pred="sankhya"), (
+        f"10 should bind to velocity (last satya), got {g!r}"
     )
 
 
-def test_find_context_reflexive_satya(vy):
-    # satya triple is [node, satya, node] — both s and o are the same node
-    g = [["mass", "satya", "mass"]]
-    result = vy.eval(f"find-context {tl(g)}")
-    assert result[0] == "mass", (
-        f"reflexive satya should set active='mass', got {result[0]!r}"
+def test_context_mithya_does_not_become_active(vy):
+    """An unrecognised word (mithya) does not capture numbers."""
+    g = bqg_refined(vy, "mass xyzfoo 5")
+    # mass is the only satya — 5 should still bind to mass
+    assert vy.has_triple(g, subj="mass", pred="sankhya"), (
+        f"5 should bind to mass despite mithya 'xyzfoo', got {g!r}"
     )
 
 
-def test_find_context_non_satya_triple_ignored(vy):
-    # mithya triple doesn't set active concept
-    g = [["ball", "mithya", "ball"]]
-    result = vy.eval(f"find-context {tl(g)}")
-    # no satya → active should be empty (or not "ball")
-    assert result[0] != "ball", (
-        f"mithya triple should not set active concept, got {result[0]!r}"
+def test_context_pending_number_consumed_by_unit(vy):
+    """A bare number followed by a unit word produces sankhya + matra."""
+    g = bqg_refined(vy, "mass 5 kilogram")
+    assert vy.has_triple(g, subj="mass", pred="sankhya"), (
+        f"expected [mass, sankhya, 5] from unit consumption, got {g!r}"
+    )
+    assert vy.has_triple(g, subj="mass", pred="matra"), (
+        f"expected [mass, matra, kilogram] from unit consumption, got {g!r}"
     )
 
 
-# ── find-context: pending clear after non-asprista-sankhya ───────────────────
-
-
-def test_find_context_pending_cleared_when_last_triple_not_sankhya(vy):
-    # only the LAST triple counts for pending — if it's not asprista-sankhya, pending=""
-    g = [
-        ["mass", "satya", "mass"],
-        ["5", "asprista-sankhya", "5."],
-        ["velocity", "satya", "velocity"],  # last triple is satya, not sankhya
-    ]
-    result = vy.eval(f"find-context {tl(g)}")
-    assert result[1] == "", (
-        f"pending should be cleared when last triple is not asprista-sankhya, "
-        f"got {result[1]!r}"
+def test_context_two_concepts_two_numbers(vy):
+    """Two concepts each get their own number."""
+    g = bqg_refined(vy, "mass 5 velocity 10")
+    assert vy.has_triple(g, subj="mass", pred="sankhya"), (
+        f"mass should have sankhya, got {g!r}"
+    )
+    assert vy.has_triple(g, subj="velocity", pred="sankhya"), (
+        f"velocity should have sankhya, got {g!r}"
     )
 
 

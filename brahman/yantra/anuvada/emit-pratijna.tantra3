@@ -1,0 +1,67 @@
+tantra3 emit-pratijna
+
+-- pratijna: "we have" — the thesis.
+-- states what is given before any reasoning begins.
+-- walks sankhya, prathama-vibhakti, shashthi-vibhakti, viveka-sankhya edges.
+--
+-- viveka: shows entity (concept=val) from viveka-sankhya edges
+-- physics/count: shows owned entity props, then flat unowned given values
+--
+-- returns: string like "we have: mass=5. and velocity=3."
+
+takes graph
+takes is-viveka
+
+say-given   = shabda "anuvada-setu" "speech-given"
+rel-sankhya = shabda "anuvada-setu" "rel-sankhya"
+
+derived-concepts = graph | where [s, e, o] | and (eq e "derived-by") | collect (to-string s)
+entities = prathama-sparsha graph
+
+-- viveka-concept for grouping label
+vc-concept = nth (graph | where [s, e, o] | and (eq e "viveka-concept") | collect (to-string o)) 0
+
+-- viveka entity strs from viveka-sankhya edges
+viveka-entity-strs = cond is-viveka
+  (reduce entities [] (fn acc ent ->
+    let vs = graph | where [s, e, o]
+      | and (eq (to-string s) (to-string ent))
+      | and (eq e "viveka-sankhya")
+      | collect o
+    cond (gt (length vs) 0)
+      (append acc [(concat (to-string ent) " (" (to-string vc-concept) rel-sankhya (to-string (nth vs 0)) ")")])
+    otherwise acc))
+  otherwise []
+
+-- standard entity grouping via shashthi
+std-entity-strs = cond (not is-viveka)
+  (entity-props-str graph entities)
+  otherwise []
+
+-- owned concepts for flat dedup
+owned-concepts = reduce graph [] (fn acc tri ->
+  cond (and (eq (nth tri 1) "shashthi-vibhakti")
+            (neq (to-string (nth tri 2)) "shashthi-vibhakti"))
+    (append acc [(to-string (nth tri 0))])
+  otherwise acc)
+
+-- flat given values: not owned, not derived
+flat-strs = cond (not is-viveka)
+  (reduce graph [] (fn acc tri ->
+    cond (eq (nth tri 1) "sankhya")
+      (let c = to-string (nth tri 0)
+       cond (or (member c owned-concepts) (member c derived-concepts)) acc
+       otherwise (append acc [(concat c rel-sankhya (to-string (nth tri 2)))]))
+    otherwise acc))
+  otherwise []
+
+entity-strs = cond is-viveka viveka-entity-strs otherwise std-entity-strs
+all-given   = append entity-strs flat-strs
+
+result = cond (gt (length all-given) 0)
+  (concat say-given ": " (list-join all-given))
+  otherwise ""
+
+return result
+
+done

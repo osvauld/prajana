@@ -15,7 +15,8 @@ let tantra_files_recursive (root : string) : string list =
         try
           if Sys.is_directory path then walk path
           else if Filename.check_suffix path ".tantra"
-               || Filename.check_suffix path ".tantra2" then
+               || Filename.check_suffix path ".tantra2"
+               || Filename.check_suffix path ".tantra3" then
             files := path :: !files
         with _ -> ()
       ) entries
@@ -118,11 +119,17 @@ let register_tantra ?(graph : proof_graph option) (idx : tantra_index) (t : tant
 
 let load_tantra_dir ?(graph : proof_graph option) (idx : tantra_index) (dir : string) : unit =
   let files = tantra_files_recursive dir in
+  (* tantra2 first, then tantra3 — tantra3 overwrites same-name tantra2 (supersedes) *)
   let tantra2 = List.filter (fun p -> Filename.check_suffix p ".tantra2") files in
   List.iter (fun path ->
     match Yantra_tantra_file2.parse_tantra2_file path with
     | None -> () | Some t -> register_tantra ?graph idx t
-  ) tantra2
+  ) tantra2;
+  let tantra3 = List.filter (fun p -> Filename.check_suffix p ".tantra3") files in
+  List.iter (fun path ->
+    match Yantra_tantra_file2.parse_tantra2_file path with
+    | None -> () | Some t -> register_tantra ?graph idx t
+  ) tantra3
 
 (* collect all tantra directories from the given dirs list *)
 let collect_tantra_dirs (dirs : string list) : string list =

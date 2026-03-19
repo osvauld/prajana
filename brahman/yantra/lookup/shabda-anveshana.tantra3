@@ -1,0 +1,38 @@
+tantra3 shabda-anveshana
+
+-- shabda-anveshana: word → graph-node or _none
+-- pratyabhijna — recognition. one cognitive act with internal fallback:
+--   1. word-node  — abbreviation/alias (kg→kilogram, N→newton, what→prashna)
+--   2. lookup     — exact graph node by name (mass, velocity, force)
+--   3. morpheme   — suffix inversion for plurals (velocities→velocity)
+--
+-- replaces: lookup-word + try-morpheme-rules
+
+takes word
+
+-- path 1: abbreviation/alias
+abbrev = word-node word
+
+-- path 2: exact match
+ex = cond (exists abbrev) _none otherwise (lookup word)
+
+-- path 3: morpheme inversion (plurals, etc.)
+rules = walk-in "vachana-bahu" "sthita"
+wlen  = string-length word
+morph = cond (or (exists abbrev) (exists ex)) _none
+  otherwise (reduce rules _none (fn acc rl ->
+    let sf     = shabda rl "suffix"
+    let ssf    = shabda rl "stem-suffix"
+    let sf-len = string-length sf
+    let ok     = (and (ends-with word sf) (gt wlen sf-len))
+    let stem   = (cond ok (concat (substr word 0 (sub wlen sf-len)) ssf) otherwise "")
+    let hit    = (cond (gt (string-length stem) 0) (lookup stem) otherwise _none)
+    (cond (exists acc) acc otherwise hit)))
+
+result = cond (exists abbrev) abbrev
+  otherwise (cond (exists ex) ex
+  otherwise morph)
+
+return result
+
+done

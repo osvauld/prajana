@@ -1,0 +1,12 @@
+kosha animal-varga
+
+  -- animal-varga IS-A living-varga.
+  "living-swarupa"
+
+  -- yukta edges: properties all animals have
+  "sensing-yukta"
+  "moving-yukta"
+
+shabda animal-varga / cluster-for-animals-living-things-that-move-and-sense
+
+done

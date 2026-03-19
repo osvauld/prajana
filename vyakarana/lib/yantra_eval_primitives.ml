@@ -157,6 +157,56 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
        ) edges in
        VList sources)
 
+  (* ---- om-* primitives: deduplicated edge walkers for om graph interfacing ----
+     the om graph stores edges via slokas; a node may declare the same edge
+     multiple times (e.g. "mass-janya velocity-janya" in two slokas).
+     walk returns duplicates. om-* deduplicates by target name so tantras
+     get clean contract lists.
+
+     dedup_walk: shared helper — walk outgoing edges of rel, unique targets *)
+  | "om-janya" | "om-phala" | "om-kriya" | "om-yukta"
+  | "om-sthita" | "om-swarupa" | "om-abheda" ->
+    let node_name = eval_str 0 in
+    let rel_name = String.sub op 3 (String.length op - 3) in (* strip "om-" prefix *)
+    let rel = Proof_graph.visheshanam_of_string rel_name in
+    Some (match rel with
+     | None -> VList []
+     | Some vish ->
+       let edges = Proof_graph.edges_of k node_name in
+       let seen = Hashtbl.create 8 in
+       let targets = List.filter_map (fun edge ->
+         if edge.relation = vish && edge.source = node_name
+            && not (Hashtbl.mem seen edge.target) then begin
+           Hashtbl.replace seen edge.target true;
+           Some (VNode edge.target)
+         end else None
+       ) edges in
+       VList targets)
+
+  (* om-contract: node-name → [janya, phala, kriya, yukta, sthita, swarupa, abheda]
+     returns all seven suffix-typed edge lists in one call, all deduplicated.
+     one graph-touch instead of seven — used by generic match-mantra walker. *)
+  | "om-contract" ->
+    let node_name = eval_str 0 in
+    let edges = Proof_graph.edges_of k node_name in
+    let dedup rel_name =
+      let rel = Proof_graph.visheshanam_of_string rel_name in
+      match rel with
+      | None -> VList []
+      | Some vish ->
+        let seen = Hashtbl.create 8 in
+        VList (List.filter_map (fun edge ->
+          if edge.relation = vish && edge.source = node_name
+             && not (Hashtbl.mem seen edge.target) then begin
+            Hashtbl.replace seen edge.target true;
+            Some (VNode edge.target)
+          end else None
+        ) edges)
+    in
+    Some (VList [dedup "janya"; dedup "phala"; dedup "kriya";
+                 dedup "yukta"; dedup "sthita"; dedup "swarupa";
+                 dedup "abheda"])
+
   (* has: node × edge-pattern → bool
      edge-pattern is "relation-target" e.g. "matra-sthita" *)
   | "has" ->
@@ -915,6 +965,15 @@ let register_primitive_arities () =
   r "graph-node-count"   (-1); (* () → float *)
   r "graph-all-nodes"    (-1); (* () → [node-name ...] *)
   r "graph-edge-count"   (-1); (* () → float *)
+  (* om-* primitives — deduplicated edge walkers for om graph interfacing *)
+  r "om-janya"            1;   (* node → [concept ...] deduplicated *)
+  r "om-phala"            1;   (* node → [concept ...] deduplicated *)
+  r "om-kriya"            1;   (* node → [action ...]  deduplicated *)
+  r "om-yukta"            1;   (* node → [concept ...] deduplicated *)
+  r "om-sthita"           1;   (* node → [context ...] deduplicated *)
+  r "om-swarupa"          1;   (* node → [identity ..] deduplicated *)
+  r "om-abheda"           1;   (* node → [equiv ...]   deduplicated *)
+  r "om-contract"         1;   (* node → [janya,phala,kriya,yukta,sthita,swarupa,abheda] *)
   (* field accessors *)
   r "shabda"              2;   (* node key → string *)
   r "raw-shabda"          2;   (* node key → own-only string *)

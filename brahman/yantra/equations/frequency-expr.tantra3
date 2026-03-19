@@ -1,0 +1,11 @@
+tantra3 frequency-expr
+
+-- f = 1/T
+
+takes period
+
+val = reciprocal period
+
+return val
+
+done

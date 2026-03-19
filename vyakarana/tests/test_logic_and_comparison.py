@@ -190,23 +190,12 @@ def test_transitive_chain_three_steps(vy):
 #   [X, swarupa, Y] in graph, then syllogism-mantra walks the chain.
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Syllogism not implemented. 'all cats are animals' needs to emit "
-    "[cat, swarupa, animal]. 'all animals breathe' → [animal, swarupa, breathe]. "
-    "Then syllogism-mantra walks: cat→animal→breathe → cat breathes. "
-    "This IS modus-ponens on swarupa edges — the logic kosha has it declared.",
-)
 def test_syllogism_cats_breathe(vy):
     """All cats are animals. All animals breathe. Do cats breathe?"""
     r = answer(vy, "all cats are animals. all animals breathe. do cats breathe.")
     assert "yes" in r.lower(), f"expected yes, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Same syllogism gap — dogs and mammals.",
-)
 def test_syllogism_dogs_mammals(vy):
     """All dogs are mammals. All mammals have hearts. Do dogs have hearts?"""
     r = answer(
@@ -216,12 +205,6 @@ def test_syllogism_dogs_mammals(vy):
     assert "yes" in r.lower(), f"expected yes, got {r}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Syllogism using kosha IS-A edges directly — no assertion needed. "
-    "electron swarupa particle already in kosha. particle has mass already declared. "
-    "Pipeline should walk the existing edge without being told in the question.",
-)
 def test_syllogism_from_kosha_electron_is_particle(vy):
     """electron IS-A particle (kosha edge). particle has mass. does electron have mass?"""
     r = answer(vy, "particles have mass. does an electron have mass.")

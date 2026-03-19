@@ -1,0 +1,12 @@
+tantra3 ke-inv-mass
+
+-- mass = 2*KE / v²
+
+takes kinetic-energy
+takes velocity
+
+val = div (double kinetic-energy) (square velocity)
+
+return val
+
+done

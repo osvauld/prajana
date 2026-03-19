@@ -1,0 +1,13 @@
+tantra3 potential-energy-expr
+
+-- PE = mgh
+
+takes mass
+takes gravity
+takes height
+
+val = mul mass (mul gravity height)
+
+return val
+
+done

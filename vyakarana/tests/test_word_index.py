@@ -44,9 +44,9 @@ import pytest
     ],
 )
 def test_direct_hit(vy, word, expected):
-    result = vy.eval(f'lookup-word "{word}"')
+    result = vy.eval(f'shabda-anveshana "{word}"')
     assert result == expected, (
-        f"lookup-word '{word}': expected {expected!r}, got {result!r}"
+        f"shabda-anveshana '{word}': expected {expected!r}, got {result!r}"
     )
 
 
@@ -62,7 +62,7 @@ def test_direct_hit(vy, word, expected):
     ],
 )
 def test_plural_s(vy, plural, expected):
-    result = vy.eval(f'lookup-word "{plural}"')
+    result = vy.eval(f'shabda-anveshana "{plural}"')
     assert result == expected, (
         f"plural-s: '{plural}' → expected {expected!r}, got {result!r}"
     )
@@ -79,7 +79,7 @@ def test_plural_s(vy, plural, expected):
     ],
 )
 def test_plural_ies(vy, plural, expected):
-    result = vy.eval(f'lookup-word "{plural}"')
+    result = vy.eval(f'shabda-anveshana "{plural}"')
     assert result == expected, (
         f"plural-ies: '{plural}' → expected {expected!r}, got {result!r}"
     )
@@ -90,7 +90,7 @@ def test_plural_ies(vy, plural, expected):
 
 def test_plural_es_masses(vy):
     # "masses" → "mass" via english-plural-es morpheme rule
-    result = vy.eval('lookup-word "masses"')
+    result = vy.eval('shabda-anveshana "masses"')
     assert result == "mass", f"expected 'mass', got {result!r}"
 
 
@@ -106,7 +106,7 @@ def test_plural_es_masses(vy):
     ],
 )
 def test_miss_returns_null(vy, word):
-    result = vy.eval(f'lookup-word "{word}"')
+    result = vy.eval(f'shabda-anveshana "{word}"')
     assert result is None, f"expected None for '{word}', got {result!r}"
 
 
@@ -124,7 +124,7 @@ def test_miss_returns_null(vy, word):
 )
 def test_uppercase_returns_null(vy, word):
     # word index is case-sensitive; capitalised words are not registered
-    result = vy.eval(f'lookup-word "{word}"')
+    result = vy.eval(f'shabda-anveshana "{word}"')
     assert result is None, (
         f"word index is case-sensitive: '{word}' should return None, got {result!r}"
     )
@@ -143,7 +143,7 @@ def test_uppercase_returns_null(vy, word):
     ],
 )
 def test_abbreviation(vy, abbr, expected):
-    result = vy.eval(f'lookup-word "{abbr}"')
+    result = vy.eval(f'shabda-anveshana "{abbr}"')
     assert result == expected, (
         f"abbreviation '{abbr}' → expected {expected!r}, got {result!r}"
     )
@@ -154,13 +154,13 @@ def test_abbreviation(vy, abbr, expected):
 
 def test_concept_name_not_mantra(vy):
     # "acceleration" resolves to the concept node, not "acceleration-mantra"
-    result = vy.eval('lookup-word "acceleration"')
+    result = vy.eval('shabda-anveshana "acceleration"')
     assert result == "acceleration", f"expected 'acceleration', got {result!r}"
     assert result != "acceleration-mantra", "should not resolve to mantra name"
 
 
 def test_kinetic_energy_concept_not_mantra(vy):
     # "kinetic-energy" resolves to the concept node, not "kinetic-energy-mantra"
-    result = vy.eval('lookup-word "kinetic-energy"')
+    result = vy.eval('shabda-anveshana "kinetic-energy"')
     assert result == "kinetic-energy", f"expected 'kinetic-energy', got {result!r}"
     assert result != "kinetic-energy-mantra", "should not resolve to mantra name"

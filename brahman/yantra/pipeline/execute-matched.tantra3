@@ -1,0 +1,30 @@
+tantra3 execute-matched
+
+-- dispatch a matched mantra to the right executor and format the answer.
+-- items = [mantra, val-pairs, mode]
+-- sf    = the concept being solved for
+-- returns: "label = value" string
+
+takes items
+takes sf
+
+mantra   = nth items 0
+valpairs = nth items 1
+mode     = nth items 2
+is-inv   = eq mode "inverse"
+
+val     = execute-mantra mantra valpairs mode sf
+
+phala   = walk mantra "phala"
+swarupa = walk mantra "swarupa"
+
+label = (cond is-inv sf
+  otherwise (cond (gt (length phala) 0) (nth phala 0)
+  otherwise (cond (gt (length swarupa) 0) (nth swarupa 0)
+  otherwise (to-string mantra))))
+
+answer = concat label " = " (to-string val)
+
+return answer
+
+done

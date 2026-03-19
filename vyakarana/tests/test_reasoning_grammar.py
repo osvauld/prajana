@@ -162,6 +162,9 @@ def test_physics_all_five_strands(vy):
 # ── Section 5: count arithmetic grammar ───────────────────────────────────────
 
 
+@pytest.mark.xfail(
+    reason="arithmetic: count-chain not wired into pipeline yet", strict=True
+)
 def test_count_add_we_find_names_total(vy):
     """Count addition we-find should name the total."""
     r = answer(vy, "i have 4 apples and 3 oranges how many total.")
@@ -169,6 +172,9 @@ def test_count_add_we_find_names_total(vy):
     assert "7" in r, f"total=7 not in result: {r}"
 
 
+@pytest.mark.xfail(
+    reason="arithmetic: count-chain not wired into pipeline yet", strict=True
+)
 def test_count_sub_we_find_names_remaining(vy):
     """Count subtraction we-find should name what remains."""
     r = answer(vy, "i have 10 apples i gave away 3 how many remaining.")

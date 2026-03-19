@@ -1,0 +1,38 @@
+tantra3 kosha-expand
+
+-- PPR-based kosha expansion pass.
+-- extracts active satya concept nodes, uses them as PPR seeds,
+-- appends kosha-janya triples for highest-ranked related nodes.
+-- additive — no existing triples are removed or modified.
+
+takes graph
+
+sc         = graph | where [s, e, o] | and (eq e "satya") | collect o
+seed-pairs = map sc (fn n -> [n, "1.0"])
+
+-- collect all node names already present (subjects + objects)
+existing = reduce graph [] (fn acc tri ->
+  let s      = nth tri 0
+  let o      = nth tri 2
+  let with-s = (cond (member s acc) acc otherwise (append acc [s]))
+  (cond (member o with-s) with-s otherwise (append with-s [o])))
+
+threshold = 0.001
+top-k     = 100
+
+new-triples = (cond (eq (length sc) 0) []
+  otherwise (reduce sc [] (fn acc seed ->
+    let results  = ppr seed-pairs seed []
+    let filtered = reduce results [] (fn facc pr ->
+      let nm    = to-string (nth pr 0)
+      let score = to-number (to-string (nth pr 1))
+      (cond (and (gt score threshold) (not (member nm existing)) (lt (length facc) top-k))
+        (append facc [[seed, "kosha-janya", nm]])
+        otherwise facc))
+    (append acc filtered))))
+
+result = (append graph new-triples)
+
+return result
+
+done

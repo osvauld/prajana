@@ -801,7 +801,8 @@ let parse_tantra2_file (path : string) : tantra option =
       else begin
         let (opens, closes) = count_opens_closes line in
 
-        if String.length trimmed >= 8 && String.sub trimmed 0 8 = "tantra2 " then
+        if String.length trimmed >= 8 && (String.sub trimmed 0 8 = "tantra2 "
+                                     || String.sub trimmed 0 8 = "tantra3 ") then
           st.name <- String.trim (String.sub trimmed 8 (String.length trimmed - 8))
         else if trimmed = "takes" || trimmed = "inputs" then
           st.section <- "inputs"
@@ -867,9 +868,31 @@ let parse_tantra2_file (path : string) : tantra option =
              | [] -> ())
            | _ ->
              (* body section — track block depth *)
-             (* a line is "inside a block" if: depth > 0, in scan head, or in scan body *)
-             let inside_block = !depth > 0 || !in_scan_head || !in_scan_body in
-             if not inside_block then begin
+             (* A line is "inside a block" if depth > 0 or in_scan_head.
+                in_scan_body is handled specially: scan body lines are flat
+                (branch heads + body stmts), so a new top-level binding at
+                depth 0 ends the scan body.  Without this, every line after
+                a scan header is absorbed into the scan binding forever. *)
+             let inside_block = !depth > 0 || !in_scan_head in
+             (* scan body escape: if we're in a scan body at depth 0 and
+                the line starts a new top-level binding or scan, close the
+                scan body.  Crucially, only UN-INDENTED lines can escape:
+                scan body stmts (state assignments like "cur-base = ...")
+                are always indented; top-level bindings start at column 0. *)
+             let is_top_level_line =
+               String.length stripped > 0
+               && stripped.[0] <> ' ' && stripped.[0] <> '\t'
+             in
+             let escaped_scan = !in_scan_body && !depth = 0
+               && not !in_scan_head
+               && is_top_level_line
+               && (is_scan_start trimmed
+                   || (match try_binding_start trimmed with
+                       | Some _ -> true | None -> false))
+             in
+             if escaped_scan then in_scan_body := false;
+             let inside_block = inside_block && not escaped_scan in
+             if not inside_block && not !in_scan_body then begin
                (* at top level: check for new binding start or scan head *)
                if is_scan_start trimmed then begin
                  flush_binding st;

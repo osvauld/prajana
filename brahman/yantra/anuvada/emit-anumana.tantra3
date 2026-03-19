@@ -1,0 +1,99 @@
+tantra3 emit-anumana
+
+-- panchaavayava nyaya for categorical inference (anumana).
+-- same five limbs as physics emission — different edges walked.
+--
+-- the reasoning structure:
+--   pratijna:   "we assert: [swarupa chain found in graph]"
+--   hetu:       "we ask: does query-entity have predicate?"
+--   udaharana:  "we know: [IS-A chain and property declaration]"
+--   upanaya:    "we see: [how query reaches predicate]"
+--   nigamana:   "yes" / "no"
+--
+-- inputs:
+--   graph          — refined question graph (has swarupa edges from assertion-bandha)
+--   query-entity   — what was asked about
+--   assert-entity  — what the predicate was asserted of (or the predicate itself for varga mode)
+--   mode           — "shashthi" | "swarupa" | "varga"
+--   answer         — "yes" | "no"
+
+takes graph
+takes query-entity
+takes assert-entity
+takes mode
+takes answer
+
+sep = shabda "anuvada-setu" "speech-strand-separator"
+
+-- swarupa assertions in the question graph (from assertion-bandha)
+swarupa-pairs = filter graph (fn tri -> eq (nth tri 1) "swarupa")
+
+-- pratijna: state the IS-A assertions given in the sentence
+-- "we assert: cat IS-A mammal, mammal IS-A breathing"
+pratijna-parts = map swarupa-pairs (fn tri ->
+  concat (to-string (nth tri 0)) " IS-A " (to-string (nth tri 2)))
+
+pratijna = cond (gt (length pratijna-parts) 0)
+  (concat "we assert: " (list-join pratijna-parts))
+  otherwise ""
+
+-- hetu: state the question
+hetu = concat "we ask: does " query-entity " inherit " assert-entity "?"
+
+-- udaharana: the chain rule walked
+-- kosha varga chain for the query entity
+varga-chain-raw = append
+  (map (walk query-entity "varga") (fn x -> to-string x))
+  (reduce (map (walk query-entity "varga") (fn x -> to-string x)) []
+    (fn acc v -> append acc (map (walk v "varga") (fn x -> to-string x))))
+
+varga-chain-strs = filter varga-chain-raw (fn v -> gt (string-length v) 0)
+
+-- graph swarupa chain for the query entity
+graph-chain = map (filter swarupa-pairs (fn tri ->
+  eq (to-string (nth tri 0)) query-entity)) (fn tri ->
+    concat query-entity " IS-A " (to-string (nth tri 2)))
+
+udaharana-kosha = cond (gt (length varga-chain-strs) 0)
+  (concat "we know: " query-entity " → " (list-join varga-chain-strs))
+  otherwise ""
+
+udaharana-graph = cond (gt (length graph-chain) 0)
+  (concat "we know: " (list-join graph-chain))
+  otherwise ""
+
+udaharana = cond (gt (string-length udaharana-kosha) 0)
+  (cond (gt (string-length udaharana-graph) 0)
+    (concat udaharana-graph sep " " udaharana-kosha)
+    otherwise udaharana-kosha)
+  otherwise udaharana-graph
+
+-- upanaya: property declared at which varga node
+yukta-at = reduce varga-chain-strs "" (fn found v ->
+  let ys = map (om-yukta v) (fn y -> to-string y)
+  cond (and (eq found "") (member assert-entity ys))
+    v
+  otherwise found)
+
+upanaya = cond (gt (string-length yukta-at) 0)
+  (concat "we see: " assert-entity " is declared at " yukta-at)
+  otherwise (cond (eq mode "swarupa")
+    (concat "we see: chain reaches " assert-entity " via IS-A")
+    otherwise (concat "we see: " assert-entity " reachable from " query-entity))
+
+-- nigamana
+nigamana = cond (eq answer "yes")
+  (concat "yes — " query-entity " has " assert-entity)
+  otherwise (concat "no — " query-entity " does not have " assert-entity)
+
+-- weave
+all-strands = filter [pratijna, hetu, udaharana, upanaya, nigamana]
+  (fn s -> gt (string-length s) 0)
+
+result = reduce all-strands "" (fn acc strand ->
+  cond (eq (string-length acc) 0) strand
+  otherwise (concat acc sep " " strand))
+
+return result
+
+done

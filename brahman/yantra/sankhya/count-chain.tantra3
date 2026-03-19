@@ -1,0 +1,17 @@
+tantra3 count-chain
+
+takes graph
+
+db1 = debug-print graph
+
+scanned = scan graph [total: num = 0.]:
+  _ -> emit
+
+db2 = debug-print scanned
+len = length scanned
+
+result = [len, scanned]
+
+return result
+
+done

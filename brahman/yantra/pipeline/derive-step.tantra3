@@ -1,0 +1,38 @@
+tantra3 derive-step
+
+-- one derivation pass over a question graph.
+-- fires every mantra whose janya inputs are all bound and phala is not yet bound.
+-- appends new [concept, sankhya, value] triples to the graph.
+-- used by fixpoint: fixpoint refined derive-step
+--
+-- tantra3: uses mantra-select instead of physics-mantras/math-mantras.
+-- mantra-select reads om-janya/om-phala to discover mantras automatically.
+
+takes graph
+
+bv   = bound-state graph
+bcs  = nth bv 0
+vps  = nth bv 1
+
+all-mantras = mantra-select ""
+
+new-triples = reduce all-mantras [] (fn acc mantra ->
+  let ms       = to-string mantra
+  let janya    = om-janya ms
+  let phala-l  = om-phala ms
+  let phala    = cond (gt (length phala-l) 0) (nth phala-l 0) otherwise (shabda ms "name")
+  let all-ok   = reduce janya true (fn a r ->
+    (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
+  let math-op  = shabda ms "math-op"
+  let has-math = gt (string-length math-op) 0
+  let fired    = execute-mantra mantra vps "forward" ""
+  cond (or (member phala bcs) (not all-ok)) acc
+  -- emit both the value and which mantra produced it
+  otherwise (append acc [[phala, "sankhya", fired],
+                         [phala, "derived-by", mantra]]))
+
+result = reduce new-triples graph (fn g t -> (append g [t]))
+
+return result
+
+done

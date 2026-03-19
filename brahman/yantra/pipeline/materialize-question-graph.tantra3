@@ -1,0 +1,49 @@
+tantra3 materialize-question-graph
+
+-- convert a VList question graph into proof-graph nodes with typed edges.
+-- after this call the graph is traversable by walk/walk-in/has/edges.
+
+takes graph
+
+result = reduce graph [] (fn acc tri ->
+  let subj = nth tri 0
+  let edge = nth tri 1
+  let obj  = nth tri 2
+  (cond (eq edge "sankhya")
+    (let _ = emit-node subj "prashna" [] (concat "sankhya:" (to-string obj)) in acc)
+  otherwise (cond (eq edge "matra")
+    (let _ = emit-node subj "prashna" [] (concat "matra:" (to-string obj)) in acc)
+  otherwise (cond (eq edge "asprista-sankhya")
+    (let _ = emit-node subj "prashna" [] (concat "asprista-sankhya:" (to-string obj)) in acc)
+  otherwise (cond (eq edge "satya")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-satya")] ""
+     in (append acc [(to-string subj)]))
+  otherwise (cond (eq edge "mithya")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-mithya")] ""
+     in (append acc [(to-string subj)]))
+  otherwise (cond (eq edge "shashthi-vibhakti")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-shashthi-vibhakti")] ""
+     in (append acc [(to-string subj)]))
+  otherwise (cond (eq edge "prathama-vibhakti")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-prathama-vibhakti")] ""
+     in (append acc [(to-string subj)]))
+  otherwise (cond (eq edge "vidhi-kaala")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-vidhi-kaala")] ""
+     in (append acc [(to-string subj)]))
+  otherwise (cond (eq edge "vishesa")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-vishesa")] ""
+     in (append acc [(to-string subj)]))
+  otherwise (cond (eq edge "viraam")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-viraam")] ""
+     in (append acc [(to-string subj)]))
+  otherwise (cond (eq edge "krama")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-krama")] ""
+     in (append acc [(to-string subj)]))
+  otherwise (cond (eq edge "dvandva")
+    (let _ = emit-node subj "prashna" [(concat (to-string obj) "-q-dvandva")] ""
+     in (append acc [(to-string subj)]))
+  otherwise acc))))))))))))
+
+return result
+
+done

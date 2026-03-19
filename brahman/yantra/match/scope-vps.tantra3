@@ -1,0 +1,67 @@
+tantra3 scope-vps
+
+-- scope-vps: graph × entity → [[concept, val], ...]
+-- given a question graph and a named entity, return that entity's val-pairs.
+-- when entity is empty, returns all val-pairs from bound-vals (flat mode).
+--
+-- two ownership patterns in the graph:
+--   instance path:  [inst, shashthi-vibhakti, entity] + [inst, vishesa, concept] + [inst, sankhya, val]
+--   concept path:   [concept, shashthi-vibhakti, entity] + [concept, sankhya, val]
+--
+-- builds scoped val-pairs from whichever pattern is present.
+
+takes graph
+takes entity
+
+bv  = bound-state graph
+bcs = nth bv 0
+vps = nth bv 1
+
+-- entity ownership map: [[concept, entity], ...]
+concept-entity-order = shashthi-sparsha graph ""
+
+scoped-vps = cond (exists entity)
+  (reduce (shashthi-sparsha graph entity)
+    []
+    (fn acc owned ->
+      -- instance path: owned is a rashi instance — resolve concept via vishesa
+      let inst-concept = nth (graph | where [i, e, c] | and (eq (to-string i) (to-string owned)) | and (eq e "vishesa") | and (neq (to-string c) "rashi") | collect c) 0
+      let concept      = cond (exists inst-concept) inst-concept otherwise owned
+      -- instance path: sankhya on the instance
+      let inst-val = cond (exists inst-concept)
+        (nth (graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v) 0)
+        otherwise ""
+      -- concept path: index into ordered sankhya values
+      let all-sankhyas = graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v
+      let owners       = concept-entity-order | where [c, ent] | and (eq (to-string c) (to-string owned)) | collect ent
+      let owner-idx    = nth (reduce owners [0, false] (fn st ent ->
+                           cond (nth st 1) st
+                           otherwise (cond (eq (to-string ent) (to-string entity))
+                             [(nth st 0), true]
+                             otherwise [(add (nth st 0) 1), false]))) 0
+      let direct-val   = cond (lt owner-idx (length all-sankhyas))
+        (nth all-sankhyas owner-idx)
+        otherwise (nth all-sankhyas 0)
+      let val = cond (exists inst-val) inst-val otherwise direct-val
+      cond (exists val)
+        (append acc [[concept, val]])
+      otherwise acc))
+  otherwise vps
+
+-- effective: scoped-vps first, supplement from flat vps for unscoped constants
+eff-vps = cond (exists entity)
+  (reduce vps scoped-vps (fn acc kv ->
+    let concept = nth kv 0
+    let already = acc | where [c, v] | and (eq (to-string c) (to-string concept)) | collect c
+    cond (gt (length already) 0) acc otherwise (append acc [kv])))
+  otherwise vps
+
+eff-bcs = cond (exists entity)
+  (map eff-vps (fn kv -> nth kv 0))
+  otherwise bcs
+
+result = [eff-vps, eff-bcs]
+
+return result
+
+done
