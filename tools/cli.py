@@ -4,14 +4,15 @@ Usage:
   python3 -m tools [mode] [subcmd] [args]
 
 Modes:
-  tantra  summary|groups|all|group|source|callgraph|callers|callees|search
+  tantra  summary|groups|all|group|source|callgraph|callers|callees|search|lint
   om      summary|domains|domain|source|search|with-key|with-relation
   search  PATTERN              search both tantras and om
   test    summary|list|run     test discovery and execution
   cache   summary|failed|gates|diff|fix-xpass|slow
-  serve   [SOCKET_PATH]        start brahman socket server
-  ask     [QUESTION]           ask a question (repl if no question given)
-  json    '{"command":...}'    run one JSON command and print response
+  vy      status|start|stop|restart|reload|run|eval|trace|walk|inspect|mantras|triples|help
+  serve   [SOCKET_PATH]        start brahman (static knowledge) server
+  ask     [QUESTION]           ask a question (auto-starts server, repl if no question)
+  json    '{"command":...}'    run one JSON command
 """
 
 import argparse
@@ -20,315 +21,12 @@ import os
 import sys
 from pathlib import Path
 
-from . import tantras, om, tests as test_meta, runner, cache as cache_mod, vyakarana
+from . import tests as test_meta, runner, cache as cache_mod, vyakarana
 from .cache import DEFAULT_CACHE
 from .server import BrahmanServer, DEFAULT_SOCKET
-
-
-def _sep(title, width=80):
-    return f"\n{'=' * width}\n  {title}\n{'=' * width}\n"
-
-
-def _header(name, meta, path, width=80):
-    return f"\n{'─' * width}\n  {name}  ({meta})\n  {path}\n{'─' * width}"
-
-
-# ── tantra ────────────────────────────────────────────────────────────────────
-
-
-def cmd_tantra(args):
-    ts = tantras.load_all()
-    sub = args.subcmd or "summary"
-
-    if sub == "summary":
-        bg = tantras.by_group(ts)
-        total = sum(t["lines"] for t in ts.values())
-        print(f"\n{'=' * 100}")
-        print(f"  TANTRA SUMMARY -- {len(ts)} tantras, {total} total lines")
-        print(f"{'=' * 100}\n")
-        for gname in tantras.TANTRA_GROUPS:
-            gt = bg.get(gname, [])
-            if not gt:
-                continue
-            gl = sum(t["lines"] for t in gt)
-            print(
-                f"  {gname}/ ({len(gt)} files, {gl} lines) -- {tantras.TANTRA_GROUPS[gname]}"
-            )
-            print(f"  {'─' * 96}")
-            print(
-                f"  {'Name':<30} {'Lines':>5} {'Takes':>5} {'Binds':>5} {'Calls':>5} {'Scans':>5} {'Conds':>5} {'Returns'}"
-            )
-            print(f"  {'─' * 96}")
-            for t in sorted(gt, key=lambda x: x["name"]):
-                ret = t["returns"] or "—"
-                if len(ret) > 30:
-                    ret = ret[:30] + "..."
-                print(
-                    f"  {t['name']:<30} {t['lines']:>5} {len(t['takes']):>5} {len(t['bindings']):>5} {len(t['calls']):>5} {t['scans']:>5} {t['conds']:>5} {ret}"
-                )
-            print()
-
-    elif sub == "groups":
-        bg = tantras.by_group(ts)
-        print(f"\nTantra groups ({len(tantras.TANTRA_GROUPS)}):\n")
-        for gname, desc in tantras.TANTRA_GROUPS.items():
-            gt = bg.get(gname, [])
-            total = sum(t["lines"] for t in gt)
-            print(f"  {gname:<12} {len(gt):>2} files  {total:>4} lines  {desc}")
-
-    elif sub == "all":
-        bg = tantras.by_group(ts)
-        for gname in tantras.TANTRA_GROUPS:
-            gt = bg.get(gname, [])
-            if not gt:
-                continue
-            gl = sum(t["lines"] for t in gt)
-            desc = tantras.TANTRA_GROUPS[gname]
-            print(_sep(f"{gname}/ -- {len(gt)} files, {gl} lines -- {desc}"))
-            for t in sorted(gt, key=lambda x: x["name"]):
-                meta = f"[{t['group']}] {t['lines']} lines"
-                if t["takes"]:
-                    meta += f" | takes: {', '.join(t['takes'])}"
-                print(_header(t["name"], meta, t["path"]))
-                print(t["source"])
-
-    elif sub == "group":
-        group = args.name
-        data = tantras.to_json_full(ts, group=group)
-        if not data:
-            print(
-                f"Group '{group}' not found. Available: {', '.join(tantras.TANTRA_GROUPS.keys())}"
-            )
-            return
-        for name, t in sorted(data.items()):
-            print(_header(name, f"[{t['group']}] {t['lines']} lines", t["path"]))
-            print(t["source"])
-
-    elif sub == "source":
-        name = args.name
-        t = ts.get(name)
-        if not t:
-            print(f"Tantra '{name}' not found.")
-            matches = [n for n in ts if name in n]
-            if matches:
-                print(f"Did you mean: {', '.join(matches)}?")
-            return
-        meta = f"[{t['group']}] {t['lines']} lines"
-        if t["takes"]:
-            meta += f" | takes: {', '.join(t['takes'])}"
-        print(_header(t["name"], meta, t["path"]))
-        print(t["source"])
-
-    elif sub == "callgraph":
-        cg = tantras.call_graph(ts)
-        rcg = tantras.reverse_call_graph(cg)
-        print(_sep("CALL GRAPH"))
-        for name in sorted(cg.keys(), key=lambda n: (-len(cg[n]), n)):
-            callees = cg[name]
-            callers = rcg.get(name, [])
-            if not callees and not callers:
-                continue
-            out = f"  {name:<35} [{ts[name]['group']}]"
-            if callees:
-                out += f"\n    calls  -> {', '.join(callees)}"
-            if callers:
-                out += f"\n    from   <- {', '.join(callers)}"
-            print(out + "\n")
-        print(_sep("HUB TANTRAS -- most called"))
-        hubs = sorted(rcg.items(), key=lambda x: -len(x[1]))
-        for name, callers in hubs[:15]:
-            print(f"  {name:<35} called by {len(callers):>2}: {', '.join(callers)}")
-
-    elif sub == "callers":
-        name = args.name
-        cg = tantras.call_graph(ts)
-        rcg = tantras.reverse_call_graph(cg)
-        callers = rcg.get(name, [])
-        if not callers:
-            print(f"No tantras call '{name}'.")
-            if name not in ts:
-                print(f"('{name}' is not a known tantra)")
-            return
-        print(f"\nTantras that call '{name}' ({len(callers)}):\n")
-        for c in callers:
-            t = ts[c]
-            print(f"  {c:<35} [{t['group']}] {t['lines']} lines")
-
-    elif sub == "callees":
-        name = args.name
-        if name not in ts:
-            print(f"Tantra '{name}' not found.")
-            return
-        cg = tantras.call_graph(ts)
-        callees = cg.get(name, [])
-        print(f"\n'{name}' [{ts[name]['group']}] calls ({len(callees)}):\n")
-        for c in callees:
-            t = ts[c]
-            print(f"  {c:<35} [{t['group']}] {t['lines']} lines")
-
-    elif sub == "search":
-        pattern = args.name
-        results = tantras.search(ts, pattern)
-        total = sum(len(r["matches"]) for r in results)
-        for r in results:
-            print(f"\n  {r['name']} [{r['group']}] -- {len(r['matches'])} matches")
-            print(f"  {r['path']}")
-            for m in r["matches"]:
-                print(f"    {m['line']:>4}: {m['text']}")
-        print(f"\n  Total: {total} matches across {len(ts)} tantras.")
-
-    else:
-        print(f"Unknown tantra command: {sub}")
-        print(
-            "Available: summary, groups, all, group, source, callgraph, callers, callees, search"
-        )
-
-
-# ── om ────────────────────────────────────────────────────────────────────────
-
-
-def cmd_om(args):
-    oms = om.load_all()
-    sub = args.subcmd or "summary"
-
-    if sub == "summary":
-        layers = {}
-        for o in oms.values():
-            layers[o["layer"]] = layers.get(o["layer"], 0) + 1
-        total = sum(o["lines"] for o in oms.values())
-        print(f"\n{'=' * 80}")
-        print(f"  OM SUMMARY -- {len(oms)} nodes, {total} total lines")
-        print(f"{'=' * 80}\n")
-        print("  Layers:")
-        for layer, count in sorted(layers.items(), key=lambda x: -x[1]):
-            print(f"    {layer:<12} {count:>5} nodes")
-        depth = int(args.name) if args.name and args.name.isdigit() else 2
-        domains = om.by_domain(oms, depth=depth)
-        print(f"\n  Domains (depth={depth}):")
-        for dname, nodes in domains.items():
-            total_l = sum(n["lines"] for n in nodes)
-            print(f"    {dname:<45} {len(nodes):>4} nodes  {total_l:>5} lines")
-
-    elif sub == "domains":
-        depth = int(args.name) if args.name and args.name.isdigit() else 2
-        domains = om.by_domain(oms, depth=depth)
-        print(f"\nOm domains (depth={depth}, {len(domains)} groups):\n")
-        for dname, nodes in domains.items():
-            total_l = sum(n["lines"] for n in nodes)
-            print(f"  {dname:<45} {len(nodes):>4} nodes  {total_l:>5} lines")
-
-    elif sub == "domain":
-        domain = args.name
-        if not domain:
-            print("Usage: om domain DOMAIN_PATH")
-            return
-        info = om.domain_info(oms, domain)
-        if info["total_count"] == 0:
-            print(f"No nodes found under domain '{domain}'")
-            return
-        print(
-            _sep(
-                f"{domain}/ -- {info['total_count']} nodes, {info['total_lines']} lines"
-            )
-        )
-        subs = info["subdomains"]
-        if len(subs) > 1 or (len(subs) == 1 and list(subs.keys())[0] != domain):
-            print("  Subdomains:")
-            print(f"  {'Path':<45} {'Nodes':>5} {'Lines':>6}  Direct nodes")
-            print(f"  {'─' * 96}")
-            for dname, dinfo in subs.items():
-                label = dname if dname != domain else f"{dname} (direct)"
-                node_preview = ", ".join(dinfo["nodes"][:5])
-                if len(dinfo["nodes"]) > 5:
-                    node_preview += f", ... (+{len(dinfo['nodes']) - 5})"
-                print(
-                    f"  {label:<45} {dinfo['count']:>5} {dinfo['lines']:>6}  {node_preview}"
-                )
-            print()
-        direct = [o for o in oms.values() if o["domain"] == domain.rstrip("/")]
-        if direct:
-            print(f"  Direct nodes in {domain}/ ({len(direct)}):")
-            for o in sorted(direct, key=lambda x: x["name"]):
-                meta = f"[{o['layer']}] {o['lines']} lines | {o['domain']}"
-                print(_header(o["name"], meta, o["path"]))
-                print(o["source"])
-
-    elif sub == "source":
-        name = args.name
-        o = oms.get(name)
-        if not o:
-            print(f"Om node '{name}' not found.")
-            matches = [n for n in oms if name in n][:10]
-            if matches:
-                print(f"Did you mean: {', '.join(matches)}?")
-            return
-        meta = f"[{o['layer']}] {o['lines']} lines | {o['domain']}"
-        print(_header(o["name"], meta, o["path"]))
-        print(o["source"])
-
-    elif sub == "search":
-        pattern = args.name
-        results = om.search(oms, pattern)
-        total = sum(len(r["matches"]) for r in results)
-        for r in results:
-            print(
-                f"\n  {r['name']} [{r['layer']}] {r['domain']} -- {len(r['matches'])} matches"
-            )
-            print(f"  {r['path']}")
-            for m in r["matches"]:
-                print(f"    {m['line']:>4}: {m['text']}")
-        print(f"\n  Total: {total} matches across {len(oms)} om nodes.")
-
-    elif sub == "with-key":
-        key = args.name
-        nodes = om.with_shabda_key(oms, key)
-        print(f"\nOm nodes with shabda key '{key}' ({len(nodes)}):\n")
-        for n in nodes:
-            val = n["shabda_keys"].get(key, "")
-            print(f"  {n['name']:<30} {val:<20} [{n['layer']}] {n['domain']}")
-
-    elif sub == "with-relation":
-        rel = args.name
-        nodes = om.with_edge_relation(oms, rel)
-        print(f"\nOm nodes with '{rel}' edges ({len(nodes)}):\n")
-        for n in nodes:
-            targets = [e["target"] for e in n["edges"] if e["relation"] == rel]
-            print(f"  {n['name']:<30} -> {', '.join(targets)}")
-
-    else:
-        print(f"Unknown om command: {sub}")
-        print(
-            "Available: summary, domains, domain, source, search, with-key, with-relation"
-        )
-
-
-# ── search ────────────────────────────────────────────────────────────────────
-
-
-def cmd_search(args):
-    pattern = args.name if args.name else args.subcmd
-    if not pattern:
-        print("Usage: search PATTERN")
-        return
-    ts = tantras.load_all()
-    oms = om.load_all()
-    t_results = tantras.search(ts, pattern)
-    o_results = om.search(oms, pattern)
-    if t_results:
-        print(_sep(f"TANTRA MATCHES ({sum(len(r['matches']) for r in t_results)})"))
-        for r in t_results:
-            print(f"\n  {r['name']} [{r['group']}]")
-            for m in r["matches"]:
-                print(f"    {m['line']:>4}: {m['text']}")
-    if o_results:
-        print(_sep(f"OM MATCHES ({sum(len(r['matches']) for r in o_results)})"))
-        for r in o_results:
-            print(f"\n  {r['name']} [{r['layer']}] {r['domain']}")
-            for m in r["matches"]:
-                print(f"    {m['line']:>4}: {m['text']}")
-    t_total = sum(len(r["matches"]) for r in t_results)
-    o_total = sum(len(r["matches"]) for r in o_results)
-    print(f"\n  Total: {t_total} tantra + {o_total} om = {t_total + o_total} matches")
+from .cli_tantra import cmd_tantra
+from .cli_om import cmd_om, cmd_search
+from .cli_vy import cmd_vy, cmd_ask, ensure_vy
 
 
 # ── test ──────────────────────────────────────────────────────────────────────
@@ -338,7 +36,7 @@ def cmd_test(args):
     sub = args.subcmd or "summary"
     vy_socket = os.environ.get("VYAKARANA_SOCKET", "/tmp/vy.sock")
     if sub == "run":
-        vy_socket = _ensure_vy()
+        vy_socket = ensure_vy()
 
     if sub == "summary":
         all_tests = test_meta.load_all()
@@ -401,12 +99,12 @@ def cmd_test(args):
         status_icon = "+" if result.get("status") == "ok" else "x"
         print(f"\n  {status_icon} {result.get('summary', 'no summary')}")
         if result.get("failed_tests"):
-            print(f"\n  FAILURES:")
+            print("\n  FAILURES:")
             for ft in result["failed_tests"]:
                 print(f"    {ft['nodeid']}")
                 print(f"      {ft['reason'][:100]}")
         if result.get("error_tests"):
-            print(f"\n  ERRORS:")
+            print("\n  ERRORS:")
             for et in result["error_tests"][:3]:
                 print(f"    {et['nodeid']}")
         print()
@@ -456,8 +154,8 @@ def cmd_cache(args):
                 print(f"    + {t['test'].split('::')[-1]}  {t['file']}:{t['line']}")
         if s["gates"]:
             print(f"\n  XFAIL GATES:")
-            for gate, tests in sorted(s["gates"].items()):
-                print(f"    [{gate}]  {len(tests)} tests")
+            for gate, gate_tests in sorted(s["gates"].items()):
+                print(f"    [{gate}]  {len(gate_tests)} tests")
         if s["slow_calls"]:
             print(f"\n  SLOWEST CALLS:")
             for sc in s["slow_calls"][:5]:
@@ -547,10 +245,10 @@ def cmd_cache(args):
 
     elif sub == "slow":
         s = cache_mod.summarize(entries)
-        print(f"\n  SLOWEST CALLS:")
+        print("\n  SLOWEST CALLS:")
         for sc in s["slow_calls"]:
             print(f"  {sc['ms']:>5}ms  {sc['method']}  {sc['input'][:60]}")
-        print(f"\n  SLOWEST TESTS:")
+        print("\n  SLOWEST TESTS:")
         for t in s["slow_tests"][:10]:
             print(
                 f"  {t['duration']:>6.2f}s  {t['calls']:>3} calls  {t['test'].split('::')[-1]}"
@@ -568,202 +266,6 @@ def cmd_serve(args):
     socket_path = args.name if args.name else DEFAULT_SOCKET
     server = BrahmanServer(socket_path=socket_path)
     server.serve()
-
-
-# ── ask (repl) ────────────────────────────────────────────────────────────────
-
-
-def _print_answer(question, answer_text):
-    """Display a question-answer exchange with reasoning strands."""
-    from .vy import Client
-
-    print(f"\n  Q: {question}")
-    print(f"  A: {answer_text}")
-    strands = Client.strands(answer_text)
-    if strands:
-        print()
-        for name, content in strands.items():
-            content = content.strip()
-            if content:
-                print(f"    [{name}] {content[:200]}")
-    print()
-
-
-def _ensure_vy():
-    """Auto-start vyakarana server if not running. Returns socket path."""
-    vy_socket = os.environ.get("VYAKARANA_SOCKET", "/tmp/vy.sock")
-    if not vyakarana.health(vy_socket):
-        print("  [vyakarana] server not running, starting...", file=sys.stderr)
-        try:
-            vyakarana.ensure(vy_socket)
-        except RuntimeError as e:
-            print(f"  [vyakarana] {e}", file=sys.stderr)
-            sys.exit(1)
-    return vy_socket
-
-
-def cmd_ask(args):
-    """Ask a question or enter interactive repl mode."""
-    from .vy import Client, VyakaranaError
-
-    vy_socket = _ensure_vy()
-
-    # single question mode
-    question = args.subcmd
-    if args.name:
-        question = f"{question} {args.name}" if question else args.name
-
-    if question:
-        try:
-            vy = Client(vy_socket)
-            answer = vy.answer(question)
-            _print_answer(question, answer)
-            vy.close()
-        except (VyakaranaError, ConnectionRefusedError, FileNotFoundError) as e:
-            print(f"  Error: {e}")
-            print(f"  Is the vyakarana server running on {vy_socket}?")
-        return
-
-    # repl mode
-    print(f"\n  vyakarana repl (server: {vy_socket})")
-    print(f"  Type a question, or:")
-    print(f"    :eval EXPR     evaluate a tantra expression")
-    print(f"    :bqg SENTENCE  show refined question graph")
-    print(f"    :trace SENTENCE show pipeline trace")
-    print(f"    :reload        reload all tantras")
-    print(f"    :quit          exit\n")
-
-    try:
-        vy = Client(vy_socket)
-    except (ConnectionRefusedError, FileNotFoundError) as e:
-        print(f"  Cannot connect to {vy_socket}: {e}")
-        print(f"  Start the server first.")
-        return
-
-    session_id = "repl"
-    while True:
-        try:
-            line = input("  > ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print()
-            break
-
-        if not line:
-            continue
-        if line in (":quit", ":q", ":exit"):
-            break
-
-        try:
-            if line.startswith(":eval "):
-                expr = line[6:].strip()
-                result = vy.eval(expr)
-                if isinstance(result, list) and result and isinstance(result[0], list):
-                    # graph — print triples
-                    for t in result:
-                        print(f"    {t}")
-                else:
-                    print(f"    {result}")
-
-            elif line.startswith(":bqg "):
-                sentence = line[5:].strip()
-                g = vy.bqg(sentence)
-                print(f"\n  Refined graph ({len(g)} triples):")
-                for t in g:
-                    print(f"    {t}")
-                print()
-
-            elif line.startswith(":trace "):
-                sentence = line[7:].strip()
-                trace = vy.pipeline_trace(sentence)
-                for step in trace:
-                    n = len(step.get("triples", []))
-                    print(f"    {step['stage']:<30} {n} triples")
-
-            elif line.startswith(":reload"):
-                resp = vy.reload_all()
-                print(f"    reloaded: {resp.get('tantras_loaded', '?')} tantras")
-
-            elif line.startswith(":"):
-                print(f"    Unknown command: {line.split()[0]}")
-
-            else:
-                # natural language question
-                answer = vy.ask(line, session_id=session_id)
-                _print_answer(line, answer)
-
-        except VyakaranaError as e:
-            print(f"    Error: {e}")
-        except (BrokenPipeError, ConnectionResetError, EOFError):
-            print("    Connection lost, reconnecting...")
-            try:
-                vy = Client(vy_socket)
-            except Exception as e:
-                print(f"    Cannot reconnect: {e}")
-                break
-
-    vy.close()
-    print("  bye")
-
-
-# ── vyakarana server management ────────────────────────────────────────────────
-
-
-def cmd_vy(args):
-    """Manage the vyakarana OCaml server."""
-    sub = args.subcmd or "status"
-
-    if sub == "status":
-        s = vyakarana.status()
-        state = "running" if s["running"] else "stopped"
-        print(f"\n  vyakarana: {state}")
-        print(f"  socket:    {s['socket']}")
-        if s["pid"]:
-            print(f"  pid:       {s['pid']}")
-        if s.get("tantras"):
-            print(f"  tantras:   {s['tantras']}")
-        print(f"  binary:    {s['binary'] or 'not found'}")
-        print()
-
-    elif sub == "start":
-        socket_path = args.name or vyakarana.DEFAULT_SOCKET
-        if vyakarana.health(socket_path):
-            print(f"  Already running on {socket_path}")
-            return
-        proc = vyakarana.start(socket_path=socket_path, background=True, quiet=False)
-        if proc:
-            print(f"  Started (pid {proc.pid})")
-        else:
-            print(f"  Failed to start")
-
-    elif sub == "stop":
-        if vyakarana.stop():
-            print("  Stopped")
-        else:
-            print("  Not running (or could not stop)")
-
-    elif sub == "restart":
-        vyakarana.stop()
-        import time
-
-        time.sleep(0.5)
-        proc = vyakarana.start(background=True, quiet=False)
-        if proc:
-            print(f"  Restarted (pid {proc.pid})")
-
-    elif sub == "reload":
-        resp = vyakarana.reload()
-        if resp:
-            print(f"  Reloaded: {resp.get('tantras_loaded', '?')} tantras")
-        else:
-            print("  Server not running")
-
-    elif sub == "run":
-        # start in foreground (blocks)
-        vyakarana.start(background=False, quiet=False)
-
-    else:
-        print(f"Unknown vy command: {sub}")
-        print("Available: status, start, stop, restart, reload, run")
 
 
 # ── json ──────────────────────────────────────────────────────────────────────
@@ -793,23 +295,42 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Modes:
-  tantra  summary|groups|all|group|source|callgraph|callers|callees|search
+  tantra  summary|groups|all|group|source|callgraph|callers|callees|search|lint
   om      summary|domains|domain|source|search|with-key|with-relation
   search  PATTERN              search both tantras and om
   test    summary|list|run     test discovery and execution
   cache   summary|failed|gates|diff|fix-xpass|slow
-  vy      status|start|stop|restart|reload|run   manage vyakarana server
+  vy      status|start|stop|restart|reload|run|eval|trace|walk|inspect|mantras|triples|help
   serve   [SOCKET_PATH]        start brahman (static knowledge) server
   ask     [QUESTION]           ask a question (auto-starts server, repl if no question)
   json    '{"command":...}'    run one JSON command
 
+Live graph queries (auto-starts server):
+  vy eval '<expr>'             evaluate any tantra expression
+  vy inspect <node>            full node: satya, shabda keys, edges
+  vy walk '<node> <relation>'  transitive chain walk with shabda at each hop
+  vy triples <node>            all triples touching a node (subject + object)
+  vy mantras '<sentence>'      which mantras fire and why (bound/missing concepts)
+  vy trace '<sentence>'        pipeline stages with +/- triple diff
+
+Static analysis (no server needed):
+  tantra lint                  hardcoded refs, unrolled loops, word lists, scan vs reduce
+  tantra callgraph             full call graph + hub tantras
+  om with-key eval             all nodes with an 'eval' shabda key (fireable operations)
+  om with-relation abheda      all nodes with 'abheda' edges
+
 Examples:
-  python3 -m tools vy start                     # start vyakarana server
-  python3 -m tools test run                     # auto-starts server, runs tests
+  python3 -m tools vy eval 'walk "viveka-max" "abheda"'
+  python3 -m tools vy eval 'shabda "addition" "eval"'
+  python3 -m tools vy eval 'om-janya "momentum-mantra"'
+  python3 -m tools vy inspect momentum
+  python3 -m tools vy walk 'viveka-max abheda'
+  python3 -m tools vy triples mass
+  python3 -m tools vy mantras 'ball has mass 5 velocity 10. find kinetic energy'
+  python3 -m tools vy trace 'ball has mass 5 velocity 10. find kinetic energy'
+  python3 -m tools tantra lint
+  python3 -m tools test run
   python3 -m tools ask "ball has mass 5 velocity 10. find kinetic energy"
-  python3 -m tools ask                          # enters repl mode
-  python3 -m tools tantra summary
-  python3 -m tools om domain kosha/math
 """,
     )
     parser.add_argument("mode", nargs="?", default="tantra")
