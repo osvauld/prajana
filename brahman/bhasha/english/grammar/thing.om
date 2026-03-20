@@ -1,8 +1,8 @@
 bhasha thing
 
-  "indefinite-swarupa generic-sthita"
-  -- generic entity placeholder: "a thing has mass 5 kg"
-  -- treated as grammar so BQG drops it; entity is recognised from possession signal
+  "padartha-swarupa english-sthita"
+  -- thing IS padartha — the most general category of the knowable.
+  -- "a thing has mass 5 kg" — the speaker names an unspecified dravya.
 
   shabda word:thing  role:grammar
 

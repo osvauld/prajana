@@ -63,6 +63,7 @@ kosha visheshanam-ring
    "rashi-bandha-yukta"        -- value-assignment: 'of' connecting rashi label to its magnitude
   "viraam-yukta"              -- punctuation: structural boundary marker
   "dvandva-yukta"             -- dvandva group: co-equal set membership (comma/and)
+  "adhikarana-yukta"          -- locative locus: on/in/at — word is a place, not a counted entity
   "naama-pratibodha-yukta"    -- pronoun reference: cross-group reference to entity (antisymmetric, non-transitive)
 
 shabda dimension-registry / the-ring-of-all-edge-dimensions-core-and-dynamic

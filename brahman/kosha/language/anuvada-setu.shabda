@@ -46,9 +46,18 @@ rel-pratipaksha: pratipaksha
 rel-sankhya: =
 rel-shashthi-vibhakti: of
 rel-prathama-vibhakti: is
+rel-dvitiya-vibhakti: towards
+rel-chaturthi-vibhakti: to
+rel-panchami-vibhakti: from
+rel-saptami-vibhakti: in
 rel-vidhi-kaala: find
 rel-satya: recognises
 rel-mithya: holds provisionally
+
+# count reasoning bridge
+speech-count-are: there are
+speech-count-is: there is
+speech-arrow: →
 
 # reasoning emission speech acts — pancavayava (five members of inference)
 # uttama-purusa-bahu-vachana kartari-prayoga:
@@ -98,6 +107,11 @@ domain-header-prefix: in
 
 # fallback token for unresolved output
 no-answer-label: asprista
+
+# sambodhana response — the graph acknowledges being addressed
+speech-sambodhana: we are here
+speech-aamantrana: we are here
+speech-abhisambodhana: we are here
 
 # mode suffixes
 mode-question: (this was a question)

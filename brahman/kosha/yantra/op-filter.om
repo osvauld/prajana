@@ -1,6 +1,16 @@
 kosha op-filter
 
+  -- keep elements matching predicate, discard the rest.
+  -- filter list (fn x -> bool)
+  --
+  -- this is a lattice operation: the result is a subset of the input,
+  -- ordered by inclusion. filter IS selection (σ) applied to a list.
+  -- pure: no state, no accumulation.
+
   "op-class-higher-order-kriya"
+  "selection-abheda"
+  "partial-order-sthita lattice-sthita"
+  "subset-phala"
 
 shabda name:filter
 

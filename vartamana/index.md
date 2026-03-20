@@ -37,7 +37,12 @@ audible in the world. Read both together for the full picture.
 | [14-tantra3.md](14-tantra3.md) | **Tantra3: the om graph as active interface.** The six suffixes as instruction set. Om-driven matching, derive-chain, pipeline ordering. The declaration IS the execution. Supersedes tantra2 as the target architecture. | Active |
 | [15-tantra3-implementation.md](15-tantra3-implementation.md) | **Tantra3 implementation plan.** Steps 1+2 complete. All tantra2 deleted. 63 active tantra3 files. Dissolution complete. Baseline: 511 passed / 63 xfailed (session 9). | Reference |
 | [16-let-binding-resolution.md](16-let-binding-resolution.md) | **Scan body escape fix.** The file parser's `in_scan_body` flag never reset — every line after a scan header was absorbed. Fix: indentation check (only column-0 lines escape scan body). Completed session 9. | Completed |
-| [17-scan-ref-patterns.md](17-scan-ref-patterns.md) | **Working document.** Two discoveries: scan-ref completes the tantra cycle; the math kosha (83 unused nodes) is a library of operations. One mechanism (read kosha → find operation → apply-op) unifies count, viveka, syllogism, transitive, dvandva. Ten natural groups. Nine-step plan: fix alias bug → count-chain → viveka → derive → anumana → dissolve monolith → new thoughts. | **Active** |
+| [17-scan-ref-patterns.md](17-scan-ref-patterns.md) | **Historical index.** Dissolving hardcoded tantra logic into kosha-driven operations. Points to 17a/17b/17c. Absorbed into 18-philosophy. | Historical |
+| [17a-discoveries.md](17a-discoveries.md) | **Reference.** Three core discoveries + 11 trace-verified findings. Absorbed into 18-philosophy. | Historical |
+| [17b-algebraic-types.md](17b-algebraic-types.md) | **Research.** The algebraic hierarchy as type system. Absorbed into 18-philosophy. | Historical |
+| [17c-implementation.md](17c-implementation.md) | **Historical plan.** Steps 1-2.5 done. Remaining steps absorbed into 18-implementation. | Historical |
+| [18-philosophy.md](18-philosophy.md) | **The six insights.** One mechanism, algebra as permission, subgraphs as cognition, dravya by exclusion, karaka already existed, utterance as vibhakti. Absorbs 17a/17b/17c. | **Active** |
+| [18-implementation.md](18-implementation.md) | **Current plan.** Three modes of address (sambodhana/darshana/prajna-dana), entity recognition, analysis tantras. Steps 3.0-3.6. | **Active** |
 | [tantra2-spec.md](tantra2-spec.md) | Technical reference. File structure, expression syntax, scan syntax, safety rules, naming conventions. | Active |
 
 ---
@@ -55,7 +60,9 @@ audible in the world. Read both together for the full picture.
 - **tantra2-mathematics**: the pipeline as monotone endomorphisms, FSTs, Datalog, Madhava series. The proof graph as self-certifying reasoning.
 - **tantra3**: the om graph IS the program. 109 nodes already declare janya/phala contracts. The six suffixes form an instruction set. The tantras are manual transcriptions of what the om graph already says — tantra3 eliminates the transcription. Supersedes tantra2 as target.
 - **tantra3-implementation**: the engineering companion. 77 xfails classified into 8 categories. 4 steps from om-contract primitive through swarupa-chain. Seven unnamed structures (sankhya-sparsha 16×, shashthi-sparsha 43×, iccha-viveka 9×, pramana-bandha 4×, varga-viveka, eval_arg 72×, with_node 34×) mapped to tantra3 steps. "No match" anatomy: 42/77 xfails produce it, 29 passing tests produce it correctly. Manipravalam: the code speaks the same language as the knowledge. Test cache analysis: 549 cached results, 197 graph traces, performance profile (chain derivations are the bottleneck).
-- **scan-ref-patterns (17)**: **active working document.** Two discoveries: scan-ref completes the tantra cycle; math kosha is an unused library of 83 operations. One mechanism (read kosha → find operation → apply-op) for all reasoning types. Physics path is the template. emit-triples alias bug documented. Nine-step plan connecting kosha to pipeline.
+- **scan-ref-patterns (17)**: historical index. Dissolved into 18-philosophy + 18-implementation.
+- **18-philosophy**: the six insights. One mechanism for all reasoning. Algebra as permission. Subgraphs mirror cognition. Dravya by exclusion. Karaka was already there. Utterance IS vibhakti to vyakarana.
+- **18-implementation**: the current plan. Three modes of address: sambodhana (greeting = existence acknowledgment), darshana (inspection), prajna-dana (knowledge intake). Entity recognition via capitalization + pronouns. Analysis tantras: karaka-viveka, prayoga-viveka.
 - **tantra2-spec**: technical reference. Authoring rules, syntax, safety rules. The working guide for writing new tantras.
 
 ---

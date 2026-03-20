@@ -20,7 +20,7 @@ takes sentence
 
 raw-graph  = build-question-graph sentence
 asserted   = assertion-bandha raw-graph
-refined    = fixpoint asserted (fn g -> avrti-refine g)
+refined    = grade-sparsha asserted
 expanded  = kosha-expand refined
 
 sf-result    = extract-solve-for expanded
@@ -77,6 +77,16 @@ anumana-result = cond is-anumana
     otherwise (anumana-viveka refined anumana-query anumana-assert))
   otherwise ""
 
+-- ── count path ────────────────────────────────────────────────────────────────
+-- count-chain (via grade-sparsha) emits [count-total, sankhya, N] or
+-- [count-remaining, sankhya, N] directly into the refined graph.
+-- we just read the pre-computed result here.
+count-total-raw     = expanded | where [s, e, o] | and (eq (to-string s) "count-total") | and (eq e "sankhya") | collect o
+count-remaining-raw = expanded | where [s, e, o] | and (eq (to-string s) "count-remaining") | and (eq e "sankhya") | collect o
+is-count     = (or (gt (length count-total-raw) 0) (gt (length count-remaining-raw) 0))
+count-result = cond (gt (length count-total-raw) 0) (nth count-total-raw 0)
+  otherwise (cond (gt (length count-remaining-raw) 0) (nth count-remaining-raw 0) otherwise "")
+
 -- ── standard math/physics path ────────────────────────────────────────────────
 chain-raw   = cond (or is-viveka has-intent) (cond is-viveka [[], expanded] otherwise (derive-chain expanded)) otherwise [[], expanded]
 enriched    = nth chain-raw 1
@@ -94,16 +104,20 @@ result = cond is-anumana
   anumana-result
   otherwise (cond is-viveka
     (cond (exists viveka-winner) (to-string viveka-winner) otherwise "no match")
-    otherwise (cond (not has-intent) "no match"
-    otherwise (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match")))
+  otherwise (cond is-count
+    (to-string count-result)
+  otherwise (cond (not has-intent) "no match"
+  otherwise (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match"))))
 
 -- ── proof graph base selection ─────────────────────────────────────────────────
 --   viveka path:        use expanded (viveka-ganana works on clean graph)
+--   count path:         use expanded (count-bandha output is in refined/expanded)
 --   direct mm match:    use expanded (no derive-chain contamination)
 --   chain-derived match: use enriched (derive-step produced the needed janya)
 base-graph = cond is-viveka expanded
+  otherwise (cond is-count expanded
   otherwise (cond (gt (length mm-direct) 0) expanded
-  otherwise enriched)
+  otherwise enriched))
 
 -- ── pramana-bandha: bind proof edges into graph ───────────────────────────────
 proof-graph = pramana-bandha base-graph final-m result sf scope-entity is-viveka viveka-ev-pairs viveka-gt-triples comp-word

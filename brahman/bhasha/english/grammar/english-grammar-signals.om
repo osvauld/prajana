@@ -1,0 +1,18 @@
+bhasha english-grammar-signals
+
+  -- English grammar signal words mapped to sangati roots.
+  -- greeting words → sambodhana / abhisambodhana / aamantrana
+  --
+  -- the pipeline reads:
+  --   shabda "english-grammar-signals" word → signal
+  --   signal is a sangati node (sambodhana, abhisambodhana, aamantrana, etc.)
+  --
+  -- parallel to common-sense-events (verbs → kshaya/vriddhi)
+  -- but for grammar signals, not event semantics.
+
+  "english-sthita"
+  "sambodhana-yukta abhisambodhana-yukta aamantrana-yukta"
+
+  shabda shabda-tmpl:english/grammar/english-grammar-signals.shabda
+
+done

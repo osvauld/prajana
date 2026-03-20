@@ -1,8 +1,8 @@
 bhasha some
 
-  "indefinite-swarupa quantifier-sthita"
-  -- indefinite quantifier / determiner: "some object", "some mass"
-  -- treated as grammar so BQG drops it
+  "amsha-swarupa english-sthita"
+  -- some IS amsha — an unspecified part of a whole.
+  -- "some apples" = amsha of the apples-vrnda.
 
   shabda word:some  role:grammar
 

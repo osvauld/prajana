@@ -12,7 +12,8 @@ takes solve-for
 
 result = reduce candidates [] (fn acc m ->
   let ms          = to-string m
-  let janya       = om-janya ms
+  let contract    = om-contract ms
+  let janya       = nth contract 0
   let sf-is-janya = member solve-for janya
   let all-ok      = reduce janya true (fn a r ->
     (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))

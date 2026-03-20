@@ -18,8 +18,9 @@ all-mantras = mantra-select ""
 
 new-triples = reduce all-mantras [] (fn acc mantra ->
   let ms       = to-string mantra
-  let janya    = om-janya ms
-  let phala-l  = om-phala ms
+  let contract = om-contract ms
+  let janya    = nth contract 0
+  let phala-l  = nth contract 1
   let phala    = cond (gt (length phala-l) 0) (nth phala-l 0) otherwise (shabda ms "name")
   let all-ok   = reduce janya true (fn a r ->
     (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))

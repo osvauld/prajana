@@ -1,0 +1,18 @@
+kosha common-sense-events
+
+  -- event verbs: everyday words for things increasing or decreasing.
+  -- "flew away" = kshaya (departure/loss → subtraction)
+  -- "came back" = vriddhi (arrival/gain → addition)
+  --
+  -- the pipeline walks:
+  --   shabda "common-sense-events" verb → kshaya or vriddhi
+  --   walk-in direction "kriya" → operation node (subtraction or addition)
+  --   shabda operation "eval" → apply-op primitive ("sub" or "add")
+
+  "common-sense-varga-sthita"
+  "kshaya-yukta vriddhi-yukta"
+  "subtraction-yukta addition-yukta"
+
+  shabda shabda-tmpl:common-sense/processes/common-sense-events.shabda
+
+done

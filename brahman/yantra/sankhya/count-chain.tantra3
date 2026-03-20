@@ -1,16 +1,134 @@
 tantra3 count-chain
 
+-- count-chain: fold over a graded-ring of sentences.
+--
+-- algebraic structure (all from kosha):
+--   proof-graph --[sthita]--> graded-ring --[sthita]--> ring
+--   graded-ring --[swarupa]--> direct-sum  (grades are direct summands)
+--   graded-ring --[kriya]--> addition      (the fold operation)
+--   monoid --[drishthanta]--> addition     (closure, associativity, identity)
+--   identity-element --[abheda]--> shunya  (0 is the fold seed)
+--   addition --[pratipaksha]--> subtraction (kshaya flips the operation)
+--   fold --[swarupa]--> sum                (fold IS sum)
+--   sum: eval:add arity:-1                 (variadic addition)
+--
+-- per-grade direction detection (kosha chain):
+--   shabda "common-sense-events" word → kshaya or vriddhi
+--   shabda "count-signals" word → kshaya or vriddhi (question-sentence fallback)
+--   kshaya → addition.pratipaksha → subtraction → eval:sub
+--   vriddhi → addition → eval:add
+--
+-- dissolves count-bandha (105 lines, 18 hardcoded word lists).
+
 takes graph
+takes grades
 
-db1 = debug-print graph
+-- ── guard: is this a count question? ────────────────────────────────────────
+has-count = gt (length (graph | where [s, e, o] | and (eq (to-string s) "count") | and (eq e "satya") | collect s)) 0
 
-scanned = scan graph [total: num = 0.]:
-  _ -> emit
+-- ── question-grade default direction from signal words ──────────────────────
+-- the question sentence ("how many are left" / "how many in total") provides
+-- the fallback direction when a premise grade has no event verb.
+q-words = reduce grades [] (fn acc grade ->
+  let is-q = gt (length (filter grade (fn t -> eq (nth t 1) "vidhi-kaala"))) 0
+  cond is-q (map (filter grade (fn t -> eq (nth t 1) "mithya")) (fn t -> to-string (nth t 0)))
+  otherwise acc)
 
-db2 = debug-print scanned
-len = length scanned
+q-direction = reduce q-words "" (fn acc w ->
+  let sig = shabda "count-signals" w
+  let ev = shabda "common-sense-events" w
+  cond (gt (string-length acc) 0) acc
+  (exists sig) (to-string sig)
+  (exists ev) (to-string ev)
+  otherwise acc)
 
-result = [len, scanned]
+-- ── entity and container from satya concepts ────────────────────────────────
+-- bird, tree, apple, box-A etc. — exclude count and viveka meta-concepts
+all-satya = unique (graph | where [s, e, o] | and (eq e "satya")
+  | and (neq (to-string s) "count")
+  | and (neq (to-string s) "count-total")
+  | and (neq (to-string s) "count-remaining")
+  | and (neq (to-string s) "viveka-max")
+  | and (neq (to-string s) "viveka-min")
+  | collect (to-string s))
+count-entity    = nth all-satya 0
+count-container = nth all-satya 1
+
+-- ── the fold ────────────────────────────────────────────────────────────────
+-- seed: identity-element of addition monoid = shunya = 0
+-- read from kosha: graded-ring.fold-identity
+-- per grade: extract number, detect direction, apply operation
+-- state = [accumulator, steps-list, has-initial-flag]
+fold-seed = to-number (shabda "graded-ring" "fold-identity")
+
+fold-state = reduce grades [fold-seed, [], false] (fn state grade ->
+  let acc   = nth state 0
+  let steps = nth state 1
+  let init  = nth state 2
+  let is-q = gt (length (filter grade (fn t -> eq (nth t 1) "vidhi-kaala"))) 0
+  let nums = map (filter grade (fn t -> eq (nth t 1) "asprista-sankhya")) (fn t -> nth t 2)
+  let has-num = gt (length nums) 0
+  let mw = map (filter grade (fn t -> eq (nth t 1) "mithya")) (fn t -> to-string (nth t 0))
+  -- build bigram keys: ["flew-away", "got-off", ...] from consecutive mithya words
+  let bigrams = reduce (range (sub (length mw) 1)) [] (fn acc i ->
+    let w1 = nth mw i
+    let w2 = nth mw (add i 1)
+    (append acc [(concat w1 "-" w2)]))
+  -- try bigrams first, then single words
+  let dir-bi = reduce bigrams "" (fn d bg ->
+    let ev = shabda "common-sense-events" bg
+    cond (gt (string-length d) 0) d
+    (exists ev) (to-string ev)
+    otherwise d)
+  let dir = cond (gt (string-length dir-bi) 0) dir-bi
+    otherwise (reduce mw "" (fn d w ->
+      let ev = shabda "common-sense-events" w
+      cond (gt (string-length d) 0) d
+      (exists ev) (to-string ev)
+      otherwise d))
+  let eff-dir = cond (gt (string-length dir) 0) dir otherwise q-direction
+  let nv = cond has-num (to-number (nth nums 0)) otherwise 0
+  let op-eval = cond (eq eff-dir "kshaya") (shabda "subtraction" "eval") otherwise (shabda "addition" "eval")
+  let new-acc = apply-op (to-string op-eval) [acc, nv]
+  let step = (concat (to-string eff-dir) " " (to-string nv) ": " (to-string acc) " -> " (to-string new-acc))
+  let skip = (or is-q (not has-num))
+  let r-init = [nv, steps, true]
+  let r-acc = [new-acc, (append steps [step]), true]
+  cond skip state
+  (not init) r-init
+  otherwise r-acc)
+
+count-result = nth fold-state 0
+count-steps  = nth fold-state 1
+found-any    = nth fold-state 2
+
+-- ── resolve count concept from question direction ───────────────────────────
+resolved-count = cond (eq q-direction "kshaya") "count-remaining" otherwise "count-total"
+
+-- ── rebuild graph with proof edges ──────────────────────────────────────────
+-- replace [count, satya, count] with resolved concept
+base = cond found-any
+  (reduce graph [] (fn acc triple ->
+    cond (and (eq (to-string (nth triple 0)) "count") (eq (nth triple 1) "satya"))
+      (append acc [[resolved-count, "satya", resolved-count]])
+    otherwise (append acc [triple])))
+  otherwise graph
+
+-- proof edges: the fold result + attribution + steps + entity/container
+step-triples = map count-steps (fn s -> ["count", "count-step", s])
+
+proof = cond found-any
+  (append
+    [[resolved-count, "sankhya", count-result],
+     [resolved-count, "derived-by", "count-chain"]]
+    (append step-triples
+      (append
+        (cond (exists count-entity) [["count", "count-entity", count-entity]] otherwise [])
+        (cond (exists count-container) [["count", "count-container", count-container]] otherwise []))))
+  otherwise []
+
+result = cond (not has-count) graph
+  otherwise (append base proof)
 
 return result
 

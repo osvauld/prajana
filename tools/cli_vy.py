@@ -115,13 +115,16 @@ def cmd_vy(args):
     elif sub == "triples":
         _vy_triples(args)
 
+    elif sub == "parse":
+        _vy_parse(args)
+
     elif sub == "help":
         _vy_help()
 
     else:
         print(f"Unknown vy command: {sub}")
         print(
-            "Available: status, start, stop, restart, reload, run, eval, trace, walk, inspect, mantras, triples, help"
+            "Available: status, start, stop, restart, reload, run, eval, trace, walk, inspect, mantras, triples, parse, help"
         )
 
 
@@ -387,6 +390,135 @@ def _vy_triples(args):
         print(f"  Error: {e}")
 
 
+def _vy_parse(args):
+    """Per-word subgraph analysis: what emit-triples sees for each word."""
+    from .vy import Client, VyakaranaError
+
+    sentence = args.name
+    if not sentence:
+        print("Usage: vy parse '<sentence>'")
+        print("  Shows per-word analysis: resolution, role, subgraph state, decision.")
+        return
+    vy_socket = ensure_vy()
+    try:
+        vy = Client(vy_socket)
+
+        # get raw BQG output (before sandhi-viveka)
+        raw_graph = vy.eval(f'build-question-graph "{sentence}"')
+        # get refined graph (after sandhi-viveka)
+        # refined = vy.bqg(sentence)
+
+        # per-word analysis
+        words = sentence.replace(".", " .").replace("?", " ?").replace("!", " !").replace(",", " ,").split()
+        punct = {".", "?", "!", ","}
+
+        print(f"\n  Sentence: {sentence}")
+        print(f"  Raw BQG: {len(raw_graph) if isinstance(raw_graph, list) else 0} triples\n")
+
+        # track subgraph state as we walk through
+        current_grade = []
+        entities = []
+        bindings = []
+        grammar_signals = []
+
+        if isinstance(raw_graph, list):
+            for t in raw_graph:
+                if not isinstance(t, list) or len(t) < 3:
+                    continue
+                subj, edge, obj = str(t[0]), str(t[1]), str(t[2])
+
+                # classify the triple
+                kind = edge
+                word_display = subj
+
+                # update subgraph state
+                if edge in ("viraam", "dvandva"):
+                    # boundary — show grade summary then reset
+                    if current_grade:
+                        print(f"  --- {edge} boundary ---")
+                        if entities:
+                            print(f"      entities: {entities}")
+                        if bindings:
+                            print(f"      bindings: {bindings}")
+                    current_grade = []
+                    entities = []
+                    bindings = []
+                    grammar_signals = []
+                    continue
+
+                # classify the decision
+                decision = ""
+                if edge == "satya":
+                    # check if this is a known node or dravya promotion
+                    node = vy.eval(f'shabda-anveshana "{subj}"')
+                    if node and str(node) != "_none":
+                        role = vy.eval(f'shabda "{node}" "role"')
+                        layer = vy.eval(f'node-layer "{node}"')
+                        decision = f"known ({layer})"
+                        if role:
+                            decision += f" role={role}"
+                    else:
+                        decision = "DRAVYA promoted"
+                    entities.append(subj)
+                elif edge == "mithya":
+                    node = vy.eval(f'shabda-anveshana "{subj}"')
+                    if node and str(node) != "_none":
+                        decision = f"known but mithya (label/modifier)"
+                    else:
+                        # check why not promoted
+                        guards = []
+                        ev = vy.eval(f'shabda "common-sense-events" "{subj}"')
+                        if ev:
+                            guards.append(f"verb({ev})")
+                        if subj.endswith("ed"):
+                            guards.append("kta-pratyaya(-ed)")
+                        if subj.endswith("ing"):
+                            guards.append("shatr-pratyaya(-ing)")
+                        if grammar_signals:
+                            last_sig = grammar_signals[-1]
+                            if last_sig == "adhikarana":
+                                guards.append("after-locative")
+                        if guards:
+                            decision = f"blocked: {', '.join(guards)}"
+                        else:
+                            decision = "unknown word"
+                elif edge == "asprista-sankhya":
+                    decision = f"number={obj}"
+                elif edge == "sankhya":
+                    decision = f"{subj} has value {obj}"
+                    bindings.append(f"{subj}={obj}")
+                elif edge == "matra":
+                    decision = f"{subj} unit={obj}"
+                    bindings.append(f"{subj}[{obj}]")
+                elif edge == "shashthi-vibhakti":
+                    decision = "possession"
+                    grammar_signals.append("possession")
+                elif edge == "adhikarana":
+                    decision = "locative (on/in/at)"
+                    grammar_signals.append("adhikarana")
+                elif edge == "vidhi-kaala":
+                    decision = f"intent: {obj}"
+
+                current_grade.append(t)
+                print(f"  {word_display:<20} [{edge:<22}] {decision}")
+
+            # final grade summary
+            if entities or bindings:
+                print(f"\n  --- final grade ---")
+                if entities:
+                    print(f"      entities: {entities}")
+                if bindings:
+                    print(f"      bindings: {bindings}")
+
+        # also show the answer
+        answer = vy.answer(sentence)
+        print(f"\n  Answer: {answer}")
+        print()
+        vy.close()
+    except VyakaranaError as e:
+        print(f"  Error: {e}")
+
+
 def _vy_help():
     print("""
   vy — query the live vyakarana graph server
@@ -407,6 +539,7 @@ def _vy_help():
     vy mantras '<sentence>'            which mantras fire and why
 
   Pipeline debugging:
+    vy parse '<sentence>'              per-word subgraph analysis (resolution, guards, decisions)
     vy trace '<sentence>'              pipeline stages with +/- diff
     vy eval 'build-question-graph "<sentence>"'   raw BQG
     vy eval 'anuvada-ganana "<sentence>"'          full answer

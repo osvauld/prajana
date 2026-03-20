@@ -1,0 +1,52 @@
+tantra3 grade-sparsha
+
+-- sentence-scope partitioning driven by the graded-ring kosha structure.
+--
+-- graded-ring semantics (from kosha):
+--   proof-graph --[sthita]--> graded-ring
+--   viraam --[swarupa]--> shunya  (sentence boundary = additive identity = zero)
+--   grade-boundary: viraam  (kosha bridge: abstract grade → concrete NLP signal)
+--
+-- pipeline:
+--   1. run fixpoint avrti-refine on the full graph (entity scoping preserved)
+--   2. read grade-boundary edge name from graded-ring kosha
+--   3. split refined graph into grade sublists on viraam boundaries
+--   4. count-chain: fold over grades with per-grade operation detection via kosha
+
+takes graph
+
+-- full-graph refinement first: entity scoping (shashthi, sankhya-bandha) needs
+-- cross-sentence context. per-grade refinement would break physics entity binding.
+refined = fixpoint graph (fn g -> avrti-refine g)
+
+-- kosha-driven boundaries: graded-ring declares both boundary types
+boundary-edge = shabda "graded-ring" "grade-boundary"
+intra-boundary = shabda "graded-ring" "intra-grade-boundary"
+
+-- split refined graph into grade sublists at boundary triples.
+-- boundaries: viraam (sentence) and dvandva (intra-sentence conjunction)
+-- state = [completed-grades, current-grade]
+--   completed-grades: list of grade-lists already finalized
+--   current-grade:    list of triples being accumulated for the current grade
+-- on boundary triple: finalize current grade (include boundary), start new grade
+-- on normal triple:   append to current grade
+grade-state = reduce refined [[], []] (fn state triple ->
+  let completed = nth state 0
+  let current   = nth state 1
+  let e = nth triple 1
+  cond (or (eq (to-string e) boundary-edge) (eq (to-string e) intra-boundary))
+    [(append completed [(append current [triple])]), []]
+  otherwise
+    [completed, (append current [triple])])
+
+-- extract final grade (triples after the last boundary, or all if no boundary found)
+completed-grades = nth grade-state 0
+final-grade      = nth grade-state 1
+all-grades       = append completed-grades [final-grade]
+
+-- cross-grade count arithmetic via kosha-driven fold
+result = count-chain refined all-grades
+
+return result
+
+done

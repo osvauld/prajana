@@ -1,0 +1,13 @@
+# english-grammar-signals: English words mapped to grammar signals
+# format — word: signal
+# readable via: shabda "english-grammar-signals" "word"
+#
+# sambodhana (vocative — direct address)
+#   neutral address
+hello: sambodhana
+hi: sambodhana
+#   emphatic/intimate address (abhisambodhana)
+hey: abhisambodhana
+yo: abhisambodhana
+#   formal invocation (aamantrana)
+greetings: aamantrana

@@ -25,8 +25,9 @@ producing-for = (fn new-cs prev-g cur-g ->
   let cur-vp   = sankhya-sparsha cur-g
   reduce all-ms [] (fn acc m ->
     let ms = to-string m
-    let ph = om-phala ms
-    let jy = om-janya ms
+    let ct = om-contract ms
+    let ph = nth ct 1
+    let jy = nth ct 0
     let covers-new = reduce new-cs false (fn found c -> or found (member (to-string c) (map ph (fn p -> to-string p))))
     let janya-bound = reduce jy true (fn ok j -> and ok (member (to-string j) prev-bcs))
     cond (and covers-new janya-bound)

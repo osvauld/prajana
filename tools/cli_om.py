@@ -4,6 +4,8 @@ Handles: om (summary/domains/domain/source/search/with-key/with-relation)
          search (cross-search both tantras and om)
 """
 
+import os
+
 from . import tantras, om
 
 
@@ -123,10 +125,106 @@ def cmd_om(args):
             targets = [e["target"] for e in n["edges"] if e["relation"] == rel]
             print(f"  {n['name']:<30} -> {', '.join(targets)}")
 
+    elif sub == "classify":
+        name = args.name
+        if not name:
+            print("Usage: om classify NODE_NAME")
+            return
+        cl = om.classify(oms, name)
+        if not cl:
+            print(f"Node '{name}' not found.")
+            return
+        print(f"\n  {cl['name']}  [{cl['layer']}]  {cl['domain']}")
+        print(f"  {'─' * 60}")
+        for rel in ("swarupa", "abheda", "sthita", "kriya", "phala", "janya", "siddha", "pratipaksha"):
+            targets = cl.get(rel, [])
+            if targets:
+                print(f"  {rel:<14} {', '.join(targets)}")
+        if cl["sthalams"]:
+            print(f"  {'sthalams':<14} {', '.join(cl['sthalams'])}")
+        if cl["target_domains"]:
+            ranked = sorted(cl["target_domains"].items(), key=lambda x: -x[1])
+            print(f"  {'affinity':<14} {', '.join(f'{d}({s})' for d, s in ranked)}")
+        if cl["suggested"]:
+            print(f"  {'suggested':<14} → {cl['layer']}/{cl['suggested']}/")
+        print()
+
+    elif sub == "ungrouped":
+        # Usage: om ungrouped [LAYER]  (default: sangati)
+        layer = args.name or "sangati"
+        results = om.ungrouped(oms, layer=layer)
+        print(f"\n  Ungrouped {layer} nodes ({len(results)}):\n")
+        by_suggestion = {}
+        for r in results:
+            s = r["suggested"] or "(unknown)"
+            by_suggestion.setdefault(s, []).append(r)
+        for suggestion in sorted(by_suggestion.keys()):
+            nodes = by_suggestion[suggestion]
+            print(f"  → {layer}/{suggestion}/ ({len(nodes)}):")
+            for r in sorted(nodes, key=lambda x: x["name"]):
+                swarupa = ", ".join(r["swarupa"][:3]) if r["swarupa"] else "-"
+                abheda = ", ".join(r["abheda"][:3]) if r["abheda"] else "-"
+                print(f"    {r['name']:<28} swarupa:{swarupa:<25} abheda:{abheda}")
+            print()
+
+    elif sub == "structure":
+        # Usage: om structure [LAYER]  (default: sangati)
+        layer = args.name or "sangati"
+        result = om.structure(oms, layer=layer)
+        print(f"\n{'=' * 80}")
+        print(f"  {layer.upper()} STRUCTURE — {result['total_nodes']} nodes, {result['total_lines']} lines")
+        print(f"{'=' * 80}\n")
+        print(f"  {'Subdirectory':<25} {'Nodes':>6} {'Lines':>7}  Cross-affinity")
+        print(f"  {'─' * 75}")
+        for subdir, info in result["subdirs"].items():
+            affinity_str = ""
+            if info["cross_affinity"]:
+                top_affinities = list(info["cross_affinity"].items())[:4]
+                affinity_str = ", ".join(f"{d}({s})" for d, s in top_affinities)
+            print(f"  {subdir:<25} {info['count']:>6} {info['lines']:>7}  {affinity_str}")
+        print()
+
+    elif sub == "sthalam":
+        name = args.name
+        if not name:
+            print("Usage: om sthalam NAME  (e.g. 'chetan', 'physics', 'kosha:math')")
+            return
+        # Allow explicit layer prefix: "kosha:physics" or "bhasha:english"
+        if ":" in name:
+            layer, name = name.split(":", 1)
+        else:
+            # Auto-detect: find which layer has this as a subdirectory
+            subdir = name.replace("-sthalam", "")
+            layer = "sangati"
+            for o in oms.values():
+                parts = o["domain"].split(os.sep)
+                if len(parts) > 1 and parts[1] == subdir:
+                    layer = parts[0]
+                    break
+        result = om.sthalam_members(oms, name, layer=layer)
+        print(f"\n  Subdir: {result['subdir']}/  ({layer}/{result['subdir']}/)")
+        print(f"  {'─' * 60}")
+        print(f"\n  Current members ({len(result['current'])}):")
+        for n in result["current"]:
+            print(f"    {n}")
+        if result["explicit"]:
+            print(f"\n  Explicit sthalam-sthita ({len(result['explicit'])}):")
+            for n in result["explicit"]:
+                print(f"    {n}")
+        if result["strong"]:
+            print(f"\n  Strong affinity — swarupa/abheda ({len(result['strong'])}):")
+            for n, score in result["strong"]:
+                print(f"    {n:<28} (score: {score})")
+        if result["weak"]:
+            print(f"\n  Weak affinity — other edges ({len(result['weak'])}):")
+            for n, score in result["weak"]:
+                print(f"    {n:<28} (score: {score})")
+        print()
+
     else:
         print(f"Unknown om command: {sub}")
         print(
-            "Available: summary, domains, domain, source, search, with-key, with-relation"
+            "Available: summary, domains, domain, source, search, with-key, with-relation, classify, ungrouped, structure, sthalam"
         )
 
 
