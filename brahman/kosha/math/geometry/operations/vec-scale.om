@@ -8,6 +8,4 @@ mantra vec-scale
   -- s · [a1,a2,...,an] = [s·a1, s·a2,...,s·an]
   "multiplication-krama"
 
-  shabda vec-scale / scalar-multiplication-of-an-n-dimensional-vector degree:1 krama-input:scalar,vector krama-output:vector per-element:yes
-
 done

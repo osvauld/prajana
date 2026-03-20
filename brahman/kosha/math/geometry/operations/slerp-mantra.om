@@ -13,6 +13,4 @@ mantra slerp
   "sine-krama"
   "quat-mul-krama"
 
-  shabda slerp / spherical-linear-interpolation-between-two-quaternions degree:1 krama-input:quat-a,quat-b,t krama-output:quaternion
-
 done

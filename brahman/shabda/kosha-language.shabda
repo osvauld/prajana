@@ -1,0 +1,9 @@
+# kosha/language — shabda extracted from .om files
+# 6 entries
+
+akshara-varga: 0:anka 1:anka 2:anka 3:anka 4:anka 5:anka 6:anka 7:anka 8:anka 9:anka a:swar e:swar i:swar o:swar u:swar A:swar E:swar I:swar O:swar U:swar b:vyanjan c:vyanjan d:vyanjan f:vyanjan g:vyanjan h:vyanjan j:vyanjan k:vyanjan l:vyanjan m:vyanjan n:vyanjan p:vyanjan q:vyanjan r:vyanjan s:vyanjan t:vyanjan v:vyanjan w:vyanjan x:vyanjan y:vyanjan z:vyanjan B:vyanjan C:vyanjan D:vyanjan F:vyanjan G:vyanjan H:vyanjan J:vyanjan K:vyanjan L:vyanjan M:vyanjan N:vyanjan P:vyanjan Q:vyanjan R:vyanjan S:vyanjan T:vyanjan V:vyanjan W:vyanjan X:vyanjan Y:vyanjan Z:vyanjan .:bindu +:chihna -:chihna *:chihna /:chihna =:chihna ?:prashna ,:alpavishram ;:vishram !:udbodhan
+chihna-ganaka: +:addition -:subtraction *:multiplication /:division
+composition: composition, compose, function-composition
+domain-language: language, linguistics
+vacaka: word:you,your,yours,yourself / the-one-being-addressed-the-nam-of-the-question
+yantra-policy: chain-depth-limit:3 chain-branch-limit:8 candidate-limit:12 prefer-direct:true prefer-inverse:true prefer-chain:true allow-inverse:true allow-chain:true fallback-to-anuvada:true

@@ -9,6 +9,4 @@ kosha op-class-relation
   "dvi-ahara-swarupa satya-phala"
   "partial-order-abheda"
 
-shabda parse-arity:2 invariant:predicate returns:bool
-
 done

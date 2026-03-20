@@ -3,6 +3,4 @@ mantra substitution
   "inference-swarupa"
   -- replace a variable with its known value in an expression
 
-  shabda word:substituting,plugging name:substitution
-
 done

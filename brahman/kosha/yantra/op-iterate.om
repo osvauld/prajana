@@ -3,8 +3,6 @@ kosha op-iterate
   "op-class-higher-order-kriya"
   "krama-swarupa parampara-abheda"
 
-shabda name:iterate parse-arity:3 arg0:n arg1:state arg2:fn
-
   -- apply fn to state exactly n times, threading the result.
   -- iterate 3 x (fn s -> ...) = fn(fn(fn(x)))
 

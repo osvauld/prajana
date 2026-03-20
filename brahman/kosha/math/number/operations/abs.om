@@ -6,6 +6,4 @@ mantra abs
   "viparita-yukta real-sthita"
   "norm-yukta max-yukta min-yukta"
 
-  shabda eval:abs arity:1 degree:1 per-element:yes invertible:no
-
 done

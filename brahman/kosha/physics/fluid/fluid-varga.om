@@ -21,6 +21,4 @@ kosha fluid-varga
   "niyama-yukta"      -- conservation laws (mass, momentum, energy) govern fluid flow
   "kaala-yukta"       -- all fluid processes are time-dependent
 
-shabda fluid-varga / cluster-for-fluid-dynamics-quantities-pressure-viscosity-flow-turbulence
-
 done

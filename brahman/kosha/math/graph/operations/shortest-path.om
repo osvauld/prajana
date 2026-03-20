@@ -5,6 +5,4 @@ kosha shortest-path
   "weighted-graph-sthita"
   "seema-yukta"   -- minimises total weight
 
-shabda shortest-path / path-between-two-vertices-minimising-total-edge-weight
-
 done

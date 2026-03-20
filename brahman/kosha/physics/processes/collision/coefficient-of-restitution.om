@@ -35,6 +35,4 @@ kosha coefficient-of-restitution
   "elastic-collision-drishthanta"   -- e=1 endpoint
   "inelastic-collision-drishthanta" -- e=0 endpoint
 
-  shabda coefficient-of-restitution, restitution / ratio-of-relative-separation-to-approach-speed-e-equals-1-elastic-e-equals-0-inelastic
-
 done

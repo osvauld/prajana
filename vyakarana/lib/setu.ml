@@ -332,12 +332,13 @@ let resolve_to_canonical (k : proof_graph) (name : string) : string =
   match Hashtbl.find_opt k.nodes name with
   | Some _ -> name
   | None ->
-    (* 2. search shabda fields for this name *)
-    let shabda_hit = Hashtbl.fold (fun node_name n acc ->
+    (* 2. search shabda store for this name *)
+    let shabda_hit = Hashtbl.fold (fun node_name _n acc ->
       match acc with
       | Some _ -> acc
       | None ->
-        let raw = String.lowercase_ascii (String.trim n.shabda) in
+        let raw = match Setu_shabda.(Hashtbl.find_opt _shabda_store node_name) with
+          | Some s -> String.lowercase_ascii (String.trim s) | None -> "" in
         if raw = "" then None
         else
           (* shabda format: "key:val key:val ..." or just words before '/' *)

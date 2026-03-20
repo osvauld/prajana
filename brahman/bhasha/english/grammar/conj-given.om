@@ -4,6 +4,4 @@ bhasha conj-given
   -- premise marker: "GIVEN mass 5kg AND velocity 3m/s"
   -- used in decompose-question to mark known bindings
 
-  shabda word:given  role:grammar
-
 done

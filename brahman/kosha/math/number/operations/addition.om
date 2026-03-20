@@ -4,6 +4,4 @@ mantra addition
   "sankalana-abheda matra-kriya arithmetic-kriya vriddhi-kriya plus-abheda equation-yukta"
   "subtraction-pratipaksha"
 
-  shabda word:plus eval:add arity:2 pratipaksha-0:sub pratipaksha-1:sub degree:1 per-element:no invertible:yes inverse:subtraction
-
 done

@@ -51,6 +51,4 @@ kosha line-types
   "dimension-yukta"
   "language-abheda"           -- line types are a visual language
 
-shabda word:line-types,hidden-line,centre-line,hatching / visible-hidden-centre-dimension-cutting-plane-hatching
-
 done

@@ -17,6 +17,4 @@ kosha op-fixpoint
   "avrti-abheda"
   "lattice-sthita"
 
-shabda name:fixpoint parse-arity:2 arg0:state arg1:fn
-
 done

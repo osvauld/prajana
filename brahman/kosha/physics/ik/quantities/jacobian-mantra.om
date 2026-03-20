@@ -17,6 +17,4 @@ mantra jacobian-mantra
   "angles-janya"
   "epsilon-janya"
 
-  shabda name:jacobian degree:1 krama-lhs:jacobian krama-rhs:fk,angles,epsilon
-
 done

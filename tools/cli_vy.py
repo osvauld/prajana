@@ -121,11 +121,89 @@ def cmd_vy(args):
     elif sub == "help":
         _vy_help()
 
+    # ── surgical edit commands ──────────────────────────────────────────────
+    # usage: vy <command> '<JSON args>'
+    # e.g.  vy add-sloka '{"name":"velocity","sloka":"mass-yukta"}'
+    #       vy set-comment '{"name":"velocity","prefix":"desc","text":"rate of change"}'
+    #       vy create-node '{"path":"/abs/path.om","layer":"kosha","name":"foo","slokas":["bar-swarupa"]}'
+    #       vy add-edge '{"source":"velocity","target":"mass","relation":"yukta"}'
+
+    elif sub in _EDIT_COMMANDS:
+        _vy_edit(args, sub)
+
     else:
         print(f"Unknown vy command: {sub}")
         print(
-            "Available: status, start, stop, restart, reload, run, eval, trace, walk, inspect, mantras, triples, parse, help"
+            "Available: status, start, stop, restart, reload, run, eval, trace, walk, inspect, "
+            "mantras, triples, parse, help,\n"
+            "           create-node, delete-node, add-sloka, remove-sloka, set-shabda,\n"
+            "           add-edge, remove-edge, set-comment, remove-comment, add-comment,\n"
+            "           add-shabda-entry, remove-shabda-entry, update-shabda-entry, write-tantra"
         )
+
+
+# ── edit commands ─────────────────────────────────────────────────────────────
+
+_EDIT_COMMANDS = {
+    "create-node", "delete-node",
+    "add-sloka", "remove-sloka", "set-shabda",
+    "add-edge", "remove-edge",
+    "set-comment", "remove-comment", "add-comment",
+    "add-shabda-entry", "remove-shabda-entry", "update-shabda-entry",
+    "write-tantra",
+}
+
+
+def _vy_edit(args, command):
+    """Send a surgical edit command to the vyakarana server.
+
+    Args are passed as JSON string in args.name:
+      vy add-sloka '{"name":"velocity","sloka":"mass-yukta"}'
+    """
+    from .vy import Client, VyakaranaError
+
+    raw = args.name
+    if not raw:
+        # show usage for this specific command
+        _edit_usage(command)
+        return
+
+    vy_socket = ensure_vy()
+    try:
+        params = json.loads(raw)
+    except json.JSONDecodeError as e:
+        print(f"  Invalid JSON: {e}")
+        return
+
+    try:
+        vy = Client(vy_socket)
+        resp = vy._edit(command, **params)
+        print(f"  ok: {resp.get('name', resp.get('command', ''))}")
+        vy.close()
+    except VyakaranaError as e:
+        print(f"  Error: {e}")
+
+
+def _edit_usage(command):
+    """Print usage for a specific edit command."""
+    usage = {
+        "create-node":   '{"path":"/abs/path.om","layer":"kosha","name":"foo","slokas":["bar-swarupa"],"shabda":"..."}',
+        "delete-node":   '{"name":"foo"}',
+        "add-sloka":     '{"name":"velocity","sloka":"mass-yukta"}',
+        "remove-sloka":  '{"name":"velocity","sloka":"mass-yukta"}',
+        "set-shabda":    '{"name":"velocity","shabda":"velocity word:speed / ..."}',
+        "add-edge":      '{"source":"velocity","target":"mass","relation":"yukta"}',
+        "remove-edge":   '{"source":"velocity","target":"mass","relation":"yukta"}',
+        "set-comment":   '{"name":"velocity","prefix":"desc","text":"rate of change of position"}',
+        "remove-comment": '{"name":"velocity","prefix":"desc"}',
+        "add-comment":   '{"name":"velocity","text":"a fundamental kinematic quantity"}',
+        "add-shabda-entry":    '{"path":"/abs/path.shabda","word":"testing","abheda":["a-abheda"],"yukta":["b-yukta"]}',
+        "remove-shabda-entry": '{"path":"/abs/path.shabda","word":"testing"}',
+        "update-shabda-entry": '{"path":"/abs/path.shabda","word":"testing","abheda":["a-abheda"],"yukta":["b-yukta"]}',
+        "write-tantra":  '{"path":"/abs/path.tantra3","source":"tantra3 foo\\n  ..."}',
+    }
+    example = usage.get(command, "{...}")
+    print(f"  Usage: vy {command} '{example}'")
 
 
 # ── vy subcommands ────────────────────────────────────────────────────────────

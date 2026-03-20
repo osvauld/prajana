@@ -165,6 +165,58 @@ let opt_field ?(default="") (json : string) (key : string) : string =
 let req_field (json : string) (key : string) : string =
   opt_field json key
 
+(* ---- JSON array extraction (string arrays only) ---- *)
+
+(* extract ["a","b","c"] from a JSON field — minimal parser for flat string arrays *)
+let json_string_array_field (json : string) (key : string) : string list =
+  let pat = "\"" ^ key ^ "\"" in
+  let len = String.length json in
+  let pat_len = String.length pat in
+  let rec scan i =
+    if i + pat_len > len then []
+    else if String.sub json i pat_len = pat then begin
+      (* skip past key, find colon, then opening bracket *)
+      let j = ref (i + pat_len) in
+      while !j < len && (json.[!j] = ' ' || json.[!j] = ':' || json.[!j] = '\t') do
+        incr j
+      done;
+      if !j < len && json.[!j] = '[' then begin
+        incr j;
+        let items = ref [] in
+        let done_ = ref false in
+        while !j < len && not !done_ do
+          let c = json.[!j] in
+          if c = ']' then done_ := true
+          else if c = '"' then begin
+            incr j;
+            let buf = Buffer.create 32 in
+            let escape = ref false in
+            let found = ref false in
+            while !j < len && not !found do
+              let ch = json.[!j] in
+              if !escape then begin
+                (match ch with
+                | '"'  -> Buffer.add_char buf '"'
+                | '\\' -> Buffer.add_char buf '\\'
+                | 'n'  -> Buffer.add_char buf '\n'
+                | _    -> Buffer.add_char buf ch);
+                escape := false
+              end else if ch = '\\' then escape := true
+              else if ch = '"' then found := true
+              else Buffer.add_char buf ch;
+              incr j
+            done;
+            if !found then items := Buffer.contents buf :: !items
+          end else
+            incr j
+        done;
+        List.rev !items
+      end else []
+    end else
+      scan (i + 1)
+  in
+  scan 0
+
 (* ---- session store ---- *)
 (* in-memory per-session state, keyed by session_id string.
    each session has its own yantra evaluation context so bindings are isolated.
@@ -464,6 +516,154 @@ let reload_tantras (k : proof_graph) (yantra_idx : tantra_index) (dirs : string 
   Printf.printf "[reload-all] %d tantras loaded from %d dirs\n%!" n (List.length tantra_dirs);
   Printf.sprintf "{\"status\":\"ok\",\"command\":\"reload-all\",\"tantras_loaded\":%d}" n
 
+(* ---- edit command handler ---- *)
+
+let edit_response (result : Om_edit.edit_result) (command : string) : string =
+  match result with
+  | Om_edit.Ok name ->
+    Printf.printf "[%s] ok: %s\n%!" command name;
+    Printf.sprintf "{\"status\":\"ok\",\"command\":%s,\"name\":%s}" (je command) (je name)
+  | Om_edit.Err msg ->
+    error_response "" "" "" "EDIT_ERROR" msg
+
+(* parse comments from JSON: [{"prefix":"desc","text":"..."},{"text":"free form"}] *)
+let parse_comments_json (json : string) : (string option * string) list =
+  (* minimal: extract from "comments" array field.
+     each element has optional "prefix" and required "text". *)
+  let _ = json in  (* TODO: full parse — for now, empty *)
+  []
+
+let handle_edit_command (k : proof_graph) (yantra_idx : Yantra_types.tantra_index)
+    (dirs : string list) (line : string) (command : string) : string =
+  match command with
+  | "create-node" ->
+    let path   = opt_field line "path" in
+    let layer  = opt_field line "layer" in
+    let name   = opt_field line "name" in
+    let slokas = json_string_array_field line "slokas" in
+    let shabda = opt_field line "shabda" in
+    if path = "" || layer = "" || name = "" then
+      error_response "" "" "" "INVALID_REQUEST" "create-node requires: path, layer, name"
+    else
+      edit_response (Om_edit.create_node k path layer name [] slokas shabda) command
+
+  | "delete-node" ->
+    let name = opt_field line "name" in
+    if name = "" then
+      error_response "" "" "" "INVALID_REQUEST" "delete-node requires: name"
+    else
+      edit_response (Om_edit.delete_node k name) command
+
+  | "add-sloka" ->
+    let name  = opt_field line "name" in
+    let sloka = opt_field line "sloka" in
+    if name = "" || sloka = "" then
+      error_response "" "" "" "INVALID_REQUEST" "add-sloka requires: name, sloka"
+    else
+      edit_response (Om_edit.add_sloka k name sloka) command
+
+  | "remove-sloka" ->
+    let name  = opt_field line "name" in
+    let sloka = opt_field line "sloka" in
+    if name = "" || sloka = "" then
+      error_response "" "" "" "INVALID_REQUEST" "remove-sloka requires: name, sloka"
+    else
+      edit_response (Om_edit.remove_sloka k name sloka) command
+
+  | "set-shabda" ->
+    let name   = opt_field line "name" in
+    let shabda = opt_field line "shabda" in
+    if name = "" then
+      error_response "" "" "" "INVALID_REQUEST" "set-shabda requires: name"
+    else
+      edit_response (Om_edit.set_shabda k name shabda) command
+
+  | "add-edge" ->
+    let source   = opt_field line "source" in
+    let target   = opt_field line "target" in
+    let relation = opt_field line "relation" in
+    if source = "" || target = "" || relation = "" then
+      error_response "" "" "" "INVALID_REQUEST" "add-edge requires: source, target, relation"
+    else
+      edit_response (Om_edit.add_edge k source target relation) command
+
+  | "remove-edge" ->
+    let source   = opt_field line "source" in
+    let target   = opt_field line "target" in
+    let relation = opt_field line "relation" in
+    if source = "" || target = "" || relation = "" then
+      error_response "" "" "" "INVALID_REQUEST" "remove-edge requires: source, target, relation"
+    else
+      edit_response (Om_edit.remove_edge k source target relation) command
+
+  | "set-comment" ->
+    let name   = opt_field line "name" in
+    let prefix = opt_field line "prefix" in
+    let text   = opt_field line "text" in
+    if name = "" || prefix = "" || text = "" then
+      error_response "" "" "" "INVALID_REQUEST" "set-comment requires: name, prefix, text"
+    else
+      edit_response (Om_edit.set_comment k name prefix text) command
+
+  | "remove-comment" ->
+    let name   = opt_field line "name" in
+    let prefix = opt_field line "prefix" in
+    if name = "" || prefix = "" then
+      error_response "" "" "" "INVALID_REQUEST" "remove-comment requires: name, prefix"
+    else
+      edit_response (Om_edit.remove_comment k name prefix) command
+
+  | "add-comment" ->
+    let name = opt_field line "name" in
+    let text = opt_field line "text" in
+    if name = "" || text = "" then
+      error_response "" "" "" "INVALID_REQUEST" "add-comment requires: name, text"
+    else
+      edit_response (Om_edit.add_comment k name text) command
+
+  | "add-shabda-entry" ->
+    let path   = opt_field line "path" in
+    let word   = opt_field line "word" in
+    let abheda = json_string_array_field line "abheda" in
+    let yukta  = json_string_array_field line "yukta" in
+    if path = "" || word = "" then
+      error_response "" "" "" "INVALID_REQUEST" "add-shabda-entry requires: path, word"
+    else
+      edit_response (Om_edit.add_shabda_entry k path word abheda yukta) command
+
+  | "remove-shabda-entry" ->
+    let path = opt_field line "path" in
+    let word = opt_field line "word" in
+    if path = "" || word = "" then
+      error_response "" "" "" "INVALID_REQUEST" "remove-shabda-entry requires: path, word"
+    else
+      edit_response (Om_edit.remove_shabda_entry k path word) command
+
+  | "update-shabda-entry" ->
+    let path   = opt_field line "path" in
+    let word   = opt_field line "word" in
+    let abheda = json_string_array_field line "abheda" in
+    let yukta  = json_string_array_field line "yukta" in
+    if path = "" || word = "" then
+      error_response "" "" "" "INVALID_REQUEST" "update-shabda-entry requires: path, word"
+    else
+      edit_response (Om_edit.update_shabda_entry k path word abheda yukta) command
+
+  | "write-tantra" ->
+    let path   = opt_field line "path" in
+    let source = opt_field line "source" in
+    if path = "" || source = "" then
+      error_response "" "" "" "INVALID_REQUEST" "write-tantra requires: path, source"
+    else begin
+      let result = Om_edit.write_tantra k path source in
+      (* reload tantras so the new/edited tantra is available *)
+      ignore (reload_tantras k yantra_idx dirs);
+      edit_response result command
+    end
+
+  | _ ->
+    error_response "" "" "" "UNKNOWN_COMMAND" (Printf.sprintf "unknown edit command: %s" command)
+
 (* ---- handle one client connection ---- *)
 
 let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session : session)
@@ -640,6 +840,18 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
              let ses_id = opt_field line "session_id" in
              if ses_id <> "" then Hashtbl.remove session_store ses_id;
              "{\"status\":\"ok\",\"command\":\"end-session\"}"
+
+          (* ---- surgical edit commands ---- *)
+          | Some "create-node" | Some "delete-node"
+          | Some "add-sloka" | Some "remove-sloka"
+          | Some "set-shabda"
+          | Some "add-edge" | Some "remove-edge"
+          | Some "set-comment" | Some "remove-comment" | Some "add-comment"
+          | Some "add-shabda-entry" | Some "remove-shabda-entry" | Some "update-shabda-entry"
+          | Some "write-tantra" ->
+            (try handle_edit_command k yantra_idx dirs line (Option.get command)
+             with exn ->
+               error_response "" "" "" "EDIT_ERROR" (Printexc.to_string exn))
            | _ ->
              let req_id     = opt_field line "request_id" in
              let ses_id     = opt_field line "session_id" in

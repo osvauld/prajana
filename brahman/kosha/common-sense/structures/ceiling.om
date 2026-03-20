@@ -27,6 +27,4 @@ kosha ceiling
   "ceil-abheda"                -- math/number/operations/ceil.om
   "floor-pratipaksha"          -- ceiling is the dual of floor
 
-  shabda word:ceiling / horizontal-overhead-surface-upper-bound-abheda-math-ceil
-
 done

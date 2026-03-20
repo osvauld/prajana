@@ -7,6 +7,4 @@ mantra quat-conjugate
   -- [w, x, y, z] → [w, -x, -y, -z]: negate the vector part
   "neg-krama"
 
-  shabda quat-conjugate / negate-vector-part-of-quaternion-w-minus-x-minus-y-minus-z degree:1 krama-input:quaternion krama-output:quaternion
-
 done

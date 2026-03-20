@@ -20,6 +20,4 @@ kosha circuit-varga
   "kaala-yukta"       -- capacitor charging, inductor response are time-dependent
   "seema-yukta"       -- resistance and impedance are limits on current flow
 
-shabda circuit-varga / cluster-for-electrical-circuit-quantities-current-voltage-resistance
-
 done

@@ -3,6 +3,4 @@ mantra negation
   "logic-varga-karma"
   "viparita-yukta"   -- flips truth value
 
-shabda word:not,without,absent eval:not arity:1 name:logical-not / logical-operation-that-inverts-the-truth-value-of-a-proposition
-
 done

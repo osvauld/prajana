@@ -5,6 +5,5 @@ bhasha english-plural-ies
 
   -- strip -ies, add -y to recover stem
   -- velocity → velocities, frequency → frequencies, density → densities
-  shabda suffix:ies stem-suffix:y
 
 done

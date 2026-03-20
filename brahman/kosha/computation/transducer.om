@@ -15,6 +15,4 @@ kosha transducer
   "recursion-sthita sequence-sthita"
   "domain-computation-sthita"
 
-  shabda transducer, finite-state-transducer, fst / a-state-machine-that-reads-input-and-emits-output-emit-triples-is-the-transducer-that-converts-words-to-graph-triples-with-four-state-subgraphs
-
 done

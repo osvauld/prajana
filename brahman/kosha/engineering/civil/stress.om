@@ -24,6 +24,4 @@ kosha stress
   "strain-yukta young-modulus-yukta"
   "yield-strength-yukta safety-factor-yukta"
 
-  shabda word:stress / force-per-unit-area-internal-resistance-of-material-sigma-equals-F-over-A
-
 done

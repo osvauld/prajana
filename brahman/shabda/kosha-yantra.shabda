@@ -1,0 +1,114 @@
+# kosha/yantra — shabda extracted from .om files
+# 111 entries
+
+op-abheda-of: name:abheda-of
+op-abs: name:abs
+op-acos: name:acos
+op-add: name:add parse-arity:2
+op-and: name:and
+op-append: name:append
+op-asin: name:asin
+op-atan2: name:atan2
+op-avrti: name:avrti
+op-bind: name:bind
+op-ceil: name:ceil
+op-char-at: name:char-at
+op-class-binary: parse-arity:2 invariant:asymmetric args:fixed-2
+op-class-constructor: parse-arity:-1 invariant:builds-value
+op-class-higher-order: parse-arity:2 arg0:data arg1:function
+op-class-keyed: parse-arity:2 arg0:container arg1:key
+op-class-monoid: parse-arity:-1 invariant:associative fold:all-args
+op-class-pipeline: parse-arity:2 invariant:effectful ordered:yes
+op-class-projection: parse-arity:1 invariant:pure side-effects:none
+op-class-relation: parse-arity:2 invariant:predicate returns:bool
+op-classify: name:classify
+op-concat: name:concat
+op-context-score: name:context-score
+op-cos: name:cos
+op-div: name:div
+op-domain-of: name:domain-of
+op-edge-weight: name:edge-weight
+op-edges: name:edges
+op-ends-with: name:ends-with parse-arity:2 arg0:string arg1:suffix
+op-eq: name:eq
+op-execute-plan: name:execute-plan
+op-exists: name:exists
+op-factorial: name:factorial
+op-filter: name:filter
+op-first-match: name:first-match
+op-fixpoint: name:fixpoint parse-arity:2 arg0:state arg1:fn
+op-flatten: name:flatten
+op-floor: name:floor
+op-ge: name:ge
+op-gt: name:gt
+op-has: name:has
+op-iccha-status: name:iccha-status
+op-incoming-to: name:incoming-to
+op-is-tantra: name:is-tantra
+op-iterate: name:iterate parse-arity:3 arg0:n arg1:state arg2:fn
+op-join: name:join
+op-kind: name:kind
+op-le: name:le
+op-length: name:length
+op-log: name:log
+op-lookup: name:lookup
+op-lower: name:lower
+op-lt: name:lt
+op-map: name:map
+op-max: name:max
+op-member: name:member parse-arity:2 arg0:value arg1:list
+op-min: name:min
+op-mod: name:mod
+op-mul: name:mul parse-arity:2
+op-name: name:name
+op-neg: name:neg
+op-neighbors: name:neighbors parse-arity:1 arg0:node
+op-neq: name:neq
+op-node: name:node
+op-node-satya: name:node-satya
+op-not: name:not
+op-nth: name:nth
+op-op-to-tantra: name:op-to-tantra
+op-or: name:or
+op-pair: name:pair
+op-power: name:power
+op-print: name:print
+op-reduce: name:reduce parse-arity:3 arg0:list arg1:init arg2:fn
+op-remember-bindings: name:remember-bindings
+op-render-node: name:render-node
+op-resolve-chain: name:resolve-chain parse-arity:3
+op-resolve-direct: name:resolve-direct
+op-resolve-inverse: name:resolve-inverse
+op-resolve-reason: name:resolve-reason
+op-role: name:role
+op-session-bindings: name:session-bindings
+op-shabda: name:shabda
+op-sin: name:sin
+op-split: name:split parse-arity:2
+op-sqrt: name:sqrt
+op-starts-with: name:starts-with parse-arity:2 arg0:string arg1:prefix
+op-string-length: name:string-length
+op-sub: name:sub
+op-tan: name:tan
+op-to-english: name:to-english
+op-to-english-relation: name:to-english-relation
+op-to-number: name:to-number
+op-to-string: name:to-string
+op-tokenise: name:tokenise
+op-unique: name:unique
+op-upper: name:upper
+op-value: name:value
+op-walk: name:walk
+op-walk-in: name:walk-in
+visheshanam-abheda: symmetric:yes transitive:yes congruence:yes composable:yes / the-equivalence-relation-that-identifies-nodes-at-some-level-symmetric-and-transitive-forming-quotient-classes-in-the-graph
+visheshanam-drishthanta: antisymmetric:yes / the-witness-edge-A-drishthanta-B-means-B-is-a-concrete-example-of-A-antisymmetric-and-grounding-abstract-structure-to-observable-instance
+visheshanam-janya: antisymmetric:yes dual:phala / the-generator-edge-dual-to-phala-where-A-janya-B-means-A-arises-from-B-reversed-by-axiom-expansion-into-B-phala-A
+visheshanam-kriya: antisymmetric:yes composable:yes ring-op:mul / the-multiplicative-operation-of-the-visheshanam-ring-composing-relations-sequentially-non-commutative-with-swarupa-as-its-identity-element
+visheshanam-phala: antisymmetric:yes dual:janya / the-result-edge-dual-to-janya-where-A-phala-B-means-B-is-the-output-of-A-and-A-janya-B-means-A-arises-from-B
+visheshanam-pratipaksha: symmetric:yes involutive:yes / the-group-inverse-of-the-visheshanam-ring-applying-pratipaksha-twice-returns-to-the-original-A-pratipaksha-B-means-B-negates-or-undoes-A
+visheshanam-ring: dimension-registry / the-ring-of-all-edge-dimensions-core-and-dynamic
+visheshanam-siddha: antisymmetric:yes / the-entailment-edge-A-siddha-B-means-A-is-proven-or-certified-through-B-antisymmetric-and-not-composable
+visheshanam-sthita: antisymmetric:yes transitive:yes composable:yes / the-dependency-edge-that-forms-a-partial-order-on-nodes-its-chains-encode-the-depth-filtration-from-sangati-foundations-to-kosha-derived-concepts
+visheshanam-swarupa: symmetric:yes transitive:yes reflexive:yes congruence:yes composable:yes ring-op:mul-identity / the-multiplicative-identity-of-the-visheshanam-ring-composing-any-relation-with-swarupa-returns-that-relation-unchanged
+visheshanam-yukta: symmetric:yes ring-op:add / the-additive-operation-of-the-visheshanam-ring-combining-two-relation-bundles-additively-with-shunya-as-its-identity-element
+yantra-varga: yantra-varga / root-cluster-for-all-operator-and-machine-domain-nodes

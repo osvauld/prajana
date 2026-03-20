@@ -69,6 +69,4 @@ kosha signal-varga
   "electronic-varga-yukta"        -- DSP implemented in electronics
   "domain-computation-yukta"      -- DSP algorithms run on processors
 
-shabda signal-varga / signals-in-time-and-frequency-Fourier-convolution-filtering-DSP-Nyquist-sampling
-
 done

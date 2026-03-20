@@ -6,6 +6,4 @@ mantra floor
   "float-yukta int-yukta ceil-inverse"
   "abs-yukta real-sthita"
 
-  shabda eval:floor arity:1 degree:1 per-element:yes invertible:no
-
 done

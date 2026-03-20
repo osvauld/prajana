@@ -2,6 +2,4 @@ kosha op-add
 
   "op-class-monoid-kriya"
 
-shabda name:add parse-arity:2
-
 done

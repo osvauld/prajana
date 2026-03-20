@@ -13,6 +13,4 @@ kosha selection
   "predicate-janya relation-janya"
   "subset-phala"
 
-  shabda selection, filter, sigma / relational-algebra-selection-filter-rows-of-a-relation-by-predicate
-
 done

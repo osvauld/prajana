@@ -5,6 +5,4 @@ kosha primitive-type
   "sankhya-sthita viveka-phala"
   "dharma-anvaya-mula"
 
-shabda primitive-type / an-irreducible-type-with-no-internal-structure-int-float-bool-nil
-
 done

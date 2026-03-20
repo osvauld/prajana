@@ -10,6 +10,4 @@ mantra lerp
   "multiplication-krama"
   "addition-krama"
 
-  shabda lerp / linear-interpolation-a-plus-t-times-b-minus-a degree:1 krama-input:a,b,t krama-output:value
-
 done

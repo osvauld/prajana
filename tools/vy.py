@@ -375,6 +375,83 @@ class Client:
         assert resp.get("status") == "ok", f"unexpected status in: {resp}"
         return resp
 
+    # ── surgical edit API ───────────────────────────────────────────────────
+    # these send edit commands to the OCaml server, which writes to disk
+    # first, then updates the live graph. disk is the source of truth.
+
+    def _edit(self, command: str, **kwargs) -> dict:
+        """Send an edit command and return the response. Raises on error."""
+        payload = {"command": command, **kwargs}
+        resp = self._send_with_retry(payload)
+        if resp.get("status") == "error":
+            err = resp.get("error", {})
+            raise VyakaranaError(err.get("code", "UNKNOWN"), err.get("message", repr(resp)))
+        return resp
+
+    def create_node(self, path: str, layer: str, name: str,
+                    slokas: list[str] | None = None, shabda: str = "") -> dict:
+        """Create a new .om file and join the node into the live graph."""
+        return self._edit("create-node", path=path, layer=layer, name=name,
+                          slokas=slokas or [], shabda=shabda)
+
+    def delete_node(self, name: str) -> dict:
+        """Delete an .om file and remove the node from the live graph."""
+        return self._edit("delete-node", name=name)
+
+    def add_sloka(self, name: str, sloka: str) -> dict:
+        """Add a sloka (assertion) to an existing node's .om file."""
+        return self._edit("add-sloka", name=name, sloka=sloka)
+
+    def remove_sloka(self, name: str, sloka: str) -> dict:
+        """Remove a sloka from an existing node's .om file."""
+        return self._edit("remove-sloka", name=name, sloka=sloka)
+
+    def set_shabda(self, name: str, shabda: str) -> dict:
+        """Set or replace the shabda line on a node's .om file."""
+        return self._edit("set-shabda", name=name, shabda=shabda)
+
+    def add_edge(self, source: str, target: str, relation: str) -> dict:
+        """Add a single edge (writes sloka to source's .om file)."""
+        return self._edit("add-edge", source=source, target=target, relation=relation)
+
+    def remove_edge(self, source: str, target: str, relation: str) -> dict:
+        """Remove a single edge (removes matching sloka from source's .om file)."""
+        return self._edit("remove-edge", source=source, target=target, relation=relation)
+
+    def set_comment(self, name: str, prefix: str, text: str) -> dict:
+        """Set a typed comment (desc, not, example, usage, see, math) on a node."""
+        return self._edit("set-comment", name=name, prefix=prefix, text=text)
+
+    def remove_comment(self, name: str, prefix: str) -> dict:
+        """Remove a typed comment by prefix from a node."""
+        return self._edit("remove-comment", name=name, prefix=prefix)
+
+    def add_comment(self, name: str, text: str) -> dict:
+        """Add a free-form comment to a node."""
+        return self._edit("add-comment", name=name, text=text)
+
+    def add_shabda_entry(self, path: str, word: str,
+                         abheda: list[str] | None = None,
+                         yukta: list[str] | None = None) -> dict:
+        """Add an entry to a .shabda file."""
+        return self._edit("add-shabda-entry", path=path, word=word,
+                          abheda=abheda or [], yukta=yukta or [])
+
+    def remove_shabda_entry(self, path: str, word: str) -> dict:
+        """Remove an entry from a .shabda file by word."""
+        return self._edit("remove-shabda-entry", path=path, word=word)
+
+    def update_shabda_entry(self, path: str, word: str,
+                            abheda: list[str] | None = None,
+                            yukta: list[str] | None = None) -> dict:
+        """Update an entry in a .shabda file (remove + re-add)."""
+        return self._edit("update-shabda-entry", path=path, word=word,
+                          abheda=abheda or [], yukta=yukta or [])
+
+    def write_tantra(self, path: str, source: str) -> dict:
+        """Write/overwrite a .tantra3 file and reload all tantras."""
+        return self._edit("write-tantra", path=path, source=source)
+
     # ── graph helpers ────────────────────────────────────────────────────────
 
     @staticmethod

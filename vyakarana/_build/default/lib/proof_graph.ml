@@ -680,3 +680,55 @@ let walk_inheritance (k : proof_graph) (node_name : string) : string list =
     frontier := !next_frontier
   done;
   List.rev !result
+
+(* ---- surgical graph mutation ---- *)
+
+(* replace_node: overwrite a node entirely — edges, shabda, slokas.
+   removes old outgoing edges from all_edges, adds new ones.
+   incoming edges from other nodes are untouched — they belong to those nodes.
+   use after editing a file on disk and re-parsing it. *)
+let replace_node (k : proof_graph) (n : nigamana) : unit =
+  (* remove old outgoing edges for this node from all_edges *)
+  k.all_edges := List.filter (fun e ->
+    e.source <> n.name
+  ) !(k.all_edges);
+  (* add new edges *)
+  k.all_edges := n.edges @ !(k.all_edges);
+  (* replace node *)
+  Hashtbl.replace k.nodes n.name n
+
+(* remove_node: delete a node and all edges touching it *)
+let remove_node (k : proof_graph) (name : string) : unit =
+  Hashtbl.remove k.nodes name;
+  k.all_edges := List.filter (fun e ->
+    e.source <> name && e.target <> name
+  ) !(k.all_edges)
+
+(* add_single_edge: add one edge to the graph *)
+let add_single_edge (k : proof_graph) (e : typed_edge) : unit =
+  (* add to source node's edge list *)
+  (match Hashtbl.find_opt k.nodes e.source with
+   | Some n ->
+     let already = List.exists (fun ex ->
+       ex.source = e.source && ex.target = e.target && ex.relation = e.relation
+     ) n.edges in
+     if not already then
+       Hashtbl.replace k.nodes n.name { n with edges = e :: n.edges }
+   | None -> ());
+  (* add to global edge list *)
+  k.all_edges := e :: !(k.all_edges)
+
+(* remove_single_edge: remove one specific edge *)
+let remove_single_edge (k : proof_graph) (e : typed_edge) : unit =
+  (* remove from source node's edge list *)
+  (match Hashtbl.find_opt k.nodes e.source with
+   | Some n ->
+     let filtered = List.filter (fun ex ->
+       not (ex.source = e.source && ex.target = e.target && ex.relation = e.relation)
+     ) n.edges in
+     Hashtbl.replace k.nodes n.name { n with edges = filtered }
+   | None -> ());
+  (* remove from global edge list *)
+  k.all_edges := List.filter (fun ex ->
+    not (ex.source = e.source && ex.target = e.target && ex.relation = e.relation)
+  ) !(k.all_edges)

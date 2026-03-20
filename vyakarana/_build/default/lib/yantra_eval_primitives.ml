@@ -298,12 +298,18 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   (* describe: node-name → shabda description string (the part after /) *)
   | "describe" ->
     let name = eval_str 0 in
-    Some (with_node k name (VString "") (fun n ->
-      let s = n.shabda in
-      match String.split_on_char '/' s with
-      | _ :: rest when rest <> [] ->
-        VString (String.trim (String.concat "/" rest))
-      | _ -> VString ""))
+    Some (with_node k name (VString "") (fun _n ->
+      let pairs = Setu_shabda.raw_shabda_for_node k name in
+      match List.assoc_opt "name" pairs with
+      | Some v -> VString v
+      | None ->
+        (* fallback: reconstruct raw shabda and look for text after / *)
+        let raw = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
+          | Some s -> s | None -> "" in
+        match String.split_on_char '/' raw with
+        | _ :: rest when rest <> [] ->
+          VString (String.trim (String.concat "/" rest))
+        | _ -> VString ""))
 
   (* to-english-relation: visheshanam-string → English phrase *)
   | "to-english-relation" ->
@@ -898,13 +904,11 @@ let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : val
         | "apply-op" ->
           let op_name = as_string (e_eval k e (List.nth args 0)) in
           let op_args_v = as_list (e_eval k e (List.nth args 1)) in
-          let prim_name = match Proof_graph.find k op_name with
-            | None -> op_name
-            | Some n ->
-              let sh = Setu_shabda.parse_shabda n.shabda in
-              (match List.assoc_opt "eval" sh with
-               | Some s -> String.trim s
-               | None -> op_name)
+          let prim_name =
+            let sh = Setu_shabda.raw_shabda_for_node k op_name in
+            (match List.assoc_opt "eval" sh with
+             | Some s -> String.trim s
+             | None -> op_name)
           in
           apply_op_vals prim_name op_args_v
 

@@ -21,6 +21,4 @@ mantra rotation-matrix
 
   "rotation-matrix-pratipaksha"
 
-shabda rotation-matrix / the-matrix-that-rotates-a-vector-by-an-angle-in-a-chosen-plane-orthogonal-and-det-1 degree:SO3-element per-element:no invertible:yes inverse:rotation-matrix
-
 done

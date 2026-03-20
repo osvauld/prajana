@@ -6,6 +6,4 @@ kosha om-parser
   "kosha-sthita satya-ganana-phala"
   "axiom-expansion-kriya"
 
-shabda two-pass-reader / pass-one-reads-all-om-files-building-nodes-with-slokas-shabda-and-raw-edges-pass-two-applies-axiom-expansion-adding-symmetric-and-transitive-closure-edges-from-visheshanam-properties
-
 done

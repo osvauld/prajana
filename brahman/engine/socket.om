@@ -6,6 +6,4 @@ kosha socket
   "reload-kriya graph-delta-phala"
   "vyakarana-yukta bridge-yukta"
 
-shabda unix-domain-socket / the-live-channel-between-engine-and-world-carrying-json-queries-and-structured-responses-over-a-unix-domain-socket
-
 done

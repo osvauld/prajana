@@ -46,6 +46,4 @@ kosha kinematic-chain
   "keyframe-abheda interpolation-abheda"
   "move-time-yukta"
 
-shabda kinematic-chain, robot-arm, manipulator, serial-chain
-
 done

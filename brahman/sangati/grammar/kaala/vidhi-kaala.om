@@ -7,6 +7,4 @@ sangati vidhi-kaala
   -- extraction role: command → goal (highest priority)
   -- English: "reach [0.4, 0.3]", "drop the load"
 
-shabda word:find,compute,calculate,determine,solve role:intent
-
 done

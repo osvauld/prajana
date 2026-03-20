@@ -41,6 +41,4 @@ kosha control-systems
   "fourier-engineering-yukta"
   "laplace-yukta"
 
-  shabda word:control-systems,PID,feedback,controller / closed-loop-PID-transfer-function-stability-Bode
-
 done

@@ -5,6 +5,4 @@ mantra sine
   "kona-yukta wave-abheda oscillation-yukta"
   "arcsine-pratipaksha"
 
-  shabda word:sine eval:sin arity:1 degree:bounded per-element:yes invertible:yes inverse:arcsine
-
 done

@@ -3,6 +3,4 @@ kosha yantra-policy
   "domain-language-sthita yantra-policy-swarupa"
   "niyama-kriya planner-phala"
 
-  shabda chain-depth-limit:3 chain-branch-limit:8 candidate-limit:12 prefer-direct:true prefer-inverse:true prefer-chain:true allow-inverse:true allow-chain:true fallback-to-anuvada:true
-
 done

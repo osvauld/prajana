@@ -2,8 +2,6 @@ kosha op-starts-with
 
   "op-class-relation-kriya"
 
-shabda name:starts-with parse-arity:2 arg0:string arg1:prefix
-
   -- string prefix test. starts-with s prefix → bool.
 
 done

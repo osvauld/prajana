@@ -7,6 +7,4 @@ mantra spring-force-mantra
   "spring-constant-janya"
   "displacement-janya"
 
-  shabda name:spring-force unit:newton math-op:multiplication
-
 done

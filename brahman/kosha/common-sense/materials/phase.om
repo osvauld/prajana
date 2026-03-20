@@ -42,6 +42,4 @@ kosha phase
   "mesh-yukta"                    -- solid: fixed mesh
   "material-yukta"                -- liquid/gas: dynamic shader
 
-  shabda phase, state-of-matter / solid-liquid-or-gas-the-everyday-observable-form-of-a-material-at-room-temperature
-
 done

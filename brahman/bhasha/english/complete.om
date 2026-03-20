@@ -6,6 +6,5 @@ bhasha complete
   -- "total" removed: it is an avastha qualifier in avrti-refine, so
   -- "total momentum" → [total,mithya]+[momentum,active] → R2 → total-momentum.
   -- keeping "total" here made it resolve as "complete" (active concept), blocking R2.
-  shabda word:complete complete, whole, full, entire
 
 done

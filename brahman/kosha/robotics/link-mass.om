@@ -22,6 +22,4 @@ kosha link-mass
   "kilogram-matra"
   "moment-of-inertia-yukta torque-yukta"
 
-shabda link-mass, link-weight / the-mass-of-a-robot-link-determines-inertia-and-gravitational-load-per-link-entity
-
 done

@@ -4,6 +4,4 @@ mantra modus-ponens
   "implication-janya"
   -- if A and A→B, then B
 
-  shabda word:therefore,follows,implies name:modus-ponens
-
 done

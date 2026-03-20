@@ -180,8 +180,7 @@ let pre_scan_arities (tantra_dirs : string list) : unit =
      2. otherwise walk the kriya edge to the class node, read parse-arity from class shabda
    class parse-arity values: -1 = variadic, 1 = projection, 2 = binary/keyed/relation/higher-order/pipeline *)
 let scan_graph_op_arities (k : proof_graph) : unit =
-  let get_parse_arity (shabda_str : string) : int option =
-    let pairs = Setu_shabda.parse_shabda shabda_str in
+  let get_parse_arity_from (pairs : (string * string) list) : int option =
     match List.assoc_opt "parse-arity" pairs with
     | Some s -> int_of_string_opt s
     | None   -> None
@@ -198,7 +197,8 @@ let scan_graph_op_arities (k : proof_graph) : unit =
     then begin
       let op_name = String.sub node_name prefix_len (String.length node_name - prefix_len) in
       (* try per-op override first *)
-      let arity_opt = match get_parse_arity n.shabda with
+      let own_pairs = Setu_shabda.raw_shabda_for_node k node_name in
+      let arity_opt = match get_parse_arity_from own_pairs with
         | Some a -> Some a
         | None ->
           (* walk kriya edges to find the class node *)
@@ -212,7 +212,8 @@ let scan_graph_op_arities (k : proof_graph) : unit =
           ) None n.edges
           in
           (match class_node_opt with
-           | Some class_node -> get_parse_arity class_node.shabda
+           | Some class_node ->
+             get_parse_arity_from (Setu_shabda.raw_shabda_for_node k class_node.name)
            | None -> None)
       in
       match arity_opt with
@@ -250,8 +251,8 @@ let scan_visheshanam_properties (k : proof_graph) : unit =
   List.iter (fun (node_name, vish) ->
     match Proof_graph.find k node_name with
     | None -> ()
-    | Some n ->
-      let pairs = Setu_shabda.parse_shabda n.Proof_graph.shabda in
+    | Some _n ->
+      let pairs = Setu_shabda.raw_shabda_for_node k node_name in
       let props : Proof_graph.vish_props = {
         vp_symmetric     = parse_bool  pairs "symmetric";
         vp_antisymmetric = parse_bool  pairs "antisymmetric";
@@ -356,8 +357,8 @@ let apply_relation_axioms (k : proof_graph) : int * (string * int * int) list =
    comma-separated word: values (e.g. "word:and,both") register all words.
    called after build_index and register_mantra_nodes. *)
 let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
-  Hashtbl.iter (fun node_name n ->
-    let pairs = Setu_shabda.parse_shabda n.Proof_graph.shabda in
+  Hashtbl.iter (fun node_name _n ->
+    let pairs = Setu_shabda.raw_shabda_for_node k node_name in
     (* index word: keys only — abbreviations and explicit aliases (kg, N, m, rad).
        concept nodes (mass, acceleration, kinetic-energy) are found via lookup
        (Proof_graph.find) in lookup-word.tantra — no need to duplicate them here. *)

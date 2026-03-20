@@ -4,6 +4,4 @@ kosha mutual-information
   "viveka-yukta"
   "sambandha-yukta"   -- measures shared information between two variables
 
-shabda mutual-information / measure-of-information-shared-between-two-random-variables
-
 done

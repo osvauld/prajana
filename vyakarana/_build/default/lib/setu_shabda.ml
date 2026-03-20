@@ -123,11 +123,56 @@ let parse_shabda_file (path : string) : (string * string) list =
     List.rev !pairs
   with _ -> []
 
+(* ---- global shabda store ----
+   loaded from brahman/shabda/*.shabda files at startup.
+   format: one entry per line — "node-name: shabda-raw"
+   falls back here when a node has no inline shabda and no shabda-tmpl. *)
+
+let _shabda_store : (string, string) Hashtbl.t = Hashtbl.create 1024
+
+(* load all *.shabda files from a directory into the global store.
+   each line: "node-name: shabda-raw-string" (# comments and blank lines skipped) *)
+let load_shabda_dir (dir : string) : int =
+  if not (Sys.file_exists dir && Sys.is_directory dir) then 0
+  else begin
+    let count = ref 0 in
+    let entries = Sys.readdir dir in
+    Array.iter (fun fname ->
+      if Filename.check_suffix fname ".shabda" then begin
+        let path = Filename.concat dir fname in
+        try
+          let ic = open_in path in
+          (try while true do
+            let line = input_line ic in
+            let trimmed = String.trim line in
+            if String.length trimmed > 0 && trimmed.[0] <> '#' then
+              match String.index_opt trimmed ':' with
+              | Some ci ->
+                let name = String.trim (String.sub trimmed 0 ci) in
+                let raw = String.trim (String.sub trimmed (ci + 1)
+                            (String.length trimmed - ci - 1)) in
+                if String.length name > 0 && String.length raw > 0 then begin
+                  Hashtbl.replace _shabda_store name raw;
+                  incr count
+                end
+              | None -> ()
+          done with End_of_file -> ());
+          close_in ic
+        with _ -> ()
+      end
+    ) entries;
+    !count
+  end
+
 (* raw_shabda_for_node: read a single node's own shabda without inheritance.
-   handles shabda-tmpl file indirection exactly as before. *)
+   priority: 1) inline shabda on node  2) shabda-tmpl file  3) global shabda store *)
 let raw_shabda_for_node (k : proof_graph) (node_name : string) : (string * string) list =
   match find k node_name with
-  | None -> []
+  | None ->
+    (* node not in graph — check global store anyway *)
+    (match Hashtbl.find_opt _shabda_store node_name with
+     | Some raw -> parse_shabda raw
+     | None -> [])
   | Some n ->
     let inline = parse_shabda n.shabda in
     match List.assoc_opt "shabda-tmpl" inline with
@@ -145,7 +190,13 @@ let raw_shabda_for_node (k : proof_graph) (node_name : string) : (string * strin
           else try_roots rest
       in
       try_roots search_roots
-    | None -> inline
+    | None ->
+      if inline <> [] then inline
+      else
+        (* fallback: check global shabda store *)
+        match Hashtbl.find_opt _shabda_store node_name with
+        | Some raw -> parse_shabda raw
+        | None -> []
 
 (* merge_shabda_priority: merge shabda pairs where earlier lists have higher priority.
    pairs_by_priority: [own_pairs; immediate_parent_pairs; grandparent_pairs; ...]

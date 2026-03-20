@@ -8,6 +8,4 @@ bhasha verb-moves
   -- compounding the entity word before it ("body moves" → body-moves is wrong).
   -- rotational equivalent: rotates (verb-rotates.om).
 
-  shabda word:moves role:grammar
-
 done

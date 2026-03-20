@@ -9,6 +9,4 @@ bhasha pronoun-it
   -- example: "find the kinetic energy. what is IT in joules?"
   --   → [it, naama-pratibodha, kinetic-energy]
 
-  shabda word:it  role:pronoun
-
 done

@@ -4,6 +4,4 @@ kosha weighted-graph
   "graph-swarupa"
   "matra-yukta"   -- edges carry numeric weight
 
-shabda weighted-graph / graph-where-each-edge-carries-a-numeric-weight
-
 done

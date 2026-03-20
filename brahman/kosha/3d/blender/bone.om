@@ -20,6 +20,4 @@ kosha bone
   -- the FK (forward kinematics) result IS this transform composition
   "scene-graph-yukta fk-siddha"
 
-shabda bone, link, rigid-link / the-rigid-segment-in-an-armature-that-carries-rotation-to-vertices
-
 done

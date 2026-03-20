@@ -3,6 +3,4 @@ mantra conjunction
   "logic-varga-karma"
   "dvandva-yukta"   -- both must hold
 
-shabda word:and,both eval:and arity:2 name:logical-and / logical-AND-true-only-when-both-operands-are-true
-
 done
