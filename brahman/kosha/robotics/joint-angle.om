@@ -41,6 +41,4 @@ kosha joint-angle
   "avastha-sthita"
   "purva-avastha-drishthanta uttara-avastha-drishthanta"
 
-shabda joint-angle, theta, joint-state / the-dof-value-of-a-joint-angle-for-revolute-distance-for-prismatic
-
 done

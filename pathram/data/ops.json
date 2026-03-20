@@ -1271,5 +1271,141 @@
       "type": "section",
       "title": "Shabda Extraction Design"
     }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-16",
+    "at": "2026-03-20T23:47:19",
+    "details": {
+      "type": "discovery",
+      "title": "Surgical edit API: built om_writer.ml + om_edit.ml in OCaml. 14 socket commands for creating/editing/deleting .om files, shabda entries, tantra files, and comments. Pattern: disk first \u2192 graph update \u2192 CSR rebuild. Python vy.py client has matching methods. CLI: vy add-sloka, vy set-comment, vy add-edge etc. Six typed comment prefixes: desc, not, example, usage, see, math."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-17",
+    "at": "2026-03-20T23:47:28",
+    "details": {
+      "type": "discovery",
+      "title": "Shabda separation complete: extracted 1250 inline shabda lines from .om files into 41 domain-grouped .shabda files in brahman/shabda/. OCaml loads shabda store at startup (setu_shabda.load_shabda_dir). Fixed 7 call sites that read n.shabda directly to use raw_shabda_for_node or _shabda_store. .om files are now pure structure: layer, name, slokas, comments, done. All tests pass 29/39/0."
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-20T23:47:33",
+    "details": {
+      "passed": 29,
+      "xfailed": 39,
+      "failed": 0
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-1",
+    "at": "2026-03-21T02:37:48",
+    "details": {
+      "type": "section",
+      "title": "Tantra4 \u2014 The System Knowing Itself as the Knower"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-2",
+    "at": "2026-03-21T02:38:02",
+    "details": {
+      "type": "section",
+      "title": "The Concrete Gap"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-3",
+    "at": "2026-03-21T02:38:18",
+    "details": {
+      "type": "section",
+      "title": "The Solution \u2014 Yantra Nodes for Tantras"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-4",
+    "at": "2026-03-21T02:38:35",
+    "details": {
+      "type": "section",
+      "title": "Angle 1: Krama-viveka \u2014 The System Knows Its Own Order"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-5",
+    "at": "2026-03-21T02:38:52",
+    "details": {
+      "type": "section",
+      "title": "Angle 2: Pramana-sreni \u2014 Every Conclusion Carries Its Proof Chain"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-6",
+    "at": "2026-03-21T02:39:10",
+    "details": {
+      "type": "section",
+      "title": "Angle 3: Aprameya-bodha \u2014 Awareness of What Cannot Be Known"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-7",
+    "at": "2026-03-21T02:39:31",
+    "details": {
+      "type": "section",
+      "title": "Angle 4: Chhanana-krama \u2014 Filtration as the Order of Purification"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-8",
+    "at": "2026-03-21T02:39:49",
+    "details": {
+      "type": "section",
+      "title": "Angle 5: Spanda-delta \u2014 Only the New Vibrates"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-9",
+    "at": "2026-03-21T02:40:04",
+    "details": {
+      "type": "section",
+      "title": "Connection to G\u00f6del"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-10",
+    "at": "2026-03-21T02:40:19",
+    "details": {
+      "type": "section",
+      "title": "Connection to Datalog"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-11",
+    "at": "2026-03-21T02:40:36",
+    "details": {
+      "type": "section",
+      "title": "What Changes Concretely"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-18",
+    "at": "2026-03-21T02:40:55",
+    "details": {
+      "type": "discovery",
+      "title": "Tantra4 spec: the system knowing itself as the knower. Five philosophical angles \u2014 krama-viveka (self-ordering from janya/phala DAG), pramana-sreni (full provenance chains), aprameya-bodha (diagnosing why 'no match'), chhanana-krama (pipeline as algebraic filtration), spanda-delta (semi-naive: only the new vibrates). Connected to Datalog stratified evaluation and G\u00f6del incompleteness. Core mechanism: create yantra .om nodes for all 74 tantras, making the pipeline visible to itself via the same graph-walk used for physics."
+    }
   }
 ]

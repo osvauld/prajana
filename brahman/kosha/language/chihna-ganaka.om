@@ -4,6 +4,5 @@ kosha chihna-ganaka
   "ganaka-kriya expression-yukta"
 
   -- maps operator symbols to their tantra (computation) names
-  shabda +:addition -:subtraction *:multiplication /:division
 
 done

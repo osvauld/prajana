@@ -1,0 +1,8 @@
+# kosha/finance — shabda extracted from .om files
+# 5 entries
+
+domain-finance: finance, economics
+finance-varga: finance-varga / root-cluster-for-all-finance-domain-nodes
+macro-varga: macro-varga / cluster-for-macroeconomic-quantities-inflation-interest-rate-money-supply
+market-varga: market-varga / cluster-for-market-quantities-equity-bond-currency-asset-liquidity
+risk-varga: risk-varga / cluster-for-risk-quantities-credit-default-systemic-contagion

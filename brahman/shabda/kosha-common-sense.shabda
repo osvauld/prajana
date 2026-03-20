@@ -1,0 +1,49 @@
+# kosha/common-sense — shabda extracted from .om files
+# 46 entries
+
+air: word:air,atmosphere / N2-O2-gas-mixture-transparent-insulator-sound-medium
+animal: word:animal,animals name:animal / a-living-creature-that-moves-and-senses
+animal-varga: animal-varga / cluster-for-animals-living-things-that-move-and-sense
+bird-varga: bird-varga / cluster-for-feathered-egg-laying-animals
+breathing: word:breathe,breathes,breathing,breath name:breathing / the-act-of-exchanging-air
+car-motion: word:car,vehicle,drives,driving,brakes,braking / combustion-mechanical-KE-via-tyre-friction
+cat: word:cat,cats name:cat / a-small-domesticated-feline
+ceiling: word:ceiling / horizontal-overhead-surface-upper-bound-abheda-math-ceil
+clay: word:clay / aluminosilicate-plastic-when-wet-inelastic-e-zero-fires-to-ceramic
+common-sense-varga: common-sense-varga / root-cluster-for-everyday-structural-patterns-location-containment-support-orientation
+container: word:container,pot,cup,bottle,box,vessel,bowl / enclosed-volume-holds-liquid-gas-or-solid
+dog: word:dog,dogs name:dog / a-domesticated-canine
+domain-common-sense: common-sense / the-ground-of-everyday-knowing-before-formal-domains-the-pointing-that-precedes-the-formula
+elasticity: word:elastic,elasticity,bouncy,bounces / property-of-returning-to-shape-coefficient-of-restitution
+falling: word:falling,falls,dropped,drop / gravity-height-to-velocity-KE-collision
+floor: eval:floor arity:1 degree:1 per-element:yes invertible:no
+glass: word:glass / amorphous-silica-transparent-hard-brittle-refraction-1.5
+ground: word:ground,earth-surface / ultimate-resting-place-normal-force-potential-energy-zero-reference
+hardness: word:hard,soft,hardness / resistance-to-permanent-deformation-mohs-scale
+heart: word:heart,hearts name:heart / the-organ-that-pumps-blood
+heating: word:heating,heated,boiling,boils,melts,melting,evaporates,freezes,condenses / Q-to-deltaT-to-phase-change
+human: word:human,humans,person,people name:human / a-human-being
+ice: word:ice,frozen / H2O-solid-below-0C-hexagonal-crystal-floats-low-friction
+living: word:living,alive name:living / the-property-of-being-alive
+living-varga: living-varga / cluster-for-all-living-things-that-breathe-and-grow
+location-varga: location-varga / where-things-are-spatial-grammar-of-everyday-pointing-displacement-from-a-named-reference
+mammal: word:mammal,mammals name:mammal / a-warm-blooded-vertebrate-that-nurses-its-young
+mammal-varga: mammal-varga / cluster-for-warm-blooded-animals-with-hearts
+materials-varga: materials-varga / cluster-for-everyday-material-properties-phase-elasticity-hardness-thermal
+metal: word:metal,metallic / solid-conductor-lustrous-malleable-free-electron-sea
+opacity: word:transparent,opaque,translucent,opacity / alpha-refraction-PBR
+phase: phase / the-offset-of-a-wave-at-a-given-instant-where-in-its-cycle-the-wave-is-at-tat-kshana
+plastic: word:plastic,polymer / synthetic-polymer-thermoplastic-thermoset-insulator-lightweight
+pole: word:pole,rod,column,pillar,post / rigid-elongated-structural-element-lever-pendulum-torque
+room: word:room,hall,chamber / enclosed-space-walls-floor-ceiling-indoor-physics
+rubber: word:rubber / polyisoprene-elastic-polymer-vulcanised-e-0.8
+shelf: word:shelf,ledge / elevated-horizontal-surface-potential-energy-height
+sparrow: word:sparrow,sparrows name:sparrow / a-small-common-bird
+stone: word:stone,rock,granite,marble,limestone / hard-brittle-mineral-aggregate-high-compressive-strength
+structures-varga: structures-varga / the-boundary-conditions-of-everyday-physics-floor-wall-ground-ceiling
+surface: word:surface / interface-where-contact-happens-normal-force-friction
+taxonomy-varga: taxonomy-varga / root-cluster-for-the-IS-A-classification-system-the-grammar-of-kinds
+thermal-conductivity: word:thermal-conductivity,conducts-heat,insulates / rate-of-heat-flow-metals-conduct-polymers-insulate
+wall: word:wall,barrier / vertical-surface-collision-normal-force-constraint
+water-material: word:water / H2O-liquid-transparent-universal-solvent-high-heat-capacity
+wood: word:wood,wooden,timber / cellulose-lignin-composite-anisotropic-insulator-flammable

@@ -157,21 +157,21 @@ let sahaja_gloss (k : proof_graph) (name : string) : string =
      1. shabda "name" key  — e.g.  shabda name:render-node
      2. text before "/"   — e.g.  shabda velocity / rate-of-change-...
      3. Setu.to_english fallback *)
-  match find k name with
-  | Some n when String.trim n.shabda <> "" ->
-    let pairs = Setu.parse_shabda n.shabda in
+  let pairs = Setu_shabda.raw_shabda_for_node k name in
+  if pairs <> [] then
     (match List.assoc_opt "name" pairs with
     | Some v when String.trim v <> "" -> String.trim v
     | _ ->
-      (* try text before "/" in raw shabda *)
-      let raw = String.trim n.shabda in
+      (* try text before "/" in raw shabda from store *)
+      let raw = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
+        | Some s -> String.trim s | None -> "" in
       (match String.index_opt raw '/' with
       | Some i ->
         let before = String.trim (String.sub raw 0 i) in
         if String.length before > 0 then before
         else Setu.to_english k name
       | None -> Setu.to_english k name))
-  | _ -> Setu.to_english k name
+  else Setu.to_english k name
 
 let sahaja_render (k : proof_graph) (name : string) : string =
   let gloss = sahaja_gloss k name in

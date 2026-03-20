@@ -5,6 +5,4 @@ mantra division
   "matra-kriya polarity-abheda dharana-phala"
   "multiplication-pratipaksha"
 
-  shabda word:over eval:div arity:2 pratipaksha-0:mul pratipaksha-1:div pratipaksha-1-flip:true degree:1 per-element:no invertible:yes inverse:multiplication
-
 done

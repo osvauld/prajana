@@ -1,0 +1,5 @@
+# bhasha/lua — shabda extracted from .om files
+# 2 entries
+
+lua-scope: const-naming:kebab-to-upper-snake scope-rule:declaration-before-use hoisting:none file-scope:sequential
+raylib: init:rl.InitWindow close:rl.CloseWindow begin-draw:rl.BeginDrawing end-draw:rl.EndDrawing clear:rl.ClearBackground draw-text:rl.DrawText draw-circle:rl.DrawCircle draw-line:rl.DrawLine draw-rect:rl.DrawRectangle key-pressed:rl.IsKeyPressed key-down:rl.IsKeyDown mouse-pos:rl.GetMousePosition get-fps:rl.GetFPS delta-time:rl.GetFrameTime camera-2d:rl.Camera2D begin-mode-2d:rl.BeginMode2D end-mode-2d:rl.EndMode2D

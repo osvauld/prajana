@@ -6,6 +6,4 @@ kosha bridge
   "resonance-ir-phala music-ir-phala graph-delta-phala"
   "session-om-janya"
 
-shabda rust-bridge / the-rust-orchestrator-that-routes-queries-over-unix-domain-socket-to-the-ocaml-engine-handles-session-lifecycle-and-returns-resonance-ir-music-ir-and-graph-deltas
-
 done

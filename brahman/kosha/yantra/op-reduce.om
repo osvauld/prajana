@@ -16,6 +16,4 @@ kosha op-reduce
   "convergence-yukta"
   "associativity-siddha closure-siddha"
 
-shabda name:reduce parse-arity:3 arg0:list arg1:init arg2:fn
-
 done

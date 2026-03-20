@@ -7,6 +7,4 @@ mantra factorial
   "combination-yukta permutation-yukta series-yukta"
   "avrti-yukta"
 
-  shabda eval:factorial arity:1 degree:n! per-element:no invertible:no
-
 done

@@ -11,6 +11,4 @@ kosha algebraic-projection
   "relation-janya"
   "set-phala"
 
-  shabda algebraic-projection, pi, project / relational-algebra-projection-extract-columns-from-a-relation
-
 done

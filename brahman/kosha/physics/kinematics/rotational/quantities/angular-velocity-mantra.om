@@ -7,6 +7,4 @@ mantra angular-velocity-mantra
   "velocity-janya"
   "radius-janya"
 
-  shabda name:angular-velocity unit:radian-per-second math-op:division
-
 done

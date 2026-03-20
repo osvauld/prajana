@@ -29,6 +29,4 @@ kosha floor
   -- math abheda: the floor operation is this structure in number space
   "floor-abheda"               -- math/number/operations/floor.om
 
-  shabda word:floor / horizontal-indoor-surface-lower-bound-normal-force-abheda-math-floor
-
 done

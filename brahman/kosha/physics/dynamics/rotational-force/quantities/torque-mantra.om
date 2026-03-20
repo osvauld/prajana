@@ -7,6 +7,4 @@ mantra torque-mantra
   "moment-of-inertia-janya"
   "angular-acceleration-janya"
 
-  shabda name:torque unit:newton-metre math-op:multiplication
-
 done

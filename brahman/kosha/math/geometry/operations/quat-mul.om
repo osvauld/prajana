@@ -14,6 +14,4 @@ mantra quat-mul
   "subtraction-krama"
   "addition-krama"
 
-  shabda quat-mul / hamilton-product-of-two-quaternions-rotation-composition degree:1 krama-input:quat-a,quat-b krama-output:quaternion
-
 done

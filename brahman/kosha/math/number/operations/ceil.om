@@ -5,6 +5,4 @@ mantra ceil
   "sama-vishama-abheda vriddhi-siddha"
   "float-yukta int-yukta floor-inverse"
 
-  shabda eval:ceil arity:1 degree:1 per-element:yes invertible:no
-
 done

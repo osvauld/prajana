@@ -1,0 +1,11 @@
+# kosha/ayurveda — shabda extracted from .om files
+# 8 entries
+
+domain-ayurveda: panchabhootam, spanda, shuddhi, dhatu, rasa, rasayana-bandha, sambandha, kaizen, svabhava, prana, dosha, ojas, vata, pitta, kapha, shiva-mooli, samsarga
+dosha: spanda, polarity, svabhava, vata, pitta, kapha, shuddhi, kshaya, panchabhootam, sambandha, domain-ayurveda
+kapha: jala, prithvi, dharana, sambandha, ojas, dosha, domain-ayurveda, svabhava
+ojas: rasayana-bandha, shuddhi, dhatu, prana, ananta, ghana-pramana, domain-ayurveda, svabhava
+pitta: agni, tejas, transformation, shuddhi, rasa, dosha, domain-ayurveda, svabhava
+prana: spanda, jiva, vayu, rasa, dhatu, sambandha, svabhava, ananta, domain-ayurveda
+rasayana: rasayana-bandha, ojas, dhatu, rasa, prana, shuddhi, shiva-mooli, kaizen, ananta, domain-ayurveda, svabhava
+vata: vayu, akasha, spanda, gati, prana, dosha, domain-ayurveda, svabhava

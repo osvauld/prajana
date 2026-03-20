@@ -7,6 +7,4 @@ mantra friction-force-mantra
   "coefficient-janya"
   "normal-force-janya"
 
-  shabda name:friction-force unit:newton math-op:multiplication
-
 done

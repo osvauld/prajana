@@ -7,6 +7,4 @@ mantra mass-density-mantra
   "mass-janya"
   "volume-janya"
 
-  shabda name:density unit:kilogram-per-cubic-metre math-op:division
-
 done

@@ -5,6 +5,5 @@ mantra arctangent
   "tangent-pratipaksha"
 
   -- atan2(y, x): angle from positive x-axis to point (x,y)
-  shabda word:arctangent eval:atan2 arity:2 degree:1 per-element:yes invertible:yes inverse:tangent
 
 done

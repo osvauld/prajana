@@ -3,6 +3,4 @@ kosha op-class-monoid
   "yantra-swarupa avrti-swarupa"
   "samgraha-kriya ananta-yukta"
 
-shabda parse-arity:-1 invariant:associative fold:all-args
-
 done

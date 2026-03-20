@@ -10,6 +10,4 @@ kosha navier-stokes
   "newton-second-law-motion-abheda"
   "avrti-kriya"
 
-shabda navier-stokes / rho-dv-dt-plus-v-dot-grad-v-equals-minus-grad-p-plus-mu-laplacian-v-plus-f-the-master-equation-of-fluid-motion
-
 done

@@ -1,0 +1,5 @@
+# bhasha/ocaml — shabda extracted from .om files
+# 2 entries
+
+loop: loop / a-repeated-sequence-of-steps-governed-by-viveka-that-continues-until-a-condition-is-false
+recursion: recursion / a-callable-that-calls-itself-each-call-a-new-shakha-terminated-by-viveka-base-case

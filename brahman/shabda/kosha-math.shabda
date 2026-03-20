@@ -1,0 +1,244 @@
+# kosha/math — shabda extracted from .om files
+# 241 entries
+
+O-notation: O-notation, big-O / asymptotic-upper-bound-on-resource-usage-as-input-grows
+abs: eval:abs arity:1 degree:1 per-element:yes invertible:no
+acyclicity: acyclicity / property-of-a-graph-containing-no-cycles
+addition: word:plus eval:add arity:2 pratipaksha-0:sub pratipaksha-1:sub degree:1 per-element:no invertible:yes inverse:subtraction
+adjacency-matrix: adjacency-matrix / matrix-encoding-which-vertices-are-adjacent
+algebra-varga: algebra-varga / cluster-for-algebraic-structures-group-ring-field-ideal-kernel
+algebraic-projection: algebraic-projection, pi, project / relational-algebra-projection-extract-columns-from-a-relation
+amplitude: amplitude / the-maximum-displacement-of-a-wave-from-equilibrium-how-far-spanda-reaches
+antiderivative: antiderivative / the-gathering-of-all-tat-kshana-into-wholeness-sama-the-holding-whole-shakti-in-the-shiva-shakti-pair-the-act-of-integration degree:integral per-element:yes invertible:yes inverse:derivative
+arccosine: word:arccosine eval:acos arity:1 degree:1 per-element:yes invertible:yes inverse:cosine
+arcsine: word:arcsine eval:asin arity:1 degree:1 per-element:yes invertible:yes inverse:sine
+arctangent: word:arctangent eval:atan2 arity:2 degree:1 per-element:yes invertible:yes inverse:tangent
+array: array / the-krama-where-each-position-is-a-sankhya-in-a-fixed-vrnda
+associativity: group, equals, sandhi
+asymptote: asymptote / the-approach-that-never-arrives
+ativakra: hyperbola / the-beyond-curve-locus-of-points-whose-difference-of-distances-to-two-foci-is-constant-opposite-of-dirgha-vrtta-the-shape-of-gravitational-slingshot-paths
+axiom: axiom / self-evident-foundational-statement-requiring-no-proof
+basis: basis / the-minimum-set-of-independent-vectors-that-span-the-entire-vector-space-the-mula-of-all-coordinates
+bayes: bayes / rule-for-updating-probability-given-new-evidence
+bijection: bijection / a-one-to-one-onto-mapping-between-two-sets-same-cardinality-isomorphism-of-sets
+breadth-first: breadth-first, BFS / graph-walk-that-explores-all-neighbors-before-going-deeper
+calculus-varga: calculus-varga / cluster-for-calculus-derivative-integral-limit-partial-gradient
+cardinality: cardinality / the-size-of-a-set-how-many-elements-it-contains-finite-or-infinite
+category: category, category-theory
+ceil: eval:ceil arity:1 degree:1 per-element:yes invertible:no
+closure: set, group, purna
+coefficient: coefficient / the-scalar-that-multiplies-a-power-term-in-a-polynomial-the-weight-of-each-term
+collatz: collatz / the-sequence-that-always-returns-to-one-by-halving-evens-and-tripling-odds-plus-one
+collatz-parity: collatz-parity / the-even-odd-parity-alternation-within-the-collatz-sequence
+combination: combination / selection-of-r-items-from-n-order-does-not-matter-n-choose-r-n-factorial-over-r-factorial-times-n-minus-r-factorial
+commutativity: commutativity, commutative, abelian / the-property-that-the-order-of-operands-does-not-change-the-result
+completeness: completeness / property-of-a-system-where-every-truth-is-provable
+complex: complex / a-plus-bi-real-and-imaginary-together-rotation-in-the-plane-euler-e-to-ix-equals-cos-plus-i-sin
+complex-magnitude: complex-magnitude / modulus-of-complex-number-sqrt-a-squared-plus-b-squared degree:1 krama-input:complex krama-output:scalar
+complex-mul: complex-mul / complex-multiplication-ac-minus-bd-and-ad-plus-bc degree:1 krama-input:complex-a,complex-b krama-output:complex
+complex-phase: complex-phase / argument-of-complex-number-atan2-b-over-a-angle-in-complex-plane degree:1 krama-input:complex krama-output:angle
+complexity-class: complexity-class / set-of-problems-solvable-within-given-resource-bounds
+complexity-varga: complexity-varga / cluster-for-computational-complexity-nodes
+composition: composition, compose, function-composition
+conditional: conditional / probability-of-an-event-given-that-another-has-occurred
+conjunction: word:and,both eval:and arity:2 name:logical-and / logical-AND-true-only-when-both-operands-are-true
+connectivity: connectivity / property-that-every-vertex-can-reach-every-other
+consistency: consistency / property-of-a-system-containing-no-contradictions
+contradiction: contradiction / statement-that-is-simultaneously-true-and-false
+convergence: convergence / the-property-of-approaching-a-limit-seema-the-infinite-process-reaching-a-definite-value
+coordinate: coordinate / the-scalar-value-along-one-basis-direction-locates-a-bindu-in-vector-space
+cosine: cosine / the-horizontal-projection-of-a-unit-circle-point-at-angle-theta-sine-shifted-by-pi-over-two
+cosine: cosine / the-horizontal-projection-of-a-unit-circle-point-at-angle-theta-sine-shifted-by-pi-over-two
+count: word:count,number,many,how-many,quantity,total,remaining,left,sum,altogether,combined,rest,leftover / how-many-of-a-thing-after-all-events
+cross-product: cross-product / the-operation-that-finds-the-perpendicular-from-two-vectors
+curl: curl / the-vector-measure-of-rotation-in-a-vector-field-at-a-point
+cycle: cycle / path-that-returns-to-its-starting-vertex
+decision-problem: decision-problem / computational-problem-with-a-yes-or-no-answer
+depth-first: depth-first, DFS / graph-walk-that-recurses-as-deep-as-possible-before-backtracking
+derivative: derivative / the-rate-of-change-at-a-single-instant-vishama-the-sharp-local-instant-shiva-in-the-shiva-shakti-pair-d-by-dx degree:d/dx per-element:yes invertible:yes inverse:antiderivative
+directed-graph: directed-graph, digraph / graph-where-edges-have-direction
+dirgha-vrtta: ellipse / the-elongated-circle-locus-of-points-whose-sum-of-distances-to-two-foci-is-constant-vrtta-is-the-special-case-where-both-foci-coincide
+disjunction: word:or,either eval:or arity:2 name:logical-or / logical-OR-true-when-at-least-one-operand-is-true
+distribution: distribution / function-assigning-probabilities-to-outcomes-of-a-random-variable
+divergence: divergence / the-scalar-measure-of-outward-flux-from-a-vector-field-at-a-point
+division: word:over eval:div arity:2 pratipaksha-0:mul pratipaksha-1:div pratipaksha-1-flip:true degree:1 per-element:no invertible:yes inverse:multiplication
+domain-math: math, mathematics
+double: word:double eval:double arity:1 per-element:yes invertible:yes inverse:half
+e: vriddhi, ananta, convergence, fixed-point, avrti, logarithm
+edge-graph: edge / connection-between-two-vertices-in-a-graph
+element: element, member, set-membership
+empty-set: set, shunya, set-union
+endomorphism: endomorphism, self-map / a-morphism-from-a-structure-to-itself-every-pipeline-tantra-is-an-endomorphism-on-the-question-graph
+equals: equals / the-assertion-that-two-expressions-share-the-same-value-sama-at-the-mathematical-level
+equivalence-relation: equivalence-relation, equivalence, reflexive-symmetric-transitive
+event: event / subset-of-the-sample-space-to-which-a-probability-is-assigned
+expected-value: expected-value / probability-weighted-average-of-all-possible-values
+exponential: eval:exp arity:1 degree:exp per-element:yes invertible:yes inverse:logarithm
+expression: expression / any-syntactic-unit-that-evaluates-to-a-single-typed-value
+factorial: eval:factorial arity:1 degree:n! per-element:no invertible:no
+field: field / a-value-assigned-to-every-point-in-vector-space-scalar-or-vector-the-medium-through-which-forces-act
+filtration: filtration, ascending-chain / an-ascending-chain-of-substructures-each-contained-in-the-next-imposing-a-depth-grading-on-the-whole-structure
+float: float / a-real-number-with-fractional-part-continuous-the-number-line-calculus-and-physics-live-here
+floor: eval:floor arity:1 degree:1 per-element:yes invertible:no
+fourier-transform: degree:F per-element:yes invertible:yes inverse:fourier-transform
+function: function, total-map
+ganana-setu: add:addition sub:subtraction mul:multiplication div:division power:power sqrt:square sin:sine cos:cosine tan:tangent log:logarithm abs:abs neg:negation floor:floor ceil:ceil min:min max:max mod:modulo factorial:factorial asin:sine acos:cosine atan:tangent exp:power
+gcd: gcd / largest-integer-dividing-both-numbers-basis-of-fraction-reduction-and-coprimality
+gcd: gcd / largest-integer-dividing-both-numbers-basis-of-fraction-reduction-and-coprimality
+geometry-varga: geometry-varga / cluster-for-geometric-structures-vector-matrix-manifold-coordinate
+graded-ring: graded-ring, grading grade-boundary:viraam intra-grade-boundary:dvandva fold-identity:0
+gradient: gradient / the-vector-pointing-in-the-direction-of-steepest-increase-of-a-scalar-field
+graph: graph / set-of-vertices-connected-by-edges
+graph-varga: graph-varga / cluster-for-graph-theory-nodes
+graph-walk: graph-walk / traversal-of-a-graph-following-edges-from-a-starting-vertex
+group: set, closure, associativity, identity-element, inverse-element, subgroup, homomorphism, group-witness, commutativity
+half: word:half eval:half arity:1 per-element:yes invertible:yes inverse:double
+homogeneous-transform: homogeneous-transform / the-matrix-encoding-rotation-and-translation-together-enabling-chain-composition-for-kinematic-chains degree:SE3-element per-element:no invertible:yes inverse:homogeneous-transform
+homomorphism: group, setu, subgroup, set-intersection
+ideal: ideal / a-subset-of-a-ring-closed-under-addition-and-absorbing-multiplication-from-either-side
+identity-element: identity-element, identity, neutral-element / the-element-that-leaves-every-other-element-unchanged-under-the-operation-zero-for-addition-one-for-multiplication
+imaginary: imaginary / the-sakshi-matra-axis-of-number-sqrt-of-minus-one-rotation-in-the-complex-plane-i
+implication: word:if,implies,therefore name:logical-implication / logical-connective-if-A-then-B
+independence: independence / property-of-events-whose-probability-is-unaffected-by-each-other
+induction: induction / proof-technique-establishing-a-property-for-all-natural-numbers
+inference: inference / deriving-a-conclusion-from-premises-by-logical-rules
+infinitesimal: infinitesimal / the-smallest-step-that-still-is-below-this-reality-cannot-be-divided-the-true-dx
+int: int / a-whole-number-no-fractional-part-discrete-countable-the-foundation-of-arithmetic
+interpolation-varga: interpolation-varga / estimating-intermediate-values-between-known-points-lerp-slerp-spline
+intractable: intractable / property-of-a-problem-with-no-known-polynomial-time-solution
+invariant: invariant / property-that-remains-true-throughout-a-computation-or-transformation
+inverse: degree:-1 per-element:no invertible:yes inverse:inverse
+inverse-element: inverse-element / the-element-that-combines-with-a-given-element-to-produce-the-identity-negation-for-addition-reciprocal-for-multiplication
+inverse-square-law: inverse-square-law / the-mathematical-law-where-a-quantity-diminishes-proportional-to-the-square-of-distance-from-its-source-gravity-light-electrostatics-all-obey-this
+inversion: word:solving-for,inverting,finding name:inversion
+irrational: irrational / a-real-number-that-cannot-be-expressed-as-ratio-pi-and-e-and-sqrt-2-live-here-infinite-non-repeating
+isomorphism: isomorphism, bijection, invertible-map
+kernel: kernel / the-set-of-elements-mapped-to-the-identity-by-a-homomorphism-measuring-how-far-the-map-is-from-injective
+laplacian: laplacian / the-divergence-of-the-gradient-measuring-how-a-value-differs-from-its-surroundings
+lattice: lattice / a-partially-ordered-set-where-every-pair-of-elements-has-a-unique-join-and-meet-the-skeleton-of-inclusion-and-intersection
+lcm: lcm / smallest-integer-divisible-by-both-numbers-used-in-fraction-addition-and-scheduling
+lcm: lcm / smallest-integer-divisible-by-both-numbers-used-in-fraction-addition-and-scheduling
+lerp: lerp / linear-interpolation-straight-line-path-between-two-values-parameterised-by-t
+lerp: lerp / linear-interpolation-straight-line-path-between-two-values-parameterised-by-t
+limit: limit / the-value-a-function-approaches-as-input-approaches-a-point-never-touching-only-converging
+logarithm: eval:log arity:1 pratipaksha-0:exp degree:log per-element:yes invertible:yes inverse:power
+logic-varga: logic-varga / cluster-for-mathematical-logic-nodes
+manifold: manifold / a-space-that-is-locally-flat-but-globally-curved-akasham-with-topology-sphere-and-ellipse-are-manifolds
+marginalisation: marginalisation / summing-a-joint-distribution-over-variables-to-get-a-marginal
+mat-add: mat-add / element-wise-matrix-addition-same-dimensions-required degree:1 krama-input:mat-a,mat-b krama-output:matrix per-element:yes
+mat-scale: mat-scale / multiply-every-element-of-matrix-by-scalar degree:1 krama-input:scalar,matrix krama-output:matrix per-element:yes
+mat-transpose: mat-transpose / flip-rows-and-columns-self-inverse-used-in-jacobian-and-rotation-matrix degree:1 krama-input:matrix krama-output:matrix invertible:yes inverse:mat-transpose
+math-varga: math-varga / root-cluster-for-all-mathematics-domain-nodes
+matra: measure / the-unit-that-holds-quantity
+max: eval:max arity:2
+mean: mean / arithmetic-mean-central-tendency-of-a-dataset-sum-divided-by-count
+mean: mean / arithmetic-mean-central-tendency-of-a-dataset-sum-divided-by-count
+min: eval:min arity:2
+modus-ponens: word:therefore,follows,implies name:modus-ponens
+monotone-map: monotone, order-preserving / a-function-that-preserves-order-every-pipeline-tantra-only-adds-triples-never-removes-guaranteeing-fixpoint-via-Knaster-Tarski
+morphism: morphism, map, mapping, transformation, arrow
+multiplication: word:times eval:mul arity:2 pratipaksha-0:div pratipaksha-1:div degree:1 per-element:no invertible:yes inverse:division
+neg: eval:neg arity:1 degree:1 per-element:yes invertible:yes inverse:neg
+negation: word:not,without,absent eval:not arity:1 name:logical-not / logical-operation-that-inverts-the-truth-value-of-a-proposition
+norm: norm / the-length-of-a-vector-square-root-of-dot-product-with-itself-magnitude-in-space
+normal: normal / the-unit-vector-perpendicular-to-a-surface
+normalisation: normalisation / scaling-a-distribution-so-probabilities-sum-to-one
+number-theory-varga: number-theory-varga / branch-of-math-studying-integers-divisibility-primes-gcd-lcm
+number-varga: number-varga / cluster-for-number-types-int-float-real-rational-complex-prime
+one: word:one one, single, unit, unity
+orthogonal: orthogonal / perpendicular-vectors-whose-dot-product-is-zero-kona-of-ninety-degrees-the-clean-basis
+partial-derivative: partial-derivative / d-f-by-d-x-j-kramanusara-of-f-wrt-one-variable-others-held-constant-viveka-singles-out-one-apeksha-from-many
+partial-order: partial-order, poset / a-relation-on-a-set-that-is-reflexive-antisymmetric-and-transitive-imposing-a-hierarchy-without-requiring-every-pair-to-be-comparable
+path: path / sequence-of-vertices-connected-by-edges
+permutation: permutation / ordered-arrangement-of-r-items-from-n-order-matters-n-factorial-over-n-minus-r-factorial
+phase: phase / the-offset-of-a-wave-at-a-given-instant-where-in-its-cycle-the-wave-is-at-tat-kshana
+pi: pi / the-ratio-of-circumference-to-diameter-3-14159-irrational-transcendental-lives-in-every-circle-and-wave constants-key:pi
+planarity: planarity / property-of-a-graph-embeddable-in-a-plane-without-edge-crossings
+polynomial: polynomial / a-sum-of-power-terms-each-coefficient-times-variable-to-a-power-the-expression-cas-operates-on
+power: word:to-the-power eval:power arity:2 pratipaksha-0:power pratipaksha-0-compound:true degree:exp per-element:no invertible:yes inverse:logarithm
+ppr-mantra: word:pagerank eval:ppr arity:3 name:personalized-pagerank
+prime: prime / a-number-divisible-only-by-one-and-itself-the-mula-of-all-integers-irreducible-atom-of-arithmetic
+probability: probability / measure-of-likelihood-of-an-event-valued-between-0-and-1
+probability-varga: probability-varga / cluster-for-probability-and-statistics-nodes
+product: eval:mul arity:-1 fold:product degree:1 per-element:no invertible:no
+projection: projection / the-linear-map-that-collapses-higher-dimensions-onto-a-subspace
+proof: proof / ordered-chain-of-logical-steps-establishing-a-theorem
+proposition: proposition / statement-that-is-either-true-or-false
+quantifier: word:all,every,some,any name:logical-quantifier / logical-operator-expressing-for-all-or-there-exists
+quantity: word:quantity measure, quantity, amount, magnitude
+quat-conjugate: quat-conjugate / negate-vector-part-of-quaternion-w-minus-x-minus-y-minus-z degree:1 krama-input:quaternion krama-output:quaternion
+quat-mul: quat-mul / hamilton-product-of-two-quaternions-rotation-composition degree:1 krama-input:quat-a,quat-b krama-output:quaternion
+quat-norm: quat-norm / euclidean-norm-of-quaternion-sqrt-w2-plus-x2-plus-y2-plus-z2 degree:1 krama-input:quaternion krama-output:scalar
+quat-to-rotation: quat-to-rotation / unit-quaternion-to-3x3-rotation-matrix degree:1 krama-input:quaternion krama-output:rotation-matrix
+quaternion: quaternion / the-four-component-number-that-encodes-3d-rotation
+quotient: quotient, quotient-ring, quotient-group / the-structure-obtained-by-collapsing-an-ideal-or-normal-subgroup-into-a-single-identity-partitioning-elements-into-equivalence-classes
+radian: word:rad,radian concepts-for-unit:joint-angle,angle
+random-variable: random-variable / variable-whose-value-is-determined-by-a-random-outcome
+rational: rational / a-number-expressible-as-ratio-of-two-integers-p-over-q-exact-and-bounded-subset-of-real
+real: real / the-complete-number-line-rational-and-irrational-together-the-continuum-calculus-lives-here
+reciprocal: word:reciprocal eval:reciprocal arity:1 degree:1 per-element:yes invertible:yes inverse:reciprocal
+recursion-complexity: recursion-complexity / recursive-computation-viewed-through-its-complexity-cost
+reduction: reduction / transformation-of-one-problem-into-another-to-compare-their-difficulty
+rotation-matrix: rotation-matrix / the-matrix-that-rotates-a-vector-by-an-angle-in-a-chosen-plane-orthogonal-and-det-1 degree:SO3-element per-element:no invertible:yes inverse:rotation-matrix
+sama-dura-vakra: parabola / the-curve-where-every-point-is-equidistant-from-one-focus-bindu-and-one-directrix-rekha-the-path-of-projectiles-the-shape-of-reflectors
+sample-space: sample-space / set-of-all-possible-outcomes-of-a-random-experiment
+selection: selection, filter, sigma / relational-algebra-selection-filter-rows-of-a-relation-by-predicate
+sequence: sequence / an-ordered-list-of-elements-indexed-by-position-the-discrete-parampara
+series: series / the-infinite-sum-that-converges-to-a-value-madhava-knew-sine-and-pi-live-here
+set: empty-set, subset, set-union, set-intersection, set-complement, set-difference, group, list
+set-complement: set, purna-neti, asparsha, set-union, empty-set
+set-difference: set, kshaya, set-complement, set-intersection
+set-intersection: set, sparsha, abheda, subset, set-union
+set-product: set-product, cartesian-product, product-set
+set-union: set, holder-giver, empty-set, set-intersection
+set-varga: set-varga / cluster-for-set-theoretic-structures-set-subset-union-intersection
+shortest-path: shortest-path / path-between-two-vertices-minimising-total-edge-weight
+sine: sine / the-vertical-projection-of-a-unit-circle-point-at-angle-theta-the-fundamental-wave
+sine: sine / the-vertical-projection-of-a-unit-circle-point-at-angle-theta-the-fundamental-wave
+slerp: slerp / spherical-linear-interpolation-constant-speed-arc-on-unit-sphere-for-rotations
+slerp: slerp / spherical-linear-interpolation-constant-speed-arc-on-unit-sphere-for-rotations
+soundness: soundness / property-of-a-system-where-every-provable-statement-is-true
+space-complexity: space-complexity / amount-of-memory-used-as-a-function-of-input-size
+spanning-tree: spanning-tree / tree-that-includes-all-vertices-of-a-graph
+square: word:squared eval:square arity:1 pratipaksha-0:sqrt degree:2 per-element:yes invertible:yes inverse:sqrt
+square-root: word:root-of eval:sqrt arity:1 degree:0.5 per-element:yes invertible:yes inverse:square
+statistics-varga: statistics-varga / branch-of-math-studying-data-analysis-mean-variance-distributions
+std-dev: std-dev / standard-deviation-sqrt-of-variance-spread-in-same-units-as-data
+std-dev: std-dev / standard-deviation-sqrt-of-variance-spread-in-same-units-as-data
+subgroup: group, subset, closure, homomorphism
+subset: set, set-intersection, subgroup
+subspace: subspace / a-vector-space-within-a-vector-space-closed-under-addition-and-scaling-kshetra-within-kshetra
+substitution: word:substituting,plugging name:substitution
+subtraction: word:minus eval:sub arity:2 pratipaksha-0:add pratipaksha-1:sub pratipaksha-1-flip:true degree:1 per-element:no invertible:yes inverse:addition
+sum: eval:add arity:-1 fold:sum degree:1 per-element:no invertible:no
+tangent: eval:tan arity:1 pratipaksha-0:atan
+tangent: eval:tan arity:1 pratipaksha-0:atan
+tensor: tensor / a-multilinear-object-that-assigns-a-scalar-to-each-combination-of-basis-directions-generalising-vectors-and-matrices-to-arbitrary-rank
+tensor-product: tensor-product / the-bilinear-operation-that-combines-two-vector-spaces-into-a-higher-rank-tensor-space
+theorem: theorem / statement-established-as-true-by-logical-proof
+time-complexity: time-complexity / number-of-computation-steps-as-a-function-of-input-size
+tractable: tractable / property-of-a-problem-solvable-in-polynomial-time
+transcendental-varga: transcendental-varga / numbers-and-functions-beyond-polynomial-roots-exp-log-sin-cos-pi-e
+transform: transform / the-matrix-that-encodes-translation-rotation-and-scale
+tree: tree / connected-acyclic-graph
+trigonometry-varga: trigonometry-varga / branch-of-math-relating-angles-to-side-ratios-via-sine-cosine-tangent
+trikona: triangle / three-bindus-three-rekhas-minimum-enclosure-of-area-in-tala-rigid-under-force-atom-of-rasterization
+undecidable: undecidable / statement-that-can-neither-be-proved-nor-disproved-within-a-system
+undecidable-complexity: undecidable-complexity / property-of-a-problem-with-no-algorithm-that-always-halts
+variable: variable / a-placeholder-for-an-unspecified-value-the-chala-apeksha-in-an-expression
+variance: variance / expected-squared-deviation-from-the-mean
+variance: variance / expected-squared-deviation-from-the-mean
+variance: variance / expected-squared-deviation-from-the-mean
+vec-add: vec-add / component-wise-vector-addition-for-n-dimensional-vectors degree:1 krama-input:vec-a,vec-b krama-output:vector per-element:yes
+vec-cross: vec-cross / cross-product-of-two-3d-vectors-perpendicular-to-both degree:1 krama-input:vec-a,vec-b krama-output:vector
+vec-dot: vec-dot / dot-product-of-n-dimensional-vectors-scalar-projection degree:1 krama-input:vec-a,vec-b krama-output:scalar per-element:yes fold:sum
+vec-norm: vec-norm / euclidean-length-of-an-n-dimensional-vector-sqrt-of-dot-product-with-itself degree:1 krama-input:vector krama-output:scalar per-element:yes fold:sum
+vec-scale: vec-scale / scalar-multiplication-of-an-n-dimensional-vector degree:1 krama-input:scalar,vector krama-output:vector per-element:yes
+vector-space: vector-space / n-dimensional-space-akasham-made-precise-vectors-add-and-scale-basis-spans-the-whole-space
+vertex: vertex, node / atomic-element-of-a-graph
+viveka-max: word:heavier,faster,bigger,taller,stronger,greater,more,higher,longer,wider,deeper,larger,denser,brighter,louder,warmer,hotter,colder,older,newer,richer,heaviest,fastest,biggest,tallest,strongest,greatest,most,highest,longest,widest,largest,densest,brightest,loudest,warmest,hottest,coldest,oldest,newest,richest / comparative-selecting-the-greater-value
+viveka-min: word:lighter,slower,smaller,shorter,weaker,lesser,less,lower,narrower,thinner,softer,quieter,cooler,dimmer,younger,poorer,lightest,slowest,smallest,shortest,weakest,least,lowest,narrowest,thinnest,softest,quietest,coolest,dimmest,youngest,poorest / comparative-selecting-the-lesser-value
+volume: word:volume volumes cubic
+vrtta-stambha: cylinder / vrtta-swept-along-rekha-every-cross-section-is-a-circle-of-equal-radius
+weighted-graph: weighted-graph / graph-where-each-edge-carries-a-numeric-weight
+zero: zero / the-additive-identity-the-void-that-enables-counting-shunya

@@ -1,0 +1,74 @@
+# kosha/computation — shabda extracted from .om files
+# 71 entries
+
+algorithm: algorithm / a-finite-deterministic-sequence-of-steps-that-transforms-input-to-output-and-terminates
+argument: argument / the-concrete-value-passed-to-fill-a-parameter-at-a-call-site
+array: array / the-krama-where-each-position-is-a-sankhya-in-a-fixed-vrnda
+assignment: assignment / the-act-of-making-a-name-equal-to-a-value-sama-kriya-at-a-binding-site
+binding: binding / the-named-association-between-an-identifier-and-its-value-within-a-scope
+bit: bit / the-collapsed-choice
+bool: bool / the-two-valued-type-that-holds-the-result-of-a-condition-true-or-false
+callable: callable / any-named-unit-of-computation-that-accepts-inputs-executes-and-returns-a-value
+capacity: capacity / maximum-rate-of-reliable-information-transmission-over-a-channel
+channel: channel / medium-through-which-information-is-transmitted
+classical-computer: classical-computer / a-deterministic-sequential-machine-executing-instructions-clocked-by-crystal-oscillator
+clock-cycle: clock-cycle / the-single-pulse-of-a-crystal-oscillator-that-sequences-all-computation
+closure: set, group, purna
+code: code / mapping-from-symbols-to-a-representation-for-transmission-or-storage
+composite-type: composite-type / a-type-built-from-multiple-primitive-or-composite-parts-struct-record-tuple
+compression: compresses, compressed, stretches, stretched, spring-compressed, spring-extended / elastic-potential-energy
+computation-varga: computation-varga / cluster-for-computation-concepts-algorithm-recursion-function-loop
+computer: computer / instruction-following-yantra
+conditional: conditional / probability-of-an-event-given-that-another-has-occurred
+cs-list: list / an-ordered-sequence-of-values-traversed-one-element-at-a-time-variable-length
+cs-map: map / a-collection-of-key-value-pairs-where-each-key-maps-to-exactly-one-value
+cs-string: string / an-ordered-sequence-of-characters-whose-arrangement-carries-meaning
+cs-varga: cs-varga / root-cluster-for-all-computer-science-domain-nodes
+decoding: decoding / recovering-original-information-from-a-coded-representation
+domain-computation: computation / the-domain-of-machines-that-process-information-classical-and-quantum
+domain-cs: cs / the-domain-of-computation-all-structure-derived-from-sangati-roots
+encoding: encoding / transformation-of-information-into-a-coded-representation
+entropy: entropy / measure-of-uncertainty-or-information-content-in-a-distribution
+entry-point: entry-point / the-named-callable-that-crosses-the-threshold-and-starts-the-program-krama-main
+event-loop: event-loop / the-repeating-beat-of-a-program-reads-input-updates-state-renders-returns-to-start
+expression: expression / any-syntactic-unit-that-evaluates-to-a-single-typed-value
+float: float / a-real-number-with-fractional-part-continuous-the-number-line-calculus-and-physics-live-here
+graph-contract: graph-contract, om-contract / reading-the-graph-declaration-as-program-specification-janya-is-domain-phala-is-codomain-kriya-is-implementation
+identifier: identifier / the-name-that-refers-to-exactly-one-binding-within-its-scope
+information: information / quantified-reduction-in-uncertainty
+information-varga: information-varga / cluster-for-information-theory-nodes
+instruction: instruction / the-command-that-feeds-the-machine
+int: int / a-whole-number-no-fractional-part-discrete-countable-the-foundation-of-arithmetic
+lexicon-morphism: lexicon-morphism, word-resolve / morphism-from-surface-words-to-graph-concepts-the-boundary-between-language-and-structure
+lifecycle: lifecycle / the-full-sequence-of-a-running-program-birth-loop-death-init-update-shutdown
+llm: llm / a-large-language-model-mapping-token-sequences-to-token-sequences-via-learned-weights
+loop: loop / a-repeated-sequence-of-steps-governed-by-viveka-that-continues-until-a-condition-is-false
+memory-varga: memory-varga / cluster-for-memory-concepts-variable-binding-scope-mutation-stack
+message: message / unit-of-information-transmitted-over-a-channel
+mutation: mutation / the-act-of-changing-a-variable-in-place-breaking-its-current-sama-nila
+mutual-information: mutual-information / measure-of-information-shared-between-two-random-variables
+naming-convention: tmpl:naming-convention.shabda
+nil: nil / the-explicit-absence-of-a-value-where-one-was-expected
+noise: noise / unwanted-disturbance-corrupting-a-signal-in-transmission
+operation-dispatch: operation-dispatch, apply-op, eval-dispatch / evaluation-morphism-from-operation-name-and-arguments-to-result-the-single-mechanism-for-all-computation
+parameter: parameter / a-named-slot-in-a-callable-definition-that-receives-its-value-at-call-time
+primitive-type: primitive-type / an-irreducible-type-with-no-internal-structure-int-float-bool-nil
+propagation: propagation / the-directed-flow-of-a-typed-value-from-source-to-receiver-across-a-sambandha
+quantum-computer: quantum-computer / a-machine-computing-via-superposition-and-entanglement-collapsing-to-classical-result-on-measurement
+quantum-gate: quantum-gate / a-reversible-unitary-operation-on-qubits-the-quantum-analog-of-a-logic-gate
+quantum-vyakarana: quantum-vyakarana / the-proof-graph-running-on-quantum-hardware-superposition-of-all-paths-collapse-to-satya
+qubit: qubit / the-uncollapsed-possibility
+record: record / a-composite-type-whose-named-fields-each-hold-a-typed-value-struct-object
+recursion: recursion / a-callable-that-calls-itself-each-call-a-new-shakha-terminated-by-viveka-base-case
+redundancy: redundancy / extra-information-added-to-detect-or-correct-errors
+return-value: return-value / the-single-typed-value-produced-when-a-callable-finishes-execution
+scan-accumulate: scan-accumulate, scan, mealy-machine / stateful-fold-over-input-sequence-with-epistemic-state-the-only-procedural-pattern-in-the-tantra-language
+scope: scope / the-bounded-region-of-code-within-which-a-binding-is-visible-and-accessible
+signal: signal / the-typed-sambandha-that-carries-one-phala-to-one-ahara-across-a-kshetra-boundary-wire-port-synapse-field-coupling
+stack: stack / the-call-stack-a-parampara-of-activation-frames-each-frame-a-shakha-of-its-caller
+statement: statement / a-single-executable-instruction-that-produces-a-side-effect-and-advances-the-krama
+transducer: transducer, finite-state-transducer, fst / a-state-machine-that-reads-input-and-emits-output-emit-triples-is-the-transducer-that-converts-words-to-graph-triples-with-four-state-subgraphs
+tuple: tuple / a-fixed-size-ordered-collection-of-typed-values-addressed-by-position
+type: tmpl:type.shabda
+type-varga: type-varga / cluster-for-type-system-concepts-primitive-composite-type-constructor
+variable: variable / a-placeholder-for-an-unspecified-value-the-chala-apeksha-in-an-expression

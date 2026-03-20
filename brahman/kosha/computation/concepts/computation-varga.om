@@ -13,6 +13,4 @@ kosha computation-varga
   "avastha-yukta"   -- computation transforms states: input → intermediate → output
   "kaala-yukta"     -- time complexity is the kaala of computation
 
-shabda computation-varga / cluster-for-computation-concepts-algorithm-recursion-function-loop
-
 done

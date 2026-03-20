@@ -44,6 +44,4 @@ kosha elastic-collision
   -- coefficient of restitution at this end of the spectrum
   "coefficient-of-restitution-sthita"          -- e = 1
 
-  shabda elastic-collision, elastic-impact / e-equals-1-both-momentum-and-kinetic-energy-conserved-billiard-balls-atomic-collisions
-
 done

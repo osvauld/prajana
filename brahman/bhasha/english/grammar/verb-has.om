@@ -6,6 +6,4 @@ bhasha verb-has
   -- signals entity→property ownership in question graphs
   -- has IS shashthi-vibhakti expressed as an English verb
 
-  shabda word:has  role:possession
-
 done

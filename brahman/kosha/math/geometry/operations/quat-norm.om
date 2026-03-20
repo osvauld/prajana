@@ -9,6 +9,4 @@ mantra quat-norm
   "addition-krama"
   "square-root-krama"
 
-  shabda quat-norm / euclidean-norm-of-quaternion-sqrt-w2-plus-x2-plus-y2-plus-z2 degree:1 krama-input:quaternion krama-output:scalar
-
 done

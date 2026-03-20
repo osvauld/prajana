@@ -4,6 +4,4 @@ mantra half
   "division-swarupa division-kriya kshaya-kriya"
   "double-pratipaksha"
 
-  shabda word:half eval:half arity:1 per-element:yes invertible:yes inverse:double
-
 done

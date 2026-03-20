@@ -14,6 +14,4 @@ mantra vec-cross
   "multiplication-krama"
   "subtraction-krama"
 
-  shabda vec-cross / cross-product-of-two-3d-vectors-perpendicular-to-both degree:1 krama-input:vec-a,vec-b krama-output:vector
-
 done

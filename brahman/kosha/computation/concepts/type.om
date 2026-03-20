@@ -7,8 +7,4 @@ kosha type
   "vrnda-sthita matra-abheda"
   "set-abheda"
 
-shabda type / the-set-of-properties-that-all-values-of-this-kind-share-root-of-type-hierarchy
-
-shabda tmpl:type.shabda
-
 done

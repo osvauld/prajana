@@ -8,6 +8,4 @@ mantra std-dev
   "variance-krama"
   "square-root-krama"
 
-  shabda std-dev / square-root-of-variance-standard-deviation degree:1 per-element:no invertible:no
-
 done

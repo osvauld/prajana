@@ -6,6 +6,4 @@ kosha sparse-adjacency
   "ppr-yukta visheshanam-yukta spmv-kriya"
   "array-swarupa float-swarupa"
 
-shabda format:csr / the-compressed-sparse-row-representation-of-the-proof-graph-incoming-edge-adjacency-materialized-once-at-startup-for-cache-friendly-spmv-in-ppr-equivalent-to-matrix-multiplication-map-janya-fold-janya-over-the-sparse-N-by-N-by-R-tensor
-
 done

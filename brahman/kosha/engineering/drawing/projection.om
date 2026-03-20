@@ -42,6 +42,4 @@ kosha projection
   "coordinate-yukta"
   "domain-3d-yukta"          -- CAD projections are automated versions of this
 
-shabda word:projection,orthographic,isometric,first-angle,third-angle / 3D-to-2D-representation-method
-
 done

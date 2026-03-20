@@ -7,6 +7,4 @@ mantra electric-power-mantra
   "voltage-janya"
   "current-janya"
 
-  shabda name:electric-power unit:watt math-op:multiplication
-
 done

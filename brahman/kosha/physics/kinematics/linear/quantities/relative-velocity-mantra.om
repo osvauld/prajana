@@ -17,6 +17,4 @@ mantra relative-velocity-mantra
   "velocity-janya"
   "velocity-janya"
 
-  shabda name:relative-velocity unit:metre-per-second math-op:subtraction
-
 done

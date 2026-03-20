@@ -198,6 +198,14 @@ let () =
           (String.concat ", " dirs);
       Om_parser.load_dirs ~emit_meta:(not quiet_startup) dirs k0
   in
+  (* load external shabda files from brahman/shabda/ directory *)
+  let shabda_loaded = List.fold_left (fun acc d ->
+    let shabda_dir = Filename.concat d "shabda" in
+    acc + Setu_shabda.load_shabda_dir shabda_dir
+  ) 0 dirs in
+  if shabda_loaded > 0 && not quiet_startup then
+    Printf.printf "shabda: %d entries loaded from external .shabda files\n%!"
+      shabda_loaded;
   let yantra_idx = Yantra.build_index ~graph:k0 dirs in
   Proof_graph.materialize_csr k0;
   Proof_graph.compute_visheshanam_entropy_weights k0;

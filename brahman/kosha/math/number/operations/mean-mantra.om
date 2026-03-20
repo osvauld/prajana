@@ -8,6 +8,4 @@ mantra mean
   "addition-krama"
   "division-krama"
 
-  shabda mean / arithmetic-mean-sum-divided-by-count degree:1 fold:sum-div per-element:no invertible:no
-
 done

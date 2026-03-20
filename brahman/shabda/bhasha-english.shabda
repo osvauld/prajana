@@ -1,0 +1,108 @@
+# bhasha/english — shabda extracted from .om files
+# 105 entries
+
+action: word:action action, process, operation, transformation
+angle: word:angle angle, corner, direction, orientation
+article: a, an, the / noun-phrase-determiner
+article-a: word:a  role:grammar
+article-an: word:an  role:grammar
+article-the: word:the  role:grammar
+bhave-prayoga: impersonal-voice / pure-process-no-agent-no-patient
+bhavishya-kaala: future-tense / action-yet-to-come
+bhuta-kaala: past-tense / action-prior-to-now
+boundary: word:boundary boundary, limit, edge, threshold
+branch: word:branch branch, fork, subdivision, sub-tree
+collection: word:collection collection, set, group, ensemble
+combination: combination / selection-of-r-items-from-n-order-does-not-matter-n-choose-r-n-factorial-over-r-factorial-times-n-minus-r-factorial
+complete: word:complete complete, whole, full, entire
+composition: composition, compose, function-composition
+conj-and: word:and  role:grammar
+conj-given: word:given  role:grammar
+conj-or: word:or  role:grammar
+conj-where: word:where  role:grammar
+conjunction: word:and,both eval:and arity:2 name:logical-and / logical-AND-true-only-when-both-operands-are-true
+contact: word:contact contact, touch, interface
+copula: is, are, was, were, equals, equaled, gives / linking-verb-connecting-subject-to-predicate
+copula-are: word:are  role:grammar
+copula-equals: word:equals  role:grammar
+copula-gives: word:gives  role:grammar
+copula-is: word:is  role:grammar
+copula-was: word:was  role:grammar
+copula-were: word:were  role:grammar
+decay: word:decay decay, reduction, loss, dissipation
+distinction: word:distinction distinction, discrimination, separation, difference
+dual: word:dual dual, pair, two-sided, binary, both
+element: element, member, set-membership
+english: English / the-english-language-surface-layer
+english-kta-ed: suffix:ed stem-suffix:
+english-kta-ied: suffix:ied stem-suffix:y
+english-plural-es: suffix:es
+english-plural-ies: suffix:ies stem-suffix:y
+english-plural-regular: suffix:s
+english-shatr-ing: suffix:ing stem-suffix:
+equal: word:equal equal, same, balanced, equivalent, uniform
+extension: word:extension extension, expansion, spread, propagation
+foundational: word:foundational foundational, axiomatic, self-grounding, self-evident, primitive
+growth: word:growth growth, increase, amplification
+independent: word:independent free, independent, autonomous, unconstrained
+infinite: word:infinite infinite, unbounded, endless, unlimited
+inherent: word:inherent inherent, intrinsic, own-nature, essential, innate
+input: word:input input, intake, reception
+inverse: degree:-1 per-element:no invertible:yes inverse:inverse
+iteration: word:iteration repetition, iteration, cycle, recurrence, loop
+karmani-prayoga: passive-voice / patient-foregrounded
+kartari-prayoga: active-voice / agent-foregrounded
+knowledge: word:knowledge knowledge, learning, understanding, science
+logic: word:logic logic, reasoning, inference, rule
+motion: word:motion motion, vibration, oscillation, dynamics
+negation: word:not,without,absent eval:not arity:1 name:logical-not / logical-operation-that-inverts-the-truth-value-of-a-proposition
+one: word:one one, single, unit, unity
+pair: word:pair pair, duality, two, binary
+prashna: word:what,how,which,when,where  role:intent
+prep-at: word:at  role:grammar
+prep-by: word:by  role:grammar
+prep-for: word:for  role:grammar
+prep-from: word:from  role:grammar
+prep-in: word:in  role:grammar
+prep-of: word:of  role:rashi-bandha
+prep-on: word:on  role:grammar
+prep-over: word:over  role:grammar
+prep-per: word:per  role:grammar
+prep-to: word:to  role:grammar
+prep-with: word:with  role:possession
+preposition: of, by, from, through, along, toward, at, in, with, over, per / relational-connective
+pronoun-it: word:it  role:pronoun
+pronoun-its: word:its  role:pronoun
+pronoun-their: word:their  role:pronoun
+proof: proof / ordered-chain-of-logical-steps-establishing-a-theorem
+purpose: word:purpose purpose, goal, objective, aim, intent
+quantity: word:quantity measure, quantity, amount, magnitude
+relation: word:relation relation, connection, link, bond, coupling
+relative: word:relative relative, dependent, with-respect-to, proportional
+result: word:result result, output, fruit, effect
+rule: word:rule rule, constraint, law, principle, regulation
+sambhavana-kaala: modal-tense / possibility-necessity-capability
+self: word:self self, own, intrinsic, inherent
+sentence: word:sentence sentence, statement, expression, utterance
+sequence: sequence / an-ordered-list-of-elements-indexed-by-position-the-discrete-parampara
+some: word:some  role:grammar
+something: word:something  role:grammar
+state: word:state state, condition, configuration
+summary: word:summary summary, compression, abstraction, condensation
+thing: word:thing  role:grammar
+time: word:time time, duration, interval, temporal
+transform: transform / the-matrix-that-encodes-translation-rotation-and-scale
+translation: word:translation translation, mapping, transformation, rendering
+true: word:true true, real, actual, valid, correct
+truth: word:truth truth, axiom, universal-truth, ground-truth
+variable: variable / a-placeholder-for-an-unspecified-value-the-chala-apeksha-in-an-expression
+vartamana-kaala: present-tense / action-at-the-current-moment
+verb-has: word:has  role:possession
+verb-have: word:have  role:possession
+verb-moves: word:moves role:grammar
+verb-moving: word:moving role:grammar
+verb-rotates: word:rotates role:grammar
+verb-rotating: word:rotating role:grammar
+vidhi-kaala: word:find,compute,calculate,determine,solve role:intent
+wave: word:wave wave, oscillation, ripple
+zero: zero / the-additive-identity-the-void-that-enables-counting-shunya

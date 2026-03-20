@@ -39,6 +39,4 @@ kosha fourier-engineering
   "oscillation-varga-yukta"
   "domain-computation-yukta"   -- FFT is an algorithm
 
-  shabda word:FFT,DFT,fourier-transform,spectrum,spectral / Fourier-decomposition-FFT-spectrum-frequency-domain
-
 done

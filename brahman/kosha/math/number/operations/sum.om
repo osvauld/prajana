@@ -7,6 +7,4 @@ mantra sum
   -- Σxᵢ: fold a list by addition
   "addition-krama"
 
-  shabda eval:add arity:-1 fold:sum degree:1 per-element:no invertible:no
-
 done

@@ -4,6 +4,4 @@ kosha directed-graph
   "graph-swarupa"
   "krama-yukta"   -- edges have direction
 
-shabda directed-graph, digraph / graph-where-edges-have-direction
-
 done

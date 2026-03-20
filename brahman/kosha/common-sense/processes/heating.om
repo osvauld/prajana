@@ -26,6 +26,4 @@ kosha heating
   "thermodynamics-varga-yukta"
   "water-drishthanta"            -- paradigm case: water on a stove
 
-  shabda word:heating,heated,boiling,boils,melts,melting,evaporates,freezes,condenses / Q-to-deltaT-to-phase-change
-
 done

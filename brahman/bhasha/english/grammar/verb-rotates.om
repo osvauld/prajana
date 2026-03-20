@@ -10,6 +10,4 @@ bhasha verb-rotates
   -- example: "disk rotates with angular velocity 5 rad/s" →
   --   "rotates" dropped, "disk" stays mithya, "with" fires R8 correctly.
 
-  shabda word:rotates role:grammar
-
 done

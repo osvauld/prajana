@@ -1,0 +1,55 @@
+# kosha/chemistry — shabda extracted from .om files
+# 52 entries
+
+acid-base: word:acid,base,acidic,basic,pH,neutralisation / proton-transfer-pH-scale-buffer-amino-acid-zwitterion
+alcohol: word:alcohol,hydroxyl / R-OH-hydrophilic-hydrogen-bonds-oxidises-to-aldehyde-or-ketone
+alkane: word:alkane,saturated-hydrocarbon / CnH2n+2-single-bonds-only-non-polar-combustion-fuel
+alkene: word:alkene,alkene,unsaturated-hydrocarbon / CnH2n-double-bond-reactive-addition-polymerisation
+alloy: word:alloy / metal-mixed-at-atomic-level-steel-brass-bronze-duralumin
+aluminium: word:Al,aluminium,aluminum
+amine: word:amine,amino / R-NH2-basic-lone-pair-peptide-bond-amino-acid-neurotransmitter
+argon: word:Ar,argon
+aromatic: word:aromatic,benzene,aromatic-ring / delocalized-pi-electrons-huckel-4n-plus-2-EAS-stable
+atomic-varga: atomic-varga / cluster-for-atomic-structure-atom-nucleus-proton-neutron-electron-shell
+calcite: word:calcite,limestone,marble,chalk,CaCO3
+calcium: word:Ca,calcium
+carbonyl: word:carbonyl,aldehyde,ketone / C=O-electrophilic-nucleophilic-addition-aldehyde-ketone
+carboxylic-acid: word:carboxylic-acid,carboxyl / R-COOH-weak-acid-pKa-4-to-5-esterification-peptide-bond
+cement-chemistry: word:cement,Portland-cement,cement-chemistry / C3S-C2S-hydration-CSH-gel-calcination-clinker
+chemistry-varga: chemistry-varga / root-cluster-for-all-chemistry-domain-nodes
+chirality: word:chirality,chiral,enantiomer / non-superimposable-mirror-image-L-D-R-S-biological-specificity
+chlorine: word:Cl,chlorine,chloride
+clay-mineral: word:clay,kaolinite,clay-mineral
+combustion: word:combustion,burns,burning,ignites / fuel-plus-O2-to-CO2-plus-H2O-plus-heat-exothermic
+composites-varga: composites-varga / matrix-plus-reinforcement-properties-exceed-either-alone-alloy-concrete-bone-wood
+concrete: word:concrete,cement / calcium-silicate-hydrate-strong-in-compression-weak-in-tension-reinforced-with-steel
+construction-varga: construction-varga / chemistry-of-building-materials-concrete-steel-glass-lime-wood
+copper: word:Cu,copper
+dissolution: word:dissolves,dissolving,dissolution,soluble / solute-in-solvent-like-dissolves-like-ionic-polar-NaCl-in-water
+domain-chemistry: chemistry
+element: element, member, set-membership
+ester: word:ester / R-COO-R-from-acid-plus-alcohol-fats-oils-polyester-fragrance
+functional-group: functional-group / the-reactive-site-of-an-organic-molecule-determines-chemical-class-and-reactivity
+glass-chemistry: word:glass-chemistry / SiO2-network-amorphous-soda-lime-borosilicate-tempered
+gold: word:Au,gold
+iron: word:Fe,iron
+lead: word:Pb,lead
+lime-chemistry: word:lime,quicklime,slaked-lime,lime-plaster,mortar / CaCO3-CaO-Ca-OH-2-carbonation-cycle
+magnesium: word:Mg,magnesium
+metals-varga: metals-varga / cluster-for-metallic-elements-electron-sea-conducts-lustrous-malleable-ductile
+minerals-varga: minerals-varga / cluster-for-inorganic-crystalline-solids-silicates-carbonates-oxides-salts
+molecular-varga: molecular-varga / cluster-for-molecular-structure-molecule-bond-covalent-ionic
+neon: word:Ne,neon
+organic-varga: organic-varga / cluster-for-organic-chemistry-carbon-hydrocarbon-polymer-amino-acid
+organic-varga-extended: organic-varga-extended / undergraduate-organic-backbone-functional-group-stereochemistry-aromatic
+oxidation-reduction: word:oxidation,reduction,redox,rusts,rusting,corrodes / electron-transfer-OIL-RIG-Fe-to-Fe2O3-C-to-CO2
+potassium: word:K,potassium
+reaction: word:reaction,reacts,react / bond-breaking-and-forming-atoms-conserved-energy-exchanged
+silica: word:silica,quartz,SiO2,sand
+silver: word:Ag,silver
+sodium: word:Na,sodium,salt concepts-for-unit:sodium
+steel: word:steel,stainless-steel,stainless / Fe-plus-C-alloy-structural-material-hardened-corrosion-resistant
+steel-chemistry: word:steel-chemistry,rebar,reinforcement / iron-carbon-alloy-corrosion-rust-electrochemical-protection
+timber-chemistry: word:timber,lumber,timber-chemistry / cellulose-lignin-hemicellulose-moisture-combustion-biodegradation
+transition-metals-varga: transition-metals-varga / d-block-elements-variable-valence-coloured-catalytic-magnetic
+zinc: word:Zn,zinc

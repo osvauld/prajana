@@ -6,6 +6,4 @@ kosha visheshanam-swarupa
   "identity-element-abheda morphism-abheda"
   "ring-sthita group-sthita"
 
-shabda symmetric:yes transitive:yes reflexive:yes congruence:yes composable:yes ring-op:mul-identity / the-multiplicative-identity-of-the-visheshanam-ring-composing-any-relation-with-swarupa-returns-that-relation-unchanged
-
 done

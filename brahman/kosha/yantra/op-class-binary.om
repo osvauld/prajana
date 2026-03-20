@@ -10,6 +10,4 @@ kosha op-class-binary
   "group-sthita"
   "pratipaksha-yukta"
 
-shabda parse-arity:2 invariant:asymmetric args:fixed-2
-
 done

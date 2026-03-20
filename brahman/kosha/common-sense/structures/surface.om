@@ -23,6 +23,4 @@ kosha surface
   "collision-varga-yukta contact-yukta"
   "domain-3d-yukta"
 
-  shabda word:surface / interface-where-contact-happens-normal-force-friction
-
 done

@@ -6,6 +6,4 @@ kosha composite-type
   "krama-yukta kshetra-sthita"
   "dharma-anvaya-yukta aneka-sthita"
 
-shabda composite-type / a-type-built-from-multiple-primitive-or-composite-parts-struct-record-tuple
-
 done

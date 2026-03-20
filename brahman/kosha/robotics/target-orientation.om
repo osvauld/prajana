@@ -34,6 +34,4 @@ kosha target-orientation
   -- orientation IK needs 6+ DOF
   "aayaama-traya-sthita"
 
-shabda target-orientation, end-effector-orientation, goal-orientation / the-world-space-rotation-the-end-effector-must-achieve-paired-with-target-position-for-full-pose
-
 done

@@ -103,11 +103,13 @@ let classify_token (k : proof_graph) word =
         | Some _ -> Content w
         | None ->
           (* search node shabda lines for this English word — checked before partial name match *)
-          let shabda_match = Hashtbl.fold (fun name n acc ->
+          let shabda_match = Hashtbl.fold (fun name _n acc ->
             (match acc with
             | Some _ -> acc
             | None ->
-              let shabda = String.lowercase_ascii (String.trim n.shabda) in
+              let raw = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
+                | Some s -> s | None -> "" in
+              let shabda = String.lowercase_ascii (String.trim raw) in
               if shabda = "" then None
               else
                 let before_slash = (match String.index_opt shabda '/' with

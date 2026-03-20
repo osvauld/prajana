@@ -15,6 +15,4 @@ mantra homogeneous-transform
 
   "homogeneous-transform-pratipaksha"
 
-shabda homogeneous-transform / the-matrix-encoding-rotation-and-translation-together-enabling-chain-composition-for-kinematic-chains degree:SE3-element per-element:no invertible:yes inverse:homogeneous-transform
-
 done

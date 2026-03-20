@@ -5,6 +5,8 @@
     proof_graph
     event
     om_parser
+    om_writer
+    om_edit
     setu_shabda
     setu_classify
     setu

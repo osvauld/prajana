@@ -20,6 +20,4 @@ kosha operation-dispatch
   "monoid-sthita"
   "domain-computation-sthita"
 
-  shabda operation-dispatch, apply-op, eval-dispatch / evaluation-morphism-from-operation-name-and-arguments-to-result-the-single-mechanism-for-all-computation
-
 done
