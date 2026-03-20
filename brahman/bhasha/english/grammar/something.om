@@ -1,8 +1,9 @@
 bhasha something
 
-  "indefinite-swarupa generic-sthita"
-  -- indefinite pronoun: "something has mass 5 kg", "find something"
-  -- treated as grammar so BQG drops it; entity/intent recognised from context
+  "amsha-swarupa padartha-sthita english-sthita"
+  -- something = some + thing = amsha of padartha.
+  -- an unspecified part of an unspecified thing.
+  -- "something has mass 5 kg" — speaker names an unknown entity with a known quality.
 
   shabda word:something  role:grammar
 

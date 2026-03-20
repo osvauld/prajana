@@ -1,429 +1,229 @@
 # tools/
 
 Analysis, knowledge, and test pipeline tools for the nam proof-graph
-reasoning system. Everything runs from this directory.
+reasoning system. Everything runs as `python3 -m tools [mode] [subcmd] [args]`.
 
 These tools read the live codebase and the test result cache — they do not
 simulate or approximate. Every number they emit came from an actual run.
 
 ---
 
-## brahman — the unified control plane
+## quick reference
 
-### `read_brahman.py` / `brahman/`
+```bash
+# ── static analysis (no server needed) ────────────────────────────────
+python3 -m tools tantra summary          # 72 tantras: lines, takes, calls
+python3 -m tools tantra lint             # hardcoded refs, word lists, smells
+python3 -m tools om summary              # 1614 nodes across 4 layers
+python3 -m tools shabda summary          # unified word index + shabda keys + gaps
 
-One tool for everything: reading tantras and om files, running tests,
-querying the result cache, and serving all of the above over a Unix socket
-so an LLM can query it directly.
+# ── shabda (word/metadata analysis) ───────────────────────────────────
+python3 -m tools shabda summary          # full landscape: words, files, keys, collisions
+python3 -m tools shabda lookup heavier   # trace a word to its node + all shabda keys
+python3 -m tools shabda lookup died      # find gaps — words the graph doesn't know
+python3 -m tools shabda eval             # all 32 fireable operations (nodes with eval:)
+python3 -m tools shabda gaps             # nodes that should have word mappings but don't
+python3 -m tools shabda words            # word index grouped by domain
+python3 -m tools shabda words count      # all words mapping to the 'count' node
+python3 -m tools shabda node addition    # full shabda metadata for a node
+python3 -m tools shabda files            # list all 17 .shabda template files
+python3 -m tools shabda files physics-constants  # show entries in a .shabda file
+python3 -m tools shabda search "died|flew|gave"  # search words + .shabda file contents
 
-**Package layout:**
+# ── live graph queries (auto-starts vyakarana server) ─────────────────
+python3 -m tools vy eval 'walk "viveka-max" "abheda"'
+python3 -m tools vy eval 'shabda "addition" "eval"'
+python3 -m tools vy eval 'word-node "many"'
+python3 -m tools vy inspect momentum
+python3 -m tools vy walk 'viveka-max abheda'
+python3 -m tools vy triples mass
+python3 -m tools vy mantras 'ball has mass 5 velocity 10. find kinetic energy'
+python3 -m tools vy trace 'ball has mass 5 velocity 10. find kinetic energy'
 
-```
-tools/brahman/
-  tantras.py      — parse + query 72 .tantra3 files (static, no server)
-  om.py           — parse + query 1614 .om files, grouped by domain
-  tests.py        — static test discovery (AST parse, no server)
-  runner.py       — pytest subprocess wrapper for targeted test runs
-  cache.py        — read/query/act on the pytest result cache
-  server.py       — Unix socket server + BrahmanClient
-  cli.py          — CLI dispatcher (all modes)
-  vy.py           — vyakarana socket client (used by tests)
-  conftest.py     — pytest fixtures + per-test cache writer
-  pyproject.toml  — anchors pytest rootdir to tools/brahman/
-  v2/             — the test suite (98 tests: 67 passing + 31 xfail)
-    test_evaluator.py
-    test_graph.py
-    test_pipeline.py
-    test_answers.py
-    test_xfail.py
-  .pytest_cache/
-    vyakarana/    — per-test JSON entries + summary.json
+# ── tests ─────────────────────────────────────────────────────────────
+python3 -m tools test run                # full v2 suite (98 tests)
+python3 -m tools test run pipeline       # one layer
+python3 -m tools test run gate:arithmetic  # xfails for a specific gate
+python3 -m tools test run test_ke_basic  # one test by name
+
+# ── ask ───────────────────────────────────────────────────────────────
+python3 -m tools ask "ball has mass 5 velocity 10. find kinetic energy"
+
+# ── patra (living documentation) ────────────────────────────────────
+python3 -m patra glance                 # 20-line LLM context summary
+python3 -m patra discover "insight"     # record a discovery
+python3 -m patra steps                  # plan steps with status
+python3 -m patra topic karaka           # cross-source search
 ```
 
 ---
 
-## running tests
+## package layout
 
-The vyakarana server must be running first:
-
-```bash
-cd vyakarana && ./_build/default/bin/vyakarana.exe --socket /tmp/vy.sock ../brahman &
+```
+tools/
+  __main__.py       — entry point (python3 -m tools)
+  cli.py            — CLI dispatcher (all modes)
+  cli_tantra.py     — tantra subcommands
+  cli_om.py         — om subcommands
+  cli_shabda.py     — shabda subcommands (word index, gaps, eval, lookup)
+  cli_vy.py         — vyakarana live-graph subcommands
+  tantras.py        — parse + query 72 .tantra3 files (static)
+  om.py             — parse + query 1614 .om files by domain (static)
+  shabda.py         — unified shabda analysis: .om inline + .shabda files
+  vy.py             — vyakarana socket client
+  vyakarana.py      — server lifecycle (start/stop/restart)
+  tests.py          — static test discovery (AST parse)
+  runner.py         — pytest subprocess wrapper
+  cache.py          — pytest result cache read/query/act
+  gates.py          — xfail gate definitions
+  paths.py          — shared path constants
+  server.py         — brahman static knowledge server
+  conftest.py       — pytest fixtures + per-test cache writer
+  v2/               — the test suite (98 tests)
+    test_evaluator.py   — 17 tests: reduce, map, filter, cond, fn, let, fixpoint
+    test_graph.py       — 10 tests: walk, walk-in, satya, shabda, stemming
+    test_pipeline.py    — 22 tests: bqg, sandhi, avrti, rashi, entity, match
+    test_answers.py     — 18 tests: end-to-end sentence -> answer
+    test_xfail.py       — 31 tests: features not yet built (the roadmap)
 ```
 
-Then run tests:
+---
+
+## modes
+
+### tantra — static tantra analysis
 
 ```bash
-# run everything
-cd tools/brahman && ../../.venv/bin/pytest v2/ --socket /tmp/vy.sock -q
-
-# or via the brahman tool (handles paths automatically)
-python3 tools/read_brahman.py test run
-
-# run one layer
-python3 tools/read_brahman.py test run evaluator
-python3 tools/read_brahman.py test run pipeline
-python3 tools/read_brahman.py test run answers
-
-# run one test by name
-python3 tools/read_brahman.py test run test_ke_basic
-
-# run xfails for a specific gate (when implementing a feature)
-python3 tools/read_brahman.py test run gate:arithmetic
-python3 tools/read_brahman.py test run gate:dvandva
+python3 -m tools tantra summary          # one-line per tantra: lines, takes, bindings
+python3 -m tools tantra groups           # 12 tantra groups by function
+python3 -m tools tantra all              # dump all tantras with source
+python3 -m tools tantra group pipeline   # one group
+python3 -m tools tantra source execute-mantra  # one tantra by name
+python3 -m tools tantra callgraph        # full call graph + hub tantras
+python3 -m tools tantra callers derive-chain   # who calls this tantra
+python3 -m tools tantra callees anuvada-ganana # what does this tantra call
+python3 -m tools tantra search "viveka"  # regex search across all tantras
+python3 -m tools tantra lint             # hardcoded refs, word lists, scan vs reduce
 ```
 
-**Test layers** — 98 tests total:
+### om — static om file analysis
+
+```bash
+python3 -m tools om summary              # layer counts + domain tree
+python3 -m tools om domains 3            # domain tree at depth 3
+python3 -m tools om domain kosha/math    # browse a domain: subdomains + nodes
+python3 -m tools om source addition      # dump one om node by name
+python3 -m tools om with-key eval        # nodes with a specific shabda key
+python3 -m tools om with-relation kriya  # nodes with a specific edge relation
+python3 -m tools om search "pratipaksha" # regex search across all om files
+```
+
+### shabda — unified word/metadata analysis
+
+Unifies both sources of shabda data:
+- **inline shabda** in 1614 .om files (`shabda word:x,y eval:add arity:2 ...`)
+- **17 .shabda template files** (physics-constants, matra-aayaama, anuvada-setu, ...)
+
+```bash
+python3 -m tools shabda summary          # full landscape
+python3 -m tools shabda lookup WORD      # trace word -> node + all shabda keys
+python3 -m tools shabda eval             # 32 fireable operations (eval: nodes)
+python3 -m tools shabda gaps             # nodes missing word: declarations
+python3 -m tools shabda words            # word index by domain
+python3 -m tools shabda words NODE       # all words mapping to a node
+python3 -m tools shabda node NODE        # full shabda metadata for one node
+python3 -m tools shabda files            # list .shabda template files
+python3 -m tools shabda files NAME       # show entries in a .shabda file
+python3 -m tools shabda search PATTERN   # search words + .shabda file contents
+```
+
+**Key capabilities:**
+
+| command | what it answers |
+|---------|----------------|
+| `shabda summary` | How many words does the graph know? What keys exist? Any collisions? |
+| `shabda lookup died` | Does the graph know this word? If not, what's close? |
+| `shabda eval` | What operations can be fired? What words trigger them? |
+| `shabda gaps` | Which nodes should have words but don't? (eval: without word:) |
+| `shabda words count` | What words all map to the `count` node? |
+| `shabda node addition` | What's the full shabda on `addition`? eval, arity, inverse, edges? |
+
+### vy — live graph queries
+
+Requires the vyakarana server (auto-started by the tool).
+
+```bash
+python3 -m tools vy eval '<expr>'        # evaluate any tantra expression
+python3 -m tools vy inspect <node>       # full node: satya, shabda keys, edges
+python3 -m tools vy walk '<node> <rel>'  # transitive chain walk
+python3 -m tools vy triples <node>       # all triples touching a node
+python3 -m tools vy mantras '<sentence>' # which mantras fire and why
+python3 -m tools vy trace '<sentence>'   # pipeline stages with +/- triple diff
+```
+
+### test — test discovery and execution
+
+```bash
+python3 -m tools test summary            # 98 total / 67 passing / 31 xfail
+python3 -m tools test list               # all tests with xfail gates
+python3 -m tools test run                # run everything
+python3 -m tools test run pipeline       # one layer
+python3 -m tools test run gate:arithmetic  # xfails for a feature gate
+python3 -m tools test run test_ke_basic  # one test by name
+```
+
+### cache — test result analysis
+
+```bash
+python3 -m tools cache summary           # passed/failed/xfailed + gates + slow calls
+python3 -m tools cache failed            # all failures with diagnosis + call chain
+python3 -m tools cache gates             # xfail gates with test counts
+python3 -m tools cache gates arithmetic  # tests in one gate
+python3 -m tools cache slow              # slowest calls and tests
+python3 -m tools cache diff /tmp/old.json  # compare against previous run
+python3 -m tools cache fix-xpass         # find tests that now pass (dry run)
+python3 -m tools cache fix-xpass --apply # actually remove @xfail markers
+```
+
+### search — cross-cutting search
+
+```bash
+python3 -m tools search "viveka"         # search both tantras AND om files
+```
+
+---
+
+## test suite (v2)
+
+**Current baseline:** 67 passed / 31 xfailed / 0 failing (98 total)
 
 | layer | tests | what it covers |
 |---|---|---|
-| `evaluator` | 17 | reduce, map, filter, cond, fn, let, from/where, fixpoint, arithmetic, strings, lists, split-numeric |
+| `evaluator` | 17 | reduce, map, filter, cond, fn, let, from/where, fixpoint, arithmetic |
 | `graph` | 10 | walk, walk-in, node-satya, shabda lookup, plural stemming, abbreviation |
-| `pipeline` | 22 | bqg, sandhi, avrti-refine, rashi, entity scope, match, agra-bandha, paragraph |
-| `answers` | 18 | end-to-end: sentence → answer, strands, multi-turn, comparison |
+| `pipeline` | 22 | bqg, sandhi, avrti-refine, rashi, entity scope, match, agra-bandha |
+| `answers` | 18 | end-to-end: sentence -> answer, strands, multi-turn, comparison |
 | `xfail` | 31 | features not yet built (the roadmap) |
 
-**Xfail gates** — what each pending group is waiting on:
+**Xfail gates:**
 
 | gate | tests | needs |
 |---|---|---|
-| `arithmetic` | 4 | plain count add/subtract, distance, area |
-| `dvandva` | 3 | per-entity instance-map + variadic sum |
+| `arithmetic` | 4 | count add/subtract via kosha, distance, area |
+| `dvandva` | 3 | per-entity derive + variadic sum |
 | `inverse_math` | 3 | bound-vals / invert-math path |
-| `sthita_viveka` | 2 | multi-slot entity assignment (gravity, coulomb) |
+| `sthita_viveka` | 2 | multi-slot entity assignment |
 | `compute_compare` | 2 | compute-then-compare viveka |
 | `transitive` | 2 | graph-walk chain inference |
-| `motion_verb` | 3 | 'moves at' / 'moving at' → velocity signal |
-| `from_rest` | 2 | 'from rest' → initial-velocity = 0 |
+| `motion_verb` | 3 | 'moves at' / 'moving at' -> velocity signal |
+| `from_rest` | 2 | 'from rest' -> initial-velocity = 0 |
 | `syllogism` | 1 | modus-ponens + assertion chain |
 | `proportional` | 1 | proportional reasoning |
-| `compound_trigram` | 2 | three-word compounds (electric-field-strength) |
+| `compound_trigram` | 2 | three-word compounds |
 | `colour_classifier` | 2 | colour words as entity discriminators |
 | `article` | 1 | 'the electron' article transparency |
 | `relative_velocity` | 1 | relative-velocity kosha concept |
-
----
-
-## cache
-
-Every test run writes per-test JSON to `tools/brahman/.pytest_cache/vyakarana/`.
-
-```bash
-# summary: passed/failed/xfailed counts, gates, slowest calls
-python3 tools/read_brahman.py cache summary
-
-# all failed tests with diagnosis + call chain
-python3 tools/read_brahman.py cache failed
-
-# xfail gates — what is each group waiting on
-python3 tools/read_brahman.py cache gates
-python3 tools/read_brahman.py cache gates arithmetic
-
-# compare against a previous run
-python3 tools/read_brahman.py cache diff /tmp/old_summary.json
-
-# show slowest calls and tests
-python3 tools/read_brahman.py cache slow
-
-# remove @xfail markers from tests that now pass (dry-run first)
-python3 tools/read_brahman.py cache fix-xpass
-python3 tools/read_brahman.py cache fix-xpass --apply
-```
-
-**Cache entry fields** (per test):
-
-| field | meaning |
-|---|---|
-| `calls[].input` | exact string sent to the server (eval expr or sentence) |
-| `calls[].output` | exact server response |
-| `calls[].elapsed_ms` | per-call timing |
-| `calls[].error` | exception string if the call threw |
-| `failure.last_call` | the specific call that caused the assertion to fail |
-| `failure.expected` / `.got` | extracted from the assertion message |
-| `outcome` | `passed` / `failed` / `xfailed` / `xpassed` |
-| `duration` | total test wall time in seconds |
-| `xfail.gate` | which feature gate this xfail belongs to |
-
----
-
-## knowledge queries
-
-Read tantras and om files from disk — no server needed.
-
-```bash
-# ── tantras ─────────────────────────────────────────────────────────────
-
-# one-line summary: name, lines, takes, bindings, calls, scans
-python3 tools/read_brahman.py tantra summary
-
-# list the 12 tantra groups
-python3 tools/read_brahman.py tantra groups
-
-# dump all tantras with source, grouped by directory
-python3 tools/read_brahman.py tantra all
-
-# dump one group
-python3 tools/read_brahman.py tantra group pipeline
-
-# dump one tantra by name (no path needed)
-python3 tools/read_brahman.py tantra source execute-mantra
-
-# static call graph: who calls whom
-python3 tools/read_brahman.py tantra callgraph
-
-# who calls derive-chain?
-python3 tools/read_brahman.py tantra callers derive-chain
-
-# what does anuvada-ganana call?
-python3 tools/read_brahman.py tantra callees anuvada-ganana
-
-# regex search across all tantras
-python3 tools/read_brahman.py tantra search "viveka"
-
-
-# ── om files ─────────────────────────────────────────────────────────────
-
-# overview: layer counts + domain tree at depth 2
-python3 tools/read_brahman.py om summary
-
-# domain tree at depth 3
-python3 tools/read_brahman.py om domains 3
-
-# browse a domain — shows subdomains then direct nodes with source
-python3 tools/read_brahman.py om domain kosha/math
-python3 tools/read_brahman.py om domain kosha/math/number/operations
-python3 tools/read_brahman.py om domain kosha/physics/kinematics/linear
-python3 tools/read_brahman.py om domain sangati/jiva
-
-# dump one om node by name
-python3 tools/read_brahman.py om source velocity
-python3 tools/read_brahman.py om source addition
-python3 tools/read_brahman.py om source viveka-max
-
-# find nodes with a specific shabda key
-python3 tools/read_brahman.py om with-key eval
-python3 tools/read_brahman.py om with-key arity
-
-# find nodes with a specific edge relation
-python3 tools/read_brahman.py om with-relation pratipaksha
-python3 tools/read_brahman.py om with-relation kriya
-
-# regex search across all om files
-python3 tools/read_brahman.py om search "pratipaksha"
-
-
-# ── cross-cutting ─────────────────────────────────────────────────────────
-
-# search both tantras AND om files at once
-python3 tools/read_brahman.py search "viveka"
-
-# run one JSON command inline (same protocol as socket)
-python3 tools/read_brahman.py json '{"command":"ping"}'
-python3 tools/read_brahman.py json '{"command":"tantra-callers","name":"derive-chain"}'
-python3 tools/read_brahman.py json '{"command":"cache-summary"}'
-```
-
----
-
-## socket server
-
-Start the brahman server (separate from the vyakarana server):
-
-```bash
-python3 tools/read_brahman.py serve                    # /tmp/brahman.sock
-python3 tools/read_brahman.py serve /tmp/custom.sock
-```
-
-Query from the command line:
-
-```bash
-echo '{"command":"ping"}' | socat - UNIX-CONNECT:/tmp/brahman.sock
-echo '{"command":"test-summary"}' | socat - UNIX-CONNECT:/tmp/brahman.sock | jq .
-echo '{"command":"cache-summary"}' | socat - UNIX-CONNECT:/tmp/brahman.sock | jq .
-echo '{"command":"test-run","socket":"/tmp/vy.sock"}' | socat - UNIX-CONNECT:/tmp/brahman.sock
-```
-
-Query from Python:
-
-```python
-from tools.brahman.server import BrahmanClient
-
-c = BrahmanClient("/tmp/brahman.sock")
-
-# knowledge
-c.ping()
-c.tantra_source("execute-mantra")
-c.tantra_callers("derive-chain")
-c.om_domain("kosha/math/logic")
-c.om_with_key("eval")
-c.search("viveka")
-c.reload()
-
-# tests
-c._call({"command": "test-summary"})
-c._call({"command": "test-list", "layer": "evaluator"})
-c._call({"command": "test-list", "gate": "arithmetic"})
-c._call({"command": "test-run", "socket": "/tmp/vy.sock"})
-c._call({"command": "test-run", "layer": "pipeline", "socket": "/tmp/vy.sock"})
-c._call({"command": "test-run", "name": "test_ke_basic", "socket": "/tmp/vy.sock"})
-
-# cache
-c._call({"command": "cache-summary"})
-c._call({"command": "cache-failed"})
-c._call({"command": "cache-gates"})
-c._call({"command": "cache-gates", "gate": "arithmetic"})
-c._call({"command": "cache-diff", "previous": "/tmp/old_summary.json"})
-c._call({"command": "cache-fix-xpass", "dry_run": True})
-c._call({"command": "cache-slow"})
-```
-
-**Full socket command reference:**
-
-| command | required | optional | returns |
-|---|---|---|---|
-| `ping` | — | — | tantra + om counts |
-| `tantra-summary` | — | — | per-tantra metadata |
-| `tantra-source` | `name` | — | full source + bindings + calls |
-| `tantra-group` | `group` | — | all tantras in group with source |
-| `tantra-groups` | — | — | group list with counts |
-| `tantra-callgraph` | — | — | forward `calls` + `called_by` |
-| `tantra-callers` | `name` | — | list of callers |
-| `tantra-callees` | `name` | — | list of callees |
-| `om-summary` | — | `depth` | layer counts + domain tree |
-| `om-source` | `name` | — | full source + slokas + edges + shabda |
-| `om-domain` | `domain` | — | subdomains + all nodes under prefix |
-| `om-domains` | — | `depth` (default 2) | domain tree |
-| `om-with-key` | `key` | — | nodes with that shabda key |
-| `om-with-relation` | `relation` | — | nodes with that edge relation |
-| `search` | `pattern` | `scope` (all/tantras/om) | matches in tantras/om |
-| `reload` | — | — | re-read all files from disk |
-| `test-summary` | — | — | 98 total / 67 passing / 31 xfail by layer+gate |
-| `test-list` | — | `layer`, `gate`, `pattern`, `xfail_only`, `passing_only` | test metadata |
-| `test-run` | `socket` | `layer`, `gate`, `name`, `pattern`, `verbose`, `timeout` | pytest result |
-| `cache-summary` | — | `cache_dir` | totals + failed list + gates + slow calls |
-| `cache-entry` | `test` | `cache_dir` | full entry for one test |
-| `cache-failed` | — | `cache_dir` | all failed entries with diagnosis |
-| `cache-gates` | — | `gate`, `cache_dir` | xfailed entries by gate |
-| `cache-diff` | `previous` | `cache_dir` | newly failing/passing vs previous run |
-| `cache-fix-xpass` | — | `dry_run` (default true), `cache_dir` | remove @xfail from passing tests |
-| `cache-slow` | — | `top_n`, `cache_dir` | slowest calls and tests |
-| `dump-om` | `path` | — | **vyakarana server only** — om AST as JSON |
-
----
-
-## domain taxonomy
-
-The om file directory structure IS the domain taxonomy:
-
-```
-brahman/
-  kosha/              — domain knowledge (1048 nodes)
-    math/             — 259 nodes (algebra, calculus, geometry, graph,
-                        logic, number, probability, set)
-    physics/          — 215 nodes (kinematics, dynamics, energy,
-                        electromagnetism, thermodynamics, oscillation)
-    chemistry/        — 84 nodes
-    biology/          — 50 nodes
-    common-sense/     — 46 nodes
-    computation/      — 66 nodes
-    engineering/      — 24 nodes
-    philosophy/       — 26 nodes
-    robotics/         — 12 nodes
-    yantra/           — 110 nodes (graph edge types, visheshanam)
-  sangati/            — universal structural truth (317 nodes)
-  bhasha/             — linguistic surface (148 nodes)
-```
-
----
-
-## tantra groups
-
-The 72 tantras in `brahman/yantra/` grouped by function:
-
-| group | files | role |
-|---|---|---|
-| `pipeline` | 22 | orchestrator, derive/execute, proof graph |
-| `avrti` | 5 | refinement passes (fixpoint, anumana) |
-| `sankhya` | 4 | number handling, count chain |
-| `match` | 7 | mantra matching, scope, forward/inverse |
-| `anuvada` | 9 | proof/reasoning emission (pratijna, hetu, etc.) |
-| `equations` | 11 | physics equations (ke, momentum, velocity, etc.) |
-| `vishesa` | 5 | entity typing, rashi, agra-bandha |
-| `sandhi` | 3 | compound word resolution |
-| `vibhakti` | 2 | grammar case handling |
-| `boot` | 2 | bootstrap + reload |
-| `debug` | 1 | mantra coverage |
-| `lookup` | 1 | shabda lookup |
-
----
-
-## structure analysis tools
-
-These are read-only analysis tools that cross-reference tantras, OCaml
-source, and the test cache. They do not run tests.
-
-### `analyze_pipeline.py`
-
-Cross-layer pattern analysis: recurring patterns, abstraction candidates,
-anti-patterns across tantra source.
-
-```bash
-python3 tools/analyze_pipeline.py
-python3 tools/analyze_pipeline.py --report patterns
-python3 tools/analyze_pipeline.py --report abstractions
-python3 tools/analyze_pipeline.py --json
-```
-
-### `analyze_ocaml.py`
-
-OCaml module map, migration candidates, dead code analysis.
-
-```bash
-python3 tools/analyze_ocaml.py
-python3 tools/analyze_ocaml.py --report migration
-python3 tools/analyze_ocaml.py --report patterns
-python3 tools/analyze_ocaml.py --json
-```
-
-**Migration boundary:**
-
-| score | meaning | examples |
-|---|---|---|
-| 3 | migrate immediately | `square → mul x x`, `half → mul x 0.5` |
-| 2 | migrate next | `unique`, `sum`, `vec-scale`, `vec-dot` |
-| 1 | defer | `reverse`, `zip`, `rot2d` |
-| 0 | keep in OCaml | `sort-desc`, `frequencies`, `mat-mul` |
-
-### `analyze_tantras.py`
-
-Deep tantra AST analysis. Requires the vyakarana server.
-
-```bash
-python3 tools/analyze_tantras.py
-python3 tools/analyze_tantras.py --report tests
-python3 tools/analyze_tantras.py --report philosophical
-python3 tools/analyze_tantras.py --json
-```
-
-### `analyze_shabda.py`
-
-Surface vocabulary analysis: word index, aliases, collisions.
-
-```bash
-python3 tools/analyze_shabda.py
-python3 tools/analyze_shabda.py --json
-```
-
-### `analyze_test_results.py`
-
-Legacy pipeline runner — still works but `read_brahman.py` is preferred.
-Reads the same cache and provides `--run`, `--full`, `--gate`, `--diff`,
-`--fix-xpass` options.
-
-```bash
-python3 tools/analyze_test_results.py           # report from cache
-python3 tools/analyze_test_results.py --full    # run full suite
-python3 tools/analyze_test_results.py --gate arithmetic
-```
 
 ---
 
@@ -431,34 +231,70 @@ python3 tools/analyze_test_results.py --gate arithmetic
 
 ```bash
 # 1. understand what you're about to change
-python3 tools/read_brahman.py tantra source derive-chain
-python3 tools/read_brahman.py tantra callers derive-chain
-python3 tools/read_brahman.py om domain kosha/math/number/operations
+python3 -m tools tantra source derive-chain
+python3 -m tools tantra callers derive-chain
+python3 -m tools shabda node addition
+python3 -m tools shabda lookup remaining
 
-# 2. run the relevant tests before changing anything
-python3 tools/read_brahman.py test run pipeline
-python3 tools/read_brahman.py cache summary
+# 2. run relevant tests before changing anything
+python3 -m tools test run pipeline
+python3 -m tools cache summary
 
 # 3. make your change (tantra, om, or OCaml)
 #    for OCaml: dune build from vyakarana/ then restart server
 
 # 4. run targeted tests
-python3 tools/read_brahman.py test run test_ke_basic
-python3 tools/read_brahman.py test run pipeline
+python3 -m tools test run test_ke_basic
+python3 -m tools test run pipeline
 
 # 5. if a gate is now implemented, run its xfails
-python3 tools/read_brahman.py test run gate:arithmetic
+python3 -m tools test run gate:arithmetic
 
 # 6. full suite
-python3 tools/read_brahman.py test run
+python3 -m tools test run
 
 # 7. if any xfails now pass, remove their markers
-python3 tools/read_brahman.py cache fix-xpass
-python3 tools/read_brahman.py cache fix-xpass --apply
+python3 -m tools cache fix-xpass
+python3 -m tools cache fix-xpass --apply
+```
 
-# 8. for LLM-assisted development: start the brahman server
-python3 tools/read_brahman.py serve &
-# then query over socket:
-echo '{"command":"test-run","socket":"/tmp/vy.sock","layer":"pipeline"}' \
-  | socat - UNIX-CONNECT:/tmp/brahman.sock | jq '{passed,failed,summary}'
+---
+
+## shabda landscape
+
+The word/metadata system has three sources:
+
+1. **Inline shabda in .om files** — 220 nodes declare `word:` keys, mapping
+   English words to graph concepts. 32 nodes have `eval:` (fireable operations).
+   Example: `shabda word:plus eval:add arity:2 inverse:subtraction`
+
+2. **17 .shabda template files** — standalone key:value tables for constants,
+   unit dimensions, grammar labels, and code-generation bridges.
+   Linked from .om nodes via `shabda-tmpl:physics` etc.
+
+3. **The engine's word index** — built at boot from all `word:` declarations.
+   `word-node "heavier"` -> `viveka-max`. `shabda-anveshana "birds"` -> `bird`.
+
+Use `python3 -m tools shabda summary` to see the full picture.
+Use `python3 -m tools shabda gaps` to find where word mappings are missing.
+Use `python3 -m tools shabda lookup WORD` to trace any word through the system.
+
+---
+
+## patra — living documentation
+
+Separate package at `patra/`. See `patra/README.md` for full docs.
+
+```bash
+python3 -m patra glance                         # compact LLM context summary
+python3 -m patra discover "insight text"         # record a discovery
+python3 -m patra step-add "step title" --doc plan  # add plan step
+python3 -m patra step-done STEP_ID "note"        # mark step complete
+python3 -m patra baseline 85 35 0                # update test baseline
+python3 -m patra search "pattern"                # regex search across docs
+python3 -m patra topic karaka                    # cross-source: patra + om + tantras
+python3 -m patra steps                           # plan steps with status
+python3 -m patra index                           # full TOC with live stats
+python3 -m patra report                          # analysis report
+python3 -m patra emit md                         # generate .md files from state
 ```

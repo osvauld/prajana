@@ -1,4 +1,0 @@
-# scene-defaults-pulley-system.shabda
-default-mass:1.0
-default-friction:0
-default-goals:acceleration,tension

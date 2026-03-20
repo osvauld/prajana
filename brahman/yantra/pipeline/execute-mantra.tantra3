@@ -28,7 +28,7 @@ forward-math = cond (and is-math (not is-inv))
   otherwise _none
 
 -- ── forward: kriya/equation path ──────────────────────────────────────────────
-kriya-nodes = walk mantra "kriya"
+kriya-nodes = om-kriya mantra
 forward-kriya = cond (and (not is-math) (not is-inv) (gt (length kriya-nodes) 0))
   (call-tantra (nth kriya-nodes 0) args)
   otherwise _none

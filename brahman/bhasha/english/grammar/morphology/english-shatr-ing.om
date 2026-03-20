@@ -1,0 +1,11 @@
+bhasha english-shatr-ing
+
+  "english-sthita"
+  "shatr-pratyaya-sthita"
+
+  -- present participle: -ing suffix → verb form (shatr-pratyaya)
+  -- walking → walk, running → run, eating → eat
+  -- used as guard: word ending in -ing is likely a verb, not a dravya
+  shabda suffix:ing stem-suffix:
+
+done

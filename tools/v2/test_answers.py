@@ -157,6 +157,49 @@ def test_paragraph_statement_then_question(vy):
     assert "250" in r
 
 
+# ── count arithmetic (grade-sparsha: sentence-local binding) ───────────────────
+
+
+def test_count_addition(vy):
+    """3 birds + 2 more = 5. Period boundary separates sentences."""
+    r = vy.answer("3 birds sat on a tree. 2 more came. how many birds are there in total")
+    assert "5" in r
+
+
+def test_count_subtraction(vy):
+    """10 birds - 3 flew away = 7. Period boundary separates sentences."""
+    r = vy.answer("10 birds sat on a tree. 3 flew away. how many birds are left")
+    assert "7" in r
+
+
+def test_count_subtraction_comma_boundary(vy):
+    """Comma is also a viraam boundary. 3 must not bind to tree."""
+    r = vy.answer("10 birds sat on a tree, 3 flew away. how many birds are left")
+    assert "7" in r
+
+
+def test_count_number_before_noun(vy):
+    """3 birds - 2 flew away = 1. Numbers-before-noun stay loose; ordering preserved."""
+    r = vy.answer("3 birds sat on a tree. 2 flew away. how many birds are left")
+    assert "1" in r
+
+
+def test_count_named_entity_total(vy):
+    """box-A has 5, box-B has 3. Total = 8."""
+    r = vy.answer(
+        "box-A has 5 apples. box-B has 3 apples. how many apples are there in total"
+    )
+    assert "8" in r
+
+
+def test_count_gave_away(vy):
+    """Maria had 10, gave 4 away. 10 - 4 = 6."""
+    r = vy.answer(
+        "Maria had 10 apples. she gave 4 to Tom. how many apples does Maria have"
+    )
+    assert "6" in r
+
+
 def test_paragraph_entity_across_sentences(vy):
     """Properties split across sentences bind to same entity."""
     r = vy.answer("ball has mass 5. velocity is 10. find kinetic energy")

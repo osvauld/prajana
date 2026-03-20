@@ -28,7 +28,10 @@ takes concept
 takes cw
 takes direction
 
-is-max = (not (eq (to-string direction) "min"))
+-- kosha-driven operation: read eval: from the direction node (max/min)
+-- and its pratipaksha (min/max) — no hardcoded gt/lt
+op-eval  = shabda direction "eval"
+opp-eval = shabda (walk direction "pratipaksha") "eval"
 
 -- scan: state = [pairs-so-far, active-entity, seen-vals]
 scan-result = reduce graph [[], "", []] (fn acc tri ->
@@ -48,28 +51,25 @@ scan-result = reduce graph [[], "", []] (fn acc tri ->
 
 ev-pairs = nth scan-result 0
 
--- find winner: entity with max (or min) sankhya value
+-- find winner: entity whose value wins under op-eval (max or min)
 best-pr = cond (gt (length ev-pairs) 0)
   (reduce ev-pairs (nth ev-pairs 0) (fn best kv ->
     let best-val = to-number (nth best 1)
     let kv-val   = to-number (nth kv 1)
-    cond (and is-max (gt kv-val best-val)) kv
-    otherwise (cond (and (not is-max) (lt kv-val best-val)) kv
-    otherwise best)))
+    cond (eq (apply-op op-eval [kv-val, best-val]) kv-val) kv
+    otherwise best))
   otherwise []
 
 winner     = cond (gt (length best-pr) 0) (to-string (nth best-pr 0)) otherwise ""
 winner-val = cond (gt (length best-pr) 0) (to-string (nth best-pr 1)) otherwise ""
 
--- find loser: entity with opposite value (for two-entity case, the other one)
--- for 3+ entities: the one with the opposite extreme
+-- find loser: entity whose value wins under opp-eval (the inverse operation)
 worst-pr = cond (gt (length ev-pairs) 0)
   (reduce ev-pairs (nth ev-pairs 0) (fn worst kv ->
     let worst-val = to-number (nth worst 1)
     let kv-val    = to-number (nth kv 1)
-    cond (and is-max (lt kv-val worst-val)) kv
-    otherwise (cond (and (not is-max) (gt kv-val worst-val)) kv
-    otherwise worst)))
+    cond (eq (apply-op opp-eval [kv-val, worst-val]) kv-val) kv
+    otherwise worst))
   otherwise []
 
 loser     = cond (gt (length worst-pr) 0) (to-string (nth worst-pr 0)) otherwise ""

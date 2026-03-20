@@ -53,6 +53,13 @@ GATE_KEYWORDS = {
     "distance = speed": ("arithmetic", "arithmetic: plain count not in pipeline"),
     "area =": ("arithmetic", "arithmetic: plain count not in pipeline"),
     "proportional": ("proportional", "viveka: proportional reasoning"),
+    "sentence_scope": ("sentence_scope", "sentence_scope: grade-sparsha sentence-local binding"),
+    "dvandva_count": ("dvandva_count", "dvandva_count: multiple numbers in one sentence summed"),
+    "entity_scope": ("entity_scope", "entity_scope: per-entity scoped count"),
+    "multi_question": ("multi_question", "multi_question: multiple questions in one paragraph"),
+    "multiplication": ("multiplication", "multiplication: 'each' triggers multiply"),
+    "count_compare": ("count_compare", "count_compare: count then viveka comparison"),
+    "long_chain": ("long_chain", "long_chain: 4+ grade count chains"),
 }
 
 

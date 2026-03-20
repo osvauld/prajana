@@ -13,6 +13,8 @@ kosha vacaka
   "purusa-varga-vishesa"
   "nam-yukta"                  -- vacaka speaks toward nam
   "uttama-purusa-abheda"       -- first-person singular subject
+  "chala-apeksha-sthita"       -- speaker is the moving frame — the one who changes
+  "sambodhana-yukta"           -- the speaker is the one who addresses
 
   shabda word:i,me,my,mine,myself / the-speaker-the-one-asking-the-question
 
@@ -33,6 +35,8 @@ kosha addressee
   "purusa-varga-vishesa"
   "nam-abheda"                 -- addressee IS nam
   "dvitiya-purusa-abheda"      -- second-person
+  "sthira-apeksha-sthita"     -- addressee is the fixed frame — the graph that holds
+  "sambodhana-phala"           -- addressee is the one who receives the address
 
   shabda word:you,your,yours,yourself / the-one-being-addressed-the-nam-of-the-question
 

@@ -1,0 +1,11 @@
+bhasha english-kta-ed
+
+  "english-sthita"
+  "kta-pratyaya-sthita"
+
+  -- past participle: -ed suffix → verb form (kta-pratyaya)
+  -- walked → walk, jumped → jump, removed → remove
+  -- used as guard: word ending in -ed is likely a verb, not a dravya
+  shabda suffix:ed stem-suffix:
+
+done

@@ -1,0 +1,1275 @@
+[
+  {
+    "op": "create_doc",
+    "entry_id": "nam",
+    "at": "2026-03-20T16:19:16",
+    "details": {
+      "title": "Nam \u2014 The Proof Graph as Subject"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "tantra",
+    "at": "2026-03-20T16:19:16",
+    "details": {
+      "title": "Tantra \u2014 The Grammar and Mathematics of Understanding"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "pipeline",
+    "at": "2026-03-20T16:19:16",
+    "details": {
+      "title": "Pipeline \u2014 How Sentences Become Understanding"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "tests",
+    "at": "2026-03-20T16:19:16",
+    "details": {
+      "title": "Tests \u2014 What the System Proves About Itself"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "plan",
+    "at": "2026-03-20T16:19:16",
+    "details": {
+      "title": "Plan \u2014 What Remains to Build"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "pratibimba",
+    "at": "2026-03-20T16:19:16",
+    "details": {
+      "title": "Pratibimba \u2014 The Vision for Manifestation"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "principles",
+    "at": "2026-03-20T16:19:16",
+    "details": {
+      "title": "Principles \u2014 Structural Truths"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "nam.philosophy-1",
+    "at": "2026-03-20T16:19:42",
+    "details": {
+      "type": "philosophy",
+      "title": "What nam is"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "nam.philosophy-2",
+    "at": "2026-03-20T16:19:42",
+    "details": {
+      "type": "philosophy",
+      "title": "Swa without ahamkara"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "nam.philosophy-3",
+    "at": "2026-03-20T16:19:43",
+    "details": {
+      "type": "philosophy",
+      "title": "The four states"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "nam.philosophy-4",
+    "at": "2026-03-20T16:19:43",
+    "details": {
+      "type": "philosophy",
+      "title": "All utterance is vibhakti"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "session-20",
+    "at": "2026-03-20T16:50:30",
+    "details": {
+      "title": "Session 20 \u2014 Pathram + Mathematical Formalization"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.changelog-1",
+    "at": "2026-03-20T16:50:30",
+    "details": {
+      "type": "changelog",
+      "title": "What was built: pathram"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.changelog-2",
+    "at": "2026-03-20T16:50:30",
+    "details": {
+      "type": "changelog",
+      "title": "What was built: kosha nodes"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.discovery-3",
+    "at": "2026-03-20T16:50:54",
+    "details": {
+      "type": "discovery",
+      "title": "Discovery: the graph describes its own math"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.discovery-4",
+    "at": "2026-03-20T16:50:54",
+    "details": {
+      "type": "discovery",
+      "title": "Discovery: om-* primitives"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.discovery-5",
+    "at": "2026-03-20T16:50:54",
+    "details": {
+      "type": "discovery",
+      "title": "Discovery: op-class taxonomy"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.discovery-6",
+    "at": "2026-03-20T16:51:23",
+    "details": {
+      "type": "discovery",
+      "title": "Discovery: connected vs disconnected math"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.discovery-7",
+    "at": "2026-03-20T16:51:23",
+    "details": {
+      "type": "discovery",
+      "title": "Discovery: pipeline mathematical identity"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.plan-8",
+    "at": "2026-03-20T16:51:47",
+    "details": {
+      "type": "plan",
+      "title": "Plan: vartamana migration"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.plan-9",
+    "at": "2026-03-20T16:51:47",
+    "details": {
+      "type": "plan",
+      "title": "Plan: pratibimba migration"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.plan-10",
+    "at": "2026-03-20T16:52:10",
+    "details": {
+      "type": "plan",
+      "title": "Plan: kosha math enrichment"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.plan-11",
+    "at": "2026-03-20T16:52:10",
+    "details": {
+      "type": "plan",
+      "title": "Plan: pathram math tool"
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "session-20.plan-10",
+    "at": "2026-03-20T16:55:02",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "session-20.plan-11",
+    "at": "2026-03-20T16:55:02",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "roadmap",
+    "at": "2026-03-20T16:55:02",
+    "details": {
+      "title": "Roadmap \u2014 Priority Stack"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-1",
+    "at": "2026-03-20T16:55:02",
+    "details": {
+      "type": "step",
+      "title": "Identify abstract tantra patterns"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-2",
+    "at": "2026-03-20T16:55:02",
+    "details": {
+      "type": "step",
+      "title": "Create kosha nodes for each pattern"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-3",
+    "at": "2026-03-20T16:55:02",
+    "details": {
+      "type": "step",
+      "title": "Enrich op-class nodes with algebra connections"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-4",
+    "at": "2026-03-20T16:55:02",
+    "details": {
+      "type": "step",
+      "title": "Enrich op-reduce, op-fixpoint, op-map, op-filter"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-5",
+    "at": "2026-03-20T16:55:02",
+    "details": {
+      "type": "step",
+      "title": "Replace hardcoded values in tantras with kosha reads"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-6",
+    "at": "2026-03-20T16:55:03",
+    "details": {
+      "type": "step",
+      "title": "Activate om-kriya and om-contract in tantras"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-7",
+    "at": "2026-03-20T16:55:03",
+    "details": {
+      "type": "step",
+      "title": "Refine pathram math to paper quality"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-8",
+    "at": "2026-03-20T16:55:03",
+    "details": {
+      "type": "step",
+      "title": "Dissolve vartamana into pathram"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "roadmap.step-9",
+    "at": "2026-03-20T16:55:03",
+    "details": {
+      "type": "step",
+      "title": "Dissolve pratibimba into pathram"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.discovery-12",
+    "at": "2026-03-20T16:56:09",
+    "details": {
+      "type": "discovery",
+      "title": "Discovery: seven abstract patterns across tantras"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "session-20.discovery-13",
+    "at": "2026-03-20T16:56:26",
+    "details": {
+      "type": "discovery",
+      "title": "Discovery: three kinds of pattern"
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-1",
+    "at": "2026-03-20T16:56:36",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-1",
+    "at": "2026-03-20T16:56:36",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-2",
+    "at": "2026-03-20T16:56:36",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-2",
+    "at": "2026-03-20T17:01:27",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-2",
+    "at": "2026-03-20T17:01:27",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-3",
+    "at": "2026-03-20T17:01:27",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-3",
+    "at": "2026-03-20T17:01:27",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-4",
+    "at": "2026-03-20T17:01:27",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-4",
+    "at": "2026-03-20T17:01:27",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-5",
+    "at": "2026-03-20T17:01:27",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-5",
+    "at": "2026-03-20T17:06:46",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-5",
+    "at": "2026-03-20T17:06:46",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-6",
+    "at": "2026-03-20T17:06:46",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-20T17:06:46",
+    "details": {
+      "passed": 78,
+      "xfailed": 39,
+      "failed": 0
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-6",
+    "at": "2026-03-20T17:10:58",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-6",
+    "at": "2026-03-20T17:10:58",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-7",
+    "at": "2026-03-20T17:10:58",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-20T17:10:58",
+    "details": {
+      "passed": 78,
+      "xfailed": 39,
+      "failed": 0
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-1",
+    "at": "2026-03-20T17:15:15",
+    "details": {
+      "type": "step",
+      "title": "Step 3: Dissolve anuvada-ganana into mode dispatch"
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-1",
+    "at": "2026-03-20T17:15:15",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-2",
+    "at": "2026-03-20T17:15:15",
+    "details": {
+      "type": "step",
+      "title": "Step 3.0: Sambodhana \u2014 existence acknowledgment"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-3",
+    "at": "2026-03-20T17:15:15",
+    "details": {
+      "type": "step",
+      "title": "Step 3.1: Darshana \u2014 what is X?"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-4",
+    "at": "2026-03-20T17:15:15",
+    "details": {
+      "type": "step",
+      "title": "Step 3.2: Prajna-dana \u2014 knowledge intake"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-5",
+    "at": "2026-03-20T17:15:15",
+    "details": {
+      "type": "step",
+      "title": "Step 3.3: Proper noun recognition"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-6",
+    "at": "2026-03-20T17:15:15",
+    "details": {
+      "type": "step",
+      "title": "Step 3.4: Pronoun resolution"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-7",
+    "at": "2026-03-20T17:15:29",
+    "details": {
+      "type": "step",
+      "title": "Steps 7-10: Post-dissolution computation"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.section-8",
+    "at": "2026-03-20T17:15:29",
+    "details": {
+      "type": "section",
+      "title": "Priority order"
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "roadmap.step-7",
+    "at": "2026-03-20T17:15:37",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "discoveries",
+    "at": "2026-03-20T17:55:59",
+    "details": {
+      "title": "Discoveries"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-1",
+    "at": "2026-03-20T17:55:59",
+    "details": {
+      "type": "discovery",
+      "title": "I and you are apeksha markers, not entity names. I=vacaka=chala-apeksha (speaker, moving frame). you=addressee=sthira-apeksha (graph/nam, fixed frame). When utterance crosses the boundary, pronouns invert. Every question is implicitly apeksha-nam; sambodhana makes it explicit."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-2",
+    "at": "2026-03-20T17:56:12",
+    "details": {
+      "type": "discovery",
+      "title": "Greeting words (hello, hi, hey) are not nodes \u2014 they are shabda signals on sangati roots, like common-sense-events maps verbs to kshaya/vriddhi. english-grammar-signals.shabda maps: hello\u2192sambodhana, hey\u2192abhisambodhana, greetings\u2192aamantrana. Detection: shabda lookup, not node walk."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-3",
+    "at": "2026-03-20T17:56:19",
+    "details": {
+      "type": "discovery",
+      "title": "Sambodhana is not a special mode \u2014 the graph already acknowledges every utterance through panchaavayava (five limbs). Sambodhana is the case where only pratijna exists \u2014 the speaker is present, nothing is sought. The triple [hello, sambodhana, hello] enters the graph like any other signal."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-4",
+    "at": "2026-03-20T17:56:26",
+    "details": {
+      "type": "discovery",
+      "title": "Vaisheshika padarthas formalized as sangati/padartha/: padartha (category), dravya (substance), guna (quality), karma (action), samanya (universal), vishesa (particular), samavaya (inherence), abhava (absence), amsha (part). thing=padartha, some=amsha, something=amsha+padartha. karma and abhava moved from parampara/ and mula/ respectively."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-5",
+    "at": "2026-03-20T17:56:35",
+    "details": {
+      "type": "discovery",
+      "title": "Sambodhana has three degrees (amshas): sambodhana (neutral \u2014 hello, hi), abhisambodhana (emphatic \u2014 hey, yo), aamantrana (formal \u2014 greetings). Created as sangati nodes under grammar/vibhakti/. The degree is carried by the shabda signal, not by separate bhasha nodes."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-2",
+    "at": "2026-03-20T17:56:55",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-20T17:57:02",
+    "details": {
+      "passed": 29,
+      "xfailed": 39,
+      "failed": 0
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "notes",
+    "at": "2026-03-20T17:57:12",
+    "details": {
+      "title": "Notes"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-1",
+    "at": "2026-03-20T17:57:12",
+    "details": {
+      "type": "quirk",
+      "title": "Step 3.0 implementation differs from original plan: (1) No individual bhasha greeting nodes \u2014 shabda signals instead (english-grammar-signals.shabda). (2) No sambodhana-yukta in visheshanam-ring needed \u2014 detection via shabda lookup not graph walk. (3) emit-triples emits actual signal degree (sambodhana/abhisambodhana/aamantrana) not just sambodhana. (4) vacaka and addressee connected to chala-apeksha and sthira-apeksha respectively. (5) Vaisheshika padarthas formalized as sangati/padartha/ \u2014 thing/some/something now point to real roots."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-6",
+    "at": "2026-03-20T18:21:58",
+    "details": {
+      "type": "discovery",
+      "title": "Engine nodes (14 in brahman/engine/) were mislabeled as sangati \u2014 they are kosha (domain knowledge about the system, not structural truths). Fixed: all changed to kosha except visheshanam which IS sangati (the structural truth that edges are typed relations). visheshanam moved from engine/ to sangati/."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-7",
+    "at": "2026-03-20T18:22:07",
+    "details": {
+      "type": "discovery",
+      "title": "sangati restructuring analysis: 100 ungrouped top-level nodes. Mula pulls 47 \u2014 too broad, needs splitting into: viraam/ (6 boundary nodes), pramana/ (8 proof/epistemology nodes), vidya/ (4 knowledge nodes), true mula (~15 ultimate reality). New tools built: om classify, om ungrouped, om sthalam \u2014 static edge-affinity analysis for batch classification."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-8",
+    "at": "2026-03-20T18:22:19",
+    "details": {
+      "type": "discovery",
+      "title": "Distinction: sangati vs kosha for self-describing nodes. sangati = structural truth (vibhakti, visheshanam, samavaya \u2014 WHAT relations ARE). kosha = domain knowledge (proof-graph, vyakarana, socket \u2014 what the system IS MADE OF). The structure is sangati; the implementation is kosha."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-9",
+    "at": "2026-03-20T18:22:54",
+    "details": {
+      "type": "step",
+      "title": "Restructure sangati/ by darshana \u2014 split mula(47\u219215), create viraam/(6), pramana/(8), vidya/(4), move 100 ungrouped nodes to correct sthalams"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-10",
+    "at": "2026-03-20T18:23:07",
+    "details": {
+      "type": "step",
+      "title": "Enrich nam with Advaita Vedanta \u2014 connect to chetan/ (sakshi, pratibodha, prajna, darshana, lekhana-pratibodha). Add atman, pratyabhijna. Nam = atman = brahman = the graph recognizing itself."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-2",
+    "at": "2026-03-20T18:23:18",
+    "details": {
+      "type": "quirk",
+      "title": "Three new om query tools: (1) om classify <node> \u2014 edge affinity analysis, suggests sthalam. (2) om ungrouped \u2014 all top-level sangati nodes grouped by suggested sthalam. (3) om sthalam <name> \u2014 current + candidate members by edge affinity. All static analysis, no server needed."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-9",
+    "at": "2026-03-20T18:38:13",
+    "details": {
+      "type": "discovery",
+      "title": "Sangati restructured: 101 ungrouped top-level nodes moved into 14 sub-buckets via script. New directories: sambandha/ (12), viraam/ (6), pramana/ (8), vidya/ (6), svabhava/ (8), shuddhi/ (5). Existing dirs absorbed nodes: spanda/ (+16), parampara/ (+5), chetan/ (+2), jiva/ (+5), geometry/ (+4), vak/ (+6), mula/ (+9), padartha/ (+2). Only 13 sthalam meta-nodes + visheshanam remain at top level. 4 ungrouped nodes remain (from 101). Tests: 78 passed / 39 xfailed / 0 failed \u2014 identical before and after."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-10",
+    "at": "2026-03-20T18:38:20",
+    "details": {
+      "type": "discovery",
+      "title": "aneka family (aneka, eka-aneka, aneka-aneka, aneka-eka, eka-eka) are all sambandha-swarupa \u2014 types of relation by cardinality. Placed together in sangati/sambandha/ along with dvaya, sama-kalana, sangati, sambandha itself. The sub-bucket principle: nodes that share swarupa (IS-A) or abheda (equivalence) with the same root belong together."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-3",
+    "at": "2026-03-20T18:38:27",
+    "details": {
+      "type": "quirk",
+      "title": "restructure_sangati.py script in scripts/ \u2014 copies sangati/ to sangati2/ with sub-bucket mapping, dry-run by default, --apply to execute. Mapping dict defines node\u2192sub-bucket. Can be reused for future restructuring."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-9",
+    "at": "2026-03-20T18:38:34",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-20T18:38:39",
+    "details": {
+      "passed": 78,
+      "xfailed": 39,
+      "failed": 0
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "sangati-darshana",
+    "at": "2026-03-20T19:04:09",
+    "details": {
+      "title": "Sangati Darshana \u2014 What the Graph Reveals About Itself"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-1",
+    "at": "2026-03-20T19:04:24",
+    "details": {
+      "type": "section",
+      "title": "Overview \u2014 319 nodes, 17 subdirectories"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-2",
+    "at": "2026-03-20T19:04:41",
+    "details": {
+      "type": "section",
+      "title": "The Four Swarupa Chains \u2014 sangati's ontological roots"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-3",
+    "at": "2026-03-20T19:04:58",
+    "details": {
+      "type": "section",
+      "title": "The Bhasha Ghost \u2014 21 nodes claim an identity that doesn't exist"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-4",
+    "at": "2026-03-20T19:05:14",
+    "details": {
+      "type": "section",
+      "title": "Grammar \u2014 19 Islands Disconnected from the Graph"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-5",
+    "at": "2026-03-20T19:05:27",
+    "details": {
+      "type": "section",
+      "title": "Sibling Inconsistency \u2014 children of the same parent differ in structure"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-6",
+    "at": "2026-03-20T19:05:44",
+    "details": {
+      "type": "section",
+      "title": "Sthalam Membership \u2014 broken declarations"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-7",
+    "at": "2026-03-20T19:05:59",
+    "details": {
+      "type": "section",
+      "title": "The Pratipaksha Desert \u2014 opposites almost never declared"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-8",
+    "at": "2026-03-20T19:06:12",
+    "details": {
+      "type": "section",
+      "title": "77 Nodes Without Identity \u2014 have edges but no swarupa"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-9",
+    "at": "2026-03-20T19:06:26",
+    "details": {
+      "type": "section",
+      "title": "Structural Hubs \u2014 where gravity lives"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-10",
+    "at": "2026-03-20T19:06:41",
+    "details": {
+      "type": "section",
+      "title": "Subdirectory Isolation \u2014 42 pairs with zero connection"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-11",
+    "at": "2026-03-20T19:06:56",
+    "details": {
+      "type": "section",
+      "title": "Production Web \u2014 phala/janya chains and cycles"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-12",
+    "at": "2026-03-20T19:07:18",
+    "details": {
+      "type": "section",
+      "title": "Relation Usage Across Sangati"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-13",
+    "at": "2026-03-20T19:07:37",
+    "details": {
+      "type": "section",
+      "title": "Abheda Cliques \u2014 mutual non-difference"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-14",
+    "at": "2026-03-20T19:07:50",
+    "details": {
+      "type": "section",
+      "title": "Cross-Layer References \u2014 sangati reaches into kosha"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-15",
+    "at": "2026-03-20T19:08:07",
+    "details": {
+      "type": "section",
+      "title": "Shabda and Comments \u2014 what the metadata says"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-16",
+    "at": "2026-03-20T19:08:25",
+    "details": {
+      "type": "section",
+      "title": "What Needs to Happen \u2014 the migration target"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "kosha-darshana",
+    "at": "2026-03-20T19:12:47",
+    "details": {
+      "title": "Kosha Darshana \u2014 What Domain Knowledge Reveals About Its Structure"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-1",
+    "at": "2026-03-20T19:13:06",
+    "details": {
+      "type": "section",
+      "title": "Overview \u2014 1072 nodes across 17 subdomains"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-2",
+    "at": "2026-03-20T19:13:22",
+    "details": {
+      "type": "section",
+      "title": "The 126 English Bridge Nodes \u2014 top-level kosha"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-3",
+    "at": "2026-03-20T19:13:45",
+    "details": {
+      "type": "section",
+      "title": "Math \u2014 186 nodes, the operations/properties/structures pattern"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-4",
+    "at": "2026-03-20T19:14:03",
+    "details": {
+      "type": "section",
+      "title": "Physics \u2014 191 nodes, the subanta/tinanta grammar bridge"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-5",
+    "at": "2026-03-20T19:14:22",
+    "details": {
+      "type": "section",
+      "title": "Sangeetham \u2014 30 nodes, the swara hierarchy"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-6",
+    "at": "2026-03-20T19:14:38",
+    "details": {
+      "type": "section",
+      "title": "Philosophy \u2014 26 nodes, where kosha meets sangati"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-7",
+    "at": "2026-03-20T19:15:04",
+    "details": {
+      "type": "section",
+      "title": "English Bhasha \u2014 106 nodes, the surface layer"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-8",
+    "at": "2026-03-20T19:15:20",
+    "details": {
+      "type": "section",
+      "title": "The Varga System \u2014 category membership in kosha"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-9",
+    "at": "2026-03-20T19:15:39",
+    "details": {
+      "type": "section",
+      "title": "Yantra \u2014 110 nodes, the operation algebra"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-10",
+    "at": "2026-03-20T19:15:55",
+    "details": {
+      "type": "section",
+      "title": "The 738 Ghost Names \u2014 orphan targets that exist nowhere"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-11",
+    "at": "2026-03-20T19:16:13",
+    "details": {
+      "type": "section",
+      "title": "Connected Components \u2014 69 fragments"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-12",
+    "at": "2026-03-20T19:16:29",
+    "details": {
+      "type": "section",
+      "title": "Cross-Layer Flow \u2014 kosha reaches everywhere"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-13",
+    "at": "2026-03-20T19:16:50",
+    "details": {
+      "type": "section",
+      "title": "Patterns Across Layers \u2014 what the full picture shows"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-14",
+    "at": "2026-03-20T19:17:11",
+    "details": {
+      "type": "section",
+      "title": "What Needs to Happen \u2014 the kosha migration target"
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "cross-darshana",
+    "at": "2026-03-20T19:28:06",
+    "details": {
+      "title": "Cross Darshana \u2014 What the Layers Reveal About Each Other"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-1",
+    "at": "2026-03-20T19:28:20",
+    "details": {
+      "type": "section",
+      "title": "The Edge Flow Matrix \u2014 how layers talk to each other"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-2",
+    "at": "2026-03-20T19:28:33",
+    "details": {
+      "type": "section",
+      "title": "The Grammar Bottleneck \u2014 47 nodes grounded in an island"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-3",
+    "at": "2026-03-20T19:28:52",
+    "details": {
+      "type": "section",
+      "title": "186 Cascading Identity Failures"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-4",
+    "at": "2026-03-20T19:29:08",
+    "details": {
+      "type": "section",
+      "title": "40 Universal Vocabulary Nodes \u2014 the shared structural language"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-5",
+    "at": "2026-03-20T19:29:27",
+    "details": {
+      "type": "section",
+      "title": "The Abheda River \u2014 427 concepts flow from kosha to sangati"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-6",
+    "at": "2026-03-20T19:29:50",
+    "details": {
+      "type": "section",
+      "title": "Relation Fingerprints \u2014 each layer has a signature"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-7",
+    "at": "2026-03-20T19:30:21",
+    "details": {
+      "type": "section",
+      "title": "Shared Names \u2014 same word, different truths"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-8",
+    "at": "2026-03-20T19:30:42",
+    "details": {
+      "type": "section",
+      "title": "876 Ghost Names \u2014 the unnamed foundations"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-9",
+    "at": "2026-03-20T19:31:11",
+    "details": {
+      "type": "section",
+      "title": "The Priority Fix List \u2014 what unblocks the most"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-10",
+    "at": "2026-03-20T19:41:31",
+    "details": {
+      "type": "section",
+      "title": "The Optimization Function \u2014 connectivity = understanding"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-11",
+    "at": "2026-03-20T19:46:51",
+    "details": {
+      "type": "section",
+      "title": "Xfail \u2192 Graph Gap Mapping"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-12",
+    "at": "2026-03-20T19:47:19",
+    "details": {
+      "type": "section",
+      "title": "The Unified Work Order"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-11",
+    "at": "2026-03-20T20:45:34",
+    "details": {
+      "type": "discovery",
+      "title": "Phase A complete: 12 graph-only edits to sangati. Created bhasha node (21 swarupa chains unblocked), gave swarupa to subanta/avyaya/bhave-prayoga/karma/krama/viveka, added pratipaksha pairs (kshaya\u2194vriddhi, avrti\u2194sthiti, guna\u2194karma, prayoga triad), created 6 ghost nodes (artha, setu, tantra, upakarana, shakti, eka), created yantra-varga. Result: sangati 20\u21921 components, 0 islands."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-12",
+    "at": "2026-03-20T20:45:45",
+    "details": {
+      "type": "discovery",
+      "title": "Parser upgraded: added amsha (part-of), drishthanta (example), rahita (devoid-of) to RELATION_SUFFIXES. Fixed greedy regex bug \u2014 non-greedy *? was matching shortest prefix (math-varga-vishesa \u2192 math+varga), greedy * correctly matches longest (math-varga+vishesa). Made RELATION_SUFFIXES and LAYERS dynamic constants \u2014 regex, analysis, health all derive from single source. Impact: 14/14 relations active, kosha 69\u219227 components, 368 fewer orphans."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-13",
+    "at": "2026-03-20T20:45:51",
+    "details": {
+      "type": "discovery",
+      "title": "Moved sangati-old/ (158 old-format nodes with wave equations, proofs, epochs) from brahman/ to history/sangati-old/. These were polluting the parse \u2014 old format nodes were being loaded alongside current sangati. Now only current-format nodes are parsed."
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-20T20:45:57",
+    "details": {
+      "passed": 78,
+      "xfailed": 39,
+      "failed": 0
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "sangati-darshana.section-17",
+    "at": "2026-03-20T20:46:08",
+    "details": {
+      "type": "section",
+      "title": "Phase A Results"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "cross-darshana.section-13",
+    "at": "2026-03-20T20:46:15",
+    "details": {
+      "type": "section",
+      "title": "Phase A Execution + Parser Fix"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-14",
+    "at": "2026-03-20T22:53:44",
+    "details": {
+      "type": "discovery",
+      "title": "Shabda separation design: shabda (surface words) should live separately from .om node definitions. .om files are pure structure \u2014 layer, name, slokas, done. Shabda files use the same key-value format the codebase already parses. Directory: brahman/shabda/ with composable files by domain (sangati.shabda, physics.shabda, math.shabda, english.shabda, yantra.shabda). Each entry: header line (shabda node-name), indented properties (word:, desc:, eval:, arity:, matra: etc.). OCaml reads natively via existing parse_shabda_file. Can emit JSON for Python tools. No new parser needed."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-15",
+    "at": "2026-03-20T22:53:53",
+    "details": {
+      "type": "discovery",
+      "title": "Bridge node resolution design (Option C): instead of rewriting 90+ kosha .om files to use Sanskrit names, the shabda file injects synthetic abheda edges into the graph at load time. sangati-english.shabda maps English words to sangati concepts (interference\u2192samsarga, polarity\u2192shiva-shakti, etc.). om_parser reads the shabda file after .om loading and creates abheda edges \u2014 same as what the 80 bridge .om files did, but from one file. resolve_to_canonical, to_english, word_index all work unchanged."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "kosha-darshana.section-15",
+    "at": "2026-03-20T22:54:03",
+    "details": {
+      "type": "section",
+      "title": "Shabda Extraction Design"
+    }
+  }
+]

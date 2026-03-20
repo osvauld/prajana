@@ -1,0 +1,26 @@
+kosha graph-contract
+
+  -- reading the graph declaration AS the program specification.
+  --   om-janya "kinetic-energy-mantra" → [mass, velocity]
+  --   om-phala "kinetic-energy-mantra" → [kinetic-energy]
+  --   om-kriya "kinetic-energy-mantra" → [ke-expr]
+  -- the seven edges form a complete function contract:
+  --   janya = domain (input types)
+  --   phala = codomain (output types)
+  --   kriya = implementation
+  --   yukta = properties
+  --   sthita = context / scope
+  --   swarupa = identity / aliases
+  --   abheda = equivalences
+  --
+  -- this IS tantra3: the om graph IS the program.
+  -- om-contract returns all seven at once (one graph touch).
+
+  "computation-varga-vishesa"
+  "morphism-swarupa endomorphism-abheda"
+  "function-sthita category-sthita"
+  "domain-computation-sthita"
+
+  shabda graph-contract, om-contract / reading-the-graph-declaration-as-program-specification-janya-is-domain-phala-is-codomain-kriya-is-implementation
+
+done

@@ -36,16 +36,19 @@ bound-sankhyas = graph | where [s, e, o]
 -- this handles "8 birds. 3 flew away" → asprista=8, bird.sankhya=3
 has-one-loose = (and (eq (length loose-nums) 1) (gt (length bound-sankhyas) 0))
 
+-- two loose: order preserved (both from same sentence or both sentence-free)
+-- one loose + one bound: bound = initial quantity (earlier sentence),
+--   loose = change quantity (later sentence). ensures n1-n2 = initial-change ≥ 0.
 n1 = cond (gt (length loose-nums) 1)
   (nth loose-nums 0)
   otherwise (cond has-one-loose
-    (nth loose-nums 0)
+    (nth bound-sankhyas 0)
     otherwise "")
 
 n2 = cond (gt (length loose-nums) 1)
   (nth loose-nums 1)
   otherwise (cond has-one-loose
-    (nth bound-sankhyas 0)
+    (nth loose-nums 0)
     otherwise "")
 
 -- signal words in the graph (as mithya tokens)

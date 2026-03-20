@@ -5,7 +5,8 @@ Usage:
 
 Modes:
   tantra  summary|groups|all|group|source|callgraph|callers|callees|search|lint
-  om      summary|domains|domain|source|search|with-key|with-relation
+  om      summary|domains|domain|source|search|with-key|with-relation|classify|ungrouped|sthalam
+  shabda  summary|words|files|node|eval|gaps|search|lookup
   search  PATTERN              search both tantras and om
   test    summary|list|run     test discovery and execution
   cache   summary|failed|gates|diff|fix-xpass|slow
@@ -26,7 +27,9 @@ from .cache import DEFAULT_CACHE
 from .server import BrahmanServer, DEFAULT_SOCKET
 from .cli_tantra import cmd_tantra
 from .cli_om import cmd_om, cmd_search
+from .cli_shabda import cmd_shabda
 from .cli_vy import cmd_vy, cmd_ask, ensure_vy
+from .cli_analysis import cmd_analyze
 
 
 # ── test ──────────────────────────────────────────────────────────────────────
@@ -296,7 +299,8 @@ def main():
         epilog="""
 Modes:
   tantra  summary|groups|all|group|source|callgraph|callers|callees|search|lint
-  om      summary|domains|domain|source|search|with-key|with-relation
+  om      summary|domains|domain|source|search|with-key|with-relation|classify|ungrouped|sthalam
+  shabda  summary|words|files|node|eval|gaps|search|lookup
   search  PATTERN              search both tantras and om
   test    summary|list|run     test discovery and execution
   cache   summary|failed|gates|diff|fix-xpass|slow
@@ -318,16 +322,26 @@ Static analysis (no server needed):
   tantra callgraph             full call graph + hub tantras
   om with-key eval             all nodes with an 'eval' shabda key (fireable operations)
   om with-relation abheda      all nodes with 'abheda' edges
+  shabda summary               unified view: words, .shabda files, shabda keys, gaps
+  shabda words [domain|node]   word index by domain or for a specific node
+  shabda eval                  all fireable operations (nodes with eval:)
+  shabda gaps                  nodes missing word mappings
+  shabda lookup WORD           trace a word to its node and shabda keys
+
+Documentation (separate package — see patra/README.md):
+  python3 -m patra glance             compact LLM context summary
+  python3 -m patra discover "..."     record a discovery
+  python3 -m patra steps              plan steps with status
+  python3 -m patra topic NAME         cross-source search (patra + om + tantras + shabda)
 
 Examples:
   python3 -m tools vy eval 'walk "viveka-max" "abheda"'
   python3 -m tools vy eval 'shabda "addition" "eval"'
-  python3 -m tools vy eval 'om-janya "momentum-mantra"'
   python3 -m tools vy inspect momentum
-  python3 -m tools vy walk 'viveka-max abheda'
-  python3 -m tools vy triples mass
-  python3 -m tools vy mantras 'ball has mass 5 velocity 10. find kinetic energy'
-  python3 -m tools vy trace 'ball has mass 5 velocity 10. find kinetic energy'
+  python3 -m tools shabda summary
+  python3 -m tools shabda lookup heavier
+  python3 -m tools shabda gaps
+  python3 -m tools shabda eval
   python3 -m tools tantra lint
   python3 -m tools test run
   python3 -m tools ask "ball has mass 5 velocity 10. find kinetic energy"
@@ -341,6 +355,7 @@ Examples:
     dispatch = {
         "tantra": cmd_tantra,
         "om": cmd_om,
+        "shabda": cmd_shabda,
         "search": cmd_search,
         "test": cmd_test,
         "cache": cmd_cache,
@@ -348,6 +363,7 @@ Examples:
         "vy": cmd_vy,
         "ask": cmd_ask,
         "json": cmd_json,
+        "analyze": cmd_analyze,
     }
 
     fn = dispatch.get(args.mode)

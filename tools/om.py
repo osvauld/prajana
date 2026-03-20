@@ -26,13 +26,17 @@ RELATION_SUFFIXES = {
     "vishesa": "specialization",
     "varga": "category membership",
     "pratipaksha": "inverse, opposite",
+    "amsha": "part-of, member-of",
+    "drishthanta": "example, illustration",
+    "rahita": "devoid-of, without",
 }
 
 _SLOKA_SUFFIX_RE = re.compile(
-    r"\b([a-z][a-z0-9-]*?)-(swarupa|yukta|sthita|kriya|phala|janya|abheda|siddha|vishesa|varga|pratipaksha)\b"
+    r"\b([a-z][a-z0-9-]*)-(" + "|".join(RELATION_SUFFIXES.keys()) + r")\b"
 )
 _SHABDA_RE = re.compile(r"^\s*shabda\s+(.+)", re.MULTILINE)
-_HEADER_RE = re.compile(r"^(sangati|kosha|bhasha|mantra)\s+([a-z][a-z0-9-]*)")
+LAYERS = ["sangati", "kosha", "bhasha", "mantra"]
+_HEADER_RE = re.compile(r"^(" + "|".join(LAYERS) + r")\s+([a-z][a-z0-9-]*)")
 _SLOKA_RE = re.compile(r'"([^"]+)"')
 
 
@@ -231,6 +235,222 @@ def with_edge_relation(oms, relation):
     return [
         om for om in oms.values() if any(e["relation"] == relation for e in om["edges"])
     ]
+
+
+def classify(oms, name, layer=None):
+    """Classify a node by its edge affinities → suggest subdirectory grouping.
+
+    Works for any layer (sangati, kosha, bhasha, mantra).
+    Returns dict with edge targets by relation, affinity scores, and suggested subdir.
+    """
+    om = oms.get(name)
+    if not om:
+        return None
+
+    if layer is None:
+        layer = om["layer"]
+
+    by_rel = defaultdict(list)
+    for e in om["edges"]:
+        by_rel[e["relation"]].append(e["target"])
+
+    # Check sthalam membership (X-sthalam-sthita convention) — sangati only
+    sthalams = [t for t in by_rel.get("sthita", []) if t.endswith("-sthalam")]
+
+    # Build affinity: which existing subdirectories of this layer do our targets belong to?
+    layer_nodes = {
+        n: o for n, o in oms.items()
+        if o["layer"] == layer
+    }
+    target_domains = defaultdict(int)
+    for rel in ("swarupa", "abheda", "sthita", "janya", "phala", "kriya", "siddha"):
+        for target in by_rel.get(rel, []):
+            if target in layer_nodes:
+                dom = layer_nodes[target]["domain"]
+                parts = dom.split(os.sep)
+                if len(parts) > 1 and parts[0] == layer:
+                    subdir = parts[1]
+                    weight = 3 if rel in ("swarupa", "abheda") else 1
+                    target_domains[subdir] += weight
+
+    suggested = None
+    if sthalams:
+        suggested = sthalams[0].replace("-sthalam", "")
+    elif target_domains:
+        suggested = max(target_domains, key=target_domains.get)
+
+    return {
+        "name": name,
+        "layer": om["layer"],
+        "domain": om["domain"],
+        "swarupa": by_rel.get("swarupa", []),
+        "abheda": by_rel.get("abheda", []),
+        "sthita": by_rel.get("sthita", []),
+        "janya": by_rel.get("janya", []),
+        "phala": by_rel.get("phala", []),
+        "kriya": by_rel.get("kriya", []),
+        "siddha": by_rel.get("siddha", []),
+        "pratipaksha": by_rel.get("pratipaksha", []),
+        "sthalams": sthalams,
+        "target_domains": dict(target_domains),
+        "suggested": suggested,
+    }
+
+
+def ungrouped(oms, layer="sangati"):
+    """Find all nodes of a layer that sit in the top-level directory (not in a subdirectory).
+
+    Returns list of classify() results for each ungrouped node.
+    """
+    results = []
+    for name, om in oms.items():
+        if om["layer"] != layer:
+            continue
+        dom_parts = om["domain"].split(os.sep)
+        if len(dom_parts) == 1:
+            if name.endswith("-sthalam"):
+                continue
+            cl = classify(oms, name, layer=layer)
+            if cl:
+                results.append(cl)
+    return results
+
+
+def structure(oms, layer="sangati"):
+    """Subdirectory-wise breakdown of a layer with node counts and affinity stats.
+
+    Returns dict of subdir → {count, lines, nodes, affinity} where affinity
+    shows how many edges point to nodes in other subdirs (cross-affinity).
+    """
+    # Collect all nodes in this layer
+    layer_nodes = {n: o for n, o in oms.items() if o["layer"] == layer}
+
+    # Group by subdirectory
+    by_subdir = defaultdict(lambda: {"count": 0, "lines": 0, "nodes": [], "cross_affinity": defaultdict(int)})
+    top_level = {"count": 0, "lines": 0, "nodes": [], "cross_affinity": defaultdict(int)}
+
+    for name, om in layer_nodes.items():
+        parts = om["domain"].split(os.sep)
+        if len(parts) == 1:
+            top_level["count"] += 1
+            top_level["lines"] += om["lines"]
+            top_level["nodes"].append(name)
+        else:
+            subdir = parts[1]
+            by_subdir[subdir]["count"] += 1
+            by_subdir[subdir]["lines"] += om["lines"]
+            by_subdir[subdir]["nodes"].append(name)
+
+    # Build cross-affinity: for each subdir, where do its nodes' edges point?
+    all_subdirs = {}
+    for name, om in layer_nodes.items():
+        parts = om["domain"].split(os.sep)
+        if len(parts) > 1:
+            all_subdirs[name] = parts[1]
+
+    for name, om in layer_nodes.items():
+        parts = om["domain"].split(os.sep)
+        src_subdir = parts[1] if len(parts) > 1 else None
+        bucket = by_subdir[src_subdir] if src_subdir else top_level
+
+        for e in om["edges"]:
+            target = e["target"]
+            if target in all_subdirs:
+                tgt_subdir = all_subdirs[target]
+                if tgt_subdir != src_subdir:
+                    bucket["cross_affinity"][tgt_subdir] += 1
+
+    # Convert defaultdicts
+    result = OrderedDict()
+    for subdir in sorted(by_subdir.keys()):
+        entry = by_subdir[subdir]
+        entry["nodes"] = sorted(entry["nodes"])
+        entry["cross_affinity"] = dict(sorted(entry["cross_affinity"].items(), key=lambda x: -x[1]))
+        result[subdir] = entry
+
+    if top_level["count"] > 0:
+        top_level["nodes"] = sorted(top_level["nodes"])
+        top_level["cross_affinity"] = dict(sorted(top_level["cross_affinity"].items(), key=lambda x: -x[1]))
+        result["(top-level)"] = top_level
+
+    return {
+        "layer": layer,
+        "total_nodes": len(layer_nodes),
+        "total_lines": sum(om["lines"] for om in layer_nodes.values()),
+        "subdirs": result,
+    }
+
+
+def sthalam_members(oms, sthalam_name, layer="sangati"):
+    """Find all nodes that should belong to a subdirectory based on edge affinity.
+
+    Works for any layer. For sangati, also checks explicit sthalam-sthita edges.
+    Returns nodes grouped by: current (already there), explicit (declared),
+    strong (swarupa/abheda), and weak (other edges).
+    """
+    subdir = sthalam_name.replace("-sthalam", "")
+
+    # Nodes already in this subdirectory
+    current = []
+    for name, om in oms.items():
+        if om["layer"] == layer:
+            parts = om["domain"].split(os.sep)
+            if len(parts) > 1 and parts[1] == subdir:
+                current.append(name)
+
+    # Nodes with explicit sthalam-sthita (sangati convention)
+    explicit = []
+    if layer == "sangati":
+        for name, om in oms.items():
+            if om["layer"] != layer:
+                continue
+            for e in om["edges"]:
+                if e["relation"] == "sthita" and e["target"] == f"{subdir}-sthalam":
+                    if name not in current:
+                        explicit.append(name)
+
+    # Get all nodes in this subdir for affinity matching
+    subdir_nodes = set(current)
+
+    # Check ungrouped top-level nodes for affinity
+    strong = []
+    weak = []
+    for name, om in oms.items():
+        if om["layer"] != layer:
+            continue
+        if name in current or name in explicit:
+            continue
+        dom_parts = om["domain"].split(os.sep)
+        if len(dom_parts) != 1:
+            continue
+        if name.endswith("-sthalam"):
+            continue
+
+        strong_score = 0
+        weak_score = 0
+        for e in om["edges"]:
+            if e["target"] in subdir_nodes:
+                if e["relation"] in ("swarupa", "abheda"):
+                    strong_score += 3
+                else:
+                    weak_score += 1
+
+        if strong_score >= 3:
+            strong.append((name, strong_score))
+        elif weak_score >= 2:
+            weak.append((name, weak_score))
+
+    strong.sort(key=lambda x: -x[1])
+    weak.sort(key=lambda x: -x[1])
+
+    return {
+        "sthalam": sthalam_name,
+        "subdir": subdir,
+        "current": sorted(current),
+        "explicit": sorted(explicit),
+        "strong": strong,
+        "weak": weak,
+    }
 
 
 def to_json_summary(oms):

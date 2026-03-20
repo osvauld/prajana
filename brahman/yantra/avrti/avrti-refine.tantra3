@@ -28,8 +28,7 @@ after-vishesa-inst    = vishesa-instance  after-vibhakti
 after-rashi-viveka    = rashi-viveka      after-vishesa-inst
 after-vishesa-bind    = vishesa-bandhana  after-rashi-viveka
 after-rashi-anuvada   = rashi-anuvada     after-vishesa-bind
-after-sankhya-bandha  = sankhya-bandha    after-rashi-anuvada
-result                = count-bandha      after-sankhya-bandha
+result                = sankhya-bandha    after-rashi-anuvada
 
 return result
 

@@ -1,0 +1,24 @@
+# count-signals: question-sentence words that signal the count direction.
+# format — word: direction
+# readable via: shabda "count-signals" "word"
+#
+# these appear in the QUESTION sentence ("how many are left / in total")
+# and indicate whether the asker expects a subtraction or addition result.
+# distinct from common-sense-events which map EVENT verbs in premise sentences.
+#
+# when a question has per-grade event verbs (flew, came), those take precedence.
+# these signals serve as fallback when no event verb is present in a grade,
+# or as the overall question-level default direction.
+#
+# kshaya signals: "how many remain / are left / rest"
+remaining: kshaya
+left: kshaya
+rest: kshaya
+leftover: kshaya
+#
+# vriddhi signals: "how many in total / altogether"
+total: vriddhi
+altogether: vriddhi
+combined: vriddhi
+together: vriddhi
+both: vriddhi

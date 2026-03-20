@@ -1,0 +1,24 @@
+kosha scan-accumulate
+
+  -- the stateful scan pattern: reduce over input with epistemic state.
+  --   reduce graph [state...] (fn state triple -> new-state)
+  -- each input element advances the automaton.
+  -- the state IS the epistemic position: what has been seen, what is active.
+  --
+  -- used in 12 tantras: viveka-ganana, extract-solve-for, sandhi-kosha,
+  -- sandhi-avastha, emit-triples, count-chain, grade-sparsha, and more.
+  --
+  -- this is the ONLY stateful pattern. all other patterns are pure.
+  -- a tantra has at most one scan — it is always the outermost structure.
+
+  "computation-varga-vishesa"
+  "transducer-swarupa op-reduce-abheda"
+  "morphism-abheda"
+  "fold-yukta map-yukta"
+  "sequence-janya"
+  "state-phala"
+  "domain-computation-sthita"
+
+  shabda scan-accumulate, scan, mealy-machine / stateful-fold-over-input-sequence-with-epistemic-state-the-only-procedural-pattern-in-the-tantra-language
+
+done

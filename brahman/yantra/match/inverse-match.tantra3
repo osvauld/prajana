@@ -13,9 +13,10 @@ takes solve-for
 
 result = reduce candidates [] (fn acc m ->
   let ms          = to-string m
-  let janya       = om-janya ms
-  let phala-l     = om-phala ms
-  let swarupa-l   = om-swarupa ms
+  let contract    = om-contract ms
+  let janya       = nth contract 0
+  let phala-l     = nth contract 1
+  let swarupa-l   = nth contract 5
   let mphala      = cond (gt (length phala-l) 0) (nth phala-l 0) otherwise ""
   let mswarupa    = cond (gt (length swarupa-l) 0) (nth swarupa-l 0) otherwise ""
   let has-math-op = gt (string-length (shabda ms "math-op")) 0

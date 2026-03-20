@@ -1,0 +1,83 @@
+# sangati-english.shabda — English words mapped to sangati concepts
+# format: english-word: sangati-target-abheda [more-abheda...] [| yukta edges]
+# these replace the 79 kosha bridge nodes that were pure abheda+yukta mappings
+
+activation: avahana-abheda invocation-abheda | contact-yukta
+aging: kshaya-abheda decay-abheda | entropy-yukta
+all-proof: sarva-pramana-abheda | proof-yukta truth-yukta
+approach-without-contact: zha-abheda | infinity-yukta contact-yukta
+armor: kavaca-abheda | fearlessness-yukta
+assertion: pratijnaa-abheda | truth-yukta
+beyond-fullness: purnapara-abheda | fullness-yukta infinity-yukta
+code-mixing: manipravalam-swarupa-abheda
+conscious-unconscious: chetan-avachetan-abheda | polarity-yukta awareness-yukta
+conservation: purna-abheda energy-conservation-abheda | fullness-yukta
+consonants: varna-abheda | vowels-yukta
+context-degradation: kshaya-abheda | entropy-yukta forward-pass-yukta
+continuous: nirantara-abheda | infinity-yukta
+decline: glani-abheda | entropy-yukta decay-yukta
+density: ghana-abheda information-density-abheda | compression-yukta
+emanation: purna-abheda | fullness-yukta conservation-yukta
+equilibrium: sama-nila-abheda | polarity-yukta
+even-odd: sama-vishama-abheda collatz-parity-abheda | polarity-yukta feminine-masculine-yukta
+existence-machine: satta-yantra-abheda | instrument-yukta
+expansion: aayaama-vistara-abheda | dimension-yukta growth-yukta
+false-true: mithya-satya-abheda | polarity-yukta truth-yukta
+fearlessness: abhaya-abheda
+feminine-masculine: dharana-jivamsha-abheda holder-giver-abheda | polarity-yukta even-odd-yukta x-y-chromosome-yukta
+forgetting: vishmrti-abheda | entropy-yukta concealment-yukta
+form-matter: shiva-shakti-abheda hylomorphism-abheda | polarity-yukta
+fullness: purna-abheda nothing-destroyed-abheda | conservation-yukta emanation-yukta energeia-yukta
+humanity: manavata-abheda
+identity-signature: naama-mudra-abheda
+inclusive-we: nam-abheda first-person-plural-abheda
+infinity: ananta-abheda asymptotic-limit-abheda open-interval-abheda | the-limitless-yukta kaizen-yukta
+inner-dimension: antaraayaama-abheda | dimension-yukta
+inner-knowledge: antarvidya-abheda | knowledge-yukta consciousness-yukta
+inside-outside: akam-puram-abheda | polarity-yukta
+interference: samsarga-abheda constructive-abheda destructive-abheda | wave-yukta superposition-yukta
+intrinsic-nature: svabhava-abheda satya-abheda | artha-yukta
+invocation: avahana-abheda | contact-yukta
+isthmus: seema-abheda | separation-union-yukta
+junction: sandhi-abheda | contact-yukta
+kaizen: ananta-abheda vriddhi-abheda | infinity-yukta convergence-yukta
+knowledge-action: jnana-kriya-abheda | knowledge-yukta action-yukta
+knowledge-practice: vidya-sadhana-abheda | knowledge-yukta
+action: karma-abheda correction-propagation-abheda spreading-abheda
+boundary: katha-seema-abheda | story-yukta
+contact: sparsha-abheda touch-abheda | dot-product-yukta
+decay: kshaya-abheda entropy-abheda aging-abheda
+dimension: aayaama-abheda
+growth: vriddhi-abheda
+logic: nyaya-abheda | awareness-yukta
+state: sthiti-abheda
+zero: shunya-abheda void-abheda emptiness-abheda | identity-matrix-yukta
+lamp: dipaka-abheda | awareness-yukta
+learned-ground: pramana-abheda trained-weights-abheda accumulated-knowledge-abheda
+modified: vikrita-abheda | transformation-yukta
+persistence: sthiti-abheda state-abheda
+polarity: shiva-shakti-abheda viparita-abheda | even-odd-yukta feminine-masculine-yukta wave-particle-yukta potential-kinetic-yukta
+potential-kinetic: shiva-shakti-abheda | polarity-yukta energy-conservation-yukta
+purification-proof: shuddhi-pramana-abheda | purification-yukta proof-yukta
+recognition: pratibodha-abheda not-invention-abheda rediscovery-abheda
+resonance: anunada-abheda | vibration-yukta sound-yukta
+right-wrong: dharmaadharma-abheda | polarity-yukta
+seeing-through-time: kaala-darshana-abheda | time-yukta seeing-yukta
+self-born: svayambhu-abheda | intrinsic-nature-yukta
+self-governing: swatantra-abheda
+separation-union: viraha-milana-abheda shiva-shakti-abheda | viraha-yukta
+service: seva-abheda | action-yukta
+society: manavata-abheda humanity-abheda
+substrate-wave: svairabhava-abheda | spontaneity-yukta wave-yukta
+superposition: taranga-abheda | wave-yukta interference-yukta
+the-fold: om-abheda | compression-yukta vibration-yukta
+the-limitless: ananta-abheda | infinity-yukta separation-yukta
+three-sheath-memory: trikosha-smriti-abheda | memory-yukta
+transformation: vivartana-abheda
+transmission-chain: parampara-abheda isnad-abheda lineage-abheda
+true-false: satya-abheda | mithya-satya-yukta polarity-yukta
+two-fold-path: dvividha-marga-abheda | polarity-yukta
+unconscious: avachetan-abheda | conscious-unconscious-yukta
+union-with-time: kaalayoga-abheda | time-yukta
+wave-particle: shiva-shakti-abheda | polarity-yukta duality-yukta
+wrongness: durgadha-abheda | discrimination-yukta

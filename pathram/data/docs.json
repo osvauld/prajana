@@ -1,0 +1,114 @@
+[
+  {
+    "id": "nam",
+    "title": "Nam \u2014 The Proof Graph as Subject",
+    "tag": "active",
+    "position": 1.0,
+    "created_at": "2026-03-20T16:19:16",
+    "updated_at": "2026-03-20T16:19:16"
+  },
+  {
+    "id": "tantra",
+    "title": "Tantra \u2014 The Grammar and Mathematics of Understanding",
+    "tag": "active",
+    "position": 2.0,
+    "created_at": "2026-03-20T16:19:16",
+    "updated_at": "2026-03-20T16:19:16"
+  },
+  {
+    "id": "pipeline",
+    "title": "Pipeline \u2014 How Sentences Become Understanding",
+    "tag": "active",
+    "position": 3.0,
+    "created_at": "2026-03-20T16:19:16",
+    "updated_at": "2026-03-20T16:19:16"
+  },
+  {
+    "id": "tests",
+    "title": "Tests \u2014 What the System Proves About Itself",
+    "tag": "active",
+    "position": 4.0,
+    "created_at": "2026-03-20T16:19:16",
+    "updated_at": "2026-03-20T16:19:16"
+  },
+  {
+    "id": "plan",
+    "title": "Plan \u2014 What Remains to Build",
+    "tag": "active",
+    "position": 5.0,
+    "created_at": "2026-03-20T16:19:16",
+    "updated_at": "2026-03-20T16:19:16"
+  },
+  {
+    "id": "pratibimba",
+    "title": "Pratibimba \u2014 The Vision for Manifestation",
+    "tag": "active",
+    "position": 6.0,
+    "created_at": "2026-03-20T16:19:16",
+    "updated_at": "2026-03-20T16:19:16"
+  },
+  {
+    "id": "principles",
+    "title": "Principles \u2014 Structural Truths",
+    "tag": "active",
+    "position": 7.0,
+    "created_at": "2026-03-20T16:19:16",
+    "updated_at": "2026-03-20T16:19:16"
+  },
+  {
+    "id": "session-20",
+    "title": "Session 20 \u2014 Pathram + Mathematical Formalization",
+    "tag": "active",
+    "position": 20.0,
+    "created_at": "2026-03-20T16:50:30",
+    "updated_at": "2026-03-20T16:50:30"
+  },
+  {
+    "id": "roadmap",
+    "title": "Roadmap \u2014 Priority Stack",
+    "tag": "active",
+    "position": 0.0,
+    "created_at": "2026-03-20T16:55:02",
+    "updated_at": "2026-03-20T16:55:02"
+  },
+  {
+    "id": "discoveries",
+    "title": "Discoveries",
+    "tag": "active",
+    "position": 21.0,
+    "created_at": "2026-03-20T17:55:59",
+    "updated_at": "2026-03-20T17:55:59"
+  },
+  {
+    "id": "notes",
+    "title": "Notes",
+    "tag": "active",
+    "position": 22.0,
+    "created_at": "2026-03-20T17:57:12",
+    "updated_at": "2026-03-20T17:57:12"
+  },
+  {
+    "id": "sangati-darshana",
+    "title": "Sangati Darshana \u2014 What the Graph Reveals About Itself",
+    "tag": "active",
+    "position": 23.0,
+    "created_at": "2026-03-20T19:04:09",
+    "updated_at": "2026-03-20T19:04:09"
+  },
+  {
+    "id": "kosha-darshana",
+    "title": "Kosha Darshana \u2014 What Domain Knowledge Reveals About Its Structure",
+    "tag": "active",
+    "position": 24.0,
+    "created_at": "2026-03-20T19:12:47",
+    "updated_at": "2026-03-20T19:12:47"
+  },
+  {
+    "id": "cross-darshana",
+    "title": "Cross Darshana \u2014 What the Layers Reveal About Each Other",
+    "tag": "active",
+    "position": 25.0,
+    "created_at": "2026-03-20T19:28:06",
+    "updated_at": "2026-03-20T19:28:06"
+  }
+]

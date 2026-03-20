@@ -1,0 +1,20 @@
+kosha transducer
+
+  -- a finite state transducer: reads input, maintains state, emits output.
+  -- emit-triples IS a transducer:
+  --   input:  (word, info) stream from the sentence
+  --   state:  [current-grade, entity-registry, binding-ledger, grammar-trail]
+  --   output: triples [subject, edge, object]
+  -- the state encodes the epistemic position: what has been seen, what is active.
+  -- each word advances the state and may emit zero or more triples.
+
+  "computation-varga-vishesa"
+  "morphism-abheda function-sthita"
+  "op-reduce-abheda"
+  "fold-yukta map-yukta"
+  "recursion-sthita sequence-sthita"
+  "domain-computation-sthita"
+
+  shabda transducer, finite-state-transducer, fst / a-state-machine-that-reads-input-and-emits-output-emit-triples-is-the-transducer-that-converts-words-to-graph-triples-with-four-state-subgraphs
+
+done

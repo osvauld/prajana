@@ -25,11 +25,12 @@ mantra-nodes = append (walk-in "physics-mantra" "varga") (walk-in "math-mantra" 
 result = cond (not (exists solve-for))
   mantra-nodes
   otherwise (filter mantra-nodes (fn m ->
-    let ms      = to-string m
-    let janya   = map (om-janya ms) (fn j -> to-string j)
-    let phala   = map (om-phala ms) (fn p -> to-string p)
-    let swarupa = map (om-swarupa ms) (fn s -> to-string s)
-    let mname   = shabda ms "name"
+    let ms       = to-string m
+    let contract = om-contract ms
+    let janya    = map (nth contract 0) (fn j -> to-string j)
+    let phala    = map (nth contract 1) (fn p -> to-string p)
+    let swarupa  = map (nth contract 5) (fn s -> to-string s)
+    let mname    = shabda ms "name"
     (or (eq mname solve-for)
         (member solve-for phala)
         (member solve-for swarupa)

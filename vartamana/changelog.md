@@ -9,11 +9,277 @@ Do not update this mid-session — only when a session is complete and tests pas
 
 ## Current baseline
 
-**511 passed / 63 xfailed / 0 failing** (2026-03-19, session 10)
+**78 passed / 39 xfailed / 0 failing** (v2 suite, 2026-03-20, session 19)
 
 ---
 
 ## Sessions
+
+### 2026-03-20 — Session 19: karaka + dravya + subgraph architecture + tools
+
+**Started:** 78 passed / 39 xfailed / 0 failing
+**Ended:** 78 passed / 39 xfailed / 0 failing
+
+**Step 2.5 — complete (5 sub-steps):**
+
+2.5a — Locative prepositions:
+- New: prep-on.om, prep-in.om → saptami-vibhakti via sthita edges
+- "on", "in" now absorbed as grammar, emit adhikarana edge in BQG
+
+2.5b — Auxiliary verbs:
+- Already existed: copula-was → bhuta-kaala, copula-were → bhuta-kaala
+
+2.5c — Verb morphology:
+- New: english-kta-ed.om, english-kta-ied.om, english-shatr-ing.om
+- kta-pratyaya (-ed) and shatr-pratyaya (-ing) as morphology rules
+
+2.5d — Dravya promotion + subgraph architecture:
+- Rewrote emit-triples: takes [current-grade, entity-registry, binding-ledger, grammar-trail]
+- BQG computes 4 focused subgraphs per word (replaces narrow context tuple)
+- Dravya promotion: unknown word after number → satya, with guards:
+  - Not a verb form (common-sense-events or -ed/-ing suffix)
+  - Not after locative preposition (adhikarana in grammar-trail)
+  - Active concept can't claim the pending number (binding-ledger check)
+- Flattened cond chain in emit-triples (no nested cond)
+
+2.5e — Karaka nodes:
+- New: sangati/grammar/karaka/ with 6 nodes (karta, karma-karaka, karana, sampradana, apadana, adhikarana)
+- Each connects vibhakti ↔ sangati root (kriya, phala, yukta, phala, kshaya, sthiti+kshetra)
+- adhikarana-yukta registered in visheshanam-ring
+
+**Data additions:**
+- prep-to.om, prep-for.om → chaturthi-vibhakti
+- 23 new verbs in common-sense-events.shabda (87 total: 53 kshaya, 34 vriddhi)
+
+**New tools:**
+- `vy parse '<sentence>'` — per-word subgraph analysis (resolution, guards, decisions)
+- `shabda verbs` — verb coverage with gap detection
+- `shabda karaka` — karaka/vibhakti/preposition wiring status
+
+**Documentation:**
+- New: 18-philosophy.md — six insights (absorbs 17a/17b/17c discoveries)
+- New: 18-implementation.md — clean plan (three modes of address, entity recognition)
+- 17 series marked historical
+
+**Six insights documented:**
+1. One mechanism for all reasoning (kosha → eval → apply-op)
+2. Algebraic hierarchy as structural permissions
+3. Subgraphs mirror cognition (working memory of comprehension)
+4. Dravya recognized by exclusion (Vaisheshika method)
+5. Karaka system was already in the sangati roots
+6. All utterance is vibhakti relation to vyakarana (sambodhana = existence acknowledgment)
+
+---
+
+### 2026-03-20 — Session 18: count-chain + emit-count + dvandva boundary
+
+**Started:** 73 passed / 31 xfailed / 0 failing
+**Ended:** 78 passed / 39 xfailed / 0 failing
+
+**What was done:**
+
+Step 2 — count-chain rewrite (dissolved count-bandha):
+- Parser fixes: variadic concat in parens, flat cond chains (no nested cond)
+- count-chain fold over grades with per-grade kshaya/vriddhi detection via kosha
+- Bigram event verbs: got-off, picked-up, went-home etc. in common-sense-events.shabda
+- New event words: borrowed, damaged, caught, went, off, back, collected, picked, brought
+- anuvada-ganana reads count-total/count-remaining from grade-sparsha output
+
+emit-count tantra:
+- Walks grades + count-steps + anuvada-setu bridge to produce natural output
+- emit-reasoning routes to emit-count when derived-by count-chain detected
+- Output: "we have: 10 bird sat on tree. we know: 3 minus (10 → 7). we find: 7 birds"
+
+dvandva boundary:
+- BQG emits [and, dvandva, dvandva] triple when conj-and detected
+- conj-and --[sthita]--> dvandva: the graph declares "and" IS dvandva
+- sankhya-bandha resets on dvandva boundary (like viraam)
+- grade-sparsha splits on both viraam AND dvandva
+- "5 cats and 3 dogs" → 8 (was: 5)
+
+New xfail gates: dvandva_count (3→0), entity_scope (3), multi_question (2),
+multiplication (3), count_compare (2), long_chain (1→0)
+
+Step 2.5 planned: karaka + dravya recognition (5 sub-steps).
+Ontological mapping complete: rashi=dravya, karaka→sangati roots.
+Documented in 17c-implementation.md.
+
+### 2026-03-20 — Session 17: Steps 1c + 1e DONE, 1b deferred, plan reordered
+
+**Started:** 73 passed / 31 xfailed / 0 failing (v2 suite, 104 tests)
+**Ended:** 73 passed / 31 xfailed / 0 failing (kosha enrichment, no xfail change)
+
+**What was done:**
+
+Step 1e — BQG last-satya viraam reset:
+- `last-satya` in `build-question-graph.tantra3` never reset at viraam (period)
+  boundaries. `tree` from sentence 1 leaked into sentence 3, causing
+  `[tree, sankhya, 2.]` in "10 birds sat on a tree. 2 more came."
+- Fixed: added `cond (eq (nth t 1) "viraam") ""` to the last-satya reduce.
+
+Step 1c — Common-sense event verb shabda table:
+- `common-sense-events.shabda` — 32 event verbs mapped to kshaya (18 decrease
+  verbs: flew, away, died, gave, etc.) or vriddhi (14 increase verbs: came,
+  arrived, found, added, etc.)
+- `common-sense-events.om` — links shabda template into the kosha
+- vriddhi-kriya edges added to: addition, multiplication, power, exponential,
+  square, double (the addition→vriddhi edge was the missing symmetric counterpart
+  to subtraction→kshaya)
+- kshaya-kriya edges added to: division, square-root, half
+- Full kosha chain verified: verb → shabda → kshaya/vriddhi → walk-in kriya →
+  operation → eval → apply-op
+
+Step 1b — sankhya-bandha number-before-noun — **DEFERRED**:
+- Investigation revealed it blocks nothing. Count sentences work with loose numbers
+  via grade-sparsha's two-loose path. The three-sentence chain fails because
+  count-bandha handles only 2 operands, not because of number-before-noun.
+- "2 more came" must NOT bind 2 to viveka-max. The binding requires container
+  semantics and implicit noun resolution, which is deeper than a simple retroactive
+  bind.
+
+Set operation analysis (new finding):
+- 6 tantras use set operations inline (member, subset check, union-with-dedup)
+  without referencing kosha set operation nodes.
+- Kosha nodes (set-union, set-intersection, set-difference) have wrong eval values
+  (div, ceil, sin — inherited placeholders). No runtime primitives exist.
+- Step 2a added to implementation plan for set operation infrastructure.
+
+Plan reordered: 1b deferred, Step 2 (count-chain) is NEXT.
+
+**Files created:**
+- `brahman/kosha/common-sense/processes/common-sense-events.shabda`
+- `brahman/kosha/common-sense/processes/common-sense-events.om`
+
+**Files changed:**
+- `brahman/yantra/pipeline/build-question-graph.tantra3` — viraam reset
+- `brahman/kosha/math/number/operations/addition.om` — vriddhi-kriya
+- `brahman/kosha/math/number/operations/multiplication.om` — vriddhi-kriya
+- `brahman/kosha/math/number/operations/power.om` — vriddhi-kriya
+- `brahman/kosha/math/number/operations/exponential.om` — vriddhi-kriya
+- `brahman/kosha/math/number/operations/square.om` — vriddhi-kriya
+- `brahman/kosha/math/number/operations/double.om` — vriddhi-kriya
+- `brahman/kosha/math/number/operations/division.om` — kshaya-kriya
+- `brahman/kosha/math/number/operations/square-root.om` — kshaya-kriya
+- `brahman/kosha/math/number/operations/half.om` — kshaya-kriya
+- `brahman/yantra/sankhya/sankhya-bandha.tantra3` — updated comments
+- `vartamana/17-scan-ref-patterns.md` — current state + plan reordered
+- `vartamana/17a-discoveries.md` — findings 13-16 added
+- `vartamana/17b-algebraic-types.md` — vriddhi/kshaya + set operation sections
+- `vartamana/17c-implementation.md` — steps 1c/1e DONE, 1b deferred, 2a added, order table updated
+
+---
+
+### 2026-03-20 — Session 16: Step 1d — grade-sparsha sentence partitioning
+
+**Started:** 67 passed / 31 xfailed / 0 failing (v2 suite, 98 tests)
+**Ended:** 73 passed / 31 xfailed / 0 failing (104 tests, +6 xfails promoted, 6 new xfails added)
+
+**What was done:**
+
+Step 1d — grade-sparsha sentence partitioning:
+- `grade-sparsha.tantra3` — splits graph at viraam boundaries (kosha-driven via
+  `shabda "graded-ring" "grade-boundary"` → "viraam"), runs `fixpoint avrti-refine`
+  per grade, flattens, then runs `count-bandha` on merged result.
+- `graded-ring.om` — added `grade-boundary: viraam` shabda (kosha bridge:
+  abstract grade → concrete NLP signal).
+- `count-bandha.tantra3` — n1/n2 ordering fix for one-loose + one-bound case:
+  bound = initial (earlier sentence), loose = change (later sentence).
+  Ensures n1-n2 = initial-change >= 0.
+- `anuvada-ganana.tantra3` — wired grade-sparsha: `refined = grade-sparsha asserted`.
+  Count dispatch: reads count-total/count-remaining from graph, looks up eval via
+  kosha (`shabda "subtraction" "eval"` → "sub", `shabda "sum" "eval"` → "add"),
+  fires `apply-op`.
+
+Key insight: number-before-noun numbers stay loose in pure count sentences —
+grade-sparsha's two-loose path handles them correctly without Step 1b.
+
+6 new sentence_scope xfail tests added (test suite: 98 → 104 tests, 31 → 37 xfails).
+6 xfails promoted (arithmetic + sentence_scope gates): test_count_addition,
+test_count_subtraction, test_count_subtraction_comma_boundary,
+test_count_number_before_noun, test_count_named_entity_total, test_count_gave_away.
+
+**Files created:**
+- `brahman/yantra/avrti/grade-sparsha.tantra3`
+
+**Files changed:**
+- `brahman/kosha/math/algebra/structures/graded-ring.om` — grade-boundary: viraam
+- `brahman/yantra/sankhya/count-bandha.tantra3` — n1/n2 swap for one-loose
+- `brahman/yantra/pipeline/anuvada-ganana.tantra3` — grade-sparsha wired, count dispatch
+- `brahman/yantra/sankhya/sankhya-bandha.tantra3` — viraam reset (session 15 carryover)
+
+---
+
+### 2026-03-20 — Session 15: Step 3 — viveka-ganana kosha-driven comparison
+
+**Started:** 67 passed / 31 xfailed / 0 failing (v2 suite)
+**Ended:** 67 passed / 31 xfailed / 0 failing (architecture, no xfail change)
+
+**What was done:**
+
+Step 3 of the eval/apply-op unification plan:
+- Replaced hardcoded `gt`/`lt` comparisons in `viveka-ganana.tantra3` with
+  `apply-op op-eval [kv-val, best-val]` (winner) and `apply-op opp-eval [kv-val, worst-val]` (loser)
+- `op-eval = shabda direction "eval"` — reads eval: from the kosha max/min node
+- `opp-eval = shabda (walk direction "pratipaksha") "eval"` — follows pratipaksha edge to get inverse
+- `is-max` boolean removed — direction is now fully kosha-driven
+- Kosha chain in use: `direction("max") --[eval]--> "max"` and `"max" --[pratipaksha]--> "min" --[eval]--> "min"`
+
+Viveka end-to-end trace confirmed: "ball A has mass 5. ball B has mass 8. which is heavier"
+→ "ball-B is viveka-max than A" (correct, same result as before).
+
+**Files changed:**
+- `brahman/yantra/pipeline/viveka-ganana.tantra3` — gt/lt → apply-op (lines 31-73)
+- `vartamana/17-scan-ref-patterns.md` — Step 3 marked DONE
+- `vartamana/17c-implementation.md` — Step 3 marked DONE, changelog entry added
+
+---
+
+### 2026-03-20 — Session 13: shabda analysis tool + plan revision
+
+**Started:** 67 passed / 31 xfailed / 0 failing (v2 suite)
+**Ended:** 67 passed / 31 xfailed / 0 failing (tool work, no test changes)
+
+**What was done:**
+
+Built unified shabda analysis tool (`python3 -m tools shabda`):
+- `shabda.py` — data layer: parses 1614 .om files for inline shabda + 17 .shabda
+  template files. Builds unified word index (1498 words -> 977 nodes).
+- `cli_shabda.py` — 8 subcommands: summary, words, files, node, eval, gaps, search, lookup.
+- Wired into main CLI dispatcher and help text.
+- `tools/README.md` fully rewritten for current `python3 -m tools` interface.
+
+Four new findings from live graph tracing + shabda analysis:
+
+**Finding 8:** Alias bug affects 85 words, not just "many". All count aliases (13),
+viveka-max aliases (41), and viveka-min aliases (31) emit mithya when an active
+satya concept is in context. Step 1 unblocks viveka and krama-viveka, not just counting.
+
+**Finding 9:** 12 common event verbs (died, gave, lost, flew, ate, found, came, bought,
+sold, added, removed, received) all resolve to None via word-node. The kosha has
+`subtraction --[kriya]--> kshaya` but no word mapping connects event verbs.
+**Blocks Step 2** — count-chain cannot be kosha-driven without event classification.
+
+**Finding 10:** sankhya-bandha only binds number-after-noun. "birds 10" -> [bird, sankhya, 10].
+"10 birds" -> 10 stays orphaned. Natural English is number-before-noun.
+**Blocks Step 2** — starting quantities are lost.
+
+**Finding 11:** `shabda gaps` reveals 14 nodes with eval: but no word: declarations,
+including max and min (needed for viveka in Steps 3, 7).
+
+**Plan revised:** Steps 1b (sankhya number-before-noun) and 1c (common-sense event
+shabda table) added as prerequisites for Step 2. Step summary updated in 17c.
+Findings 8-11 added to 17a.
+
+**Files created:**
+- `tools/shabda.py`
+- `tools/cli_shabda.py`
+
+**Files changed:**
+- `tools/cli.py` — shabda dispatch + help text
+- `tools/README.md` — fully rewritten
+- `vartamana/17-scan-ref-patterns.md` — index updated
+- `vartamana/17a-discoveries.md` — findings 8-11 added
+- `vartamana/17c-implementation.md` — steps 1b+1c added, bugs section expanded
 
 ### 2026-03-19 — Session 10: architectural plan — every tantra is one complete thought
 
