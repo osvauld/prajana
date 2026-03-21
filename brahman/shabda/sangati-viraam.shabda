@@ -1,9 +1,32 @@
 # sangati/viraam — shabda extracted from .om files
 # 6 entries
 
-ardha-viraam: half-pause / the-breath-mid-sentence
-prashna-viraam: question-pause / the-silence-that-holds-a-question
-purna-viraam: full-stop / the-pause-that-completes
-traya-bindu: three-dots / the-pause-that-holds-continuation
-viraam: pause / the-silence-between-sounds
-vismaya-viraam: wonder-pause / the-silence-of-astonishment
+shabda ardha-viraam
+  (alias half-pause)
+  (desc "the-breath-mid-sentence")
+done
+
+shabda prashna-viraam
+  (alias question-pause)
+  (desc "the-silence-that-holds-a-question")
+done
+
+shabda purna-viraam
+  (alias full-stop)
+  (desc "the-pause-that-completes")
+done
+
+shabda traya-bindu
+  (alias three-dots)
+  (desc "the-pause-that-holds-continuation")
+done
+
+shabda viraam
+  (alias pause)
+  (desc "the-silence-between-sounds")
+done
+
+shabda vismaya-viraam
+  (alias wonder-pause)
+  (desc "the-silence-of-astonishment")
+done

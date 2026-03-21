@@ -1,0 +1,13 @@
+kosha additive-identity
+
+  -- the element e such that a + e = a for all a.
+  -- for the visheshanam ring: shunya (zero). yukta(x, shunya) = x.
+  -- for arithmetic: 0. add(x, 0) = x.
+
+  "identity-element-swarupa"
+  "shunya-abheda zero-abheda"
+  "addition-drishthanta"
+  "ring-sthita monoid-sthita"
+  "visheshanam-yukta-yukta"
+
+done

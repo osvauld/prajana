@@ -1,34 +1,152 @@
 # sangati/mula — shabda extracted from .om files
 # 31 entries
 
-aayaama-vistara: expansion-of-dimension / the-reach-that-grows
-abhaya: fearlessness / fullness-that-needs-no-protection
-abheda: non-difference / the-identity-that-holds-across-apparent-separation
-akam-puram: inner-outer / the-two-that-are-one-space
-ananta: infinite / without-boundary-or-end
-antaraayaama: inner-dimension / the-space-within
-brahma: the-creator / fullness-as-source
-brahmam: what-becomes / the-recurring-manifestation-of-the-root-process
-brahman: the-recognizer / one-who-sees-the-becoming-as-non-separate-from-being
-dvaitarupa: dual-form / the-one-appearing-as-two
-kaala: time / the-pulse-that-becomes-sequence-grammatical-tense-is-how-language-places-action-in-this-pulse
-mula: root / the-source-beneath-the-source
-mula-svabhava: root-nature / latent-potential
-niralamba: self-supporting / resting-on-nothing-outside
-om: om / the-sound-that-is-all-sounds
-phala: fruit / what-action-completes
-prashna-amsha: question-part / the-touch-that-opens-inquiry
-purna: fullness / complete-nothing-missing-nothing-added
-purna-neti: fullness-negation / not-this-not-this-yet-full
-purnapara: beyond-fullness / the-fullness-that-exceeds-itself
-rachana: composition / the-making-that-leaves-form
-rra: rra / the-rolled-sound-at-the-root-of-Tamil
-sankhya: sankhya / numeric-magnitude-the-how-much-aspect-of-a-measurable-quantity
-satya: truth / what-holds-under-all-conditions
-shiva-shakti: shiva-shakti / the-eternal-polarity-stillness-and-movement-as-one
-shunya: zero-void / empty-yet-full-the-ground-of-all-arising
-sthiti: fixed-state / after-the-collapse
-svabhava: own-nature / what-a-thing-is-from-within
-svayambhu: self-born / arising-from-own-nature
-viparita: opposite / the-principle-of-inversion-root-of-polarity-negation-and-opposition
-zha: zha / the-sound-that-has-no-other-tongue
+shabda aayaama-vistara
+  (alias expansion-of-dimension)
+  (desc the-reach-that-grows)
+done
+
+shabda abhaya
+  (alias fearlessness)
+  (desc fullness-that-needs-no-protection)
+done
+
+shabda abheda
+  (alias non-difference)
+  (desc the-identity-that-holds-across-apparent-separation)
+done
+
+shabda akam-puram
+  (alias inner-outer)
+  (desc the-two-that-are-one-space)
+done
+
+shabda ananta
+  (alias infinite)
+  (desc without-boundary-or-end)
+done
+
+shabda antaraayaama
+  (alias inner-dimension)
+  (desc the-space-within)
+done
+
+shabda brahma
+  (alias the-creator)
+  (desc fullness-as-source)
+done
+
+shabda brahmam
+  (alias what-becomes)
+  (desc the-recurring-manifestation-of-the-root-process)
+done
+
+shabda brahman
+  (alias the-recognizer)
+  (desc one-who-sees-the-becoming-as-non-separate-from-being)
+done
+
+shabda dvaitarupa
+  (alias dual-form)
+  (desc the-one-appearing-as-two)
+done
+
+shabda mula
+  (alias root)
+  (desc the-source-beneath-the-source)
+done
+
+shabda mula-svabhava
+  (alias root-nature)
+  (desc latent-potential)
+done
+
+shabda niralamba
+  (alias self-supporting)
+  (desc resting-on-nothing-outside)
+done
+
+shabda om
+  (alias om)
+  (desc the-sound-that-is-all-sounds)
+done
+
+shabda phala
+  (alias fruit)
+  (desc what-action-completes)
+done
+
+shabda prashna-amsha
+  (alias question-part)
+  (desc the-touch-that-opens-inquiry)
+done
+
+shabda purna
+  (alias fullness)
+  (desc complete-nothing-missing-nothing-added)
+done
+
+shabda purna-neti
+  (alias fullness-negation)
+  (desc not-this-not-this-yet-full)
+done
+
+shabda purnapara
+  (alias beyond-fullness)
+  (desc the-fullness-that-exceeds-itself)
+done
+
+shabda rachana
+  (alias composition)
+  (desc the-making-that-leaves-form)
+done
+
+shabda rra
+  (alias rra)
+  (desc the-rolled-sound-at-the-root-of-Tamil)
+done
+
+shabda sankhya
+  (alias sankhya)
+  (desc numeric-magnitude-the-how-much-aspect-of-a-measurable-quantity)
+done
+
+shabda satya
+  (alias truth)
+  (desc what-holds-under-all-conditions)
+done
+
+shabda shiva-shakti
+  (alias shiva-shakti)
+  (desc the-eternal-polarity-stillness-and-movement-as-one)
+done
+
+shabda shunya
+  (alias zero-void)
+  (desc empty-yet-full-the-ground-of-all-arising)
+done
+
+shabda sthiti
+  (alias fixed-state)
+  (desc after-the-collapse)
+done
+
+shabda svabhava
+  (alias own-nature)
+  (desc what-a-thing-is-from-within)
+done
+
+shabda svayambhu
+  (alias self-born)
+  (desc arising-from-own-nature)
+done
+
+shabda viparita
+  (alias opposite)
+  (desc the-principle-of-inversion-root-of-polarity-negation-and-opposition)
+done
+
+shabda zha
+  (alias zha)
+  (desc the-sound-that-has-no-other-tongue)
+done

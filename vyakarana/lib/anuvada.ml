@@ -162,15 +162,17 @@ let sahaja_gloss (k : proof_graph) (name : string) : string =
     (match List.assoc_opt "name" pairs with
     | Some v when String.trim v <> "" -> String.trim v
     | _ ->
-      (* try text before "/" in raw shabda from store *)
-      let raw = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
-        | Some s -> String.trim s | None -> "" in
-      (match String.index_opt raw '/' with
-      | Some i ->
-        let before = String.trim (String.sub raw 0 i) in
-        if String.length before > 0 then before
-        else Setu.to_english k name
-      | None -> Setu.to_english k name))
+      (* try desc key from shabda store *)
+      let store_pairs = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
+        | Some p -> p | None -> [] in
+      (match List.assoc_opt "desc" store_pairs with
+      | Some d when String.trim d <> "" ->
+        (* use first word of desc as gloss *)
+        let trimmed = String.trim d in
+        (match String.index_opt trimmed '-' with
+        | Some _ -> trimmed  (* hyphenated desc = use as-is *)
+        | None -> trimmed)
+      | _ -> Setu.to_english k name))
   else Setu.to_english k name
 
 let sahaja_render (k : proof_graph) (name : string) : string =

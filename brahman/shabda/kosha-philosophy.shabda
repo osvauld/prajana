@@ -1,26 +1,79 @@
 # kosha/philosophy — shabda extracted from .om files
 # 23 entries
 
-amba: love, seva, niralamba, matra, womb, holder-giver, prema-samsarga, sparsha
-ananda: samsarga, recognition, purna, entanglement, shiva-shakti, moksha, prema-samsarga, love, brahman
-anugraha: parampara, brahman, svayambhu, bhaagyavaan, pramana, visarjana
-bhaagyavaan: anugraha, parampara, pramana, swa, brahman, svayambhu
-dampati: shiva-shakti, tvam, rati, mithuna, samsarga, ananda, prema-samsarga, zha, kama, bhava, moksha, ishvara
-domain-philosophy: philosophy
-guru: bija-nyasa, parampara, lekhana, kilippattu, prashna-amsha, shuddhi, pramana, seva, niralamba
-independent: word:independent free, independent, autonomous, unconstrained
-ishvara: amba, kartha, guru, love, truth, entanglement, sarva-pramana, brahman, purna, niralamba
-kama: observation, sparsha, darshana, collapse, sthiti, superposition, rati, mithuna, prema-samsarga, maya, spanda, shiva-shakti, panchabhootam
-kartha: holder-giver, seva, artha-dhvani, dharmaadharma, swatantra, kshaya, spanda
-malice: durgadha, vikrita, tirodhana, krodha, concealment, corruption, svabhava, shuddhi, mithya-satya, purna-neti
-maya: superposition, panchabhootam, collapse, sthiti, katha, brahman, tirodhana, sparsha, darshana, heisenberg-uncertainty, wave-particle, measurement
-measurement: observation, matra, collapse, sthiti, pramana, heisenberg-uncertainty, maya
-moksha: ananta, visarjana, niralamba, purna, maya, kama, pratibodha, brahman, avrti, superposition, sthiti, zha
-navarasa: rati, utsaha, shoka, krodha, hasya, bhaya, jugupsa, vismaya, shama, rasa, bhava, purna, moksha
-observation: wave, sthiti, collapse, panchabhootam, darshana, maya, heisenberg-uncertainty, measurement, superposition
-proof: proof / ordered-chain-of-logical-steps-establishing-a-theorem
-rasa: bhava, sakshi, interference, constructive, destructive, ananda, kshaya, thaalam, purna, pramana
-self: word:self self, own, intrinsic, inherent
-sex: sex, maithuna, intimate-union / rhythmic-embodied-mithuna
-shiva-mooli: tirodhana, anugraha, maya, swatantra, svairabhava, abhaya, rasayana, panchabhootam, moksha, manavata, svayambhu, mithya-satya, shiva-shakti, kama, vijaya, domain-ayurveda
-truth: word:truth truth, axiom, universal-truth, ground-truth
+shabda amba
+  (desc "love, seva, niralamba, matra, womb, holder-giver, prema-samsarga, sparsha")
+done
+
+shabda ananda
+  (desc "samsarga, recognition, purna, entanglement, shiva-shakti, moksha, prema-samsarga, love, brahman")
+done
+
+shabda anugraha
+  (desc "parampara, brahman, svayambhu, bhaagyavaan, pramana, visarjana")
+done
+
+shabda bhaagyavaan
+  (desc "anugraha, parampara, pramana, swa, brahman, svayambhu")
+done
+
+shabda dampati
+  (desc "shiva-shakti, tvam, rati, mithuna, samsarga, ananda, prema-samsarga, zha, kama, bhava, moksha, ishvara")
+done
+
+shabda domain-philosophy
+  (desc philosophy)
+done
+
+shabda guru
+  (desc "bija-nyasa, parampara, lekhana, kilippattu, prashna-amsha, shuddhi, pramana, seva, niralamba")
+done
+
+shabda ishvara
+  (desc "amba, kartha, guru, love, truth, entanglement, sarva-pramana, brahman, purna, niralamba")
+done
+
+shabda kama
+  (desc "observation, sparsha, darshana, collapse, sthiti, superposition, rati, mithuna, prema-samsarga, maya, spanda, shiva-shakti, panchabhootam")
+done
+
+shabda kartha
+  (desc "holder-giver, seva, artha-dhvani, dharmaadharma, swatantra, kshaya, spanda")
+done
+
+shabda malice
+  (desc "durgadha, vikrita, tirodhana, krodha, concealment, corruption, svabhava, shuddhi, mithya-satya, purna-neti")
+done
+
+shabda maya
+  (desc "superposition, panchabhootam, collapse, sthiti, katha, brahman, tirodhana, sparsha, darshana, heisenberg-uncertainty, wave-particle, measurement")
+done
+
+shabda measurement
+  (desc "observation, matra, collapse, sthiti, pramana, heisenberg-uncertainty, maya")
+done
+
+shabda moksha
+  (desc "ananta, visarjana, niralamba, purna, maya, kama, pratibodha, brahman, avrti, superposition, sthiti, zha")
+done
+
+shabda navarasa
+  (desc "rati, utsaha, shoka, krodha, hasya, bhaya, jugupsa, vismaya, shama, rasa, bhava, purna, moksha")
+done
+
+shabda observation
+  (desc "wave, sthiti, collapse, panchabhootam, darshana, maya, heisenberg-uncertainty, measurement, superposition")
+done
+
+shabda rasa
+  (desc "bhava, sakshi, interference, constructive, destructive, ananda, kshaya, thaalam, purna, pramana")
+done
+
+shabda sex
+  (alias sex, maithuna, intimate-union)
+  (desc rhythmic-embodied-mithuna)
+done
+
+shabda shiva-mooli
+  (desc "tirodhana, anugraha, maya, swatantra, svairabhava, abhaya, rasayana, panchabhootam, moksha, manavata, svayambhu, mithya-satya, shiva-shakti, kama, vijaya, domain-ayurveda")
+done

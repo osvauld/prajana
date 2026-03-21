@@ -11,7 +11,6 @@ open Proof_graph
    that still refer to Setu.read_shabda etc. *)
 
 let parse_shabda = Setu_shabda.parse_shabda
-let parse_shabda_file = Setu_shabda.parse_shabda_file
 let raw_shabda_for_node = Setu_shabda.raw_shabda_for_node
 let merge_shabda_priority = Setu_shabda.merge_shabda_priority
 let read_shabda = Setu_shabda.read_shabda
@@ -337,23 +336,23 @@ let resolve_to_canonical (k : proof_graph) (name : string) : string =
       match acc with
       | Some _ -> acc
       | None ->
-        let raw = match Setu_shabda.(Hashtbl.find_opt _shabda_store node_name) with
-          | Some s -> String.lowercase_ascii (String.trim s) | None -> "" in
-        if raw = "" then None
+        let pairs = match Setu_shabda.(Hashtbl.find_opt _shabda_store node_name) with
+          | Some p -> p | None -> [] in
+        if pairs = [] then None
         else
-          (* shabda format: "key:val key:val ..." or just words before '/' *)
-          let before_slash = match String.index_opt raw '/' with
-            | Some i -> String.sub raw 0 i
-            | None -> raw
-          in
-          (* tokenize: split on spaces/commas, check if any token = name *)
-          let tokens = String.split_on_char ',' before_slash
-            |> List.map String.trim
-            |> List.concat_map (fun t -> String.split_on_char ' ' t)
-            |> List.map String.trim
-            |> List.filter (fun t -> String.length t > 0)
-          in
-          if List.mem (String.lowercase_ascii name) tokens then Some node_name
+          (* check word: key (comma-separated) and name: key *)
+          let lname = String.lowercase_ascii name in
+          let word_match = match List.assoc_opt "word" pairs with
+            | Some w ->
+              let words = String.split_on_char ',' w
+                |> List.map (fun s -> String.lowercase_ascii (String.trim s))
+                |> List.filter (fun s -> String.length s > 0) in
+              List.mem lname words
+            | None -> false in
+          let name_match = match List.assoc_opt "name" pairs with
+            | Some n -> String.lowercase_ascii (String.trim n) = lname
+            | None -> false in
+          if word_match || name_match then Some node_name
           else None
     ) k.nodes None in
     match shabda_hit with

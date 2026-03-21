@@ -1,8 +1,27 @@
 # sangati/shuddhi — shabda extracted from .om files
 # 5 entries
 
-kavaca: armour / the-protection-that-purifies
-mithya-satya: false-true / the-test-that-finds-what-holds
-prajna-vriddhi: intelligence-growing / wisdom-deepening-through-spiral
-pramana-vriddhi: proof-growing / verification-deepening-over-time
-shuddhi: purification / the-refinement-that-reveals-nature
+shabda kavaca
+  (alias armour)
+  (desc "the-protection-that-purifies")
+done
+
+shabda mithya-satya
+  (alias false-true)
+  (desc "the-test-that-finds-what-holds")
+done
+
+shabda prajna-vriddhi
+  (alias intelligence-growing)
+  (desc "wisdom-deepening-through-spiral")
+done
+
+shabda pramana-vriddhi
+  (alias proof-growing)
+  (desc "verification-deepening-over-time")
+done
+
+shabda shuddhi
+  (alias purification)
+  (desc "the-refinement-that-reveals-nature")
+done

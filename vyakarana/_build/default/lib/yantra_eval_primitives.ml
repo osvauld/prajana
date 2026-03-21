@@ -303,12 +303,11 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
       match List.assoc_opt "name" pairs with
       | Some v -> VString v
       | None ->
-        (* fallback: reconstruct raw shabda and look for text after / *)
-        let raw = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
-          | Some s -> s | None -> "" in
-        match String.split_on_char '/' raw with
-        | _ :: rest when rest <> [] ->
-          VString (String.trim (String.concat "/" rest))
+        (* fallback: check desc key in shabda store *)
+        let store_pairs = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
+          | Some p -> p | None -> [] in
+        match List.assoc_opt "desc" store_pairs with
+        | Some d when String.trim d <> "" -> VString (String.trim d)
         | _ -> VString ""))
 
   (* to-english-relation: visheshanam-string → English phrase *)

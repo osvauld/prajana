@@ -12,18 +12,16 @@ from .paths import YANTRA
 
 TANTRA_GROUPS = OrderedDict(
     [
-        ("pipeline", "main pipeline orchestration + derive/execute steps"),
-        ("avrti", "refinement passes (fixpoint, assertion, anumana)"),
-        ("sankhya", "number handling + count chain"),
-        ("match", "mantra matching + scope + forward/inverse"),
-        ("anuvada", "proof/reasoning emission (pratijna, hetu, etc.)"),
+        ("pipeline", "orchestrator — sentence → answer"),
+        ("construct", "layer 1 — sentence → raw question graph"),
+        ("assert", "layer 2 — raw graph → asserted graph (categorical claims)"),
+        ("refine", "layer 3 — asserted → refined graph (fixpoint avrti-refine)"),
+        ("expand", "layer 4 — refined → expanded graph (kosha janya injection)"),
+        ("detect", "layer 5 — expanded → intent signals (parallel reads)"),
+        ("dispatch", "layer 6 — signals → answer (anumana|viveka|count|derive)"),
+        ("emit", "layer 7 — answer + graph → formatted output (proof + reasoning)"),
         ("equations", "physics equation tantras (ke, momentum, etc.)"),
-        ("vishesa", "entity typing, rashi, agra-bandha"),
-        ("sandhi", "compound resolution"),
-        ("vibhakti", "grammar case handling"),
         ("boot", "bootstrap + reload"),
-        ("debug", "mantra coverage"),
-        ("lookup", "shabda lookup"),
     ]
 )
 

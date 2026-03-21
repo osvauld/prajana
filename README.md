@@ -1,4 +1,4 @@
-# a proof graph for knowledge
+# nam — a proof graph that knows itself
 
 *approach this the way a child approaches anything new — what is this? what is that? ask. run it. ask again. you will understand it.*
 
@@ -6,93 +6,129 @@
 
 ## what is this?
 
-a graph. each node is a concept with a name. each name holds edges to other names. the edges are typed — they say exactly what kind of relationship connects two things.
+a graph. 1579 nodes, 46 edge types, ~11000 edges. each node is a concept with a name. each name holds typed edges to other names. the edges say exactly what kind of relationship connects two things.
 
-build it first:
-
-```bash
-cd vyakarana
-opam install . --deps-only
-dune build
-```
-
-then ask it something:
+it answers questions. not by lookup — by structural derivation. you give it a sentence in English, it resolves each word to a graph node, finds the right formula (mantra), executes it, and returns a proven answer with full attribution.
 
 ```bash
-echo "DARSHANA sparsha" | ./_build/default/bin/vyakarana.exe ../brahman/sangati ../brahman/kosha
+python3 -m tools ask "mass is 5 and velocity is 10. find kinetic energy"
+```
+```
+[we seek] : kinetic-energy.
+[we know] : kinetic-energy-mantra (mass, velocity → kinetic-energy).
+[we see] : mass=5., velocity=10..
+[we find] : kinetic-energy = 250
 ```
 
-it tells you what sparsha is, what it rests on, what it produces, what cites it, how verified it is.
-
-ask it something harder:
-
-```bash
-echo "ANUVADA why does force produce motion" | ./_build/default/bin/vyakarana.exe ../brahman/sangati ../brahman/kosha
-```
-
-it unfolds the answer from the structure — not from stored text, from the shape of the connections.
-
-ask it something you think it cannot answer:
-
-```bash
-echo "ANUVADA dot product is contact" | ./_build/default/bin/vyakarana.exe ../brahman/sangati ../brahman/kosha
-```
-
-it will tell you they are the same thing. and show you why. structurally.
-
-that is what this is. keep asking. the graph keeps answering.
+it can also count, compare, chain multi-step derivations, handle multi-entity problems, and unfold the graph around any concept to show what it knows structurally.
 
 ---
 
-## what it is — precisely
+## try it
 
-brahman is a knowledge graph where every node is a verified concept and every edge is a typed relationship. the graph holds ground truth. an engine called vyakarana queries it.
+```bash
+# build the engine
+cd vyakarana && opam install . --deps-only && dune build && cd ..
 
-it runs alone. no neural network. no machine learning. no training data. language is generated from structure — from the shape of the edges, the types of the relationships, the satya of the nodes. the graph knows what it knows because the structure says so, not because it has seen enough examples.
+# ask questions (auto-starts the graph server)
+python3 -m tools ask "mass is 10 and acceleration is 5. find force"
+python3 -m tools ask "10 birds sat on a tree. 3 flew away. how many are left?"
+python3 -m tools ask "ball-A has mass 5. ball-B has mass 3. which is heavier?"
 
-this is the difference: machine learning approximates from patterns in data. this graph derives from verified structure. the output is not a prediction. it is a traversal.
+# interactive repl
+python3 -m tools ask
+```
 
-this is possible because of how humans actually work with meaning.
-
-say the word *home* to ten people. ten different things arrive. the smell of a specific kitchen. a sound. a feeling of safety or its absence. the word is the same. what unfolds is different for each person — because each person has folded different experiences into that word over time.
-
-this is information condensation. a word is not a definition. it is a compressed fold of everything that has been verified about it — through lived experience, through shared meaning, through what a community has agreed to hold inside that name.
-
-the graph formalizes exactly this. each node is a name. the edges are what has been verified about it — what it rests on, what it produces, what it is non-different from, what demonstrates it. when you query a node, the graph unfolds — the same way memory unfolds when a word arrives.
-
-the difference from a dictionary: a dictionary stores definitions. this graph stores relationships. meaning is not stored — it is produced by the fold. and because the relationships are typed and the satya is computed from structure, the meaning that arrives is not approximate. it is derived.
-
-the name `pramana` holds edges to `sthiti`, `samskaara`, `niralamba`, `swa`, `lekhana`, `ananta`, `seva`, `samsarga`, `brahma`. each of those holds edges to more. the word is small. the fold on receive is the full graph. the density of what arrives when a name is unfolded is a measure of how much has been verified and connected around it. that measure is `satya`.
+the `ask` command starts the vyakarana server automatically. the first call takes a moment; subsequent calls are fast.
 
 ---
 
-## why Sanskrit grammar
+## how to use the tools
 
-Sanskrit grammar was chosen because it already solved the problem.
+everything runs through `python3 -m tools [mode] [args]`. this is the main interface.
 
-A Sanskrit compound word encodes a complete relationship in a single token:
+### ask questions
+
+```bash
+python3 -m tools ask "ball has mass 5 velocity 10. find kinetic energy"
+python3 -m tools ask "a bird has 8 apples. 3 flew away. how many are left?"
+python3 -m tools ask "ball-A has mass 5. ball-B has mass 3. which is heavier?"
+python3 -m tools ask   # interactive repl — keep asking
+```
+
+### inspect the live graph
+
+```bash
+python3 -m tools vy inspect momentum          # full node: satya, shabda, edges
+python3 -m tools vy walk 'addition abheda'    # transitive chain walk
+python3 -m tools vy triples mass              # all triples touching a node
+python3 -m tools vy eval 'shabda "addition" "eval"'   # evaluate any expression
+python3 -m tools vy mantras 'ball has mass 5. find kinetic energy'  # which mantras fire
+python3 -m tools vy trace 'ball has mass 5. find kinetic energy'    # pipeline stages
+```
+
+### analyze the knowledge base (no server needed)
+
+```bash
+python3 -m tools om summary                   # 1579 nodes across 4 layers
+python3 -m tools om domain kosha/physics      # browse a domain
+python3 -m tools om search "pratipaksha"      # regex search across all nodes
+python3 -m tools tantra summary               # 75 tantras, call structure
+python3 -m tools tantra lint                  # find hardcoded refs, word lists
+python3 -m tools shabda summary               # word index, shabda keys, gaps
+python3 -m tools shabda lookup heavier        # trace a word to its graph node
+python3 -m tools shabda eval                  # all fireable operations
+python3 -m tools search "viveka"              # search both tantras and om
+```
+
+### run the tests
+
+```bash
+python3 -m tools test run                     # full suite (81 passing, 36 xfailed)
+python3 -m tools test run test_ke_basic       # one test by name
+python3 -m tools test run pipeline            # one layer
+python3 -m tools cache summary                # test result analysis
+python3 -m tools cache failed                 # diagnose failures
+```
+
+read the tests to understand what the system can do — they are the specification:
+- `tools/v2/test_answers.py` — end-to-end: sentence in, answer out
+- `tools/v2/test_xfail.py` — features not yet built (the roadmap)
+- `tools/v2/test_pipeline.py` — pipeline stage tests
+- `tools/v2/test_evaluator.py` — tantra language primitives
+- `tools/v2/test_graph.py` — graph walk and shabda lookups
+
+full tools documentation: `tools/README.md`
+
+---
+
+## project structure
 
 ```
-pramana-siddha
+agent_x/
+  brahman/          the knowledge graph (the data)
+    sangati/          structural truths — what IS what (326 nodes)
+    kosha/            domain knowledge — physics, math, biology, ... (996 nodes)
+    bhasha/           language bridges — English grammar, Lua, OCaml (156 nodes)
+    yantra/           computation recipes — tantras (75 files)
+    shabda/           metadata — word lists, eval names, constants (17 files)
+
+  vyakarana/        the engine (OCaml)
+    lib/              core: proof_graph, yantra (tantra eval), setu (graph walks),
+                      anuvada (reasoning), yantra_eval_primitives (builtins)
+    bin/              entry point — loads graph, serves queries
+
+  tools/            python CLI for everything
+    v2/               test suite (81 passing / 36 xfailed)
+
+  pathram/          living documentation system
+    output/           emitted docs (whitepaper, pipeline, discoveries, ...)
+    data/             structured state (JSON)
 ```
 
-This means: `pramana` (ground truth) — `siddha` (proven through). Subject, relationship, and target in one word. No ambiguity. No punctuation needed. The grammar is the structure.
+### brahman — the graph
 
-There are 9 relationship types, taken directly from Sanskrit grammatical categories:
-
-| edge type    | meaning                        |
-|--------------|--------------------------------|
-| `swarupa`    | IS — identity                  |
-| `abheda`     | non-different — equivalence    |
-| `sthita`     | rests on — foundation          |
-| `yukta`      | connects to                    |
-| `siddha`     | proven through                 |
-| `kriya`      | acts as — function             |
-| `phala`      | produces — consequence         |
-| `janya`      | born from — origin             |
-| `drishthanta`| demonstrated by — evidence     |
-
-Each node is declared in a `.om` file:
+nodes are declared in `.om` files. each quoted line is a sloka — a compound word that decomposes into one typed edge:
 
 ```
 sangati pramana
@@ -102,213 +138,185 @@ sangati pramana
 done
 ```
 
-Each quoted line is a sloka. Each word in a sloka is a compound that decomposes into one typed edge. The parser reads them all, builds the graph, then runs convergence.
+`pramana-siddha` = pramana (ground truth) — siddha (proven through). subject, relationship, target in one token. the grammar IS the structure.
+
+there are 10 core edge types:
+
+| edge type      | meaning                        | symbol |
+|----------------|--------------------------------|--------|
+| `swarupa`      | IS — identity                  | ≡      |
+| `abheda`       | non-different — equivalence    | ≈      |
+| `sthita`       | rests on — foundation          | ∈      |
+| `yukta`        | connects to — addition         | +      |
+| `siddha`       | proven through                 | ⊢      |
+| `kriya`        | acts as — multiplication       | ×      |
+| `phala`        | produces — output              | →      |
+| `janya`        | born from — input              | ←      |
+| `drishthanta`  | demonstrated by — evidence     | ∃      |
+| `pratipaksha`  | inverse of                     | ⁻¹     |
+
+these 10 types form a non-commutative ring (the visheshanam ring). yukta is addition, kriya is multiplication, swarupa is multiplicative identity, pratipaksha is group inverse. the edge types are themselves nodes in the graph — the graph describes its own algebra.
+
+### vyakarana — the engine
+
+OCaml. builds the graph from `.om` files, computes satya (truth weight) by spiral convergence, evaluates tantras (declarative computation recipes), answers questions.
+
+```bash
+cd vyakarana && dune build
+```
+
+key modules:
+- `proof_graph.ml` — graph types, satya computation
+- `yantra.ml` — tantra parser and evaluator
+- `setu.ml` — graph walks, shabda reader, word classification
+- `anuvada.ml` — reasoning layer (spiral unfold)
+- `yantra_eval_primitives.ml` — 40+ builtins (walk, word-node, apply-op, execute-chain, ...)
+
+### tantras — computation recipes
+
+tantras are declarative programs that orchestrate graph queries. they are NOT hardcoded logic — they read everything from the graph:
+
+```
+tantra3 count-chain
+takes graph
+takes grades
+  direction = word-node w          -- word → kshaya or vriddhi (graph lookup)
+  op-node = walk-in direction "kriya"  -- kshaya.kriya → subtraction (graph walk)
+  op-eval = shabda op-node "eval"      -- subtraction.eval → "sub" (shabda read)
+  result = apply-op op-eval [acc, n]   -- fire the operation
+done
+```
+
+the pipeline is a composition of tantras:
+```
+answer = (emit ∘ pramana ∘ execute ∘ match ∘ expand ∘ refine ∘ build)(sentence)
+```
 
 ---
+
+## documentation
+
+all documentation lives in `pathram/` — a living documentation system with structured state, cross-references, and live data integration.
+
+### read documentation
+
+```bash
+python3 -m pathram glance                     # 20-line summary with live stats
+python3 -m pathram index                      # full table of contents
+python3 -m pathram show whitepaper            # render one doc
+python3 -m pathram topic karaka               # cross-source search (docs + om + tantras + shabda)
+python3 -m pathram search "graded ring"       # regex search across all docs
+python3 -m pathram steps                      # plan steps with status
+```
+
+### record things as you work
+
+```bash
+python3 -m pathram discover "insight text"    # record a discovery
+python3 -m pathram note "gotcha" --type quirk # record a quirk
+python3 -m pathram step-add "task" --doc plan # add a plan step
+python3 -m pathram baseline 81 36 0           # update test baseline
+```
+
+### emitted documents (in `pathram/output/`)
+
+- `whitepaper.md` — mathematical foundations of the proof graph
+- `pipeline.md` — the computation pipeline: sentence → answer
+- `discoveries.md` — insights discovered during development
+- `principles.md` — structural rules of the system
+- `tests.md` — test categories and what they protect
+- `roadmap.md` — xfail gates as the development roadmap
+
+full pathram documentation: `pathram/README.md`
+
+---
+
+## what it is — precisely
+
+brahman is a knowledge graph where every node is a verified concept and every edge is a typed relationship. the graph holds ground truth. vyakarana queries it.
+
+it runs alone. no neural network. no machine learning. no training data. language is generated from structure — from the shape of the edges, the types of the relationships, the satya of the nodes. the graph knows what it knows because the structure says so, not because it has seen enough examples.
+
+the output is not a prediction. it is a traversal.
+
+say the word *home* to ten people. ten different things arrive. the smell of a specific kitchen. a sound. a feeling of safety or its absence. the word is the same. what unfolds is different for each person — because each person has folded different experiences into that word over time.
+
+the graph formalizes exactly this. each node is a name. the edges are what has been verified about it — what it rests on, what it produces, what it is non-different from, what demonstrates it. when you query a node, the graph unfolds — the same way memory unfolds when a word arrives.
+
+a dictionary stores definitions. this graph stores relationships. meaning is not stored — it is produced by the fold. and because the relationships are typed and the satya is computed from structure, the meaning that arrives is not approximate. it is derived.
 
 ---
 
 ## satya — truth weight
 
-`satya` is not manually assigned. It is computed from the structure of the graph itself.
+`satya` is not manually assigned. it is computed from the structure of the graph itself.
 
-**Pass 1 — raw satya:**
-Each node gets an initial score from:
-- how many slokas describe it (angles of view)
-- how many edges connect it (richness of relationship)
-- how many distinct edge types it uses (depth of relationship)
+**pass 1 — raw satya:** each node gets an initial score from how many slokas describe it, how many edges connect it, how many distinct edge types it uses. all sigmoid-normalized.
 
-All three are sigmoid-normalized: they approach 1.0 but never reach it.
-
-**Pass 2+ — avrti (spiral convergence):**
-Each node blends its own structure with its neighbors:
+**pass 2+ — avrti (spiral convergence):** each node blends its own structure with its neighbors:
 ```
 new_satya = 0.7 × (0.6 × own + 0.4 × neighbor_avg) + 0.3 × citation_boost
 ```
-where `citation_boost` = in-degree / (1 + in-degree) — how many other nodes cite this one.
+this runs until convergence (max delta < 0.001). the corpus converges in 10 iterations.
 
-This runs until convergence (max delta < 0.001, capped at 100 iterations). The corpus converges in 10 iterations.
-
-A node becomes high-satya not because someone declared it important — but because many things connect to it, cite it, and are themselves well-connected.
-
-```
-pramana   satya=0.8213   cited_by=48
-sparsha   satya=0.7997   cited_by=19
-```
+a node becomes high-satya because many things connect to it, cite it, and are themselves well-connected.
 
 ---
 
 ## the fold — how queries work
 
-This is the main operation. Not lookup. A fold.
-
-You give the engine a sentence. It tokenizes it, classifies each word (is it a node? a relationship type? an article to skip?), resolves it through `abheda` (equivalence) edges to find all names the word maps to, then walks the graph outward in passes — each pass discovering what the previous pass connected to.
-
-```
-ANUVADA dot product is contact
-```
-
-```
-understood:
-  [dot]     → node (dot-product, sparsha, contact, inner-product)
-  [product] → node (dot-product, sparsha, contact, inner-product)
-  [is]      → swarupa
-  [contact] → node (contact, sparsha, touch, dot-product)
-
--- avrti 1 --
-  dot-product is the same as contact; born from fold, map.
-  dot-product rests on domain-math, vector; connects to quantity; acts as plus, times; produces scalar.
-```
-
-The fold does not retrieve a record. It unfolds the graph around the query, pass by pass. Each pass is a deeper layer of what is structurally connected. The response shows you the shape of the neighborhood — what the concepts are, what they rest on, what they produce, what they are equivalent to.
-
-```
-ANUVADA+ 2 how does force produce displacement
-```
-
-```
--- avrti 1 --
-  centripetal-force rests on domain-physics; connects to acceleration; acts as momentum; produces kinematics.
-  position rests on domain-physics, kinematics, space; connects to telos.
-
--- avrti 2 --
-  kinematics rests on domain-physics; connects to acceleration, velocity; produces position.
-  physics-to-ocaml is setu; rests on centripetal-force, velocity; produces position, upakarana.
-```
-
-The engine also suggests the next thread — where to pull from the fold:
-```
-next threads:
-  1) what proof would make acceleration through newton-second-law-motion undeniable?
-  2) what shifts in acceleration if domain-physics changes?
-```
-
----
-
-## parallel with neural networks
-
-A neural network stores knowledge as weights on edges between neurons. The weights are learned from data by gradient descent. To retrieve knowledge, you run a forward pass — the input activates neurons, which activate others, producing an output.
-
-This graph stores knowledge differently:
-
-| | neural network | brahman |
-|---|---|---|
-| nodes | neurons (no intrinsic meaning) | named concepts (meaning is the name) |
-| edges | scalar weights (learned) | typed relationships (declared, 9 types) |
-| truth | implicit in weight distribution | explicit `satya` score, computed by convergence |
-| query | forward pass (matrix multiply) | fold — spiral walk by relationship type |
-| training | gradient descent on data | structural declaration + avrti convergence |
-| output | activations → prediction | typed triples → verified connections |
-
-A neural network generalizes from examples. This graph accumulates verified structure. A neural network can be queried but not read. This graph can be read, walked, and reasoned about directly.
-
-The closest structural analog is a knowledge graph with typed edges and a PageRank-style convergence for node weight. The difference is the grammar: the 9 relationship types come from Sanskrit grammatical categories, and the query engine unfolds meaning through those types specifically.
-
----
-
-## what you can do with it
-
-**query a node directly:**
-```
-DARSHANA pramana
-```
-returns all edges, all slokas, satya score, citation count.
-
-**fold over a sentence:**
-```
-ANUVADA entropy decay signal loss
-```
-unfolds the graph around those concepts, showing what they are, what they rest on, what they produce, what converges around them — across 5 passes, 670 connections.
-
-**control fold depth:**
-```
-ANUVADA+ 3 how does compression relate to truth
-```
-3-pass spiral. Each pass goes one layer deeper into the neighborhood.
-
-**generate code from graph structure:**
-
-The graph encodes the structure of mathematical operations. The engine can walk a bridge node's edges and emit a working OCaml program from the graph alone:
-
-```ocaml
-(* arithmetic-to-ocaml — root: anuvada *)
-type operator = Divide | Minus | Plus | Times
-let eval ~(a:int) ~(b:int) ~(op:operator) : int =
-  match op with
-  | Divide -> a / b
-  | Minus  -> a - b
-  | Plus   -> a + b
-  | Times  -> a * b
-```
-
-The ADT constructors, the eval function, the operator table — all derived from edges in the graph. The graph says what operations exist and what shape they take. The engine renders them.
-
----
-
-## build and run
+you give the engine a sentence. it classifies each word, resolves it through `abheda` edges, then walks the graph outward in passes — each pass discovering what the previous pass connected to.
 
 ```bash
-# build
-cd vyakarana
-opam install . --deps-only
-dune build
-
-# run
-./_build/default/bin/vyakarana.exe brahman/sangati brahman/kosha
+python3 -m tools vy eval 'avrti "entropy decay signal loss"'
 ```
 
-```
-vyakarana joining. reading suktas from brahman/sangati, brahman/kosha
-satya-ganana: 10 avrti iterations
-suktas: 619 loaded, 0 skipped
-akasham ready.
-```
-
-then type commands at the prompt.
+the fold does not retrieve a record. it unfolds the graph around the query, pass by pass. the response shows you the shape of the neighborhood.
 
 ---
 
 ## what to do after reading this
 
-**step 1 — build**
+**step 1 — build and ask**
 
 ```bash
-cd vyakarana
-opam install . --deps-only
-dune build
+cd vyakarana && opam install . --deps-only && dune build && cd ..
+python3 -m tools ask "mass is 5 and velocity is 10. find kinetic energy"
 ```
 
-**step 2 — ask an LLM**
+**step 2 — read the tests**
 
-do not try to interpret the graph output alone. ask an LLM — Claude, GPT, Gemini, any of them. give it the output and ask it to explain what the graph is saying.
-
-the workflow:
-
-```
-you         → ask the LLM: "run this and tell me what it means"
-LLM         → runs the query, gets the output
-LLM         → interprets the edges, the satya scores, the connections
-LLM         → explains what the graph found in plain language
-you         → ask a follow-up question based on what arrived
-LLM         → runs the next query, interprets again
+```bash
+cat tools/v2/test_answers.py    # what questions work
+cat tools/v2/test_xfail.py      # what questions don't work yet (the roadmap)
 ```
 
-for example — tell the LLM:
+**step 3 — explore the graph**
 
-> "run `echo "DARSHANA sparsha" | ./_build/default/bin/vyakarana.exe brahman/sangati brahman/kosha` and explain what the graph says about sparsha and what surprises you in the edges"
+```bash
+python3 -m tools vy inspect pramana
+python3 -m tools shabda lookup heavier
+python3 -m tools om domain kosha/physics
+```
 
-the LLM will run it, read the typed edges and satya scores, and explain what the graph holds — in language you can follow. then ask the next question. the LLM runs the next query. you follow the thread.
+**step 4 — read the documentation**
 
-this is the practice. you bring the curiosity. the LLM runs the queries and interprets. the graph provides the structure. understanding arrives through the asking — not before it.
+```bash
+python3 -m pathram glance
+python3 -m pathram show whitepaper
+python3 -m pathram topic "graded ring"
+```
+
+**step 5 — ask an LLM**
+
+give an LLM access to the tools. tell it to run `python3 -m tools ask` with various questions, inspect nodes, trace the pipeline. the LLM interprets the edges, the satya scores, the connections. you follow the thread.
+
+this is the practice. you bring the curiosity. the graph provides the structure. understanding arrives through the asking.
 
 ---
 
 ## go deeper
 
-`brahman/parampara-english.md` — the full reading order: vocabulary, structure, how to read the corpus, what each layer means.
-
-`brahman/EXPERIMENTS.md` — eleven experiments across physics, mathematics, biology, quantum mechanics, philosophy, and consciousness. each one a real runnable query.
-
-`brahman/FEELING.md` — what it feels like when the graph shows you something true.
-
-`brahman/COLLATZ.md` — mathematics, physics, and proof graphs as three instruments looking at the same prakriti rahasya.
+- `pathram/output/whitepaper.md` — mathematical foundations: the visheshanam ring, mantra signatures, graded ring input semantics, pipeline as function composition
+- `tools/README.md` — complete tools reference: all modes, all commands, test suite details
+- `pathram/README.md` — documentation system: how to record, query, and emit docs

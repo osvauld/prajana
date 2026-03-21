@@ -107,22 +107,21 @@ let classify_token (k : proof_graph) word =
             (match acc with
             | Some _ -> acc
             | None ->
-              let raw = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
-                | Some s -> s | None -> "" in
-              let shabda = String.lowercase_ascii (String.trim raw) in
-              if shabda = "" then None
+              let pairs = match Setu_shabda.(Hashtbl.find_opt _shabda_store name) with
+                | Some p -> p | None -> [] in
+              if pairs = [] then None
               else
-                let before_slash = (match String.index_opt shabda '/' with
-                  | Some i -> String.sub shabda 0 i
-                  | None -> shabda)
-                in
-                let tokens = String.split_on_char ',' before_slash
-                  |> List.map String.trim
-                  |> List.concat_map (fun t -> String.split_on_char ' ' t)
-                  |> List.map String.trim
-                  |> List.filter (fun t -> String.length t > 0)
-                in
-                if List.mem w tokens then Some name else None)
+                let word_match = match List.assoc_opt "word" pairs with
+                  | Some wv ->
+                    let words = String.split_on_char ',' wv
+                      |> List.map (fun s -> String.lowercase_ascii (String.trim s))
+                      |> List.filter (fun s -> String.length s > 0) in
+                    List.mem w words
+                  | None -> false in
+                let name_match = match List.assoc_opt "name" pairs with
+                  | Some n -> String.lowercase_ascii (String.trim n) = w
+                  | None -> false in
+                if word_match || name_match then Some name else None)
           ) k.nodes None in
           (match shabda_match with
           | Some name -> Content name

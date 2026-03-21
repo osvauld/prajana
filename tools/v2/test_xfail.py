@@ -186,7 +186,6 @@ def test_car_from_rest_force(vy):
 # ── gate: total_compound ───────────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="'total kinetic energy': avastha fires before kosha bigram")
 def test_total_ke_resolves(vy):
     g = vy.bqg("find total kinetic energy given mass 2 and velocity 3")
     satya = vy.subjects(g, pred="satya")
@@ -194,7 +193,6 @@ def test_total_ke_resolves(vy):
     assert "count" not in satya
 
 
-@xfail(strict=True, reason="'total' resolves to count via shabda alias")
 def test_total_momentum_resolves(vy):
     g = vy.bqg("find total momentum given mass 2 and velocity 3")
     assert "count" not in vy.subjects(g, pred="satya")
@@ -224,7 +222,6 @@ def test_red_blue_addition(vy):
 # ── gate: article ──────────────────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="'the' breaks scope detection: 'of the electron' fails")
 def test_article_before_entity(vy):
     r = vy.answer(
         "find kinetic energy of the electron given mass 9.109e-31 and velocity 1e6"
