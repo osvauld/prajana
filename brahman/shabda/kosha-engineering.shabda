@@ -1,27 +1,117 @@
 # kosha/engineering — shabda extracted from .om files
 # 24 entries
 
-arch: word:arch,keystone,vault,voussoir / pure-compression-geometry-no-tension-masonry-catenary-Gaudi
-architectural-space: word:space,room,enclosure,void / the-primary-material-of-architecture-bounded-by-structure
-architecture-varga: architecture-varga / organising-space-firmitas-utilitas-venustas-structure-geometry-human-scale
-beam: word:beam,girder,joist / horizontal-structural-element-bending-compression-top-tension-bottom
-bridge: word:bridge / span-a-gap-carry-load-beam-arch-suspension-cable-stayed-truss
-civil-varga: civil-varga / cluster-for-structures-that-resist-gravity-bridges-buildings-roads-dams
-column: word:column,pillar,post,pier / vertical-compression-member-buckling-Euler-classical-orders
-control-systems: word:control-systems,PID,feedback,controller / closed-loop-PID-transfer-function-stability-Bode
-dimension: word:dimension,dimensioning / exact-measurement-on-drawing-linear-angular-radial-diametric
-domain-engineering: engineering / applied-physics-chemistry-knowledge-made-into-artefact
-dome: word:dome,cupola / arch-rotated-360-pure-compression-pantheon-geodesic-pendentive
-drawing-varga: drawing-varga / the-precise-visual-language-of-engineering-orthographic-isometric-dimensioned-toleranced
-electrical-varga: electrical-varga / power-systems-generation-transmission-distribution-transformer-motor-generator
-electronic-varga: electronic-varga / semiconductor-signal-transistor-diode-op-amp-analog-digital-PCB
-engineering-varga: engineering-varga / root-cluster-for-all-engineering-domain-nodes
-foundation: word:foundation,footing / transfers-all-structural-loads-to-ground-shallow-deep-raft
-fourier-engineering: word:FFT,DFT,fourier-transform,spectrum,spectral / Fourier-decomposition-FFT-spectrum-frequency-domain
-instruments: word:instruments,drafting-instruments,compass,T-square,set-square,protractor,drafting / tools-of-engineering-drawing-pencil-compass-protractor-T-square-CAD
-line-types: word:line-types,hidden-line,centre-line,hatching / visible-hidden-centre-dimension-cutting-plane-hatching
-projection: projection / the-linear-map-that-collapses-higher-dimensions-onto-a-subspace
-signal-varga: signal-varga / signals-in-time-and-frequency-Fourier-convolution-filtering-DSP-Nyquist-sampling
-strain: word:strain / fractional-deformation-epsilon-equals-deltaL-over-L-dimensionless
-stress: word:stress / force-per-unit-area-internal-resistance-of-material-sigma-equals-F-over-A
-tolerance: word:tolerance,GD&T,fit / permissible-variation-from-nominal-clearance-interference-transition-fits
+shabda arch
+  (word arch keystone vault voussoir)
+  (desc pure-compression-geometry-no-tension-masonry-catenary-Gaudi)
+done
+
+shabda architectural-space
+  (word space room enclosure void)
+  (desc the-primary-material-of-architecture-bounded-by-structure)
+done
+
+shabda architecture-varga
+  (alias architecture-varga)
+  (desc organising-space-firmitas-utilitas-venustas-structure-geometry-human-scale)
+done
+
+shabda beam
+  (word beam girder joist)
+  (desc horizontal-structural-element-bending-compression-top-tension-bottom)
+done
+
+shabda civil-varga
+  (alias civil-varga)
+  (desc cluster-for-structures-that-resist-gravity-bridges-buildings-roads-dams)
+done
+
+shabda column
+  (word column pillar post pier)
+  (desc vertical-compression-member-buckling-Euler-classical-orders)
+done
+
+shabda control-systems
+  (word control-systems PID feedback controller)
+  (desc closed-loop-PID-transfer-function-stability-Bode)
+done
+
+shabda dimension
+  (word dimension dimensioning)
+  (desc exact-measurement-on-drawing-linear-angular-radial-diametric)
+done
+
+shabda domain-engineering
+  (alias engineering)
+  (desc applied-physics-chemistry-knowledge-made-into-artefact)
+done
+
+shabda dome
+  (word dome cupola)
+  (desc arch-rotated-360-pure-compression-pantheon-geodesic-pendentive)
+done
+
+shabda drawing-varga
+  (alias drawing-varga)
+  (desc the-precise-visual-language-of-engineering-orthographic-isometric-dimensioned-toleranced)
+done
+
+shabda electrical-varga
+  (alias electrical-varga)
+  (desc power-systems-generation-transmission-distribution-transformer-motor-generator)
+done
+
+shabda electronic-varga
+  (alias electronic-varga)
+  (desc semiconductor-signal-transistor-diode-op-amp-analog-digital-PCB)
+done
+
+shabda engineering-varga
+  (alias engineering-varga)
+  (desc root-cluster-for-all-engineering-domain-nodes)
+done
+
+shabda foundation
+  (word foundation footing)
+  (desc transfers-all-structural-loads-to-ground-shallow-deep-raft)
+done
+
+shabda fourier-engineering
+  (word FFT DFT fourier-transform spectrum spectral)
+  (desc Fourier-decomposition-FFT-spectrum-frequency-domain)
+done
+
+shabda instruments
+  (word instruments drafting-instruments compass T-square set-square protractor drafting)
+  (desc tools-of-engineering-drawing-pencil-compass-protractor-T-square-CAD)
+done
+
+shabda line-types
+  (word line-types hidden-line centre-line hatching)
+  (desc visible-hidden-centre-dimension-cutting-plane-hatching)
+done
+
+shabda projection
+  (alias projection)
+  (desc the-linear-map-that-collapses-higher-dimensions-onto-a-subspace)
+done
+
+shabda signal-varga
+  (alias signal-varga)
+  (desc signals-in-time-and-frequency-Fourier-convolution-filtering-DSP-Nyquist-sampling)
+done
+
+shabda strain
+  (word strain)
+  (desc fractional-deformation-epsilon-equals-deltaL-over-L-dimensionless)
+done
+
+shabda stress
+  (word stress)
+  (desc force-per-unit-area-internal-resistance-of-material-sigma-equals-F-over-A)
+done
+
+shabda tolerance
+  (word tolerance GD&T fit)
+  (desc permissible-variation-from-nominal-clearance-interference-transition-fits)
+done

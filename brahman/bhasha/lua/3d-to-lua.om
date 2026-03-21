@@ -7,6 +7,5 @@ bhasha 3d-to-lua
   "camera-3d-yukta force-directed-yukta node-graph-yukta"
   "sphere-phala line3d-phala begin-3d-phala"
 
-  shabda shabda-tmpl:language/lua/raylib-setu.shabda
 
 done

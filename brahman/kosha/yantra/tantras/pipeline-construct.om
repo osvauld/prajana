@@ -1,0 +1,14 @@
+
+kosha pipeline-construct
+  "yantra-varga-swarupa"
+  "domain-yantra-sthita"
+  "sentence-janya"
+  "raw-graph-phala"
+  "pipeline-assert-krama"
+done
+  "materialize-question-graph-kriya"
+  "shabda-anveshana-kriya"
+  "sandhi-viveka-kriya"
+  "emit-triples-kriya"
+  "transducer-abheda"
+  "build-question-graph-kriya"

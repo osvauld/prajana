@@ -64,74 +64,127 @@ let parse_shabda (s : string) : (string * string) list =
       if String.length before_slash > 0 then [("name", before_slash)] else []
     else pairs
 
-(* parse_shabda_file: read a .shabda file — one "key: value" per line.
-   blank lines and lines starting with # are ignored.
-   multiline values: if value is "|", subsequent indented lines are collected
-   until a non-indented non-empty line is found. *)
-let parse_shabda_file (path : string) : (string * string) list =
-  try
-    let ic = open_in path in
-    let all_lines = ref [] in
-    (try
-      while true do
-        all_lines := input_line ic :: !all_lines
-      done
-    with End_of_file -> ());
-    close_in ic;
-    let lines = Array.of_list (List.rev !all_lines) in
-    let n = Array.length lines in
-    let pairs = ref [] in
-    let i = ref 0 in
-    while !i < n do
-      let line = lines.(!i) in
-      let trimmed = String.trim line in
-      if String.length trimmed > 0 && trimmed.[0] <> '#' then begin
-        match String.index_opt trimmed ':' with
-        | Some ci ->
-          let k = String.trim (String.sub trimmed 0 ci) in
-          let v = String.trim (String.sub trimmed (ci + 1) (String.length trimmed - ci - 1)) in
-          if String.length k > 0 then begin
-            if v = "|" then begin
-              (* multiline block: collect indented lines until dedent *)
-              incr i;
-              let buf = Buffer.create 256 in
-              while !i < n && (
-                let l = lines.(!i) in
-                String.length l = 0 ||
-                (String.length l > 0 && (l.[0] = ' ' || l.[0] = '\t'))
-              ) do
-                (* strip exactly 2 leading spaces if present *)
-                let raw = lines.(!i) in
-                let stripped =
-                  if String.length raw >= 2 && raw.[0] = ' ' && raw.[1] = ' '
-                  then String.sub raw 2 (String.length raw - 2)
-                  else raw
-                in
-                Buffer.add_string buf stripped;
-                Buffer.add_char buf '\n';
-                incr i
-              done;
-              pairs := (k, Buffer.contents buf) :: !pairs
-            end else begin
-              pairs := (k, v) :: !pairs;
-              incr i
-            end
-          end else incr i
-        | None -> incr i
-      end else incr i
-    done;
-    List.rev !pairs
-  with _ -> []
-
 (* ---- global shabda store ----
    loaded from brahman/shabda/*.shabda files at startup.
-   format: one entry per line — "node-name: shabda-raw"
-   falls back here when a node has no inline shabda and no shabda-tmpl. *)
+   stores parsed (key, value) pairs per node — the native query format.
+   all consumers query pairs directly via shabda_get or List.assoc_opt. *)
 
-let _shabda_store : (string, string) Hashtbl.t = Hashtbl.create 1024
+let _shabda_store : (string, (string * string) list) Hashtbl.t = Hashtbl.create 1024
 
-(* load all *.shabda files from a directory into the global store.
-   each line: "node-name: shabda-raw-string" (# comments and blank lines skipped) *)
+(* --- S-expression shabda parser ---
+   format:
+     shabda node-name
+       (key value ...)
+       (word a b c)
+       -- comment
+     done
+
+   Parses directly into (key, value) pairs — the native query format.
+   Multi-value: (word a b c) → ("word", "a,b,c")
+   Single-value: (eval mul) → ("eval", "mul")
+   Description: (desc "text") → ("desc", "text")
+   Alias: (alias x y) → ("name", "x y")  *)
+
+(* tokenize S-expression body: split on spaces, respecting "quoted strings" *)
+let _tokenize_sexp (s : string) : string list =
+  let tokens = ref [] in
+  let buf = Buffer.create 32 in
+  let in_quote = ref false in
+  String.iter (fun c ->
+    if c = '"' then
+      in_quote := not !in_quote
+    else if (c = ' ' || c = '\t') && not !in_quote then begin
+      if Buffer.length buf > 0 then begin
+        tokens := Buffer.contents buf :: !tokens;
+        Buffer.clear buf
+      end
+    end else
+      Buffer.add_char buf c
+  ) s;
+  if Buffer.length buf > 0 then
+    tokens := Buffer.contents buf :: !tokens;
+  List.rev !tokens
+
+(* parse one S-expression block body into (key, value) pairs *)
+let parse_sexp_pairs (body_lines : string list) : (string * string) list =
+  let pairs = ref [] in
+  List.iter (fun line ->
+    let trimmed = String.trim line in
+    if String.length trimmed > 1 && trimmed.[0] = '(' then begin
+      let inner = String.trim (String.sub trimmed 1
+        (String.length trimmed - (if trimmed.[String.length trimmed - 1] = ')'
+         then 2 else 1))) in
+      let toks = _tokenize_sexp inner in
+      (match toks with
+      | [] -> ()
+      | key :: values ->
+        let k = if key = "description" then "desc"
+                else if key = "alias" then "name"
+                else key in
+        let v = match values with
+          | [] -> ""
+          | [v] -> v
+          | vs -> String.concat "," vs
+        in
+        if String.length v > 0 then
+          pairs := (k, v) :: !pairs)
+    end
+  ) body_lines;
+  List.rev !pairs
+
+(* detect whether a file uses S-expression format *)
+let is_sexp_format (lines : string list) : bool =
+  List.exists (fun line ->
+    let trimmed = String.trim line in
+    String.length trimmed > 7 &&
+    String.sub trimmed 0 7 = "shabda " &&
+    trimmed.[6] = ' '
+  ) lines
+
+(* load S-expression file: returns (node-name, pairs) list *)
+let load_sexp_file (lines : string list) : (string * (string * string) list) list =
+  let results = ref [] in
+  let i = ref 0 in
+  let n = List.length lines in
+  let arr = Array.of_list lines in
+  while !i < n do
+    let line = String.trim arr.(!i) in
+    if String.length line > 7 && String.sub line 0 7 = "shabda " then begin
+      let name = String.trim (String.sub line 7 (String.length line - 7)) in
+      incr i;
+      let body = ref [] in
+      while !i < n && String.trim arr.(!i) <> "done" do
+        body := arr.(!i) :: !body;
+        incr i
+      done;
+      if !i < n then incr i;
+      let pairs = parse_sexp_pairs (List.rev !body) in
+      if String.length name > 0 && pairs <> [] then
+        results := (name, pairs) :: !results
+    end else
+      incr i
+  done;
+  List.rev !results
+
+(* load flat file: returns (node-name, pairs) list *)
+let load_flat_file (lines : string list) : (string * (string * string) list) list =
+  let results = ref [] in
+  List.iter (fun line ->
+    let trimmed = String.trim line in
+    if String.length trimmed > 0 && trimmed.[0] <> '#' then
+      match String.index_opt trimmed ':' with
+      | Some ci ->
+        let name = String.trim (String.sub trimmed 0 ci) in
+        let raw = String.trim (String.sub trimmed (ci + 1)
+                    (String.length trimmed - ci - 1)) in
+        if String.length name > 0 && String.length raw > 0 then
+          results := (name, parse_shabda raw) :: !results
+      | None -> ()
+  ) lines;
+  List.rev !results
+
+(* load all *.shabda files from a directory into the store.
+   auto-detects format per file: S-expression or flat. *)
 let load_shabda_dir (dir : string) : int =
   if not (Sys.file_exists dir && Sys.is_directory dir) then 0
   else begin
@@ -142,22 +195,20 @@ let load_shabda_dir (dir : string) : int =
         let path = Filename.concat dir fname in
         try
           let ic = open_in path in
+          let all_lines = ref [] in
           (try while true do
-            let line = input_line ic in
-            let trimmed = String.trim line in
-            if String.length trimmed > 0 && trimmed.[0] <> '#' then
-              match String.index_opt trimmed ':' with
-              | Some ci ->
-                let name = String.trim (String.sub trimmed 0 ci) in
-                let raw = String.trim (String.sub trimmed (ci + 1)
-                            (String.length trimmed - ci - 1)) in
-                if String.length name > 0 && String.length raw > 0 then begin
-                  Hashtbl.replace _shabda_store name raw;
-                  incr count
-                end
-              | None -> ()
+            all_lines := input_line ic :: !all_lines
           done with End_of_file -> ());
-          close_in ic
+          close_in ic;
+          let lines = List.rev !all_lines in
+          let entries_list =
+            if is_sexp_format lines then load_sexp_file lines
+            else load_flat_file lines
+          in
+          List.iter (fun (name, pairs) ->
+            Hashtbl.replace _shabda_store name pairs;
+            incr count
+          ) entries_list
         with _ -> ()
       end
     ) entries;
@@ -165,50 +216,29 @@ let load_shabda_dir (dir : string) : int =
   end
 
 (* raw_shabda_for_node: read a single node's own shabda without inheritance.
-   priority: 1) inline shabda on node  2) shabda-tmpl file  3) global shabda store *)
+   priority: 1) global shabda store (from .shabda files)  2) inline shabda on node *)
 let raw_shabda_for_node (k : proof_graph) (node_name : string) : (string * string) list =
-  match find k node_name with
+  (* shabda store has all entries from brahman/shabda/*.shabda — check first *)
+  match Hashtbl.find_opt _shabda_store node_name with
+  | Some pairs -> pairs
   | None ->
-    (* node not in graph — check global store anyway *)
-    (match Hashtbl.find_opt _shabda_store node_name with
-     | Some raw -> parse_shabda raw
-     | None -> [])
-  | Some n ->
-    let inline = parse_shabda n.shabda in
-    match List.assoc_opt "shabda-tmpl" inline with
-    | Some rel_path ->
-      let search_roots =
-        let kr = !(k.kosha_root) in
-        let base_roots = if String.length kr > 0 then [kr] else [] in
-        base_roots @ !(k.search_dirs)
-      in
-      let rec try_roots = function
-        | [] -> parse_shabda_file rel_path
-        | root :: rest ->
-          let full_path = Filename.concat root rel_path in
-          if Sys.file_exists full_path then parse_shabda_file full_path
-          else try_roots rest
-      in
-      try_roots search_roots
-    | None ->
-      if inline <> [] then inline
-      else
-        (* fallback: check global shabda store *)
-        match Hashtbl.find_opt _shabda_store node_name with
-        | Some raw -> parse_shabda raw
-        | None -> []
+    (* fallback: inline shabda on the .om node *)
+    match find k node_name with
+    | None -> []
+    | Some n ->
+      let inline = parse_shabda n.shabda in
+      if inline <> [] then inline else []
 
 (* merge_shabda_priority: merge shabda pairs where earlier lists have higher priority.
    pairs_by_priority: [own_pairs; immediate_parent_pairs; grandparent_pairs; ...]
-   For each key, the first (highest-priority) value wins.
-   shabda-tmpl is never inherited — it would resolve the wrong file. *)
+   For each key, the first (highest-priority) value wins. *)
 let merge_shabda_priority (pairs_by_priority : (string * string) list list)
     : (string * string) list =
   let seen = Hashtbl.create 16 in
   let result = ref [] in
   List.iter (fun pairs ->
     List.iter (fun (key, v) ->
-      if key <> "shabda-tmpl" && not (Hashtbl.mem seen key) then begin
+      if not (Hashtbl.mem seen key) then begin
         Hashtbl.replace seen key true;
         result := (key, v) :: !result
       end
@@ -221,7 +251,7 @@ let merge_shabda_priority (pairs_by_priority : (string * string) list list)
 let inheritable_keys = [
   "eval"; "arity"; "parse-arity"; "degree"; "pratipaksha";
   "copula"; "copula-plural"; "copula-formula";
-  "matra"; "concepts-for-unit"
+  "matra"
 ]
 
 (* read_shabda: return effective shabda pairs for a node, including inherited pairs.

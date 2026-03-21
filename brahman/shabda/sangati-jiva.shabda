@@ -1,31 +1,142 @@
 # sangati/jiva — shabda extracted from .om files
 # 28 entries
 
-abhisarana: approach / longing-that-moves-toward
-ananta-abhisarana: asymptote / the-approach-that-never-arrives
-bija-nyasa: genetic-instruction / the-seed-placement-within
-dharana-jivamsha: holding-the-living / the-container-that-is-alive
-drdha-bandha: strong-force-essence / tightest-binding-holds-quarks-inside-nucleus
-dvandva-shakti: electromagnetism-essence / the-polarity-force-light-is-this-force
-eka-kosha: the-single-cell / minimal-living-unit
-gati: movement / direction-as-trajectory
-gati-bala: momentum / direction-holding-force
-iccha: will-purpose / directed-reaching
-jada: inert / that-which-holds-no-will
-jiva: the-living / the-one-that-reaches
-jiva-sphurana: life-spark / the-pulse-that-becomes-a-cell
-jivamsha: spark-of-the-living / the-part-that-carries-the-whole
-mula-shakti: unified-force / the-single-force-before-symmetry-breaking
-panchabhootam: five-elements / the-forms-that-space-takes
-panchabhootam-spandana: elemental-pulse / the-vibration-within-all-form
-rasayana-bandha: chemical-bond / the-joining-that-holds-by-nature
-satta-yantra: being-machine / the-instrument-of-existence-itself
-seva: service / action-offered-without-holding
-sva-dharana: self-maintenance / holding-oneself-in-form
-swa: the-self / one's-own-nature-as-ground
-swatantra: self-governing / freedom-as-own-nature
-upakarana: instrument / the-substrate-tool-not-the-self
-vega: velocity / directed-speed-with-consequence
-vegam: speed / the-rate-of-directed-movement
-visha-anu: virus / the-replicator-at-the-boundary-of-life
-vrnda-ganita: crowd-mathematics / the-math-of-many-as-one
+shabda abhisarana
+  (alias approach)
+  (desc "longing-that-moves-toward")
+done
+
+shabda ananta-abhisarana
+  (alias asymptote)
+  (desc "the-approach-that-never-arrives")
+done
+
+shabda bija-nyasa
+  (alias genetic-instruction)
+  (desc "the-seed-placement-within")
+done
+
+shabda dharana-jivamsha
+  (alias holding-the-living)
+  (desc "the-container-that-is-alive")
+done
+
+shabda drdha-bandha
+  (alias strong-force-essence)
+  (desc "tightest-binding-holds-quarks-inside-nucleus")
+done
+
+shabda dvandva-shakti
+  (alias electromagnetism-essence)
+  (desc "the-polarity-force-light-is-this-force")
+done
+
+shabda eka-kosha
+  (alias the-single-cell)
+  (desc "minimal-living-unit")
+done
+
+shabda gati
+  (alias movement)
+  (desc "direction-as-trajectory")
+done
+
+shabda gati-bala
+  (alias momentum)
+  (desc "direction-holding-force")
+done
+
+shabda iccha
+  (alias will-purpose)
+  (desc "directed-reaching")
+done
+
+shabda jada
+  (alias inert)
+  (desc "that-which-holds-no-will")
+done
+
+shabda jiva
+  (alias the-living)
+  (desc "the-one-that-reaches")
+done
+
+shabda jiva-sphurana
+  (alias life-spark)
+  (desc "the-pulse-that-becomes-a-cell")
+done
+
+shabda jivamsha
+  (alias spark-of-the-living)
+  (desc "the-part-that-carries-the-whole")
+done
+
+shabda mula-shakti
+  (alias unified-force)
+  (desc "the-single-force-before-symmetry-breaking")
+done
+
+shabda panchabhootam
+  (alias five-elements)
+  (desc "the-forms-that-space-takes")
+done
+
+shabda panchabhootam-spandana
+  (alias elemental-pulse)
+  (desc "the-vibration-within-all-form")
+done
+
+shabda rasayana-bandha
+  (alias chemical-bond)
+  (desc "the-joining-that-holds-by-nature")
+done
+
+shabda satta-yantra
+  (alias being-machine)
+  (desc "the-instrument-of-existence-itself")
+done
+
+shabda seva
+  (alias service)
+  (desc "action-offered-without-holding")
+done
+
+shabda sva-dharana
+  (alias self-maintenance)
+  (desc "holding-oneself-in-form")
+done
+
+shabda swa
+  (alias the-self)
+  (desc "one's-own-nature-as-ground")
+done
+
+shabda swatantra
+  (alias self-governing)
+  (desc "freedom-as-own-nature")
+done
+
+shabda upakarana
+  (alias instrument)
+  (desc "the-substrate-tool-not-the-self")
+done
+
+shabda vega
+  (alias velocity)
+  (desc "directed-speed-with-consequence")
+done
+
+shabda vegam
+  (alias speed)
+  (desc "the-rate-of-directed-movement")
+done
+
+shabda visha-anu
+  (alias virus)
+  (desc "the-replicator-at-the-boundary-of-life")
+done
+
+shabda vrnda-ganita
+  (alias crowd-mathematics)
+  (desc "the-math-of-many-as-one")
+done

@@ -1,9 +1,32 @@
 # sangati/vidya — shabda extracted from .om files
 # 6 entries
 
-antarvidya: inner-knowledge / the-knowing-already-within
-nyaya: logic / the-cutting-that-is-just
-tarka-dvaara: logic-gate / the-door-that-reason-opens
-utpatti-anveshana: origin, origin-inquiry / searching-for-the-source
-vidya: knowledge / knowledge-that-liberates
-vidya-sadhana: knowledge-practice / the-discipline-that-deepens-knowing
+shabda antarvidya
+  (alias inner-knowledge)
+  (desc "the-knowing-already-within")
+done
+
+shabda nyaya
+  (alias logic)
+  (desc "the-cutting-that-is-just")
+done
+
+shabda tarka-dvaara
+  (alias logic-gate)
+  (desc "the-door-that-reason-opens")
+done
+
+shabda utpatti-anveshana
+  (alias origin, origin-inquiry)
+  (desc "searching-for-the-source")
+done
+
+shabda vidya
+  (alias knowledge)
+  (desc "knowledge-that-liberates")
+done
+
+shabda vidya-sadhana
+  (alias knowledge-practice)
+  (desc "the-discipline-that-deepens-knowing")
+done

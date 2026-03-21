@@ -139,11 +139,23 @@ class Bridge:
         return sigs
 
     def operation_algebra(self):
-        """Extract all fireable operations with eval, arity, inverse."""
+        """Extract all fireable operations with eval, arity, inverse.
+
+        Merges shabda from both .om inline shabda_keys AND external .shabda files,
+        since eval/arity/pratipaksha-0 etc. live in the external shabda store.
+        """
         oms = self._load_om()
+        from tools import shabda as shabda_mod
+        all_shabda = shabda_mod.load_all()
         ops = []
         for name, o in oms.items():
-            sk = o.get("shabda_keys", {})
+            # Merge: external shabda wins over inline
+            sk = dict(o.get("shabda_keys", {}))
+            ext = all_shabda.get(name)
+            if ext:
+                for k, v in ext.get("fields", {}).items():
+                    if k not in sk:
+                        sk[k] = v
             ev = sk.get("eval")
             if not ev:
                 continue

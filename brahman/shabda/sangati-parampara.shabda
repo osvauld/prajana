@@ -1,29 +1,132 @@
 # sangati/parampara — shabda extracted from .om files
 # 26 entries
 
-artha: meaning, purpose / the-weight-orientation-of-what-is-pointed-at
-artha-viveka: artha-viveka / the-discernment-that-separates-meaning-from-its-surface-vehicle
-asparsha: non-contact / the-withdrawal-that-purifies
-asprista: dont know / the-term-not-yet-touched-by-understanding
-avastha: state-at-a-krama-point / the-condition-of-a-quantity-before-or-after-a-process
-chhanana: filtration / the-cutting-that-clarifies
-dharana: holding-womb / the-container-that-is-fullness
-dharma-anvaya: inheritance / the-running-of-properties-through-lineage
-dhatu: root-element / the-substrate-that-holds
-durgadha: the-impurity / residue-of-what-was-released
-krama: krama / the-ordered-sequence-where-each-step-grounds-the-next
-kramanusara: derivative / rate-of-change-of-one-quantity-with-respect-to-another
-nirantara: unbroken / the-continuity-that-holds
-niyama: niyama / the-governing-rule-that-defines-which-sequence-is-valid
-parampara: the-deepening-chain / tradition-as-spiral
-samskaara: imprint / the-mark-left-by-action-that-seeds-the-next-turn
-sandhi: the-joining-that-produces-meaning
-seema: boundary-threshold / the-line-between-states
-shakha: branch / the-single-unit-in-a-hierarchy-knowing-its-root-and-carrying-its-dharma-forward
-sparsha-rekha: tangent, signature / the-touch-that-defines-and-departs
-tantra: weaving, recipe / the-system-found-from-weaving-what-was-given-with-what-is-carried
-tantu: thread / the-filament-that-connects-as-wave
-visarjana: release / the-letting-go-that-completes-the-self
-viveka: discrimination / the-discrimination-at-a-fork-root-of-all-branching
-viveka-dvara: gate-switch / the-controlled-passage-that-decides
-viveka-shakti: symmetry-breaking / the-discernment-by-which-one-force-becomes-many
+shabda artha
+  (alias meaning, purpose)
+  (desc "the-weight-orientation-of-what-is-pointed-at")
+done
+
+shabda artha-viveka
+  (alias artha-viveka)
+  (desc "the-discernment-that-separates-meaning-from-its-surface-vehicle")
+done
+
+shabda asparsha
+  (alias non-contact)
+  (desc "the-withdrawal-that-purifies")
+done
+
+shabda asprista
+  (alias dont know)
+  (desc "the-term-not-yet-touched-by-understanding")
+done
+
+shabda avastha
+  (qualifier initial final angular linear net total average relative)
+  (alias state-at-a-krama-point)
+  (desc "the-condition-of-a-quantity-before-or-after-a-process")
+done
+
+shabda chhanana
+  (alias filtration)
+  (desc "the-cutting-that-clarifies")
+done
+
+shabda dharana
+  (alias holding-womb)
+  (desc "the-container-that-is-fullness")
+done
+
+shabda dharma-anvaya
+  (alias inheritance)
+  (desc "the-running-of-properties-through-lineage")
+done
+
+shabda dhatu
+  (alias root-element)
+  (desc "the-substrate-that-holds")
+done
+
+shabda durgadha
+  (alias the-impurity)
+  (desc "residue-of-what-was-released")
+done
+
+shabda krama
+  (alias krama)
+  (desc "the-ordered-sequence-where-each-step-grounds-the-next")
+done
+
+shabda kramanusara
+  (alias derivative)
+  (desc "rate-of-change-of-one-quantity-with-respect-to-another")
+done
+
+shabda nirantara
+  (alias unbroken)
+  (desc "the-continuity-that-holds")
+done
+
+shabda niyama
+  (alias niyama)
+  (desc "the-governing-rule-that-defines-which-sequence-is-valid")
+done
+
+shabda parampara
+  (alias the-deepening-chain)
+  (desc "tradition-as-spiral")
+done
+
+shabda samskaara
+  (alias imprint)
+  (desc "the-mark-left-by-action-that-seeds-the-next-turn")
+done
+
+shabda sandhi
+  (desc "the-joining-that-produces-meaning")
+done
+
+shabda seema
+  (alias boundary-threshold)
+  (desc "the-line-between-states")
+done
+
+shabda shakha
+  (alias branch)
+  (desc "the-single-unit-in-a-hierarchy-knowing-its-root-and-carrying-its-dharma-forward")
+done
+
+shabda sparsha-rekha
+  (alias tangent, signature)
+  (desc "the-touch-that-defines-and-departs")
+done
+
+shabda tantra
+  (alias weaving, recipe)
+  (desc "the-system-found-from-weaving-what-was-given-with-what-is-carried")
+done
+
+shabda tantu
+  (alias thread)
+  (desc "the-filament-that-connects-as-wave")
+done
+
+shabda visarjana
+  (alias release)
+  (desc "the-letting-go-that-completes-the-self")
+done
+
+shabda viveka
+  (alias discrimination)
+  (desc "the-discrimination-at-a-fork-root-of-all-branching")
+done
+
+shabda viveka-dvara
+  (alias gate-switch)
+  (desc "the-controlled-passage-that-decides")
+done
+
+shabda viveka-shakti
+  (alias symmetry-breaking)
+  (desc "the-discernment-by-which-one-force-becomes-many")
+done

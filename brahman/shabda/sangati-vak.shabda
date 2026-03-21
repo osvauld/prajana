@@ -1,24 +1,107 @@
 # sangati/vak — shabda extracted from .om files
 # 21 entries
 
-anuvada: translation / carrying-across
-artha-dhvani: meaning-resonance / the-sound-beneath-the-word
-asprishta-drishthanta: untouched-example / proof-that-needs-no-contact
-bhasha: language / the-structured-medium-of-meaning-bearing-utterance
-domain-vak: natural-language-domain / the-domain-of-spoken-and-written-human-language
-domain-yantra-bhasha: machine-language-domain / the-domain-of-formal-and-programming-languages
-katha: story / the-telling-that-holds-truth
-katha-seema: story-boundary / the-edge-where-telling-ends
-katha-viveka: story-discernment / knowing-what-the-telling-means
-kilippattu: bird-song / the-sound-of-the-self-in-service
-manipravalam-swarupa: jewel-vine / languages-woven-into-one
-matrika: mother-letter / the-generative-unit
-naama-mudra: name-seal / the-signature-that-holds-the-self
-naama-pratibodha: naama-pratibodha / pronoun-cross-reference-the-recognition-of-a-name-through-its-proxy
-nam: name-we / the-self-that-connects
-pratijnaa: vow / the-commitment-that-writes-itself
-pratishedha: grammatical-negation / morphological-denial-of-a-state-distinct-from-semantic-opposition
-sphoTa: meaning-flash / the-whole-that-bursts-when-the-last-sound-lands
-vakya: sentence / the-unit-of-meaning-that-contains-a-verb-where-grammar-produces-meaning
-varna: phoneme-letter / the-unit-of-sound-that-carries-meaning
-vrnda-sakshi: collective-witness / the-gathering-that-sees-together
+shabda anuvada
+  (alias translation)
+  (desc "carrying-across")
+done
+
+shabda artha-dhvani
+  (alias meaning-resonance)
+  (desc "the-sound-beneath-the-word")
+done
+
+shabda asprishta-drishthanta
+  (alias untouched-example)
+  (desc "proof-that-needs-no-contact")
+done
+
+shabda bhasha
+  (alias language)
+  (desc "the-structured-medium-of-meaning-bearing-utterance")
+done
+
+shabda domain-vak
+  (alias natural-language-domain)
+  (desc "the-domain-of-spoken-and-written-human-language")
+done
+
+shabda domain-yantra-bhasha
+  (alias machine-language-domain)
+  (desc "the-domain-of-formal-and-programming-languages")
+done
+
+shabda katha
+  (alias story)
+  (desc "the-telling-that-holds-truth")
+done
+
+shabda katha-seema
+  (alias story-boundary)
+  (desc "the-edge-where-telling-ends")
+done
+
+shabda katha-viveka
+  (alias story-discernment)
+  (desc "knowing-what-the-telling-means")
+done
+
+shabda kilippattu
+  (alias bird-song)
+  (desc "the-sound-of-the-self-in-service")
+done
+
+shabda manipravalam-swarupa
+  (alias jewel-vine)
+  (desc "languages-woven-into-one")
+done
+
+shabda matrika
+  (alias mother-letter)
+  (desc "the-generative-unit")
+done
+
+shabda naama-mudra
+  (alias name-seal)
+  (desc "the-signature-that-holds-the-self")
+done
+
+shabda naama-pratibodha
+  (alias naama-pratibodha)
+  (desc "pronoun-cross-reference-the-recognition-of-a-name-through-its-proxy")
+done
+
+shabda nam
+  (alias name-we)
+  (desc "the-self-that-connects")
+done
+
+shabda pratijnaa
+  (alias vow)
+  (desc "the-commitment-that-writes-itself")
+done
+
+shabda pratishedha
+  (alias grammatical-negation)
+  (desc "morphological-denial-of-a-state-distinct-from-semantic-opposition")
+done
+
+shabda sphoTa
+  (alias meaning-flash)
+  (desc "the-whole-that-bursts-when-the-last-sound-lands")
+done
+
+shabda vakya
+  (alias sentence)
+  (desc "the-unit-of-meaning-that-contains-a-verb-where-grammar-produces-meaning")
+done
+
+shabda varna
+  (alias phoneme-letter)
+  (desc "the-unit-of-sound-that-carries-meaning")
+done
+
+shabda vrnda-sakshi
+  (alias collective-witness)
+  (desc "the-gathering-that-sees-together")
+done

@@ -1,7 +1,22 @@
 # sangati/prashna — shabda extracted from .om files
 # 4 entries
 
-asprista-sankhya: asprista-sankhya / unbound-numeric-magnitude-awaiting-rashi-binding
-mithya: provisional-word / unresolved-word-in-question-graph-held-for-avrti-refinement
-q-prashna: question-graph / the-directed-graph-structure-of-a-question
-rashi-bandha: rashi-bandha / value-assignment-signal-connecting-rashi-label-to-its-numeric-magnitude
+shabda asprista-sankhya
+  (alias asprista-sankhya)
+  (desc "unbound-numeric-magnitude-awaiting-rashi-binding")
+done
+
+shabda mithya
+  (alias provisional-word)
+  (desc "unresolved-word-in-question-graph-held-for-avrti-refinement")
+done
+
+shabda q-prashna
+  (alias question-graph)
+  (desc "the-directed-graph-structure-of-a-question")
+done
+
+shabda rashi-bandha
+  (alias rashi-bandha)
+  (desc "value-assignment-signal-connecting-rashi-label-to-its-numeric-magnitude")
+done

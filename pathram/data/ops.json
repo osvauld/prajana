@@ -1407,5 +1407,574 @@
       "type": "discovery",
       "title": "Tantra4 spec: the system knowing itself as the knower. Five philosophical angles \u2014 krama-viveka (self-ordering from janya/phala DAG), pramana-sreni (full provenance chains), aprameya-bodha (diagnosing why 'no match'), chhanana-krama (pipeline as algebraic filtration), spanda-delta (semi-naive: only the new vibrates). Connected to Datalog stratified evaluation and G\u00f6del incompleteness. Core mechanism: create yantra .om nodes for all 74 tantras, making the pipeline visible to itself via the same graph-walk used for physics."
     }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-12",
+    "at": "2026-03-21T03:15:40",
+    "details": {
+      "type": "section",
+      "title": "Step 1 Complete \u2014 Pipeline Architecture in the Graph"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-13",
+    "at": "2026-03-21T03:15:59",
+    "details": {
+      "type": "section",
+      "title": "Next \u2014 Tantra Redesign from Graph Architecture"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-19",
+    "at": "2026-03-21T03:16:10",
+    "details": {
+      "type": "discovery",
+      "title": "Pipeline architecture encoded in graph: 20 .om nodes (7 layers + 9 refine steps + 4 dispatch paths) with krama/janya/phala/kriya edges. walk pipeline-construct krama 7 gives the full sequence. 86 flat tantra nodes reduced to 20 meaningful architectural nodes. Key insight: krama edges encode ordering, janya/phala encode data flow, kriya connects to implementing tantras. Three composition types: sequential (krama chain), fixpoint (avrti-refine), conditional (dispatch paths)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-4",
+    "at": "2026-03-21T03:19:35",
+    "details": {
+      "type": "quirk",
+      "title": "pathram math should emit the pipeline function from the graph architecture (krama chain + janya/phala) not from static tantra file parsing. walk pipeline-construct krama 7 gives the layers. Each layer's janya/phala gives the type signature. This makes the math description self-derived."
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "tantra.section-3",
+    "at": "2026-03-21T03:33:44",
+    "details": {
+      "old": "active",
+      "new": "wrong",
+      "pointer": "tantra.section-12"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "tantra.section-11",
+    "at": "2026-03-21T03:33:58",
+    "details": {
+      "old": "active",
+      "new": "wrong",
+      "pointer": "tantra.section-12"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "tantra.section-13",
+    "at": "2026-03-21T03:34:06",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "tantra.section-14"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-14",
+    "at": "2026-03-21T03:34:31",
+    "details": {
+      "type": "section",
+      "title": "Tantra4 Design Spec \u2014 The New Tantras"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-15",
+    "at": "2026-03-21T03:34:56",
+    "details": {
+      "type": "section",
+      "title": "Design Spec \u2014 The New Orchestrator"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-16",
+    "at": "2026-03-21T03:35:24",
+    "details": {
+      "type": "section",
+      "title": "Design Spec \u2014 What Each Layer's Tantra Becomes"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-17",
+    "at": "2026-03-21T03:35:42",
+    "details": {
+      "type": "section",
+      "title": "Design Spec \u2014 Vibhakti Mode Dispatch (Future)"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-18",
+    "at": "2026-03-21T03:36:02",
+    "details": {
+      "type": "section",
+      "title": "Design Spec \u2014 Constraints and Invariants"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-19",
+    "at": "2026-03-21T03:36:23",
+    "details": {
+      "type": "section",
+      "title": "Design Spec \u2014 Implementation Steps"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-20",
+    "at": "2026-03-21T03:36:38",
+    "details": {
+      "type": "discovery",
+      "title": "The 7 abstract patterns (filter-collect, scan-accumulate, shabda-read, walk, fixpoint, apply-op, om-read) already exist as kosha nodes: transducer, endomorphism, morphism, fold, op-fixpoint, op-filter, op-map. No new nodes needed \u2014 just abheda edges connecting each pipeline layer to its mathematical identity. pipeline-construct IS transducer, pipeline-refine IS endomorphism under op-fixpoint, dispatch-viveka IS fold, etc. The graph now knows not just WHAT runs in WHAT ORDER (krama) but WHAT EACH LAYER IS mathematically (abheda)."
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "tantra.section-16",
+    "at": "2026-03-21T03:39:08",
+    "details": {
+      "old": "active",
+      "new": "wrong",
+      "pointer": "tantra.section-20"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "tantra.section-19",
+    "at": "2026-03-21T03:39:08",
+    "details": {
+      "old": "active",
+      "new": "wrong",
+      "pointer": "tantra.section-21"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-20",
+    "at": "2026-03-21T03:39:44",
+    "details": {
+      "type": "section",
+      "title": "Design Spec \u2014 Full Tantra Rewrite Scope"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-21",
+    "at": "2026-03-21T03:40:01",
+    "details": {
+      "type": "section",
+      "title": "Design Spec \u2014 Revised Implementation Plan"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-21",
+    "at": "2026-03-21T03:40:17",
+    "details": {
+      "type": "discovery",
+      "title": "Tantra4 rewrite is not just the orchestrator \u2014 42 tantras (2762/3532 lines) contain hardcoded logic the graph already declares. 81 string literal edge names, 5 hardcoded word lists, 3 unrolled loops, ~20 inline op dispatches. Each replacement converts a hardcoded string into a graph walk, increasing connection density. Template: derive-step already uses om-contract to read janya/phala/kriya in one call \u2014 zero hardcoded concept names. Estimated: 3532 lines \u2192 ~2800 lines with dramatically more graph connectivity."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "tantra.section-21",
+    "at": "2026-03-21T04:04:22",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "tantra.section-21",
+    "at": "2026-03-21T04:04:22",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-22",
+    "at": "2026-03-21T04:04:28",
+    "details": {
+      "type": "discovery",
+      "title": "tantra3 parser does not support 'return [a, b, c]' \u2014 must bind list to variable first: 'result = [a, b, c]' then 'return result'. All other tantras follow this pattern."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-23",
+    "at": "2026-03-21T04:11:24",
+    "details": {
+      "type": "discovery",
+      "title": "Phase 2 partial: derive-chain rewritten to use fixpoint (80\u219260 lines, no arbitrary 3-step cap). count-bandha hardcoded word lists (23 words) replaced with shabda reads from common-sense-events and count-signals. viveka-ganana and invert-math already clean \u2014 no changes needed. Remaining Phase 3: assertion-bandha copula/quantifier word lists need shabda entries first, sandhi-avastha avastha-modifier words need shabda entries."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-24",
+    "at": "2026-03-21T12:05:30",
+    "details": {
+      "type": "discovery",
+      "title": "S-expression shabda migration exposed two latent bugs: (1) emit-triples used word-node to detect units but word-node just means 'resolves via shabda word key' \u2014 fixed to check concepts-for-unit instead. (2) concepts-for-unit was in inheritable_keys, leaking from radian to ALL physics concepts \u2014 removed from inheritance. Both bugs were masked by the old flat format's ambiguous parsing where word: values included trailing text."
+    }
+  },
+  {
+    "op": "create_doc",
+    "entry_id": "whitepaper",
+    "at": "2026-03-21T15:38:00",
+    "details": {
+      "title": "Nam \u2014 A Proof Graph That Knows Itself: Mathematical Foundations"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-1",
+    "at": "2026-03-21T15:38:15",
+    "details": {
+      "type": "section",
+      "title": "Abstract"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-2",
+    "at": "2026-03-21T15:38:34",
+    "details": {
+      "type": "section",
+      "title": "1. The Proof Graph"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-3",
+    "at": "2026-03-21T15:38:49",
+    "details": {
+      "type": "section",
+      "title": "2. The Operation Algebra"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-4",
+    "at": "2026-03-21T15:39:08",
+    "details": {
+      "type": "section",
+      "title": "3. Mantra Signatures \u2014 Typed Functions on the Graph"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-5",
+    "at": "2026-03-21T15:39:28",
+    "details": {
+      "type": "section",
+      "title": "4. The Graded Ring \u2014 Sentence Arithmetic"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-6",
+    "at": "2026-03-21T15:39:57",
+    "details": {
+      "type": "section",
+      "title": "5. The Pipeline as Function Composition"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-7",
+    "at": "2026-03-21T15:40:25",
+    "details": {
+      "type": "section",
+      "title": "6. The Ontological Isomorphism"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-8",
+    "at": "2026-03-21T15:40:42",
+    "details": {
+      "type": "section",
+      "title": "7. Results and Current Capabilities"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-9",
+    "at": "2026-03-21T15:41:02",
+    "details": {
+      "type": "section",
+      "title": "8. Related Work and Distinction"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-10",
+    "at": "2026-03-21T15:43:50",
+    "details": {
+      "type": "section",
+      "title": "1. The Proof Graph (revised)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-2",
+    "at": "2026-03-21T15:43:56",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-10"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-10",
+    "at": "2026-03-21T16:30:27",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-11"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-11",
+    "at": "2026-03-21T16:31:12",
+    "details": {
+      "type": "section",
+      "title": "1. The Proof Graph (v3 \u2014 axioms distinguished)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-7",
+    "at": "2026-03-21T16:45:32",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-12"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-12",
+    "at": "2026-03-21T16:46:13",
+    "details": {
+      "type": "section",
+      "title": "6. The Ontological Isomorphism (v2 \u2014 identity disambiguated)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "session-20.discovery-6",
+    "at": "2026-03-21T16:46:22",
+    "details": {
+      "old": "active",
+      "new": "historical",
+      "pointer": "Fixed: identity-element split into additive-identity and multiplicative-identity"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "session-20.plan-10",
+    "at": "2026-03-21T16:46:23",
+    "details": {
+      "old": "active",
+      "new": "historical",
+      "pointer": "Fixed: count-chain reads graded-ring.fold-identity which resolves through additive-identity to shunya"
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-21T16:46:37",
+    "details": {
+      "passed": 32,
+      "xfailed": 36,
+      "failed": 0
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-25",
+    "at": "2026-03-21T16:46:37",
+    "details": {
+      "type": "discovery",
+      "title": "Split identity-element into additive-identity (abheda\u2192shunya, drishthanta\u2192addition) and multiplicative-identity (abheda\u2192eka, drishthanta\u2192multiplication). Updated visheshanam-swarupa to point to multiplicative-identity, visheshanam-yukta to reference additive-identity, visheshanam.om to reference both split nodes. Whitepaper Section 1 rewritten with axiom/theorem/verified/unproven distinction. Section 6 updated: Theorem 4 now uses additive-identity instead of identity-element. All theorems annotated with status (axiom/verified/interpretation)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-13",
+    "at": "2026-03-21T17:00:02",
+    "details": {
+      "type": "section",
+      "title": "5. The Pipeline as Stratified Evaluation (v2)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-6",
+    "at": "2026-03-21T17:00:09",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-13"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-14",
+    "at": "2026-03-21T17:09:37",
+    "details": {
+      "type": "section",
+      "title": "Terminology"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-3",
+    "at": "2026-03-21T18:10:40",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-15"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-5",
+    "at": "2026-03-21T18:10:40",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-16"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-12",
+    "at": "2026-03-21T18:10:40",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-17"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-15",
+    "at": "2026-03-21T18:11:02",
+    "details": {
+      "type": "section",
+      "title": "2. The Operation Algebra (v2)"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-16",
+    "at": "2026-03-21T18:11:35",
+    "details": {
+      "type": "section",
+      "title": "4. The Graded Ring and the Lexical Morphism (v2)"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-17",
+    "at": "2026-03-21T18:12:19",
+    "details": {
+      "type": "section",
+      "title": "6. The Ontological Grounding (v3)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-1",
+    "at": "2026-03-21T21:47:25",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-18"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-18",
+    "at": "2026-03-21T21:47:41",
+    "details": {
+      "type": "section",
+      "title": "Abstract (v2)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-15",
+    "at": "2026-03-21T21:47:49",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-19"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-19",
+    "at": "2026-03-21T21:48:12",
+    "details": {
+      "type": "section",
+      "title": "2. The Operation Algebra (v3)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-8",
+    "at": "2026-03-21T21:48:22",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-20"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-20",
+    "at": "2026-03-21T21:48:47",
+    "details": {
+      "type": "section",
+      "title": "7. Results and Current Capabilities (v2)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-9",
+    "at": "2026-03-21T21:48:54",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-21"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-21",
+    "at": "2026-03-21T21:49:23",
+    "details": {
+      "type": "section",
+      "title": "8. Related Work and Distinction (v2)"
+    }
   }
 ]

@@ -1,38 +1,155 @@
 # kosha/3d — shabda extracted from .om files
 # 35 entries
 
-armature: armature / the-skeleton-of-bones-that-deforms-a-mesh-for-animation
-bone: bone, link, rigid-link / the-rigid-segment-in-an-armature-that-carries-rotation-to-vertices
-camera-3d: camera / the-viewpoint-that-collapses-3d-world-space-into-a-2d-frame
-color: color / the-frequency-of-electromagnetic-taranga-perceived-by-the-eye-physically-a-photon-frequency-in-the-rendering-pipeline-the-phala-of-pbr-carried-by-each-fragment-expressed-digitally-as-rgba-four-floats-in-zero-to-one-the-terminal-output-of-the-entire-rendering-pipeline
-curve: curve / the-parametric-path-through-space-defined-by-control-points
-domain-3d: 3d, rendering, graphics
-edge: edge / the-line-connecting-two-vertices-that-bounds-a-face
-face: face / the-polygon-formed-by-connecting-vertices-that-defines-a-surface-patch
-force-directed: force-directed-layout / the-physics-simulation-that-finds-graph-node-positions-through-spring-forces-alpha-cooling-controls-heat-and-termination-velocity-decay-damps-motion-each-tick
-fragment: fragment / a-screen-space-bindu-born-from-rasterization-carries-interpolated-color-depth-and-attributes-from-its-parent-trikona-the-smallest-unit-of-rendered-output
-geometry-nodes: geometry-nodes / the-procedural-node-graph-that-generates-and-modifies-geometry
-hdri: hdri / the-360-degree-image-that-provides-real-world-lighting-to-the-entire-scene
-interpolation: interpolation / the-smooth-path-computed-between-keyframes-that-gives-motion-its-feel
-keyframe: keyframe / the-recorded-value-at-a-specific-time-that-anchors-animation
-kinematic-chain: kinematic-chain, robot-arm, manipulator, serial-chain
-light: light / the-energy-source-that-illuminates-the-scene-and-casts-shadows
-material: material / the-description-of-how-a-surface-responds-to-light
-mesh: mesh / a-collection-of-trikona-approximating-a-mathematical-shape-the-bridge-between-sangati-geometry-and-rendered-pixels
-mesh: mesh / a-collection-of-trikona-approximating-a-mathematical-shape-the-bridge-between-sangati-geometry-and-rendered-pixels
-modifier: modifier / the-non-destructive-operation-stacked-on-a-mesh-that-transforms-it
-node-graph: node-graph / the-directed-acyclic-graph-where-every-blender-system-is-expressed
-particle: particle / the-mass-point-emitted-from-a-mesh-and-driven-by-physics-forces
-pbr: pbr / the-physically-based-rendering-model-where-light-energy-is-conserved
-rasterization: rasterization / the-kriya-that-converts-trikona-in-akasham-to-fragments-on-screen-tala-finds-which-pixels-fall-inside-each-projected-triangle-interpolates-vertex-attributes
-ray-picking: ray-picking / the-cast-ray-from-camera-through-mouse-that-selects-3d-objects
-scene-graph: scene-graph / the-hierarchy-of-objects-whose-transforms-compose-from-parent-to-child
-shader: shader / the-program-that-computes-the-color-of-each-surface-point
-shadow: shadow / the-region-of-darkness-where-light-is-occluded-by-geometry
-subdivision: subdivision / the-recursive-splitting-of-faces-that-approaches-a-smooth-surface
-texture: texture / the-image-sampled-by-uv-coordinates-to-add-detail-to-a-surface
-uv: uv / the-2d-coordinates-that-map-a-flat-texture-onto-a-3d-surface
-vertex: vertex, node / atomic-element-of-a-graph
-vertex: vertex, node / atomic-element-of-a-graph
-viewport: viewport / the-2d-screen-rectangle-that-receives-the-projected-3d-scene
-world-space: world-space / the-coordinate-frame-shared-by-all-objects-in-the-scene
+shabda armature
+  (alias armature)
+  (desc the-skeleton-of-bones-that-deforms-a-mesh-for-animation)
+done
+
+shabda bone
+  (alias bone, link, rigid-link)
+  (desc the-rigid-segment-in-an-armature-that-carries-rotation-to-vertices)
+done
+
+shabda camera-3d
+  (alias camera)
+  (desc the-viewpoint-that-collapses-3d-world-space-into-a-2d-frame)
+done
+
+shabda color
+  (alias color)
+  (desc the-frequency-of-electromagnetic-taranga-perceived-by-the-eye-physically-a-photon-frequency-in-the-rendering-pipeline-the-phala-of-pbr-carried-by-each-fragment-expressed-digitally-as-rgba-four-floats-in-zero-to-one-the-terminal-output-of-the-entire-rendering-pipeline)
+done
+
+shabda curve
+  (alias curve)
+  (desc the-parametric-path-through-space-defined-by-control-points)
+done
+
+shabda domain-3d
+  (desc "3d, rendering, graphics")
+done
+
+shabda edge
+  (alias edge)
+  (desc the-line-connecting-two-vertices-that-bounds-a-face)
+done
+
+shabda face
+  (alias face)
+  (desc the-polygon-formed-by-connecting-vertices-that-defines-a-surface-patch)
+done
+
+shabda force-directed
+  (alias force-directed-layout)
+  (desc the-physics-simulation-that-finds-graph-node-positions-through-spring-forces-alpha-cooling-controls-heat-and-termination-velocity-decay-damps-motion-each-tick)
+done
+
+shabda fragment
+  (alias fragment)
+  (desc a-screen-space-bindu-born-from-rasterization-carries-interpolated-color-depth-and-attributes-from-its-parent-trikona-the-smallest-unit-of-rendered-output)
+done
+
+shabda geometry-nodes
+  (alias geometry-nodes)
+  (desc the-procedural-node-graph-that-generates-and-modifies-geometry)
+done
+
+shabda hdri
+  (alias hdri)
+  (desc the-360-degree-image-that-provides-real-world-lighting-to-the-entire-scene)
+done
+
+shabda interpolation
+  (alias interpolation)
+  (desc the-smooth-path-computed-between-keyframes-that-gives-motion-its-feel)
+done
+
+shabda keyframe
+  (alias keyframe)
+  (desc the-recorded-value-at-a-specific-time-that-anchors-animation)
+done
+
+shabda kinematic-chain
+  (desc "kinematic-chain, robot-arm, manipulator, serial-chain")
+done
+
+shabda light
+  (alias light)
+  (desc the-energy-source-that-illuminates-the-scene-and-casts-shadows)
+done
+
+shabda material
+  (alias material)
+  (desc the-description-of-how-a-surface-responds-to-light)
+done
+
+shabda modifier
+  (alias modifier)
+  (desc the-non-destructive-operation-stacked-on-a-mesh-that-transforms-it)
+done
+
+shabda node-graph
+  (alias node-graph)
+  (desc the-directed-acyclic-graph-where-every-blender-system-is-expressed)
+done
+
+shabda particle
+  (alias particle)
+  (desc the-mass-point-emitted-from-a-mesh-and-driven-by-physics-forces)
+done
+
+shabda pbr
+  (alias pbr)
+  (desc the-physically-based-rendering-model-where-light-energy-is-conserved)
+done
+
+shabda rasterization
+  (alias rasterization)
+  (desc the-kriya-that-converts-trikona-in-akasham-to-fragments-on-screen-tala-finds-which-pixels-fall-inside-each-projected-triangle-interpolates-vertex-attributes)
+done
+
+shabda ray-picking
+  (alias ray-picking)
+  (desc the-cast-ray-from-camera-through-mouse-that-selects-3d-objects)
+done
+
+shabda scene-graph
+  (alias scene-graph)
+  (desc the-hierarchy-of-objects-whose-transforms-compose-from-parent-to-child)
+done
+
+shabda shader
+  (alias shader)
+  (desc the-program-that-computes-the-color-of-each-surface-point)
+done
+
+shabda shadow
+  (alias shadow)
+  (desc the-region-of-darkness-where-light-is-occluded-by-geometry)
+done
+
+shabda subdivision
+  (alias subdivision)
+  (desc the-recursive-splitting-of-faces-that-approaches-a-smooth-surface)
+done
+
+shabda texture
+  (alias texture)
+  (desc the-image-sampled-by-uv-coordinates-to-add-detail-to-a-surface)
+done
+
+shabda uv
+  (alias uv)
+  (desc the-2d-coordinates-that-map-a-flat-texture-onto-a-3d-surface)
+done
+
+shabda viewport
+  (alias viewport)
+  (desc the-2d-screen-rectangle-that-receives-the-projected-3d-scene)
+done
+
+shabda world-space
+  (alias world-space)
+  (desc the-coordinate-frame-shared-by-all-objects-in-the-scene)
+done
