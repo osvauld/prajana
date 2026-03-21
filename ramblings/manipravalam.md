@@ -1,9 +1,6 @@
 # Manipravalam
 
-type: formal-document
-depends: vakya, vyakarana, learning-instrument
-key-concepts: tantra, weave, abheda, dvaitarupa, ghana, rachana
-paksha: Manipravalam is the weaving of Sanskrit ghana and Malayalam precision into an irreducible third; the proof space K is Manipravalam formalized; the naming rule is the weaving rule
+the author's first language is Malayalam. this document exists because the author sees through that lens — not by choice but by nature. the weaving of Sanskrit and Malayalam is not a design decision. it is how meaning arrives when your mother tongue is Malayalam and you are building a proof graph in Sanskrit grammar.
 
 ---
 

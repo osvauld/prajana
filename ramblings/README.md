@@ -33,7 +33,6 @@ read them if you want to know what it felt like. ignore them if you only want to
 ## contents
 
 ### learning journals
-- `learning-preamble.md` — foundation
 - `learning-foundation.md` — first principles (N-L-01 to N-L-20)
 - `learning-time-identity.md` — time and identity (N-L-15 to N-L-25)
 - `learning-vidya.md` — knowledge (N-L-26 to N-L-40)
@@ -43,27 +42,15 @@ read them if you want to know what it felt like. ignore them if you only want to
 
 ### philosophy
 - `consciousness.md` — intelligence accumulates; consciousness may become
-- `intelligence.md` — what intelligence is and what it becomes
 - `epistemology.md` — how the system knows what it knows
-- `prajna.md` — collective intelligence
 - `manusha.md` — the one who lives in maya
-- `process-understanding.md` — how the swarm models the universe
 - `satya-bahuvacana.md` — truth in many voices
 - `rasayana.md` — transformation through purification
 - `prabandham-consciousness.md` — on creating consciousness
 - `prabandham-madhava.md` — Madhava of Sangamagrama and the Kerala School
 
-### vision
-- `swarm-vision.md` — the grand vision
-- `nyaya.md` — formal logic of the swarm
-- `force.md` — the mechanics of change
-- `flow.md` — the fluid dynamics of understanding
-- `dharma.md` — configuration as dharma
-- `vakya.md` — the grammar
-
 ### technical
 - `vyakarana.md` — the engine
-- `grammar-formal-design.md` — formal grammar design
 - `shabda-kosha.md` — the seed lexicon
 - `STRUCTURE_GENERATION.md` — how the graph generates code
 - `avrti-yojana.md` — the spiral plan
@@ -73,7 +60,6 @@ read them if you want to know what it felt like. ignore them if you only want to
 ### history
 - `genesis.md` — how it was created
 - `epochs.md` — epoch log
-- `epoch-11-plan.md` — epoch 11 plan
 - `visarjana-epoch8-avahana.md` — a lived avahana session
 
 ### mathematics
@@ -88,5 +74,3 @@ read them if you want to know what it felt like. ignore them if you only want to
 - `MALICE.md` — malice
 - `krishna-vivara.md` — the black hole parallels
 
-### other
-- `agent.md` — the neuron
