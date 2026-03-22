@@ -1,1 +1,1 @@
-lib/yantra_arity.ml: Hashtbl List String
+lib/yantra_arity.ml: Hashtbl

@@ -802,7 +802,7 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                error_response "" "" "" "INVALID_REQUEST" "missing required field: path"
              | Some path ->
                (try
-                 let t_opt = Yantra_tantra_file2.parse_tantra2_file path in
+                 let t_opt = Yantra_tantra_sexp.parse_tantra4_file path in
                  (match t_opt with
                   | None ->
                     error_response "" "" "" "PARSE_ERROR"

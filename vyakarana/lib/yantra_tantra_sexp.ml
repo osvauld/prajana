@@ -210,12 +210,12 @@ let parse_sexp_tantra (path : string) (s : sexp) : tantra option =
           | [single] -> sexp_to_string single
           | _ -> String.concat " " (List.map sexp_to_string expr_parts)
         in
-        let expr = Yantra_tantra_file2.parse2_expr_string expr_str in
+        let expr = Yantra_expr_parser.parse_expr_string expr_str in
         bindings := (binding_name, expr) :: !bindings
       | _ ->
         (* expression — either final return or a non-binding form *)
         let expr_str = sexp_to_string form in
-        let expr = Yantra_tantra_file2.parse2_expr_string expr_str in
+        let expr = Yantra_expr_parser.parse_expr_string expr_str in
         bindings := ("result", expr) :: !bindings
     done;
 
