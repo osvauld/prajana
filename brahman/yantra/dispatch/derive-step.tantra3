@@ -21,11 +21,11 @@ new-triples = reduce all-mantras [] (fn acc mantra ->
   let contract = om-contract ms
   let janya    = nth contract 0
   let phala-l  = nth contract 1
-  let phala    = cond (gt (length phala-l) 0) (nth phala-l 0) otherwise (shabda ms "name")
+  let phala    = cond (has-items phala-l) (nth phala-l 0) otherwise (shabda ms "name")
   let all-ok   = reduce janya true (fn a r ->
     (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
   let math-op  = shabda ms "math-op"
-  let has-math = gt (string-length math-op) 0
+  let has-math = has-text math-op
   let fired    = execute-mantra mantra vps "forward" ""
   cond (or (member phala bcs) (not all-ok)) acc
   -- emit both the value and which mantra produced it

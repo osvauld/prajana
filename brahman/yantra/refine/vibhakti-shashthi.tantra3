@@ -63,7 +63,7 @@ result = scan graph [last-label: str = "", cur-entity: str = "", jsc: bool = fal
       emit
 
   [word, mithya, _] ->
-    last-label = (cond (gt (string-length last-label) 0) (concat last-label "-" (to-string word)) otherwise (to-string word))
+    last-label = (cond (has-text last-label) (concat last-label "-" (to-string word)) otherwise (to-string word))
     emit
 
   _ -> emit

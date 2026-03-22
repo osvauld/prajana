@@ -1,0 +1,19 @@
+tantra3 detect-anumana
+
+-- detects anumana (categorical reasoning) intent from the graph.
+-- returns signal pairs or [] if no anumana detected.
+
+takes expanded
+
+raw = anumana-sparsha expanded
+is-anumana = anumana-field raw "is-anumana"
+
+result = cond is-anumana
+  [["anumana-query", (anumana-field raw "query")],
+   ["anumana-assert", (anumana-field raw "assert")],
+   ["anumana-mode", (anumana-field raw "mode")]]
+  otherwise []
+
+return result
+
+done

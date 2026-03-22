@@ -33,10 +33,10 @@ viveka-sankhya-triples = cond is-viveka
   otherwise []
 
 -- ── physics/count proof edges ─────────────────────────────────────────────────
-result-mantra = cond (gt (length final-m) 0) (nth final-m 0) otherwise ""
-result-valpairs = cond (gt (length final-m) 0) (nth final-m 1) otherwise []
+result-mantra = cond (has-items final-m) (nth final-m 0) otherwise ""
+result-valpairs = cond (has-items final-m) (nth final-m 1) otherwise []
 
-scoped-sankhya-triples = cond (and (not is-viveka) (gt (length result-valpairs) 0))
+scoped-sankhya-triples = cond (and (not is-viveka) (has-items result-valpairs))
   (map result-valpairs (fn kv -> [(nth kv 0), "derived-sankhya", (nth kv 1)]))
   otherwise []
 

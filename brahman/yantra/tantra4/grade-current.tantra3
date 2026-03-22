@@ -1,0 +1,13 @@
+tantra3 grade-current
+
+-- triples since the last scope boundary (viraam/dvandva).
+-- this is the transducer's "recent memory".
+
+takes graph
+
+result = reduce graph [] (fn a t ->
+  cond (is-boundary t) [] otherwise (append a [t]))
+
+return result
+
+done

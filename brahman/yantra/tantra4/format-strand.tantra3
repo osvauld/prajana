@@ -1,0 +1,13 @@
+tantra3 format-strand
+
+-- formats a speech strand: "label: content" if content is non-empty, "" otherwise.
+-- used by emit-count for pratijna/udaharana/nigamana strands.
+
+takes label
+takes content
+
+result = cond (has-text content) (concat (to-string label) ": " content) otherwise ""
+
+return result
+
+done

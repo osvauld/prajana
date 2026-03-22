@@ -17,7 +17,7 @@ result = reduce candidates [] (fn acc m ->
   let sf-is-janya = member solve-for janya
   let all-ok      = reduce janya true (fn a r ->
     (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
-  cond (or (gt (length acc) 0) (not all-ok) sf-is-janya) acc
+  cond (or (has-items acc) (not all-ok) sf-is-janya) acc
   otherwise [m, vps, "forward"])
 
 return result

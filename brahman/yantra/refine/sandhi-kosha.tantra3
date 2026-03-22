@@ -40,15 +40,15 @@ pass = reduce graph [[], [], "", false] (fn acc tri ->
   let is-subject-now = cond (and (eq edge "shashthi-vibhakti") (eq (to-string obj) "shashthi-vibhakti")) true otherwise is-subject
 
   -- Way 1: last pending mithya + current satya
-  let cw1    = (cond (and (gt (string-length last-pend) 0) (eq edge "satya"))
+  let cw1    = (cond (and (has-text last-pend) (eq edge "satya"))
     (concat last-pend "-" word) otherwise "")
-  let cn1    = (cond (gt (string-length cw1) 0) (lookup cw1) otherwise _none)
+  let cn1    = (cond (has-text cw1) (lookup cw1) otherwise _none)
 
   -- Way 2: prev satya + current satya (no pending mithya, prev is not a subject/entity)
   let prev-is-subject = (or is-subject-now (member last-satya entities))
-  let cw2    = (cond (and (eq n-pend 0) (and (not prev-is-subject) (and (gt (string-length last-satya) 0) (eq edge "satya"))))
+  let cw2    = (cond (and (eq n-pend 0) (and (not prev-is-subject) (and (has-text last-satya) (eq edge "satya"))))
     (concat last-satya "-" word) otherwise "")
-  let cn2    = (cond (gt (string-length cw2) 0) (lookup cw2) otherwise _none)
+  let cn2    = (cond (has-text cw2) (lookup cw2) otherwise _none)
 
   -- drop-last: out without the final element (for Way 2 replacement)
   let drop-last = map (range (max 0 (sub (length out) 1))) (fn i -> nth out i)

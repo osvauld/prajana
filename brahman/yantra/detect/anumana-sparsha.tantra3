@@ -24,11 +24,7 @@ tantra3 anumana-sparsha
 
 takes graph
 
-is-numeric = gt (length (nth (bound-state graph) 0)) 0
-
--- viveka signal: graph contains viveka-max or viveka-min node → comparison question, not anumana
-viveka-present = gt (length (filter (graph | where [vs, ve, vo] | and (eq ve "satya") | collect (to-string vs))
-  (fn w -> (or (eq w "viveka-max") (eq w "viveka-min"))))) 0
+eligible = anumana-eligible graph
 
 -- PATH A: shashthi ownership repeated for 2+ entities
 shashthi-pairs = graph | where [sv, se, so]
@@ -39,7 +35,7 @@ shashthi-pairs = graph | where [sv, se, so]
 shared-preds = filter (unique (map shashthi-pairs (fn p -> to-string (nth p 0)))) (fn pred ->
   gt (length (filter shashthi-pairs (fn p -> eq (to-string (nth p 0)) pred))) 1)
 
-path-a = (and (gt (length shared-preds) 0) (and (not is-numeric) (not viveka-present)))
+path-a = (and (has-items shared-preds) eligible)
 path-a-pred   = nth shared-preds 0
 path-a-owners = map (filter shashthi-pairs (fn p -> eq (to-string (nth p 0)) path-a-pred)) (fn p -> to-string (nth p 1))
 path-a-assert = nth path-a-owners 0
@@ -54,7 +50,7 @@ satya-entities = unique (graph | where [ss, se, so]
   | and (eq se "satya")
   | collect (to-string ss))
 
-path-b = (and (gt (length swarupa-in-graph) 0) (and (gt (length satya-entities) 0) (and (not is-numeric) (not viveka-present))))
+path-b = (and (has-items swarupa-in-graph) (and (has-items satya-entities) eligible))
 path-b-query  = nth satya-entities (sub (length satya-entities) 1)
 path-b-assert = to-string (nth (nth swarupa-in-graph (sub (length swarupa-in-graph) 1)) 1)
 
@@ -63,11 +59,11 @@ mithya-words = graph | where [ms, me, mo]
   | and (eq me "mithya")
   | collect (to-string ms)
 
-resolvable = filter mithya-words (fn w -> exists (word-node w))
+resolvable = filter mithya-words (fn w -> exists (shabda-anveshana w))
 path-c-pred-word = nth resolvable 0
-path-c-pred      = cond (exists path-c-pred-word) (to-string (word-node path-c-pred-word)) otherwise ""
+path-c-pred      = cond (exists path-c-pred-word) (to-string (shabda-anveshana path-c-pred-word)) otherwise ""
 path-c-entity    = nth satya-entities 0
-path-c           = (and (exists path-c-entity) (and (gt (string-length path-c-pred) 0) (and (not is-numeric) (not viveka-present))))
+path-c           = (and (exists path-c-entity) (and (has-text path-c-pred) eligible))
 
 -- unified result
 is-anumana    = (or path-a (or path-b path-c))

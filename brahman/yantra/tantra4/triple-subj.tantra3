@@ -1,0 +1,12 @@
+tantra3 triple-subj
+
+-- subject of a triple, as string.
+-- replaces: to-string (nth t 0)
+
+takes t
+
+result = to-string (nth t 0)
+
+return result
+
+done

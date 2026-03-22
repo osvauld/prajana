@@ -1,0 +1,15 @@
+tantra3 word-resolve
+
+-- resolves a word to its graph node name as string.
+-- uses shabda-anveshana (morphology-aware: plurals, abbreviations, exact match).
+--
+-- returns the node name, or "" if unresolved.
+
+takes w
+
+wn = shabda-anveshana w
+result = cond (exists wn) (to-string wn) otherwise ""
+
+return result
+
+done

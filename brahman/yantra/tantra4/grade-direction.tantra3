@@ -1,0 +1,16 @@
+tantra3 grade-direction
+
+-- resolves the arithmetic direction of a grade.
+-- tries compound verbs first (bigrams), then single words.
+-- returns "kshaya", "vriddhi", or "".
+
+takes grade
+
+mw = grade-mithya grade
+bigrams = word-bigrams mw
+dir-bi = detect-direction bigrams
+result = cond (has-text dir-bi) dir-bi otherwise (detect-direction mw)
+
+return result
+
+done

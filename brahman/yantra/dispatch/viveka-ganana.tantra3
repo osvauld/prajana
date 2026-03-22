@@ -44,36 +44,21 @@ scan-result = reduce graph [[], "", []] (fn acc tri ->
   cond (eq e "prathama-vibhakti")
     [pairs, (to-string s), seen-vals]
   otherwise (cond (and (eq e "sankhya")
-                       (gt (string-length active) 0)
+                       (has-text active)
                        (not (member active seen-vals)))
     [(append pairs [[active, o]]), active, (append seen-vals [active])]
   otherwise acc))
 
 ev-pairs = nth scan-result 0
 
--- find winner: entity whose value wins under op-eval (max or min)
-best-pr = cond (gt (length ev-pairs) 0)
-  (reduce ev-pairs (nth ev-pairs 0) (fn best kv ->
-    let best-val = to-number (nth best 1)
-    let kv-val   = to-number (nth kv 1)
-    cond (eq (apply-op op-eval [kv-val, best-val]) kv-val) kv
-    otherwise best))
-  otherwise []
+-- find winner and loser via extremum selection
+best-pr  = select-extremum ev-pairs op-eval
+worst-pr = select-extremum ev-pairs opp-eval
 
-winner     = cond (gt (length best-pr) 0) (to-string (nth best-pr 0)) otherwise ""
-winner-val = cond (gt (length best-pr) 0) (to-string (nth best-pr 1)) otherwise ""
-
--- find loser: entity whose value wins under opp-eval (the inverse operation)
-worst-pr = cond (gt (length ev-pairs) 0)
-  (reduce ev-pairs (nth ev-pairs 0) (fn worst kv ->
-    let worst-val = to-number (nth worst 1)
-    let kv-val    = to-number (nth kv 1)
-    cond (eq (apply-op opp-eval [kv-val, worst-val]) kv-val) kv
-    otherwise worst))
-  otherwise []
-
-loser     = cond (gt (length worst-pr) 0) (to-string (nth worst-pr 0)) otherwise ""
-loser-val = cond (gt (length worst-pr) 0) (to-string (nth worst-pr 1)) otherwise ""
+winner     = cond (has-items best-pr) (to-string (nth best-pr 0)) otherwise ""
+winner-val = cond (has-items best-pr) (to-string (nth best-pr 1)) otherwise ""
+loser      = cond (has-items worst-pr) (to-string (nth worst-pr 0)) otherwise ""
+loser-val  = cond (has-items worst-pr) (to-string (nth worst-pr 1)) otherwise ""
 
 -- emit greater-than edge into the proof graph — the comparison IS the relation.
 -- emission walks this edge rather than being told via viveka-ctx.
@@ -81,7 +66,7 @@ loser-val = cond (gt (length worst-pr) 0) (to-string (nth worst-pr 1)) otherwise
 --   "ball-A is greater-than ball-B in mass"
 -- also emit the concept and direction so emission knows what was compared.
 -- these triples make emit-reasoning a pure graph walker — no external ctx needed.
-gt-triples = cond (and (gt (string-length winner) 0) (gt (string-length loser) 0))
+gt-triples = cond (and (has-text winner) (has-text loser))
   [[winner, "greater-than", loser],
    [winner, "viveka-concept", concept],
    [winner, "viveka-direction", direction]]

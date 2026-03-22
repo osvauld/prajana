@@ -19,8 +19,8 @@ phala   = walk mantra "phala"
 swarupa = walk mantra "swarupa"
 
 label = (cond is-inv sf
-  otherwise (cond (gt (length phala) 0) (nth phala 0)
-  otherwise (cond (gt (length swarupa) 0) (nth swarupa 0)
+  otherwise (cond (has-items phala) (nth phala 0)
+  otherwise (cond (has-items swarupa) (nth swarupa 0)
   otherwise (to-string mantra))))
 
 answer = concat label " = " (to-string val)

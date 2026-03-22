@@ -1,0 +1,13 @@
+tantra3 is-system-concept
+
+-- true if a concept name is internal (not a user entity).
+-- system concepts: count, count-total, count-remaining, viveka-max, viveka-min.
+-- these are pipeline-internal nodes, not things the user mentioned.
+
+takes w
+
+result = member w ["count", "count-total", "count-remaining", "viveka-max", "viveka-min"]
+
+return result
+
+done

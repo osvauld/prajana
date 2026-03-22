@@ -1,0 +1,21 @@
+tantra3 swarupa-anuvada
+
+takes graph
+
+src-tgt = non-reflexive (triples-by-edge graph "swarupa")
+src-val = graph | where [src, e, val] | and (eq e "sankhya") | collect [src, val]
+directly-bound = nth (bound-state graph) 0
+
+new-triples = reduce src-tgt [] (fn acc kv ->
+  let src = triple-subj kv
+  let tgt = triple-obj kv
+  let is-dir = (or (eq tgt "kshaya") (eq tgt "vriddhi"))
+  let vals = src-val | where [lbl, v] | and (eq (to-string lbl) src) | collect v
+  cond (or (not (has-items vals)) (or (member tgt directly-bound) is-dir)) acc
+  otherwise (append acc [[tgt, "sankhya", (nth vals 0)]]))
+
+result = append-triples graph new-triples
+
+return result
+
+done

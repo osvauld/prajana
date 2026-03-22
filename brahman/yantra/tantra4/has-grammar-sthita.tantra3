@@ -1,0 +1,16 @@
+tantra3 has-grammar-sthita
+
+-- true if a word is a grammar word with a specific sthita edge.
+-- "and" is grammar + has dvandva in its sthita walk.
+-- "at" is grammar + has saptami-vibhakti in its sthita walk.
+
+takes nd
+takes rl
+takes sthita-name
+
+is-grammar = cond (exists rl) (eq (to-string rl) "grammar") otherwise false
+result = cond (and (exists nd) is-grammar) (member sthita-name (walk (to-string nd) "sthita")) otherwise false
+
+return result
+
+done

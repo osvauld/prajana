@@ -1,0 +1,116 @@
+tantra3 assertion-bandha
+
+-- reads IS-A assertions and emits swarupa edges alongside original triples.
+-- "all X are Y" / "X are Y" / "X is a Y" → additionally emits [X, swarupa, Y]
+-- every original triple is always passed through unchanged.
+--
+-- the swarupa edge IS the IS-A relation — same edge the kosha uses.
+-- assertion-bandha makes sentence-level IS-A explicit in the question graph
+-- so anumana-viveka can walk it the same way it walks the kosha chain.
+
+takes graph
+
+-- word lists from shabda (no hardcoded lists)
+quant-words  = split (shabda "quantifier" "word") ","
+copula-words = split (shabda "copula" "word") ","
+
+result = scan graph [subj: str = "", subj-ok: bool = false, saw-cop: bool = false]:
+
+  -- viraam: flush state
+  [word, viraam, _] ->
+    subj    = ""
+    subj-ok = false
+    saw-cop = false
+    emit
+
+  -- quantifier: marks the following clause as a universal assertion
+  -- "all cats are mammals" — 'all' signals IS-A assertion mode
+  [word, mithya, _]
+    when (member (to-string word) quant-words)
+    ->
+      subj    = ""
+      subj-ok = false
+      saw-cop = true
+      emit
+
+  -- quantifier resolves to satya (all → quantifier node)
+  [word, satya, _]
+    when (eq (to-string word) "quantifier")
+    ->
+      subj    = ""
+      subj-ok = false
+      saw-cop = true
+      emit
+
+  -- IS-A pattern: subject held + saw-cop + mithya object that resolves to a concept
+  -- "all cats are mammals" → quantifier sets saw-cop, cat is subject, mammals is object
+  -- guard: word-node must resolve to a real concept (filters "there", "how", etc.)
+  [word, mithya, _]
+    when (neq subj "")
+    when saw-cop
+    when (exists (word-node (to-string word)))
+    ->
+      let obj-node = word-node (to-string word)
+      let obj-str  = to-string obj-node
+      emit
+      emit [subj, "swarupa", obj-str]
+      subj    = ""
+      subj-ok = false
+      saw-cop = false
+
+  -- copula signal: "is"/"are" emitted by emit-triples as [word, copula, word]
+  -- only activates when we have a satya subject (subj-ok=true)
+  -- "cats are animals" → subj=cat (satya), copula → saw-cop=true
+  -- "there are 5" → subj=there (mithya, subj-ok=false), copula ignored
+  [word, copula, _]
+    when subj-ok
+    ->
+      saw-cop = true
+
+  -- copula without valid subject: pass through silently
+  [word, copula, _] ->
+    emit
+
+  -- mithya word: hold as potential subject but mark subj-ok=false
+  -- mithya subjects (there, how, etc.) should not participate in IS-A
+  [word, mithya, _] ->
+    let nd = word-node (to-string word)
+    subj = cond (exists nd) (to-string nd) otherwise (to-string word)
+    subj-ok = false
+    emit
+
+  -- satya word after quantifier (saw-cop=true) with no subject yet: this IS the subject
+  [word, satya, _]
+    when saw-cop
+    when (eq subj "")
+    ->
+      let nd = word-node (to-string word)
+      subj = cond (exists nd) (to-string nd) otherwise (to-string word)
+      subj-ok = true
+      emit
+
+  -- satya object after copula+subject: IS-A assertion
+  [word, satya, _]
+    when saw-cop
+    when (neq subj "")
+    ->
+      emit
+      emit [subj, "swarupa", (to-string word)]
+      subj    = ""
+      subj-ok = false
+      saw-cop = false
+
+  -- satya word: hold as subject (valid for IS-A)
+  [word, satya, _] ->
+    subj    = (to-string word)
+    subj-ok = true
+    saw-cop = false
+    emit
+
+  -- everything else: pass through unchanged
+  _ ->
+    emit
+
+return result
+
+done

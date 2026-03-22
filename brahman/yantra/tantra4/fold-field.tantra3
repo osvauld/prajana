@@ -1,0 +1,20 @@
+tantra3 fold-field
+
+-- unpacks a count fold state.
+-- state = [value, steps, started]
+--
+-- value   — the running accumulator
+-- steps   — proof trace (list of step strings)
+-- started — has the fold seen its first numeric grade
+
+takes state
+takes field
+
+result = cond (eq field "value") (nth state 0)
+  (eq field "steps") (nth state 1)
+  (eq field "started") (nth state 2)
+  otherwise ""
+
+return result
+
+done

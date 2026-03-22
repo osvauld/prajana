@@ -1,0 +1,12 @@
+tantra3 is-empty
+
+-- true if string is empty.
+-- the negation of has-text.
+
+takes s
+
+result = eq (string-length s) 0
+
+return result
+
+done

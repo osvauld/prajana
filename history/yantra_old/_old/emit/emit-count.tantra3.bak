@@ -1,0 +1,119 @@
+tantra3 emit-count
+
+-- emit-count: weave count reasoning from graph structure.
+--
+-- the graph carries everything:
+--   premise grades: mithya words (events), asprista-sankhya (numbers)
+--   count-steps: [count, count-step, "direction N: before -> after"]
+--   count-entity: [count, count-entity, entity-name]
+--   result: [resolved-concept, sankhya, N]
+--   question grade: mithya words = answer shape
+--
+-- Sanskrit grammar path:
+--   event verb → shabda common-sense-events → kshaya/vriddhi (direction)
+--   kshaya → pratipaksha of addition → subtraction → word → "minus"
+--   vriddhi → addition → word → "plus"
+--   bhuta-kaala + kta-pratyaya = past tense (premise grades)
+--   vartamana-kaala + bahu-vachana + copula-are = present tense (answer)
+--
+-- bridge: anuvada-setu speech- keys + rel- keys
+
+takes graph
+
+say-given  = shabda "anuvada-setu" "speech-given"
+say-known  = shabda "anuvada-setu" "speech-known"
+say-found  = shabda "anuvada-setu" "speech-found"
+say-arrow  = shabda "anuvada-setu" "speech-arrow"
+say-sep    = shabda "anuvada-setu" "speech-strand-separator"
+op-plus    = shabda "addition" "word"
+op-minus   = shabda "subtraction" "word"
+
+-- ── extract proof edges ─────────────────────────────────────────────────────
+count-entity = nth (graph | where [s, e, o] | and (eq e "count-entity") | collect (to-string o)) 0
+count-steps  = graph | where [s, e, o] | and (eq e "count-step") | collect (to-string o)
+result-val   = nth (graph | where [s, e, o] | and (eq e "sankhya")
+  | and (or (eq (to-string s) "count-total") (eq (to-string s) "count-remaining"))
+  | collect (to-string o)) 0
+
+-- ── split graph into grades at viraam ────────────────────────────────────────
+grade-state = reduce graph [[], []] (fn state triple ->
+  let completed = nth state 0
+  let current = nth state 1
+  let e = nth triple 1
+  cond (eq (to-string e) "viraam")
+    [(append completed [(append current [triple])]), []]
+  otherwise
+    [completed, (append current [triple])])
+all-grades = append (nth grade-state 0) [nth grade-state 1]
+
+-- ── grade 0: "we have" — read mithya + asprista-sankhya words ───────────────
+grade0 = nth all-grades 0
+given-words = reduce grade0 [] (fn acc t ->
+  let e = nth t 1
+  let w = to-string (nth t 0)
+  cond (eq e "mithya") (append acc [w])
+  (eq e "asprista-sankhya") (append acc [w])
+  (eq e "satya") (append acc [w])
+  otherwise acc)
+given-str = reduce given-words "" (fn acc w ->
+  cond (eq (string-length acc) 0) w
+  otherwise (concat acc " " w))
+
+-- ── question grade: last grade with vidhi-kaala ──────────────────────────────
+q-grade = reduce all-grades [] (fn acc grade ->
+  let has-q = gt (length (filter grade (fn t -> eq (nth t 1) "vidhi-kaala"))) 0
+  cond has-q grade otherwise acc)
+q-words = reduce q-grade [] (fn acc t ->
+  let e = nth t 1
+  let w = to-string (nth t 0)
+  cond (eq e "mithya") (append acc [w])
+  (eq e "satya") (cond (or (eq w "count-total") (eq w "count-remaining")) acc
+    otherwise (append acc [w]))
+  otherwise acc)
+
+-- ── "we know" — one line per count-step ──────────────────────────────────────
+-- count-step format: "direction N: before -> after"
+-- parse: direction = first word, rest = arithmetic
+know-lines = map count-steps (fn step ->
+  let parts = split step " "
+  let dir = nth parts 0
+  let op-word = cond (eq dir "kshaya") op-minus otherwise op-plus
+  -- find the event verb for this step from the matching grade
+  -- step has "N:" at position 1 — extract the number
+  let num-colon = nth parts 1
+  let num = substr num-colon 0 (sub (string-length num-colon) 1)
+  -- arithmetic: "before -> after" = parts 2..4
+  let before = nth parts 2
+  let after = nth parts 4
+  (concat num " " (to-string op-word) " (" before " " (to-string say-arrow) " " after ")"))
+
+know-str = reduce know-lines "" (fn acc line ->
+  cond (eq (string-length acc) 0) line
+  otherwise (concat acc say-sep " " line))
+
+-- ── "we find" — result + entity in vartamana-kaala ──────────────────────────
+-- use question grade words to form natural answer
+-- entity from count-entity, or from question grade mithya
+entity-word = cond (exists count-entity) (to-string count-entity)
+  otherwise (nth q-words 0)
+
+found-str = cond (exists result-val)
+  (concat (to-string result-val) " " (reduce q-words "" (fn acc w ->
+    cond (eq (string-length acc) 0) w
+    otherwise (concat acc " " w))))
+  otherwise ""
+
+-- ── weave strands ───────────────────────────────────────────────────────────
+pratijna  = cond (gt (string-length given-str) 0) (concat (to-string say-given) ": " given-str) otherwise ""
+udaharana = cond (gt (string-length know-str) 0) (concat (to-string say-known) ": " know-str) otherwise ""
+nigamana  = cond (gt (string-length found-str) 0) (concat (to-string say-found) ": " found-str) otherwise ""
+
+strands = filter [pratijna, udaharana, nigamana] (fn s -> gt (string-length s) 0)
+
+result = reduce strands "" (fn acc strand ->
+  cond (eq (string-length acc) 0) strand
+  otherwise (concat acc say-sep " " strand))
+
+return result
+
+done

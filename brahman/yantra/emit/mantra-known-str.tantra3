@@ -17,7 +17,7 @@ janya     = walk mantra "janya"
 phala     = nth (walk mantra "phala") 0
 
 janya-str = (reduce janya "" (fn acc j ->
-  cond (eq (string-length acc) 0) (to-string j)
+  cond (not (has-text acc)) (to-string j)
   otherwise (concat acc ", " (to-string j))))
 
 phala-str = (cond (exists phala)

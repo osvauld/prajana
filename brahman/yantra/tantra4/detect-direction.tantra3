@@ -1,0 +1,17 @@
+tantra3 detect-direction
+
+-- scans a list of words for the first kshaya/vriddhi direction.
+-- returns "kshaya", "vriddhi", or "" if no direction found.
+-- used by count-chain to detect event verb direction in each grade.
+
+takes words
+
+result = reduce words "" (fn acc w ->
+  let wn = word-resolve w
+  cond (has-text acc) acc
+  (or (eq wn "kshaya") (eq wn "vriddhi")) wn
+  otherwise acc)
+
+return result
+
+done

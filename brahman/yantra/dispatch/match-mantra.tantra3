@@ -27,11 +27,11 @@ eff-bcs     = nth svps 1
 -- ── relative-velocity special path ────────────────────────────────────────────
 rel-vps     = relative-vps graph scope-entity
 
-final-vps = cond (gt (length rel-vps) 0) rel-vps otherwise eff-vps
-final-bcs = cond (gt (length rel-vps) 0) (rel-vps | collect (nth _it 0)) otherwise eff-bcs
+final-vps = cond (has-items rel-vps) rel-vps otherwise eff-vps
+final-bcs = cond (has-items rel-vps) (rel-vps | collect (nth _it 0)) otherwise eff-bcs
 
 -- ── candidate selection (om-driven) ──────────────────────────────────────────
-candidates = cond (gt (string-length solve-for) 0)
+candidates = cond (has-text solve-for)
   (mantra-select solve-for)
   otherwise (mantra-select "")
 
@@ -41,10 +41,10 @@ fwd = forward-match candidates final-vps final-bcs solve-for
 -- ── inverse match (only if has-intent and no forward) ─────────────────────────
 inv-candidates = cond has-intent candidates otherwise []
 
-inv = cond (gt (length fwd) 0) fwd
+inv = cond (has-items fwd) fwd
   otherwise (inverse-match inv-candidates final-vps final-bcs solve-for)
 
-result = cond (gt (length fwd) 0) fwd otherwise inv
+result = cond (has-items fwd) fwd otherwise inv
 
 return result
 

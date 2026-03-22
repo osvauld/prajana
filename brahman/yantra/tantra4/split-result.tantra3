@@ -1,0 +1,18 @@
+tantra3 split-result
+
+-- unpacks a split-numeric result.
+-- parts = [number-string, unit-string]
+--
+-- "5kg" → number = "5", unit = "kg"
+-- "hello" → number = "", unit = ""
+
+takes parts
+takes field
+
+result = cond (eq field "number") (nth parts 0)
+  (eq field "unit") (nth parts 1)
+  otherwise ""
+
+return result
+
+done

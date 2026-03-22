@@ -1,0 +1,22 @@
+tantra3 anumana-field
+
+-- unpacks the anumana (categorical reasoning) detection result.
+-- anumana-ctx = [is-anumana, query, assert, mode]
+--
+-- is-anumana — true if categorical structure found
+-- query      — the concept being asked about
+-- assert     — the concept being asserted
+-- mode       — "varga" (class) or "direct"
+
+takes ctx
+takes field
+
+result = cond (eq field "is-anumana") (nth ctx 0)
+  (eq field "query") (nth ctx 1)
+  (eq field "assert") (nth ctx 2)
+  (eq field "mode") (nth ctx 3)
+  otherwise ""
+
+return result
+
+done

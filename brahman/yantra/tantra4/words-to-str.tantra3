@@ -1,0 +1,11 @@
+tantra3 words-to-str
+
+-- joins a list of word strings with spaces.
+
+takes words
+
+result = join-with words " "
+
+return result
+
+done

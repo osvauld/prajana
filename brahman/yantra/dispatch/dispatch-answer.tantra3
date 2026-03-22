@@ -1,83 +1,59 @@
 tantra3 dispatch-answer
 
--- 4-way dispatch: anumana | viveka | count | derive.
--- reads signal list from detect-signals, runs the appropriate path,
--- binds proof edges, emits formatted answer.
---
--- dispatch order (from pipeline-dispatch.om swarupa edges):
---   1. anumana  — categorical yes/no
---   2. viveka   — comparison (max/min)
---   3. count    — arithmetic on counts
---   4. derive   — mantra chain + execute
-
 takes expanded
 takes refined
-takes signals
 
--- ── unpack signals ────────────────────────────────────────────────────────────
-has-intent   = nth signals 0
-sf           = nth signals 1
-scope-entity = nth signals 2
-is-viveka    = nth signals 3
-viveka-dir   = nth signals 4
-comp-word    = nth signals 5
-comp-concept = nth signals 6
-is-anumana   = nth signals 7
-anumana-query  = nth signals 8
-anumana-assert = nth signals 9
-anumana-mode   = nth signals 10
-is-count     = nth signals 11
-count-result = nth signals 12
+dispatch-mode = read-signal expanded "dispatch-mode"
+sf            = read-signal expanded "solve-for"
+scope-entity  = read-signal expanded "scope-entity"
 
--- ── anumana path ──────────────────────────────────────────────────────────────
-anumana-result = cond is-anumana
+is-anumana = eq dispatch-mode "anumana"
+is-viveka  = eq dispatch-mode "viveka"
+is-count   = eq dispatch-mode "count"
+is-derive  = eq dispatch-mode "derive"
+
+anumana-query  = read-signal expanded "anumana-query"
+anumana-assert = read-signal expanded "anumana-assert"
+anumana-mode   = read-signal expanded "anumana-mode"
+anumana-answer = cond is-anumana
   (cond (eq anumana-mode "varga")
     (anumana-viveka-yukta refined anumana-query anumana-assert)
     otherwise (anumana-viveka refined anumana-query anumana-assert))
   otherwise ""
 
--- ── viveka path ───────────────────────────────────────────────────────────────
-viveka-raw        = cond is-viveka
-  (viveka-ganana expanded comp-concept comp-word viveka-dir)
+comp-word    = read-signal expanded "comp-word"
+comp-concept = read-signal expanded "comp-concept"
+viveka-dir   = read-signal expanded "viveka-dir"
+viveka-raw   = cond is-viveka (viveka-ganana expanded comp-concept comp-word viveka-dir) otherwise []
+viveka-winner     = cond is-viveka (viveka-result viveka-raw "winner") otherwise ""
+viveka-ev-pairs   = cond is-viveka (viveka-result viveka-raw "ev-pairs") otherwise []
+viveka-gt-triples = cond is-viveka (viveka-result viveka-raw "gt-triples") otherwise []
+
+has-intent  = (or is-viveka is-derive)
+chain-raw   = cond is-derive (derive-chain expanded) otherwise [[], expanded]
+enriched    = derive-result chain-raw "enriched"
+chain-steps = derive-result chain-raw "steps"
+mm-direct   = cond is-derive (match-mantra expanded) otherwise []
+
+final-m = cond (has-items mm-direct) mm-direct
+  (has-items chain-steps) (nth (last-of chain-steps) 2)
   otherwise []
-viveka-winner     = cond is-viveka (nth viveka-raw 0) otherwise ""
-viveka-loser      = cond is-viveka (nth viveka-raw 1) otherwise ""
-viveka-gt-triples = cond is-viveka (nth viveka-raw 5) otherwise []
-viveka-ev-pairs   = cond is-viveka (nth viveka-raw 4) otherwise []
 
--- ── derive path ───────────────────────────────────────────────────────────────
-chain-raw   = cond (or is-viveka has-intent) (cond is-viveka [[], expanded] otherwise (derive-chain expanded)) otherwise [[], expanded]
-enriched    = nth chain-raw 1
-mm-direct   = cond (or is-viveka has-intent) (cond is-viveka [] otherwise (match-mantra expanded)) otherwise []
-chain-steps = nth chain-raw 0
+result = cond is-anumana anumana-answer
+  is-viveka (cond (exists viveka-winner) (to-string viveka-winner) otherwise "no match")
+  is-count (to-string (read-signal expanded "count-result"))
+  is-derive (cond (has-items final-m) (execute-matched final-m sf) otherwise "no match")
+  otherwise "no match"
 
-final-m = cond (gt (length mm-direct) 0)
-  mm-direct
-  otherwise (cond (gt (length chain-steps) 0)
-    (nth (nth chain-steps (sub (length chain-steps) 1)) 2)
-    otherwise [])
-
--- ── result selection ──────────────────────────────────────────────────────────
-result = cond is-anumana
-  anumana-result
-  otherwise (cond is-viveka
-    (cond (exists viveka-winner) (to-string viveka-winner) otherwise "no match")
-  otherwise (cond is-count
-    (to-string count-result)
-  otherwise (cond (not has-intent) "no match"
-  otherwise (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match"))))
-
--- ── proof graph ───────────────────────────────────────────────────────────────
 base-graph = cond is-viveka expanded
-  otherwise (cond is-count expanded
-  otherwise (cond (gt (length mm-direct) 0) expanded
-  otherwise enriched))
+  is-count expanded
+  (has-items mm-direct) expanded
+  otherwise enriched
 
 proof-graph = pramana-bandha base-graph final-m result sf scope-entity is-viveka viveka-ev-pairs viveka-gt-triples comp-word
 
--- ── emit ──────────────────────────────────────────────────────────────────────
 answer = cond is-anumana
-  (emit-anumana refined anumana-query anumana-assert anumana-mode anumana-result)
+  (emit-anumana refined anumana-query anumana-assert anumana-mode anumana-answer)
   otherwise (emit-reasoning proof-graph)
 
 return answer

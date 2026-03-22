@@ -1,0 +1,13 @@
+tantra3 user-concepts
+
+-- extracts user-mentioned concept names from graph (excludes system concepts).
+-- returns unique list of satya subject strings.
+-- used by count-chain for entity/container detection.
+
+takes graph
+
+result = unique (map (filter (triples-by-edge graph "satya") (fn t -> not (is-system-concept (triple-subj t)))) (fn t -> triple-subj t))
+
+return result
+
+done

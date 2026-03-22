@@ -1,47 +1,22 @@
 tantra3 emit-reasoning
 
--- panchaavayava nyaya: the five-limbed proof.
--- each limb is a separate cognitive act, now a separate tantra:
---   1. pratijna   — "we have" — stating what is given
---   2. hetu       — "we seek" — the reason for inquiry
---   3. udaharana  — "we know" — the universal rule
---   4. upanaya    — "we see"  — applying the rule to this case
---   5. nigamana   — "we find" — the conclusion
---
--- this tantra weaves the five strands into one utterance.
--- the graph is the reasoning. the walk is the speech.
--- uttama-purusa-bahu-vachana kartari: "we" = nam + human + LLM.
-
 takes graph
 
 sep-strands = shabda "anuvada-setu" "speech-strand-separator"
 
--- ── is-count: derived-by count-chain present ────────────────────────────────
 is-count = gt (length (graph | where [s, e, o] | and (eq e "derived-by") | and (eq (to-string o) "count-chain") | collect s)) 0
-
--- ── count path: graph speaks through grades ─────────────────────────────────
 count-woven = cond is-count (emit-count graph) otherwise ""
 
--- ── is-viveka: greater-than edge present ─────────────────────────────────────
 is-viveka = gt (length (graph | where [s, e, o] | and (eq e "greater-than") | collect s)) 0
 
--- ── five limbs (physics / viveka path) ──────────────────────────────────────
-given-str    = cond (not is-count) (emit-pratijna graph is-viveka) otherwise ""
-sought-str   = cond (not is-count) (emit-hetu graph is-viveka) otherwise ""
+given-str     = cond (not is-count) (emit-pratijna graph is-viveka) otherwise ""
+sought-str    = cond (not is-count) (emit-hetu graph is-viveka) otherwise ""
 know-see-strs = cond (not is-count) (emit-udaharana-upanaya graph is-viveka) otherwise []
-found-str    = cond (not is-count) (emit-nigamana graph is-viveka) otherwise ""
+found-str     = cond (not is-count) (emit-nigamana graph is-viveka) otherwise ""
 
--- ── weave — Manipravalam ──────────────────────────────────────────────────────
 all-strands = append (append [given-str, sought-str] know-see-strs) [found-str]
 
-strands = reduce all-strands [] (fn acc s ->
-  cond (gt (string-length s) 0) (append acc [s]) otherwise acc)
-
-woven = reduce strands "" (fn acc strand ->
-  cond (eq (string-length acc) 0) strand
-  otherwise (concat acc sep-strands " " strand))
-
-result = cond is-count count-woven otherwise woven
+result = cond is-count count-woven otherwise (weave-strands all-strands)
 
 return result
 

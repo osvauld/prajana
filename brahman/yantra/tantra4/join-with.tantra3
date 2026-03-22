@@ -1,0 +1,18 @@
+tantra3 join-with
+
+-- joins non-empty strings with a separator.
+-- replaces the pattern: reduce list "" (fn acc x -> cond (is-empty acc) x otherwise (concat acc sep x))
+-- used by weave-strands and words-to-str.
+
+takes items
+takes sep
+
+non-empty = filter items (fn s -> has-text s)
+
+result = reduce non-empty "" (fn acc item ->
+  cond (is-empty acc) item
+  otherwise (concat acc sep item))
+
+return result
+
+done

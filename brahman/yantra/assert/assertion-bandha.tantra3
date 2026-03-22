@@ -1,74 +1,65 @@
 tantra3 assertion-bandha
 
--- reads IS-A assertions and emits swarupa edges alongside original triples.
--- "all X are Y" / "X are Y" → additionally emits [X, swarupa, Y]
--- every original triple is always passed through unchanged.
---
--- the swarupa edge IS the IS-A relation — same edge the kosha uses.
--- assertion-bandha makes sentence-level IS-A explicit in the question graph
--- so anumana-viveka can walk it the same way it walks the kosha chain.
-
 takes graph
 
--- word lists from shabda (no hardcoded lists)
-quant-words  = split (shabda "quantifier" "word") ","
-copula-words = split (shabda "copula" "word") ","
+quant-words = split (shabda "quantifier" "word") ","
 
-result = scan graph [subj: str = "", saw-cop: bool = false]:
+result = scan graph [subj: str = "", subj-ok: bool = false, saw-cop: bool = false]:
 
-  -- viraam: flush state
   [word, viraam, _] ->
     subj    = ""
+    subj-ok = false
     saw-cop = false
     emit
 
-  -- quantifier: marks the following clause as a universal assertion
-  -- "all cats are mammals" — 'all' signals IS-A assertion mode
   [word, mithya, _]
     when (member (to-string word) quant-words)
     ->
       subj    = ""
-      saw-cop = true    -- treat as copula-signal: next satya→mithya is IS-A
+      subj-ok = false
+      saw-cop = true
       emit
 
-  -- quantifier resolves to satya (all → quantifier node)
   [word, satya, _]
     when (eq (to-string word) "quantifier")
     ->
       subj    = ""
+      subj-ok = false
       saw-cop = true
       emit
 
-  -- IS-A pattern: subject held + saw-cop + mithya object
-  -- "all cats are mammals" → quantifier sets saw-cop, cat is subject, mammals is object
   [word, mithya, _]
     when (neq subj "")
     when saw-cop
+    when (has-text (word-resolve (to-string word)))
     ->
-      let obj-node = word-node (to-string word)
-      let obj-str  = cond (exists obj-node) (to-string obj-node) otherwise (to-string word)
       emit
-      emit [subj, "swarupa", obj-str]
+      emit [subj, "swarupa", (word-resolve (to-string word))]
       subj    = ""
+      subj-ok = false
       saw-cop = false
 
-  -- mithya word: potential subject — normalise via word-node
-  [word, mithya, _] ->
-    let nd = word-node (to-string word)
-    subj = cond (exists nd) (to-string nd) otherwise (to-string word)
+  [word, copula, _]
+    when subj-ok
+    ->
+      saw-cop = true
+
+  [word, copula, _] ->
     emit
 
-  -- satya word after quantifier (saw-cop=true): this IS the subject — hold it, keep saw-cop
-  -- resolve via word-node so plurals/aliases normalise: cats→cat, mammals→mammal
+  [word, mithya, _] ->
+    subj    = resolve-or-self (to-string word)
+    subj-ok = false
+    emit
+
   [word, satya, _]
     when saw-cop
     when (eq subj "")
     ->
-      let nd = word-node (to-string word)
-      subj = cond (exists nd) (to-string nd) otherwise (to-string word)
+      subj    = resolve-or-self (to-string word)
+      subj-ok = true
       emit
 
-  -- satya object after copula+subject: IS-A assertion
   [word, satya, _]
     when saw-cop
     when (neq subj "")
@@ -76,15 +67,15 @@ result = scan graph [subj: str = "", saw-cop: bool = false]:
       emit
       emit [subj, "swarupa", (to-string word)]
       subj    = ""
+      subj-ok = false
       saw-cop = false
 
-  -- satya word: hold as subject
   [word, satya, _] ->
     subj    = (to-string word)
+    subj-ok = true
     saw-cop = false
     emit
 
-  -- everything else: pass through unchanged
   _ ->
     emit
 

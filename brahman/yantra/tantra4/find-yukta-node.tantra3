@@ -1,0 +1,21 @@
+tantra3 find-yukta-node
+
+-- finds which varga node declares a predicate as yukta (associated property).
+-- walks the varga chain and checks om-yukta at each node.
+--
+-- "cat" varga chain = [mammal, animal, ...], predicate = "breathe"
+-- → "animal" (because breathe is yukta to animal)
+--
+-- returns the node name string, or "" if not found.
+
+takes chain
+takes predicate
+
+result = reduce chain "" (fn acc v ->
+  let ys = map (om-yukta v) (fn y -> to-string y)
+  cond (and (not (has-text acc)) (member predicate ys)) v
+  otherwise acc)
+
+return result
+
+done

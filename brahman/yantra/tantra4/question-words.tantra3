@@ -1,0 +1,16 @@
+tantra3 question-words
+
+-- finds the mithya words from the question grade.
+-- these are the signal words that determine direction and shape the answer.
+-- "how many birds are left?" → ["left"]
+
+takes grades
+
+q-grade = reduce grades [] (fn acc grade ->
+  cond (is-question-grade grade) grade otherwise acc)
+
+result = grade-mithya q-grade
+
+return result
+
+done

@@ -1,0 +1,23 @@
+tantra3 sought-context
+
+-- reads the sought context from a proof graph.
+-- returns [solve-for, label, scope-entity]
+--
+-- solve-for:    the concept being computed (subject of sought edge)
+-- label:        the display label (object of sought edge)
+-- scope-entity: whose frame (object of sought-of edge)
+
+takes graph
+
+sought-entries = graph | where [s, e, o] | and (eq e "sought") | collect [s, o]
+scope-entries  = graph | where [s, e, o] | and (eq e "sought-of") | collect [s, o]
+
+sf    = cond (has-items sought-entries) (to-string (nth (nth sought-entries 0) 0)) otherwise ""
+label = cond (has-items sought-entries) (to-string (nth (nth sought-entries 0) 1)) otherwise ""
+scope = cond (has-items scope-entries) (to-string (nth (nth scope-entries 0) 1)) otherwise ""
+
+result = [sf, label, scope]
+
+return result
+
+done

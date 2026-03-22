@@ -1,0 +1,15 @@
+tantra3 is-direction
+
+-- true if a word resolves to kshaya or vriddhi.
+-- kshaya = decrease (flew, left, died)
+-- vriddhi = increase (came, arrived, found)
+-- these are the two directions of count arithmetic.
+
+takes w
+
+wn = word-resolve w
+result = (or (eq wn "kshaya") (eq wn "vriddhi"))
+
+return result
+
+done

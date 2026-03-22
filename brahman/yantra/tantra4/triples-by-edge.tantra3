@@ -1,0 +1,16 @@
+tantra3 triples-by-edge
+
+-- filters triples by edge type.
+-- replaces: filter X (fn t -> eq (nth t 1) "edge-type")
+--
+-- usage: triples-by-edge graph "satya"
+--   → all triples where the edge is "satya"
+
+takes triples
+takes edge-type
+
+result = filter triples (fn t -> eq (nth t 1) edge-type)
+
+return result
+
+done

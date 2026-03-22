@@ -1,0 +1,13 @@
+tantra3 grade-mithya
+
+-- extracts mithya (unresolved) word names from a grade.
+-- these are event verbs, labels, unknowns — anything not satya.
+-- used by count-chain for direction detection.
+
+takes grade
+
+result = map (triples-by-edge grade "mithya") (fn t -> triple-subj t)
+
+return result
+
+done

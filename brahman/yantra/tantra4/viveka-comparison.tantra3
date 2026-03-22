@@ -1,0 +1,18 @@
+tantra3 viveka-comparison
+
+-- reads the comparison result from a proof graph.
+-- the proof graph contains [winner, greater-than, loser] from viveka-ganana.
+--
+-- returns [winner, loser] or [] if no comparison present.
+
+takes graph
+
+gt-triples = graph | where [s, e, o] | and (eq e "greater-than") | collect [s, o]
+
+result = cond (has-items gt-triples)
+  [(to-string (nth (nth gt-triples 0) 0)), (to-string (nth (nth gt-triples 0) 1))]
+  otherwise []
+
+return result
+
+done

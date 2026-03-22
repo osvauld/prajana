@@ -19,7 +19,7 @@ other-entities = cond (and (eq (to-string solve-for) "relative-velocity") (exist
 scoped-result = scope-vps graph scope-entity
 scoped-vps    = nth scoped-result 0
 
-result = cond (gt (length other-entities) 0)
+result = cond (has-items other-entities)
   (let other-entity    = nth other-entities 0
    let v-observer-list = scoped-vps | where [c, v] | and (eq (to-string c) "velocity") | collect v
    let v-observer      = nth v-observer-list 0
@@ -27,7 +27,7 @@ result = cond (gt (length other-entities) 0)
    let other-owned     = shashthi-sparsha graph (to-string other-entity)
    let v-other-list    = reduce other-owned [] (fn acc concept ->
      cond (eq (to-string concept) "velocity")
-       (let val = nth (graph | where [s, e, v] | and (eq (to-string s) (to-string concept)) | and (eq e "sankhya") | collect v) 0
+       (let val = query-edge-of graph (to-string concept) "sankhya"
         cond (exists val) (append acc [(to-string val)]) otherwise acc)
      otherwise acc)
    let v-other = nth v-other-list 0

@@ -1,0 +1,12 @@
+tantra3 triple-edge
+
+-- edge type of a triple.
+-- replaces: nth t 1
+
+takes t
+
+result = nth t 1
+
+return result
+
+done

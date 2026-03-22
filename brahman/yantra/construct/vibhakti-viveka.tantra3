@@ -42,7 +42,7 @@ result = map graph (fn tri ->
         (substr w 0 (sub (string-length w) sthita-len))
         otherwise "")
     otherwise "")))
-  (cond (and (gt (string-length root) 0) (not (and (eq root "matra") (member word rashi-labels)))) [word, root, root] otherwise [word, edge, obj]))
+  (cond (and (has-text root) (not (and (eq root "matra") (member word rashi-labels)))) [word, root, root] otherwise [word, edge, obj]))
 
 return result
 

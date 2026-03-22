@@ -13,17 +13,15 @@ say-sought = shabda "anuvada-setu" "speech-sought"
 say-of     = shabda "anuvada-setu" "speech-of"
 say-is     = shabda "anuvada-setu" "speech-is"
 
-sought-entries = graph | where [s, e, o] | and (eq e "sought") | collect [s, o]
-scope-entries  = graph | where [s, e, o] | and (eq e "sought-of") | collect [s, o]
-
-sought-sf    = cond (gt (length sought-entries) 0) (to-string (nth (nth sought-entries 0) 0)) otherwise ""
-sought-label = cond (gt (length sought-entries) 0) (to-string (nth (nth sought-entries 0) 1)) otherwise ""
-scope-entity = cond (gt (length scope-entries)  0) (to-string (nth (nth scope-entries  0) 1)) otherwise ""
+ctx          = sought-context graph
+sought-sf    = nth ctx 0
+sought-label = nth ctx 1
+scope-entity = nth ctx 2
 
 result = cond is-viveka
   (concat say-sought ": which " say-is " " sought-label)
-  otherwise (cond (gt (string-length sought-sf) 0)
-    (cond (gt (string-length scope-entity) 0)
+  otherwise (cond (has-text sought-sf)
+    (cond (has-text scope-entity)
       (concat say-sought ": " sought-sf " " say-of " " scope-entity)
       otherwise (concat say-sought ": " sought-sf))
     otherwise "")

@@ -1,0 +1,17 @@
+tantra3 write-signal
+
+-- writes a named signal to the graph's _signal edges.
+-- the inverse of read-signal.
+--
+-- usage: write-signal graph "dispatch-mode" "viveka"
+--   → appends ["_signal", "dispatch-mode", "viveka"] to graph
+
+takes graph
+takes signal-name
+takes signal-value
+
+result = append graph [["_signal", signal-name, signal-value]]
+
+return result
+
+done

@@ -1,49 +1,46 @@
 tantra3 sankhya-bandha
 
--- binds floating asprista-sankhya (unattached numbers) to their preceding satya concept.
--- asprista-sankhya arises when a number appears without a unit in direct proximity.
--- example: "mass 10 and acceleration 2" → mass=10, acceleration=2
---
--- number-before-noun ("10 birds") is handled upstream in BQG/emit-triples,
--- which has word-level context to distinguish direct nouns from alias words.
---
--- rashi-viveka (earlier avrti pass) handles the named-instance case:
---   "velocity v1 of 20" → [v1, vishesa, velocity], [v1, sankhya, 20.]
--- by the time sankhya-bandha runs, rashi-bandha signals are already consumed.
---
--- scope: sentence-local. viraam (period) resets last-active — a number
--- in one sentence must not bind to a concept from a previous sentence.
--- "10 birds sat on a tree. 3 flew away." → 3 stays loose, not bound to tree.
---
--- guards (must NOT bind):
---   concept already has a sankhya triple → already bound, skip
-
 takes graph
 
--- concepts already bound to a numeric value
 already-bound = nth (bound-state graph) 0
 
-result = scan graph [last-active: str = ""]:
+result = scan graph [last-active: str = "", pending-num: str = ""]:
 
-  -- sentence boundary: reset scope
-  [word, viraam, obj] ->
+  [word, viraam, _] ->
     last-active = ""
+    pending-num = ""
     emit
 
-  -- dvandva boundary: reset scope (5 cats AND 3 dogs)
-  [word, dvandva, obj] ->
+  [word, dvandva, _] ->
     last-active = ""
+    pending-num = ""
     emit
 
-  [word, satya, obj] ->
+  [word, satya, _]
+    when (has-text pending-num)
+    when (not (member (to-string word) already-bound))
+    ->
+      emit
+      emit [(to-string word), "sankhya", pending-num]
+      last-active = (to-string word)
+      pending-num = ""
+
+  [word, satya, _] ->
     last-active = (to-string word)
+    pending-num = ""
     emit
 
   [word, asprista-sankhya, obj]
-    when (neq last-active "")
+    when (has-text last-active)
     when (not (member last-active already-bound))
     ->
+      emit
       emit [last-active, "sankhya", obj]
+      pending-num = ""
+
+  [word, asprista-sankhya, obj] ->
+    pending-num = (to-string obj)
+    emit
 
   _ -> emit
 

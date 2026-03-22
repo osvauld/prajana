@@ -40,7 +40,7 @@ result = scan after-sankhya [redirects: list = sv-redirects]:
 
   [concept, shashthi-vibhakti, entity] ->
     let matches = redirects | where [c, e, i] | and (eq (to-string c) (to-string concept)) | and (eq (to-string e) (to-string entity)) | collect i
-    let match = cond (gt (length matches) 0) (nth matches 0) otherwise ""
+    let match = cond (has-items matches) (nth matches 0) otherwise ""
     emit (cond (neq match "") [match, "shashthi-vibhakti", entity] otherwise [concept, "shashthi-vibhakti", entity])
 
   _ -> emit
