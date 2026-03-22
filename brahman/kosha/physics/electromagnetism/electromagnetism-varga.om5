@@ -1,0 +1,12 @@
+; cluster for all electromagnetic quantities: fields, circuits, charges, currents.
+; electromagnetism is one of the four fundamental forces.
+; light is an EM wave — optics-varga is a vishesa of this.
+; cross-links to energy-varga: electrical energy is a form of energy.
+; units: charge in coulombs, current in amperes, voltage in volts, field in V/m
+; sangati roots
+
+(kosha electromagnetism-varga
+  (vishesa physics-varga energy-varga)
+  (swarupa subanta)
+  (matra ampere coulomb volt)
+  (yukta mula-shakti taranga spanda kaala))

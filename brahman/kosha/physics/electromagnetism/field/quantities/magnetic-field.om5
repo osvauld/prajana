@@ -1,0 +1,7 @@
+; exerts force on moving charges: measured in tesla
+
+(kosha magnetic-field
+  (vishesa field-varga)
+  (swarupa subanta)
+  (abheda field)
+  (yukta force current velocity charge))

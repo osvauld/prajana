@@ -39,6 +39,10 @@ let tokenize_sexp (src : string) : string list =
       (* comment: skip to end of line *)
       flush ();
       while !i < len && src.[!i] <> '\n' do incr i done
+    | ';' ->
+      (* lisp-style comment: skip to end of line *)
+      flush ();
+      while !i < len && src.[!i] <> '\n' do incr i done
     | ' ' | '\t' | '\n' | '\r' ->
       flush (); incr i
     | '(' | ')' | '[' | ']' | ',' ->

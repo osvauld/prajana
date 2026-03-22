@@ -1,0 +1,13 @@
+; the physical length of a robot link (bone/rekha) in the kinematic chain
+; this is the L in the IK formula: cos(θ2) = (x²+y²-L1²-L2²)/(2·L1·L2)
+; and the L in moment of inertia: I = (1/3)·m·L²
+; 
+; 3D perspective: the bone's rest-length in local space
+; physics perspective: the arm of the lever — determines torque sensitivity
+
+(kosha link-length
+  (swarupa subanta)
+  (sthita domain-robotics bone)
+  (yukta kinematic-chain moment-of-inertia torque)
+  (abheda rekha)
+  (matra metre))

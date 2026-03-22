@@ -1,0 +1,7 @@
+(bhasha english-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita english domain-ocaml domain-language)
+  (phala ocaml)
+  (siddha root)
+  (yukta correctness-check))

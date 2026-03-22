@@ -1,0 +1,6 @@
+(mantra friction-force-mantra
+  (vishesa linear-force-varga)
+  (varga physics-mantra)
+  (swarupa friction-force)
+  (phala friction-force)
+  (janya coefficient normal-force))

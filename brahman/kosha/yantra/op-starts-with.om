@@ -1,7 +1,0 @@
-kosha op-starts-with
-
-  "op-class-relation-kriya"
-
-  -- string prefix test. starts-with s prefix → bool.
-
-done

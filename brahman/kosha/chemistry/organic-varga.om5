@@ -1,0 +1,9 @@
+; cluster for organic chemistry: carbon, hydrocarbons, polymers, amino-acids, peptides.
+; organic chemistry is the chemistry of carbon-based compounds.
+; carbon's tetravalence enables the complexity of life molecules.
+; sangati roots
+
+(kosha organic-varga
+  (vishesa chemistry-varga biology-varga)
+  (swarupa subanta)
+  (yukta sandhi krama vrnda avastha))

@@ -1,0 +1,8 @@
+; cluster for algebraic structures: groups, rings, fields, ideals, kernels.
+; algebra studies structure preserved under operations.
+; the central question: what operations are valid, and what do they preserve?
+; sangati roots
+
+(kosha algebra-varga
+  (vishesa math-varga)
+  (yukta niyama sandhi viveka dvandva))

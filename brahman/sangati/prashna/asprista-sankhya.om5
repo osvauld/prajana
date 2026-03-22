@@ -1,0 +1,16 @@
+; a numeric magnitude that has entered the question graph but is not yet
+; bound to any rashi. held provisionally until sankhya-bandha attaches it
+; to the preceding active rashi.
+; 
+; example: "ball has mass 5 kg"
+; before binding: [5, asprista-sankhya, 5.0]  — the 5 is floating
+; after binding:  [mass, sankhya, 5.0]        — the 5 belongs to mass's rashi
+; 
+; asprista = not yet touched by understanding (which rashi does this belong to?)
+; sankhya  = numeric magnitude
+; together: a magnitude whose rashi owner has not yet been discerned
+; 
+; resolves into sankhya on binding. remains asprista-sankhya if no rashi precedes it.
+
+(sangati asprista-sankhya
+  (sthita prashna asprista sankhya mithya-satya))

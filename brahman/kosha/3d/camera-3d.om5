@@ -1,0 +1,6 @@
+(kosha camera-3d
+  (swarupa darshana)
+  (sthita domain-3d domain-raylib bindu world-space akasham)
+  (yukta rekha position target fovy)
+  (kriya projection)
+  (phala viewport))

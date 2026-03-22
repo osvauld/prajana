@@ -1,0 +1,8 @@
+(kosha refine-sandhi-kosha
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-sandhi-avastha)
+  (abheda endomorphism)
+  (kriya sandhi-kosha))

@@ -1,0 +1,6 @@
+(bhasha 3d-to-lua
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita domain-3d domain-lua domain-raylib)
+  (yukta raylib-setu lua-setu mesh shader material camera-3d force-directed node-graph)
+  (phala sphere line3d begin-3d))

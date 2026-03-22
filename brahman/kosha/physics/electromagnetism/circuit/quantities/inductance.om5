@@ -1,0 +1,6 @@
+; voltage induced per unit rate of change of current: henrys
+
+(kosha inductance
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta volt ampere second current magnetic-field))

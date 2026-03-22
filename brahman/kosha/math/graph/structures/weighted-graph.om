@@ -1,7 +1,0 @@
-kosha weighted-graph
-
-  "graph-varga-vishesa"
-  "graph-swarupa"
-  "matra-yukta"   -- edges carry numeric weight
-
-done

@@ -1,0 +1,12 @@
+; kramanusara chain: velocity = d(displacement)/d(time)
+; apeksha: kramanusara wrt physics-time, held in a sthira (fixed) reference frame
+; avastha: initial-velocity and final-velocity are velocity wearing a state
+
+(kosha velocity
+  (vishesa linear-motion-varga)
+  (abheda vega)
+  (sthita krama sthira-apeksha)
+  (yukta kshetrajna direction)
+  (kramanusara displacement)
+  (phala acceleration-kramanusara)
+  (drishthanta purva-avastha uttara-avastha))

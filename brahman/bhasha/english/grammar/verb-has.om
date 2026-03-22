@@ -1,9 +1,0 @@
-bhasha verb-has
-
-  "kriya-swarupa sambandha-sthita"
-  "shashthi-vibhakti-sthita"
-  -- possession verb: "ball HAS mass 5 kg"
-  -- signals entity→property ownership in question graphs
-  -- has IS shashthi-vibhakti expressed as an English verb
-
-done

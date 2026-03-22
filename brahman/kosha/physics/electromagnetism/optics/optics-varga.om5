@@ -1,0 +1,12 @@
+; cluster for all optics quantities: light, reflection, refraction, diffraction, spectrum.
+; optics is a subdomain of electromagnetism: light is an EM wave.
+; also a subdomain of oscillation: light has frequency, wavelength, period.
+; the speed of light is the universal limit — connects to seema.
+; units: wavelength in metres; frequency in hertz; intensity in W/m²
+; sangati roots
+
+(kosha optics-varga
+  (vishesa electromagnetism-varga oscillation-varga)
+  (swarupa subanta taranga)
+  (matra metre hertz second)
+  (yukta spanda seema vega))

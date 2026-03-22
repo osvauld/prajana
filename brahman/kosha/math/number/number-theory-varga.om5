@@ -1,0 +1,7 @@
+; branch of math studying properties of integers: divisibility, primes, gcd, lcm
+
+(kosha number-theory-varga
+  (vishesa number-varga)
+  (swarupa integer)
+  (abheda divisibility)
+  (yukta prime gcd lcm))

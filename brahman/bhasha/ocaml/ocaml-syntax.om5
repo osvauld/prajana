@@ -1,0 +1,5 @@
+(bhasha ocaml-syntax
+  (abheda rachana)
+  (yukta type-signature algebraic-data-type pattern-matching)
+  (siddha compiler)
+  (sthita domain-ocaml domain-language))

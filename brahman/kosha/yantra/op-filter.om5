@@ -1,0 +1,12 @@
+; keep elements matching predicate, discard the rest.
+; filter list (fn x -> bool)
+; 
+; this is a lattice operation: the result is a subset of the input,
+; ordered by inclusion. filter IS selection (σ) applied to a list.
+; pure: no state, no accumulation.
+
+(kosha op-filter
+  (kriya op-class-higher-order)
+  (abheda selection)
+  (sthita partial-order lattice)
+  (phala subset))

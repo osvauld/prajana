@@ -1,0 +1,6 @@
+(kosha int
+  (sthita domain-cs sama)
+  (swarupa primitive-type)
+  (siddha exact bounded)
+  (abheda sankhya)
+  (janya domain-math-int))

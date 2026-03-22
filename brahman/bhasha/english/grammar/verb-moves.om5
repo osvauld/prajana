@@ -1,0 +1,7 @@
+; "moves" signals linear motion. the physics is carried by the velocity/speed
+; values that follow. treated as grammar so BQG drops it — prevents R9 from
+; compounding the entity word before it ("body moves" → body-moves is wrong).
+; rotational equivalent: rotates (verb-rotates.om).
+
+(bhasha verb-moves
+  (sthita english kartari-prayoga))

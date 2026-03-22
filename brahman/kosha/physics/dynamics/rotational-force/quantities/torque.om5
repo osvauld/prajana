@@ -1,0 +1,10 @@
+; r × F: causes angular acceleration; torque × angle = work (joules)
+
+(kosha torque
+  (vishesa rotational-force-varga mechanical-energy-varga)
+  (swarupa subanta rotation)
+  (abheda force)
+  (yukta kona moment-of-inertia angular-momentum)
+  (siddha cross-product)
+  (phala vector)
+  (janaka angular-acceleration))

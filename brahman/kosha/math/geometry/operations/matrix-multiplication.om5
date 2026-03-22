@@ -1,0 +1,8 @@
+(mantra matrix-multiplication
+  (karma geometry-varga)
+  (kriya taranga dot-product)
+  (sthita vrnda-ganita vector)
+  (phala matrix)
+  (yukta forward-pass determinant eigenvalue)
+  (janya map fold)
+  (swarupa float array))

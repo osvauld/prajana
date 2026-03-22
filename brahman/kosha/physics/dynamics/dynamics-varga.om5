@@ -1,0 +1,11 @@
+; cluster for all dynamic quantities: motion described with cause (force).
+; dynamics asks WHY — what force causes this motion?
+; Newton's laws are the niyama of this cluster.
+; units: force is kg⋅m⋅s⁻² (newton); torque is kg⋅m²⋅s⁻²
+; sangati roots
+
+(kosha dynamics-varga
+  (vishesa physics-varga)
+  (swarupa subanta)
+  (matra newton kilogram metre second)
+  (yukta mula-shakti gati niyama kaala))

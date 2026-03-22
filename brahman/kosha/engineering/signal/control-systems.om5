@@ -1,0 +1,36 @@
+; control systems: engineering the behaviour of dynamic systems over time.
+; the discipline of making systems do what you want despite disturbances.
+; a thermostat is a control system. so is autopilot, ABS, and insulin pump.
+; 
+; open-loop vs closed-loop:
+; open-loop:   no feedback. output not measured. toaster, washing machine timer.
+; predictable only if system is well-modelled. no disturbance rejection.
+; closed-loop: feedback. output measured and compared to desired (setpoint).
+; error = setpoint - actual output.
+; controller adjusts input based on error → error → 0.
+; 
+; PID controller: the workhorse of industrial control.
+; P (proportional): u = Kp × e.     proportional to current error.
+; large Kp → fast response, may overshoot.
+; I (integral):     u = Ki × ∫e dt.  integral of past error.
+; eliminates steady-state error (I action catches constant offset).
+; D (derivative):   u = Kd × de/dt.  rate of change of error.
+; anticipates future error → reduces overshoot.
+; PID combined: u = Kp×e + Ki×∫e + Kd×ė
+; tuning: choosing Kp, Ki, Kd for stable, fast, accurate response.
+; Ziegler-Nichols method: systematic tuning from step response.
+; 
+; transfer function: H(s) = Y(s)/X(s) in Laplace domain.
+; poles: values of s where H(s) → ∞. determine stability.
+; zeros: values of s where H(s) = 0. determine frequency response.
+; stable system: all poles in left half of s-plane (negative real part).
+; 
+; Bode plot: gain and phase vs frequency. shows stability margins.
+; gain margin: how much gain before instability.
+; phase margin: how much phase lag before instability.
+; 60° phase margin: well-damped. < 30°: risk of oscillation.
+
+(kosha control-systems
+  (vishesa signal-varga engineering-varga)
+  (swarupa subanta feedback)
+  (yukta derivative antiderivative fourier-engineering laplace))

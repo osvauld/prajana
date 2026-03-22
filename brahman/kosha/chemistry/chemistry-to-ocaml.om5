@@ -1,0 +1,5 @@
+(kosha chemistry-to-ocaml
+  (swarupa setu)
+  (yukta domain-chemistry domain-ocaml element type-signature)
+  (kriya atom-function)
+  (siddha ocaml-syntax correctness-check))

@@ -1,0 +1,6 @@
+; atan2(y, x): angle from positive x-axis to point (x,y)
+
+(mantra arctangent
+  (karma number-varga)
+  (vishesa trigonometry-varga)
+  (pratipaksha tangent))

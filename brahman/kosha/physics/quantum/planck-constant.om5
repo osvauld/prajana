@@ -1,0 +1,6 @@
+(kosha planck-constant
+  (sthita constant domain-quantum)
+  (swarupa float)
+  (abheda planck-relation)
+  (yukta heisenberg-uncertainty joule second)
+  (siddha svayambhu))

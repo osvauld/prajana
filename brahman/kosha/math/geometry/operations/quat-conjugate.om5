@@ -1,0 +1,8 @@
+; [w, x, y, z] → [w, -x, -y, -z]: negate the vector part
+
+(mantra quat-conjugate
+  (karma geometry-varga)
+  (vishesa quaternion-varga)
+  (pratipaksha quat-mul)
+  (swarupa rotation-inverse)
+  (krama neg))

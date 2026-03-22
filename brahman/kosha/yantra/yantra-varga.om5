@@ -1,0 +1,6 @@
+; root cluster for all yantra (operator/machine) domain nodes.
+; op-classes, visheshanam ring operators, and dispatch machinery.
+
+(kosha yantra-varga
+  (vishesa math-varga)
+  (yukta niyama krama tantra))

@@ -1,0 +1,6 @@
+; "total" removed: it is an avastha qualifier in avrti-refine, so
+; "total momentum" → [total,mithya]+[momentum,active] → R2 → total-momentum.
+; keeping "total" here made it resolve as "complete" (active concept), blocking R2.
+
+(bhasha complete
+  (sthita english purna))

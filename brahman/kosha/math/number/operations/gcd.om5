@@ -1,0 +1,9 @@
+; greatest common divisor: largest integer dividing both a and b
+; gcd(12,8)=4, gcd(7,5)=1 (coprime)
+
+(kosha gcd
+  (vishesa number-theory-varga)
+  (swarupa divisor)
+  (yukta integer lcm fraction-reduction)
+  (abheda prime-factorization)
+  (drishthanta coprime))

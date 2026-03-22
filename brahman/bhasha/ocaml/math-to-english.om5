@@ -1,0 +1,6 @@
+(bhasha math-to-english
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita expression arithmetic vector domain-language)
+  (phala english explanation)
+  (siddha correctness-check))

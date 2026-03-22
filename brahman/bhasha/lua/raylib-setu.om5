@@ -1,0 +1,5 @@
+(bhasha raylib-setu
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita domain-raylib domain-lua domain-language)
+  (yukta raylib lua-setu lua-to-lua render input window camera draw update resonance shabda visheshanam))

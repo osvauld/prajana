@@ -1,0 +1,9 @@
+; average squared deviation from the mean: measure of spread
+; var(X) = E[(X - μ)²]
+
+(kosha variance
+  (vishesa statistics-varga)
+  (swarupa spread)
+  (yukta data mean square)
+  (janaka std-dev)
+  (abheda deviation))

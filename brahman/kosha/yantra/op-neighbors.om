@@ -1,9 +1,0 @@
-kosha op-neighbors
-
-  "op-class-projection-kriya"
-  "graph-walk-swarupa avrti-yukta"
-
-  -- returns all nodes adjacent to the given node (both in and out edges).
-  -- used by avrti.tantra for spreading activation across the graph.
-
-done

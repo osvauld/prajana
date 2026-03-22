@@ -1,0 +1,8 @@
+; lcm(a,b) = |a·b| / gcd(a,b)
+
+(mantra lcm
+  (karma number-varga)
+  (vishesa number-theory-varga)
+  (yukta gcd)
+  (swarupa multiple)
+  (krama multiplication gcd division))

@@ -1,0 +1,18 @@
+; a mass released from height in a gravitational field.
+; gravity (F=mg) acts downward continuously — svayambhu-siddha.
+; janya (what it needs): mass, height, gravity.
+; phala (what follows): velocity at impact = √(2gh), KE = mgh.
+; then: collision with surface → coefficient-of-restitution determines bounce.
+; 
+; the tantra (falling-step.tantra2) implements the step:
+; given [object, height, h] and g → emit [object, velocity, √(2gh)]
+; given [object, velocity, v] and surface e → emit [object, velocity-after, e*v]
+; iterate until velocity below threshold → object at rest.
+
+(kosha falling
+  (vishesa common-sense-varga processes-varga)
+  (swarupa tinanta bhave-prayoga)
+  (janya gravity height mass)
+  (phala velocity kinetic-energy collision-varga)
+  (abheda free-fall)
+  (yukta potential-energy kinetic-energy coefficient-of-restitution normal-force))

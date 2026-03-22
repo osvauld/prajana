@@ -1,0 +1,7 @@
+; articles: determiners that introduce noun phrases.
+; used by compose-formula-body.tantra before quantity nouns.
+
+(bhasha article
+  (swarupa avyaya nipata)
+  (sthita english viveka)
+  (yukta dhatu))

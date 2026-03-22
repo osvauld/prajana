@@ -1,0 +1,12 @@
+; d(angle)/d(time): kona is numerator, time is apeksha
+; omega IS angular-frequency — connects directly to oscillation-varga
+; apeksha: kramanusara wrt physics-time, held in a sthira (fixed) reference frame
+
+(kosha angular-velocity
+  (vishesa rotational-motion-varga oscillation-varga)
+  (abheda velocity frequency)
+  (yukta kona avrti pi period)
+  (swarupa radian)
+  (phala angular-acceleration)
+  (kramanusara kona)
+  (sthita sthira-apeksha))

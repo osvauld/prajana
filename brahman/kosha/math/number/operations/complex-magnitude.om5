@@ -1,0 +1,8 @@
+; |a+bi| = sqrt(a² + b²)
+
+(mantra complex-magnitude
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda vec-norm)
+  (swarupa modulus)
+  (krama square addition square-root))

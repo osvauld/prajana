@@ -1,0 +1,9 @@
+; cluster for computation concepts: algorithm, recursion, loop, function, conditional.
+; computation is the execution of a sequence of steps that transforms input to output.
+; all computation is kramanusara: each step is a transformation of the previous state.
+; sangati roots
+
+(kosha computation-varga
+  (vishesa cs-varga)
+  (swarupa subanta krama)
+  (yukta niyama avastha kaala))

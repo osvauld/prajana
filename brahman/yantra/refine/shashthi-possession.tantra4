@@ -1,0 +1,42 @@
+-- shashthi-possession: detect "X has Y" as entity-concept ownership.
+-- pattern: [mithya entity] [mithya possession-verb] [satya concept] [value]
+-- continuation: "and [satya concept2] [value2]" extends to same entity.
+-- emits: [entity, prathama-vibhakti, object] + [concept, shashthi-vibhakti, entity]
+-- runs before vibhakti-shashthi so entity edges are available for scoping.
+(tantra shashthi-possession (graph)
+  (possession-verbs (split (shabda "verb-has" "word") ","))
+  (grades (split-grades graph))
+  (new-triples (reduce grades [] (fn acc grade ->
+    let st = reduce grade [[], "", false, ""] (fn st tri ->
+      let result  = nth st 0
+      let pending = nth st 1
+      let saw-pos = nth st 2
+      let entity  = nth st 3
+      let edge = to-string (nth tri 1)
+      let word = to-string (nth tri 0)
+      cond (or (eq edge "viraam") (eq edge "vidhi-kaala"))
+        [result, "", false, ""]
+      -- possession verb: activate if entity pending
+      (and (eq edge "mithya") (member word possession-verbs))
+        [result, pending, (has-text pending), entity]
+      -- satya after possession verb: emit ownership, keep entity active
+      (and (eq edge "satya") saw-pos (has-text pending))
+        [(append result [[pending, "prathama-vibhakti", "object"],
+                         [word, "shashthi-vibhakti", pending]]),
+         pending, false, pending]
+      -- satya after dvandva continuation: same entity owns this concept too
+      (and (eq edge "satya") (has-text entity))
+        [(append result [[word, "shashthi-vibhakti", entity]]),
+         entity, false, entity]
+      -- skip numbers and dvandva while entity is active
+      (and (eq edge "asprista-sankhya") (or saw-pos (has-text entity)))
+        [result, pending, saw-pos, entity]
+      (and (eq edge "dvandva") (has-text entity))
+        [result, entity, false, entity]
+      -- new mithya word: potential entity
+      (eq edge "mithya")
+        [result, word, false, ""]
+      otherwise
+        [result, "", false, ""])
+    (append acc (nth st 0)))))
+  (append-triples graph new-triples))

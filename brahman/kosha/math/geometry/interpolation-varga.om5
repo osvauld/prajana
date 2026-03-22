@@ -1,0 +1,8 @@
+; estimating values between known data points
+; lerp (linear), slerp (spherical), spline, bezier
+
+(kosha interpolation-varga
+  (vishesa geometry-varga number-varga)
+  (yukta seema)
+  (abheda krama)
+  (drishthanta lerp slerp))

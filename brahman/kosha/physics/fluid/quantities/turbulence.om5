@@ -1,0 +1,8 @@
+; chaotic irregular flow when reynolds number exceeds critical threshold
+
+(kosha turbulence
+  (vishesa fluid-varga)
+  (siddha reynolds-number)
+  (yukta velocity curl vortex entropy)
+  (abheda avrti)
+  (phala navier-stokes))

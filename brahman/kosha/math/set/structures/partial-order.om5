@@ -1,0 +1,8 @@
+(kosha partial-order
+  (vishesa set-varga)
+  (sthita set)
+  (siddha reflexive antisymmetric transitive)
+  (abheda equivalence-relation)
+  (janya lattice)
+  (drishthanta subset)
+  (yukta sambandha krama))

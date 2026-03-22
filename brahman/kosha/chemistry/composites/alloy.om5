@@ -1,0 +1,25 @@
+; a metal mixed with one or more elements (metal or nonmetal) at atomic level.
+; the mixture changes properties: harder, stronger, more corrosion-resistant,
+; lower/higher melting point, different electrical properties.
+; 
+; two types of alloys:
+; substitutional: solute atoms replace solvent atoms in the lattice.
+; requires similar atomic size (within ~15%). e.g. Cu-Ni (cupronickel).
+; interstitial:   small atoms fit in gaps between large atoms.
+; carbon in iron → steel. nitrogen in iron → case hardening.
+; 
+; important alloys:
+; steel:        Fe + C (0.02-2.1%). harder than iron, less brittle than cast iron.
+; stainless:    Fe + Cr (>10.5%) + Ni. Cr2O3 passive layer prevents rusting.
+; brass:        Cu + Zn (5-45%). golden colour, corrosion resistant, acoustic.
+; bronze:       Cu + Sn (3-20%). harder than Cu alone. the Bronze Age material.
+; duralumin:    Al + Cu + Mg + Mn. strong, lightweight. aircraft structures.
+; solder:       Sn + Pb (old) or Sn + Ag + Cu (lead-free). low melting point.
+; amalgam:      Hg + Ag/Sn. dental fillings. liquid at room temperature.
+
+(kosha alloy
+  (vishesa composites-varga chemistry-varga)
+  (sthita metals-varga)
+  (swarupa metallic-bond)
+  (yukta lattice)
+  (drishthanta substitutional interstitial steel brass bronze))

@@ -1,0 +1,8 @@
+; source: the fixed point from which departure/separation occurs
+; vibhakti: panchami (ablative)
+; sangati root: kshaya (departure/diminution)
+
+(sangati apadana
+  (amsha karaka)
+  (yukta panchami-vibhakti)
+  (swarupa kshaya))

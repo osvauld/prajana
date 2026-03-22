@@ -1,0 +1,4 @@
+(bhasha domain-ocaml
+  (yukta ocaml english-to-ocaml ocaml-to-ocaml physics-to-ocaml math-to-ocaml ocaml-syntax type-signature type-system type-inference pattern-matching module-system functor algebraic-data-type loop recursion fold map list compiler runtime execution vector state-update integrator type-checking correctness-check upakarana tantra)
+  (sthita domain-language computer)
+  (siddha yantra))

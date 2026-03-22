@@ -6,6 +6,9 @@ module Anuvada = Vyakarana_lib__Anuvada
 (** @canonical Vyakarana_lib.Event *)
 module Event = Vyakarana_lib__Event
 
+(** @canonical Vyakarana_lib.Om5_parser *)
+module Om5_parser = Vyakarana_lib__Om5_parser
+
 (** @canonical Vyakarana_lib.Om_edit *)
 module Om_edit = Vyakarana_lib__Om_edit
 

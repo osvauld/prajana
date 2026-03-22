@@ -83,6 +83,7 @@ type nigamana = {
   edges  : typed_edge list;   (* extracted from slokas *)
   satya  : float;             (* raw_satya set at load time; read-only thereafter *)
   shabda : string;            (* key:value mapping data — target-domain rendering *)
+  krama  : string;            (* evaluable formula expression for mantra nodes, "" if none *)
 }
 
 (* ---- visheshanam ↔ integer index ---- *)
@@ -254,8 +255,8 @@ let json_of_nigamana (n : nigamana) : string =
         (je_pg e.source) (je_pg e.target) (je_pg (string_of_visheshanam e.relation))
     ) n.edges) in
   Printf.sprintf
-    "{\"name\":%s,\"layer\":%s,\"satya\":%.4f,\"slokas\":[%s],\"edges\":[%s],\"shabda\":%s}"
-    (je_pg n.name) (je_pg n.layer) n.satya slokas_json edges_json (je_pg n.shabda)
+    "{\"name\":%s,\"layer\":%s,\"satya\":%.4f,\"slokas\":[%s],\"edges\":[%s],\"shabda\":%s,\"krama\":%s}"
+    (je_pg n.name) (je_pg n.layer) n.satya slokas_json edges_json (je_pg n.shabda) (je_pg n.krama)
 
 (* ---- satya: raw structural prior ---- *)
 

@@ -1,9 +1,0 @@
-kosha animal
-
-  -- the concept 'animal' — distinct from animal-varga (the container).
-  -- animal IS-A living: [animal, swarupa, living]
-  "living-swarupa"
-  "breathing-yukta"
-  "taxonomy-varga-sthita"
-
-done

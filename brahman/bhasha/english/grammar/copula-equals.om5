@@ -1,0 +1,5 @@
+; used in formula statements: "kinetic energy EQUALS ½mv²"
+
+(bhasha copula-equals
+  (swarupa copula)
+  (sthita vartamana-kaala formula))

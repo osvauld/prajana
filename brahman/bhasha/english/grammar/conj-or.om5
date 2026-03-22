@@ -1,0 +1,5 @@
+; alternative: "sine OR cosine of the angle"
+
+(bhasha conj-or
+  (swarupa conjunction)
+  (sthita vikalpa))

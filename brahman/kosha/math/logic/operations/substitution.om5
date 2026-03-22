@@ -1,0 +1,4 @@
+; replace a variable with its known value in an expression
+
+(mantra substitution
+  (swarupa inference))

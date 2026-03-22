@@ -1,0 +1,10 @@
+; how much light a material blocks. opaque → translucent → transparent.
+; opaque: metals (free electrons absorb photons), stone, wood.
+; transparent: glass, water, air (photon energy below bandgap).
+; refraction index: water 1.33, glass 1.5, diamond 2.42.
+; in 3d/pratibimba: alpha (0=transparent, 1=opaque), roughness, refraction.
+
+(kosha opacity
+  (vishesa common-sense-varga materials-varga)
+  (swarupa subanta)
+  (yukta photon pbr domain-3d))

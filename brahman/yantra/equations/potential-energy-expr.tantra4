@@ -1,3 +1,0 @@
--- PE = mgh
-(tantra potential-energy-expr (mass gravity height)
-  (mul mass (mul gravity height)))

@@ -1,0 +1,2 @@
+(kosha op-append
+  (kriya op-class-monoid))

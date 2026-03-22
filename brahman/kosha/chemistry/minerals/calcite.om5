@@ -1,0 +1,14 @@
+; CaCO3. calcium carbonate. the mineral of shells, limestone, marble, chalk.
+; crystal form: calcite (rhombohedral) or aragonite (orthorhombic) — same formula.
+; limestone: sedimentary rock, mostly calcite from marine organisms.
+; marble: metamorphic limestone — recrystallised under heat and pressure.
+; chalk: soft, fine-grained calcite from microscopic marine algae (coccoliths).
+; reacts with acid: CaCO3 + 2HCl → CaCl2 + H2O + CO2 (effervesces).
+; soluble in slightly acidic water (acid rain dissolves limestone buildings).
+; cement: CaCO3 → CaO (lime) + CO2 at 900°C (calcination).
+
+(kosha calcite
+  (vishesa minerals-varga)
+  (yukta calcium carbon oxygen acid dissolution)
+  (sthita ionic-bond domain-chemistry)
+  (abheda limestone marble chalk))

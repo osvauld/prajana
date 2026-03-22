@@ -1,0 +1,4 @@
+; list membership test. member value list → bool. O(n).
+
+(kosha op-member
+  (kriya op-class-relation))

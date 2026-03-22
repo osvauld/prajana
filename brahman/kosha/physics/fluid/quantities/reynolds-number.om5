@@ -1,0 +1,9 @@
+; rho*v*L/mu: dimensionless ratio predicting laminar (< 2300) or turbulent (> 4000) flow
+
+(kosha reynolds-number
+  (vishesa fluid-varga)
+  (swarupa subanta scalar)
+  (abheda float)
+  (yukta mass-density velocity viscosity)
+  (siddha dimensionless)
+  (phala turbulence laminar))

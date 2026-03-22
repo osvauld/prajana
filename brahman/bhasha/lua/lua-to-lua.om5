@@ -1,0 +1,7 @@
+(bhasha lua-to-lua
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita lua domain-lua domain-language)
+  (phala lua)
+  (yukta table function module-system metatable state-update closure coroutine lua-setu)
+  (siddha correctness-check))

@@ -1,0 +1,7 @@
+(kosha pipeline-dispatch
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya intent-signals expanded-graph)
+  (phala answer)
+  (krama pipeline-proof-emit)
+  (kriya dispatch-answer))

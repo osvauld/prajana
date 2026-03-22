@@ -1,0 +1,11 @@
+; Coulomb-like inverse-square force pushing two particles apart
+
+(kosha repulsion
+  (vishesa field-varga)
+  (swarupa dhurana)
+  (siddha coulomb inverse-square-law)
+  (sthita particle-a particle-b distance)
+  (kriya inverse-square)
+  (phala force direction-away)
+  (yukta force-directed)
+  (abheda bond))

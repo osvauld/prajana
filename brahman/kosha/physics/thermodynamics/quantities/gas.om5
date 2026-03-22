@@ -1,0 +1,29 @@
+; no definite shape and no definite volume. fills its container completely.
+; atoms/molecules move freely and rapidly — translational, rotational, vibrational.
+; thermal energy >> intermolecular forces (except near condensation).
+; compressible: volume changes significantly with pressure and temperature.
+; 
+; ideal gas law: PV = nRT
+; P = pressure (Pa), V = volume (m³), n = moles, R = 8.314 J/mol·K, T = kelvin.
+; at standard conditions: 1 mol ideal gas occupies 22.4 L.
+; real gases deviate: van der Waals equation adds intermolecular forces and volume.
+; 
+; kinetic theory: gas pressure = force per unit area from molecular collisions.
+; average kinetic energy = (3/2)kT — temperature IS average molecular KE.
+; Maxwell-Boltzmann distribution: spread of molecular speeds at given temperature.
+; 
+; properties:
+; low density: ~1000x less dense than liquid at same temperature.
+; diffusion: gases mix spontaneously (entropy drives it).
+; effusion: gas escapes through small hole — rate ∝ 1/√(molar mass). Graham's law.
+; 
+; in 3d / pratibimba: volume rendering — participating medium, smoke, fog shader.
+; transparent to semi-transparent. scatters light (Rayleigh → blue sky).
+; physics connections
+; 3d / pratibimba
+
+(kosha gas
+  (vishesa thermodynamics-varga)
+  (swarupa subanta no-fixed-shape no-fixed-volume compressible ideal-gas)
+  (yukta diffusion kinetic-theory pressure temperature volume-shader domain-3d)
+  (ahara phase-change-boil))

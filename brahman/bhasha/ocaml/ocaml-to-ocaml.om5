@@ -1,0 +1,7 @@
+(bhasha ocaml-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita ocaml domain-ocaml domain-language)
+  (phala ocaml)
+  (yukta ocaml-syntax type-signature)
+  (siddha correctness-check))

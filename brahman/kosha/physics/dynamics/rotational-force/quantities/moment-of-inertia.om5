@@ -1,0 +1,9 @@
+; I = integral(r² dm): resistance to angular acceleration
+
+(kosha moment-of-inertia
+  (vishesa rotational-force-varga)
+  (swarupa subanta rotation)
+  (abheda mass)
+  (yukta distance power angular-momentum torque)
+  (siddha antiderivative)
+  (pratipaksha angular-acceleration))

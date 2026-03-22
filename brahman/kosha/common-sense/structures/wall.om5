@@ -1,0 +1,16 @@
+; a vertical structural surface. barrier to horizontal motion.
+; walls define rooms, buildings, enclosures.
+; collision with wall: normal force is horizontal (perpendicular to wall surface).
+; a ball thrown at a wall: horizontal velocity component reverses (times e).
+; vertical component is unaffected by the wall collision.
+; 
+; wall as constraint: the ball cannot pass through.
+; wall exerts normal force in the direction away from the wall.
+; in 3d: static rigid body with vertical orientation.
+; material of wall determines coefficient of restitution:
+; concrete wall: e ≈ 0.5-0.6. padded wall: e ≈ 0.2. elastic wall: e ≈ 0.9.
+
+(kosha wall
+  (vishesa structures-varga common-sense-varga)
+  (swarupa vertical barrier)
+  (yukta normal-force collision-varga domain-3d))

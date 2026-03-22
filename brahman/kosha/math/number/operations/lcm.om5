@@ -1,0 +1,8 @@
+; least common multiple: smallest integer divisible by both a and b
+; lcm(4,6)=12, lcm(a,b) = |a·b|/gcd(a,b)
+
+(kosha lcm
+  (vishesa number-theory-varga)
+  (swarupa multiple)
+  (yukta integer gcd fraction-addition scheduling)
+  (abheda prime-factorization))

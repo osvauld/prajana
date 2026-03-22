@@ -1,0 +1,13 @@
+; trajectory: a path through akasham parameterized by kaala
+; the root is gati — gati's own shabda is "direction-as-trajectory"
+; trajectory is gati made precise: a function from kaala to position in sthira-apeksha
+; in a kinematic chain: trajectory is kona(t) from theta-start to theta-target
+
+(kosha trajectory
+  (swarupa gati)
+  (sthita krama sthira-apeksha akasham)
+  (yukta kaala)
+  (phala chala-apeksha-krama)
+  (siddha bindu-krama)
+  (janaka angular-displacement path-energy)
+  (vishesa kinematics-varga))

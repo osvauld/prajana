@@ -1,0 +1,7 @@
+; point/condition: "AT velocity 3m/s", "AT angle 30 degrees", "AT rest"
+; at IS saptami-vibhakti (locative) expressed as an English preposition
+; saptami = 7th case: location, condition, point of reference
+
+(bhasha prep-at
+  (swarupa preposition)
+  (sthita seema saptami-vibhakti))

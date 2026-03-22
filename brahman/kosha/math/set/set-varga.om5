@@ -1,0 +1,8 @@
+; cluster for set-theoretic structures: set, subset, union, intersection, complement.
+; set theory is the foundation of all mathematics — everything is built from sets.
+; Zermelo-Fraenkel axioms define the rules of set membership.
+; sangati roots
+
+(kosha set-varga
+  (vishesa math-varga)
+  (yukta vrnda niyama viveka dvandva))

@@ -1,0 +1,8 @@
+; standard deviation: square root of variance; spread in original units
+; sigma = sqrt(variance)
+
+(kosha std-dev
+  (vishesa statistics-varga)
+  (swarupa spread)
+  (yukta data variance normal-distribution)
+  (abheda square-root))

@@ -403,7 +403,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     ) slokas in
     let n : Proof_graph.nigamana = {
       name; layer; slokas; edges;
-      satya = 0.0; shabda;
+      satya = 0.0; shabda; krama = "";
     } in
     ignore (Proof_graph.join k n);
     (* update satya for this node *)
@@ -426,7 +426,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
        (* join a minimal nigamana carrying just this edge *)
        let n : Proof_graph.nigamana = {
          name = source; layer = "kosha"; slokas = []; edges = [edge];
-         satya = 0.0; shabda = "";
+         satya = 0.0; shabda = ""; krama = "";
        } in
        ignore (Proof_graph.join k n);
        Some (VNode source))

@@ -1,0 +1,10 @@
+; the element e such that a * e = a for all a.
+; for the visheshanam ring: swarupa (IS-A). kriya(x, swarupa) = x.
+; for arithmetic: 1. mul(x, 1) = x.
+
+(kosha multiplicative-identity
+  (swarupa identity-element)
+  (abheda eka)
+  (drishthanta multiplication)
+  (sthita ring monoid)
+  (yukta visheshanam-swarupa))

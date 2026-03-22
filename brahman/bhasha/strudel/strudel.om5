@@ -1,0 +1,10 @@
+; strudel — resonance as Strudel mini-notation
+; one of the pratibimba (renderer) family.
+; translates graph energy/relations into layered pattern text.
+
+(bhasha strudel
+  (yukta pratibimba swara thaalam swara-to-strudel ornament-to-strudel strudel-setu)
+  (swarupa setu stack)
+  (phala naada)
+  (sthita layer domain-sangeetham domain-language)
+  (abheda avrti))

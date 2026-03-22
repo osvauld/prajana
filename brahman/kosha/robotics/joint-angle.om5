@@ -1,0 +1,36 @@
+; the current DOF state of a joint — the scalar value of its degree of freedom
+; 
+; for a revolute joint: joint-angle is the rotation angle about the joint axis (radians)
+; for a prismatic joint: joint-angle is the translation distance along the axis (metres)
+; for a spherical joint: joint-angle is a vector of 3 angles (handled as sub-entity)
+; 
+; 3D perspective:
+; joint-angle IS the parameter of the joint's local transform:
+; revolute: Rot(joint-axis, joint-angle) — a rotation matrix / quaternion
+; prismatic: Trans(joint-axis, joint-angle) — a translation
+; changing joint-angle changes the bone's local transform in the scene-graph
+; which propagates downstream through all child frames (chala-apeksha chain)
+; 
+; physics perspective:
+; joint-angle IS kona — the angular state
+; its kramanusara wrt time = joint angular-velocity (ω)
+; its second kramanusara wrt time = joint angular-acceleration (α)
+; these live in the joint's chala-apeksha frame (not world frame)
+; 
+; purva/uttara avastha:
+; joint-angle at purva-avastha = current configuration (where the arm IS)
+; joint-angle at uttara-avastha = target configuration (where the arm must GO)
+; the difference Δθ drives the motion plan
+; kramanusara chain: angle → angular-velocity → angular-acceleration
+; lives in chala-apeksha (joint's local frame) not world frame
+; state distinction
+
+(kosha joint-angle
+  (swarupa subanta)
+  (sthita domain-robotics chala-apeksha avastha)
+  (yukta kinematic-chain joint)
+  (abheda kona)
+  (matra radian)
+  (phala angular-velocity-kramanusara)
+  (apeksha physics-time)
+  (drishthanta purva-avastha uttara-avastha))

@@ -1,0 +1,6 @@
+(bhasha math-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita expression arithmetic domain-ocaml domain-language)
+  (yukta arithmetic-to-ocaml vector-to-ocaml matrix-to-ocaml ocaml-syntax type-signature)
+  (siddha correctness-check))

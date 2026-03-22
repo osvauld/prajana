@@ -1,0 +1,5 @@
+(bhasha lua
+  (abheda language vrnda aadana-visarjana)
+  (sthita domain-lua domain-language krama karma-krama niyama viveka-krama vivartana abhava thaalam)
+  (swarupa table)
+  (yukta function module-system runtime state-update loop recursion closure variable assignment field-access iteration metatable coroutine nil karma))

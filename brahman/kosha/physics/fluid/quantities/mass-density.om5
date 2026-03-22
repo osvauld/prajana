@@ -1,0 +1,9 @@
+; rho = mass per unit volume
+
+(kosha mass-density
+  (vishesa fluid-varga)
+  (swarupa subanta scalar)
+  (abheda float density)
+  (ahara mass)
+  (phala volume)
+  (yukta pressure viscosity continuity navier-stokes))

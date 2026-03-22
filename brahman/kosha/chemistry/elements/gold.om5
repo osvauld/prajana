@@ -1,0 +1,14 @@
+; Au. proton-79. period 6, transition metal. valence: 1 or 3.
+; most malleable and ductile metal. does not tarnish or corrode.
+; excellent conductor. used in electronics for reliable connections.
+; catalysis: gold nanoparticles catalyse reactions at room temperature.
+; Au³⁺ in medicine: gold compounds used in rheumatoid arthritis treatment.
+; formed only in neutron star mergers (r-process nucleosynthesis) — not in stars.
+; relativistic effects make Au yellow (not silver-white like most metals).
+
+(kosha gold
+  (sthita element domain-chemistry)
+  (swarupa proton-seventy-nine transition-metal corrosion-resistant malleable conductor)
+  (yukta valence-one valence-three)
+  (phala neutron-star)
+  (siddha r-process))

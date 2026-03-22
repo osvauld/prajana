@@ -1,0 +1,9 @@
+; multiply each component of an n-dimensional vector by a scalar
+; s · [a1,a2,...,an] = [s·a1, s·a2,...,s·an]
+
+(mantra vec-scale
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda scalar-multiplication)
+  (yukta aayaama)
+  (krama multiplication))

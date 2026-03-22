@@ -1,0 +1,5 @@
+; past participle: -ied suffix → strip -ied, add -y
+; carried → carry, worried → worry
+
+(bhasha english-kta-ied
+  (sthita english kta-pratyaya))

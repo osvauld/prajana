@@ -1,0 +1,13 @@
+; rashi-bandha: value-assignment signal for a rashi instance.
+; appears in the question graph when 'of' connects a named rashi label to its magnitude:
+; "velocity v1 of 20"  →  [of, rashi-bandha, rashi-bandha]
+; 
+; distinct from shashthi-vibhakti (entity ownership):
+; shashthi-vibhakti: "ball has mass"   — entity possesses a concept
+; rashi-bandha:      "v1 of 20"        — rashi label receives its numeric value
+; 
+; consumed by sankhya-bandha: the asprista-sankhya following rashi-bandha
+; is bound to the preceding mithya label (the rashi instance), not to the satya concept.
+
+(sangati rashi-bandha
+  (sthita prashna sankhya sambandha))

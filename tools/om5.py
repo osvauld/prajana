@@ -22,16 +22,71 @@ from collections import defaultdict, OrderedDict
 
 from .paths import BRAHMAN
 
-# All known visheshanam suffixes — must match proof_graph.ml core + dynamic dims.
+# Shabda keys that become graph edges in om5.
+# key → (relation, value_transform)
+#   value_transform: None means use value as target directly,
+#   callable means transform value to target name.
+_DEGREE_MAP = {
+    "0.5": "sub-linear", "1": "linear", "2": "quadratic",
+    "3": "cubic", "4": "quartic",
+}
+
+SHABDA_TO_EDGE = {
+    "invertible":  ("siddha", lambda v: "inverse-element" if v == "yes" else None),
+    "symmetric":   ("siddha", lambda v: "commutativity" if v == "yes" else None),
+    "inverse":     ("pratipaksha", None),
+    "math-op":     ("kriya", None),
+    "unit":        ("matra", None),
+    "degree":      ("sthita", lambda v: _DEGREE_MAP.get(v)),
+}
+
+# All known visheshanam suffixes.
+# Core 10 (proof_graph.ml indices 0-9) + varga (10):
+#   swarupa abheda drishthanta sthita yukta siddha kriya phala janya pratipaksha varga
+# Dynamic 36 (visheshanam-ring declared):
+#   adhikarana ahara amsha apeksha asprista-sankhya avastha bhavishya-kaala
+#   bhuta-kaala chaturthi-vibhakti dhatu dvandva dvitiya-vibhakti kala krama
+#   kramanusara matra mithya naama-mudra naama-pratibodha panchami-vibhakti
+#   prathama-vibhakti prayoga purusa rashi-bandha sandhi sankhya
+#   saptami-vibhakti satya shashthi-vibhakti trtiya-vibhakti vachana
+#   vartamana-kaala vidhi-kaala viraam vishesa vrnda
+# Ad-hoc (used in om slokas but not ring-declared):
+#   karma janaka rahita lakshana poorva viparita pratibodha artha
+#   vibheda daatri atita purna paripurna antya seema sama paschat
+#   purva atikrama abhisarana garbha bhanga shakti nirodha
 RELATION_SUFFIXES = [
+    # core 0-10
     "swarupa", "abheda", "drishthanta", "sthita", "yukta",
     "siddha", "kriya", "phala", "janya", "pratipaksha",
-    "varga", "vishesa", "amsha", "rahita", "karma",
+    "varga",
+    # ring-declared dynamic (36)
+    "adhikarana", "ahara", "amsha", "apeksha", "asprista-sankhya",
+    "avastha", "bhavishya-kaala", "bhuta-kaala", "chaturthi-vibhakti",
+    "dhatu", "dvandva", "dvitiya-vibhakti", "kala", "krama",
+    "kramanusara", "matra", "mithya", "naama-mudra", "naama-pratibodha",
+    "panchami-vibhakti", "prathama-vibhakti", "prayoga", "purusa",
+    "rashi-bandha", "sandhi", "sankhya", "saptami-vibhakti", "satya",
+    "shashthi-vibhakti", "trtiya-vibhakti", "vachana", "vartamana-kaala",
+    "vidhi-kaala", "viraam", "vishesa", "vrnda",
+    # ad-hoc: used as compound suffixes in om slokas. All are now standalone
+    # sangati nodes so om_parser.ml registers them as dynamic dims.
+    "karma", "viparita", "pratibodha", "artha",
+    "purna", "seema", "sama", "abhisarana", "shakti",
+    "janaka", "rahita", "lakshana", "poorva", "daatri",
+    "atita", "vibheda", "garbha", "antya", "bhanga",
+    "nirodha", "paripurna", "paschat", "purva", "atikrama",
+    # aliases
+    "inverse",
 ]
+
+# Normalize aliases to canonical relation names
+_ALIAS_MAP = {
+    "inverse": "pratipaksha",
+}
 
 _SUFFIX_SET = set(RELATION_SUFFIXES)
 
-_HEADER_RE = re.compile(r"^(sangati|kosha|bhasha|mantra)\s+([a-z][a-z0-9-]*)")
+_HEADER_RE = re.compile(r"^(sangati|kosha|bhasha|mantra)\s+([a-zA-Z0-9][a-zA-Z0-9-]*)", re.MULTILINE)
 _SLOKA_RE = re.compile(r'"([^"]+)"')
 _COMMENT_RE = re.compile(r"^\s*--\s*(.*)")
 
@@ -45,7 +100,8 @@ def decompose_word(word):
         if word[i] == '-':
             suffix = word[i + 1:]
             if suffix in _SUFFIX_SET:
-                return (word[:i], suffix)
+                canonical = _ALIAS_MAP.get(suffix, suffix)
+                return (word[:i], canonical)
     return None
 
 
@@ -61,12 +117,19 @@ def parse_om(path):
     layer = header.group(1)
     name = header.group(2)
 
-    slokas = _SLOKA_RE.findall(source)
+    slokas = []
     comments = []
     for line in source.split("\n"):
-        m = _COMMENT_RE.match(line)
+        stripped = line.strip()
+        if stripped == "done":
+            continue
+        m = _COMMENT_RE.match(stripped)
         if m:
             comments.append(m.group(1).strip())
+            continue
+        # Extract quoted strings from non-comment lines (including after done)
+        for qm in _SLOKA_RE.finditer(line):
+            slokas.append(qm.group(1))
 
     # Decompose all compound words into (target, relation) edges
     edges = []
@@ -91,6 +154,26 @@ def parse_om(path):
         "path": path,
         "source": source,
     }
+
+
+def shabda_edges(name, shabda_nodes):
+    """Extract graph edges from shabda intrinsic keys for a node."""
+    node = shabda_nodes.get(name)
+    if not node:
+        return []
+    fields = node.get("fields", {})
+    extra = []
+    for key, (relation, transform) in SHABDA_TO_EDGE.items():
+        val = fields.get(key)
+        if val is None:
+            continue
+        if transform is not None:
+            target = transform(val)
+        else:
+            target = val
+        if target:
+            extra.append((target, relation))
+    return extra
 
 
 def edges_to_grouped(edges):
@@ -145,21 +228,41 @@ def convert_file(path):
     return to_om5(parsed), parsed
 
 
-def convert_all():
-    """Convert all .om files under BRAHMAN. Returns list of results."""
+def convert_all(merge_shabda=False):
+    """Convert all .om files under BRAHMAN. Returns list of results.
+
+    If merge_shabda=True, intrinsic shabda keys (invertible, symmetric,
+    inverse, math-op, unit, degree) are merged as edges into the om5 output.
+    """
     import glob
+    shabda_nodes = {}
+    if merge_shabda:
+        from .shabda import load_all
+        shabda_nodes = load_all()
+
     results = []
     for path in sorted(glob.glob(os.path.join(BRAHMAN, "**", "*.om"), recursive=True)):
-        om5, parsed = convert_file(path)
-        if om5 and parsed:
-            results.append({
-                "path": parsed["path"],
-                "name": parsed["name"],
-                "layer": parsed["layer"],
-                "om5": om5,
-                "edges": len(parsed["edges"]),
-                "unmatched": parsed["unmatched"],
-            })
+        parsed = parse_om(path)
+        if not parsed:
+            continue
+
+        if merge_shabda:
+            extra = shabda_edges(parsed["name"], shabda_nodes)
+            # Deduplicate: don't add edges that already exist from slokas
+            existing = set(parsed["edges"])
+            for e in extra:
+                if e not in existing:
+                    parsed["edges"].append(e)
+
+        om5_str = to_om5(parsed)
+        results.append({
+            "path": parsed["path"],
+            "name": parsed["name"],
+            "layer": parsed["layer"],
+            "om5": om5_str,
+            "edges": len(parsed["edges"]),
+            "unmatched": parsed["unmatched"],
+        })
     return results
 
 
@@ -213,9 +316,9 @@ def roundtrip_check(parsed, om5_string):
     return False, "; ".join(msg)
 
 
-def stats():
+def stats(merge_shabda=False):
     """Return conversion statistics."""
-    results = convert_all()
+    results = convert_all(merge_shabda=merge_shabda)
     total = len(results)
     total_edges = sum(r["edges"] for r in results)
     with_unmatched = [r for r in results if r["unmatched"]]

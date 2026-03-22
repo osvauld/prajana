@@ -22,7 +22,7 @@ let tokenise_expr (s : string) : string list =
       while !i < len && s.[!i] <> '\n' do incr i done
     | ' ' | '\t' | '\n' ->
       flush (); incr i
-    | '(' | ')' | '[' | ']' | ',' ->
+    | '(' | ')' | '[' | ']' | ',' | '|' ->
        flush ();
        tokens := String.make 1 c :: !tokens;
        incr i

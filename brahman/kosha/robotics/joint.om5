@@ -1,0 +1,46 @@
+; a joint is the DOF-carrying connector between two links in a kinematic chain
+; the link is rigid (no DOF); the joint is where motion happens
+; 
+; 3D perspective:
+; the joint IS a bone's local transform — rotation (revolute) or translation (prismatic)
+; its axis is a 3D unit vector in the parent link's local frame
+; its value (angle or displacement) IS the DOF state = kona
+; in the scene-graph: bone.local = Rot(joint.axis, joint.angle) or Trans(joint.axis, joint.disp)
+; 
+; physics perspective:
+; the joint state IS kona (for revolute) — same quantity, 3D axis specifies which rotation
+; angular-velocity = kramanusara of kona wrt time
+; torque is applied about the joint axis
+; the joint has limits: angle-min, angle-max, speed-max, torque-max
+; 
+; extraction from text:
+; "revolute joint about Z" → joint-type=revolute, joint-axis=[0,0,1]
+; "prismatic joint along X" → joint-type=prismatic, joint-axis=[1,0,0]
+; "spherical joint" → joint-type=spherical (3 DOF — special case)
+; "currently at 0 radians" → joint-angle = 0
+; "max speed 2 rad/s" → joint-speed-max = 2
+; DOF definition
+; state — the actual DOF value
+; physical limits
+; reference frame structure — this is the key propagation mechanism:
+; 
+; each joint except the base lives in a chala-apeksha (moving frame) —
+; its parent joint's local frame is the reference, and that frame moves.
+; the joint itself provides a new chala-apeksha to its child joint.
+; the base joint alone has sthira-apeksha (fixed world frame).
+; 
+; change in joint[i].kona → changes joint[i]'s local frame →
+; this IS the chala-apeksha of joint[i+1], joint[i+2], ..., end-effector
+; ALL downstream positions, velocities, accelerations are reborn (janya)
+; from this changed frame — the phala propagates through the parampara chain
+; 
+; krama-janya: joint[i]'s transform IS the karana (cause)
+; joint[i+1..n] world poses ARE the phala (fruit)
+; sambandha:   the transform T[i] is the typed connection — it carries
+; position + orientation from frame i to frame i+1
+
+(kosha joint
+  (sthita domain-robotics bone chala-apeksha parampara)
+  (yukta kinematic-chain scene-graph joint-type joint-axis joint-angle angular-velocity joint-speed-max rated-torque krama-janya sambandha link)
+  (abheda kona)
+  (phala chala-apeksha))

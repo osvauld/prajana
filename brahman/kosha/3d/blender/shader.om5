@@ -1,0 +1,6 @@
+(kosha shader
+  (sthita domain-3d node-graph)
+  (yukta material light normal pbr)
+  (ahara vertex)
+  (phala fragment)
+  (kriya gpu))

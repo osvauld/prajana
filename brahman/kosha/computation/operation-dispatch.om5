@@ -1,0 +1,19 @@
+; evaluation morphism: look up operation by name, apply to arguments.
+; apply-op "sub" [10, 3] → 7
+; the shabda declares the operation (eval:sub), apply-op fires it.
+; 
+; constrained: arity must match, operands must be numeric.
+; the algebraic hierarchy provides structural permissions:
+; monoid guarantees fold validity (closure + associativity + identity)
+; distributivity validates compute-then-sum
+; partial-order validates transitivity
+; 
+; this is the single mechanism for all computation:
+; physics, counting, comparison, logic all use the same path:
+; read kosha → find operation → fire via apply-op
+
+(kosha operation-dispatch
+  (vishesa computation-varga)
+  (swarupa morphism)
+  (sthita function monoid domain-computation)
+  (abheda ganana-setu))

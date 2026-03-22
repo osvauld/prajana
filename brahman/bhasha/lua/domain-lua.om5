@@ -1,0 +1,4 @@
+(bhasha domain-lua
+  (yukta lua table variable assignment field-access function function-call method-call return loop iteration recursion closure module-system metatable state-update runtime nil boolean number string coroutine upakarana)
+  (sthita domain-language)
+  (siddha yantra))

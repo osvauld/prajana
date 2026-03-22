@@ -1,0 +1,5 @@
+(kosha currency
+  (sthita matra domain-finance)
+  (swarupa float)
+  (abheda float)
+  (yukta artha exchange))

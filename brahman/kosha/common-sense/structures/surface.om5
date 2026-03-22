@@ -1,0 +1,19 @@
+; the interface between two regions — the place where contact happens.
+; every collision involves a surface (or two surfaces meeting).
+; surfaces are characterised by:
+; orientation: horizontal (floor, ground), vertical (wall), inclined (ramp, slope)
+; material: determines coefficient of restitution and friction coefficient
+; roughness: smooth surface → low friction. rough → high friction.
+; 
+; the surface is the mediator of all contact forces:
+; normal force: perpendicular to surface. prevents penetration.
+; friction force: parallel to surface. opposes relative motion.
+; 
+; in chemistry: surface area matters — reactions happen at surfaces.
+; finely divided materials have huge surface area → react faster.
+; iron powder burns; iron block does not (same mass, different surface area).
+
+(kosha surface
+  (vishesa structures-varga common-sense-varga)
+  (swarupa interface)
+  (yukta normal-force friction-force collision-varga contact domain-3d))

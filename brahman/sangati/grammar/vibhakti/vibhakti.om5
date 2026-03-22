@@ -1,0 +1,6 @@
+; eight cases together constitute the case system — members are amshas
+; members point here via vibhakti-amsha
+
+(sangati vibhakti
+  (sthita bhasha-swarupa)
+  (swarupa sambandha))

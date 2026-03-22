@@ -1,0 +1,12 @@
+; cluster for rotational kinematic quantities: the time-derivative chain in rotation.
+; angular-displacement → angular-velocity → angular-acceleration — each is d/dt of previous.
+; the chain is: rad → rad⋅s⁻¹ → rad⋅s⁻²
+; angular-velocity IS angular-frequency (omega) — connects directly to oscillation-varga.
+; units: radians for angle, seconds for time
+; sangati roots
+
+(kosha rotational-motion-varga
+  (vishesa kinematics-varga oscillation-varga)
+  (swarupa subanta kona)
+  (matra radian second)
+  (yukta gati kramanusara avrti avastha))

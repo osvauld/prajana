@@ -1,0 +1,9 @@
+; vishesa: particular — what distinguishes one instance from another.
+; "this ball's mass = 5kg" is vishesa of the samanya "mass".
+; the rashi instance IS vishesa; the kosha concept IS samanya.
+; already used as edge type (vishesa-yukta) throughout the graph.
+
+(sangati vishesa
+  (amsha padartha)
+  (pratipaksha samanya)
+  (siddha pratyaksha))

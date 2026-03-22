@@ -1,0 +1,6 @@
+(mantra spring-force-mantra
+  (vishesa linear-force-varga)
+  (varga physics-mantra)
+  (swarupa spring-force)
+  (phala spring-force)
+  (janya spring-constant displacement))

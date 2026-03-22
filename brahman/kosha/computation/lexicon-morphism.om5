@@ -1,0 +1,15 @@
+; maps surface words to graph concepts: λ: Word → Node ∪ {⊥}
+; word-node "heavier" → viveka-max
+; shabda-anveshana "birds" → bird
+; includes stemming (birds→bird) and alias resolution (heavier→viveka-max).
+; returns ⊥ (mithya) when the word is unknown.
+; 
+; this is the boundary between language and graph.
+; used 20 times across tantras (word-node + shabda-anveshana).
+; pure: same word always resolves to same concept.
+
+(kosha lexicon-morphism
+  (vishesa computation-varga)
+  (swarupa morphism)
+  (sthita function domain-computation)
+  (janya shabda))

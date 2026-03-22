@@ -1,0 +1,11 @@
+; matra-guna: SI prefix scaling ladder.
+; each prefix is a power of 10 that scales a base unit.
+; nano + metre = nanometre = metre at 10^-9.
+; the ladder itself is a kramanusara structure —
+; each step is a multiplicative rate of change.
+
+(kosha matra-guna
+  (vishesa physics-varga)
+  (sthita matra yantra)
+  (swarupa guna)
+  (yukta sankhya))

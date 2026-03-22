@@ -1,0 +1,5 @@
+; personalized pagerank: surfaces contextually relevant nodes
+; given seeds and a target, ranks all nodes by teleport probability
+
+(mantra ppr-mantra
+  (swarupa graph-walk breadth-first))

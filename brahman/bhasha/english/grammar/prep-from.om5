@@ -1,0 +1,7 @@
+; source/origin: "FROM initial velocity", "derived FROM force", "FROM rest"
+; from IS panchami-vibhakti (ablative) expressed as an English preposition
+; panchami = 5th case: separation, origin, the point of departure
+
+(bhasha prep-from
+  (swarupa preposition)
+  (sthita janya panchami-vibhakti))

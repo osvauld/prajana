@@ -1,0 +1,6 @@
+(kosha texture
+  (sthita domain-3d)
+  (ahara uv)
+  (phala color)
+  (swarupa image)
+  (yukta material shader normal-map displacement-map))

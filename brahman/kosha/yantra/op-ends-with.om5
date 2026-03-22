@@ -1,0 +1,4 @@
+; string suffix test. ends-with s suffix → bool.
+
+(kosha op-ends-with
+  (kriya op-class-relation))

@@ -1,0 +1,8 @@
+; mean = Σxᵢ / n: sum then divide by count
+
+(mantra mean
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (yukta sum count)
+  (swarupa central-tendency)
+  (krama addition division))

@@ -1,0 +1,27 @@
+; C=O group: carbon double-bonded to oxygen. the most reactive organic group.
+; the C=O bond is polarised: C is electrophilic (δ+), O is nucleophilic (δ-).
+; this polarity drives nucleophilic addition — the fundamental reaction of carbonyls.
+; 
+; two forms depending on carbon's other bonds:
+; aldehyde: -CHO (carbonyl at end of chain). more reactive.
+; formaldehyde HCHO, acetaldehyde CH3CHO.
+; ketone:   >C=O (carbonyl in middle of chain). less reactive.
+; acetone (CH3)2CO. propanone.
+; 
+; reactions:
+; nucleophilic addition: Nu attacks C → addition product
+; oxidation: aldehyde → carboxylic acid (Tollens test, silver mirror)
+; reduction: C=O → C-OH (NaBH4, LiAlH4)
+; aldol condensation: two carbonyls → β-hydroxy carbonyl
+; Grignard: R-MgX + C=O → tertiary alcohol
+; 
+; metabolic importance: glucose is a polyhydroxy aldehyde.
+; pyruvate, acetyl-CoA — all carry carbonyl groups.
+; the Krebs cycle is fundamentally carbonyl chemistry.
+
+(kosha carbonyl
+  (vishesa organic-varga)
+  (sthita functional-group domain-chemistry domain-biology)
+  (swarupa carbonyl electrophilic polar-bond)
+  (yukta nucleophilic-addition oxidation reduction)
+  (drishthanta aldehyde ketone))

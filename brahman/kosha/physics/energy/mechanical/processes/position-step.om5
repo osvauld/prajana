@@ -1,0 +1,10 @@
+; position integration: x += v * dt
+
+(kosha position-step
+  (vishesa mechanical-energy-varga)
+  (swarupa tinanta bhave-prayoga float list)
+  (abheda gati integrator)
+  (sthita displacement velocity)
+  (phala displacement)
+  (kriya addition scalar-multiplication)
+  (janya map))

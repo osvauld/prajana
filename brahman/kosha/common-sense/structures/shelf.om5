@@ -1,0 +1,12 @@
+; a horizontal surface attached to a wall, at some height above the floor.
+; an elevated floor for objects. gravity still acts downward.
+; object on shelf: normal force from shelf = weight of object.
+; if the object slides off the shelf → falls under gravity → collision with floor.
+; potential energy = mgh where h is the shelf height above floor.
+; when the object falls: PE converts to KE → velocity at floor = √(2gh).
+
+(kosha shelf
+  (vishesa structures-varga common-sense-varga)
+  (swarupa horizontal elevated)
+  (yukta normal-force potential-energy height wall domain-3d)
+  (sthita gravity))

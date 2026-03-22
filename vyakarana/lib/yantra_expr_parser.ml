@@ -67,9 +67,76 @@ let parse_destructure_pattern (idx : int) (tokens : string list)
 
 let rec parse_expr (tokens : string list) : expr * string list =
   let (e, rest) = parse_expr_primary tokens in
-  match try_parse_infix e rest with
-  | Some (e', rest') -> (e', rest')
-  | None -> (e, rest)
+  (* check for pipe or infix *)
+  parse_pipe_or_infix e rest
+
+and parse_pipe_or_infix (lhs : expr) (tokens : string list) : expr * string list =
+  match tokens with
+  | "|" :: "where" :: rest ->
+    (* | where [pat] [and guard]* collect expr *)
+    let (pat_names, rest) = match rest with
+      | "[" :: rest' ->
+        let rec cp acc = function
+          | "]" :: r -> (List.rev acc, r)
+          | "," :: r -> cp acc r
+          | "_" :: r -> cp ("_" :: acc) r
+          | name :: r -> cp (name :: acc) r
+          | [] -> (List.rev acc, [])
+        in
+        cp [] rest'
+      | _ -> failwith "| where: expected '[' pattern"
+    in
+    let rec collect_guards acc = function
+      | "|" :: "and" :: rest | "and" :: rest ->
+        let (g, rest') = parse_expr_primary rest in
+        (* apply infix but NOT pipes to the guard *)
+        let (g, rest') = match try_parse_infix g rest' with
+          | Some (g', r) -> (g', r)
+          | None -> (g, rest')
+        in
+        collect_guards (g :: acc) rest'
+      | "|" :: "collect" :: rest | "collect" :: rest ->
+        (List.rev acc, rest)
+      | other -> ([], other)
+    in
+    let (guards, rest) = collect_guards [] rest in
+    let (collect_e, rest) = parse_expr_primary rest in
+    let from_e = From (lhs, pat_names, guards, collect_e) in
+    parse_pipe_or_infix from_e rest
+  | "|" :: "collect" :: rest ->
+    (* | collect expr  — shorthand, bind "_it" to whole item *)
+    let (collect_e, rest) = parse_expr_primary rest in
+    let from_e = From (lhs, ["_it"], [], collect_e) in
+    parse_pipe_or_infix from_e rest
+  | "|" :: "filter" :: rest ->
+    let (fn_e, rest) = parse_expr_primary rest in
+    let e = Call ("filter", [lhs; fn_e]) in
+    parse_pipe_or_infix e rest
+  | "|" :: "map" :: rest ->
+    let (fn_e, rest) = parse_expr_primary rest in
+    let e = Call ("map", [lhs; fn_e]) in
+    parse_pipe_or_infix e rest
+  | "|" :: "all" :: rest ->
+    let (fn_e, rest) = parse_expr_primary rest in
+    let e = Call ("list-all", [lhs; fn_e]) in
+    parse_pipe_or_infix e rest
+  | "|" :: "any" :: rest ->
+    let (fn_e, rest) = parse_expr_primary rest in
+    let e = Call ("list-any", [lhs; fn_e]) in
+    parse_pipe_or_infix e rest
+  | "|" :: "find" :: rest ->
+    let (fn_e, rest) = parse_expr_primary rest in
+    let e = Call ("list-find", [lhs; fn_e]) in
+    parse_pipe_or_infix e rest
+  | "|" :: "reduce" :: rest ->
+    let (init_e, rest) = parse_expr_primary rest in
+    let (fn_e, rest) = parse_expr_primary rest in
+    let e = Call ("reduce", [lhs; init_e; fn_e]) in
+    parse_pipe_or_infix e rest
+  | _ ->
+    match try_parse_infix lhs tokens with
+    | Some (e', rest') -> (e', rest')
+    | None -> (lhs, tokens)
 
 and parse_expr_primary (tokens : string list) : expr * string list =
   match tokens with
@@ -142,7 +209,7 @@ and parse_expr_primary (tokens : string list) : expr * string list =
        (* successive let without in: chain them *)
        let (body, rest'') = parse_expr rest' in
        (LetIn (name, rhs, body), rest'')
-     | [] | ")" :: _ | "]" :: _ -> (LetIn (name, rhs, Var name), rest')
+     | [] | ")" :: _ | "]" :: _ | "|" :: _ -> (LetIn (name, rhs, Var name), rest')
      | _ ->
        (* last let in a lambda body: parse remainder as the body *)
        let (body, rest'') = parse_expr rest' in
@@ -197,7 +264,7 @@ and parse_expr_primary (tokens : string list) : expr * string list =
         (* variable arity: collect args until boundary or closing paren *)
         let rec collect_var_args acc toks =
           match toks with
-          | [] | ")" :: _ -> (List.rev acc, toks)
+          | [] | ")" :: _ | "|" :: _ -> (List.rev acc, toks)
           | tok :: _ when Yantra_arity.is_boundary tok -> (List.rev acc, toks)
           | _ ->
             let (arg, toks') = parse_expr toks in
@@ -247,7 +314,7 @@ and parse_from (tokens : string list) : expr * string list =
 
 and parse_cond (branches : (expr * expr) list) (tokens : string list) : expr * string list =
   match tokens with
-  | [] | ")" :: _ | "]" :: _ ->
+  | [] | ")" :: _ | "]" :: _ | "|" :: _ ->
     (* end of enclosing expression — stop here, no default branch *)
     (Cond (List.rev branches, Var "_none"), tokens)
   | "otherwise" :: rest ->
@@ -268,7 +335,7 @@ and parse_cond (branches : (expr * expr) list) (tokens : string list) : expr * s
     else
       let (guard, rest') = parse_expr tokens in
       (match rest' with
-       | [] | ")" :: _ | "]" :: _ ->
+       | [] | ")" :: _ | "]" :: _ | "|" :: _ ->
          (* ran out before body — guard is the else value *)
          (Cond (List.rev branches, guard), rest')
        | tok :: _ when Yantra_arity.is_boundary tok ->

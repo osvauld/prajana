@@ -1,9 +1,0 @@
-bhasha prashna
-
-  -- question words: interrogatives that mark the query target.
-  -- used by classify-word.tantra to emit intent:solve-for token.
-
-  "avyaya-swarupa nipata-swarupa english-sthita"
-  "dhatu prashna-amsha-sthita"
-
-done

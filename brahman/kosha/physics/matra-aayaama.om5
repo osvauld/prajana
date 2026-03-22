@@ -1,0 +1,10 @@
+; matra-aayaama: SI dimension exponent vectors for all units.
+; each unit maps to [M, L, T, I, theta, N, J, scale].
+; the exponent vector IS the unit's identity.
+; kramanusara (d/dt) subtracts 1 from the T exponent.
+; the T exponent depth = kramanusara depth.
+
+(kosha matra-aayaama
+  (vishesa physics-varga)
+  (sthita matra yantra)
+  (yukta kramanusara aayaama))

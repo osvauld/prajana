@@ -1,0 +1,10 @@
+; total momentum = sum of all momenta in the system
+; for single-body: p_total = mv (same formula as momentum)
+; for multi-body:  p_total = m1v1 + m2v2 + ... (dvandva, Phase 4)
+
+(kosha total-momentum
+  (vishesa linear-motion-varga)
+  (abheda samskaara)
+  (sthita krama kshetrajna niyama samgraha)
+  (yukta kshetra mass velocity conservation)
+  (avastha total))

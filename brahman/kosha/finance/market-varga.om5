@@ -1,0 +1,9 @@
+; cluster for market quantities: equity, bond, currency, asset, liquidity.
+; markets are systems where assets are priced through supply and demand.
+; price is the emergent measure of collective valuation.
+; sangati roots
+
+(kosha market-varga
+  (vishesa finance-varga)
+  (swarupa subanta)
+  (yukta matra kaala sandhi avastha))

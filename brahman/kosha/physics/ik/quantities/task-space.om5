@@ -1,0 +1,11 @@
+; the workspace of the end-effector in sthira-apeksha (world frame)
+; the range of FK: every reachable end-effector position is a point in task-space
+; IK maps task-space targets back to joint-space configurations
+; for a planar arm: task-space is aayaama-dvaya (2D); for 3D: aayaama-traya
+
+(kosha task-space
+  (sthita domain-robotics sthira-apeksha)
+  (swarupa akasham bindu)
+  (phala kinematic-chain fk)
+  (ahara ik)
+  (drishthanta aayaama-dvaya aayaama-traya))

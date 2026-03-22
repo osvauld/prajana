@@ -1,0 +1,5 @@
+; if A and A→B, then B
+
+(mantra modus-ponens
+  (swarupa inference)
+  (janya implication))

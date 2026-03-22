@@ -1,0 +1,9 @@
+(kosha norm
+  (lakshana geometry-varga)
+  (swarupa matra float)
+  (kriya vector)
+  (phala scalar magnitude)
+  (abheda abs)
+  (yukta dot-product power)
+  (sthita real)
+  (siddha distance))

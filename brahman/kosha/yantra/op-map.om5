@@ -1,0 +1,11 @@
+; apply fn to each element, preserving structure.
+; map list (fn x -> ...)
+; 
+; this IS a morphism: it preserves the list structure
+; while transforming each element. f: A → B lifts to F(f): F(A) → F(B).
+; pure: no state, no accumulation, no filtering.
+
+(kosha op-map
+  (kriya op-class-higher-order)
+  (abheda morphism endomorphism)
+  (yukta structure))

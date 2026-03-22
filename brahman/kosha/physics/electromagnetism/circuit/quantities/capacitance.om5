@@ -1,0 +1,7 @@
+; charge stored per unit voltage: farads
+
+(kosha capacitance
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta coulomb volt charge voltage)
+  (abheda dharana))

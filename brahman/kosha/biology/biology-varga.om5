@@ -1,0 +1,11 @@
+; root cluster for all biology domain nodes.
+; biology is grounded in chemistry: all life processes are chemical reactions.
+; inherits chemistry-varga which in turn reaches physics and math.
+; domain identity
+; sangati roots
+
+(kosha biology-varga
+  (sthita domain-biology)
+  (vishesa chemistry-varga)
+  (swarupa subanta)
+  (yukta spanda sva-dharana kramanusara avastha))

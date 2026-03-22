@@ -1,0 +1,9 @@
+; branch of math studying relations between angles and ratios of sides
+; sine, cosine, tangent and their inverses
+; connects kona (angle) to ratio (number)
+
+(kosha trigonometry-varga
+  (vishesa number-varga geometry-varga)
+  (yukta kona)
+  (abheda ratio wave)
+  (swarupa unit-circle))

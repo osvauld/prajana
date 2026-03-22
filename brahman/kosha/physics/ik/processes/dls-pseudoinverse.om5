@@ -1,0 +1,16 @@
+; damped least-squares inverse of the Jacobian
+; solves: delta-theta = J^T (J J^T + lambda I)^{-1} * error
+; minimum-norm solution for the underdetermined system J * delta-theta = error
+; lambda (seema) damps the inverse near singularities, preventing blow-up
+; iterative: krama of Newton-Raphson steps converges to the IK solution
+; sangati roots: viparita (inversion), seema (lambda = damping threshold),
+; krama (iterative steps), viveka (choosing minimum norm)
+
+(kosha dls-pseudoinverse
+  (swarupa tinanta bhave-prayoga viparita)
+  (sthita domain-robotics)
+  (siddha krama viveka ik)
+  (yukta seema norm-seema)
+  (nirodha singularity)
+  (viparita jacobian)
+  (phala minimum-norm joint-space))

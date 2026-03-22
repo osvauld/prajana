@@ -201,7 +201,6 @@ def test_total_momentum_resolves(vy):
 # ── gate: colour_classifier ───────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="colour classifiers not treated as entity discriminators")
 def test_red_blue_distinct(vy):
     g = vy.bqg("a box has 5 red balls and 3 blue balls")
     sankhya = [
@@ -213,7 +212,6 @@ def test_red_blue_distinct(vy):
     assert len(set(subjects)) >= 2
 
 
-@xfail(strict=True, reason="colour classifiers — full pipeline addition")
 def test_red_blue_addition(vy):
     r = vy.answer("a box has 5 red balls and 3 blue balls. how many balls")
     assert "8" in r
@@ -305,10 +303,6 @@ def test_count_three_sentence_chain(vy):
     assert "9" in r
 
 
-@xfail(
-    strict=True,
-    reason="sentence_scope: multi-clause viveka — which entity has more after arithmetic",
-)
 def test_viveka_after_count(vy):
     """box-A starts with 5 and gains 3 → 8. box-B has 6. which has more → box-A."""
     r = vy.answer(
@@ -443,7 +437,6 @@ def test_multiplication_people(vy):
 # count then viveka comparison
 
 
-@xfail(strict=True, reason="count_compare: compare two entity counts")
 def test_count_compare_jars(vy):
     """jar-A=8, jar-B=12 → jar-B has more."""
     r = vy.answer(
@@ -452,7 +445,6 @@ def test_count_compare_jars(vy):
     assert "jar-B" in r or "jar-b" in r.lower()
 
 
-@xfail(strict=True, reason="count_compare: count then compare after arithmetic")
 def test_count_compare_after_change(vy):
     """box-A: 5+3=8, box-B: 6 → box-A has more."""
     r = vy.answer(

@@ -1,0 +1,9 @@
+; cluster for molecular structure: molecule, chemical bonds, covalent, ionic, hydrogen bonds.
+; molecules form when atoms share or transfer electrons — sandhi at chemical scale.
+; molecular geometry determines chemical properties.
+; sangati roots
+
+(kosha molecular-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta sandhi)
+  (yukta mula-shakti spanda avastha niyama))

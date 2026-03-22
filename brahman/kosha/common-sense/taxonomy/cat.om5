@@ -1,0 +1,9 @@
+; cat IS-A mammal. the swarupa edge is the IS-A relation.
+; boot pass sees mammal-swarupa on cat → mammal-varga exists → emits [cat, varga, mammal-varga]
+; anumana-viveka walks: cat → varga → mammal-varga → yukta:[heart, warm-blooded]
+; → varga → animal-varga → yukta:[sensing, moving]
+; → varga → living-varga → yukta:[breathing, growing]
+
+(kosha cat
+  (swarupa mammal)
+  (sthita taxonomy-varga))

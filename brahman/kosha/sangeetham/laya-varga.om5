@@ -1,0 +1,9 @@
+; cluster for laya (rhythm) concepts: laya, vriddhi-laya, kshaya-laya, thaalam.
+; laya is time structured into repeating cycles — kaala made musical.
+; vriddhi (increase) and kshaya (decrease) are the two directions of tempo change.
+; sangati roots
+
+(kosha laya-varga
+  (vishesa sangeetham-varga)
+  (swarupa subanta kaala)
+  (yukta avrti spanda krama seema))

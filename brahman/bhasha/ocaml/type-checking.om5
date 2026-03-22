@@ -1,0 +1,5 @@
+(bhasha type-checking
+  (siddha pramana type-inference niyama viveka)
+  (sthita type-system domain-ocaml domain-language)
+  (yukta pattern-matching)
+  (phala correctness-check krama-pramana))

@@ -1,0 +1,19 @@
+; the stateful scan pattern: reduce over input with epistemic state.
+; reduce graph [state...] (fn state triple -> new-state)
+; each input element advances the automaton.
+; the state IS the epistemic position: what has been seen, what is active.
+; 
+; used in 12 tantras: viveka-ganana, extract-solve-for, sandhi-kosha,
+; sandhi-avastha, emit-triples, count-chain, grade-sparsha, and more.
+; 
+; this is the ONLY stateful pattern. all other patterns are pure.
+; a tantra has at most one scan — it is always the outermost structure.
+
+(kosha scan-accumulate
+  (vishesa computation-varga)
+  (swarupa transducer)
+  (abheda op-reduce morphism)
+  (yukta fold map)
+  (janya sequence)
+  (phala state)
+  (sthita domain-computation))

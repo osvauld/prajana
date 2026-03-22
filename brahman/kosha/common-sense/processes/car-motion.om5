@@ -1,0 +1,23 @@
+; the energy conversion chain of a car.
+; chemical bonds (fuel) → heat (combustion) → mechanical rotation (engine)
+; → linear KE (tyre friction) → heat (brake friction) → rest.
+; 
+; driving: tyre static friction is the force that moves the car forward.
+; engine torque → wheel rotation → contact patch pushes backward on road
+; → Newton 3: road pushes forward on car = driving force.
+; no friction = no motion. a car on ice cannot accelerate.
+; 
+; braking: brake pad kinetic friction converts KE → heat.
+; Q = ½mv² (all KE) if braking to rest.
+; ABS keeps friction static (higher μ) → shorter stopping distance.
+; 
+; janya: fuel (hydrocarbon), mass, velocity, friction-coefficient.
+; phala: velocity-change (acceleration or deceleration), heat.
+; energy chain nodes
+; governing laws
+; materials
+
+(kosha car-motion
+  (vishesa common-sense-varga processes-varga)
+  (swarupa tinanta bhave-prayoga)
+  (yukta combustion mechanical-energy-varga kinetic-energy friction-force heat-transfer first-law second-law newton-second-law-motion hydrocarbon rubber steel))

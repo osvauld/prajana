@@ -1,0 +1,12 @@
+; root cluster for all music/sangeetham domain nodes.
+; sangeetham is grounded in physics (spanda, taranga) and math (frequency ratios).
+; shruti intervals are frequency ratios — pure mathematics expressed as sound.
+; naada-brahma: sound IS the fundamental vibration of existence.
+; domain identity
+; sangati roots
+
+(kosha sangeetham-varga
+  (sthita domain-sangeetham)
+  (vishesa physics-varga math-varga)
+  (swarupa subanta)
+  (yukta spanda taranga naada kaala matra))

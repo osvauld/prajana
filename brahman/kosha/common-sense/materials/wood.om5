@@ -1,0 +1,23 @@
+; natural composite: cellulose fibres (polymer) in lignin matrix.
+; cellulose: (C6H10O5)n — linear glucose polymer. strong fibres.
+; lignin: cross-linked aromatic polymer. binds cellulose, waterproofs.
+; anisotropic: properties differ along and across the grain.
+; strong along grain (fibres parallel to load).
+; splits easily across grain (fibres separate).
+; 
+; properties:
+; solid at room temperature
+; thermal insulator (k ≈ 0.13 W/mK — air trapped in cells)
+; coefficient of restitution: ~0.3-0.5 depending on species/hardness
+; flammable: cellulose combustion at ~300°C ignition temperature
+; biodegradable: enzymes (cellulase, lignase) break it down
+; hygroscopic: absorbs moisture, swells and contracts
+; 
+; hardwoods (oak, teak, walnut) vs softwoods (pine, cedar, balsa).
+; hardness range: balsa 0.1 Mohs equivalent, ebony 9.
+
+(kosha wood
+  (vishesa common-sense-varga materials-varga organic-varga composites-varga)
+  (swarupa polymer insulator flammable)
+  (yukta cellulose lignin domain-3d pbr)
+  (sthita solid))

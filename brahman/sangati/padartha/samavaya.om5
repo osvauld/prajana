@@ -1,0 +1,10 @@
+; samavaya: inherence — the eternal, inseparable relation between
+; a substance and its qualities, a whole and its parts, a universal and its instances.
+; "mass inheres in ball" — the relation itself is samavaya.
+; the graph edge IS samavaya — the typed relation between nodes.
+
+(sangati samavaya
+  (amsha padartha)
+  (swarupa sambandha)
+  (sthita ananta)
+  (siddha svayambhu))

@@ -1,0 +1,9 @@
+; lerp(a, b, t) = a + t·(b-a): linear interpolation
+; t=0 → a, t=1 → b, t=0.5 → midpoint
+
+(mantra lerp
+  (karma geometry-varga)
+  (vishesa interpolation-varga)
+  (drishthanta slerp)
+  (swarupa linear)
+  (krama subtraction multiplication addition))

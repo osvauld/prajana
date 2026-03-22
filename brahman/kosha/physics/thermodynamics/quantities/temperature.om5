@@ -1,0 +1,8 @@
+; measure of average kinetic energy of particles
+
+(kosha temperature
+  (vishesa thermodynamics-varga)
+  (swarupa subanta matra float scalar)
+  (abheda energy spanda)
+  (yukta entropy)
+  (sthita absolute-zero))

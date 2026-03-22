@@ -1,0 +1,6 @@
+; cluster for graph theory nodes.
+; graph theory sits at the intersection of structure, order, and connection.
+
+(kosha graph-varga
+  (vishesa math-varga)
+  (yukta shakha sambandha krama))

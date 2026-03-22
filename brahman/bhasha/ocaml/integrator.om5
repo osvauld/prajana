@@ -1,0 +1,7 @@
+(bhasha integrator
+  (abheda avrti)
+  (kriya state-update)
+  (phala displacement)
+  (yukta velocity acceleration)
+  (siddha execution)
+  (sthita domain-ocaml domain-language))

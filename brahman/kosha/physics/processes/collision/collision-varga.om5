@@ -1,0 +1,43 @@
+; cluster for all collision interactions between bodies.
+; collision is the primary interaction pattern of the real world:
+; two bodies meet, exchange momentum, and separate (or stick).
+; 
+; what is always conserved: momentum (samvega). always. no exception.
+; p_total_before = p_total_after  (in a closed system)
+; this is the first niyama of collision — it does not depend on elasticity.
+; 
+; what depends on elasticity: kinetic energy.
+; e = 1  perfectly elastic    — KE conserved, bodies separate at full speed
+; e = 0  perfectly inelastic  — KE maximally lost, bodies stick and move together
+; 0<e<1  partially elastic    — KE partially lost, coefficient of restitution e
+; 
+; the coefficient of restitution (e) is the ratio of relative separation speed
+; to relative approach speed:
+; e = (v2_after - v1_after) / (v1_before - v2_before)
+; this single number spans the entire spectrum of real-world collisions.
+; a rubber ball on concrete: e ≈ 0.8. clay on clay: e ≈ 0. billiard balls: e ≈ 0.95.
+; 
+; the interaction structure: dvaya (two-body). same as gravitational force
+; and coulomb — two participants, one event. particle-a-sthita and
+; particle-b-sthita are the required slots. the event cannot be described
+; from one body's perspective alone — both must be held simultaneously.
+; this is mithuna: the resonance of two that produces a third (the exchange).
+; 
+; processes declared here:
+; elastic-collision    — e=1, both KE and momentum conserved
+; inelastic-collision  — e=0, momentum conserved, bodies merge
+; partial-collision    — 0<e<1, general case via coefficient of restitution
+; the conserved quantity: momentum is always the witness
+; two-body structure: mithuna
+; elasticity spectrum
+; sangati roots
+
+(kosha collision-varga
+  (vishesa physics-varga dynamics-varga)
+  (yukta momentum conservation dvaya kinetic-energy coefficient-of-restitution)
+  (sthita samvega niyama particle-a particle-b)
+  (swarupa aneka-eka)
+  (abheda mithuna)
+  (kriya sparsha)
+  (janya samvega)
+  (phala vivartana))

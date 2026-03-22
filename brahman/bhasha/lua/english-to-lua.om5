@@ -1,0 +1,6 @@
+(bhasha english-to-lua
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita english domain-lua domain-language)
+  (phala lua)
+  (yukta lua-setu correctness-check))

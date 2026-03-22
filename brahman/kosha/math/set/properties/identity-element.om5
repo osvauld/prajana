@@ -1,0 +1,11 @@
+; the general concept: an element that leaves others unchanged under an operation.
+; splits into additive-identity (0) and multiplicative-identity (1).
+
+(kosha identity-element
+  (lakshana set-varga algebra-varga)
+  (sthita group monoid ring)
+  (siddha closure)
+  (yukta inverse-element sama)
+  (swarupa additive-identity multiplicative-identity)
+  (janya identity-matrix)
+  (drishthanta addition multiplication))

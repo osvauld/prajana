@@ -1,0 +1,5 @@
+(kosha shortest-path
+  (karma graph-varga)
+  (swarupa graph-walk)
+  (sthita weighted-graph)
+  (yukta seema))

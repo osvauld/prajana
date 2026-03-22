@@ -1,0 +1,7 @@
+(mantra gravitational-force-mantra
+  (vishesa linear-force-varga)
+  (varga physics-mantra)
+  (swarupa gravitational-force)
+  (phala gravitational-force)
+  (janya gravitational-constant mass1 mass2 radius)
+  (krama div ( mul gravitational-constant ( mul mass1 mass2 ) ) ( square radius )))

@@ -1,0 +1,28 @@
+; a link is the rigid body between two joints in a kinematic chain
+; it carries no DOF itself — all motion happens at the joints
+; 
+; 3D perspective:
+; the link IS a bone in the scene-graph — rigid segment with fixed rest-length
+; its local coordinate frame is defined by its proximal joint
+; its world-space pose is fully determined by all ancestor joint angles
+; (this is the chala-apeksha chain: each ancestor's frame moves it)
+; 
+; physics perspective:
+; a rigid body with mass, length, and inertia tensor
+; for a uniform rod: I = (1/3)·m·L² about the proximal end
+; the mass distribution determines how much torque is needed to accelerate it
+; its velocity in world-space depends on ALL ancestor joint velocities
+; (chala-apeksha: the transport theorem applies at every level)
+; 
+; in the scene: links are ordered by krama sequence — link[0] is base, link[n] is tip
+; the end-effector bindu is the distal end of link[n] in world-space
+; physical properties
+; frame structure: link lives in its proximal joint's chala-apeksha
+; its world pose is phala of all ancestor joint transforms
+; ordering in the chain
+
+(kosha link
+  (sthita domain-robotics chala-apeksha parampara krama)
+  (yukta kinematic-chain mass link-length moment-of-inertia inertia-tensor krama-janya)
+  (abheda bone rekha)
+  (phala world-space))

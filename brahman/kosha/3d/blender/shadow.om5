@@ -1,0 +1,6 @@
+(kosha shadow
+  (sthita domain-3d mesh)
+  (janya light)
+  (swarupa occlusion)
+  (yukta depth normal)
+  (abheda maya))

@@ -1,0 +1,20 @@
+; force per unit area inside a material. σ = F/A. unit: pascal (Pa).
+; the internal force that a material develops to resist external load.
+; three types:
+; normal stress: force perpendicular to cross-section (compression or tension).
+; shear stress: force parallel to cross-section (sliding).
+; bearing stress: stress at a contact point.
+; 
+; the fundamental civil engineering quantity.
+; a bridge must not be stressed beyond its yield strength.
+; design: σ_working = σ_ultimate / safety_factor.
+; 
+; stress and pressure are dimensionally identical (Pa = N/m²).
+; difference: pressure is isotropic (same in all directions) — fluid.
+; stress is directional — solid material.
+
+(kosha stress
+  (vishesa civil-varga engineering-varga)
+  (swarupa subanta)
+  (yukta force area strain young-modulus yield-strength safety-factor)
+  (abheda pressure))

@@ -110,8 +110,11 @@ def parse_sexp(path):
 
     lines = source.split("\n")
 
+    # strip leading comments (-- or ;) before matching the tantra header
+    stripped_source = re.sub(r'(?m)^\s*(?:--|;).*\n', '', source)
+
     # extract (tantra name (params...) body...)
-    m = re.match(r'\(\s*tantra\s+([a-z][a-z0-9-]*)\s*\(([^)]*)\)', source)
+    m = re.match(r'\(\s*tantra\s+([a-z][a-z0-9-]*)\s*\(([^)]*)\)', stripped_source)
     if not m:
         return None
     name = m.group(1)
@@ -123,11 +126,13 @@ def parse_sexp(path):
         stripped = line.strip()
         if stripped.startswith("--"):
             comments.append(stripped[2:].strip())
+        elif stripped.startswith(";"):
+            comments.append(stripped[1:].strip())
 
     # extract bindings: (name expr...) at top level inside the tantra body
     # simplified: find all (identifier ...) forms after the params
     body_start = m.end()
-    body_text = source[body_start:]
+    body_text = stripped_source[body_start:]
     bindings = []
     for bm in re.finditer(r'\(([a-z][a-z0-9-]*)\s+', body_text):
         bname = bm.group(1)

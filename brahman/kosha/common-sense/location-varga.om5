@@ -1,0 +1,18 @@
+; where things are. the spatial grammar of everyday knowing.
+; not coordinates — pointing. "north of", "inside", "near", "above".
+; location is always relative to something else — a reference entity.
+; "delhi is in india" — india is the reference. "the book is on the table"
+; — the table is the reference. the reference is always named or implied.
+; 
+; location-varga in the formal domain: position in sthira-apeksha.
+; the apeksha (reference frame) is just named explicitly in everyday language
+; rather than assumed to be the global inertial frame.
+; "north of delhi" = displacement from delhi in the north direction.
+; the common-sense pointing and the physics formalisation are the same
+; structure — the everyday version just names the reference body, not the axis.
+; connections to formal domain
+
+(kosha location-varga
+  (vishesa common-sense-varga)
+  (yukta physics apeksha direction sthira-apeksha)
+  (abheda displacement))

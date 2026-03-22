@@ -1,0 +1,14 @@
+; Cu. proton-29. period 4, transition metal. valence: 1 or 2.
+; excellent electrical and thermal conductor — used in wiring, heat exchangers.
+; antimicrobial: bacteria cannot survive on copper surfaces (oligodynamic effect).
+; Cu²⁺ in enzymes: cytochrome c oxidase (respiration), tyrosinase (melanin).
+; alloys: brass (Cu+Zn), bronze (Cu+Sn) — the Bronze Age material.
+; blue-green patina: Cu + O2 + CO2 + H2O → Cu2(OH)2CO3 (malachite).
+; second only to gold in electrical conductivity among common metals.
+
+(kosha copper
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-twenty-nine transition-metal conductor antimicrobial)
+  (yukta valence-two alloy)
+  (janya nuclear-fusion)
+  (abheda brass bronze))

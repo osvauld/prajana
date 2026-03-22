@@ -1,0 +1,13 @@
+; guna: quality — that which inheres in substance (dravya) and has no further qualities.
+; 24 gunas in Vaisheshika: rupa (colour), rasa (taste), gandha (smell), sparsha (touch),
+; sankhya (number), parimana (size), prthaktva (individuality), samyoga (conjunction),
+; vibhaga (disjunction), paratva (remoteness), aparatva (proximity), buddhi (cognition),
+; sukha (pleasure), duhkha (pain), iccha (desire), dvesha (aversion), prayatna (effort), ...
+; "mass", "velocity", "temperature" — each is a guna of a dravya in physics.
+
+(sangati guna
+  (amsha padartha)
+  (sthita dravya)
+  (yukta samavaya)
+  (siddha pratyaksha)
+  (pratipaksha karma))

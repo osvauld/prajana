@@ -1,0 +1,7 @@
+; charge flow per unit time: coulombs per second
+
+(kosha current
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta ampere coulomb second voltage resistance electron charge)
+  (abheda pravaha))

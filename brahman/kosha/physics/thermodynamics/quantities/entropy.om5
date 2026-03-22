@@ -1,0 +1,21 @@
+; S = k·ln(W): entropy arises from the count of microstates (vrnda-sankhya)
+; more microstates → more disorder → higher entropy
+; entropy IS inverse compression: maximum entropy = minimum compressibility
+; a maximally compressed string has zero entropy (one arrangement)
+; a random string has maximum entropy (all arrangements equally likely)
+; the thermodynamic kramanusara: dS/dT — entropy change wrt temperature
+; apeksha is ushna (temperature), NOT thaalam (time)
+; Clausius: dS = dQ/T at constant temperature
+; entropy's definition S = k·ln(W) is atemporal: kaala is not in the formula
+; kaala gives the DIRECTION of entropy change (second law: dS/dt ≥ 0)
+; but entropy itself does not have kaala as apeksha — see thermodynamics-varga
+
+(kosha entropy
+  (vishesa thermodynamics-varga)
+  (swarupa subanta irreversibility kaala-rahita)
+  (abheda disorder)
+  (sthita kshaya)
+  (siddha second-law)
+  (janya vrnda-sankhya)
+  (pratipaksha sankshepa)
+  (kramanusara ushna-apeksha))

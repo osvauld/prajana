@@ -1,0 +1,27 @@
+; fuel + oxygen → carbon dioxide + water + heat.
+; the most common exothermic reaction in everyday life.
+; complete combustion: CxHy + O2 → CO2 + H2O (all carbon fully oxidised)
+; incomplete combustion: insufficient O2 → CO (carbon monoxide) + soot (C).
+; 
+; methane:  CH4 + 2O2 → CO2 + 2H2O       ΔH = -890 kJ/mol
+; ethanol:  C2H5OH + 3O2 → 2CO2 + 3H2O   ΔH = -1367 kJ/mol
+; glucose:  C6H12O6 + 6O2 → 6CO2 + 6H2O  ΔH = -2803 kJ/mol
+; octane:   2C8H18 + 25O2 → 16CO2 + 18H2O
+; 
+; activation energy: combustion needs ignition (spark, flame).
+; once started, exothermic: the heat produced ignites more fuel → chain reaction.
+; 
+; biological relevance: cellular respiration is slow combustion.
+; C6H12O6 + 6O2 → 6CO2 + 6H2O + ATP (same equation, different path, no flame).
+; the energy is captured as ATP rather than released as heat.
+; 
+; combustion IS oxidation of carbon from C to C⁴⁺ (in CO2).
+; the carbon oxidation state goes from 0 (in alkane) to +4 (in CO2).
+
+(kosha combustion
+  (vishesa chemistry-varga)
+  (swarupa reaction oxidation tinanta bhave-prayoga exothermic)
+  (yukta oxygen hydrocarbon fuel)
+  (phala carbon-dioxide water heat)
+  (abheda respiration)
+  (sthita domain-chemistry domain-biology))

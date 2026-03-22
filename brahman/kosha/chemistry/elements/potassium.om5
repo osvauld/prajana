@@ -1,0 +1,12 @@
+; K. proton-19. period 4, group 1 alkali metal. valence: 1.
+; K⁺ ion: primary intracellular cation. sodium-potassium pump drives nerve impulse.
+; essential for heart muscle rhythm. plant nutrition (K, N, P are the three).
+; reacts vigorously with water (more so than sodium).
+; radioactive isotope K-40: naturally occurring, used in potassium-argon dating.
+
+(kosha potassium
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-nineteen alkali-metal)
+  (yukta valence-one water nerve-impulse heart plant)
+  (janya nuclear-fusion)
+  (siddha ionic-bond))

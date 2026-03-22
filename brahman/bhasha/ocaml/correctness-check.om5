@@ -1,0 +1,5 @@
+(bhasha correctness-check
+  (abheda pramana)
+  (siddha type-checking)
+  (sthita type-system domain-ocaml domain-language)
+  (yukta type-inference))

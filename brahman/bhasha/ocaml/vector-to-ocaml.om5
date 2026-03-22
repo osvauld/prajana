@@ -1,0 +1,7 @@
+(bhasha vector-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita vector domain-ocaml domain-language)
+  (yukta dot-product execution)
+  (phala scalar ocaml)
+  (siddha correctness-check))

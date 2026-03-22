@@ -1,0 +1,7 @@
+(bhasha arithmetic-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita expression arithmetic domain-ocaml domain-language)
+  (yukta plus minus times division execution)
+  (phala ocaml)
+  (siddha correctness-check))

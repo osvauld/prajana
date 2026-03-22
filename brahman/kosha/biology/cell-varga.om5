@@ -1,0 +1,9 @@
+; cluster for cell biology: cell, mitochondria, ribosome, metabolism, ATP.
+; the cell is the fundamental unit of life — eka-kosha (single compartment).
+; metabolism is the continuous chain of chemical reactions that sustains life.
+; sangati roots
+
+(kosha cell-varga
+  (vishesa biology-varga)
+  (swarupa subanta spanda)
+  (yukta sva-dharana seema avastha kaala))

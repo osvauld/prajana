@@ -1,0 +1,8 @@
+; root cluster for all physics domain nodes.
+; all physics leaves inherit domain identity through this node via vishesa walk.
+; physics-varga points UP to sangati; sangati nodes do not point down to physics.
+; sangati roots: physics is grounded in motion, force, measure, and law
+
+(kosha physics-varga
+  (vishesa math-varga)
+  (yukta gati matra niyama kaala mula-shakti sambandha prasarana))

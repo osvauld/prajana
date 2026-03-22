@@ -1,0 +1,9 @@
+; cluster for risk quantities: credit, default-risk, systemic-risk, contagion.
+; risk is the probability of an adverse state transition.
+; systemic risk is contagion — one failure propagating through the network.
+; sangati roots
+
+(kosha risk-varga
+  (vishesa finance-varga)
+  (swarupa subanta)
+  (yukta seema avastha sandhi kaala niyama))

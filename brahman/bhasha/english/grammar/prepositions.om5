@@ -1,0 +1,7 @@
+; prepositions: relational words connecting nouns in formula bodies.
+; used by compose-formula-body.tantra to link quantity roles.
+
+(bhasha preposition
+  (swarupa avyaya nipata)
+  (sthita english sambandha)
+  (yukta dhatu))

@@ -1,0 +1,11 @@
+; cluster for rotational force quantities: torque and rotational inertia.
+; torque causes angular acceleration (τ = Iα) — the rotational analogue of F = ma.
+; moment-of-inertia is the rotational analogue of mass: resistance to angular acceleration.
+; units: torque in newton-metres (N⋅m = kg⋅m²⋅s⁻²); MOI in kg⋅m²
+; sangati roots
+
+(kosha rotational-force-varga
+  (vishesa dynamics-varga)
+  (swarupa subanta)
+  (matra newton kilogram metre second)
+  (yukta mula-shakti kona gati niyama))

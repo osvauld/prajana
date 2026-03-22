@@ -1,0 +1,4 @@
+(kosha mesh
+  (sthita domain-3d vrnda-ganita transform world-space)
+  (yukta vertex face edge normal uv topology)
+  (siddha manifold))

@@ -1,0 +1,8 @@
+; del(rho)/del(t) + div(rho*v) = 0: mass conservation
+
+(kosha continuity
+  (vishesa fluid-varga)
+  (yukta mass-density velocity divergence)
+  (swarupa conservation)
+  (abheda first-law)
+  (sthita navier-stokes))

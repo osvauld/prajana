@@ -1,0 +1,9 @@
+; the denominator variable of a derivative — with-respect-to
+; sthira-apeksha: fixed reference (time, world-frame)
+; chala-apeksha: moving reference (joint frames in kinematic chain)
+
+(sangati apeksha
+  (yukta viveka sankhya sambandha)
+  (sthita kramanusara)
+  (janya matra)
+  (abheda sthira-apeksha chala-apeksha))

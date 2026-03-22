@@ -1,0 +1,16 @@
+; general fold / catamorphism: carry accumulator through every element.
+; reduce list init (fn acc x -> ...)
+; 
+; requires monoid structure on the accumulator:
+; closure (result stays in same type)
+; associativity (grouping doesn't matter)
+; identity (init is the neutral element)
+; the init argument IS the identity element of the monoid.
+
+(kosha op-reduce
+  (kriya op-class-higher-order)
+  (swarupa krama)
+  (abheda parampara fold scan-accumulate transducer)
+  (sthita monoid)
+  (yukta convergence)
+  (siddha associativity closure))

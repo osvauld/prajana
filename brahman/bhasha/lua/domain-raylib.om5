@@ -1,0 +1,4 @@
+(bhasha domain-raylib
+  (yukta raylib render input window camera draw update audio upakarana)
+  (sthita domain-lua domain-language)
+  (siddha yantra))

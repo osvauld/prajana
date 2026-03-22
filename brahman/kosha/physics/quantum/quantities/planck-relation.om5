@@ -1,0 +1,8 @@
+; E = hf: energy of a quantum is proportional to frequency
+
+(kosha planck-relation
+  (vishesa quantum-varga)
+  (siddha spanda quantum)
+  (sthita energy)
+  (yukta planck-constant frequency mula-shakti)
+  (phala energy))

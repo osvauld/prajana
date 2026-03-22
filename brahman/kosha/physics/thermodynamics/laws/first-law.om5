@@ -1,0 +1,7 @@
+; energy conservation: dU = dQ - dW
+
+(kosha first-law
+  (vishesa thermodynamics-varga)
+  (abheda purna)
+  (sthita niyama kshetra energy)
+  (rahita vivartana))

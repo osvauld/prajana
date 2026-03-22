@@ -1,0 +1,7 @@
+(bhasha lua-scope
+  (swarupa scope)
+  (sthita domain-lua)
+  (yukta lua lua-setu block-emission-order)
+  (kriya local-declaration)
+  (siddha declaration-before-use no-hoisting definer-precedes-caller)
+  (phala sequential-file-scope))

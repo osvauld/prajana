@@ -1,0 +1,10 @@
+; velocity integration: v += a * dt
+
+(kosha velocity-step
+  (vishesa mechanical-energy-varga)
+  (swarupa tinanta bhave-prayoga float list)
+  (abheda vega gati)
+  (sthita velocity acceleration)
+  (phala velocity)
+  (kriya addition scalar-multiplication)
+  (janya map))

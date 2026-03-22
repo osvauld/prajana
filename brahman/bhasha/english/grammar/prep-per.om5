@@ -1,0 +1,5 @@
+; rate/unit: "meters PER second", "joules PER kilogram"
+
+(bhasha prep-per
+  (swarupa preposition)
+  (sthita matra))

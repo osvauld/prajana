@@ -1,0 +1,7 @@
+; maps operator symbols to their tantra (computation) names
+
+(kosha chihna-ganaka
+  (swarupa chihna)
+  (sthita domain-cs language)
+  (kriya ganaka)
+  (yukta expression))

@@ -1,0 +1,8 @@
+; std-dev = sqrt(variance)
+
+(mantra std-dev
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (yukta variance)
+  (swarupa spread)
+  (krama variance square-root))

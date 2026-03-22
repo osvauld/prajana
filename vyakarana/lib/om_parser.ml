@@ -289,6 +289,7 @@ let parse_file (known_names : string list) (path : string) : nigamana option =
         edges;
         satya  = 0.0;  (* will be computed by satya-ganana *)
         shabda = !shabda_val;
+        krama  = "";
       }
   with _ -> None
 
@@ -323,22 +324,41 @@ let load_dir ?(emit_meta = true) dir (k : proof_graph) : proof_graph * int * int
    pass 2:   parse all files with the combined vocabulary + dynamic dims
    satya-ganana runs once on the unified graph *)
 let load_dirs ?(emit_meta = true) (dirs : string list) (k : proof_graph) : proof_graph * int * int =
-  (* pass 1: collect names from all directories *)
+  (* pass 1: collect names from all directories (.om + .om5) *)
   let known_names = List.concat_map collect_names dirs in
+  let om5_names = List.concat_map Om5_parser.collect_names dirs in
+  let known_names = known_names @ om5_names in
   (* pass 1.5: discover dynamic dimensions from the visheshanam-ring node *)
   let all_files = List.concat_map om_files_recursive dirs in
   let dyn_dims = collect_dynamic_dims_from_ring all_files known_names in
-  register_dynamic_dims dyn_dims;
-  (* pass 2: parse all files from all directories *)
+  let om5_dyn_dims = Om5_parser.collect_dynamic_dims_from_ring dirs known_names in
+  register_dynamic_dims (dyn_dims @ om5_dyn_dims);
+  (* pass 2: parse .om files from all directories *)
   let loaded = ref 0 in
   let skipped = ref 0 in
   let k_ref = ref k in
+  (* track om5 names so they supersede .om nodes *)
+  let om5_node_names = Hashtbl.create 64 in
+  (* load .om5 files first — they take priority *)
+  let all_om5_files = List.concat_map Om5_parser.om5_files_recursive dirs in
+  List.iter (fun path ->
+    match Om5_parser.parse_file path with
+    | Some n ->
+      Hashtbl.replace om5_node_names n.name true;
+      k_ref := join !k_ref n;
+      incr loaded
+    | None ->
+      incr skipped
+  ) all_om5_files;
+  (* load .om files — skip if om5 already loaded same name *)
   let all_files = List.concat_map om_files_recursive dirs in
   List.iter (fun path ->
     match parse_file known_names path with
     | Some n ->
-      k_ref := join !k_ref n;
-      incr loaded
+      if not (Hashtbl.mem om5_node_names n.name) then begin
+        k_ref := join !k_ref n;
+        incr loaded
+      end
     | None ->
       incr skipped
   ) all_files;

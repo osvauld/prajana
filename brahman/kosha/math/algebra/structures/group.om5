@@ -1,0 +1,5 @@
+(kosha group
+  (vishesa algebra-varga)
+  (swarupa set dharma-anvaya)
+  (yukta closure identity-element inverse-element associativity shakha commutativity)
+  (janya quotient kernel))

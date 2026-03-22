@@ -1,0 +1,7 @@
+(kosha bond
+  (vishesa physics-varga)
+  (swarupa sambandha)
+  (sthita particle-a particle-b rest-length stiffness damping-coefficient)
+  (yukta spring-force damped-oscillation tension-force)
+  (kriya hooke damper)
+  (phala direction force equilibrium))

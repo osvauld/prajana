@@ -1,0 +1,8 @@
+; branch of math studying collection, analysis, and interpretation of data
+; mean, variance, standard deviation, distributions
+
+(kosha statistics-varga
+  (vishesa number-varga)
+  (yukta data)
+  (abheda distribution)
+  (swarupa central-tendency spread))

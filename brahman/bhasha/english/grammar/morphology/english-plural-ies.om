@@ -1,9 +1,0 @@
-bhasha english-plural-ies
-
-  "english-sthita"
-  "vachana-bahu-sthita"
-
-  -- strip -ies, add -y to recover stem
-  -- velocity → velocities, frequency → frequencies, density → densities
-
-done

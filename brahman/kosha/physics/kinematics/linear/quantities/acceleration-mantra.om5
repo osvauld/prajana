@@ -1,0 +1,7 @@
+(mantra acceleration-mantra
+  (vishesa linear-motion-varga)
+  (varga physics-mantra)
+  (swarupa acceleration)
+  (phala acceleration)
+  (janya final-velocity initial-velocity time)
+  (krama div ( sub final-velocity initial-velocity ) time))

@@ -1,0 +1,10 @@
+; grammatical tense values — kaala IS tense; these are its forms in language
+; "vartamana kaalam", "bhoota kaalam", "bhavisyat kaalam" (Malayalam grammar)
+
+(sangati kaala
+  (swarupa brahma)
+  (kriya spanda)
+  (yukta karma kshetrajna)
+  (sthita om kshetra)
+  (poorva prakaasha)
+  (janaka thaalam vartamana-kaala bhuta-kaala bhavishya-kaala vidhi-kaala sambhavana-kaala))

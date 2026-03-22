@@ -1,0 +1,12 @@
+; relational algebra projection: π_A(R) — select columns from a relation.
+; in tantras: | collect s  or  | collect o  or  | collect (to-string s)
+; extracts a specific component from each triple.
+; pure: no state, no side effects. composes with selection.
+; distinct from geometric projection (kosha/3d/projection).
+
+(kosha algebraic-projection
+  (karma algebra-varga)
+  (swarupa morphism)
+  (sthita function)
+  (janya relation)
+  (phala set))

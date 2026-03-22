@@ -1,0 +1,8 @@
+; variance = mean((xᵢ - μ)²): mean of squared deviations from mean
+
+(mantra variance
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (janaka std-dev)
+  (swarupa spread)
+  (krama mean subtraction square))

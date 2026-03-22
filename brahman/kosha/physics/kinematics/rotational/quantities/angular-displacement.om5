@@ -1,0 +1,11 @@
+; delta-theta: kona traversed along a trajectory
+; signed radian difference from start to target angle
+; path-energy depends on angular-displacement: E = sum(tau_i * |delta-theta_i|)
+
+(kosha angular-displacement
+  (vishesa rotational-motion-varga)
+  (swarupa kona)
+  (abheda gati)
+  (sthita trajectory)
+  (ahara angular-velocity-kramanusara)
+  (janaka path-energy))

@@ -1,0 +1,37 @@
+; the chemistry of Portland cement — the binder in concrete.
+; raw materials: limestone (CaCO3) + clay (Al2Si2O5) + small amounts of
+; iron ore (Fe2O3) and gypsum (CaSO4).
+; 
+; STEP 1: calcination (900-1400°C in kiln)
+; CaCO3 → CaO (lime) + CO2↑       decomposition of limestone
+; Al2Si2O5 → Al2O3 + 2SiO2        decomposition of clay
+; these combine at high temperature → clinker minerals:
+; C3S  (alite):  3CaO·SiO2        ~50-70% of clinker
+; C2S  (belite): 2CaO·SiO2        ~15-30%
+; C3A  (aluminate): 3CaO·Al2O3    ~5-10%
+; C4AF (ferrite): 4CaO·Al2O3·Fe2O3 ~5-15%
+; clinker is ground with gypsum → Portland cement powder.
+; 
+; STEP 2: hydration (cement + water → concrete strength)
+; C3S + H2O → C-S-H gel + Ca(OH)2    (fast reaction, early strength)
+; C2S + H2O → C-S-H gel + Ca(OH)2    (slow reaction, long-term strength)
+; C3A + H2O → ettringite + monosulfate (very fast, gypsum controls this)
+; C-S-H: calcium silicate hydrate — the actual binding material.
+; C-S-H is an amorphous polymer gel that grows as interlocking needles.
+; the needles fill pores and bond aggregate → compressive strength builds.
+; 
+; STEP 3: curing (28 days to full strength)
+; hydration is exothermic — heat of hydration can crack large pours.
+; strength development: 1 day 20%, 7 days 70%, 28 days 100%.
+; water must be present — concrete must not dry out while curing.
+; "curing" ≠ "drying" — it is a chemical reaction requiring water.
+; 
+; CO2 cost: 1 tonne cement → ~0.7 tonne CO2.
+; 8% of global CO2 emissions. the most CO2-intensive material.
+; alternative binders: geopolymers (alkali-activated aluminosilicates),
+; supplementary cementitious materials (fly ash, slag) reduce CO2 by 30-60%.
+
+(kosha cement-chemistry
+  (vishesa construction-varga chemistry-varga)
+  (swarupa reaction exothermic polymer)
+  (yukta calcium silicon aluminium water dissolution calcite clay-mineral concrete))

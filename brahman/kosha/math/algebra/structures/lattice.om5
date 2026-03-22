@@ -1,0 +1,7 @@
+(kosha lattice
+  (vishesa algebra-varga)
+  (sthita partial-order)
+  (yukta set-union set-intersection)
+  (kriya join meet)
+  (siddha closure associativity commutativity)
+  (drishthanta subset))

@@ -1,0 +1,12 @@
+; Zn. proton-30. period 4, transition metal (d10). valence: 2.
+; galvanisation: zinc coat on steel prevents rusting (sacrificial anode).
+; Zn²⁺: essential trace element — over 300 enzymes require zinc.
+; immune function, wound healing, DNA synthesis, taste and smell.
+; zinc oxide ZnO: white pigment, sunscreen, semiconductor.
+; brass: Cu+Zn alloy — warm gold colour, corrosion resistant.
+
+(kosha zinc
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-thirty transition-metal corrosion-resistant)
+  (yukta valence-two galvanisation enzyme immune alloy brass)
+  (janya nuclear-fusion))

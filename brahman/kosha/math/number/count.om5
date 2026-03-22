@@ -1,0 +1,21 @@
+; count: the numeric measure of a collection after all events.
+; the bridge between everyday language and arithmetic.
+; "4 apples" → count = 4
+; "8 birds, 3 flew away, 2 came back" → count = 7
+; 
+; count IS sankhya of a vrnda (collection) — not a physics quantity.
+; count-chain.tantra3 walks the event sequence and emits [count, sankhya, result].
+; the result word (total/remaining/left) determines the operation:
+; total/altogether/combined → addition (eval:add via kosha)
+; remaining/left/rest → subtraction (eval:sub via kosha)
+; 
+; the operation comes from the math kosha:
+; count → yukta → arithmetic
+; addition → eval:add → apply-op "add"
+; subtraction → eval:sub → apply-op "sub"
+
+(kosha count
+  (vishesa number-varga math-varga)
+  (yukta common-sense-varga vrnda arithmetic)
+  (swarupa sankhya)
+  (abheda vrnda-ganita))

@@ -1,0 +1,8 @@
+; Σxᵢ: fold a list by addition
+
+(mantra sum
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (abheda addition)
+  (swarupa fold)
+  (krama addition))

@@ -1,0 +1,10 @@
+; numerical Jacobian via finite differences
+; for each joint j: column j = (FK(θ + ε·eⱼ) - FK(θ)) / ε
+; assembles into matrix: rows = task-space dims, cols = joint count
+
+(mantra jacobian-mantra
+  (swarupa jacobian)
+  (krama fk addition subtraction division)
+  (kriya execute-chain)
+  (sthita implication)
+  (janya fk angles epsilon))
