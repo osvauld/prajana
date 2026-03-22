@@ -2317,5 +2317,308 @@
       "type": "step",
       "title": "tantra4 live: old tantras moved to history, 10 collision fixes, swarupa-anuvada direction guard, count-chain aggregation guard. 32p/31x/5xpass."
     }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-22",
+    "at": "2026-03-22T13:49:41",
+    "details": {
+      "type": "step",
+      "title": "S-expression tantra format: new .tantra4 parser in OCaml (yantra_tantra_sexp.ml). Reuse existing sexp tokenizer from setu_shabda.ml. (tantra name (params) body) syntax \u2014 last expression is return, (name expr) for bindings. Coexists with .tantra3."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-23",
+    "at": "2026-03-22T13:49:50",
+    "details": {
+      "type": "step",
+      "title": "Convert 56 tantra4 helpers to .tantra4 s-expression format. Most become single-expression tantras: (tantra has-text (w) (gt (string-length w) 0)). No variable bindings needed for simple helpers."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-24",
+    "at": "2026-03-22T13:50:01",
+    "details": {
+      "type": "step",
+      "title": "Convert 76 pipeline tantras to .tantra4 s-expression format. With semantic helpers, most become sentence tantras \u2014 body reads as prose with minimal variable bindings."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-25",
+    "at": "2026-03-22T13:50:09",
+    "details": {
+      "type": "step",
+      "title": "Sentence tantras: push abstraction until every cond branch is a single named call. Pipeline tantras read as natural language \u2014 the conclusion is the viveka conclusion or the physics conclusion."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-35",
+    "at": "2026-03-22T13:50:20",
+    "details": {
+      "type": "discovery",
+      "title": "S-expression tantras: with enough named helpers, tantra bodies become sentences \u2014 compositions of words with no variable plumbing. (tantra emit-nigamana (graph is-viveka) (cond is-viveka (viveka-conclusion graph) (physics-conclusion graph))) \u2014 one sentence, three words. The tantra IS a sentence in the language the system defines for itself. tantra3 syntax (name = expr, return, done) becomes unnecessary overhead when every expression is already an s-expression internally."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-36",
+    "at": "2026-03-22T13:50:40",
+    "details": {
+      "type": "discovery",
+      "title": "Tantra4 abstraction complete: 56 helpers across 4 layers (primitives: has-text, has-items, triple-subj; operations: triples-by-edge, query-edge, query-edge-of, word-resolve; structures: fold-field, viveka-comparison, sought-context, derived-value; compositions: select-extremum, varga-chain, anumana-eligible). 103 mechanical replacements + 11 semantic replacements across 36 pipeline files. Zero regressions. Pipeline reads as named concepts instead of raw graph plumbing."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-14",
+    "at": "2026-03-22T13:51:08",
+    "details": {
+      "type": "quirk",
+      "title": "S-expression tantra design questions: (1) Comments \u2014 use -- (consistent with tantra3/shabda) not ; (lisp convention). (2) Scan syntax in s-expr \u2014 (scan source (with (var type init)...) (match [pattern] when... body)...). (3) Pipe syntax \u2014 keep | where | collect inside s-expressions since the expression parser already handles them. (4) File extension .tantra4 coexists with .tantra3 \u2014 no forced migration."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-26",
+    "at": "2026-03-22T14:01:30",
+    "details": {
+      "type": "step",
+      "title": "Stratify scan tantras: convert 14 scan tantras from stateful fold+pattern-match into stratified pipe chains. Each scan becomes multiple pure from/where/collect strata \u2014 no mutable state. Sentence boundaries via split-at-viraam, relational joins via named helpers. Eliminates scan as a construct."
+    }
+  },
+  {
+    "op": "add_ref",
+    "entry_id": "plan.step-26",
+    "at": "2026-03-22T14:01:34",
+    "details": {
+      "to": "plan.step-24",
+      "type": "depends-on"
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-22",
+    "at": "2026-03-22T14:35:55",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-23",
+    "at": "2026-03-22T14:35:55",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-24",
+    "at": "2026-03-22T14:35:55",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-26",
+    "at": "2026-03-22T14:59:06",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-26",
+    "at": "2026-03-22T15:14:52",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-27",
+    "at": "2026-03-22T15:24:04",
+    "details": {
+      "type": "step",
+      "title": "Prakriya dissolution: 8 scan tantras dissolved into composable tantra4 files. 3 new helpers (proximity-bind, rewrite-subjects, find-after-signal) + 3 OCaml primitives (with-index, nearest-before, sentence-of). Zero .tantra3 or .prakriya files remain \u2014 all 139 tantras are .tantra4 s-expressions."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-27",
+    "at": "2026-03-22T15:24:13",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-27",
+    "at": "2026-03-22T15:24:13",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-37",
+    "at": "2026-03-22T15:24:21",
+    "details": {
+      "type": "discovery",
+      "title": "S-expression migration complete: 139 tantra4 files, 0 tantra3, 0 prakriya. Scan construct eliminated \u2014 replaced by 3 positional primitives (with-index, nearest-before, sentence-of) and 3 composable helpers (proximity-bind, rewrite-subjects, find-after-signal). ke-inv-mass removed as dead code. Baseline: 32p/31x/5xpass throughout."
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-22T15:24:27",
+    "details": {
+      "passed": 32,
+      "xfailed": 31,
+      "failed": 5
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-28",
+    "at": "2026-03-22T16:44:21",
+    "details": {
+      "type": "step",
+      "title": "Relational graph consumers: viveka-ganana uses ownership joins instead of positional scan. extract-solve-for uses grade-scoped queries. All 8 rewrite tantras grade-scoped. Positional helpers (proximity-bind, rewrite-subjects, find-after-signal) removed. append-triples made idempotent. 31p/33x/4xpass."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-28",
+    "at": "2026-03-22T16:44:40",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-28",
+    "at": "2026-03-22T16:44:40",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-38",
+    "at": "2026-03-22T16:44:57",
+    "details": {
+      "type": "discovery",
+      "title": "Scan\u2192relational migration insight: scan was a flatmap (rewrite graph in-place), not an append operation. Replacing scan with append-triples broke ordering assumptions that downstream consumers depended on. The fix was two-part: (1) make consumers relational \u2014 join through ownership edges instead of positional scanning, (2) make producers grade-scoped \u2014 sequential reduce within each sentence (small, bounded), relational queries across sentences. Grade = fact set. The graded ring structure IS the Datalog stratification boundary."
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-22T16:45:07",
+    "details": {
+      "passed": 31,
+      "xfailed": 33,
+      "failed": 4
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-22",
+    "at": "2026-03-22T16:48:40",
+    "details": {
+      "type": "section",
+      "title": "5. The Pipeline as Stratified Evaluation (v3 \u2014 Grade-Scoped Relational Model)"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-23",
+    "at": "2026-03-22T16:49:05",
+    "details": {
+      "type": "section",
+      "title": "8. The Tantra as Sentence (v2)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-13",
+    "at": "2026-03-22T16:49:37",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-22"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-6",
+    "at": "2026-03-22T16:49:37",
+    "details": {
+      "old": "superseded",
+      "new": "superseded",
+      "pointer": "whitepaper.section-22"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "whitepaper.section-24",
+    "at": "2026-03-22T16:50:06",
+    "details": {
+      "type": "section",
+      "title": "7. Results and Current Capabilities (v3)"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-20",
+    "at": "2026-03-22T16:50:28",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "whitepaper.section-24"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "whitepaper.section-8",
+    "at": "2026-03-22T16:50:28",
+    "details": {
+      "old": "superseded",
+      "new": "superseded",
+      "pointer": "whitepaper.section-24"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "tantra.section-22",
+    "at": "2026-03-22T16:50:52",
+    "details": {
+      "type": "section",
+      "title": "Tantra5 \u2014 S-Expressions and the Relational Model"
+    }
   }
 ]

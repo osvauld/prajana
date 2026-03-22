@@ -57,6 +57,9 @@ module Yantra_pipeline_ops = Vyakarana_lib__Yantra_pipeline_ops
 (** @canonical Vyakarana_lib.Yantra_tantra_file2 *)
 module Yantra_tantra_file2 = Vyakarana_lib__Yantra_tantra_file2
 
+(** @canonical Vyakarana_lib.Yantra_tantra_sexp *)
+module Yantra_tantra_sexp = Vyakarana_lib__Yantra_tantra_sexp
+
 (** @canonical Vyakarana_lib.Yantra_tokeniser *)
 module Yantra_tokeniser = Vyakarana_lib__Yantra_tokeniser
 

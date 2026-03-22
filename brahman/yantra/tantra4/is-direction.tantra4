@@ -1,0 +1,4 @@
+-- true if a word resolves to kshaya or vriddhi.
+(tantra is-direction (w)
+  (wn (word-resolve w))
+  (or (eq wn "kshaya") (eq wn "vriddhi")))

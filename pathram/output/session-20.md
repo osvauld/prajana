@@ -88,6 +88,8 @@ op-class-monoid already has monoid-abheda ✓. All other classes are disconnecte
 
 ## Discovery: connected vs disconnected math
 
+*[historical]*
+
 **Already connected** (tantras read math from kosha):
 - count-chain reads graded-ring.grade-boundary → viraam
 - count-chain reads common-sense-events → kshaya/vriddhi direction
@@ -182,6 +184,8 @@ Dissolve 13 pratibimba files into pathram. These are aspirational — tag as pro
 **Implementation details to skip**: crate layout, FFI details, build order, keyboard shortcuts
 
 ## Plan: kosha math enrichment
+
+*[historical]*
 
 Connect the op-class nodes and op-* nodes to the algebraic hierarchy.
 

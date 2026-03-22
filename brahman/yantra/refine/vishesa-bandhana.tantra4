@@ -1,0 +1,26 @@
+-- redirect sankhya/matra to instances, shashthi-vibhakti via instance-map.
+(tantra vishesa-bandhana (graph)
+  (already-bound (nth (bound-state graph) 0))
+  (after-sankhya (agra-bandha graph "vishesa" "obj" "word" ["sankhya", "matra"] "" "rashi" [] already-bound []))
+  -- concept → instances map
+  (concept-instances (after-sankhya | where [inst, e, concept] | and (eq e "vishesa") | and (neq (to-string concept) "rashi") | collect [concept, inst]))
+  (instanced-concepts (concept-instances | collect (nth _it 0)))
+  -- ownership declarations on concepts in graph order
+  (ownership-order (after-sankhya | where [s, e, entity] | and (eq e "shashthi-vibhakti") | and (member s instanced-concepts) | collect [s, entity]))
+  -- pair nth ownership with nth instance per concept
+  (sv-redirects (reduce ownership-order [] (fn acc kv ->
+    let concept = nth kv 0
+    let entity  = nth kv 1
+    let seen    = length (acc | where [c, e, i] | and (eq (to-string c) (to-string concept)) | collect c)
+    let insts   = concept-instances | where [c, i] | and (eq (to-string c) (to-string concept)) | collect i
+    let inst    = cond (lt seen (length insts)) (nth insts seen) otherwise ""
+    cond (neq inst "") (append acc [[concept, entity, inst]]) otherwise acc)))
+  -- rewrite shashthi-vibhakti subjects using redirect map
+  (redirect-map (map sv-redirects (fn r -> [(nth r 0), (nth r 2)])))
+  (map after-sankhya (fn tri ->
+    let edge = to-string (nth tri 1)
+    cond (neq edge "shashthi-vibhakti") tri
+    otherwise (let concept = nth tri 0
+      let entity = nth tri 2
+      let matches = sv-redirects | where [c, e, i] | and (eq (to-string c) (to-string concept)) | and (eq (to-string e) (to-string entity)) | collect i
+      cond (has-items matches) [(nth matches 0), (nth tri 1), entity] otherwise tri))))

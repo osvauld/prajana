@@ -1,0 +1,3 @@
+-- true if list is non-empty.
+(tantra has-items (xs)
+  (gt (length xs) 0))

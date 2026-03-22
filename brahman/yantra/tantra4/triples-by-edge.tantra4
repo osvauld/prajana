@@ -1,0 +1,3 @@
+-- filters triples by edge type.
+(tantra triples-by-edge (triples edge-type)
+  (filter triples (fn t -> eq (nth t 1) edge-type)))

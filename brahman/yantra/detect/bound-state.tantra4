@@ -1,0 +1,5 @@
+-- bound-state: [concept-names, val-pairs] — what is known right now.
+(tantra bound-state (graph)
+  (vps (sankhya-sparsha graph))
+  (bcs (map vps (fn kv -> nth kv 0)))
+  [bcs, vps])

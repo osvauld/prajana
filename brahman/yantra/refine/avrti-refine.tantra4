@@ -1,0 +1,13 @@
+-- orchestrates all refinement sub-passes.
+(tantra avrti-refine (graph)
+  (has-mithya (gt (length (graph | where [s, e, o] | and (eq e "mithya") | collect s)) 0))
+  (after-sandhi-kosha (sandhi-kosha graph))
+  (after-sandhi-avastha (cond has-mithya (sandhi-avastha after-sandhi-kosha) otherwise after-sandhi-kosha))
+  (after-sandhi-bandhana (sandhi-bandhana after-sandhi-avastha))
+  (after-vibhakti (vibhakti-shashthi after-sandhi-bandhana))
+  (after-vishesa-inst (vishesa-instance after-vibhakti))
+  (after-rashi-viveka (rashi-viveka after-vishesa-inst))
+  (after-vishesa-bind (vishesa-bandhana after-rashi-viveka))
+  (after-rashi-anuvada (rashi-anuvada after-vishesa-bind))
+  (after-sankhya-bandha (sankhya-bandha after-rashi-anuvada))
+  (swarupa-anuvada after-sankhya-bandha))

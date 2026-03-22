@@ -1,0 +1,3 @@
+-- F = mv²/r
+(tantra centripetal-force-expr (mass velocity radius)
+  (div (mul mass (square velocity)) radius))

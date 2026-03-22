@@ -1,0 +1,19 @@
+-- detects viveka (comparison) intent from graph.
+(tantra detect-viveka (expanded)
+  (entities (prathama-sparsha expanded))
+  (all-subjects (unique (expanded | where [s, e, o] | collect (to-string s))))
+  (max-word (nth (filter all-subjects (fn w -> eq (to-string (shabda-anveshana w)) "viveka-max")) 0))
+  (min-word (nth (filter all-subjects (fn w -> eq (to-string (shabda-anveshana w)) "viveka-min")) 0))
+  (has-max (exists max-word))
+  (has-min (exists min-word))
+  (is-viveka (and (gt (length entities) 1) (or has-max has-min)))
+  (dir (cond (and has-min (not has-max)) "min" otherwise "max"))
+  (comp-word (cond has-max max-word otherwise min-word))
+  (comp-concept (nth (expanded | where [s, e, o]
+    | and (eq (to-string s) (to-string comp-word))
+    | and (eq e "vishesa")
+    | and (neq (to-string o) "rashi")
+    | collect o) 0))
+  (cond is-viveka
+    [["viveka-dir", dir], ["comp-word", comp-word], ["comp-concept", comp-concept]]
+    otherwise []))

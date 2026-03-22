@@ -1,0 +1,16 @@
+-- hetu: "we seek" — the reason for inquiry.
+(tantra emit-hetu (graph is-viveka)
+  (say-sought (shabda "anuvada-setu" "speech-sought"))
+  (say-of (shabda "anuvada-setu" "speech-of"))
+  (say-is (shabda "anuvada-setu" "speech-is"))
+  (ctx (sought-context graph))
+  (sought-sf (nth ctx 0))
+  (sought-label (nth ctx 1))
+  (scope-entity (nth ctx 2))
+  (cond is-viveka
+    (concat say-sought ": which " say-is " " sought-label)
+    otherwise (cond (has-text sought-sf)
+      (cond (has-text scope-entity)
+        (concat say-sought ": " sought-sf " " say-of " " scope-entity)
+        otherwise (concat say-sought ": " sought-sf))
+      otherwise "")))

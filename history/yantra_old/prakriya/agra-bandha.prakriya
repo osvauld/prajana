@@ -1,0 +1,57 @@
+-- agra-bandha: generic proximity binding via positional queries.
+-- for each bind-edge triple, finds the nearest preceding anchor and redirects subject.
+(tantra agra-bandha (graph anchor-edge anchor-obj anchor-val bind-edges gate-edge exclude-obj exclude-bind skip-bound require-key)
+  (has-gate (has-text gate-edge))
+  (has-exclude (has-text exclude-obj))
+  (has-require (has-items require-key))
+  (ig (with-index graph))
+
+  -- stratum 1: find all anchor positions and their key→value mappings
+  (anchors (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let word = to-string (nth tri 1)
+    let edge = to-string (nth tri 2)
+    let obj  = to-string (nth tri 3)
+    cond (neq edge anchor-edge) acc
+    (and has-exclude (eq obj exclude-obj)) acc
+    otherwise (let k = cond (eq anchor-obj "obj") obj otherwise word
+      let v = cond (eq anchor-val "word") word otherwise obj
+      (append acc [[pos, k, v]])))))
+
+  -- stratum 2: find gate positions (if gate-edge is set)
+  (gates (cond has-gate
+    (reduce ig [] (fn acc tri ->
+      let pos  = nth tri 0
+      let edge = to-string (nth tri 2)
+      cond (eq edge gate-edge) (append acc [pos]) otherwise acc))
+    otherwise []))
+
+  -- stratum 3: rewrite bind-edge triples using nearest preceding anchor
+  (rewritten (map ig (fn tri ->
+    let pos     = nth tri 0
+    let word    = to-string (nth tri 1)
+    let edge    = to-string (nth tri 2)
+    let obj     = nth tri 3
+    cond (not (member edge bind-edges)) [word, edge, obj]
+    otherwise (let concept = word
+      -- find nearest anchor before this position for this concept
+      let agra-match = reduce anchors "" (fn best a ->
+        let a-pos = nth a 0
+        let a-key = nth a 1
+        let a-val = nth a 2
+        cond (and (lt a-pos pos) (eq (to-string a-key) concept)
+                  (eq (sentence-of ig a-pos) (sentence-of ig pos)))
+          a-val
+        otherwise best)
+      -- check gate: was there a gate between the anchor and this triple?
+      let gated = cond has-gate
+        (reduce gates false (fn hit g-pos ->
+          or hit (and (lt g-pos pos) (gt g-pos 0))))
+        otherwise true
+      let allowed = (and gated (has-text agra-match)
+                         (not (member concept exclude-bind))
+                         (not (member agra-match skip-bound))
+                         (cond has-require (member concept require-key) otherwise true))
+      cond allowed [agra-match, edge, obj] otherwise [word, edge, obj]))))
+
+  rewritten)

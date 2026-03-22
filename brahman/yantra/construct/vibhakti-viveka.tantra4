@@ -1,0 +1,27 @@
+-- grammar structure discernment pass.
+(tantra sandhi-viveka (graph)
+  (sthita-len (string-length "-sthita"))
+  (rashi-label-words (reduce graph ["", []] (fn st tri ->
+    let last-e = nth st 0
+    let acc    = nth st 1
+    let c-edge = nth tri 1
+    let c-word = nth tri 0
+    (cond (and (eq c-edge "mithya") (eq last-e "satya")) [c-edge, (append acc [c-word])] otherwise [c-edge, acc]))))
+  (rashi-labels (nth rashi-label-words 1))
+  (map graph (fn tri ->
+    let word   = nth tri 0
+    let edge   = nth tri 1
+    let obj    = nth tri 2
+    let gnode  = (cond (eq edge "mithya") (shabda-anveshana word) otherwise _none)
+    let slokas = (cond (exists gnode) (node-slokas (to-string gnode)) otherwise [])
+    let toks   = reduce slokas [] (fn acc s -> append acc (split s " "))
+    let root   = reduce toks "" (fn acc w ->
+      (cond (neq acc "") acc
+      otherwise (cond (ends-with w "-sthita")
+        (cond (member "visheshanam-ring"
+                 (map (walk-in (substr w 0 (sub (string-length w) sthita-len)) "yukta")
+                      (fn n -> to-string n)))
+          (substr w 0 (sub (string-length w) sthita-len))
+          otherwise "")
+      otherwise "")))
+    (cond (and (has-text root) (not (and (eq root "matra") (member word rashi-labels)))) [word, root, root] otherwise [word, edge, obj]))))

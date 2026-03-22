@@ -1,0 +1,7 @@
+-- unpacks anumana detection result by field name.
+(tantra anumana-field (ctx field)
+  (cond (eq field "is-anumana") (nth ctx 0)
+    (eq field "query") (nth ctx 1)
+    (eq field "assert") (nth ctx 2)
+    (eq field "mode") (nth ctx 3)
+    otherwise ""))

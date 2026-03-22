@@ -18,7 +18,8 @@ def _load_tantra4():
     """Load only tantra4 files."""
     import glob
     result = {}
-    for path in sorted(glob.glob(os.path.join(TANTRA4_DIR, "*.tantra3"))):
+    for path in sorted(glob.glob(os.path.join(TANTRA4_DIR, "*.tantra3")) +
+                       glob.glob(os.path.join(TANTRA4_DIR, "*.tantra4"))):
         parsed = tantras.parse(path)
         if parsed:
             result[parsed["name"]] = parsed

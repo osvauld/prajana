@@ -1,0 +1,17 @@
+-- generic proximity binding: for each target-edge triple, find nearest preceding
+-- anchor-edge in same sentence, emit [anchor-val, target-edge, target-obj].
+-- skip-list: subjects already bound (idempotence guard).
+(tantra proximity-bind (graph anchor-edge target-edge skip-list)
+  (ig (with-index graph))
+  (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let edge = to-string (nth tri 2)
+    let obj  = nth tri 3
+    cond (neq edge target-edge) acc
+    otherwise (let prev = nearest-before ig pos anchor-edge
+      cond (not (exists prev)) acc
+      otherwise (let anchor = to-string (nth prev 1)
+        cond (and (eq (sentence-of ig pos) (sentence-of ig (nth prev 0)))
+                  (not (member anchor skip-list)))
+          (append acc [[anchor, target-edge, obj]])
+        otherwise acc)))))

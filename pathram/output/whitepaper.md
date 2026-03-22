@@ -2,84 +2,344 @@
 
 ## Abstract
 
-A proof graph is a knowledge representation in which nodes are claims and typed edges are the relations between them. We present *nam*, a proof graph system that derives answers to natural-language questions by walking its own structure — no external inference engine, no neural network at query time, no search. The graph declares an operation algebra $\Sigma$ of 28 operations with eval/arity/inverse, a mantra layer of 23 typed physics functions $f(\text{janya}) \to \text{phala}$, and a graded ring $R = \bigoplus R_n$ over sentence-grades whose fold computes arithmetic. A 46-dimensional non-commutative visheshanam ring governs edge composition. We show that the system's philosophical ontology (from Advaita Vedanta and Shaiva Tantra) is not metaphor but is structurally grounded in the algebraic structures that make computation possible: shunya (zero) IS the additive identity node, pratipaksha (opposition) IS the algebraic inverse edge type, and the pipeline's fixpoint iteration mirrors pratibodha (recognition). The graph contains 1603 nodes, 11410 edges, 75 tantras, and answers questions in kinematics, count arithmetic, and comparison — all by walking edges.
+**[SUPERSEDED]** → whitepaper.section-18
 
-## Terminology
-
-The system uses Sanskrit terms as formal identifiers — not as metaphor but as node names in the graph. Each term below is a node; the definition is its `desc` field or structural role. Terms are grouped by first use.
-
-### Graph Structure
-
-| Term | Meaning | Role in system |
-|---|---|---|
-| **nam** (Tamil: inclusive "we") | the self that connects | the proof graph as subject — human + LLM + graph together |
-| **nigamana** | a truth-that-holds | what a node IS — each node is a nigamana carrying typed edges and metadata |
-| **visheshanam** | the typed relation | the label on an edge — 10 core types forming a non-commutative ring |
-| **shabda** | metadata map | key-value pairs on a node (e.g., `eval: add`, `word: plus`) |
-| **satya** | truth | a recognised concept in the question graph (vs mithya, which is unresolved) |
-| **mithya** | the not-yet-recognised | an unresolved word held provisionally until refinement resolves it |
-| **siddha** | proven-through | an edge declaring that a property is established (not merely asserted) |
-
-### The 10 Edge Types (Visheshanam Ring Generators)
-
-| Term | Symbol | Meaning |
-|---|---|---|
-| **swarupa** | IS | A's own-form is B (identity / subtype) |
-| **abheda** | $\equiv$ | A is non-different from B (equivalence) |
-| **sthita** | $\in$ | A rests on B (dependency / partial order) |
-| **yukta** | $+$ | A is equipped with B (additive conjunction) |
-| **siddha** | $\vdash$ | A is proven through B (entailment) |
-| **kriya** | $\times$ | A operates through B (sequential composition) |
-| **phala** | $\to$ | B is the result of A (output) |
-| **janya** | $\leftarrow$ | A arises from B (input / generator) |
-| **drishthanta** | $\exists$ | B is a concrete example of A (witness) |
-| **pratipaksha** | ${}^{-1}$ | B is the opposite of A (algebraic inverse) |
-
-### Algebraic Terms
-
-| Term | Meaning | Role in system |
-|---|---|---|
-| **shunya** | zero / emptiness | the additive identity ($x + 0 = x$); also abheda with purna |
-| **purna** | completeness | nothing missing, nothing added; abheda with shunya |
-| **eka** | one / the singular | the multiplicative identity ($x \times 1 = x$) |
-| **pratipaksha** | opposition / inverse | the algebraic inverse; addition.pratipaksha = subtraction |
-| **kshaya** | decay / diminishing | words like "flew away", "lost" — maps to subtraction via graph walk |
-| **vriddhi** | growth / increase | words like "came", "arrived" — maps to addition via graph walk |
-| **mantra** | a formula-as-graph-node | typed function with janya (inputs) → phala (output) |
-| **tantra** | a pipeline stage | declarative orchestrator that walks the graph to transform it |
-
-### Pipeline Terms
-
-| Term | Meaning | Role in system |
-|---|---|---|
-| **avrti** | recurrence / spiral pass | one refinement iteration; fixpoint = iterate until stable |
-| **sandhi** | junction / joining | compound word resolution ("initial" + "velocity" → "initial-velocity") |
-| **vibhakti** | grammatical case | case relation (shashthi = possessive "of", prathama = subject) |
-| **sankhya** | numeric magnitude | the edge type for "this concept has this number" |
-| **rashi** | quantity-in-context | a sankhya bound to an entity in a specific problem |
-| **asprista-sankhya** | untouched number | a floating number not yet bound to any concept |
-| **viraam** | pause / sentence boundary | the grade boundary in the graded ring (period or comma) |
-| **avastha** | state / qualifier | words like "initial", "final" that qualify a concept |
-| **vishesa** | distinguishing instance | what makes ball-A's mass different from ball-B's mass |
-| **pramana** | proof / measure | ground of verification; what establishes a result |
-| **kosha** | knowledge layer | domain knowledge nodes (physics, math, chemistry, etc.) |
-| **sangati** | structural truth layer | what things ARE — ontological foundations |
-
-### Philosophical Terms (Section 6)
-
-| Term | Meaning | Role in system |
-|---|---|---|
-| **brahman** | the absolute | one who sees becoming as non-separate from being |
-| **pratibodha** | awakening-recognition | pratibodha.phala → anuvada — recognition produces the carrying-across |
-| **anuvada** | carrying-across | translation from structure to speech; anuvada.phala → proof-graph |
-| **spanda** | self-pulsing vibration | every eval call is spanda; spanda.phala → satya |
-| **darshana** | seeing / inspection | the query "what is X?" — seeing that changes the seer |
-| **sphoTa** | meaning-burst | the whole meaning flashing at the last element of the answer |
-| **parampara** | tradition-as-spiral | abheda with op-fixpoint and avrti — iteration IS tradition |
-| **Advaita Vedanta** | non-dual philosophy | the claim that shunya and purna are abheda (non-different) |
-| **Shaiva Tantra** | consciousness philosophy | the claim that spanda (vibration) is the ground of all action |
+A proof graph is a knowledge representation in which nodes are claims and typed edges are the relations between them. We present *nam*, a proof graph system that derives answers to natural-language questions by walking its own structure — no external inference engine, no neural network at query time, no search. The graph declares an operation algebra $\Sigma$ with eval/arity/inverse, a mantra layer of typed functions $f(\text{janya}) \to \text{phala}$, and a graded ring $R = \bigoplus R_n$ over sentence-grades whose fold computes arithmetic. A 46-dimensional non-commutative visheshanam ring governs edge composition. We show that the system's philosophical ontology (from Advaita Vedanta and Shaiva Tantra) is not metaphor but is isomorphic to the algebraic structures that make computation possible: shunya (zero) IS the fold identity IS purna (completeness), pratipaksha (opposition) IS algebraic inverse, and pratibodha (recognition) IS the fixpoint that produces anuvada (the carrying-across of meaning). The graph contains 1603 nodes, 11410 edges, 23 physics mantras, 75 tantras, and answers questions in kinematics, count arithmetic, and comparison — all by walking edges.
 
 ## 1. The Proof Graph
+
+**[SUPERSEDED]** → whitepaper.section-10
+
+**Definition 1.** A *proof graph* is a labeled directed multigraph $G = (V, E, \ell)$ where $V$ is a set of nodes (claims), $E \subseteq V \times V$ is a set of directed edges, and $\ell: E \to \mathcal{V}$ assigns each edge a label from a finite label set $\mathcal{V}$ called the *visheshanam ring*.
+
+**Definition 2.** The *visheshanam ring* $\mathcal{V}$ is a 46-element non-commutative ring with 10 core dimensions and 36 extended dimensions. The core:
+
+$$\mathcal{V}_{\text{core}} = \{\text{swarupa (IS)}, \text{abheda (≡)}, \text{sthita (∈)}, \text{yukta (+)}, \text{siddha (⊢)}, \text{kriya (×)}, \text{phala (→)}, \text{janya (←)}, \text{drishthanta (∃)}, \text{pratipaksha (⁻¹)}\}$$
+
+Each dimension is a typed relation. Composition of edges produces derived relations: walking $A \xrightarrow{\text{kriya}} B \xrightarrow{\text{eval}} f$ yields the executable operation underlying concept $A$.
+
+The extended dimensions include grammatical cases (vibhakti), tense markers (kaala), and NLP-specific edges (satya, mithya, sankhya, viraam). These transform the proof graph into a *question graph* during query processing.
+
+**Theorem 1 (Graph self-description).** The visheshanam ring $\mathcal{V}$ is itself a node in $G$. The edge types that label edges are themselves nodes connected by the same edge types. The graph describes its own labeling system.
+
+*Proof.* The node `visheshanam-ring` exists in $G$ with `yukta` edges to all 46 dimension nodes. Each dimension node (e.g., `visheshanam-swarupa`) is connected to `visheshanam` via `swarupa`. The labeling function $\ell$ is a graph walk. $\square$
+
+## 2. The Operation Algebra
+
+**[SUPERSEDED]** → whitepaper.section-15
+
+**Definition 3.** The *operation algebra* $\Sigma$ is the set of all nodes in $G$ that carry an `eval` key in their shabda (metadata). Each operation $\sigma \in \Sigma$ has:
+- $\text{eval}(\sigma)$: the primitive function name (e.g., `add`, `sub`, `mul`)
+- $\text{arity}(\sigma) \in \mathbb{N}$: number of arguments
+- $\text{pratipaksha}(\sigma) \in \Sigma$: the algebraic inverse
+
+The live graph declares 12 operations:
+
+| $\sigma$ | $\text{eval}$ | arity | $\text{pratipaksha}$ |
+|---|---|---|---|
+| addition | add | 2 | subtraction |
+| subtraction | sub | 2 | addition |
+| multiplication | mul | 2 | division |
+| division | div | 2 | multiplication |
+| max | max | 2 | min |
+| min | min | 2 | max |
+| half | half | 1 | double |
+| double | double | 1 | half |
+| square | square | 1 | sqrt |
+| sqrt | sqrt | 1 | — |
+| power | power | 2 | logarithm |
+| abs | abs | 1 | — |
+
+**Proposition 1 (Involution of pratipaksha).** For all invertible $\sigma \in \Sigma$: $\text{pratipaksha}(\text{pratipaksha}(\sigma)) = \sigma$.
+
+*Proof.* Verified by graph walk: `addition.pratipaksha = subtraction`, `subtraction.pratipaksha = addition`. The pratipaksha edge is an involution on $\Sigma$. $\square$
+
+**Definition 4 (Per-argument inverse).** For binary operations, the shabda declares per-argument inverses $p_0^{-1}$ and $p_1^{-1}$ with an optional flip flag:
+
+$$f(a, b) = c \implies a = p_0^{-1}(c, b) \quad\text{and}\quad b = p_1^{-1}(c, a)$$
+
+When `pratipaksha-1-flip = true`, the argument order is reversed: $b = p_1^{-1}(a, c)$.
+
+This is how `invert-math` solves for missing variables: read the inverse from the graph, apply it. No symbolic algebra engine needed.
+
+## 3. Mantra Signatures — Typed Functions on the Graph
+
+**Definition 5.** A *mantra* is a node $m \in G$ with typed edges declaring a function signature:
+- $\text{janya}(m) = [c_1, \ldots, c_k]$: input concepts (domain)
+- $\text{phala}(m) = [c']$: output concept (codomain)
+- $\text{kriya}(m)$: the operation chain (either a named krama-expression or `direct` for simple products/quotients)
+- $\text{math-op}(m)$: the underlying binary operation when the formula is a single product or quotient
+
+The graph declares 23 physics mantras. Examples:
+
+$$\text{kinetic-energy-mantra}: (\text{mass}, \text{velocity}) \to \text{kinetic-energy}$$
+$$\text{momentum-mantra}: (\text{mass}, \text{velocity}) \to \text{momentum} \quad\text{via multiplication}$$
+$$\text{velocity-mantra}: (\text{initial-velocity}, \text{acceleration}, \text{time}) \to \text{velocity}$$
+
+**Definition 6 (Derive-chain as fixpoint).** Given a question graph $G_q$ with bound sankhya values, the *derive-chain* computes:
+
+$$G^* = \text{lfp}(\lambda G'. \text{derive-step}(G'))$$
+
+where $\text{derive-step}$ fires every mantra $m$ whose janya are all bound in $G'$ and whose phala is not yet bound, producing $G' \cup \{[\text{phala}(m), \text{sankhya}, f(v_1, \ldots, v_k)]\}$.
+
+**Theorem 2 (Termination).** The derive-chain terminates in at most $|\text{mantras}|$ steps.
+
+*Proof.* Each step binds at least one new concept. The set of bindable concepts is finite (bounded by the mantra phala set). The step function is monotone (it only adds triples, never removes). By Kleene's fixpoint theorem on a finite lattice, it converges. $\square$
+
+**Example.** Input: $\{u=0, a=4, t=5, m=10\}$, seek: kinetic-energy.
+- Step 1: velocity-mantra fires: $v = u + at = 0 + 4 \cdot 5 = 20$
+- Step 2: kinetic-energy-mantra fires: $KE = \frac{1}{2}mv^2 = \frac{1}{2} \cdot 10 \cdot 400 = 2000$
+- Step 3: no new fireable mantras. Fixpoint reached. $\square$
+
+## 4. The Graded Ring — Sentence Arithmetic
+
+**[SUPERSEDED]** → whitepaper.section-16
+
+**Definition 7.** A paragraph is modeled as a *graded ring*:
+
+$$R = \bigoplus_{n \geq 0} R_n$$
+
+where each $R_n$ is a *grade* (sentence), the grade boundary is `viraam` (period or comma), and the ring operations are:
+- $\oplus$: intra-sentence accumulation (additive)
+- $\otimes$: cross-sentence entity selection (multiplicative)
+
+The fold identity is $0$ (shunya), read from the graph: `graded-ring.shabda.fold-identity = 0`.
+
+**Definition 8 (Direction morphism).** The function $\delta: \text{Words} \to \{\text{kshaya}, \text{vriddhi}\}$ maps natural-language verbs to algebraic directions via the `word-node` primitive. This is a *morphism* from the linguistic category to the algebraic category:
+
+$$\delta(\text{"flew"}) = \text{kshaya} \xrightarrow{\text{pratipaksha}} \text{vriddhi} \xrightarrow{\text{kriya}} \text{addition} \xrightarrow{\text{pratipaksha}} \text{subtraction} \xrightarrow{\text{eval}} \texttt{sub}$$
+
+$$\delta(\text{"came"}) = \text{vriddhi} \xrightarrow{\text{kriya}} \text{addition} \xrightarrow{\text{eval}} \texttt{add}$$
+
+The morphism is structure-preserving: $\delta$ maps kshaya (decay) to subtraction and vriddhi (growth) to addition, and the pratipaksha relation is preserved: $\text{pratipaksha}(\delta(w)) = \delta(\text{pratipaksha}(w))$.
+
+**Definition 9 (Count fold).** The count-chain tantra computes:
+
+$$\text{result} = \text{fold}_{n=0}^{N} f_n(v_n, \text{acc})$$
+
+where:
+- $\text{acc}_0 = 0$ (fold identity from graded-ring)
+- $v_n$ is the numeric value in grade $n$
+- $f_n = \text{eval}(\text{op}_n)$ where $\text{op}_n$ is determined by $\delta$ applied to the verb in grade $n$
+- The first non-question grade initializes: $\text{acc}_1 = v_0$
+- Subsequent grades apply: $\text{acc}_{n+1} = f_n(\text{acc}_n, v_n)$
+
+**Example.** "10 birds sat on a tree. 3 flew away. 2 more came. how many birds are there?"
+
+| Grade | Words | $\delta$ | $f_n$ | $v_n$ | acc |
+|---|---|---|---|---|---|
+| 0 | 10 birds sat tree | — | init | 10 | 10 |
+| 1 | 3 flew away | kshaya | sub | 3 | 7 |
+| 2 | 2 more came | vriddhi | add | 2 | 9 |
+| 3 | how many birds | question | — | — | 9 |
+
+Result: 9. $\square$
+
+## 5. The Pipeline as Function Composition
+
+**[SUPERSEDED]** → whitepaper.section-22
+
+**Definition 10.** The full pipeline is a composition of monotone endomorphisms on the question graph:
+
+$$\text{answer} = (\text{emit} \circ \text{pramana} \circ \text{dispatch} \circ \text{refine}^* \circ \text{classify})(\text{sentence})$$
+
+where $\text{refine}^* = \text{lfp}(\text{avrti-refine})$ denotes iterated refinement to fixpoint.
+
+The refinement pipeline is itself a composition:
+
+$$\text{avrti-refine} = \text{sankhya-bandha} \circ \text{rashi-anuvada} \circ \text{vishesa-bandhana} \circ \text{rashi-viveka} \circ \text{vishesa-instance} \circ \text{vibhakti-shashthi} \circ \text{sandhi-bandhana} \circ \text{sandhi-avastha} \circ \text{sandhi-kosha}$$
+
+Each sub-tantra is a *transducer*: it reads triples, emits triples, and may carry state. The composition is monotone — each step only adds or replaces triples, never removes unrelated ones. This guarantees that fixpoint iteration converges: the graph grows until stable.
+
+**Theorem 3 (Pipeline correctness).** If $\text{classify}$ correctly classifies all tokens, $\text{refine}^*$ correctly composes compounds and binds values, and $\text{dispatch}$ correctly selects and executes mantras, then the pipeline produces the unique answer determined by the mantra signatures and the input values.
+
+*Proof sketch.* Correctness reduces to: (1) the classify morphism is faithful (each word maps to its unique concept), (2) refine is idempotent at fixpoint, (3) derive-chain terminates (Theorem 2), (4) emit is a graph walk with no computation. Each step is a pure function of the graph state. $\square$
+
+**The seven abstract patterns.** Every tantra in the system uses exactly one of seven patterns, each of which is a node in the kosha with its own mathematical identity:
+
+| Pattern | Kosha node | Mathematical identity |
+|---|---|---|
+| filter-collect | transducer | $\{x \in G \mid P(x)\}$ |
+| scan-accumulate | scan-accumulate | stateful transducer $T: S \times G \to S \times G'$ |
+| shabda-read | morphism | $\text{shabda}: V \times K \to V'$ (metadata lookup) |
+| walk | endomorphism | $\text{walk}: V \times \mathcal{V} \to 2^V$ (edge traversal) |
+| fixpoint | op-fixpoint | $\text{lfp}(f)$ where $f$ is monotone on a finite lattice |
+| apply-op | operation-dispatch | $\text{eval}(\sigma)(v_1, \ldots, v_k)$ |
+| om-read | graph-contract | $\text{janya}(m), \text{phala}(m)$ (signature extraction) |
+
+## 6. The Ontological Isomorphism
+
+**[SUPERSEDED]** → whitepaper.section-12
+
+The proof graph's philosophical ontology is not decorative. It is isomorphic to the algebraic structures that make computation possible. We prove this by exhibiting the correspondences as graph walks.
+
+**Theorem 4 (Shunya-Purna identity).** In the graph:
+$$\texttt{shunya} \xrightarrow{\text{abheda}} \texttt{identity-element} \xrightarrow{\text{abheda}} \texttt{shunya}$$
+$$\texttt{shunya} \xrightarrow{\text{abheda}} \texttt{purna} \xrightarrow{\text{abheda}} \texttt{shunya}$$
+
+The fold identity (0), the algebraic identity element, and philosophical completeness are the same node up to abheda (non-difference). This is not metaphor: `graded-ring.fold-identity = 0`, and `identity-element.desc = "the element that leaves every other element unchanged"`, and `purna.desc = "complete, nothing missing, nothing added"`. These are three descriptions of a single algebraic property: $x + 0 = x$.
+
+**Theorem 5 (Pratipaksha as algebraic inverse).**
+$$\text{pratipaksha}(\text{addition}) = \text{subtraction} \quad\Leftrightarrow\quad \text{add}^{-1} = \text{sub}$$
+$$\text{pratipaksha}(\text{kshaya}) = \text{vriddhi} \quad\Leftrightarrow\quad \delta^{-1}(\text{decay}) = \text{growth}$$
+
+The philosophical concept of opposition (pratipaksha) is exactly the algebraic concept of inverse. The edge type is the same; the domain is different (operations vs linguistic categories). The morphism $\delta$ preserves pratipaksha.
+
+**Theorem 6 (Pratibodha as fixpoint).**
+$$\texttt{pratibodha} \xrightarrow{\text{phala}} \texttt{anuvada} \xrightarrow{\text{phala}} \texttt{proof-graph}$$
+
+Recognition (pratibodha) yields carrying-across (anuvada) which yields the proof graph itself. The derive-chain fixpoint IS pratibodha: the graph recognises what mantra to fire, applies it, recognises again, until nothing new can be recognised. The answer is not computed — it is the stable state of recognition.
+
+$\texttt{op-fixpoint} \xrightarrow{\text{abheda}} \texttt{parampara} \xrightarrow{\text{abheda}} \texttt{avrti}$
+
+Fixpoint (op-fixpoint) is non-different from tradition-as-spiral (parampara) and recurrence (avrti). The mathematical operation of iterating to stability IS the philosophical concept of tradition — each pass deepens, never the same twice, converging to truth.
+
+**Theorem 7 (Spanda as operation).**
+$$\texttt{spanda} \xrightarrow{\text{phala}} \texttt{satya}$$
+$$\texttt{satya} \xrightarrow{\text{phala}} \texttt{brahman}$$
+$$\texttt{brahman} \xrightarrow{\text{swarupa}} \texttt{pratibodha}$$
+
+Self-pulsing vibration (spanda) produces truth (satya). Truth produces the absolute (brahman). The absolute IS recognition (pratibodha). Every `eval` call — `add(3, 5)` returning `8` — is spanda producing satya. The pipeline's computation IS the philosophical ontology in action.
+
+**Corollary.** The system's ontology is not a metaphor layer painted on top of computation. It is the computation. Remove shunya and the fold has no seed. Remove pratipaksha and there are no inverses. Remove pratibodha and there is no fixpoint. The philosophy is load-bearing.
+
+## 7. Results and Current Capabilities
+
+**[SUPERSEDED]** → whitepaper.section-24
+
+The system as of March 2026 contains:
+
+| Metric | Value |
+|---|---|
+| Graph nodes | 1603 |
+| Graph edges | 11410 |
+| Visheshanam dimensions | 46 (10 core + 36 extended) |
+| Operations in $\Sigma$ | 12 (8 invertible) |
+| Physics mantras | 23 |
+| Total tantras | 75 |
+| Pipeline stages | 9 (refine has 9 sub-stages) |
+| Tests passing | 32 |
+| Tests expected-fail | 36 (declared roadmap) |
+
+**Capabilities demonstrated:**
+- Direct mantra computation: $KE = \frac{1}{2}mv^2$, $p = mv$, $F = ma$ (and 20 more)
+- Chain derivation: $u, a, t \to v \to KE$ (fixpoint over 2 mantras)
+- Entity-scoped computation: "ball-A has mass 3... ball-B has mass 2... find KE of ball-A"
+- Count arithmetic: "10 birds. 3 flew away. 2 came back. how many?" → 9
+- Comparison (viveka): "which is heavier?" → graph-driven max/min
+- Article transparency: "the electron" → electron
+- Avastha compounds: "initial velocity" → initial-velocity
+- Scientific notation: $9.109 \times 10^{-31}$
+- Multi-sentence session accumulation
+
+**What the system does NOT do (declared as xfail tests):**
+- Dvandva collection (multiple entities with shared properties)
+- Inverse math (solve for missing variable — plumbing exists, binding broken)
+- Proportional reasoning
+- Multiplication ("each table has 4 legs")
+- Multi-question paragraphs
+- Transitive chain inference
+- Syllogistic reasoning (assertion-bandha exists, not yet wired)
+
+## 8. Related Work and Distinction
+
+**[SUPERSEDED]** → whitepaper.section-21
+
+**Knowledge graphs** (Wikidata, ConceptNet, YAGO): Store facts as triples but require external inference engines (SPARQL, embedding-based retrieval). Nam's graph IS the inference — edge walks are computation.
+
+**Datalog / Answer Set Programming**: Stratified evaluation with fixpoint semantics. Nam's avrti-refine pipeline is structurally equivalent to stratified Datalog, but the rules are declared as graph nodes (mantras) rather than logic programs.
+
+**Type-theoretic proof assistants** (Coq, Lean, Agda): Formal verification with dependent types. Nam's mantra signatures are a lightweight typed function system without the proof obligation — the graph declares what functions exist and what they need, not that they are correct in all cases.
+
+**Category-theoretic knowledge representation**: The visheshanam ring is a small category with 46 morphisms. The pipeline is a functor from the question category to the answer category. The direction morphism $\delta$ is a natural transformation. We do not claim full categorical rigor but note the structural correspondence.
+
+**What is genuinely novel:**
+1. The ontology is not a metaphor layer — it is isomorphic to the algebra (Section 6)
+2. The graph describes its own edge types (Theorem 1)
+3. Natural language maps to algebraic operations via graph walks, not learned embeddings
+4. The fold identity (0), philosophical completeness (purna), and the sentence boundary (viraam) are the same node — this is a structural claim verified by graph walk, not a poetic assertion
+
+## 1. The Proof Graph (revised)
+
+**[SUPERSEDED]** → whitepaper.section-11
+
+### 1.1 Structure
+
+**Definition 1 (Proof graph).** A *proof graph* is a 3-tensor $G \in \{0,1\}^{N \times N \times R}$ where $N = |V|$ is the number of nodes, $R$ is the number of relation types, and $G_{i,j,r} = 1$ iff node $i$ is connected to node $j$ by relation $r$. The tensor is sparse (sub-1% fill, as declared by the node `proof-graph.desc`).
+
+Each node is called a *nigamana* — a truth-that-holds. The graph's own description of a nigamana: "the node that holds a truth with its typed edges, slokas, shabda map, layer tag, and satya score; each node carries a grade from its sthita depth."
+
+The proof graph rests on (`sthita`):
+- **satya** — truth (every node has a truth-weight)
+- **graded-ring** — the algebraic structure governing composition
+- **filtration** — the depth-ordering of nodes
+- **partial-order** — the dependency structure
+
+The graph arises from (`janya`):
+- **anuvada** — carrying-across (translation from language to structure)
+- **om-parser** — the parser that reads `.om` slokas into nodes and edges
+
+### 1.2 The Visheshanam Ring
+
+The set of relation types $\mathcal{V}$ is not an external schema imposed on the graph. It is a node IN the graph — `visheshanam` — which declares its own algebraic structure.
+
+**Definition 2 (Visheshanam ring).** The relation type system $(\mathcal{V}, \oplus, \otimes, 0, 1, {}^{-1})$ is a non-commutative ring where:
+
+| Axiom | Ring element | Graph declaration |
+|---|---|---|
+| Additive operation $\oplus$ | **yukta** | `visheshanam-yukta.abheda = addition` |
+| Multiplicative operation $\otimes$ | **kriya** | `visheshanam-kriya.abheda = multiplication, composition` |
+| Additive identity $0$ | **shunya** | `visheshanam-yukta.desc: "...shunya as its identity element"` |
+| Multiplicative identity $1$ | **swarupa** | `visheshanam-swarupa.desc: "composing any relation with swarupa returns that relation unchanged"` |
+| Group inverse ${}^{-1}$ | **pratipaksha** | `visheshanam-pratipaksha.abheda = inverse-element` |
+| Non-commutativity | **kriya** | `visheshanam-kriya.desc: "non-commutative"` |
+
+The ring has 10 core generators and 36 extended dimensions (46 total), listed by `visheshanam-ring.yukta`.
+
+**The 10 core generators and their algebraic roles:**
+
+| Generator | Symbol | Algebraic identity (from `abheda`) | Desc |
+|---|---|---|---|
+| swarupa | $1_\otimes$ | identity-element, morphism | IS — multiplicative identity |
+| abheda | $\equiv$ | equivalence-relation, quotient | ≡ — forms quotient classes |
+| sthita | $\leq$ | partial-order | ∈ — depth filtration |
+| yukta | $+$ | addition | + — additive operation |
+| siddha | $\vdash$ | — | ⊢ — entailment (not composable) |
+| kriya | $\times$ | multiplication, composition | × — multiplicative operation |
+| phala | $\to$ | — | → — result (dual to janya) |
+| janya | $\leftarrow$ | — | ← — generator (dual to phala) |
+| drishthanta | $\exists$ | — | ∃ — witness / example |
+| pratipaksha | ${}^{-1}$ | inverse-element | ⁻¹ — group inverse |
+
+**Proposition 1 (phala-janya duality).** $\text{phala.pratipaksha} = \text{janya}$ and $\text{janya.pratipaksha} = \text{phala}$. The result relation and the generator relation are inverses of each other.
+
+*Proof.* Graph walk: `visheshanam-phala --pratipaksha--> visheshanam-janya` and `visheshanam-janya --pratipaksha--> visheshanam-phala`. $\square$
+
+### 1.3 Self-description
+
+**Theorem 1 (Graph self-description).** The proof graph $G$ contains a complete description of its own relation type system as nodes and edges within $G$ itself.
+
+*Proof.* We exhibit the self-description:
+
+1. The node `visheshanam` exists in $G$ and declares: `desc = "the 10 typed edges forming a non-commutative ring with yukta as addition, kriya as multiplication, shunya as additive identity, swarupa as multiplicative identity, and pratipaksha as group inverse"`.
+
+2. The node `visheshanam-ring` exists in $G$ with `yukta` edges to all 46 dimension nodes.
+
+3. Each core dimension (e.g., `visheshanam-swarupa`) is itself a node in $G$, connected to its mathematical identity via `abheda`:
+   - `visheshanam-swarupa.abheda = identity-element` (it IS the multiplicative identity)
+   - `visheshanam-yukta.abheda = addition` (it IS addition)
+   - `visheshanam-kriya.abheda = multiplication` (it IS multiplication)
+   - `visheshanam-pratipaksha.abheda = inverse-element` (it IS the group inverse)
+
+4. The labeling function $\ell: E \to \mathcal{V}$ is computable by graph walk: given an edge $(i, j)$, its label is the node in $\mathcal{V}$ that classifies it.
+
+The graph describes its own labeling system using the same labeling system. The description is not circular — it is fixed-point: the description does not change under re-description. $\square$
+
+**Remark (Non-circularity).** The self-description is a *fixed point*, not a paradox. At startup, the OCaml engine reads `.om` files into the tensor. The `.om` file for `visheshanam` declares what the edge types ARE. The runtime reads these declarations to know how to label edges. But the declarations themselves are stored as nodes-with-edges — using the very edge types they declare. This works because the edge types are finite and known at compile time (hardcoded in the OCaml `visheshanam_of_string` function). The graph's self-description is therefore a *reflection* of the compiled edge types, not a bootstrap.
+
+What IS non-trivial: the graph's description of its own algebra (ring structure, identity elements, inverses) is NOT hardcoded. The OCaml engine does not know that yukta is addition or that swarupa is the multiplicative identity. Only the graph knows this. The algebraic structure is declared, not compiled.
+
+## 1. The Proof Graph (v3 — axioms distinguished)
 
 ### 1.1 Structure
 
@@ -158,141 +418,57 @@ The general concept `identity-element` has `swarupa = [additive-identity, multip
 
 **Remark (What is compiled vs declared).** The 10 core edge types are compiled into the OCaml parser (`visheshanam_of_string`). The graph *reflects* these types as nodes. What is NOT compiled — and exists only in the graph — is the algebraic interpretation: that yukta is addition, that swarupa is the multiplicative identity, that pratipaksha is the group inverse. The engine walks edges. Only the graph knows what the edges *mean algebraically*.
 
-## 2. The Operation Algebra
+## 6. The Ontological Isomorphism (v2 — identity disambiguated)
 
-**Definition 3.** The *operation algebra* $\Sigma$ is the set of all nodes in $G$ that carry an \`eval\` key in their shabda. Each operation $\sigma \in \Sigma$ has:
-- $\text{eval}(\sigma)$: the primitive function name (e.g., \`add\`, \`sub\`, \`mul\`)
-- $\text{arity}(\sigma) \in \mathbb{N} \cup \{-1\}$: number of arguments ($-1$ = variadic)
-- $\text{pratipaksha}(\sigma) \in \Sigma$: the algebraic inverse (when it exists)
+**[SUPERSEDED]** → whitepaper.section-17
 
-The live graph declares 28 operations (see Appendix A for the full table). The core 12 used by the pipeline:
+The proof graph's philosophical ontology is not decorative. It is isomorphic to the algebraic structures that make computation possible. We exhibit the correspondences as graph walks, distinguishing axioms from verified properties.
 
-| $\sigma$ | $\text{eval}$ | arity | $\text{pratipaksha}$ |
-|---|---|---|---|
-| addition | add | 2 | subtraction |
-| subtraction | sub | 2 | addition |
-| multiplication | mul | 2 | division |
-| division | div | 2 | multiplication |
-| max | max | 2 | min |
-| min | min | 2 | max |
-| half | half | 1 | double |
-| double | double | 1 | half |
-| square | square | 1 | square-root |
-| square-root | sqrt | 1 | square |
-| power | power | 2 | logarithm |
-| abs | abs | 1 | — |
+**Theorem 4 (Shunya-Purna identity).** In the graph:
+$$\texttt{shunya} \xrightarrow{\text{abheda}} \texttt{additive-identity} \xrightarrow{\text{abheda}} \texttt{shunya}$$
+$$\texttt{shunya} \xrightarrow{\text{abheda}} \texttt{purna} \xrightarrow{\text{abheda}} \texttt{shunya}$$
 
-Additionally: \`sum\` (variadic add), \`product\` (variadic mul), trig functions and inverses (arcsine, arccosine, arctangent), \`factorial\`, \`exponential\`, \`logarithm\`, \`reciprocal\`, \`neg\`, \`ceil\`, \`floor\`, logical operators (\`conjunction\`, \`disjunction\`, \`negation\`).
+Shunya (zero) is abheda with two things simultaneously: the additive identity (the element that leaves everything unchanged under addition) and purna (completeness — nothing missing, nothing added). These are not conflated — `additive-identity` and `purna` are distinct nodes, each independently identified with shunya.
 
-**Proposition 1 (Involution of pratipaksha on $\Sigma$).** For all paired operations $\sigma, \tau \in \Sigma$ where $\sigma.\text{pratipaksha} = \tau$: $\tau.\text{pratipaksha} = \sigma$.
+The fold seed for count arithmetic (`graded-ring.fold-identity = 0`) reads shunya. Shunya is the additive identity (`additive-identity.drishthanta = addition`). And shunya is purna (`purna.desc = "complete, nothing missing, nothing added"`). Three descriptions of a single algebraic property: $x + 0 = x$ — adding nothing leaves you complete.
 
-*Status:* **Verified** by graph walk on 8 symmetric pairs (addition↔subtraction, multiplication↔division, max↔min, half↔double, square↔square-root, power↔logarithm, exponential↔logarithm, neg↔neg). One known gap: \`reciprocal\` should be self-inverse (\`reciprocal.pratipaksha = reciprocal\`) but the edge is missing from the graph.
+*Status:* The shunya↔additive-identity and shunya↔purna abheda edges are **axioms** (declared in .om files). Their symmetry is **verified** by graph walk.
 
-**Definition 4 (Per-argument inverse).** For binary operations, the shabda declares per-argument inverses $p_0^{-1}$ and $p_1^{-1}$ with an optional flip flag:
+**Theorem 5 (Pratipaksha as algebraic inverse).**
+$$\text{pratipaksha}(\text{addition}) = \text{subtraction} \quad\Leftrightarrow\quad \text{add}^{-1} = \text{sub}$$
+$$\text{pratipaksha}(\text{kshaya}) = \text{vriddhi} \quad\Leftrightarrow\quad \delta^{-1}(\text{decay}) = \text{growth}$$
 
-$$f(a, b) = c \implies a = p_0^{-1}(c, b) \quad\text{and}\quad b = p_1^{-1}(c, a)$$
+The philosophical concept of opposition (pratipaksha) is exactly the algebraic concept of inverse. The edge type is the same; the domain is different (operations vs linguistic categories). The morphism $\delta$ preserves pratipaksha.
 
-When \`pratipaksha-1-flip = true\`, the argument order is reversed: $b = p_1^{-1}(a, c)$.
+*Status:* The pratipaksha edges on operations are **axioms**. Their symmetry (involution) is **verified** by graph walk on all tested pairs. That $\delta$ preserves pratipaksha is a **structural observation**, not proven for all possible future word→node mappings.
 
-7 of 28 operations declare per-argument inverses: addition, subtraction, multiplication, division, power, square, logarithm. Of the 23 physics mantras, 14 have a \`math-op\` pointing to one of these invertible operations. The remaining 9 mantras use multi-step krama chains (e.g., $KE = \frac{1}{2}mv^2$) whose inversion would require composing pratipaksha edges in reverse — mechanically possible from the graph structure but not yet implemented.
+**Theorem 6 (Pratibodha as fixpoint).**
+$$\texttt{pratibodha} \xrightarrow{\text{phala}} \texttt{anuvada} \xrightarrow{\text{phala}} \texttt{proof-graph}$$
 
-## 3. Mantra Signatures — Typed Functions on the Graph
+Recognition (pratibodha) yields carrying-across (anuvada) which yields the proof graph itself. The derive-chain fixpoint IS pratibodha: the graph recognises what mantra to fire, applies it, recognises again, until nothing new can be recognised. The answer is not computed — it is the stable state of recognition.
 
-**Definition 5.** A *mantra* is a node $m \in G$ with typed edges declaring a function signature:
-- $\text{janya}(m) = [c_1, \ldots, c_k]$: input concepts (domain)
-- $\text{phala}(m) = [c']$: output concept (codomain)
-- $\text{kriya}(m)$: the operation chain (either a named krama-expression or `direct` for simple products/quotients)
-- $\text{math-op}(m)$: the underlying binary operation when the formula is a single product or quotient
+$$\texttt{op-fixpoint} \xrightarrow{\text{abheda}} \texttt{parampara} \xrightarrow{\text{abheda}} \texttt{avrti}$$
 
-The graph declares 23 physics mantras. Examples:
+Fixpoint (op-fixpoint) is non-different from tradition-as-spiral (parampara) and recurrence (avrti). The mathematical operation of iterating to stability IS the philosophical concept of tradition — each pass deepens, never the same twice, converging to truth.
 
-$$\text{kinetic-energy-mantra}: (\text{mass}, \text{velocity}) \to \text{kinetic-energy}$$
-$$\text{momentum-mantra}: (\text{mass}, \text{velocity}) \to \text{momentum} \quad\text{via multiplication}$$
-$$\text{velocity-mantra}: (\text{initial-velocity}, \text{acceleration}, \text{time}) \to \text{velocity}$$
+*Status:* The phala chain is an **axiom** (declared). The op-fixpoint↔parampara↔avrti abheda chain is an **axiom**. The claim that derive-chain IS pratibodha is an **interpretation** — the structural correspondence is exact, but the identification is a philosophical claim, not a mathematical proof.
 
-**Definition 6 (Derive-chain as fixpoint).** Given a question graph $G_q$ with bound sankhya values, the *derive-chain* computes:
+**Theorem 7 (Spanda as operation).**
+$$\texttt{spanda} \xrightarrow{\text{phala}} \texttt{satya}$$
+$$\texttt{satya} \xrightarrow{\text{phala}} \texttt{brahman}$$
+$$\texttt{brahman} \xrightarrow{\text{swarupa}} \texttt{pratibodha}$$
 
-$$G^* = \text{lfp}(\lambda G'. \text{derive-step}(G'))$$
+Self-pulsing vibration (spanda) produces truth (satya). Truth produces the absolute (brahman). The absolute IS recognition (pratibodha). Every `eval` call — `add(3, 5)` returning `8` — is spanda producing satya.
 
-where $\text{derive-step}$ fires every mantra $m$ whose janya are all bound in $G'$ and whose phala is not yet bound, producing $G' \cup \{[\text{phala}(m), \text{sankhya}, f(v_1, \ldots, v_k)]\}$.
+*Status:* All three edges are **axioms** (declared in .om files). The claim that every eval call is spanda→satya is an **interpretation**.
 
-**Theorem 2 (Termination).** The derive-chain terminates in at most $|\text{mantras}|$ steps.
+**Corollary.** The system's ontology is not a metaphor layer painted on top of computation. It is the computation. Remove shunya and the fold has no seed. Remove pratipaksha and there are no inverses. Remove pratibodha and there is no fixpoint.
 
-*Proof.* Each step binds at least one new concept. The set of bindable concepts is finite (bounded by the mantra phala set). The step function is monotone (it only adds triples, never removes). By Kleene's fixpoint theorem on a finite lattice, it converges. $\square$
+*Status:* This is **verified** — the count-chain tantra reads `graded-ring.fold-identity` (which resolves to shunya), the direction morphism reads pratipaksha edges, and derive-chain uses fixpoint iteration. Deleting these nodes would break the pipeline. The philosophy is load-bearing.
 
-**Example.** Input: $\{u=0, a=4, t=5, m=10\}$, seek: kinetic-energy.
-- Step 1: velocity-mantra fires: $v = u + at = 0 + 4 \cdot 5 = 20$
-- Step 2: kinetic-energy-mantra fires: $KE = \frac{1}{2}mv^2 = \frac{1}{2} \cdot 10 \cdot 400 = 2000$
-- Step 3: no new fireable mantras. Fixpoint reached. $\square$
+## 5. The Pipeline as Stratified Evaluation (v2)
 
-## 4. The Graded Ring and the Lexical Morphism
-
-### 4.1 The Graded Ring
-
-**Definition 7.** A paragraph is modeled as a *graded ring*:
-
-$$R = \bigoplus_{n \geq 0} R_n$$
-
-where each $R_n$ is a *grade* (sentence), the grade boundary is viraam (period or comma), and the ring operations are:
-- $\oplus$: intra-sentence accumulation (additive)
-- $\otimes$: cross-sentence entity selection (multiplicative)
-
-The fold identity is $0$ (shunya), read from the graph: \`graded-ring.shabda.fold-identity = 0\`.
-
-### 4.2 The Lexical Morphism
-
-**Definition 8 (Lexical morphism).** The function \`word-node\` is a morphism from the natural-language lexicon to the graph:
-
-$$\delta: \text{Words} \to V$$
-
-where $V$ is the full node set. This is not limited to verb→direction mapping. The graph declares 211 nodes with \`word:\` lists, covering every word class:
-
-| Word class | Example word | Target node | Downstream use |
-|---|---|---|---|
-| Decay verbs | "flew", "lost", "gave" | kshaya | count-chain → subtraction |
-| Growth verbs | "came", "bought", "earned" | vriddhi | count-chain → addition |
-| Comparatives | "heavier", "faster" | viveka-max | viveka-ganana → max |
-| Superlatives | "lightest", "slowest" | viveka-min | viveka-ganana → min |
-| Articles | "the", "a" | article-the, article-a | sandhi (transparent) |
-| Copulas | "is", "are", "was" | copula-is, copula-are | assertion-bandha (IS-A detection) |
-| Imperatives | "find", "calculate" | vidhi-kaala | dispatch (compute mode) |
-| Questions | "what", "how", "which" | prashna | dispatch (question mode) |
-| Greetings | "hello", "hi" | sambodhana | dispatch (acknowledge) |
-| Prepositions | "of", "in", "from" | prep-of, prep-in | vibhakti (case relations) |
-| Quantifiers | "all", "every" | quantifier | assertion-bandha (universal) |
-| Nouns | "cat", "iron", "gravity" | cat, iron, gravity | entity/concept recognition |
-
-The morphism is structure-preserving: it maps linguistic categories to graph nodes, and the algebraic relationships between those nodes (pratipaksha, kriya, eval) determine computation. The count path (kshaya/vriddhi → subtraction/addition) is one instance. The viveka path (viveka-max/viveka-min → max/min) is another. The grammar path (copula → IS-A, preposition → vibhakti) is a third. All use the same mechanism.
-
-**Proposition 2 (Pratipaksha preservation).** The morphism $\delta$ preserves pratipaksha for tested word pairs:
-
-$$\delta(\text{"flew"}) = \text{kshaya}, \quad \delta(\text{"came"}) = \text{vriddhi}, \quad \text{kshaya.pratipaksha} = \text{vriddhi}$$
-
-*Status:* **Verified** by graph walk on all kshaya↔vriddhi and viveka-max↔viveka-min pairs. Not proven for all possible future word→node mappings.
-
-### 4.3 The Count Fold
-
-**Definition 9 (Count fold).** For the count path specifically, the morphism resolves verbs to directions, then graph walks reach the operation:
-
-$$\delta(w) \xrightarrow{\text{graph walk}} \text{eval name} \xrightarrow{\text{apply-op}} \text{result}$$
-
-The count-chain tantra folds over grades:
-- $\text{acc}_0 = 0$ (fold identity from graded-ring, which is shunya, which is additive-identity)
-- For each grade: detect direction via $\delta$, resolve to operation via graph walk, apply
-- The first non-question grade initializes; subsequent grades accumulate
-
-**Example.** "10 birds sat on a tree. 3 flew away. 2 more came. how many birds are there?"
-
-| Grade | Words | $\delta$ | Operation | $v_n$ | acc |
-|---|---|---|---|---|---|
-| 0 | 10 birds sat tree | — | init | 10 | 10 |
-| 1 | 3 flew away | kshaya → sub | subtract | 3 | 7 |
-| 2 | 2 more came | vriddhi → add | add | 2 | 9 |
-| 3 | how many birds | question | — | — | 9 |
-
-Result: 9. $\square$
-
-## 5. The Pipeline as Stratified Evaluation
+**[SUPERSEDED]** → whitepaper.section-22
 
 ### 5.1 Stratified Evaluation
 
@@ -383,7 +559,232 @@ Every tantra uses one of seven computational patterns, each a node in the kosha 
 
 *Status:* The pattern↔kosha-node correspondence is **axiomatized** (declared via abheda edges). The claim that every tantra uses exactly one pattern is a **structural observation** verified by code inspection, not a formal proof.
 
-## 6. The Ontological Grounding
+## 5. The Pipeline as Stratified Evaluation (v3 — Grade-Scoped Relational Model)
+
+### 5.1 The Grade as Fact Set
+
+**Definition 10 (Grade).** A paragraph decomposes at viraam (sentence boundary) into grades $G_0, G_1, \ldots, G_n$. Each grade $G_i$ is a finite set of triples — a self-contained relational fact set.
+
+**Definition 11 (Stratified pipeline).** The full pipeline is a composition of strata:
+
+$$\text{answer} = \text{emit} \circ \text{dispatch} \circ \text{detect} \circ \text{expand} \circ \text{refine} \circ \text{assert} \circ \text{construct}$$
+
+Each stratum is a monotone endomorphism on the question graph: it only adds triples, never removes them. This guarantees fixpoint convergence within the refine stratum.
+
+### 5.2 Two Computation Patterns
+
+**Composition tantras** compose named operations. Their bodies read as sentences:
+
+$$\text{dispatch-answer}(\text{expanded}, \text{refined}) = \begin{cases} \text{dispatch-anumana}(\text{expanded}, \text{refined}) & \text{if mode} = \text{anumana} \\ \text{dispatch-viveka}(\text{expanded}, \text{refined}) & \text{if mode} = \text{viveka} \\ \text{dispatch-count}(\text{expanded}, \text{refined}) & \text{if mode} = \text{count} \\ \text{dispatch-derive}(\text{expanded}, \text{refined}) & \text{if mode} = \text{derive} \end{cases}$$
+
+**Rewrite tantras** transform the triple-list via grade-scoped sequential reduce:
+
+$$T(G) = \bigoplus_{i} f(G_i)$$
+
+where $f$ is a sequential fold within each grade (ordering matters within a sentence) and $\bigoplus$ is concatenation (ordering across grades is irrelevant to relational consumers).
+
+### 5.3 The Relational Principle
+
+Consumers read relations, not positions. Entity-value binding is resolved by ownership joins:
+
+$$\text{ev-pairs}(e) = \{(e, v) \mid \exists c.\; \text{owns}(c, e) \wedge \text{sankhya}(c, v)\}$$
+
+where $\text{owns}(c, e) \equiv [c, \text{shashthi-vibhakti}, e] \in G$ and $\text{sankhya}(c, v) \equiv [c, \text{sankhya}, v] \in G$.
+
+This eliminates positional scanning. The grade structure IS the Datalog stratification boundary: within a grade, facts are a set; across grades, results compose relationally.
+
+### 5.4 From Scan to Stratification
+
+The original scan construct was an imperative flatmap — walk input triples with mutable state, emit output triples. Replacing scan required two insights:
+
+1. **Producers** are grade-scoped: sequential reduce within each sentence (bounded, 3-8 triples), relational queries across sentences.
+2. **Consumers** are relational: join through typed edges (ownership, derivation), never through positional ordering.
+
+With relational consumers, producers can safely append new triples — ordering no longer carries cross-sentence semantics. The grade boundary resets the additive index, matching the graded ring's period = grade boundary axiom from §4.
+
+## Terminology
+
+The system uses Sanskrit terms as formal identifiers — not as metaphor but as node names in the graph. Each term below is a node; the definition is its `desc` field or structural role. Terms are grouped by first use.
+
+### Graph Structure
+
+| Term | Meaning | Role in system |
+|---|---|---|
+| **nam** (Tamil: inclusive "we") | the self that connects | the proof graph as subject — human + LLM + graph together |
+| **nigamana** | a truth-that-holds | what a node IS — each node is a nigamana carrying typed edges and metadata |
+| **visheshanam** | the typed relation | the label on an edge — 10 core types forming a non-commutative ring |
+| **shabda** | metadata map | key-value pairs on a node (e.g., `eval: add`, `word: plus`) |
+| **satya** | truth | a recognised concept in the question graph (vs mithya, which is unresolved) |
+| **mithya** | the not-yet-recognised | an unresolved word held provisionally until refinement resolves it |
+| **siddha** | proven-through | an edge declaring that a property is established (not merely asserted) |
+
+### The 10 Edge Types (Visheshanam Ring Generators)
+
+| Term | Symbol | Meaning |
+|---|---|---|
+| **swarupa** | IS | A's own-form is B (identity / subtype) |
+| **abheda** | $\equiv$ | A is non-different from B (equivalence) |
+| **sthita** | $\in$ | A rests on B (dependency / partial order) |
+| **yukta** | $+$ | A is equipped with B (additive conjunction) |
+| **siddha** | $\vdash$ | A is proven through B (entailment) |
+| **kriya** | $\times$ | A operates through B (sequential composition) |
+| **phala** | $\to$ | B is the result of A (output) |
+| **janya** | $\leftarrow$ | A arises from B (input / generator) |
+| **drishthanta** | $\exists$ | B is a concrete example of A (witness) |
+| **pratipaksha** | ${}^{-1}$ | B is the opposite of A (algebraic inverse) |
+
+### Algebraic Terms
+
+| Term | Meaning | Role in system |
+|---|---|---|
+| **shunya** | zero / emptiness | the additive identity ($x + 0 = x$); also abheda with purna |
+| **purna** | completeness | nothing missing, nothing added; abheda with shunya |
+| **eka** | one / the singular | the multiplicative identity ($x \times 1 = x$) |
+| **pratipaksha** | opposition / inverse | the algebraic inverse; addition.pratipaksha = subtraction |
+| **kshaya** | decay / diminishing | words like "flew away", "lost" — maps to subtraction via graph walk |
+| **vriddhi** | growth / increase | words like "came", "arrived" — maps to addition via graph walk |
+| **mantra** | a formula-as-graph-node | typed function with janya (inputs) → phala (output) |
+| **tantra** | a pipeline stage | declarative orchestrator that walks the graph to transform it |
+
+### Pipeline Terms
+
+| Term | Meaning | Role in system |
+|---|---|---|
+| **avrti** | recurrence / spiral pass | one refinement iteration; fixpoint = iterate until stable |
+| **sandhi** | junction / joining | compound word resolution ("initial" + "velocity" → "initial-velocity") |
+| **vibhakti** | grammatical case | case relation (shashthi = possessive "of", prathama = subject) |
+| **sankhya** | numeric magnitude | the edge type for "this concept has this number" |
+| **rashi** | quantity-in-context | a sankhya bound to an entity in a specific problem |
+| **asprista-sankhya** | untouched number | a floating number not yet bound to any concept |
+| **viraam** | pause / sentence boundary | the grade boundary in the graded ring (period or comma) |
+| **avastha** | state / qualifier | words like "initial", "final" that qualify a concept |
+| **vishesa** | distinguishing instance | what makes ball-A's mass different from ball-B's mass |
+| **pramana** | proof / measure | ground of verification; what establishes a result |
+| **kosha** | knowledge layer | domain knowledge nodes (physics, math, chemistry, etc.) |
+| **sangati** | structural truth layer | what things ARE — ontological foundations |
+
+### Philosophical Terms (Section 6)
+
+| Term | Meaning | Role in system |
+|---|---|---|
+| **brahman** | the absolute | one who sees becoming as non-separate from being |
+| **pratibodha** | awakening-recognition | pratibodha.phala → anuvada — recognition produces the carrying-across |
+| **anuvada** | carrying-across | translation from structure to speech; anuvada.phala → proof-graph |
+| **spanda** | self-pulsing vibration | every eval call is spanda; spanda.phala → satya |
+| **darshana** | seeing / inspection | the query "what is X?" — seeing that changes the seer |
+| **sphoTa** | meaning-burst | the whole meaning flashing at the last element of the answer |
+| **parampara** | tradition-as-spiral | abheda with op-fixpoint and avrti — iteration IS tradition |
+| **Advaita Vedanta** | non-dual philosophy | the claim that shunya and purna are abheda (non-different) |
+| **Shaiva Tantra** | consciousness philosophy | the claim that spanda (vibration) is the ground of all action |
+
+## 2. The Operation Algebra (v2)
+
+**[SUPERSEDED]** → whitepaper.section-19
+
+**Definition 3.** The *operation algebra* $\Sigma$ is the set of all nodes in $G$ that carry an `eval` key in their shabda. Each operation $\sigma \in \Sigma$ has:
+- $\text{eval}(\sigma)$: the primitive function name (e.g., `add`, `sub`, `mul`)
+- $\text{arity}(\sigma) \in \mathbb{N} \cup \{-1\}$: number of arguments ($-1$ = variadic)
+- $\text{pratipaksha}(\sigma) \in \Sigma$: the algebraic inverse (when it exists)
+
+The live graph declares 25 operations (see Appendix A for the full table). The core 12 used by the pipeline:
+
+| $\sigma$ | $\text{eval}$ | arity | $\text{pratipaksha}$ |
+|---|---|---|---|
+| addition | add | 2 | subtraction |
+| subtraction | sub | 2 | addition |
+| multiplication | mul | 2 | division |
+| division | div | 2 | multiplication |
+| max | max | 2 | min |
+| min | min | 2 | max |
+| half | half | 1 | double |
+| double | double | 1 | half |
+| square | square | 1 | sqrt |
+| sqrt | sqrt | 1 | — |
+| power | power | 2 | logarithm |
+| abs | abs | 1 | — |
+
+Additionally: `sum` (variadic add), `product` (variadic mul), trig functions (sin/cos/tan and inverses), `factorial`, `exponential`, `logarithm`, `reciprocal`, `neg`, `ceil`.
+
+**Proposition 1 (Involution of pratipaksha on $\Sigma$).** For all invertible $\sigma \in \Sigma$: $\text{pratipaksha}(\text{pratipaksha}(\sigma)) = \sigma$.
+
+*Status:* The pratipaksha edges are **axioms** (declared in .om files). Their symmetry is **verified** by graph walk on all 6 invertible pairs. This is an involution — not derived from deeper principles, but checked for consistency.
+
+**Definition 4 (Per-argument inverse).** For binary operations, the shabda declares per-argument inverses $p_0^{-1}$ and $p_1^{-1}$ with an optional flip flag:
+
+$$f(a, b) = c \implies a = p_0^{-1}(c, b) \quad\text{and}\quad b = p_1^{-1}(c, a)$$
+
+When `pratipaksha-1-flip = true`, the argument order is reversed: $b = p_1^{-1}(a, c)$.
+
+7 of 25 operations declare per-argument inverses. This is how `invert-math` solves for missing variables: read the inverse from the graph, apply it. No symbolic algebra engine needed.
+
+## 4. The Graded Ring and the Lexical Morphism (v2)
+
+### 4.1 The Graded Ring
+
+**Definition 7.** A paragraph is modeled as a *graded ring*:
+
+$$R = \bigoplus_{n \geq 0} R_n$$
+
+where each $R_n$ is a *grade* (sentence), the grade boundary is viraam (period or comma), and the ring operations are:
+- $\oplus$: intra-sentence accumulation (additive)
+- $\otimes$: cross-sentence entity selection (multiplicative)
+
+The fold identity is $0$ (shunya), read from the graph: \`graded-ring.shabda.fold-identity = 0\`.
+
+### 4.2 The Lexical Morphism
+
+**Definition 8 (Lexical morphism).** The function \`word-node\` is a morphism from the natural-language lexicon to the graph:
+
+$$\delta: \text{Words} \to V$$
+
+where $V$ is the full node set. This is not limited to verb→direction mapping. The graph declares 211 nodes with \`word:\` lists, covering every word class:
+
+| Word class | Example word | Target node | Downstream use |
+|---|---|---|---|
+| Decay verbs | "flew", "lost", "gave" | kshaya | count-chain → subtraction |
+| Growth verbs | "came", "bought", "earned" | vriddhi | count-chain → addition |
+| Comparatives | "heavier", "faster" | viveka-max | viveka-ganana → max |
+| Superlatives | "lightest", "slowest" | viveka-min | viveka-ganana → min |
+| Articles | "the", "a" | article-the, article-a | sandhi (transparent) |
+| Copulas | "is", "are", "was" | copula-is, copula-are | assertion-bandha (IS-A detection) |
+| Imperatives | "find", "calculate" | vidhi-kaala | dispatch (compute mode) |
+| Questions | "what", "how", "which" | prashna | dispatch (question mode) |
+| Greetings | "hello", "hi" | sambodhana | dispatch (acknowledge) |
+| Prepositions | "of", "in", "from" | prep-of, prep-in | vibhakti (case relations) |
+| Quantifiers | "all", "every" | quantifier | assertion-bandha (universal) |
+| Nouns | "cat", "iron", "gravity" | cat, iron, gravity | entity/concept recognition |
+
+The morphism is structure-preserving: it maps linguistic categories to graph nodes, and the algebraic relationships between those nodes (pratipaksha, kriya, eval) determine computation. The count path (kshaya/vriddhi → subtraction/addition) is one instance. The viveka path (viveka-max/viveka-min → max/min) is another. The grammar path (copula → IS-A, preposition → vibhakti) is a third. All use the same mechanism.
+
+**Proposition 2 (Pratipaksha preservation).** The morphism $\delta$ preserves pratipaksha for tested word pairs:
+
+$$\delta(\text{"flew"}) = \text{kshaya}, \quad \delta(\text{"came"}) = \text{vriddhi}, \quad \text{kshaya.pratipaksha} = \text{vriddhi}$$
+
+*Status:* **Verified** by graph walk on all kshaya↔vriddhi and viveka-max↔viveka-min pairs. Not proven for all possible future word→node mappings.
+
+### 4.3 The Count Fold
+
+**Definition 9 (Count fold).** For the count path specifically, the morphism resolves verbs to directions, then graph walks reach the operation:
+
+$$\delta(w) \xrightarrow{\text{graph walk}} \text{eval name} \xrightarrow{\text{apply-op}} \text{result}$$
+
+The count-chain tantra folds over grades:
+- $\text{acc}_0 = 0$ (fold identity from graded-ring, which is shunya, which is additive-identity)
+- For each grade: detect direction via $\delta$, resolve to operation via graph walk, apply
+- The first non-question grade initializes; subsequent grades accumulate
+
+**Example.** "10 birds sat on a tree. 3 flew away. 2 more came. how many birds are there?"
+
+| Grade | Words | $\delta$ | Operation | $v_n$ | acc |
+|---|---|---|---|---|---|
+| 0 | 10 birds sat tree | — | init | 10 | 10 |
+| 1 | 3 flew away | kshaya → sub | subtract | 3 | 7 |
+| 2 | 2 more came | vriddhi → add | add | 2 | 9 |
+| 3 | how many birds | question | — | — | 9 |
+
+Result: 9. $\square$
+
+## 6. The Ontological Grounding (v3)
 
 The proof graph's philosophical ontology is not decorative. The philosophical terms ARE the node names of the algebraic structures. There are not two parallel systems with a map between them — there is one system where each node has both a philosophical meaning and an algebraic role.
 
@@ -443,7 +844,51 @@ The interpretations (pratibodha/fixpoint, spanda/eval) are not load-bearing in t
 
 *Status:* **Verified** — count-chain reads \`graded-ring.fold-identity\` (resolving through shunya), the direction morphism reads pratipaksha edges, and derive-chain uses fixpoint iteration. The grounded pairs are operationally necessary. The interpretations are philosophically meaningful but computationally dispensable.
 
-## 7. Results and Current Capabilities
+## Abstract (v2)
+
+A proof graph is a knowledge representation in which nodes are claims and typed edges are the relations between them. We present *nam*, a proof graph system that derives answers to natural-language questions by walking its own structure — no external inference engine, no neural network at query time, no search. The graph declares an operation algebra $\Sigma$ of 28 operations with eval/arity/inverse, a mantra layer of 23 typed physics functions $f(\text{janya}) \to \text{phala}$, and a graded ring $R = \bigoplus R_n$ over sentence-grades whose fold computes arithmetic. A 46-dimensional non-commutative visheshanam ring governs edge composition. We show that the system's philosophical ontology (from Advaita Vedanta and Shaiva Tantra) is not metaphor but is structurally grounded in the algebraic structures that make computation possible: shunya (zero) IS the additive identity node, pratipaksha (opposition) IS the algebraic inverse edge type, and the pipeline's fixpoint iteration mirrors pratibodha (recognition). The graph contains 1603 nodes, 11410 edges, 75 tantras, and answers questions in kinematics, count arithmetic, and comparison — all by walking edges.
+
+## 2. The Operation Algebra (v3)
+
+**Definition 3.** The *operation algebra* $\Sigma$ is the set of all nodes in $G$ that carry an \`eval\` key in their shabda. Each operation $\sigma \in \Sigma$ has:
+- $\text{eval}(\sigma)$: the primitive function name (e.g., \`add\`, \`sub\`, \`mul\`)
+- $\text{arity}(\sigma) \in \mathbb{N} \cup \{-1\}$: number of arguments ($-1$ = variadic)
+- $\text{pratipaksha}(\sigma) \in \Sigma$: the algebraic inverse (when it exists)
+
+The live graph declares 28 operations (see Appendix A for the full table). The core 12 used by the pipeline:
+
+| $\sigma$ | $\text{eval}$ | arity | $\text{pratipaksha}$ |
+|---|---|---|---|
+| addition | add | 2 | subtraction |
+| subtraction | sub | 2 | addition |
+| multiplication | mul | 2 | division |
+| division | div | 2 | multiplication |
+| max | max | 2 | min |
+| min | min | 2 | max |
+| half | half | 1 | double |
+| double | double | 1 | half |
+| square | square | 1 | square-root |
+| square-root | sqrt | 1 | square |
+| power | power | 2 | logarithm |
+| abs | abs | 1 | — |
+
+Additionally: \`sum\` (variadic add), \`product\` (variadic mul), trig functions and inverses (arcsine, arccosine, arctangent), \`factorial\`, \`exponential\`, \`logarithm\`, \`reciprocal\`, \`neg\`, \`ceil\`, \`floor\`, logical operators (\`conjunction\`, \`disjunction\`, \`negation\`).
+
+**Proposition 1 (Involution of pratipaksha on $\Sigma$).** For all paired operations $\sigma, \tau \in \Sigma$ where $\sigma.\text{pratipaksha} = \tau$: $\tau.\text{pratipaksha} = \sigma$.
+
+*Status:* **Verified** by graph walk on 8 symmetric pairs (addition↔subtraction, multiplication↔division, max↔min, half↔double, square↔square-root, power↔logarithm, exponential↔logarithm, neg↔neg). One known gap: \`reciprocal\` should be self-inverse (\`reciprocal.pratipaksha = reciprocal\`) but the edge is missing from the graph.
+
+**Definition 4 (Per-argument inverse).** For binary operations, the shabda declares per-argument inverses $p_0^{-1}$ and $p_1^{-1}$ with an optional flip flag:
+
+$$f(a, b) = c \implies a = p_0^{-1}(c, b) \quad\text{and}\quad b = p_1^{-1}(c, a)$$
+
+When \`pratipaksha-1-flip = true\`, the argument order is reversed: $b = p_1^{-1}(a, c)$.
+
+7 of 28 operations declare per-argument inverses: addition, subtraction, multiplication, division, power, square, logarithm. Of the 23 physics mantras, 14 have a \`math-op\` pointing to one of these invertible operations. The remaining 9 mantras use multi-step krama chains (e.g., $KE = \frac{1}{2}mv^2$) whose inversion would require composing pratipaksha edges in reverse — mechanically possible from the graph structure but not yet implemented.
+
+## 7. Results and Current Capabilities (v2)
+
+**[SUPERSEDED]** → whitepaper.section-24
 
 The system as of March 2026 contains:
 
@@ -483,7 +928,71 @@ The system as of March 2026 contains:
 - Integration / calculus (graph has derivative↔antiderivative ontology but no integration mantras)
 - Any formula not declared as a mantra node — the system's computational power is exactly the transitive closure of its declared mantras over bound input values
 
-## 8. Related Work and Distinction
+## 8. The Tantra as Sentence (v2)
+
+### 8.1 S-Expression Syntax
+
+All 145 tantras use s-expression format:
+
+```
+(tantra name (params...)
+  (binding expr)
+  ...
+  final-expr)
+```
+
+The last expression is the return value. No `return`/`done` boilerplate. Bindings are `(name expr)` — the name is visible to subsequent bindings.
+
+### 8.2 Words as Sentences
+
+With sufficient named helpers, tantra bodies become sentences — compositions of words with minimal variable plumbing:
+
+```
+(tantra dispatch-answer (expanded refined)
+  (mode (read-signal expanded "dispatch-mode"))
+  (cond (eq mode "anumana") (dispatch-anumana expanded refined)
+        (eq mode "viveka")  (dispatch-viveka expanded refined)
+        (eq mode "count")   (dispatch-count expanded refined)
+        (eq mode "derive")  (dispatch-derive expanded refined)
+        otherwise "no match"))
+```
+
+This reads as prose: "the answer is the anumana answer, the viveka answer, the count answer, or the derived answer."
+
+### 8.3 The Composition Hierarchy
+
+145 tantras across four layers of abstraction:
+
+| Layer | Count | Example |
+|---|---|---|
+| Primitives | 20 | `has-text`, `has-items`, `triple-subj` |
+| Operations | 30 | `triples-by-edge`, `query-edge`, `word-resolve` |
+| Structures | 15 | `viveka-comparison`, `sought-context`, `derived-value` |
+| Compositions | 80 | `dispatch-answer`, `emit-reasoning`, `anuvada-ganana` |
+
+Each layer composes the previous. The top layer reads as natural language.
+
+## 7. Results and Current Capabilities (v3)
+
+The system as of March 2026 contains:
+
+| Metric | Value |
+|---|---|
+| Graph nodes | ~2200 |
+| Graph edges | ~12000 |
+| Visheshanam dimensions | 46 |
+| Physics mantras | 23 |
+| Tantras (s-expression) | 145 |
+| Tantra layers | 4 (primitives → operations → structures → compositions) |
+| Scan constructs | 0 (eliminated — replaced by grade-scoped relational queries) |
+| Tests passing | 31 |
+| Tests xfail (known gaps) | 33 |
+
+**Capabilities:** kinematics (single + chain derivation), multi-entity scoped computation, comparison (viveka), count arithmetic (addition/subtraction with proof), categorical inference (anumana via varga chain), session accumulation.
+
+**Architecture:** All computation is s-expression tantras composing named operations. Graph transforms use grade-scoped sequential reduce within sentences and relational joins across sentences. The pipeline is stratified Datalog evaluation where each grade is a fact set and each layer is a monotone stratum.
+
+## 8. Related Work and Distinction (v2)
 
 **Knowledge graphs** (Wikidata, ConceptNet, YAGO): Store facts as triples but require external inference engines (SPARQL, embedding-based retrieval). Nam's graph IS the inference — edge walks are computation.
 
@@ -499,141 +1008,3 @@ The system as of March 2026 contains:
 3. Natural language maps to algebraic operations via a 211-node lexical morphism using graph walks, not learned embeddings (Section 4.2)
 4. The fold identity (0), philosophical completeness (purna), and the sentence boundary (viraam) are connected through abheda edges — a structural claim verified by graph walk, with the level-indexed nature of abheda made explicit (Section 6.2)
 5. The system is honest about its limits: it can only compute what its declared mantras cover, and it distinguishes axioms from theorems from interpretations throughout
-
-## Appendix A: Live Graph State (auto-generated by pathram math)
-
-*Emitted directly from the running proof graph.*
-
-## The Operation Algebra
-
-The system has an operation set $\Sigma$ with 25 operations, each declared in the kosha with eval (primitive name), arity, and inverse:
-
-| Operation | $f$ | Arity | Word | $f^{-1}$ |
-|---|---|---|---|---|
-| abs | `abs` | 1 | — | — |
-| addition | `add` | 2 | plus | subtraction |
-| arccosine | `acos` | 1 | arccosine | cosine |
-| arcsine | `asin` | 1 | arcsine | sine |
-| arctangent | `atan2` | 2 | arctangent | tangent |
-| ceil | `ceil` | 1 | — | — |
-| disjunction | `or` | 2 | ['or', 'either'] | — |
-| division | `div` | 2 | over | multiplication |
-| double | `double` | 1 | double | half |
-| exponential | `exp` | 1 | — | logarithm |
-| factorial | `factorial` | 1 | — | — |
-| half | `half` | 1 | half | double |
-| logarithm | `log` | 1 | — | power |
-| max | `max` | 2 | — | — |
-| min | `min` | 2 | — | — |
-| multiplication | `mul` | 2 | times | division |
-| neg | `neg` | 1 | — | neg |
-| power | `power` | 2 | to-the-power | logarithm |
-| ppr-mantra | `ppr` | 3 | pagerank | — |
-| product | `mul` | -1 | — | — |
-| reciprocal | `reciprocal` | 1 | reciprocal | reciprocal |
-| square | `square` | 1 | squared | sqrt |
-| square-root | `sqrt` | 1 | root-of | square |
-| subtraction | `sub` | 2 | minus | addition |
-| sum | `add` | -1 | — | — |
-
-**Invertible operations** (7/25): for binary $f(a, b) = c$, the inverse is declared per-argument:
-
-$$f^{-1}_0(c, b) = a \quad\text{and}\quad f^{-1}_1(c, a) = b$$
-
-- `addition`: $p_0^{-1}$ = `sub`, $p_1^{-1}$ = `sub`
-- `division`: $p_0^{-1}$ = `mul`, $p_1^{-1}$ = `div` (flip)
-- `logarithm`: $p_0^{-1}$ = `exp`, $p_1^{-1}$ = ``
-- `multiplication`: $p_0^{-1}$ = `div`, $p_1^{-1}$ = `div`
-- `power`: $p_0^{-1}$ = `power`, $p_1^{-1}$ = ``
-- `square`: $p_0^{-1}$ = `sqrt`, $p_1^{-1}$ = ``
-- `subtraction`: $p_0^{-1}$ = `add`, $p_1^{-1}$ = `sub` (flip)
-
-## Mantra Signatures
-
-The graph declares 53 mantras as typed functions. 23 are physics mantras with complete janya (input) → phala (output) signatures:
-
-$$\text{acceleration-mantra}(final-velocity, initial-velocity, time) \to acceleration \quad\text{via }\texttt{acceleration-expr}$$
-
-$$\text{angular-momentum-mantra}(moment-of-inertia, angular-velocity) \to angular-momentum \quad\text{via }\texttt{direct}$$
-
-$$\text{angular-velocity-mantra}(velocity, radius) \to angular-velocity \quad\text{via }\texttt{direct}$$
-
-$$\text{capacitance-mantra}(charge, voltage) \to capacitance \quad\text{via }\texttt{direct}$$
-
-$$\text{centripetal-force-mantra}(mass, velocity, radius) \to centripetal-force \quad\text{via }\texttt{centripetal-force-expr}$$
-
-$$\text{electric-power-mantra}(voltage, current) \to electric-power \quad\text{via }\texttt{direct}$$
-
-$$\text{frequency-mantra}(period) \to frequency \quad\text{via }\texttt{frequency-expr}$$
-
-$$\text{friction-force-mantra}(coefficient, normal-force) \to friction-force \quad\text{via }\texttt{direct}$$
-
-$$\text{gravitational-force-mantra}(gravitational-constant, mass1, mass2, radius) \to gravitational-force \quad\text{via }\texttt{gravitational-force-expr}$$
-
-$$\text{kinetic-energy-mantra}(mass, velocity) \to kinetic-energy \quad\text{via }\texttt{ke-expr}$$
-
-$$\text{mass-density-mantra}(mass, volume) \to mass-density \quad\text{via }\texttt{direct}$$
-
-$$\text{momentum-mantra}(mass, velocity) \to momentum \quad\text{via }\texttt{direct}$$
-
-$$\text{newton-second-law-motion}(mass, acceleration) \to force \quad\text{via }\texttt{direct}$$
-
-$$\text{ohm-law}(current, resistance) \to ∅ \quad\text{via }\texttt{direct}$$
-
-$$\text{period-mantra}(angular-velocity) \to period \quad\text{via }\texttt{period-expr}$$
-
-$$\text{photon-energy-mantra}(planck-constant, frequency) \to photon-energy \quad\text{via }\texttt{direct}$$
-
-$$\text{potential-energy-mantra}(mass, gravity, height) \to potential-energy \quad\text{via }\texttt{potential-energy-expr}$$
-
-$$\text{pressure-mantra}(force, area) \to pressure \quad\text{via }\texttt{direct}$$
-
-$$\text{relative-velocity-mantra}(velocity, velocity) \to relative-velocity \quad\text{via }\texttt{relative-velocity-expr}$$
-
-$$\text{spring-force-mantra}(spring-constant, displacement) \to spring-force \quad\text{via }\texttt{direct}$$
-
-$$\text{torque-mantra}(moment-of-inertia, angular-acceleration) \to torque \quad\text{via }\texttt{direct}$$
-
-$$\text{velocity-mantra}(initial-velocity, acceleration, time) \to velocity \quad\text{via }\texttt{velocity-expr}$$
-
-$$\text{work-mantra}(force, displacement, angle) \to work \quad\text{via }\texttt{work-expr}$$
-
-## Algebraic Hierarchy
-
-The kosha declares algebraic structures as **structural permissions**. Each level adds guarantees that the pipeline reads to validate operations:
-
-$$\text{field} \supset \text{ring} \supset \text{group} \supset \text{monoid}$$
-
-- **monoid**: rests on group; witnessed by addition, multiplication; has associativity, identity-element
-- **group**: has closure, identity-element, inverse-element, associativity, shakha +1 more
-- **ring**: rests on group; operates via addition, multiplication; proves distributivity; witnessed by int, polynomial; has monoid, identity-element, commutativity
-- **graded-ring**: rests on ring; operates via addition, multiplication; has filtration, partial-order, grade, depth
-- **distributivity**: operates via multiplication, addition
-- **field-varga**: rests on kshetra; has mula-shakti, taranga, spanda, niyama
-- **filtration**: rests on ring, partial-order; proves closure; has ideal, subspace
-- **associativity**: rests on group; proves sandhi; has sama
-- **commutativity**: witnessed by addition, multiplication; has associativity, sama
-
-The **graded ring** is the input structure for paragraphs:
-
-$$R = \bigoplus_{n \geq 0} R_n$$
-
-where each $R_n$ is a sentence (grade), the grade boundary is `viraam` (period/comma), addition ($\oplus$) is intra-sentence accumulation, and multiplication ($\otimes$) is cross-sentence entity selection.
-
-## Pipeline as Function Composition
-
-The full pipeline is a composition of monotone endomorphisms on the question graph $G$:
-
-$$\text{answer} = (\text{emit} \circ \text{pramana} \circ \text{execute} \circ \text{match} \circ \text{expand} \circ \text{refine} \circ \text{build})(\text{sentence})$$
-
-**pipeline** (1 tantras, 35 lines):
-- $\texttt{anuvada-ganana}(sentence)$ — calls 6 tantras
-
-## Visheshanam Ring
-
-The edge type system is a 46-element non-commutative ring with 10 core dimensions and extended grammatical dimensions:
-
-**Core** (the original 10): swarupa (IS), abheda (≡), sthita (∈), yukta (+), siddha (⊢), kriya (×), phala (→), janya (←), drishthanta (∃), pratipaksha (⁻¹)
-
-**Extended** (36 dimensions): sandhi, matra, krama, kramanusara, avastha, apeksha, ahara, dhatu, vrnda, kala, prayoga, vachana, purusa, vishesa, amsha, dvitiya-vibhakti, trtiya-vibhakti, chaturthi-vibhakti, panchami-vibhakti, saptami-vibhakti, bhuta-kaala, vartamana-kaala, bhavishya-kaala, satya, mithya, sankhya, shashthi-vibhakti, prathama-vibhakti, vidhi-kaala, naama-mudra, asprista-sankhya, rashi-bandha, viraam, dvandva, adhikarana, naama-pratibodha
-

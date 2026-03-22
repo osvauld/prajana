@@ -1,0 +1,6 @@
+-- unpacks solve-for detection result by field name.
+(tantra solve-for-result (sf field)
+  (cond (eq field "has-intent") (nth sf 0)
+    (eq field "solve-for") (nth sf 1)
+    (eq field "scope-entity") (nth sf 2)
+    otherwise ""))

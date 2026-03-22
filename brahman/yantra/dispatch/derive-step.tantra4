@@ -1,0 +1,26 @@
+-- one derivation pass: fires every mantra whose janya are all bound and phala is unbound.
+(tantra derive-step (graph)
+
+  (bv (bound-state graph))
+  (bcs (nth bv 0))
+  (vps (nth bv 1))
+
+  (all-mantras (mantra-select ""))
+
+  (new-triples (reduce all-mantras [] (fn acc mantra ->
+    let ms       = to-string mantra
+    let contract = om-contract ms
+    let janya    = nth contract 0
+    let phala-l  = nth contract 1
+    let phala    = cond (has-items phala-l) (nth phala-l 0) otherwise (shabda ms "name")
+    let all-ok   = reduce janya true (fn a r ->
+      (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
+    let math-op  = shabda ms "math-op"
+    let has-math = has-text math-op
+    let fired    = execute-mantra mantra vps "forward" ""
+    cond (or (member phala bcs) (not all-ok)) acc
+    -- emit both the value and which mantra produced it
+    otherwise (append acc [[phala, "sankhya", fired],
+                           [phala, "derived-by", mantra]]))))
+
+  (reduce new-triples graph (fn g t -> (append g [t]))))

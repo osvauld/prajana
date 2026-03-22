@@ -1,0 +1,61 @@
+-- arithmetic count-chain: fold over grades to compute count results.
+(tantra count-chain (graph grades)
+  (has-count (has-items (filter (triples-by-edge graph "satya") (fn t -> eq (triple-subj t) "count"))))
+  (q-concept (question-concept grades))
+  (q-direction (detect-direction (question-words grades)))
+  (has-swarupa (has-items (filter (non-reflexive (triples-by-edge graph "swarupa")) (fn t -> not (is-direction (triple-obj t))))))
+  (q-vals (cond (and has-swarupa (has-text q-concept))
+    (graph | where [s, e, o] | and (eq (to-string s) q-concept) | and (eq e "sankhya") | collect (to-number o))
+    otherwise []))
+  (use-aggregation (has-items q-vals))
+  (agg-result (sum q-vals))
+  (agg-fold (reduce q-vals [0, []] (fn state v ->
+    let acc = fold-field state "value"
+    let steps = fold-field state "steps"
+    let new-acc = add acc v
+    let step = (concat "vriddhi " (to-string v) ": " (to-string acc) " -> " (to-string new-acc))
+    [new-acc, (append steps [step])])))
+  (agg-steps (nth agg-fold 1))
+  (fold-seed (to-number (shabda "graded-ring" "fold-identity")))
+  (arith-state (reduce grades [fold-seed, [], false] (fn state grade ->
+    let acc   = fold-field state "value"
+    let steps = fold-field state "steps"
+    let init  = fold-field state "started"
+    let is-q  = is-question-grade grade
+    let nums  = grade-numbers grade
+    let has-num = has-items nums
+    let dir   = grade-direction grade
+    let eff-dir = cond (has-text dir) dir
+      (has-text q-direction) q-direction
+      otherwise "vriddhi"
+    let nv = cond has-num (to-number (nth nums 0)) otherwise 0
+    let op-eval = cond (eq eff-dir "kshaya") (shabda "subtraction" "eval") otherwise (shabda "addition" "eval")
+    let new-acc = apply-op (to-string op-eval) [acc, nv]
+    let step = (concat eff-dir " " (to-string nv) ": " (to-string acc) " -> " (to-string new-acc))
+    cond (or is-q (not has-num)) state
+    (not init) [nv, steps, true]
+    otherwise [new-acc, (append steps [step]), true])))
+  (count-result (cond use-aggregation agg-result otherwise (fold-field arith-state "value")))
+  (count-steps (cond use-aggregation agg-steps otherwise (fold-field arith-state "steps")))
+  (found-any (cond use-aggregation true otherwise (fold-field arith-state "started")))
+  (all-satya (user-concepts graph))
+  (count-entity (cond use-aggregation q-concept otherwise (nth all-satya 0)))
+  (count-container (nth all-satya 1))
+  (resolved-count (cond (eq q-direction "kshaya") "count-remaining" otherwise "count-total"))
+  (base-graph (cond found-any
+    (reduce graph [] (fn acc triple ->
+      cond (and (eq (triple-subj triple) "count") (eq (triple-edge triple) "satya"))
+        (append acc [[resolved-count, "satya", resolved-count]])
+      otherwise (append acc [triple])))
+    otherwise graph))
+  (step-triples (map count-steps (fn s -> ["count", "count-step", s])))
+  (proof (cond found-any
+    (append
+      [[resolved-count, "sankhya", count-result],
+       [resolved-count, "derived-by", "count-chain"]]
+      (append step-triples
+        (append
+          (cond (exists count-entity) [["count", "count-entity", count-entity]] otherwise [])
+          (cond (exists count-container) [["count", "count-container", count-container]] otherwise []))))
+    otherwise []))
+  (cond (not has-count) graph otherwise (append base-graph proof)))

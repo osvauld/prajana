@@ -116,3 +116,55 @@ These depend on mode dispatch being clean (Step 3 / Step 6 done first).
 3.1 uses existing node-info builtin.
 3.2 requires session integration.
 After 3.2, anuvada-ganana is dissolved into mode dispatch + ganana-response.
+
+## Signal emission: emit-triples emits graph-declared signals for all words ✓
+
+
+
+emit-triples rewritten with word-info, word-resolve, is-direction helpers. shabda-anveshana now sole word resolution path — word-node only used internally. All consumer tantras switched from word-node to shabda-anveshana.
+
+## Plural morphology: strip -s/-es/-ies to resolve stems, emit bahu-vachana signal
+
+## Vibhakti signals: prepositions emit their vibhakti case (panchami from 'from', saptami from 'at', chaturthi from 'to')
+
+## Tense signals: copula variants emit kaala (vartamana/bhuta) and vachana (eka/bahu)
+
+## Distribution signal: add 'each/every/per' → distribution node with kriya→multiplication
+
+## Motion verb binding: 'moves/moving' emit kartari-prayoga + velocity concept binding
+
+## From-rest sandhi: panchami-vibhakti + 'rest' → initial-velocity=0
+
+## Multiplication in count-chain: distribution signal triggers multiply instead of add
+
+## Flip resolved xfails to passing tests (13 tests: 8 earlier + 5 from swarupa-anuvada)
+
+## tantra4 created: 61 files with 4-layer composition (primitives → operations → structures → compositions). Signal bus via write-signals/read-signal. Pipeline tantras 26% smaller. Next: swap into live pipeline, test, om node updates for new helpers. ✓
+
+
+
+tantra4 live: all 13 pipeline tantras + 48 helpers swapped into live pipeline. Old tantras moved to history/yantra_old/. Fixed 10 variable-name collisions (role→rl, pair→kv, base→base-graph, hit→found-node, found→matched, name→w, anumana-result→anumana-field). Fixed swarupa-anuvada propagating sankhya to direction nodes. Fixed count-chain aggregation path false-triggering on direction swarupa edges. 32 passed / 31 xfailed / 5 XPASS / 0 regressions.
+
+## tantra4 live: old tantras moved to history, 10 collision fixes, swarupa-anuvada direction guard, count-chain aggregation guard. 32p/31x/5xpass. ✓
+
+## S-expression tantra format: new .tantra4 parser in OCaml (yantra_tantra_sexp.ml). Reuse existing sexp tokenizer from setu_shabda.ml. (tantra name (params) body) syntax — last expression is return, (name expr) for bindings. Coexists with .tantra3. ✓
+
+## Convert 56 tantra4 helpers to .tantra4 s-expression format. Most become single-expression tantras: (tantra has-text (w) (gt (string-length w) 0)). No variable bindings needed for simple helpers. ✓
+
+## Convert 76 pipeline tantras to .tantra4 s-expression format. With semantic helpers, most become sentence tantras — body reads as prose with minimal variable bindings. ✓
+
+## Sentence tantras: push abstraction until every cond branch is a single named call. Pipeline tantras read as natural language — the conclusion is the viveka conclusion or the physics conclusion.
+
+## Stratify scan tantras: convert 14 scan tantras from stateful fold+pattern-match into stratified pipe chains. Each scan becomes multiple pure from/where/collect strata — no mutable state. Sentence boundaries via split-at-viraam, relational joins via named helpers. Eliminates scan as a construct. ✓
+
+## Prakriya dissolution: 8 scan tantras dissolved into composable tantra4 files. 3 new helpers (proximity-bind, rewrite-subjects, find-after-signal) + 3 OCaml primitives (with-index, nearest-before, sentence-of). Zero .tantra3 or .prakriya files remain — all 139 tantras are .tantra4 s-expressions. ✓
+
+
+
+All 8 scan prakriyas dissolved into composed tantra4 files. Intermediate .prakriya format created and then absorbed — prakriya concept lives on as a composition pattern, not a file format.
+
+## Relational graph consumers: viveka-ganana uses ownership joins instead of positional scan. extract-solve-for uses grade-scoped queries. All 8 rewrite tantras grade-scoped. Positional helpers (proximity-bind, rewrite-subjects, find-after-signal) removed. append-triples made idempotent. 31p/33x/4xpass. ✓
+
+
+
+Relational model working. 1 pass regression vs baseline (31 vs 32) — red_blue tests shifted from XPASS to XFAIL. Root cause identified: scan was flatmap (rewrite), prakriya was additive (append). Fix: grade-scoped sequential reduce within each sentence, relational joins across sentences. Three positional OCaml primitives (with-index, nearest-before, sentence-of) still in codebase but no longer used by any tantra.

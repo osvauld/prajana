@@ -26,6 +26,7 @@ TANTRA_GROUPS = OrderedDict(
 )
 
 _KEYWORDS = {
+    "tantra",
     "tantra3",
     "takes",
     "return",
@@ -80,8 +81,11 @@ _KEYWORDS = {
 
 
 def find_all():
-    """Find all .tantra3 files under brahman/yantra/."""
-    return sorted(glob.glob(os.path.join(YANTRA, "**", "*.tantra3"), recursive=True))
+    """Find all .tantra3 and .tantra4 files under brahman/yantra/."""
+    t3 = glob.glob(os.path.join(YANTRA, "**", "*.tantra3"), recursive=True)
+    t4 = glob.glob(os.path.join(YANTRA, "**", "*.tantra4"), recursive=True)
+    pr = glob.glob(os.path.join(YANTRA, "**", "*.prakriya"), recursive=True)
+    return sorted(t3 + t4 + pr)
 
 
 def group_of(path):
@@ -96,8 +100,87 @@ def name_of(path):
     return os.path.splitext(os.path.basename(path))[0]
 
 
+def parse_sexp(path):
+    """Parse a .tantra4 s-expression file into a structured dict."""
+    try:
+        with open(path) as f:
+            source = f.read()
+    except Exception:
+        return None
+
+    lines = source.split("\n")
+
+    # extract (tantra name (params...) body...)
+    m = re.match(r'\(\s*tantra\s+([a-z][a-z0-9-]*)\s*\(([^)]*)\)', source)
+    if not m:
+        return None
+    name = m.group(1)
+    params_str = m.group(2).strip()
+    takes = params_str.split() if params_str else []
+
+    comments = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("--"):
+            comments.append(stripped[2:].strip())
+
+    # extract bindings: (name expr...) at top level inside the tantra body
+    # simplified: find all (identifier ...) forms after the params
+    body_start = m.end()
+    body_text = source[body_start:]
+    bindings = []
+    for bm in re.finditer(r'\(([a-z][a-z0-9-]*)\s+', body_text):
+        bname = bm.group(1)
+        if bname not in _KEYWORDS and bname not in {"tantra"}:
+            # extract up to matching close paren
+            depth = 1
+            pos = bm.end()
+            while pos < len(body_text) and depth > 0:
+                if body_text[pos] == '(':
+                    depth += 1
+                elif body_text[pos] == ')':
+                    depth -= 1
+                pos += 1
+            expr = body_text[bm.start() + 1:pos - 1].strip()
+            # only count as binding if the name part looks like an assignment
+            # (not a function call — bindings have the name as first token)
+            bindings.append({
+                "name": bname,
+                "expr": expr[:120] + "..." if len(expr) > 120 else expr,
+            })
+
+    scan_count = len(re.findall(r'\bscan\s+\S+\s+\[', source))
+    cond_count = source.count(" cond ") + source.count("(cond ")
+    from_count = len(re.findall(r'\|\s*where\b', source))
+    reduce_count = len(re.findall(r'\breduce\b', source))
+
+    all_ids = set(re.findall(r'\b([a-z][a-z0-9]*(?:-[a-z0-9]+)+)\b', source))
+    own = {name} | set(takes) | {b["name"] for b in bindings}
+    call_candidates = all_ids - own - _KEYWORDS
+
+    return {
+        "name": name,
+        "path": path,
+        "group": group_of(path),
+        "takes": takes,
+        "bindings": bindings,
+        "returns": "result",
+        "comments": comments,
+        "scans": scan_count,
+        "conds": cond_count,
+        "froms": from_count,
+        "reduces": reduce_count,
+        "lines": len(lines),
+        "calls": sorted(call_candidates),
+        "source": source,
+    }
+
+
 def parse(path):
-    """Parse a tantra3 file into a structured dict."""
+    """Parse a tantra3 or tantra4 file into a structured dict."""
+    if path.endswith(".tantra4") or path.endswith(".prakriya"):
+        return parse_sexp(path)
+
     try:
         with open(path) as f:
             source = f.read()

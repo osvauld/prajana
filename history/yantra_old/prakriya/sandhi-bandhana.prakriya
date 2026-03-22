@@ -1,0 +1,19 @@
+-- sandhi-bandhana: reattribute sankhya/matra bindings from base to compound names.
+-- reads sandhi-rename markers, rewrites matching subjects, removes markers.
+(tantra sandhi-bandhana (graph)
+  -- build rename map: [[base, compound], ...]
+  (renames (graph | where [compound, e, base] | and (eq e "sandhi-rename") | collect [base, compound]))
+  (has-renames (has-items renames))
+
+  -- pure rewrite: apply rename map and remove markers
+  (cond (not has-renames) graph
+    otherwise (reduce graph [] (fn acc tri ->
+      let word = to-string (nth tri 0)
+      let edge = to-string (nth tri 1)
+      -- remove sandhi-rename markers
+      cond (eq edge "sandhi-rename") acc
+      -- rewrite sankhya/matra subjects using rename map
+      otherwise (let rename-match = renames | where [b, c] | and (eq (to-string b) word) | collect c
+        cond (and (has-items rename-match) (or (eq edge "sankhya") (eq edge "matra")))
+          (append acc [[(nth rename-match 0), (nth tri 1), (nth tri 2)]])
+        otherwise (append acc [tri]))))))

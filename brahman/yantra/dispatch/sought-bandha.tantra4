@@ -1,0 +1,21 @@
+-- emits [solve-for, sought, comp-word-or-solve-for] into the proof graph.
+(tantra sought-bandha (graph solve-for scope-entity comp-word)
+
+  (already (gt (length (graph | where [s, e, o] | and (eq e "sought") | collect s)) 0))
+
+  (has-sf (exists solve-for))
+  (has-scope (exists scope-entity))
+  (has-cw (exists comp-word))
+
+  -- the "sought" label: comp-word for viveka, solve-for for physics/count
+  (sought-label (cond has-cw (to-string comp-word) otherwise (to-string solve-for)))
+
+  (new-triples (cond (and has-sf (not already))
+    (append
+      [[(to-string solve-for), "sought", sought-label]]
+      (cond has-scope
+        [[(to-string solve-for), "sought-of", (to-string scope-entity)]]
+        otherwise []))
+    otherwise []))
+
+  (append graph new-triples))

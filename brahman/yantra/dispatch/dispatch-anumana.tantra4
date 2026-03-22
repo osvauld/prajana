@@ -1,0 +1,11 @@
+-- anumana dispatch: resolve categorical yes/no via varga or swarupa chain.
+-- returns [answer-str, "", proof-graph] (no proof edges for anumana).
+(tantra dispatch-anumana (expanded refined)
+  (query (read-signal expanded "anumana-query"))
+  (assert (read-signal expanded "anumana-assert"))
+  (mode (read-signal expanded "anumana-mode"))
+  (answer (cond (eq mode "varga")
+    (anumana-viveka-yukta refined query assert)
+    otherwise (anumana-viveka refined query assert)))
+  (reasoning (emit-anumana refined query assert mode answer))
+  reasoning)

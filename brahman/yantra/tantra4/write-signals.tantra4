@@ -1,0 +1,4 @@
+-- writes multiple named signals to the graph.
+(tantra write-signals (graph pairs)
+  (reduce pairs graph (fn g kv ->
+    (append g [["_signal", (nth kv 0), (nth kv 1)]]))))

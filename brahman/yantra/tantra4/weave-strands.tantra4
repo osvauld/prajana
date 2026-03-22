@@ -1,0 +1,4 @@
+-- weaves non-empty strands into a single utterance.
+(tantra weave-strands (strands)
+  (sep (shabda "anuvada-setu" "speech-strand-separator"))
+  (join-with strands sep))

@@ -1,0 +1,3 @@
+-- v = u + at
+(tantra velocity-expr (initial-velocity acceleration time)
+  (add initial-velocity (mul acceleration time)))
