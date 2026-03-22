@@ -1,0 +1,50 @@
+-- assertion-bandha: extract IS-A assertions from subject-copula-object patterns.
+-- "all cats are mammals" → [cat, swarupa, mammal]
+-- stratified: positional queries replace subj/saw-cop/subj-ok state.
+(tantra assertion-bandha (graph)
+  (quant-words (split (shabda "quantifier" "word") ","))
+  (ig (with-index graph))
+
+  -- stratum 1: find copulas and quantifier-copulas with their positions
+  (copula-positions (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let edge = to-string (nth tri 2)
+    let word = to-string (nth tri 1)
+    cond (eq edge "copula") (append acc [pos])
+    (and (eq edge "mithya") (member word quant-words)) (append acc [pos])
+    (and (eq edge "satya") (eq word "quantifier")) (append acc [pos])
+    otherwise acc)))
+
+  -- stratum 2: for each copula, find the subject before it and object after it
+  (swarupa-triples (reduce copula-positions [] (fn acc cop-pos ->
+    -- find subject: nearest satya or mithya before copula in same sentence
+    let sent = sentence-of ig cop-pos
+    let subj-tri = reduce ig _none (fn best tri ->
+      let pos  = nth tri 0
+      let edge = to-string (nth tri 2)
+      cond (and (lt pos cop-pos)
+                (eq (sentence-of ig pos) sent)
+                (or (eq edge "satya") (eq edge "mithya")))
+        tri
+      otherwise best)
+    cond (not (exists subj-tri)) acc
+    otherwise (let subj = to-string (nth subj-tri 1)
+      let resolved-subj = resolve-or-self subj
+      -- find object: nearest satya or resolvable mithya after copula in same sentence
+      let obj-tri = reduce ig _none (fn found tri ->
+        let pos  = nth tri 0
+        let edge = to-string (nth tri 2)
+        let word = to-string (nth tri 1)
+        cond (exists found) found
+        otherwise (cond (and (gt pos cop-pos)
+                             (eq (sentence-of ig pos) sent)
+                             (or (eq edge "satya")
+                                 (and (eq edge "mithya") (has-text (word-resolve word)))))
+          tri
+        otherwise found))
+      cond (not (exists obj-tri)) acc
+      otherwise (let obj-word = to-string (nth obj-tri 1)
+        let obj = cond (eq (to-string (nth obj-tri 2)) "mithya") (word-resolve obj-word) otherwise obj-word
+        (append acc [[resolved-subj, "swarupa", obj]]))))))
+
+  (append-triples graph swarupa-triples))

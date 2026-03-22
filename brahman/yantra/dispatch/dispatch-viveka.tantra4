@@ -1,0 +1,15 @@
+-- viveka dispatch: comparison — which entity has the greater/lesser value.
+-- runs viveka-ganana, builds proof graph, emits reasoning.
+(tantra dispatch-viveka (expanded refined)
+  (sf (read-signal expanded "solve-for"))
+  (scope-entity (read-signal expanded "scope-entity"))
+  (comp-word (read-signal expanded "comp-word"))
+  (comp-concept (read-signal expanded "comp-concept"))
+  (viveka-dir (read-signal expanded "viveka-dir"))
+  (viveka-raw (viveka-ganana expanded comp-concept comp-word viveka-dir))
+  (winner (viveka-result viveka-raw "winner"))
+  (ev-pairs (viveka-result viveka-raw "ev-pairs"))
+  (gt-triples (viveka-result viveka-raw "gt-triples"))
+  (result (cond (exists winner) (to-string winner) otherwise "no match"))
+  (proof-graph (pramana-bandha expanded [] result sf scope-entity true ev-pairs gt-triples comp-word))
+  (emit-reasoning proof-graph))

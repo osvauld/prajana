@@ -1,0 +1,31 @@
+-- upanaya strand: "we see: applying janya1=val1, janya2=val2"
+(tantra mantra-seen-str (mm added-concepts)
+  (say-seen (shabda "anuvada-setu" "speech-seen"))
+  (say-applying (shabda "anuvada-setu" "speech-applying"))
+  (rel-sankhya (shabda "anuvada-setu" "rel-sankhya"))
+  (mantra (nth mm 0))
+  (valpairs (nth mm 1))
+  (janya (walk mantra "janya"))
+  (has-added (has-items added-concepts))
+  (phala (nth (walk mantra "phala") 0))
+  (is-phala (fn c -> eq (to-string c) (to-string phala)))
+  (non-phala-added (filter added-concepts (fn c -> not (is-phala c))))
+  (concepts-to-show (cond (and has-added (has-items non-phala-added))
+    non-phala-added
+    otherwise janya))
+  (bindings (reduce concepts-to-show [] (fn acc c ->
+    let v = reduce valpairs "" (fn a2 kv ->
+      cond (eq (to-string (nth kv 0)) (to-string c))
+        (to-string (nth kv 1))
+      otherwise a2)
+    cond (has-text v)
+      (append acc [(concat (to-string c) rel-sankhya v)])
+    otherwise acc)))
+  (bind-str (reduce bindings "" (fn acc s ->
+    cond (not (has-text acc)) s
+    otherwise (concat acc ", " s))))
+  (cond (has-text bind-str)
+    (cond has-added
+      (concat say-seen ": " bind-str)
+      otherwise (concat say-seen ": " say-applying " " bind-str))
+    otherwise ""))

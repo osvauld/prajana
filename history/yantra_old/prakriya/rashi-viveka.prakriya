@@ -1,0 +1,26 @@
+-- rashi-viveka: bind numbers to rashi instances via gate signal.
+-- pattern: [inst, vishesa, rashi] → [_, rashi-bandha, _] → [_, asprista-sankhya, val]
+-- stratified: positional queries replace last-rashi + saw-gate state.
+(tantra rashi-viveka (graph)
+  (rashi-labels (graph | where [s, e, o] | and (eq e "vishesa") | and (eq o "rashi") | collect s))
+  (already-bound (nth (bound-state graph) 0))
+  (ig (with-index graph))
+
+  -- find gate signals and bind numbers to their nearest preceding rashi instance
+  (new-triples (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let edge = to-string (nth tri 2)
+    let val  = nth tri 3
+    cond (neq edge "asprista-sankhya") acc
+    otherwise (let gate = nearest-before ig pos "rashi-bandha"
+      cond (not (exists gate)) acc
+      otherwise (let rashi = nearest-before ig (nth gate 0) "vishesa"
+        cond (not (exists rashi)) acc
+        otherwise (let inst = to-string (nth rashi 1)
+          cond (and (member inst rashi-labels)
+                    (not (member inst already-bound))
+                    (eq (sentence-of ig pos) (sentence-of ig (nth rashi 0))))
+            (append acc [[inst, "sankhya", val]])
+          otherwise acc))))))
+
+  (append-triples graph new-triples))

@@ -1,0 +1,40 @@
+-- count emission: given/known/found strands for count-chain results.
+(tantra emit-count (graph)
+  (say-given (shabda "anuvada-setu" "speech-given"))
+  (say-known (shabda "anuvada-setu" "speech-known"))
+  (say-found (shabda "anuvada-setu" "speech-found"))
+  (say-arrow (shabda "anuvada-setu" "speech-arrow"))
+  (op-plus (shabda "addition" "word"))
+  (op-minus (shabda "subtraction" "word"))
+  (count-entity (query-edge graph "count-entity"))
+  (count-steps (graph | where [s, e, o] | and (eq e "count-step") | collect (to-string o)))
+  (result-val (nth (graph | where [s, e, o] | and (eq e "sankhya")
+    | and (or (eq (to-string s) "count-total") (eq (to-string s) "count-remaining"))
+    | collect (to-string o)) 0))
+  (all-grades (split-grades graph))
+  (grade0 (nth all-grades 0))
+  (given-str (words-to-str (grade-words grade0)))
+  (q-grade (reduce all-grades [] (fn acc grade ->
+    cond (is-question-grade grade) grade otherwise acc)))
+  (q-words-raw (reduce q-grade [] (fn acc t ->
+    let e = triple-edge t
+    let w = triple-subj t
+    cond (eq e "mithya") (append acc [w])
+    (eq e "satya") (cond (is-system-concept w) acc otherwise (append acc [w]))
+    otherwise acc)))
+  (know-lines (map count-steps (fn step ->
+    let parts = split step " "
+    let dir = nth parts 0
+    let op-word = cond (eq dir "kshaya") op-minus otherwise op-plus
+    let num-colon = nth parts 1
+    let num = substr num-colon 0 (sub (string-length num-colon) 1)
+    let before = nth parts 2
+    let after = nth parts 4
+    (concat num " " (to-string op-word) " (" before " " (to-string say-arrow) " " after ")"))))
+  (found-str (cond (exists result-val)
+    (concat (to-string result-val) " " (words-to-str q-words-raw))
+    otherwise ""))
+  (weave-strands [
+    (format-strand say-given given-str),
+    (format-strand say-known (words-to-str know-lines)),
+    (format-strand say-found found-str)]))

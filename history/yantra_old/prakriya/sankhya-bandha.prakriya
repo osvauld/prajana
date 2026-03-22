@@ -1,0 +1,40 @@
+-- sankhya-bandha: bind numbers to their nearest concept.
+-- two patterns: number-after-concept and number-before-concept.
+-- stratified: positional queries replace mutable state.
+(tantra sankhya-bandha (graph)
+  (already-bound (nth (bound-state graph) 0))
+  (ig (with-index graph))
+
+  -- stratum 1: numbers that follow a concept (nearest-before satya)
+  (after-bindings (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let edge = to-string (nth tri 2)
+    let val  = nth tri 3
+    cond (neq edge "asprista-sankhya") acc
+    otherwise (let prev = nearest-before ig pos "satya"
+      cond (not (exists prev)) acc
+      otherwise (let concept = to-string (nth prev 1)
+        let same-sent = eq (sentence-of ig pos) (sentence-of ig (nth prev 0))
+        cond (and same-sent (not (member concept already-bound)))
+          (append acc [[concept, "sankhya", val]])
+        otherwise acc)))))
+
+  -- stratum 2: numbers that precede a concept (nearest-before asprista-sankhya, looking from concept)
+  (before-bindings (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let edge = to-string (nth tri 2)
+    let word = to-string (nth tri 1)
+    cond (neq edge "satya") acc
+    otherwise (let prev-num = nearest-before ig pos "asprista-sankhya"
+      cond (not (exists prev-num)) acc
+      otherwise (let num-val = nth prev-num 3
+        let same-sent = eq (sentence-of ig pos) (sentence-of ig (nth prev-num 0))
+        -- only bind if this concept wasn't already bound by stratum 1
+        let already-from-s1 = reduce after-bindings false (fn hit b ->
+          or hit (eq (to-string (nth b 0)) word))
+        cond (and same-sent (not (member word already-bound)) (not already-from-s1))
+          (append acc [[word, "sankhya", num-val]])
+        otherwise acc)))))
+
+  -- combine: original graph + all new bindings
+  (append-triples graph (append after-bindings before-bindings)))

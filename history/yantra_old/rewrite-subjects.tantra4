@@ -1,0 +1,9 @@
+-- rewrites triple subjects using a [[from, to]] rename map.
+-- triples whose subject matches a "from" get their subject replaced with "to".
+-- non-matching triples pass through unchanged.
+(tantra rewrite-subjects (graph rename-map)
+  (map graph (fn tri ->
+    let subj = to-string (nth tri 0)
+    let match = rename-map | where [f, t] | and (eq (to-string f) subj) | collect t
+    cond (has-items match) [(nth match 0), (nth tri 1), (nth tri 2)]
+    otherwise tri)))

@@ -506,4 +506,49 @@ let eval_pure_op (e_eval : evaluator) (k : proof_graph) (e : env) (op : string) 
     let n'  = max 0 (min (eval_int 1) (List.length lst)) in
     Some (VList (List.filteri (fun i _ -> i >= n') lst))
 
+  (* ---- prakriya primitives: positional awareness for stratified scans ---- *)
+
+  (* with-index: graph → [[0, w, e, o], [1, w, e, o], ...]
+     enriches each triple with its position index. *)
+  | "with-index" ->
+    let items = eval_lst 0 in
+    Some (VList (List.mapi (fun i item ->
+      match as_list item with
+      | [w; e; o] -> VList [VFloat (Float.of_int i); w; e; o]
+      | _ -> VList [VFloat (Float.of_int i); item]
+    ) items))
+
+  (* nearest-before: indexed-graph pos edge-type → [idx, w, e, o] or VNone
+     finds the nearest triple BEFORE pos with the given edge type.
+     scans backward from pos-1 to 0. *)
+  | "nearest-before" ->
+    let ig = eval_lst 0 in
+    let pos = eval_int 1 in
+    let edge = eval_str 2 in
+    let result = ref VNone in
+    let i = ref (pos - 1) in
+    while !i >= 0 && !result = VNone do
+      (match as_list (List.nth ig !i) with
+       | VFloat _ :: _ :: VString e :: _ when e = edge ->
+         result := List.nth ig !i
+       | _ -> ());
+      decr i
+    done;
+    Some !result
+
+  (* sentence-of: indexed-graph pos → sentence-index (float)
+     counts how many viraam/dvandva boundaries appear before pos.
+     two positions in the same sentence have the same sentence-of value. *)
+  | "sentence-of" ->
+    let ig = eval_lst 0 in
+    let pos = eval_int 1 in
+    let count = ref 0 in
+    for j = 0 to pos - 1 do
+      match as_list (List.nth ig j) with
+      | _ :: _ :: VString e :: _ when e = "viraam" || e = "dvandva" ->
+        incr count
+      | _ -> ()
+    done;
+    Some (VFloat (Float.of_int !count))
+
   | _ -> None

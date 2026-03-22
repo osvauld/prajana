@@ -1,0 +1,21 @@
+-- detect all intent signals and write them to the graph.
+(tantra detect-signals (expanded)
+  (sf-raw (extract-solve-for expanded))
+  (has-intent (solve-for-result sf-raw "has-intent"))
+  (viveka-signals (detect-viveka expanded))
+  (anumana-signals (detect-anumana expanded))
+  (count-signals (detect-count expanded))
+  (dispatch-mode (cond (has-items anumana-signals) "anumana"
+    (has-items viveka-signals) "viveka"
+    (has-items count-signals) "count"
+    has-intent "derive"
+    otherwise "none"))
+  (base-signals (cond has-intent
+    [["solve-for", (solve-for-result sf-raw "solve-for")],
+     ["scope-entity", (solve-for-result sf-raw "scope-entity")]]
+    otherwise []))
+  (all-signals (append [["dispatch-mode", dispatch-mode]]
+    (append base-signals
+    (append viveka-signals
+    (append anumana-signals count-signals)))))
+  (write-signals expanded all-signals))

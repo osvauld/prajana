@@ -1,0 +1,25 @@
+-- bind numbers to concepts within each grade (grade-scoped, idempotent).
+(tantra sankhya-bandha (graph)
+  (already-bound (nth (bound-state graph) 0))
+  (existing-sankhya (graph | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)))
+  (grades (split-grades graph))
+  -- within each grade, pair concepts with numbers sequentially
+  (new-bindings (reduce grades [] (fn acc grade ->
+    let paired = reduce grade [[], "", ""] (fn st tri ->
+      let pairs   = nth st 0
+      let active  = nth st 1
+      let pending = nth st 2
+      let edge = to-string (nth tri 1)
+      let word = to-string (nth tri 0)
+      let val  = to-string (nth tri 2)
+      cond (eq edge "satya")
+        (cond (and (has-text pending) (not (member word already-bound)) (not (member word existing-sankhya)))
+          [(append pairs [[word, "sankhya", pending]]), word, ""]
+          otherwise [pairs, word, ""])
+      (eq edge "asprista-sankhya")
+        (cond (and (has-text active) (not (member active already-bound)) (not (member active existing-sankhya)))
+          [(append pairs [[active, "sankhya", val]]), active, ""]
+          otherwise [pairs, active, val])
+      otherwise st)
+    (append acc (nth paired 0)))))
+  (append-triples graph new-bindings))

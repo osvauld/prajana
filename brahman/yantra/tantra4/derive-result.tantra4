@@ -1,0 +1,5 @@
+-- unpacks derive-chain result by field name.
+(tantra derive-result (raw field)
+  (cond (eq field "steps") (nth raw 0)
+    (eq field "enriched") (nth raw 1)
+    otherwise []))

@@ -1,0 +1,6 @@
+-- reads comparison result from proof graph: [winner, loser] or [].
+(tantra viveka-comparison (graph)
+  (gt-triples (graph | where [s, e, o] | and (eq e "greater-than") | collect [s, o]))
+  (cond (has-items gt-triples)
+    [(to-string (nth (nth gt-triples 0) 0)), (to-string (nth (nth gt-triples 0) 1))]
+    otherwise []))

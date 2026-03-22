@@ -1,0 +1,3 @@
+-- KE = ½mv²
+(tantra ke-expr (mass velocity)
+  (half (mul mass (square velocity))))

@@ -465,6 +465,30 @@ python3 -m tools vy trace 'ball-A has mass 5. ball-B has mass 3. which is heavie
 python3 -m tools vy trace '10 birds sat on a tree. 3 flew away. how many birds are left'  # 7
 ```
 
+## Tantra5 — S-Expressions and the Relational Model
+
+Tantra5 is the fifth generation. Each generation deepened what "weaving" means:
+
+- **tantra1** (2025): OCaml functions calling OCaml functions
+- **tantra2** (2025): declarative let-blocks parsed into AST
+- **tantra3** (2026-01): scan blocks, pipe syntax, graph-native resolution
+- **tantra4** (2026-03): named helpers, signal bus, 4-layer composition
+- **tantra5** (2026-03): s-expression syntax, relational graph model, sentence tantras
+
+**What changed in tantra5:**
+
+1. **S-expression format.** `(tantra name (params) body)` — last expression is return. 145 files, zero .tantra3.
+
+2. **Scan eliminated.** The imperative scan construct (mutable state + pattern matching) replaced by grade-scoped sequential reduce within sentences + relational joins across sentences. No mutable state anywhere.
+
+3. **Sentence tantras.** With sufficient named helpers, pipeline orchestrators read as prose: "the answer is the viveka answer or the physics answer." dispatch-answer: 57 lines → 7 lines.
+
+4. **Relational consumers.** viveka-ganana joins entities→ownership→values through typed edges. extract-solve-for queries the question grade. No positional scanning across the full graph.
+
+5. **Grade = fact set.** The graded ring's sentence boundary IS the Datalog stratification boundary. Within a grade: sequential (ordering matters). Across grades: relational (ordering irrelevant).
+
+**The key insight:** scan was a flatmap (rewrite), not an append. Replacing it with append broke ordering that downstream consumers depended on. The fix: make consumers relational → ordering doesn't matter → producers can append safely. The graph IS a relational database stratified by sentence boundaries.
+
 ## Design Spec — Full Tantra Rewrite Scope
 
 The redesign is NOT just the orchestrator. 42 tantras (2762 lines out of 3532) contain significant hardcoded logic that the graph already declares. The rewrite dissolves hardcoded strings, word lists, unrolled loops, and inline operation dispatch into graph reads.

@@ -1,0 +1,9 @@
+-- physics/count nigamana: "we find: kinetic-energy = 18"
+(tantra nigamana-physics (graph)
+  (say-found (shabda "anuvada-setu" "speech-found"))
+  (say-no-match (shabda "anuvada-setu" "speech-no-match"))
+  (rel-sankhya (shabda "anuvada-setu" "rel-sankhya"))
+  (dv (derived-value graph))
+  (cond (has-items dv)
+    (concat say-found ": " (nth dv 0) " " rel-sankhya " " (nth dv 1))
+    otherwise (to-string say-no-match)))

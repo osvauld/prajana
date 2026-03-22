@@ -1,0 +1,13 @@
+-- finds triples with target-edge that follow a signal-edge in the same sentence.
+-- returns [[signal-context, target-triple], ...] pairs.
+-- signal-context is the triple that matched the signal-edge.
+(tantra find-after-signal (graph signal-edge target-edge)
+  (ig (with-index graph))
+  (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let edge = to-string (nth tri 2)
+    cond (neq edge target-edge) acc
+    otherwise (let sig = nearest-before ig pos signal-edge
+      cond (and (exists sig) (eq (sentence-of ig pos) (sentence-of ig (nth sig 0))))
+        (append acc [[sig, tri]])
+      otherwise acc))))

@@ -1,0 +1,2 @@
+(tantra has-text (w)
+  (gt (string-length w) 0))

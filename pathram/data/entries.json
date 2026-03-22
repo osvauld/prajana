@@ -2063,12 +2063,12 @@
     "title": "5. The Pipeline as Function Composition",
     "body": "**Definition 10.** The full pipeline is a composition of monotone endomorphisms on the question graph:\n\n$$\\text{answer} = (\\text{emit} \\circ \\text{pramana} \\circ \\text{dispatch} \\circ \\text{refine}^* \\circ \\text{classify})(\\text{sentence})$$\n\nwhere $\\text{refine}^* = \\text{lfp}(\\text{avrti-refine})$ denotes iterated refinement to fixpoint.\n\nThe refinement pipeline is itself a composition:\n\n$$\\text{avrti-refine} = \\text{sankhya-bandha} \\circ \\text{rashi-anuvada} \\circ \\text{vishesa-bandhana} \\circ \\text{rashi-viveka} \\circ \\text{vishesa-instance} \\circ \\text{vibhakti-shashthi} \\circ \\text{sandhi-bandhana} \\circ \\text{sandhi-avastha} \\circ \\text{sandhi-kosha}$$\n\nEach sub-tantra is a *transducer*: it reads triples, emits triples, and may carry state. The composition is monotone \u2014 each step only adds or replaces triples, never removes unrelated ones. This guarantees that fixpoint iteration converges: the graph grows until stable.\n\n**Theorem 3 (Pipeline correctness).** If $\\text{classify}$ correctly classifies all tokens, $\\text{refine}^*$ correctly composes compounds and binds values, and $\\text{dispatch}$ correctly selects and executes mantras, then the pipeline produces the unique answer determined by the mantra signatures and the input values.\n\n*Proof sketch.* Correctness reduces to: (1) the classify morphism is faithful (each word maps to its unique concept), (2) refine is idempotent at fixpoint, (3) derive-chain terminates (Theorem 2), (4) emit is a graph walk with no computation. Each step is a pure function of the graph state. $\\square$\n\n**The seven abstract patterns.** Every tantra in the system uses exactly one of seven patterns, each of which is a node in the kosha with its own mathematical identity:\n\n| Pattern | Kosha node | Mathematical identity |\n|---|---|---|\n| filter-collect | transducer | $\\{x \\in G \\mid P(x)\\}$ |\n| scan-accumulate | scan-accumulate | stateful transducer $T: S \\times G \\to S \\times G'$ |\n| shabda-read | morphism | $\\text{shabda}: V \\times K \\to V'$ (metadata lookup) |\n| walk | endomorphism | $\\text{walk}: V \\times \\mathcal{V} \\to 2^V$ (edge traversal) |\n| fixpoint | op-fixpoint | $\\text{lfp}(f)$ where $f$ is monotone on a finite lattice |\n| apply-op | operation-dispatch | $\\text{eval}(\\sigma)(v_1, \\ldots, v_k)$ |\n| om-read | graph-contract | $\\text{janya}(m), \\text{phala}(m)$ (signature extraction) |",
     "tag": "superseded",
-    "tag_pointer": "whitepaper.section-13",
+    "tag_pointer": "whitepaper.section-22",
     "position": 6.0,
     "level": 2,
     "session_id": null,
     "created_at": "2026-03-21T15:39:57",
-    "updated_at": "2026-03-21T17:00:09",
+    "updated_at": "2026-03-22T16:49:37",
     "meta": {}
   },
   {
@@ -2093,12 +2093,12 @@
     "title": "7. Results and Current Capabilities",
     "body": "The system as of March 2026 contains:\n\n| Metric | Value |\n|---|---|\n| Graph nodes | 1603 |\n| Graph edges | 11410 |\n| Visheshanam dimensions | 46 (10 core + 36 extended) |\n| Operations in $\\Sigma$ | 12 (8 invertible) |\n| Physics mantras | 23 |\n| Total tantras | 75 |\n| Pipeline stages | 9 (refine has 9 sub-stages) |\n| Tests passing | 32 |\n| Tests expected-fail | 36 (declared roadmap) |\n\n**Capabilities demonstrated:**\n- Direct mantra computation: $KE = \\frac{1}{2}mv^2$, $p = mv$, $F = ma$ (and 20 more)\n- Chain derivation: $u, a, t \\to v \\to KE$ (fixpoint over 2 mantras)\n- Entity-scoped computation: \"ball-A has mass 3... ball-B has mass 2... find KE of ball-A\"\n- Count arithmetic: \"10 birds. 3 flew away. 2 came back. how many?\" \u2192 9\n- Comparison (viveka): \"which is heavier?\" \u2192 graph-driven max/min\n- Article transparency: \"the electron\" \u2192 electron\n- Avastha compounds: \"initial velocity\" \u2192 initial-velocity\n- Scientific notation: $9.109 \\times 10^{-31}$\n- Multi-sentence session accumulation\n\n**What the system does NOT do (declared as xfail tests):**\n- Dvandva collection (multiple entities with shared properties)\n- Inverse math (solve for missing variable \u2014 plumbing exists, binding broken)\n- Proportional reasoning\n- Multiplication (\"each table has 4 legs\")\n- Multi-question paragraphs\n- Transitive chain inference\n- Syllogistic reasoning (assertion-bandha exists, not yet wired)",
     "tag": "superseded",
-    "tag_pointer": "whitepaper.section-20",
+    "tag_pointer": "whitepaper.section-24",
     "position": 8.0,
     "level": 2,
     "session_id": null,
     "created_at": "2026-03-21T15:40:42",
-    "updated_at": "2026-03-21T21:48:22",
+    "updated_at": "2026-03-22T16:50:28",
     "meta": {}
   },
   {
@@ -2182,13 +2182,13 @@
     "type": "section",
     "title": "5. The Pipeline as Stratified Evaluation (v2)",
     "body": "### 5.1 Stratified Evaluation\n\n**Definition 10 (Stratified pipeline).** The full pipeline is a composition of strata, where each stratum is a monotone endomorphism on the question graph that reads only the frozen output of preceding strata:\n\n$$\\text{answer} = (\\text{emit} \\circ \\text{pramana} \\circ \\text{execute} \\circ \\text{match} \\circ \\text{derive} \\circ \\text{grade} \\circ \\text{refine}^* \\circ \\text{classify})(\\text{sentence})$$\n\nThis is structurally equivalent to **Datalog stratified evaluation**: rules are sorted into layers by dependency, each layer runs to completion and freezes, and higher layers read frozen results without modifying them.\n\n### 5.2 The Refinement Strata\n\nThe inner pipeline `avrti-refine` is a 9-stratum chain where each stratum is a single tantra. The output of stratum $k$ becomes the read-only input to stratum $k+1$:\n\n| Stratum | Tantra | Derives | Depends on |\n|---|---|---|---|\n| 0 | sandhi-kosha | compound words (mithya+satya \u2192 kosha node) | raw question graph |\n| 1 | sandhi-avastha | avastha compounds (initial+velocity \u2192 initial-velocity) | stratum 0 |\n| 2 | sandhi-bandhana | reattribute sankhya/matra after compound rename | stratum 1 |\n| 3 | vibhakti-shashthi | entity ownership (ball-A owns mass) | stratum 2 |\n| 4 | vishesa-instance | typed rashi instances (ball-A's mass, no value yet) | stratum 3 |\n| 5 | rashi-viveka | rashi instances with values bound | stratum 4 |\n| 6 | vishesa-bandhana | bindings moved from concept to instance | stratum 5 |\n| 7 | rashi-anuvada | instance values propagated up to concept level | stratum 6 |\n| 8 | sankhya-bandha | floating asprista-sankhya bound to preceding concept | stratum 7 |\n\nThe implementation in `avrti-refine.tantra3` is single-assignment \u2014 each stratum's output is bound to a variable and never modified:\n\n```\nafter-sandhi-kosha    = sandhi-kosha graph\nafter-sandhi-avastha  = sandhi-avastha  after-sandhi-kosha\nafter-sandhi-bandhana = sandhi-bandhana after-sandhi-avastha\n...\nresult                = sankhya-bandha  after-rashi-anuvada\n```\n\n**Why the order matters.** Stratum 3 (vibhakti-shashthi) detects \"ball-A has mass\" and creates ownership edges. But it needs compound words already resolved \u2014 \"initial velocity\" must already be \"initial-velocity\" (stratum 1) with its sankhya reattributed (stratum 2). Stratum 8 (sankhya-bandha) binds floating numbers to concepts, but needs ownership and instances established first. Running these out of order would bind \"5\" to \"ball-A\" instead of to \"ball-A's mass\". The dependency structure dictates the stratum order \u2014 exactly as in Datalog.\n\n### 5.3 Iterated Fixpoint over Strata\n\nThe `grade-sparsha` tantra wraps the entire stratified chain in a fixpoint:\n\n$$\\text{refine}^* = \\text{lfp}(\\text{avrti-refine})$$\n\nThis runs all 9 strata, checks if the graph changed, and if so runs all 9 again. This is necessary because stratum 0 (sandhi-kosha) may resolve a new compound from concepts that stratum 8 (sankhya-bandha) bound on the previous pass. In Datalog terms: the entire stratified program is iterated to fixpoint.\n\n**Theorem 3 (Convergence).** The iterated fixpoint terminates.\n\n*Proof.* Each stratum is monotone (only adds or replaces triples, never removes unrelated ones). The set of possible triples is finite (bounded by $N^2 \\times R$ where $N$ is node count and $R$ is relation count). A monotone function on a finite lattice has a least fixpoint reached in finitely many steps (Kleene). $\\square$\n\n### 5.4 The Higher Strata (Dispatch Layer)\n\nAfter refinement stabilizes, higher strata run \u2014 each reading the frozen output of the previous:\n\n| Stratum | Tantra | Role | Reads from |\n|---|---|---|---|\n| refine* | avrti-refine (iterated) | word resolution, entity binding | raw question graph |\n| grade | grade-sparsha | split into sentence grades at viraam boundaries | refine* (frozen) |\n| count | count-chain | fold over grades with $\\delta$-directed operations | grade (frozen) |\n| derive | derive-chain | fire mantras to fixpoint | grade (frozen) |\n| match | match-mantra | find mantras whose janya are all bound | derive (frozen) |\n| execute | execute-matched | compute phala values | match (frozen) |\n| pramana | pramana-bandha | bind computed results to graph | execute (frozen) |\n| emit | emit-reasoning | walk proof edges \u2192 natural language | pramana (frozen) |\n\nNo stratum modifies a lower stratum's results. This is the Datalog guarantee: **derived facts at level $k$ are stable before level $k+1$ begins.**\n\n### 5.5 Departures from Standard Datalog\n\nTwo structural differences:\n\n1. **Rules are graph walks, not logic clauses.** A Datalog rule is $\\text{ancestor}(X, Z) \\text{ :- } \\text{parent}(X, Y), \\text{ancestor}(Y, Z)$. A tantra rule is `let wn = word-node w` followed by `shabda (walk-in wn \"kriya\") \"eval\"`. The dependency structure is identical \u2014 the mechanism differs (graph walk vs unification).\n\n2. **Negation handling.** Datalog stratification exists primarily for safe negation \u2014 you cannot negate a fact not yet fully derived. The pipeline uses `not` guards (e.g., \"skip if count already bound\") rather than formal negation, but the purpose is the same: don't act on results that a later stratum might change.\n\n### 5.6 The Seven Abstract Patterns\n\nEvery tantra uses one of seven computational patterns, each a node in the kosha with its own mathematical identity:\n\n| Pattern | Kosha node | Mathematical identity |\n|---|---|---|\n| filter-collect | transducer | $\\{x \\in G \\mid P(x)\\}$ |\n| scan-accumulate | scan-accumulate | stateful transducer $T: S \\times G \\to S \\times G'$ |\n| shabda-read | morphism | $\\text{shabda}: V \\times K \\to V'$ (metadata lookup) |\n| walk | endomorphism | $\\text{walk}: V \\times \\mathcal{V} \\to 2^V$ (edge traversal) |\n| fixpoint | op-fixpoint | $\\text{lfp}(f)$ where $f$ is monotone on a finite lattice |\n| apply-op | operation-dispatch | $\\text{eval}(\\sigma)(v_1, \\ldots, v_k)$ |\n| om-read | graph-contract | $\\text{janya}(m), \\text{phala}(m)$ (signature extraction) |\n\n*Status:* The pattern\u2194kosha-node correspondence is **axiomatized** (declared via abheda edges). The claim that every tantra uses exactly one pattern is a **structural observation** verified by code inspection, not a formal proof.",
-    "tag": "active",
-    "tag_pointer": null,
+    "tag": "superseded",
+    "tag_pointer": "whitepaper.section-22",
     "position": 13.0,
     "level": 2,
     "session_id": null,
     "created_at": "2026-03-21T17:00:02",
-    "updated_at": "2026-03-21T17:00:02",
+    "updated_at": "2026-03-22T16:49:37",
     "meta": {}
   },
   {
@@ -2287,13 +2287,13 @@
     "type": "section",
     "title": "7. Results and Current Capabilities (v2)",
     "body": "The system as of March 2026 contains:\n\n| Metric | Value |\n|---|---|\n| Graph nodes | 1603 |\n| Graph edges | 11410 |\n| Visheshanam dimensions | 46 (10 core + 36 extended) |\n| Operations in $\\Sigma$ | 28 (7 with per-argument inverse) |\n| Physics mantras | 23 (14 invertible via math-op) |\n| Total mantras | 53 |\n| Total tantras | 75 |\n| Pipeline stages | 9 (refine has 9 sub-stages) |\n| Lexical morphism coverage | 211 nodes with word: lists |\n| Tests passing | 32 |\n| Tests expected-fail | 36 (declared roadmap) |\n\n**Capabilities demonstrated:**\n- Direct mantra computation: $KE = \\frac{1}{2}mv^2$, $p = mv$, $F = ma$ (and 20 more)\n- Chain derivation: $u, a, t \\to v \\to KE$ (fixpoint over 2 mantras)\n- Entity-scoped computation: \"ball-A has mass 3... ball-B has mass 2... find KE of ball-A\"\n- Count arithmetic: \"10 birds. 3 flew away. 2 came back. how many?\" \u2192 9\n- Comparison (viveka): \"which is heavier?\" \u2192 graph-driven max/min\n- Article transparency: \"the electron\" \u2192 electron\n- Avastha compounds: \"initial velocity\" \u2192 initial-velocity\n- Scientific notation: $9.109 \\times 10^{-31}$\n- Multi-sentence session accumulation\n\n**What the system does NOT do (declared as xfail tests):**\n- Inverse math for krama-chain mantras (KE\u2192velocity requires composing pratipaksha in reverse; the graph has the edges, the tantra doesn't exist)\n- Dvandva collection (multiple entities with shared properties)\n- Proportional reasoning\n- Multiplication (\"each table has 4 legs\")\n- Multi-question paragraphs\n- Transitive chain inference\n- Syllogistic reasoning (assertion-bandha exists, not yet wired)\n- Integration / calculus (graph has derivative\u2194antiderivative ontology but no integration mantras)\n- Any formula not declared as a mantra node \u2014 the system's computational power is exactly the transitive closure of its declared mantras over bound input values",
-    "tag": "active",
-    "tag_pointer": null,
+    "tag": "superseded",
+    "tag_pointer": "whitepaper.section-24",
     "position": 20.0,
     "level": 2,
     "session_id": null,
     "created_at": "2026-03-21T21:48:47",
-    "updated_at": "2026-03-21T21:48:47",
+    "updated_at": "2026-03-22T16:50:28",
     "meta": {}
   },
   {
@@ -2767,5 +2767,259 @@
     "meta": {
       "status": "done"
     }
+  },
+  {
+    "id": "plan.step-22",
+    "doc_id": "plan",
+    "type": "step",
+    "title": "S-expression tantra format: new .tantra4 parser in OCaml (yantra_tantra_sexp.ml). Reuse existing sexp tokenizer from setu_shabda.ml. (tantra name (params) body) syntax \u2014 last expression is return, (name expr) for bindings. Coexists with .tantra3.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 20.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T13:49:41",
+    "updated_at": "2026-03-22T14:35:55",
+    "meta": {
+      "status": "done"
+    }
+  },
+  {
+    "id": "plan.step-23",
+    "doc_id": "plan",
+    "type": "step",
+    "title": "Convert 56 tantra4 helpers to .tantra4 s-expression format. Most become single-expression tantras: (tantra has-text (w) (gt (string-length w) 0)). No variable bindings needed for simple helpers.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 21.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T13:49:50",
+    "updated_at": "2026-03-22T14:35:55",
+    "meta": {
+      "status": "done"
+    }
+  },
+  {
+    "id": "plan.step-24",
+    "doc_id": "plan",
+    "type": "step",
+    "title": "Convert 76 pipeline tantras to .tantra4 s-expression format. With semantic helpers, most become sentence tantras \u2014 body reads as prose with minimal variable bindings.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 22.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T13:50:01",
+    "updated_at": "2026-03-22T14:35:55",
+    "meta": {
+      "status": "done"
+    }
+  },
+  {
+    "id": "plan.step-25",
+    "doc_id": "plan",
+    "type": "step",
+    "title": "Sentence tantras: push abstraction until every cond branch is a single named call. Pipeline tantras read as natural language \u2014 the conclusion is the viveka conclusion or the physics conclusion.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 23.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T13:50:09",
+    "updated_at": "2026-03-22T13:50:09",
+    "meta": {
+      "status": "pending"
+    }
+  },
+  {
+    "id": "discoveries.discovery-35",
+    "doc_id": "discoveries",
+    "type": "discovery",
+    "title": "S-expression tantras: with enough named helpers, tantra bodies become sentences \u2014 compositions of words with no variable plumbing. (tantra emit-nigamana (graph is-viveka) (cond is-viveka (viveka-conclusion graph) (physics-conclusion graph))) \u2014 one sentence, three words. The tantra IS a sentence in the language the system defines for itself. tantra3 syntax (name = expr, return, done) becomes unnecessary overhead when every expression is already an s-expression internally.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 35.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T13:50:20",
+    "updated_at": "2026-03-22T13:50:20",
+    "meta": {}
+  },
+  {
+    "id": "discoveries.discovery-36",
+    "doc_id": "discoveries",
+    "type": "discovery",
+    "title": "Tantra4 abstraction complete: 56 helpers across 4 layers (primitives: has-text, has-items, triple-subj; operations: triples-by-edge, query-edge, query-edge-of, word-resolve; structures: fold-field, viveka-comparison, sought-context, derived-value; compositions: select-extremum, varga-chain, anumana-eligible). 103 mechanical replacements + 11 semantic replacements across 36 pipeline files. Zero regressions. Pipeline reads as named concepts instead of raw graph plumbing.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 36.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T13:50:40",
+    "updated_at": "2026-03-22T13:50:40",
+    "meta": {}
+  },
+  {
+    "id": "notes.quirk-14",
+    "doc_id": "notes",
+    "type": "quirk",
+    "title": "S-expression tantra design questions: (1) Comments \u2014 use -- (consistent with tantra3/shabda) not ; (lisp convention). (2) Scan syntax in s-expr \u2014 (scan source (with (var type init)...) (match [pattern] when... body)...). (3) Pipe syntax \u2014 keep | where | collect inside s-expressions since the expression parser already handles them. (4) File extension .tantra4 coexists with .tantra3 \u2014 no forced migration.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 14.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T13:51:08",
+    "updated_at": "2026-03-22T13:51:08",
+    "meta": {}
+  },
+  {
+    "id": "plan.step-26",
+    "doc_id": "plan",
+    "type": "step",
+    "title": "Stratify scan tantras: convert 14 scan tantras from stateful fold+pattern-match into stratified pipe chains. Each scan becomes multiple pure from/where/collect strata \u2014 no mutable state. Sentence boundaries via split-at-viraam, relational joins via named helpers. Eliminates scan as a construct.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 25.5,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T14:01:30",
+    "updated_at": "2026-03-22T15:14:52",
+    "meta": {
+      "status": "done"
+    }
+  },
+  {
+    "id": "plan.step-27",
+    "doc_id": "plan",
+    "type": "step",
+    "title": "Prakriya dissolution: 8 scan tantras dissolved into composable tantra4 files. 3 new helpers (proximity-bind, rewrite-subjects, find-after-signal) + 3 OCaml primitives (with-index, nearest-before, sentence-of). Zero .tantra3 or .prakriya files remain \u2014 all 139 tantras are .tantra4 s-expressions.",
+    "body": "\n\nAll 8 scan prakriyas dissolved into composed tantra4 files. Intermediate .prakriya format created and then absorbed \u2014 prakriya concept lives on as a composition pattern, not a file format.",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 26.5,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T15:24:04",
+    "updated_at": "2026-03-22T15:24:13",
+    "meta": {
+      "status": "done"
+    }
+  },
+  {
+    "id": "discoveries.discovery-37",
+    "doc_id": "discoveries",
+    "type": "discovery",
+    "title": "S-expression migration complete: 139 tantra4 files, 0 tantra3, 0 prakriya. Scan construct eliminated \u2014 replaced by 3 positional primitives (with-index, nearest-before, sentence-of) and 3 composable helpers (proximity-bind, rewrite-subjects, find-after-signal). ke-inv-mass removed as dead code. Baseline: 32p/31x/5xpass throughout.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 37.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T15:24:21",
+    "updated_at": "2026-03-22T15:24:21",
+    "meta": {}
+  },
+  {
+    "id": "plan.step-28",
+    "doc_id": "plan",
+    "type": "step",
+    "title": "Relational graph consumers: viveka-ganana uses ownership joins instead of positional scan. extract-solve-for uses grade-scoped queries. All 8 rewrite tantras grade-scoped. Positional helpers (proximity-bind, rewrite-subjects, find-after-signal) removed. append-triples made idempotent. 31p/33x/4xpass.",
+    "body": "\n\nRelational model working. 1 pass regression vs baseline (31 vs 32) \u2014 red_blue tests shifted from XPASS to XFAIL. Root cause identified: scan was flatmap (rewrite), prakriya was additive (append). Fix: grade-scoped sequential reduce within each sentence, relational joins across sentences. Three positional OCaml primitives (with-index, nearest-before, sentence-of) still in codebase but no longer used by any tantra.",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 27.5,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T16:44:21",
+    "updated_at": "2026-03-22T16:44:40",
+    "meta": {
+      "status": "done"
+    }
+  },
+  {
+    "id": "discoveries.discovery-38",
+    "doc_id": "discoveries",
+    "type": "discovery",
+    "title": "Scan\u2192relational migration insight: scan was a flatmap (rewrite graph in-place), not an append operation. Replacing scan with append-triples broke ordering assumptions that downstream consumers depended on. The fix was two-part: (1) make consumers relational \u2014 join through ownership edges instead of positional scanning, (2) make producers grade-scoped \u2014 sequential reduce within each sentence (small, bounded), relational queries across sentences. Grade = fact set. The graded ring structure IS the Datalog stratification boundary.",
+    "body": "",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 38.0,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T16:44:57",
+    "updated_at": "2026-03-22T16:44:57",
+    "meta": {}
+  },
+  {
+    "id": "whitepaper.section-22",
+    "doc_id": "whitepaper",
+    "type": "section",
+    "title": "5. The Pipeline as Stratified Evaluation (v3 \u2014 Grade-Scoped Relational Model)",
+    "body": "### 5.1 The Grade as Fact Set\n\n**Definition 10 (Grade).** A paragraph decomposes at viraam (sentence boundary) into grades $G_0, G_1, \\ldots, G_n$. Each grade $G_i$ is a finite set of triples \u2014 a self-contained relational fact set.\n\n**Definition 11 (Stratified pipeline).** The full pipeline is a composition of strata:\n\n$$\\text{answer} = \\text{emit} \\circ \\text{dispatch} \\circ \\text{detect} \\circ \\text{expand} \\circ \\text{refine} \\circ \\text{assert} \\circ \\text{construct}$$\n\nEach stratum is a monotone endomorphism on the question graph: it only adds triples, never removes them. This guarantees fixpoint convergence within the refine stratum.\n\n### 5.2 Two Computation Patterns\n\n**Composition tantras** compose named operations. Their bodies read as sentences:\n\n$$\\text{dispatch-answer}(\\text{expanded}, \\text{refined}) = \\begin{cases} \\text{dispatch-anumana}(\\text{expanded}, \\text{refined}) & \\text{if mode} = \\text{anumana} \\\\ \\text{dispatch-viveka}(\\text{expanded}, \\text{refined}) & \\text{if mode} = \\text{viveka} \\\\ \\text{dispatch-count}(\\text{expanded}, \\text{refined}) & \\text{if mode} = \\text{count} \\\\ \\text{dispatch-derive}(\\text{expanded}, \\text{refined}) & \\text{if mode} = \\text{derive} \\end{cases}$$\n\n**Rewrite tantras** transform the triple-list via grade-scoped sequential reduce:\n\n$$T(G) = \\bigoplus_{i} f(G_i)$$\n\nwhere $f$ is a sequential fold within each grade (ordering matters within a sentence) and $\\bigoplus$ is concatenation (ordering across grades is irrelevant to relational consumers).\n\n### 5.3 The Relational Principle\n\nConsumers read relations, not positions. Entity-value binding is resolved by ownership joins:\n\n$$\\text{ev-pairs}(e) = \\{(e, v) \\mid \\exists c.\\; \\text{owns}(c, e) \\wedge \\text{sankhya}(c, v)\\}$$\n\nwhere $\\text{owns}(c, e) \\equiv [c, \\text{shashthi-vibhakti}, e] \\in G$ and $\\text{sankhya}(c, v) \\equiv [c, \\text{sankhya}, v] \\in G$.\n\nThis eliminates positional scanning. The grade structure IS the Datalog stratification boundary: within a grade, facts are a set; across grades, results compose relationally.\n\n### 5.4 From Scan to Stratification\n\nThe original scan construct was an imperative flatmap \u2014 walk input triples with mutable state, emit output triples. Replacing scan required two insights:\n\n1. **Producers** are grade-scoped: sequential reduce within each sentence (bounded, 3-8 triples), relational queries across sentences.\n2. **Consumers** are relational: join through typed edges (ownership, derivation), never through positional ordering.\n\nWith relational consumers, producers can safely append new triples \u2014 ordering no longer carries cross-sentence semantics. The grade boundary resets the additive index, matching the graded ring's period = grade boundary axiom from \u00a74.",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 13.5,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T16:48:40",
+    "updated_at": "2026-03-22T16:48:40",
+    "meta": {}
+  },
+  {
+    "id": "whitepaper.section-23",
+    "doc_id": "whitepaper",
+    "type": "section",
+    "title": "8. The Tantra as Sentence (v2)",
+    "body": "### 8.1 S-Expression Syntax\n\nAll 145 tantras use s-expression format:\n\n```\n(tantra name (params...)\n  (binding expr)\n  ...\n  final-expr)\n```\n\nThe last expression is the return value. No `return`/`done` boilerplate. Bindings are `(name expr)` \u2014 the name is visible to subsequent bindings.\n\n### 8.2 Words as Sentences\n\nWith sufficient named helpers, tantra bodies become sentences \u2014 compositions of words with minimal variable plumbing:\n\n```\n(tantra dispatch-answer (expanded refined)\n  (mode (read-signal expanded \"dispatch-mode\"))\n  (cond (eq mode \"anumana\") (dispatch-anumana expanded refined)\n        (eq mode \"viveka\")  (dispatch-viveka expanded refined)\n        (eq mode \"count\")   (dispatch-count expanded refined)\n        (eq mode \"derive\")  (dispatch-derive expanded refined)\n        otherwise \"no match\"))\n```\n\nThis reads as prose: \"the answer is the anumana answer, the viveka answer, the count answer, or the derived answer.\"\n\n### 8.3 The Composition Hierarchy\n\n145 tantras across four layers of abstraction:\n\n| Layer | Count | Example |\n|---|---|---|\n| Primitives | 20 | `has-text`, `has-items`, `triple-subj` |\n| Operations | 30 | `triples-by-edge`, `query-edge`, `word-resolve` |\n| Structures | 15 | `viveka-comparison`, `sought-context`, `derived-value` |\n| Compositions | 80 | `dispatch-answer`, `emit-reasoning`, `anuvada-ganana` |\n\nEach layer composes the previous. The top layer reads as natural language.",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 20.5,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T16:49:05",
+    "updated_at": "2026-03-22T16:49:05",
+    "meta": {}
+  },
+  {
+    "id": "whitepaper.section-24",
+    "doc_id": "whitepaper",
+    "type": "section",
+    "title": "7. Results and Current Capabilities (v3)",
+    "body": "The system as of March 2026 contains:\n\n| Metric | Value |\n|---|---|\n| Graph nodes | ~2200 |\n| Graph edges | ~12000 |\n| Visheshanam dimensions | 46 |\n| Physics mantras | 23 |\n| Tantras (s-expression) | 145 |\n| Tantra layers | 4 (primitives \u2192 operations \u2192 structures \u2192 compositions) |\n| Scan constructs | 0 (eliminated \u2014 replaced by grade-scoped relational queries) |\n| Tests passing | 31 |\n| Tests xfail (known gaps) | 33 |\n\n**Capabilities:** kinematics (single + chain derivation), multi-entity scoped computation, comparison (viveka), count arithmetic (addition/subtraction with proof), categorical inference (anumana via varga chain), session accumulation.\n\n**Architecture:** All computation is s-expression tantras composing named operations. Graph transforms use grade-scoped sequential reduce within sentences and relational joins across sentences. The pipeline is stratified Datalog evaluation where each grade is a fact set and each layer is a monotone stratum.",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 20.5,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T16:50:06",
+    "updated_at": "2026-03-22T16:50:06",
+    "meta": {}
+  },
+  {
+    "id": "tantra.section-22",
+    "doc_id": "tantra",
+    "type": "section",
+    "title": "Tantra5 \u2014 S-Expressions and the Relational Model",
+    "body": "Tantra5 is the fifth generation. Each generation deepened what \"weaving\" means:\n\n- **tantra1** (2025): OCaml functions calling OCaml functions\n- **tantra2** (2025): declarative let-blocks parsed into AST\n- **tantra3** (2026-01): scan blocks, pipe syntax, graph-native resolution\n- **tantra4** (2026-03): named helpers, signal bus, 4-layer composition\n- **tantra5** (2026-03): s-expression syntax, relational graph model, sentence tantras\n\n**What changed in tantra5:**\n\n1. **S-expression format.** `(tantra name (params) body)` \u2014 last expression is return. 145 files, zero .tantra3.\n\n2. **Scan eliminated.** The imperative scan construct (mutable state + pattern matching) replaced by grade-scoped sequential reduce within sentences + relational joins across sentences. No mutable state anywhere.\n\n3. **Sentence tantras.** With sufficient named helpers, pipeline orchestrators read as prose: \"the answer is the viveka answer or the physics answer.\" dispatch-answer: 57 lines \u2192 7 lines.\n\n4. **Relational consumers.** viveka-ganana joins entities\u2192ownership\u2192values through typed edges. extract-solve-for queries the question grade. No positional scanning across the full graph.\n\n5. **Grade = fact set.** The graded ring's sentence boundary IS the Datalog stratification boundary. Within a grade: sequential (ordering matters). Across grades: relational (ordering irrelevant).\n\n**The key insight:** scan was a flatmap (rewrite), not an append. Replacing it with append broke ordering that downstream consumers depended on. The fix: make consumers relational \u2192 ordering doesn't matter \u2192 producers can append safely. The graph IS a relational database stratified by sentence boundaries.",
+    "tag": "active",
+    "tag_pointer": null,
+    "position": 19.5,
+    "level": 2,
+    "session_id": null,
+    "created_at": "2026-03-22T16:50:52",
+    "updated_at": "2026-03-22T16:50:52",
+    "meta": {}
   }
 ]

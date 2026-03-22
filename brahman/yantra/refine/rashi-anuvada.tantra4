@@ -1,0 +1,12 @@
+-- propagates rashi instance sankhya up to the concept level.
+(tantra rashi-anuvada (graph)
+  (inst-concept (graph | where [inst, e, concept] | and (eq e "vishesa") | and (neq (to-string concept) "rashi") | collect [inst, concept]))
+  (inst-val (graph | where [inst, e, val] | and (eq e "sankhya") | collect [inst, val]))
+  (directly-bound (nth (bound-state graph) 0))
+  (new-triples (reduce inst-concept [] (fn acc kv ->
+    let inst    = nth kv 0
+    let concept = nth kv 1
+    let vals    = inst-val | where [lbl, v] | and (eq (to-string lbl) (to-string inst)) | collect v
+    let skip    = (or (eq (length vals) 0.) (member concept directly-bound))
+    cond skip acc otherwise (append acc [[concept, "sankhya", (nth vals 0)]]))))
+  (reduce new-triples graph (fn grph t -> (append grph [t]))))

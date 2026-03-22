@@ -1,0 +1,33 @@
+-- vishesa-instance: promote mithya labels to vishesa against nearest satya concept.
+-- stratified: nearest-before satya replaces last-agra state.
+(tantra vishesa-instance (graph)
+  (owned (graph | where [s, e, _] | and (eq e "shashthi-vibhakti") | collect s))
+  (bound (nth (bound-state graph) 0))
+  (entities (graph | where [s, e, _] | and (eq e "prathama-vibhakti") | collect s))
+  (can-promote (exists (graph | where [_, e, _] | and (eq e "rashi-bandha") | collect _it)))
+  (ig (with-index graph))
+
+  -- find mithya triples that should promote to vishesa
+  (new-triples (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let word = nth tri 1
+    let edge = to-string (nth tri 2)
+    cond (neq edge "mithya") acc
+    otherwise (let prev = nearest-before ig pos "satya"
+      cond (not (exists prev)) acc
+      otherwise (let concept = to-string (nth prev 1)
+        let same-sent = eq (sentence-of ig pos) (sentence-of ig (nth prev 0))
+        -- check: no intervening sankhya/matra/vishesa between concept and this mithya
+        let intervening = reduce ig false (fn hit t ->
+          let ti = nth t 0
+          let te = to-string (nth t 2)
+          or hit (and (gt ti (nth prev 0)) (lt ti pos)
+                      (or (eq te "sankhya") (eq te "matra") (eq te "vishesa"))))
+        cond (and same-sent (not intervening)
+                  (or (member concept owned) can-promote)
+                  (not (member concept bound))
+                  (not (member word entities)))
+          (append acc [[word, "vishesa", concept], [word, "vishesa", "rashi"]])
+        otherwise acc)))))
+
+  (append-triples graph new-triples))

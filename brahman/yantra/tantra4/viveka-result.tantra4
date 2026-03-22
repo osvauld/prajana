@@ -1,0 +1,7 @@
+-- unpacks viveka computation result by field name.
+(tantra viveka-result (raw field)
+  (cond (eq field "winner") (nth raw 0)
+    (eq field "loser") (nth raw 1)
+    (eq field "ev-pairs") (nth raw 4)
+    (eq field "gt-triples") (nth raw 5)
+    otherwise ""))

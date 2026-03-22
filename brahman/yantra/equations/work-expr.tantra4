@@ -1,0 +1,3 @@
+-- W = F · d · cos(θ)
+(tantra work-expr (force displacement angle)
+  (mul force (mul displacement (apply-op "cosine" [angle]))))

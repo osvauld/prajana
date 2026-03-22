@@ -1,0 +1,11 @@
+-- coverage info for every mantra: [name, fires, covered, missing].
+(tantra mantra-coverage (graph)
+  (bcs (nth (bound-state graph) 0))
+  (all-mantras (mantra-select ""))
+  (map all-mantras (fn m ->
+    let ms      = to-string m
+    let janya   = nth (om-contract ms) 0
+    let covered = filter janya (fn r -> member r bcs)
+    let missing = filter janya (fn r -> not (member r bcs))
+    let fires   = eq (length missing) 0
+    [m, fires, covered, missing])))

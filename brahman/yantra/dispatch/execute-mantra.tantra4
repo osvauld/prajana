@@ -1,0 +1,29 @@
+-- execute-mantra: fire a matched mantra via math-op, kriya, or inverse path.
+(tantra execute-mantra (mantra bindings mode solve-for)
+
+  (math-op (shabda mantra "math-op"))
+  (is-math (has-text math-op))
+  (is-inv (eq mode "inverse"))
+
+  -- resolve janya → values
+  (args (resolve-janya-args mantra bindings))
+
+  -- forward: math-op path
+  (forward-math (cond (and is-math (not is-inv))
+    (apply-op (shabda math-op "eval") args)
+    otherwise _none))
+
+  -- forward: kriya/equation path
+  (kriya-nodes (om-kriya mantra))
+  (forward-kriya (cond (and (not is-math) (not is-inv) (has-items kriya-nodes))
+    (call-tantra (nth kriya-nodes 0) args)
+    otherwise _none))
+
+  -- inverse path
+  (inverse-val (cond is-inv (invert-math mantra bindings solve-for) otherwise _none))
+
+  -- dispatch
+  (cond (exists forward-math) forward-math
+    otherwise (cond (exists forward-kriya) forward-kriya
+    otherwise (cond (exists inverse-val) inverse-val
+    otherwise _none))))

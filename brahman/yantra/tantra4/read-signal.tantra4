@@ -1,0 +1,3 @@
+-- reads a named signal from the graph's _signal edges.
+(tantra read-signal (graph signal-name)
+  (nth (graph | where [s, e, o] | and (eq (to-string s) "_signal") | and (eq e signal-name) | collect (to-string o)) 0))

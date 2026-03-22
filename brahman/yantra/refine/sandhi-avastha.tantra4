@@ -1,0 +1,27 @@
+-- avastha qualification: mithya qualifier + satya concept -> synthesized compound.
+(tantra sandhi-avastha (graph)
+  (avastha-qualifiers (split (shabda "avastha" "qualifier") ","))
+  (pass (reduce graph [[], []] (fn acc tri ->
+    let word   = nth tri 0
+    let edge   = nth tri 1
+    let obj    = nth tri 2
+    let pend   = nth acc 0
+    let out    = nth acc 1
+    let n-pend = length pend
+    let last-pend   = (cond (gt n-pend 0) (nth pend (sub n-pend 1)) otherwise "")
+    let prefix-list = map (range (max 0 (sub n-pend 1))) (fn i -> nth pend i)
+    let prefix-out  = flush-pending-mithya prefix-list out
+    let full-flush  = flush-pending-mithya pend out
+    let compound = (cond (and (has-text last-pend) (eq edge "satya"))
+      (concat last-pend "-" word) otherwise "")
+    (cond (and (has-text compound) (eq edge "satya") (member last-pend avastha-qualifiers))
+      [[], (append prefix-out [[compound, "satya", compound], [compound, "sandhi-rename", word]])]
+    otherwise (cond (eq edge "mithya")
+      [(append pend [word]), out]
+    otherwise (cond (gt n-pend 0)
+      [[], (append full-flush [[word, edge, obj]])]
+    otherwise
+      [[], (append out [[word, edge, obj]])]))))))
+  (pending-list (nth pass 0))
+  (rough (nth pass 1))
+  (flush-pending-mithya pending-list rough))

@@ -1,0 +1,43 @@
+-- vibhakti-shashthi: entity detection + concept ownership from possession signal.
+-- pattern: [label, mithya/satya, _] → [_, shashthi-vibhakti, shashthi-vibhakti] → [concept, satya, _]
+-- the label before the signal becomes the entity; concepts after get owned by it.
+-- stratified: positional queries replace last-label + cur-entity state.
+(tantra vibhakti-shashthi (graph)
+  (ig (with-index graph))
+
+  -- stratum 1: find possession signals and the label preceding each
+  (signals (reduce ig [] (fn acc tri ->
+    let pos  = nth tri 0
+    let edge = to-string (nth tri 2)
+    let obj  = to-string (nth tri 3)
+    cond (not (and (eq edge "shashthi-vibhakti") (eq obj "shashthi-vibhakti"))) acc
+    otherwise (let prev = nearest-before ig pos "satya"
+      -- also check mithya labels (compound names like "ball-A")
+      let prev-m = nearest-before ig pos "mithya"
+      let label-tri = cond (and (exists prev) (exists prev-m))
+        (cond (gt (nth prev 0) (nth prev-m 0)) prev otherwise prev-m)
+        otherwise (cond (exists prev) prev otherwise prev-m)
+      cond (not (exists label-tri)) acc
+      otherwise (let label = to-string (nth label-tri 1)
+        let same-sent = eq (sentence-of ig pos) (sentence-of ig (nth label-tri 0))
+        cond same-sent
+          (append acc [[pos, label]])
+        otherwise acc)))))
+
+  -- stratum 2: for each signal, find concepts after it and bind ownership
+  (new-triples (reduce signals [] (fn acc sig ->
+    let sig-pos = nth sig 0
+    let entity  = nth sig 1
+    -- entity declaration
+    let entity-triple = [entity, "prathama-vibhakti", "object"]
+    -- find satya concepts after the signal, within same sentence
+    let owned = reduce ig [] (fn oacc tri ->
+      let pos  = nth tri 0
+      let edge = to-string (nth tri 2)
+      cond (and (gt pos sig-pos) (eq edge "satya")
+                (eq (sentence-of ig pos) (sentence-of ig sig-pos)))
+        (append oacc [[(to-string (nth tri 1)), "shashthi-vibhakti", entity]])
+      otherwise oacc)
+    (append acc (append [entity-triple] owned)))))
+
+  (append-triples graph new-triples))
