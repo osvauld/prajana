@@ -2620,5 +2620,226 @@
       "type": "section",
       "title": "Tantra5 \u2014 S-Expressions and the Relational Model"
     }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-39",
+    "at": "2026-03-22T17:33:26",
+    "details": {
+      "type": "discovery",
+      "title": "Vyakarana analysis tool: python3 -m tools vyakarana (ops|unused|modules|old-code|report). Cross-references OCaml primitive ops against tantra4 usage AND shabda eval: keys. Findings: 62 truly unused OCaml ops (not referenced by any tantra or shabda eval:), 11 shabda-only ops (reachable only via apply-op + eval: key \u2014 must keep), 956-line old tantra3 parser still loaded (yantra_tantra_file2.ml \u2014 sexp parser reuses tokenise2 and parse2_expr_string from it), scan construct types/eval code in 4 files. Total removable: ~62 match arms + arity registrations + scan types."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-40",
+    "at": "2026-03-22T17:33:38",
+    "details": {
+      "type": "discovery",
+      "title": "S-expression unification insight: three file formats today (.om sloka compounds, .shabda sexp key-value, .tantra4 full sexp) with three separate parsers (~900 lines OCaml). If om nodes become s-expressions, the boundary between static knowledge and computation dissolves. Mantra krama chains become evaluable expressions \u2014 no execute-chain stack machine needed. eval: shabda keys become inline (krama (add a b)) \u2014 no OCaml dispatch table needed for composed ops. The graph becomes self-computing: nodes carry their own evaluation. One tokenizer handles everything. The 62 dead ops stay dead, the 11 shabda-only ops dissolve into node-level krama expressions, and ~15 irreducible math primitives (add, mul, div, sqrt, sin, cos...) remain as the only OCaml atoms."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-29",
+    "at": "2026-03-22T17:33:47",
+    "details": {
+      "type": "step",
+      "title": "Remove 62 unused OCaml ops from yantra_ops.ml and yantra_eval_primitives.ml. Remove corresponding arity registrations. Includes: 3 prakriya primitives (with-index, nearest-before, sentence-of), 6 vector/matrix ops (vec-add/sub/scale/dot/norm, rot2d, mat-mul), dimension ops (dim-op, dim-to-unit, dim-kramanusara-depth), graph introspection (all-edges, graph-node-count, edge-weight, node-satya, etc), and misc (sort-desc, frequencies, first-match, etc). Build and test after."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-30",
+    "at": "2026-03-22T17:33:54",
+    "details": {
+      "type": "step",
+      "title": "Remove scan construct from OCaml: delete ScanStmt, scan_branch, SEmit, SSet, SClear from yantra_types.ml. Remove eval_scan from yantra_eval.ml. Remove scan parsing from yantra_expr_parser.ml and yantra_tantra_file2.ml. Remove scan-related boundary keywords from arity registration. No tantra uses scan anymore."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-31",
+    "at": "2026-03-22T17:34:00",
+    "details": {
+      "type": "step",
+      "title": "Extract shared expression parser from yantra_tantra_file2.ml. The sexp parser (yantra_tantra_sexp.ml) depends on tokenise2 and parse2_expr_string from the old tantra3 parser. Extract these into a standalone yantra_expr_core.ml module. Then yantra_tantra_file2.ml (956 lines) can be removed entirely \u2014 no more .tantra2/.tantra3 loading."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-32",
+    "at": "2026-03-22T17:34:08",
+    "details": {
+      "type": "step",
+      "title": "Remove .tantra2/.tantra3/.tantra loading from yantra_index.ml and socket.ml. After expression parser extraction (step 31), these old format paths are dead. Remove tantra_files_recursive extensions for .tantra/.tantra2/.tantra3. Remove pre_scan_arities line-based scanner. Remove write-tantra tantra3 support from socket.ml."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-33",
+    "at": "2026-03-22T17:34:18",
+    "details": {
+      "type": "step",
+      "title": "Design om5 s-expression format. Target: (layer name (swarupa X) (yukta A B) (shabda (word W) (eval E)) (krama expr)). Key decisions: (1) edges explicit as (relation target...) \u2014 no compound suffix decomposition, (2) shabda inlined \u2014 no separate .shabda files, (3) mantra krama as evaluable s-expression \u2014 replaces krama edges + execute-chain, (4) one parser (extend yantra_tantra_sexp.ml tokenizer). Write format spec, convert 3-5 example nodes, verify roundtrip."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-34",
+    "at": "2026-03-22T17:34:26",
+    "details": {
+      "type": "step",
+      "title": "Build om5 parser in OCaml. Extend sexp tokenizer to handle om5 format. Parse (layer name ...) into nigamana type with explicit edges. No two-pass name collection needed \u2014 edges are explicit. No decompose_compound. Shabda parsed from inline (shabda ...) block. Krama stored as expr for mantra nodes. Coexists with .om \u2014 both formats load, om5 supersedes same-name .om."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-35",
+    "at": "2026-03-22T17:34:34",
+    "details": {
+      "type": "step",
+      "title": "Dissolve execute-chain into krama evaluation. Once mantra nodes carry krama as s-expressions, execute-chain OCaml primitive (stack machine over krama edges) is replaced by direct eval of the krama expression. The 28 eval: shabda ops become inline (krama (primitive args)) on mantra nodes. apply-op reads node krama, evals it. OCaml dispatch table shrinks to ~15 irreducible math atoms."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-36",
+    "at": "2026-03-22T17:34:42",
+    "details": {
+      "type": "step",
+      "title": "Migrate 1579 om nodes from .om sloka format to .om5 s-expression format. Mechanical conversion: parse existing slokas, decompose compounds into explicit (relation target) edges, inline shabda from .shabda files. Write Python migration tool in tools/. Convert layer by layer: sangati (326) \u2192 kosha (996) \u2192 bhasha (156) \u2192 mantra (101). Test after each layer."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-37",
+    "at": "2026-03-22T17:34:54",
+    "details": {
+      "type": "step",
+      "title": "Remove old om_parser.ml (373 lines) and setu_shabda.ml shabda file loader. After om5 migration, the two-pass compound decomposition parser, dynamic dimension discovery from visheshanam-ring slokas, and separate .shabda file loading are all dead. The sexp parser handles everything. Remove .shabda files (merged into .om5). Update tools/om.py and tools/shabda.py for new format."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-41",
+    "at": "2026-03-22T17:46:15",
+    "details": {
+      "type": "discovery",
+      "title": "Om5 format design: everything is an edge, no special key-value properties. (layer name (relation target...) ...) \u2014 one syntax rule. Arity maps to existing op-class edges (binary\u2192op-class-binary, unary\u2192op-class-projection, variadic\u2192op-class-monoid). Invertible/commutative/associative become (siddha invertible) edges to sangati concept nodes. Inverse is already (pratipaksha X). Degree maps to (sthita linear/quadratic). eval: not needed in om5 \u2014 already derivable from op-* nodes via kriya edges. Only exception: (krama expr) on mantra nodes carries an evaluable s-expression. Need ~3 new sangati nodes: invertible, commutative, associative. Most properties already map to existing graph concepts."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-42",
+    "at": "2026-03-22T17:46:21",
+    "details": {
+      "type": "discovery",
+      "title": "Equation tantra dissolution: 10 equation tantras (ke-expr, velocity-expr, etc.) become (krama expr) on their mantra om nodes. Today one equation = 3 things: tantra file (formula), mantra.om (graph edges), execute-chain (OCaml stack machine). With om5 krama, one equation = 1 mantra node that IS the formula + graph edges. 10 tantra files dissolve, execute-chain primitive removed, krama edge walking eliminated. 31 mantra nodes total gain self-contained evaluable expressions."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-43",
+    "at": "2026-03-22T17:46:29",
+    "details": {
+      "type": "discovery",
+      "title": "Om file hygiene: 21 files have slokas after done (all in kosha/yantra/tantras/ \u2014 slokas leaked past the done marker). 1 multi-node file (kosha/language/purusa-vacaka.om \u2014 2 nodes, needs splitting). 1 empty-sloka file (sangati/grammar/karaka/karaka.om \u2014 comments only). These get fixed during om5 migration."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-38",
+    "at": "2026-03-22T17:47:03",
+    "details": {
+      "type": "step",
+      "title": "Om5 format design: (layer name (relation target...)...) \u2014 everything is an edge. No key-value properties. Arity \u2192 existing op-class kriya edges (binary\u2192op-class-binary, unary\u2192op-class-projection, variadic\u2192op-class-monoid). Invertible/commutative/associative \u2192 (siddha concept) edges to ~3 new sangati nodes. Inverse \u2192 already (pratipaksha X). eval: not needed \u2014 derivable from op-* kriya edges. Only exception: (krama expr) on mantra nodes for evaluable s-expression formulas. Create sangati nodes: invertible, commutative, associative. Write spec, convert 5 example nodes, verify roundtrip."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-39",
+    "at": "2026-03-22T17:47:09",
+    "details": {
+      "type": "step",
+      "title": "Om5 parser in OCaml: extend sexp tokenizer to parse (layer name (relation target...)...) into nigamana type. Edges explicit \u2014 no compound decomposition, no two-pass name collection. (krama expr) on mantra nodes stored as evaluable expr (reuse parse2_expr_string). Coexists with .om \u2014 om5 supersedes same-name .om nodes."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-40",
+    "at": "2026-03-22T17:47:17",
+    "details": {
+      "type": "step",
+      "title": "Dissolve equation tantras into mantra krama: 10 equation tantras (ke-expr, velocity-expr, acceleration-expr, etc.) become (krama expr) on their 31 mantra om5 nodes. Today: tantra file (formula) + mantra.om (graph edges) + execute-chain (OCaml stack machine) = 3 things per equation. After: one mantra node IS the formula + graph edges. Remove execute-chain OCaml primitive. Remove krama edge walking from yantra_eval_primitives.ml. Remove 10 tantra files."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-41",
+    "at": "2026-03-22T17:47:24",
+    "details": {
+      "type": "step",
+      "title": "Migrate 1579 om nodes to om5 sexp format. Python converter in tools/: parse existing slokas, decompose compounds into explicit (relation target...) edges, merge intrinsic shabda keys (eval/arity/invertible/etc.) as edges to concept nodes. Fix 21 files with slokas after done, split 1 multi-node file. Convert layer by layer: sangati (326) \u2192 kosha (996) \u2192 bhasha (156) \u2192 mantra (101). Test after each layer."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-42",
+    "at": "2026-03-22T17:47:32",
+    "details": {
+      "type": "step",
+      "title": "Remove old parsers: om_parser.ml (373L, two-pass compound decomposition), execute-chain in yantra_eval_primitives.ml, krama edge walking, dynamic dimension discovery from visheshanam-ring slokas. The sexp parser handles everything. Update tools/om.py for om5 format. Remove intrinsic keys from .shabda files (eval/arity/invertible/symmetric/etc. now edges in om5). Shabda retains linguistic surface only (word/desc/alias/name/role/pos)."
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "plan.step-33",
+    "at": "2026-03-22T17:47:49",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "plan.step-38"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "plan.step-34",
+    "at": "2026-03-22T17:47:49",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "plan.step-39"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "plan.step-35",
+    "at": "2026-03-22T17:47:49",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "plan.step-40"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "plan.step-36",
+    "at": "2026-03-22T17:47:49",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "plan.step-41"
+    }
+  },
+  {
+    "op": "update_tag",
+    "entry_id": "plan.step-37",
+    "at": "2026-03-22T17:47:49",
+    "details": {
+      "old": "active",
+      "new": "superseded",
+      "pointer": "plan.step-42"
+    }
   }
 ]

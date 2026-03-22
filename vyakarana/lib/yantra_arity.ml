@@ -17,51 +17,6 @@ let _graph_arities : (string, int) Hashtbl.t = Hashtbl.create 128
 let register_graph_op_arity (name : string) (arity : int) : unit =
   Hashtbl.replace _graph_arities name arity
 
-(* pre-scan a .tantra file: extract name and input count only.
-   does NOT parse the let block — just reads the header. *)
-let pre_scan_tantra_file (path : string) : (string * int) option =
-  try
-    let ic = open_in path in
-    let lines = ref [] in
-    (try while true do lines := input_line ic :: !lines done
-     with End_of_file -> ());
-    close_in ic;
-    let lines = List.rev !lines in
-    let name = ref "" in
-    let input_count = ref 0 in
-    let section = ref "header" in
-    List.iter (fun line ->
-      let trimmed = String.trim line in
-      (* strip comments *)
-      let trimmed = match String.index_opt trimmed '-' with
-        | Some i when i + 1 < String.length trimmed && trimmed.[i+1] = '-' ->
-          String.trim (String.sub trimmed 0 i)
-        | _ -> trimmed
-      in
-      if String.length trimmed >= 8 && String.sub trimmed 0 8 = "tantra2 " then
-        name := String.trim (String.sub trimmed 8 (String.length trimmed - 8))
-      else if String.length trimmed >= 8 && String.sub trimmed 0 8 = "tantra3 " then
-        name := String.trim (String.sub trimmed 8 (String.length trimmed - 8))
-      else if trimmed = "inputs" || trimmed = "takes" then
-        section := "inputs"
-      else if trimmed = "let" || trimmed = "return" || trimmed = "done" then
-        section := trimmed
-      (* new-style: "return name" inline — stop body, switch to return *)
-      else if String.length trimmed >= 7 && String.sub trimmed 0 7 = "return " then
-        section := "return"
-      (* new-style: "takes name [type]" all on one line — count param, switch to body *)
-      else if String.length trimmed >= 6 && String.sub trimmed 0 6 = "takes " then begin
-        section := "body";
-        incr input_count
-      end
-      (* old-style: bare param line inside inputs section *)
-      else if !section = "inputs" && String.length trimmed > 0 then
-        incr input_count
-    ) lines;
-    if String.length !name > 0 then
-      Some (!name, !input_count)
-    else None
-  with _ -> None
 
 (* op arity lookup — pure graph-class model.
    priority: graph-derived class arity → tantra-scanned arity → 0 (unknown). *)

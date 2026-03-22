@@ -63,8 +63,8 @@ let rec eval (k : proof_graph) (e : env) (expr : expr) : value =
   | From (list_expr, pat_names, guards, collect_expr) ->
     eval_from k e list_expr pat_names guards collect_expr
 
-  | Scan (list_expr, state_decls, branches) ->
-    eval_scan k e list_expr state_decls branches
+  | Scan _ ->
+    failwith "eval: scan construct removed — all tantras use reduce now"
 
 (* ---- eval_from: direct evaluation of from/where/collect ---- *)
 and eval_from (k : proof_graph) (e : env) (list_expr : expr)
@@ -92,85 +92,6 @@ and eval_from (k : proof_graph) (e : env) (list_expr : expr)
   ) items;
   VList (List.rev !result)
 
-(* ---- eval_scan: direct evaluation of scan/with/when/emit ---- *)
-and eval_scan (k : proof_graph) (e : env) (list_expr : expr)
-    (state_decls : (string * expr) list) (branches : scan_branch list) : value =
-  let items = as_list (eval k e list_expr) in
-  (* mutable state *)
-  let state = Hashtbl.create 16 in
-  List.iter (fun (name, init_expr) ->
-    Hashtbl.replace state name (eval k e init_expr)
-  ) state_decls;
-  let output = ref [] in
-
-  (* execute a list of scan_stmts *)
-  let rec exec_stmts (sub_env : env) (stmts : scan_stmt list) : unit =
-    List.iter (fun stmt ->
-      match stmt with
-      | SEmit expr ->
-        let v = eval k sub_env expr in
-        (* emit triple → re-emit current [word, edge, obj] *)
-        let item = match v with
-          | VString "triple" ->
-            let w = try Hashtbl.find sub_env "word" with Not_found -> VNone in
-            let e' = try Hashtbl.find sub_env "edge" with Not_found -> VNone in
-            let o = try Hashtbl.find sub_env "obj" with Not_found -> VNone in
-            VList [w; e'; o]
-          | _ -> v
-        in
-        output := item :: !output
-      | SSkip -> ()   (* suppress emission of current triple — no-op *)
-      | SSet (var, expr) ->
-        let v = eval k sub_env expr in
-        Hashtbl.replace state var v;
-        Hashtbl.replace sub_env var v
-      | SClear var ->
-        Hashtbl.replace state var (VString "");
-        Hashtbl.replace sub_env var (VString "")
-      | SLet (name, expr) ->
-        let v = eval k sub_env expr in
-        Hashtbl.replace sub_env name v
-      | SWhen (guard, then_body, else_body) ->
-        if as_bool (eval k sub_env guard) then
-          exec_stmts sub_env then_body
-        else
-          exec_stmts sub_env else_body
-    ) stmts
-  in
-
-  List.iter (fun item ->
-    let item_list = as_list item in
-    let sub_env = env_copy e in
-    Hashtbl.iter (fun k v -> Hashtbl.replace sub_env k v) state;
-    let word = if List.length item_list > 0 then List.nth item_list 0 else VNone in
-    let edge = if List.length item_list > 1 then List.nth item_list 1 else VNone in
-    let obj  = if List.length item_list > 2 then List.nth item_list 2 else VNone in
-    Hashtbl.replace sub_env "word" word;
-    Hashtbl.replace sub_env "edge" edge;
-    Hashtbl.replace sub_env "obj" obj;
-    Hashtbl.replace sub_env "triple" (VList [word; edge; obj]);
-
-    let matched = ref false in
-    List.iter (fun branch ->
-      if not !matched then begin
-        match branch.sb_guard with
-        | None ->
-          matched := true;
-          exec_stmts sub_env branch.sb_body
-        | Some guard ->
-          if as_bool (eval k sub_env guard) then begin
-            matched := true;
-            exec_stmts sub_env branch.sb_body
-          end
-      end
-    ) branches;
-    List.iter (fun (name, _) ->
-      match Hashtbl.find_opt sub_env name with
-      | Some v -> Hashtbl.replace state name v
-      | None -> ()
-    ) state_decls
-  ) items;
-  VList (List.rev !output)
 
 (* ---- evaluate a full tantra using the internal evaluator ---- *)
 let eval_tantra ?(idx : tantra_index option) ?(session : session option)

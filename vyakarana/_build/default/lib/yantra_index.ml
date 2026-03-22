@@ -14,11 +14,7 @@ let tantra_files_recursive (root : string) : string list =
         let path = Filename.concat dir entry in
         try
           if Sys.is_directory path then walk path
-          else if Filename.check_suffix path ".tantra"
-               || Filename.check_suffix path ".tantra2"
-               || Filename.check_suffix path ".tantra3"
-               || Filename.check_suffix path ".tantra4"
-               || Filename.check_suffix path ".prakriya" then
+          else if Filename.check_suffix path ".tantra4" then
             files := path :: !files
         with _ -> ()
       ) entries
@@ -121,25 +117,10 @@ let register_tantra ?(graph : proof_graph option) (idx : tantra_index) (t : tant
 
 let load_tantra_dir ?(graph : proof_graph option) (idx : tantra_index) (dir : string) : unit =
   let files = tantra_files_recursive dir in
-  (* tantra2 first, then tantra3 — tantra3 overwrites same-name tantra2 (supersedes) *)
-  let tantra2 = List.filter (fun p -> Filename.check_suffix p ".tantra2") files in
-  List.iter (fun path ->
-    match Yantra_tantra_file2.parse_tantra2_file path with
-    | None -> () | Some t -> register_tantra ?graph idx t
-  ) tantra2;
-  let tantra3 = List.filter (fun p -> Filename.check_suffix p ".tantra3") files in
-  List.iter (fun path ->
-    match Yantra_tantra_file2.parse_tantra2_file path with
-    | None -> () | Some t -> register_tantra ?graph idx t
-  ) tantra3;
-  (* tantra4 + prakriya (s-expression format) last — supersedes same-name tantra3 *)
-  let tantra4 = List.filter (fun p ->
-    Filename.check_suffix p ".tantra4" || Filename.check_suffix p ".prakriya"
-  ) files in
   List.iter (fun path ->
     match Yantra_tantra_sexp.parse_tantra4_file path with
     | None -> () | Some t -> register_tantra ?graph idx t
-  ) tantra4
+  ) files
 
 (* collect all tantra directories from the given dirs list *)
 let collect_tantra_dirs (dirs : string list) : string list =
@@ -176,14 +157,7 @@ let pre_scan_arities (tantra_dirs : string list) : unit =
   List.iter (fun dir ->
     let files = tantra_files_recursive dir in
     List.iter (fun path ->
-      (* dispatch to sexp pre-scanner for .tantra4, line-based for others *)
-      let scan_result =
-        if Filename.check_suffix path ".tantra4"
-           || Filename.check_suffix path ".prakriya" then
-          Yantra_tantra_sexp.pre_scan_tantra4_file path
-        else
-          Yantra_arity.pre_scan_tantra_file path
-      in
+      let scan_result = Yantra_tantra_sexp.pre_scan_tantra4_file path in
       (match scan_result with
       | Some (name, arity) ->
         Yantra_arity.register_tantra_arity name arity

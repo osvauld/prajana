@@ -14,13 +14,6 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
     (k : proof_graph) (e : env) (op : string) (args : expr list) : value option =
   match op with
 
-  (* session-bindings: _ -> [VBinding ...] from current yantra session *)
-  | "session-bindings" ->
-    (match !eval_ctx with
-     | None -> Some (VList [])
-     | Some ctx ->
-       Some (VList (List.map (fun b -> VBinding (b.b_name, b.b_value)) ctx.ctx_session.bindings)))
-
   (* remember-bindings: [VBinding ...] -> ["stored"; name; value; unit; ""] *)
   | "remember-bindings" ->
     let items = as_list (e_eval k e (List.nth args 0)) in
@@ -45,12 +38,6 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
           VList [VString "stored"; VString b.b_name; VFloat b.b_value; VString unit_s; VString ""]
         | [] ->
           VList [VString "error"; VString "no bindings"; VFloat 0.0; VString ""; VString ""]))
-
-  (* print / debug *)
-  | "print" ->
-    let v = e_eval k e (List.nth args 0) in
-    Printf.printf "%s\n%!" (as_string v);
-    Some v
 
   (* unknown operation — try env variable holding a function, then loaded tantra *)
   | _ ->

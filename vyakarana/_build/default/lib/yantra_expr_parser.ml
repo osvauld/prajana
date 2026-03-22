@@ -156,9 +156,9 @@ and parse_expr_primary (tokens : string list) : expr * string list =
   | "from" :: rest ->
     parse_from rest
 
-  (* scan <list> with <var>=<init>,... when/otherwise ... *)
-  | "scan" :: rest ->
-    parse_scan rest
+  (* scan construct removed — all tantras use reduce now *)
+  | "scan" :: _ ->
+    failwith "parse_expr: scan construct removed — use reduce"
 
   | tok :: rest ->
     (* try literal float *)
@@ -244,119 +244,6 @@ and parse_from (tokens : string list) : expr * string list =
   let (extra_guards, rest) = collect_guards [] rest in
   let (collect_expr, rest) = parse_expr rest in
   (From (list_expr, pat_names, extra_guards, collect_expr), rest)
-
-(* ---- scan/with/when/emit parser -----------------------------------------
-   Produces: Scan (list_expr, state_decls, branches)
-   Evaluated directly by eval_scan in yantra_eval.ml — no desugaring.
-   Supports nested when/otherwise inside branch bodies. *)
-and parse_scan (tokens : string list) : expr * string list =
-  let rec collect_until_with acc = function
-    | "with" :: rest -> (List.rev acc, rest)
-    | tok :: rest    -> collect_until_with (tok :: acc) rest
-    | []             -> (List.rev acc, [])
-  in
-  let (list_toks, rest) = collect_until_with [] tokens in
-  let list_expr = match list_toks with
-    | [] -> failwith "scan: missing list expression"
-    | _ -> let (e, _) = parse_expr list_toks in e
-  in
-  (* parse state variable declarations: "let name be expr [, let name be expr]*"
-     until first "when"/"otherwise".
-     using "let name be expr" (not "name = expr") so that multi-line state
-     declarations are unambiguous to the tantra file parser — "let" at the
-     start of a line can never be mistaken for a top-level binding start. *)
-  let rec parse_state_decls acc toks =
-    match toks with
-    | "when" :: _ | "otherwise" :: _ -> (List.rev acc, toks)
-    | [] -> (List.rev acc, [])
-    | "let" :: name :: "be" :: rest ->
-      let rec collect_init iacc = function
-        | ("," | "let" | "when" | "otherwise") :: _ as r -> (List.rev iacc, r)
-        | tok :: rest -> collect_init (tok :: iacc) rest
-        | [] -> (List.rev iacc, [])
-      in
-      let (init_toks, rest') = collect_init [] rest in
-      let init_expr = let (e, _) = parse_expr init_toks in e in
-      let rest'' = match rest' with "," :: r -> r | r -> r in
-      parse_state_decls ((name, init_expr) :: acc) rest''
-    | _ :: rest -> parse_state_decls acc rest
-  in
-  let (state_decls, rest) = parse_state_decls [] rest in
-  let rec parse_scan_stmts toks : scan_stmt list * string list =
-    match toks with
-    | "emit" :: rest ->
-      let (e, rest') = parse_expr rest in
-      let (more, rest'') = parse_scan_stmts rest' in
-      (SEmit e :: more, rest'')
-    | "skip" :: rest ->
-      let (more, rest') = parse_scan_stmts rest in
-      (SSkip :: more, rest')
-    | "set" :: var :: "to" :: rest ->
-      let (e, rest') = parse_expr rest in
-      let (more, rest'') = parse_scan_stmts rest' in
-      (SSet (var, e) :: more, rest'')
-    | "clear" :: var :: rest ->
-      let (more, rest') = parse_scan_stmts rest in
-      (SClear var :: more, rest')
-    | "let" :: name :: "=" :: rest ->
-      let (e, rest') = parse_expr rest in
-      let (more, rest'') = parse_scan_stmts rest' in
-      (SLet (name, e) :: more, rest'')
-    | "when" :: _ | "otherwise" :: _ | "return" :: _ | "done" :: _ | [] ->
-      ([], toks)
-    | _ :: rest -> parse_scan_stmts rest
-  in
-  let rec parse_branches acc toks =
-    match toks with
-    | "when" :: rest ->
-      let (guard, rest') = parse_expr rest in
-      (* parse one guard atom then absorb any trailing infix "or" chains.
-         "or" is safe as infix here — scan guards never contain "let x = e in body".
-         e.g. "member x lst or can-promote" → or(member x lst, can-promote) *)
-      let parse_guard_atom toks =
-        let (g, rest) = parse_expr toks in
-        let rec absorb_or g toks =
-          match toks with
-          | "or" :: rest ->
-            let (g2, rest') = parse_expr rest in
-            absorb_or (Call ("or", [g; g2])) rest'
-          | _ -> (g, toks)
-        in
-        absorb_or g rest
-      in
-      (* absorb_or: fold any trailing "or atom" onto g before collect_and_guards.
-         This handles the case where the initial guard after "when" ends with
-         "or something" — e.g. "when edge is mithya and member x lst or flag":
-         parse_expr gives "member(x, lst)", then absorb_or gives
-         "or(member(x,lst), flag)", then collect_and_guards sees "and ...". *)
-      let rec absorb_or g toks =
-        match toks with
-        | "or" :: rest ->
-          let (g2, rest') = parse_expr rest in
-          absorb_or (Call ("or", [g; g2])) rest'
-        | _ -> (g, toks)
-      in
-      let (guard, rest') = absorb_or guard rest' in
-      let rec collect_and_guards g toks =
-        match toks with
-        | "and" :: rest ->
-          (* parse_guard_atom handles absorb_or within each atom *)
-          let (g2, rest') = parse_guard_atom rest in
-          collect_and_guards (Call ("and", [g; g2])) rest'
-        | _ -> (g, toks)
-      in
-      let (guard, rest') = collect_and_guards guard rest' in
-      let (body, rest'') = parse_scan_stmts rest' in
-      parse_branches ({ sb_guard = Some guard; sb_body = body } :: acc) rest''
-    | "otherwise" :: rest ->
-      let (body, rest') = parse_scan_stmts rest in
-      (List.rev ({ sb_guard = None; sb_body = body } :: acc), rest')
-    | [] ->
-      (List.rev ({ sb_guard = None; sb_body = [SEmit (Var "triple")] } :: acc), [])
-    | _ :: rest -> parse_branches acc rest
-  in
-  let (branches, rest) = parse_branches [] rest in
-  (Scan (list_expr, state_decls, branches), rest)
 
 and parse_cond (branches : (expr * expr) list) (tokens : string list) : expr * string list =
   match tokens with
