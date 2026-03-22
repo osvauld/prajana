@@ -1,0 +1,20 @@
+tantra3 anumana-eligible
+
+-- true if the graph is eligible for categorical inference (anumana).
+-- guards: must not be numeric (has bound values) and must not be viveka (has comparison nodes).
+--
+-- this is the precondition that all three anumana paths share.
+
+takes graph
+
+is-numeric = has-items (nth (bound-state graph) 0)
+
+viveka-present = has-items (filter (graph | where [vs, ve, vo]
+  | and (eq ve "satya") | collect (to-string vs))
+  (fn w -> (or (eq w "viveka-max") (eq w "viveka-min"))))
+
+result = (and (not is-numeric) (not viveka-present))
+
+return result
+
+done

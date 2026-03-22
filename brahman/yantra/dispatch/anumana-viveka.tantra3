@@ -11,7 +11,7 @@ takes query-entity
 takes assert-entity
 
 -- all swarupa edges from question graph
-gsp = filter graph (fn tri -> eq (nth tri 1) "swarupa")
+gsp = triples-by-edge graph "swarupa"
 
 -- parents of query-entity (level 1)
 l1-kosha  = map (walk query-entity "swarupa") (fn x -> to-string x)
@@ -44,9 +44,9 @@ l4 = reduce l3 [] (fn acc nd ->
   append acc (append ksp (append gsp4 kvp)))
 hit4 = member assert-entity l4
 
-found = (or hit1 (or hit2 (or hit3 hit4)))
+matched = (or hit1 (or hit2 (or hit3 hit4)))
 
-result = cond found "yes" otherwise "no"
+result = cond matched "yes" otherwise "no"
 
 return result
 

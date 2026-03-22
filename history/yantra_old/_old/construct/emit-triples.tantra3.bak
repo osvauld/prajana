@@ -1,0 +1,91 @@
+tantra3 emit-triples
+
+-- graph transformer: (word, info, subgraphs) → new triples
+-- info:      [node, role, layer, num-val, unit-node]
+-- subgraphs: [current-grade, entity-registry, binding-ledger, grammar-trail]
+
+takes word
+takes info
+takes subgraphs
+
+nd   = nth info 0
+rl   = nth info 1
+ly   = nth info 2
+nv   = nth info 3
+un   = nth info 4
+
+-- read subgraphs
+current-grade  = nth subgraphs 0
+entity-reg     = nth subgraphs 1
+bind-ledger    = nth subgraphs 2
+grammar-trail  = nth subgraphs 3
+
+-- derive context from current-grade
+last-satya = reduce current-grade "" (fn a t -> cond (eq (nth t 1) "satya") (nth t 0) otherwise a)
+last-tri   = cond (gt (length current-grade) 0) (nth current-grade (sub (length current-grade) 1)) otherwise []
+pend-num   = cond (and (gt (length last-tri) 0) (eq (nth last-tri 1) "asprista-sankhya")) (nth last-tri 2) otherwise ""
+prev-edge  = cond (gt (length last-tri) 0) (nth last-tri 1) otherwise ""
+
+ac = last-satya
+pn = pend-num
+
+has-num  = gt (string-length nv) 0
+has-unit = exists un
+has-act  = exists ac
+has-pend = neq pn ""
+
+is-concept = (and (exists nd)
+  (neq rl "grammar")
+  (neq rl "intent")
+  (neq rl "boundary")
+  (neq rl "possession")
+  (neq rl "rashi-bandha")
+  (neq ly "mantra"))
+
+-- rashi-label: concept in label position (follows concept, no pending num, not a declared word alias)
+-- word != nd catches direct matches; word-node != nd catches kosha aliases (many->count)
+is-rashi-label = (and has-act (not has-pend) is-concept (neq word (to-string nd)) (neq (to-string (word-node word)) (to-string nd)))
+
+-- dravya recognition (Step 2.5d) via subgraph queries
+-- guard 1: not a verb form (kshaya/vriddhi word or ends with -ed/-ing)
+wn           = word-node word
+is-event     = (or (eq (to-string wn) "kshaya") (eq (to-string wn) "vriddhi"))
+is-verb-ed   = ends-with word "ed"
+is-verb-ing  = ends-with word "ing"
+is-verb-form = (or is-event is-verb-ed is-verb-ing)
+-- guard 2: not after locative preposition (adhikarana in grammar-trail)
+after-loc    = eq prev-edge "adhikarana"
+-- guard 3: active concept can still claim this number
+-- "velocity 5 final" — velocity is active, has no sankhya yet → it will claim 5, final is not dravya
+-- "5 apples" — no active concept → number is for the next word → apples is dravya
+-- "bird has 5 apples" — bird is active but "has" signals possession → number is for next word
+active-can-claim = (and has-act (not (eq prev-edge "shashthi-vibhakti")) (gt (length (filter current-grade (fn t -> (and (eq (nth t 0) ac) (eq (nth t 1) "satya"))))) 0))
+-- promote: unknown word, has pending number, passes all guards
+is-dravya    = (and (not (exists nd)) has-pend (not is-verb-form) (not after-loc) (not active-can-claim))
+
+-- sambodhana detection: word-node resolves hello→sambodhana, hey→abhisambodhana etc.
+grammar-signal = word-node word
+is-sambodhana  = (or (eq (to-string grammar-signal) "sambodhana") (eq (to-string grammar-signal) "abhisambodhana") (eq (to-string grammar-signal) "aamantrana"))
+-- copula detection: "is"/"are" → emit copula signal for assertion-bandha
+is-copula = (and (eq rl "grammar") (starts-with (to-string (word-node word)) "copula"))
+
+triples = (cond (eq rl "intent") [[word, "vidhi-kaala", "solve-for"]]
+  is-sambodhana [[word, (to-string grammar-signal), word]]
+  is-copula [[word, "copula", word]]
+  (eq rl "grammar") []
+  (and has-num has-unit has-act)
+    [[(to-string ac), "sankhya", nv], [(to-string ac), "matra", (to-string un)]]
+  (and has-num has-unit)
+    [["_", "sankhya", nv], ["_", "matra", (to-string un)]]
+  has-num [[word, "asprista-sankhya", nv]]
+  (and has-pend is-concept has-act (exists (shabda (to-string nd) "concepts-for-unit")))
+    [[(to-string ac), "sankhya", pn], [(to-string ac), "matra", (to-string nd)]]
+  is-rashi-label [[word, "mithya", word]]
+  is-verb-form [[word, "mithya", word]]
+  is-concept [[(to-string nd), "satya", (to-string nd)]]
+  is-dravya [[word, "satya", word]]
+  otherwise [[word, "mithya", word]])
+
+return triples
+
+done

@@ -1,0 +1,24 @@
+tantra3 select-extremum
+
+-- finds the entity-value pair that wins under an operation.
+-- op-eval is "max" or "min" (from shabda direction "eval").
+--
+-- given ev-pairs [[ball-A, 5], [ball-B, 3]] and op "max":
+--   returns [ball-A, 5] — the pair whose value is the extremum.
+--
+-- returns [] if ev-pairs is empty.
+
+takes ev-pairs
+takes op-eval
+
+result = cond (has-items ev-pairs)
+  (reduce ev-pairs (nth ev-pairs 0) (fn best kv ->
+    let best-val = to-number (nth best 1)
+    let kv-val   = to-number (nth kv 1)
+    cond (eq (apply-op op-eval [kv-val, best-val]) kv-val) kv
+    otherwise best))
+  otherwise []
+
+return result
+
+done

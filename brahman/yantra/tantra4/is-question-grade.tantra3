@@ -1,0 +1,11 @@
+tantra3 is-question-grade
+
+-- true if a grade contains a question signal (vidhi-kaala).
+
+takes grade
+
+result = has-items (triples-by-edge grade "vidhi-kaala")
+
+return result
+
+done

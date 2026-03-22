@@ -1,0 +1,25 @@
+tantra3 word-info
+
+-- unpacks a word-info structure by field name.
+-- word-info = [node, role, layer, num-val, unit-node]
+--
+-- built by build-question-graph for each word:
+--   node     — resolved graph node name (shabda-anveshana result)
+--   role     — grammar, intent, boundary, possession, rashi-bandha
+--   layer    — mantra, kosha, etc.
+--   num-val  — numeric part if word contains digits ("5kg" → "5")
+--   unit     — unit node if word contains unit suffix ("5kg" → kilogram)
+
+takes info
+takes field
+
+result = cond (eq field "node") (nth info 0)
+  (eq field "role") (nth info 1)
+  (eq field "layer") (nth info 2)
+  (eq field "num-val") (nth info 3)
+  (eq field "unit") (nth info 4)
+  otherwise ""
+
+return result
+
+done

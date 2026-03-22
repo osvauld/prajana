@@ -25,7 +25,7 @@ janya    = walk mantra "janya"
 -- note: caller may pass graph-derived-sankhya as valpairs
 -- (injected by anuvada-ganana for scoped multi-entity questions)
 
-has-added = gt (length added-concepts) 0
+has-added = has-items added-concepts
 
 -- upanaya shows the INPUTS (janya) that were applied — not the output.
 -- for intermediate chain steps: show the newly derived intermediate values
@@ -37,7 +37,7 @@ non-phala-added = filter added-concepts (fn c -> not (is-phala c))
 
 -- show non-phala additions (intermediate values) when present,
 -- otherwise show janya (the inputs that were applied)
-concepts-to-show = cond (and has-added (gt (length non-phala-added) 0))
+concepts-to-show = cond (and has-added (has-items non-phala-added))
   non-phala-added
   otherwise janya
 
@@ -46,15 +46,15 @@ bindings = (reduce concepts-to-show [] (fn acc c ->
     cond (eq (to-string (nth kv 0)) (to-string c))
       (to-string (nth kv 1))
     otherwise a2)
-  cond (gt (string-length v) 0)
+  cond (has-text v)
     (append acc [(concat (to-string c) rel-sankhya v)])
   otherwise acc))
 
 bind-str = (reduce bindings "" (fn acc s ->
-  cond (eq (string-length acc) 0) s
+  cond (not (has-text acc)) s
   otherwise (concat acc ", " s)))
 
-result = cond (gt (string-length bind-str) 0)
+result = cond (has-text bind-str)
   (cond has-added
     (concat say-seen ": " bind-str)
     otherwise (concat say-seen ": " say-applying " " bind-str))

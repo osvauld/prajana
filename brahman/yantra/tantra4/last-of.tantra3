@@ -1,0 +1,12 @@
+tantra3 last-of
+
+-- returns the last element of a list, or [] if empty.
+-- replaces: cond (gt (length xs) 0) (nth xs (sub (length xs) 1)) otherwise []
+
+takes xs
+
+result = cond (has-items xs) (nth xs (sub (length xs) 1)) otherwise []
+
+return result
+
+done

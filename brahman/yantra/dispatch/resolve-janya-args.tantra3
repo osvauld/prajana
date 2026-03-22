@@ -14,7 +14,7 @@ janya = walk mantra "janya"
 
 result = reduce janya [] (fn acc concept ->
   let ck = shabda concept "constants-key"
-  let v  = cond (gt (string-length ck) 0)
+  let v  = cond (has-text ck)
     (nth (split-numeric (shabda "physics-constants" ck)) 0)
     otherwise
       (reduce bindings "" (fn a2 kv ->

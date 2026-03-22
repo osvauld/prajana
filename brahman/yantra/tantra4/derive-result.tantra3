@@ -1,0 +1,18 @@
+tantra3 derive-result
+
+-- unpacks the derive-chain computation result.
+-- chain-raw = [steps, enriched-graph]
+--
+-- steps    — list of derivation steps taken
+-- enriched — graph with derived triples added
+
+takes raw
+takes field
+
+result = cond (eq field "steps") (nth raw 0)
+  (eq field "enriched") (nth raw 1)
+  otherwise []
+
+return result
+
+done

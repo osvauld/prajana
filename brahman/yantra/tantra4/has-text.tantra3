@@ -1,0 +1,12 @@
+tantra3 has-text
+
+-- true if string is non-empty.
+-- replaces: gt (string-length X) 0
+
+takes s
+
+result = gt (string-length s) 0
+
+return result
+
+done

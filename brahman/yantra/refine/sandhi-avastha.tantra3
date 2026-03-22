@@ -22,10 +22,10 @@ pass = reduce graph [[], []] (fn acc tri ->
   let prefix-out  = flush-pending-mithya prefix-list out
   let full-flush  = flush-pending-mithya pend out
 
-  let compound = (cond (and (gt (string-length last-pend) 0) (eq edge "satya"))
+  let compound = (cond (and (has-text last-pend) (eq edge "satya"))
     (concat last-pend "-" word) otherwise "")
 
-  (cond (and (gt (string-length compound) 0) (eq edge "satya") (member last-pend avastha-qualifiers))
+  (cond (and (has-text compound) (eq edge "satya") (member last-pend avastha-qualifiers))
     [[], (append prefix-out [[compound, "satya", compound], [compound, "sandhi-rename", word]])]
   otherwise (cond (eq edge "mithya")
     [(append pend [word]), out]

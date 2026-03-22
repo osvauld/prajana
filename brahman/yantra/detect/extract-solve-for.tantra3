@@ -39,8 +39,8 @@ sf-state = reduce graph [false, "", "", ""] (fn acc kv ->
     (eq e "vidhi-kaala")                                                             [true, fallback, sf, scope]
     (and (not past-intent) (eq fallback "") (eq e "satya") (not is-entity))          [past-intent, s, sf, scope]
     (and past-intent (eq sf "") (eq e "satya") (not is-entity))                      [past-intent, fallback, s, scope]
-    (and past-intent (gt (string-length sf) 0) (eq scope "") (eq e "mithya") is-entity) [past-intent, fallback, sf, s]
-    (and past-intent (gt (string-length sf) 0) (eq scope "") (eq e "satya") is-entity)  [past-intent, fallback, sf, s]
+    (and past-intent (has-text sf) (eq scope "") (eq e "mithya") is-entity) [past-intent, fallback, sf, s]
+    (and past-intent (has-text sf) (eq scope "") (eq e "satya") is-entity)  [past-intent, fallback, sf, s]
     otherwise acc)
 
 has-intent  = nth sf-state 0

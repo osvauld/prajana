@@ -1,0 +1,17 @@
+tantra3 resolve-or-self
+
+-- resolves a word to its graph node name, or falls back to the word itself.
+-- word-resolve returns "" for unresolved words.
+-- resolve-or-self returns the word string as fallback.
+--
+-- "cats" → "cat" (resolved via word-node)
+-- "there" → "there" (no node, keeps the word)
+
+takes w
+
+resolved = word-resolve w
+result = cond (has-text resolved) resolved otherwise w
+
+return result
+
+done

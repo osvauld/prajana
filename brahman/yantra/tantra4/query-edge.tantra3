@@ -1,0 +1,16 @@
+tantra3 query-edge
+
+-- first object value for a given edge type.
+-- replaces: nth (graph | where [s, e, o] | and (eq e "EDGE") | collect (to-string o)) 0
+--
+-- "what is the first count-entity in this graph?"
+-- query-edge graph "count-entity" → "bird"
+
+takes graph
+takes edge-name
+
+result = nth (graph | where [s, e, o] | and (eq e edge-name) | collect (to-string o)) 0
+
+return result
+
+done

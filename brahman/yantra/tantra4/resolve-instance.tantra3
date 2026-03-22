@@ -1,0 +1,22 @@
+tantra3 resolve-instance
+
+-- resolves a rashi instance to its concept via vishesa edge.
+-- instances are named tokens (v1, v2) created by vishesa-instance.
+-- the vishesa edge points from instance to concept (excluding "rashi" itself).
+--
+-- "v1" → vishesa → "velocity" (the concept this instance represents)
+--
+-- returns the concept node or _none.
+
+takes graph
+takes inst
+
+result = nth (graph | where [i, e, c]
+  | and (eq (to-string i) (to-string inst))
+  | and (eq e "vishesa")
+  | and (neq (to-string c) "rashi")
+  | collect c) 0
+
+return result
+
+done

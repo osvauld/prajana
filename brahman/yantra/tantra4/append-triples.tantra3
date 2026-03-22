@@ -1,0 +1,13 @@
+tantra3 append-triples
+
+-- appends a list of new triples to a graph.
+-- monotone operation: only adds, never removes.
+
+takes graph
+takes new-triples
+
+result = reduce new-triples graph (fn g t -> (append g [t]))
+
+return result
+
+done

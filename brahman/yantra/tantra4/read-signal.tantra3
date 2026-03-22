@@ -1,0 +1,18 @@
+tantra3 read-signal
+
+-- reads a named signal from the graph's _signal edges.
+-- replaces 10 identical graph queries in dispatch-answer with one call.
+--
+-- usage: read-signal graph "dispatch-mode"
+--   → returns the value of [_signal, "dispatch-mode", value]
+--
+-- the graph IS the signal bus. this is the bus read operation.
+
+takes graph
+takes signal-name
+
+result = nth (graph | where [s, e, o] | and (eq (to-string s) "_signal") | and (eq e signal-name) | collect (to-string o)) 0
+
+return result
+
+done

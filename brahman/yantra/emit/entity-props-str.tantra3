@@ -18,13 +18,13 @@ rel-sankhya = shabda "anuvada-setu" "rel-sankhya"
 result = reduce entities [] (fn acc entity ->
   let owned = shashthi-sparsha graph entity
   let props = reduce owned [] (fn pacc concept ->
-    let val = nth (graph | where [s, e, v] | and (eq (to-string s) (to-string concept)) | and (eq e "sankhya") | collect v) 0
+    let val = query-edge-of graph (to-string concept) "sankhya"
     cond (exists val)
       (append pacc [(concat (to-string concept) rel-sankhya (to-string val))])
     otherwise pacc)
-  cond (gt (length props) 0)
+  cond (has-items props)
     (let props-str = reduce props "" (fn a p ->
-       cond (eq (string-length a) 0) p otherwise (concat a ", " p))
+       cond (not (has-text a)) p otherwise (concat a ", " p))
      append acc [(concat (to-string entity) " (" props-str ")")])
   otherwise acc)
 

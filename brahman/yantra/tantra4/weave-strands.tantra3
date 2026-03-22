@@ -1,0 +1,13 @@
+tantra3 weave-strands
+
+-- weaves non-empty string strands into a single utterance.
+-- joins with speech-strand-separator from anuvada-setu.
+
+takes strands
+
+sep = shabda "anuvada-setu" "speech-strand-separator"
+result = join-with strands sep
+
+return result
+
+done

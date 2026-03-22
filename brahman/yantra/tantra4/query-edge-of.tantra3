@@ -1,0 +1,17 @@
+tantra3 query-edge-of
+
+-- first object value for a given subject + edge type.
+-- replaces: nth (graph | where [s, e, o] | and (eq (to-string s) SUBJ) | and (eq e "EDGE") | collect ...) 0
+--
+-- "what is ball-A's sankhya?"
+-- query-edge-of graph "ball-A" "sankhya" → "5."
+
+takes graph
+takes subj
+takes edge-name
+
+result = nth (graph | where [s, e, o] | and (eq (to-string s) subj) | and (eq e edge-name) | collect (to-string o)) 0
+
+return result
+
+done

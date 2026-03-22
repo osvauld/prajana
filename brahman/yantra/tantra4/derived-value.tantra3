@@ -1,0 +1,24 @@
+tantra3 derived-value
+
+-- finds the derived value for the sought concept in the proof graph.
+-- returns [concept-name, value-string] or [] if not derived.
+--
+-- "sought → kinetic-energy, derived-by → mantra, sankhya → 250"
+-- → ["kinetic-energy", "250"]
+
+takes graph
+
+sought-entries = graph | where [s, e, o] | and (eq e "sought") | collect [s, o]
+sf = cond (has-items sought-entries) (to-string (nth (nth sought-entries 0) 0)) otherwise ""
+
+was-derived = cond (has-text sf)
+  (has-items (graph | where [s, e, o] | and (eq (to-string s) sf) | and (eq e "derived-by") | collect o))
+  otherwise false
+
+val = cond was-derived (query-edge-of graph sf "sankhya") otherwise _none
+
+result = cond (and was-derived (exists val)) [sf, (to-string val)] otherwise []
+
+return result
+
+done

@@ -1,55 +1,31 @@
 tantra3 detect-signals
 
--- consolidate all intent detection from the expanded graph.
--- reads: viveka words (shabda-anveshana), anumana structure, count results, solve-for.
--- returns a flat signal list consumed by dispatch-answer.
---
--- signal list: [has-intent, sf, scope-entity,
---               is-viveka, viveka-dir, comp-word, comp-concept,
---               is-anumana, anumana-query, anumana-assert, anumana-mode,
---               is-count, count-result]
-
 takes expanded
 
--- ── solve-for ─────────────────────────────────────────────────────────────────
-sf-result    = extract-solve-for expanded
-has-intent   = nth sf-result 0
-sf           = nth sf-result 1
-scope-entity = nth sf-result 2
+sf-raw       = extract-solve-for expanded
+has-intent   = solve-for-result sf-raw "has-intent"
 
--- ── viveka detection ──────────────────────────────────────────────────────────
-entities         = prathama-sparsha expanded
-all-subjects     = unique (expanded | where [s, e, o] | collect (to-string s))
-viveka-max-word  = nth (filter all-subjects (fn w -> eq (to-string (shabda-anveshana w)) "viveka-max")) 0
-viveka-min-word  = nth (filter all-subjects (fn w -> eq (to-string (shabda-anveshana w)) "viveka-min")) 0
-viveka-max-present = exists viveka-max-word
-viveka-min-present = exists viveka-min-word
-is-viveka        = (and (gt (length entities) 1) (or viveka-max-present viveka-min-present))
-viveka-dir       = cond (and viveka-min-present (not viveka-max-present)) "min" otherwise "max"
-comp-word        = cond viveka-max-present viveka-max-word otherwise viveka-min-word
-comp-concept     = nth (expanded | where [s, e, o]
-  | and (eq (to-string s) (to-string comp-word))
-  | and (eq e "vishesa")
-  | and (neq (to-string o) "rashi")
-  | collect o) 0
+viveka-signals  = detect-viveka expanded
+anumana-signals = detect-anumana expanded
+count-signals   = detect-count expanded
 
--- ── anumana detection ─────────────────────────────────────────────────────────
-anumana-ctx    = anumana-sparsha expanded
--- note: original used 'refined' here but anumana-sparsha reads categorical
--- structure which is available in expanded too. keeping expanded for now.
-is-anumana     = nth anumana-ctx 0
-anumana-query  = nth anumana-ctx 1
-anumana-assert = nth anumana-ctx 2
-anumana-mode   = nth anumana-ctx 3
+dispatch-mode = cond (has-items anumana-signals) "anumana"
+  (has-items viveka-signals) "viveka"
+  (has-items count-signals) "count"
+  has-intent "derive"
+  otherwise "none"
 
--- ── count detection ───────────────────────────────────────────────────────────
-count-total-raw     = expanded | where [s, e, o] | and (eq (to-string s) "count-total") | and (eq e "sankhya") | collect o
-count-remaining-raw = expanded | where [s, e, o] | and (eq (to-string s) "count-remaining") | and (eq e "sankhya") | collect o
-is-count     = (or (gt (length count-total-raw) 0) (gt (length count-remaining-raw) 0))
-count-result = cond (gt (length count-total-raw) 0) (nth count-total-raw 0)
-  otherwise (cond (gt (length count-remaining-raw) 0) (nth count-remaining-raw 0) otherwise "")
+base-signals = cond has-intent
+  [["solve-for", (solve-for-result sf-raw "solve-for")],
+   ["scope-entity", (solve-for-result sf-raw "scope-entity")]]
+  otherwise []
 
-result = [has-intent, sf, scope-entity, is-viveka, viveka-dir, comp-word, comp-concept, is-anumana, anumana-query, anumana-assert, anumana-mode, is-count, count-result]
+all-signals = append [["dispatch-mode", dispatch-mode]]
+  (append base-signals
+  (append viveka-signals
+  (append anumana-signals count-signals)))
+
+result = write-signals expanded all-signals
 
 return result
 

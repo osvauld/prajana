@@ -1,0 +1,43 @@
+tantra3 swarupa-anuvada
+
+-- propagates properties through identity (swarupa) edges.
+--
+-- pattern:  [X, swarupa, Y] + [X, sankhya, V]  →  [Y, sankhya, V]
+--
+-- same pattern as rashi-anuvada (which propagates through vishesa edges).
+-- both are instances of: propagate PROPERTY through RELATION.
+--
+--   rashi-anuvada:   [v1, vishesa, velocity] + [v1, sankhya, 20] → [velocity, sankhya, 20]
+--   swarupa-anuvada: [cat, swarupa, animal]  + [cat, sankhya, 5] → [animal, sankhya, 5]
+--
+-- this handles category-aware counting:
+--   "cats are animals" → assertion-bandha emits [cat, swarupa, animal]
+--   "5 cats" → sankhya-bandha emits [cat, sankhya, 5]
+--   swarupa-anuvada → [animal, sankhya, 5]
+--   count-chain folds sankhya on the query concept (animal) naturally
+
+takes graph
+
+-- build map: source -> target via swarupa edges
+-- exclude self-referential swarupa (identity edges from kosha)
+src-tgt = graph | where [src, e, tgt] | and (eq e "swarupa") | and (neq (to-string src) (to-string tgt)) | collect [src, tgt]
+
+-- build map: source -> sankhya value
+src-val = graph | where [src, e, val] | and (eq e "sankhya") | collect [src, val]
+
+-- targets already directly bound (guard: don't overwrite)
+directly-bound = nth (bound-state graph) 0
+
+-- for each (src, tgt) pair, propagate src's sankhya to tgt
+new-triples = reduce src-tgt [] (fn acc kv ->
+  let src = nth kv 0
+  let tgt = nth kv 1
+  let vals = src-val | where [lbl, v] | and (eq (to-string lbl) (to-string src)) | collect v
+  let skip = (or (eq (length vals) 0.) (member tgt directly-bound))
+  cond skip acc otherwise (append acc [[(to-string tgt), "sankhya", (nth vals 0)]]))
+
+result = reduce new-triples graph (fn grph t -> (append grph [t]))
+
+return result
+
+done

@@ -1,0 +1,12 @@
+tantra3 grade-numbers
+
+-- extracts numeric values from a grade.
+-- reads both asprista-sankhya (unbound) and sankhya (bound).
+
+takes grade
+
+result = map (triples-by-edges grade ["asprista-sankhya", "sankhya"]) (fn t -> nth t 2)
+
+return result
+
+done

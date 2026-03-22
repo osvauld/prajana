@@ -1,0 +1,14 @@
+tantra3 word-bigrams
+
+-- builds hyphenated bigrams from a word list.
+-- ["flew", "away"] → ["flew-away"]
+-- used for compound verb detection: "flew-away" → kshaya.
+
+takes words
+
+result = reduce (range (sub (length words) 1)) [] (fn acc i ->
+  (append acc [(concat (nth words i) "-" (nth words (add i 1)))]))
+
+return result
+
+done

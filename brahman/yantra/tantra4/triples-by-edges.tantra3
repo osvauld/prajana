@@ -1,0 +1,14 @@
+tantra3 triples-by-edges
+
+-- filters triples matching any of the given edge types.
+-- usage: triples-by-edges graph ["sankhya", "matra"]
+--   → all triples where edge is "sankhya" OR "matra"
+
+takes triples
+takes edge-types
+
+result = filter triples (fn t -> member (triple-edge t) edge-types)
+
+return result
+
+done

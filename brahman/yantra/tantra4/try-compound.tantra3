@@ -1,0 +1,21 @@
+tantra3 try-compound
+
+-- attempts to resolve two adjacent words as a compound concept.
+-- concatenates with hyphen and looks up in graph.
+--
+-- "kinetic" + "energy" → lookup "kinetic-energy" → kinetic-energy node
+-- "hello" + "world" → lookup "hello-world" → _none
+--
+-- returns the compound node or _none.
+
+takes w1
+takes w2
+
+compound = cond (and (has-text w1) (has-text w2))
+  (concat w1 "-" w2) otherwise ""
+
+result = cond (has-text compound) (lookup compound) otherwise _none
+
+return result
+
+done

@@ -9,7 +9,7 @@ takes graph
 
 renames = graph | where [compound, e, base] | and (eq e "sandhi-rename") | collect [base, compound]
 
-has-renames = gt (length renames) 0
+has-renames = has-items renames
 
 -- early exit: no renames means no sandhi compounds — return graph unchanged
 -- when has-renames is false, scan-result is never used (scan is a no-op pass)
@@ -24,8 +24,8 @@ result = scan passthrough [cur-base: str = "", cur-compound: str = "", active: b
     when active
     ->
       let matches = renames | where [b, c] | and (eq (to-string c) (to-string word)) | collect [b, c]
-      cur-base     = (cond (gt (length matches) 0) (to-string (nth (nth matches 0) 0)) otherwise cur-base)
-      cur-compound = (cond (gt (length matches) 0) (to-string (nth (nth matches 0) 1)) otherwise cur-compound)
+      cur-base     = (cond (has-items matches) (to-string (nth (nth matches 0) 0)) otherwise cur-base)
+      cur-compound = (cond (has-items matches) (to-string (nth (nth matches 0) 1)) otherwise cur-compound)
       emit
 
   [word, satya, _] -> emit

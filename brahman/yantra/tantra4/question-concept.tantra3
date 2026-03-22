@@ -1,0 +1,20 @@
+tantra3 question-concept
+
+-- finds the query concept from grades: the first non-system satya in the question grade.
+-- "how many animals are there?" → "animal"
+-- "how many birds are left?" → "bird"
+
+takes grades
+
+result = reduce grades "" (fn acc grade ->
+  cond (not (is-question-grade grade)) acc
+  otherwise (reduce grade acc (fn a t ->
+    let e = triple-edge t
+    let s = triple-subj t
+    cond (has-text a) a
+    (and (eq e "satya") (not (is-system-concept s))) s
+    otherwise a)))
+
+return result
+
+done

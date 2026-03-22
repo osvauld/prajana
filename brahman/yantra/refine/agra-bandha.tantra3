@@ -31,9 +31,9 @@ takes exclude-bind
 takes skip-bound
 takes require-key
 
-has-gate    = gt (string-length gate-edge) 0
-has-exclude = gt (string-length exclude-obj) 0
-has-require = gt (length require-key) 0
+has-gate    = has-text gate-edge
+has-exclude = has-text exclude-obj
+has-require = has-items require-key
 
 result = scan graph [agra-map: list = [], saw-gate: bool = false]:
 

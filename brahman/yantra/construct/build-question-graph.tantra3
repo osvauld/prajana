@@ -11,32 +11,27 @@ graph = reduce words [] (fn g word ->
   let has-punct = member last-ch sent-punct
   let clean     = (cond has-punct (substr word 0 (sub wlen 1)) otherwise word)
   let punct     = (cond has-punct last-ch otherwise "")
-  let nd        = (cond (gt (string-length clean) 0) (shabda-anveshana clean) otherwise _none)
+  let nd        = (cond (has-text clean) (shabda-anveshana clean) otherwise _none)
   let rl        = (cond (exists nd) (shabda nd "role") otherwise "")
   let ly        = (cond (exists nd) (node-layer nd) otherwise "")
   let parts     = split-numeric clean
   let num-str   = nth parts 0
   let uni-str   = nth parts 1
-  let nv        = (cond (gt (string-length num-str) 0) num-str otherwise "")
-  let un        = (cond (gt (string-length uni-str) 0) (word-node uni-str) otherwise "")
-  let is-dvandva = (and (exists nd) (eq rl "grammar") (member "dvandva" (walk (to-string nd) "sthita")))
-  let is-locative = (and (exists nd) (eq rl "grammar") (member "saptami-vibhakti" (walk (to-string nd) "sthita")))
+  let nv        = (cond (has-text num-str) num-str otherwise "")
+  let un        = (cond (has-text uni-str) (shabda-anveshana uni-str) otherwise "")
+  let is-dvandva  = has-grammar-sthita nd rl "dvandva"
+  let is-locative = has-grammar-sthita nd rl "saptami-vibhakti"
 
-  -- compute subgraphs from accumulated graph
-  -- 0: current-grade (triples since last viraam/dvandva boundary)
   let current-grade = reduce g [] (fn a t -> cond (or (eq (nth t 1) "viraam") (eq (nth t 1) "dvandva")) [] otherwise (append a [t]))
-  -- 1: entity-registry (all satya triples)
-  let entity-reg = filter g (fn t -> eq (nth t 1) "satya")
-  -- 2: binding-ledger (all sankhya + matra bindings)
+  let entity-reg = triples-by-edge g "satya"
   let bind-ledger = filter g (fn t -> (or (eq (nth t 1) "sankhya") (eq (nth t 1) "matra")))
-  -- 3: grammar-trail (last grammar signals in current grade: adhikarana, bhuta-kaala, etc.)
   let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala")))
 
   let subgraphs = [current-grade, entity-reg, bind-ledger, grammar-trail]
   let info      = [(to-string nd), rl, ly, nv, (to-string un)]
   let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]] is-locative [[clean, "adhikarana", clean]] otherwise (emit-triples clean info subgraphs)
   let with-word = (append g triples)
-  (cond (gt (string-length punct) 0) (append with-word [[punct, "viraam", punct]]) otherwise with-word))
+  (cond (has-text punct) (append with-word [[punct, "viraam", punct]]) otherwise with-word))
 
 result = sandhi-viveka graph
 

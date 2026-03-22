@@ -1,0 +1,155 @@
+tantra3 count-chain
+
+-- count-chain: fold over a graded-ring.
+--
+-- two modes, both folds, determined by graph structure:
+--
+--   1. aggregation: query concept has sankhya edges (from swarupa-anuvada).
+--      sum them.  "cat is animal. 5 cats and 2 dogs" → animal has [5, 2] → 7
+--
+--   2. arithmetic: grades have asprista-sankhya + event verbs.
+--      fold with per-grade direction.  "10 birds. 3 flew. 2 came" → 10-3+2 = 9
+--
+-- algebraic structure (all from kosha):
+--   graded-ring → fold-identity: 0  (seed)
+--   kshaya → subtraction → eval: sub
+--   vriddhi → addition → eval: add
+--   word-node verb → kshaya or vriddhi  (direction detection)
+
+takes graph
+takes grades
+
+-- ── guard: is this a count question? ────────────────────────────────────────
+has-count = gt (length (graph | where [s, e, o] | and (eq (to-string s) "count") | and (eq e "satya") | collect s)) 0
+
+-- ── query concept from question grade ──────────────────────────────────────
+-- "how many animals are there" → q-concept = "animal"
+q-concept = reduce grades "" (fn acc grade ->
+  let is-q = gt (length (filter grade (fn t -> eq (nth t 1) "vidhi-kaala"))) 0
+  cond (not is-q) acc
+  otherwise (reduce grade acc (fn a t ->
+    let e = nth t 1
+    let s = to-string (nth t 0)
+    cond (gt (string-length a) 0) a
+    (and (eq e "satya") (neq s "count") (neq s "count-total") (neq s "count-remaining")) s
+    otherwise a)))
+
+-- ── question-grade direction from signal words ──────────────────────────────
+q-words = reduce grades [] (fn acc grade ->
+  let is-q = gt (length (filter grade (fn t -> eq (nth t 1) "vidhi-kaala"))) 0
+  cond is-q (map (filter grade (fn t -> eq (nth t 1) "mithya")) (fn t -> to-string (nth t 0)))
+  otherwise acc)
+
+q-direction = reduce q-words "" (fn acc w ->
+  let wn = to-string (word-node w)
+  cond (gt (string-length acc) 0) acc
+  (or (eq wn "kshaya") (eq wn "vriddhi")) wn
+  otherwise acc)
+
+-- ── mode detection: aggregation vs arithmetic ───────────────────────────────
+-- aggregation: swarupa edges exist AND query concept has sankhya from propagation.
+-- swarupa edges only come from assertion-bandha ("cat is an animal").
+-- without assertions, always use arithmetic (grade fold).
+has-swarupa = gt (length (graph | where [s, e, o] | and (eq e "swarupa") | and (neq (to-string s) (to-string o)) | collect s)) 0
+q-vals = cond (and has-swarupa (gt (string-length q-concept) 0))
+  (graph | where [s, e, o] | and (eq (to-string s) q-concept) | and (eq e "sankhya") | collect (to-number o))
+  otherwise []
+use-aggregation = gt (length q-vals) 0
+
+-- ── aggregation path: sum sankhya edges on query concept ────────────────────
+agg-result = sum q-vals
+-- build step narrative with running accumulator
+agg-fold = reduce q-vals [0, []] (fn state v ->
+  let acc = nth state 0
+  let steps = nth state 1
+  let new-acc = add acc v
+  let step = (concat "vriddhi " (to-string v) ": " (to-string acc) " -> " (to-string new-acc))
+  [new-acc, (append steps [step])])
+agg-steps = nth agg-fold 1
+
+-- ── arithmetic path: grade fold with direction detection ────────────────────
+fold-seed = to-number (shabda "graded-ring" "fold-identity")
+
+fold-state = reduce grades [fold-seed, [], false] (fn state grade ->
+  let acc   = nth state 0
+  let steps = nth state 1
+  let init  = nth state 2
+  let is-q = gt (length (filter grade (fn t -> eq (nth t 1) "vidhi-kaala"))) 0
+  let nums = map (filter grade (fn t -> or (eq (nth t 1) "asprista-sankhya") (eq (nth t 1) "sankhya"))) (fn t -> nth t 2)
+  let has-num = gt (length nums) 0
+  let mw = map (filter grade (fn t -> eq (nth t 1) "mithya")) (fn t -> to-string (nth t 0))
+  -- bigram keys for compound verbs: "flew-away", "got-off", etc.
+  let bigrams = reduce (range (sub (length mw) 1)) [] (fn acc i ->
+    let w1 = nth mw i
+    let w2 = nth mw (add i 1)
+    (append acc [(concat w1 "-" w2)]))
+  let dir-bi = reduce bigrams "" (fn d bg ->
+    let wn = to-string (word-node bg)
+    cond (gt (string-length d) 0) d
+    (or (eq wn "kshaya") (eq wn "vriddhi")) wn
+    otherwise d)
+  let dir = cond (gt (string-length dir-bi) 0) dir-bi
+    otherwise (reduce mw "" (fn d w ->
+      let wn = to-string (word-node w)
+      cond (gt (string-length d) 0) d
+      (or (eq wn "kshaya") (eq wn "vriddhi")) wn
+      otherwise d))
+  let eff-dir = cond (gt (string-length dir) 0) dir
+    (gt (string-length q-direction) 0) q-direction
+    otherwise "vriddhi"
+  let nv = cond has-num (to-number (nth nums 0)) otherwise 0
+  let op-eval = cond (eq eff-dir "kshaya") (shabda "subtraction" "eval") otherwise (shabda "addition" "eval")
+  let new-acc = apply-op (to-string op-eval) [acc, nv]
+  let step = (concat (to-string eff-dir) " " (to-string nv) ": " (to-string acc) " -> " (to-string new-acc))
+  let skip = (or is-q (not has-num))
+  let r-init = [nv, steps, true]
+  let r-acc = [new-acc, (append steps [step]), true]
+  cond skip state
+  (not init) r-init
+  otherwise r-acc)
+
+-- ── select result from mode ─────────────────────────────────────────────────
+count-result = cond use-aggregation agg-result otherwise (nth fold-state 0)
+count-steps  = cond use-aggregation agg-steps  otherwise (nth fold-state 1)
+found-any    = cond use-aggregation true       otherwise (nth fold-state 2)
+
+-- ── entity and container ────────────────────────────────────────────────────
+all-satya = unique (graph | where [s, e, o] | and (eq e "satya")
+  | and (neq (to-string s) "count")
+  | and (neq (to-string s) "count-total")
+  | and (neq (to-string s) "count-remaining")
+  | and (neq (to-string s) "viveka-max")
+  | and (neq (to-string s) "viveka-min")
+  | collect (to-string s))
+count-entity    = cond use-aggregation q-concept otherwise (nth all-satya 0)
+count-container = nth all-satya 1
+
+-- ── resolve count concept from question direction ───────────────────────────
+resolved-count = cond (eq q-direction "kshaya") "count-remaining" otherwise "count-total"
+
+-- ── rebuild graph with proof edges ──────────────────────────────────────────
+base = cond found-any
+  (reduce graph [] (fn acc triple ->
+    cond (and (eq (to-string (nth triple 0)) "count") (eq (nth triple 1) "satya"))
+      (append acc [[resolved-count, "satya", resolved-count]])
+    otherwise (append acc [triple])))
+  otherwise graph
+
+step-triples = map count-steps (fn s -> ["count", "count-step", s])
+
+proof = cond found-any
+  (append
+    [[resolved-count, "sankhya", count-result],
+     [resolved-count, "derived-by", "count-chain"]]
+    (append step-triples
+      (append
+        (cond (exists count-entity) [["count", "count-entity", count-entity]] otherwise [])
+        (cond (exists count-container) [["count", "count-container", count-container]] otherwise []))))
+  otherwise []
+
+result = cond (not has-count) graph
+  otherwise (append base proof)
+
+return result
+
+done

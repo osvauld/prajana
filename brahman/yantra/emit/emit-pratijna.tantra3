@@ -19,7 +19,7 @@ derived-concepts = graph | where [s, e, o] | and (eq e "derived-by") | collect (
 entities = prathama-sparsha graph
 
 -- viveka-concept for grouping label
-vc-concept = nth (graph | where [s, e, o] | and (eq e "viveka-concept") | collect (to-string o)) 0
+vc-concept = query-edge graph "viveka-concept"
 
 -- viveka entity strs from viveka-sankhya edges
 viveka-entity-strs = cond is-viveka
@@ -28,7 +28,7 @@ viveka-entity-strs = cond is-viveka
       | and (eq (to-string s) (to-string ent))
       | and (eq e "viveka-sankhya")
       | collect o
-    cond (gt (length vs) 0)
+    cond (has-items vs)
       (append acc [(concat (to-string ent) " (" (to-string vc-concept) rel-sankhya (to-string (nth vs 0)) ")")])
     otherwise acc))
   otherwise []
@@ -39,11 +39,7 @@ std-entity-strs = cond (not is-viveka)
   otherwise []
 
 -- owned concepts for flat dedup
-owned-concepts = reduce graph [] (fn acc tri ->
-  cond (and (eq (nth tri 1) "shashthi-vibhakti")
-            (neq (to-string (nth tri 2)) "shashthi-vibhakti"))
-    (append acc [(to-string (nth tri 0))])
-  otherwise acc)
+owned-concepts = ownership-concepts graph
 
 -- flat given values: not owned, not derived
 flat-strs = cond (not is-viveka)
@@ -58,7 +54,7 @@ flat-strs = cond (not is-viveka)
 entity-strs = cond is-viveka viveka-entity-strs otherwise std-entity-strs
 all-given   = append entity-strs flat-strs
 
-result = cond (gt (length all-given) 0)
+result = cond (has-items all-given)
   (concat say-given ": " (list-join all-given))
   otherwise ""
 

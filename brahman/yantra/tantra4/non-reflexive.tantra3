@@ -1,0 +1,13 @@
+tantra3 non-reflexive
+
+-- filters out self-referential triples (where subject = object).
+-- [cat, swarupa, cat] is reflexive (identity).
+-- [cat, swarupa, animal] is non-reflexive (assertion).
+
+takes triples
+
+result = filter triples (fn t -> neq (triple-subj t) (triple-obj t))
+
+return result
+
+done

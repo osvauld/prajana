@@ -1,0 +1,12 @@
+tantra3 triple-obj
+
+-- object of a triple, as string.
+-- replaces: to-string (nth t 2)
+
+takes t
+
+result = to-string (nth t 2)
+
+return result
+
+done

@@ -1,0 +1,13 @@
+tantra3 last-concept
+
+-- finds the most recent satya subject in a grade.
+-- "ball has mass 5" after processing → last-concept = "mass"
+-- used by emit-triples as the active concept for number binding.
+
+takes grade
+
+result = reduce grade "" (fn a t -> cond (eq (triple-edge t) "satya") (triple-subj t) otherwise a)
+
+return result
+
+done

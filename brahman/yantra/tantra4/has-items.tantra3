@@ -1,0 +1,12 @@
+tantra3 has-items
+
+-- true if list is non-empty.
+-- replaces: gt (length X) 0
+
+takes xs
+
+result = gt (length xs) 0
+
+return result
+
+done

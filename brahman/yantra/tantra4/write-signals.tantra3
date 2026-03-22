@@ -1,0 +1,16 @@
+tantra3 write-signals
+
+-- writes multiple named signals to the graph.
+-- takes a list of [name, value] pairs.
+--
+-- usage: write-signals graph [["dispatch-mode", "viveka"], ["viveka-dir", "max"]]
+
+takes graph
+takes pairs
+
+result = reduce pairs graph (fn g kv ->
+  (append g [["_signal", (nth kv 0), (nth kv 1)]]))
+
+return result
+
+done

@@ -1,0 +1,20 @@
+tantra3 solve-for-result
+
+-- unpacks the solve-for detection result by field name.
+-- sf-result = [has-intent, solve-for, scope-entity]
+--
+-- has-intent   — true if a solvable concept was found
+-- solve-for    — the concept to compute
+-- scope-entity — the entity scope (e.g., "ball-A")
+
+takes sf
+takes field
+
+result = cond (eq field "has-intent") (nth sf 0)
+  (eq field "solve-for") (nth sf 1)
+  (eq field "scope-entity") (nth sf 2)
+  otherwise ""
+
+return result
+
+done

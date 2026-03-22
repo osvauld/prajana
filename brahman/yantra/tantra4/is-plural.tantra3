@@ -1,0 +1,23 @@
+tantra3 is-plural
+
+-- detects whether a word is a plural form.
+-- checks: word ≠ resolved-node AND stripping a plural suffix yields a graph node.
+-- uses the english-plural-* morphology rules from the graph.
+--
+-- returns true if plural, false otherwise.
+
+takes w
+
+-- if word-node finds it directly (exact or alias), not a morpheme-stripped plural
+direct = word-node w
+exact  = cond (exists direct) (lookup w) otherwise _none
+
+-- word resolves to something (via shabda-anveshana morphology)
+resolved = shabda-anveshana w
+
+-- plural = resolved exists AND no direct match AND word differs from resolved name
+result = (and (exists resolved) (not (exists exact)) (neq w (to-string resolved)))
+
+return result
+
+done

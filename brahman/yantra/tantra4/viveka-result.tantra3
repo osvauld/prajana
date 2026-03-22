@@ -1,0 +1,22 @@
+tantra3 viveka-result
+
+-- unpacks the viveka (comparison) computation result.
+-- viveka-raw = [winner, loser, ?, ?, ev-pairs, gt-triples]
+--
+-- winner     — the entity that wins the comparison
+-- loser      — the entity that loses
+-- ev-pairs   — entity-value pairs used in comparison
+-- gt-triples — greater-than triples for proof graph
+
+takes raw
+takes field
+
+result = cond (eq field "winner") (nth raw 0)
+  (eq field "loser") (nth raw 1)
+  (eq field "ev-pairs") (nth raw 4)
+  (eq field "gt-triples") (nth raw 5)
+  otherwise ""
+
+return result
+
+done

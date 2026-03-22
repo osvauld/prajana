@@ -1,0 +1,14 @@
+tantra3 is-boundary
+
+-- true if a triple is a scope boundary (viraam or dvandva).
+-- viraam = sentence boundary. dvandva = conjunction boundary.
+-- both reset scan state in assertion-bandha, sankhya-bandha, etc.
+
+takes triple
+
+e = triple-edge triple
+result = (or (eq e "viraam") (eq e "dvandva"))
+
+return result
+
+done

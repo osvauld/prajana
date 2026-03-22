@@ -9,12 +9,12 @@ takes prior-graph
 raw-graph = build-question-graph sentence
 refined   = fixpoint raw-graph (fn g -> avrti-refine g)
 
-merged = (cond (and (exists prior-graph) (gt (length prior-graph) 0)) (append prior-graph refined) otherwise refined)
+merged = (cond (and (exists prior-graph) (has-items prior-graph)) (append prior-graph refined) otherwise refined)
 
 expanded = kosha-expand merged
 mm       = match-mantra expanded
-enriched = (cond (gt (length mm) 0) expanded otherwise (fixpoint expanded (fn g -> derive-step g)))
-final-m  = (cond (gt (length mm) 0) mm otherwise (match-mantra enriched))
+enriched = (cond (has-items mm) expanded otherwise (fixpoint expanded (fn g -> derive-step g)))
+final-m  = (cond (has-items mm) mm otherwise (match-mantra enriched))
 
 sf-result = extract-solve-for expanded
 sf        = nth sf-result 1
@@ -25,14 +25,14 @@ direct-bindings = sankhya-sparsha refined
 sv-concepts = (shashthi-sparsha refined "") | collect (nth _it 0)
 sv-vals     = (sankhya-sparsha refined)     | collect (nth _it 1)
 
-sv-bindings = (cond (and (gt (length sv-concepts) 0) (gt (length sv-vals) 0))
+sv-bindings = (cond (and (has-items sv-concepts) (has-items sv-vals))
   (map sv-concepts (fn c -> [c, (nth sv-vals 0)]))
   otherwise [])
 
 this-turn = append direct-bindings sv-bindings
 _stored   = remember-bindings (map this-turn (fn p -> bind (nth p 0) (nth p 1)))
 
-result = (cond (gt (length final-m) 0) (execute-matched final-m sf) otherwise "no match")
+result = (cond (has-items final-m) (execute-matched final-m sf) otherwise "no match")
 
 return result
 

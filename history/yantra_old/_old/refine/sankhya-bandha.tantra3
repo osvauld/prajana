@@ -1,0 +1,68 @@
+tantra3 sankhya-bandha
+
+-- binds floating asprista-sankhya (unattached numbers) to their satya concept.
+-- handles both orderings:
+--   concept-before-number: "mass 10" → [mass, sankhya, 10]
+--   number-before-concept: "5 cats" → [cat, sankhya, 5]
+--
+-- the original asprista-sankhya triple is always emitted (never consumed).
+-- sankhya edges are ADDED alongside — enrichment, not replacement.
+-- this preserves asprista-sankhya for count-chain's grade fold.
+--
+-- scope: sentence-local. viraam/dvandva resets state.
+--
+-- guards: concept already has a sankhya triple → skip
+
+takes graph
+
+-- concepts already bound to a numeric value
+already-bound = nth (bound-state graph) 0
+
+result = scan graph [last-active: str = "", pending-num: str = ""]:
+
+  -- sentence boundary: reset scope
+  [word, viraam, obj] ->
+    last-active = ""
+    pending-num = ""
+    emit
+
+  -- dvandva boundary: reset scope
+  [word, dvandva, obj] ->
+    last-active = ""
+    pending-num = ""
+    emit
+
+  -- satya after pending number: bind number to this concept
+  [word, satya, obj]
+    when (gt (string-length pending-num) 0)
+    when (not (member (to-string word) already-bound))
+    ->
+      emit
+      emit [(to-string word), "sankhya", pending-num]
+      last-active = (to-string word)
+      pending-num = ""
+
+  [word, satya, obj] ->
+    last-active = (to-string word)
+    pending-num = ""
+    emit
+
+  -- number after concept: bind to last-active
+  [word, asprista-sankhya, obj]
+    when (neq last-active "")
+    when (not (member last-active already-bound))
+    ->
+      emit
+      emit [last-active, "sankhya", obj]
+      pending-num = ""
+
+  -- number before concept: hold as pending, still emit the original triple
+  [word, asprista-sankhya, obj] ->
+    pending-num = (to-string obj)
+    emit
+
+  _ -> emit
+
+return result
+
+done

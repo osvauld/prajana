@@ -25,11 +25,11 @@ scoped-vps = cond (exists entity)
     []
     (fn acc owned ->
       -- instance path: owned is a rashi instance — resolve concept via vishesa
-      let inst-concept = nth (graph | where [i, e, c] | and (eq (to-string i) (to-string owned)) | and (eq e "vishesa") | and (neq (to-string c) "rashi") | collect c) 0
+      let inst-concept = resolve-instance graph owned
       let concept      = cond (exists inst-concept) inst-concept otherwise owned
       -- instance path: sankhya on the instance
       let inst-val = cond (exists inst-concept)
-        (nth (graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v) 0)
+        (query-edge-of graph (to-string owned) "sankhya")
         otherwise ""
       -- concept path: index into ordered sankhya values
       let all-sankhyas = graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v
@@ -53,7 +53,7 @@ eff-vps = cond (exists entity)
   (reduce vps scoped-vps (fn acc kv ->
     let concept = nth kv 0
     let already = acc | where [c, v] | and (eq (to-string c) (to-string concept)) | collect c
-    cond (gt (length already) 0) acc otherwise (append acc [kv])))
+    cond (has-items already) acc otherwise (append acc [kv])))
   otherwise vps
 
 eff-bcs = cond (exists entity)

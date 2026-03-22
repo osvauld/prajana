@@ -26,8 +26,8 @@ morph = cond (or (exists abbrev) (exists ex)) _none
     let sf-len = string-length sf
     let ok     = (and (ends-with word sf) (gt wlen sf-len))
     let stem   = (cond ok (concat (substr word 0 (sub wlen sf-len)) ssf) otherwise "")
-    let hit    = (cond (gt (string-length stem) 0) (lookup stem) otherwise _none)
-    (cond (exists acc) acc otherwise hit)))
+    let found-node = (cond (has-text stem) (lookup stem) otherwise _none)
+    (cond (exists acc) acc otherwise found-node)))
 
 result = cond (exists abbrev) abbrev
   otherwise (cond (exists ex) ex

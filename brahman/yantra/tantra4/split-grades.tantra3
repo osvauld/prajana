@@ -1,0 +1,28 @@
+tantra3 split-grades
+
+-- splits a graph into grade sublists at viraam boundaries.
+-- used by grade-sparsha (for count fold) and emit-count (for formatting).
+--
+-- graded-ring semantics: viraam = grade boundary = additive identity.
+-- each grade is a sublist of triples between boundaries.
+--
+-- returns: list of grade-lists (each is a list of triples).
+
+takes graph
+
+grade-state = reduce graph [[], []] (fn state triple ->
+  let completed = nth state 0
+  let current   = nth state 1
+  let e = nth triple 1
+  cond (eq (to-string e) "viraam")
+    [(append completed [(append current [triple])]), []]
+  otherwise
+    [completed, (append current [triple])])
+
+completed = nth grade-state 0
+final      = nth grade-state 1
+result     = append completed [final]
+
+return result
+
+done

@@ -1,0 +1,34 @@
+tantra3 anuvada-ganana
+
+-- orchestrator: sentence → answer.
+-- pipeline layers read from graph: pipeline-construct krama 7 gives the sequence.
+-- each layer's implementing tantra is declared via kriya edges on the pipeline-* nodes.
+--
+-- construct → assert → refine → expand → detect → dispatch → emit
+--
+-- detect-signals consolidates all intent detection (viveka, anumana, count, solve-for).
+-- dispatch-answer runs the 4-way dispatch and emits the formatted answer.
+
+takes sentence
+
+-- ── layer 1: construct ────────────────────────────────────────────────────────
+raw-graph = build-question-graph sentence
+
+-- ── layer 2: assert ───────────────────────────────────────────────────────────
+asserted = assertion-bandha raw-graph
+
+-- ── layer 3: refine (fixpoint) ────────────────────────────────────────────────
+refined = grade-sparsha asserted
+
+-- ── layer 4: expand ───────────────────────────────────────────────────────────
+expanded = kosha-expand refined
+
+-- ── layer 5: detect ───────────────────────────────────────────────────────────
+signals = detect-signals expanded
+
+-- ── layer 6+7: dispatch + emit ────────────────────────────────────────────────
+answer = dispatch-answer expanded refined signals
+
+return answer
+
+done

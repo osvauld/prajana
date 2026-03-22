@@ -1976,5 +1976,346 @@
       "type": "section",
       "title": "8. Related Work and Distinction (v2)"
     }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-26",
+    "at": "2026-03-22T01:51:31",
+    "details": {
+      "type": "discovery",
+      "title": "Universal signal emission: every word emits what its graph node declares via edges. Grammar words (copula, prepositions, articles, quantifiers) emit vibhakti/tense/number signals as typed triples. Morphology (plural -s, past -ed, progressive -ing) emits stem + inflection signal. Downstream tantras consume signals they care about \u2014 no hardcoded drops. Pattern: word \u2192 word-node \u2192 edges \u2192 emit triples. Same as swarupa-anuvada but at construct level. Unlocks 11+ xfails: from_rest (panchami-vibhakti), motion_verb (kartari-prayoga), multiplication (distribution signal from 'each'), entity_scope (chaturthi-vibhakti from 'to')."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-27",
+    "at": "2026-03-22T01:51:42",
+    "details": {
+      "type": "discovery",
+      "title": "Transitive property propagation via swarupa-anuvada: [X, swarupa, Y] + [X, sankhya, V] \u2192 [Y, sankhya, V]. Same pattern as rashi-anuvada (vishesa edges). Both are instances of: propagate PROPERTY through RELATION edge. Enables category-aware counting without hardcoding: 'cat is animal, 5 cats' \u2192 [animal, sankhya, 5] via swarupa chain. count-chain has two modes: aggregation (sum propagated sankhya on query concept) and arithmetic (grade fold with direction verbs). Graph determines which mode \u2014 no hardcoded logic. Unlocked 5 xfails: red_blue_distinct, red_blue_addition, viveka_after_count, count_compare_jars, count_compare_after_change."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-11",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "Signal emission: emit-triples emits graph-declared signals for all words"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-12",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "Plural morphology: strip -s/-es/-ies to resolve stems, emit bahu-vachana signal"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-13",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "Vibhakti signals: prepositions emit their vibhakti case (panchami from 'from', saptami from 'at', chaturthi from 'to')"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-14",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "Tense signals: copula variants emit kaala (vartamana/bhuta) and vachana (eka/bahu)"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-15",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "Distribution signal: add 'each/every/per' \u2192 distribution node with kriya\u2192multiplication"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-16",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "Motion verb binding: 'moves/moving' emit kartari-prayoga + velocity concept binding"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-17",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "From-rest sandhi: panchami-vibhakti + 'rest' \u2192 initial-velocity=0"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-18",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "Multiplication in count-chain: distribution signal triggers multiply instead of add"
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-19",
+    "at": "2026-03-22T01:51:57",
+    "details": {
+      "type": "step",
+      "title": "Flip resolved xfails to passing tests (13 tests: 8 earlier + 5 from swarupa-anuvada)"
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-22T01:52:03",
+    "details": {
+      "passed": 32,
+      "xfailed": 31,
+      "failed": 0
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.plan-5",
+    "at": "2026-03-22T01:52:16",
+    "details": {
+      "type": "plan",
+      "title": "Signal emission plan \u2014 the active work. Three layers: (1) emit-triples becomes pure transducer: word \u2192 word-node \u2192 edges \u2192 typed triples. No hardcoded drops. (2) Morphology: plural stripping resolves stems + emits bahu-vachana. Past tense -ed emits bhuta-kaala. (3) swarupa-anuvada propagates properties through identity edges \u2014 transitive property. Together these unlock 16 xfails. Current state: 32 passed + 5 XPASS (need flip) + 31 xfail. Changes so far: copula emission in emit-triples, assertion-bandha reads copula signal, swarupa-anuvada in refine chain, sankhya-bandha handles number-before-noun, count-chain has aggregation mode."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-28",
+    "at": "2026-03-22T01:54:32",
+    "details": {
+      "type": "discovery",
+      "title": "Pipeline timing is Datalog stratified evaluation with monotone fixpoint. Three mechanisms: (1) Monotone enrichment \u2014 signals only added, never removed. Each tantra emits alongside originals, never consumes. Graph only grows within a stratum. (2) Fixpoint iteration \u2014 avrti-refine runs until no new triples appear. A signal emitted late in pass N is visible to early steps in pass N+1. This handles within-layer async. (3) Layer ordering (construct \u2192 assert \u2192 refine \u2192 expand \u2192 detect \u2192 dispatch \u2192 emit) handles cross-layer dependencies. Each layer's output is frozen input to the next. Within refine, the krama chain orders sub-steps: sandhi-kosha \u2192 ... \u2192 sankhya-bandha \u2192 swarupa-anuvada. swarupa-anuvada MUST be after sankhya-bandha (needs sankhya edges to propagate). The constraint: every sub-tantra must be monotone (only add triples). sankhya-bandha was non-monotone (consumed asprista-sankhya) \u2014 fixed to emit alongside instead. True monotonicity means the graph is append-only within a stratum, guaranteeing fixpoint convergence."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.principle-6",
+    "at": "2026-03-22T01:54:41",
+    "details": {
+      "type": "principle",
+      "title": "Monotonicity constraint identified and enforced. sankhya-bandha was the only non-monotone refine sub-tantra \u2014 it consumed asprista-sankhya triples when binding sankhya. Fixed: now emits original asprista-sankhya AND adds sankhya binding. Both coexist. count-chain reads either (asprista-sankhya for grade fold, sankhya for aggregation). All 10 refine sub-tantras are now monotone endomorphisms \u2014 graph only grows within avrti-refine fixpoint. This guarantees convergence and enables true async signal flow: any signal emitted in pass N is visible to all steps in pass N+1."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.insight-7",
+    "at": "2026-03-22T01:56:53",
+    "details": {
+      "type": "insight",
+      "title": "Pipeline is Datalog stratified evaluation. 7 layers = 7 strata. Within each stratum, triples accumulate monotonically (append-only). Between strata, results freeze as read-only input. refine layer is a fixpoint over 10 monotone sub-steps (krama chain). Signal flow: every word resolves to graph node, node edges are signals, emitted as typed triples. No drops \u2014 signals flow through graph. Three timing mechanisms: (1) monotone enrichment within stratum, (2) fixpoint iteration for within-layer async, (3) layer ordering for cross-layer deps."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.plan-8",
+    "at": "2026-03-22T01:57:04",
+    "details": {
+      "type": "plan",
+      "title": "Signal types currently emitted: satya (concept), asprista-sankhya (number), mithya (unresolved/event verb), copula (is/are), shashthi-vibhakti (possession), dvandva (conjunction), vidhi-kaala (question intent), adhikarana (location), viraam (sentence boundary). Signals emitted by refine: swarupa (IS-A from assertion-bandha), sankhya (bound number from sankhya-bandha), propagated sankhya (category-level from swarupa-anuvada). Planned signals not yet emitted: bahu-vachana (plural), bhuta-kaala (past tense), panchami-vibhakti (from), saptami-vibhakti (at/in/on), chaturthi-vibhakti (to), tritiya-vibhakti (by/with), distribution (each/every/per), kartari-prayoga (moves/moving)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.insight-9",
+    "at": "2026-03-22T01:57:15",
+    "details": {
+      "type": "insight",
+      "title": "Count-chain two modes \u2014 graph determines which fires. Aggregation: query concept has sankhya edges from swarupa-anuvada \u2192 sum them. Example: cat is animal, 5 cats and 2 dogs \u2192 [animal, sankhya, 5] + [animal, sankhya, 2] \u2192 7. Arithmetic: grades have asprista-sankhya with event verbs \u2192 fold with per-grade direction. Example: 10 birds, 3 flew, 2 came \u2192 10-3+2=9. Detection: swarupa edges exist AND query concept has propagated sankhya \u2192 aggregation. Otherwise \u2192 arithmetic. No hardcoded logic."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.insight-10",
+    "at": "2026-03-22T01:57:26",
+    "details": {
+      "type": "insight",
+      "title": "rashi-anuvada and swarupa-anuvada are the same abstract operation: propagate PROPERTY through RELATION. [X, vishesa, Y] + [X, sankhya, V] \u2192 [Y, sankhya, V] (rashi). [X, swarupa, Y] + [X, sankhya, V] \u2192 [Y, sankhya, V] (swarupa). This is the transitive property of identity \u2014 if X IS Y then X's attributes ARE Y's attributes. The visheshanam ring's multiplicative identity (swarupa) preserves everything it touches. Both are monotone endomorphisms in the refine fixpoint."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-11",
+    "at": "2026-03-22T01:57:35",
+    "details": {
+      "type": "quirk",
+      "title": "Assertion-bandha copula pattern: emit-triples emits [word, copula, word] for is/are. assertion-bandha scans for: satya subject (subj-ok=true) \u2192 copula (saw-cop=true) \u2192 satya object \u2192 emit [subject, swarupa, object]. Guard: copula only fires when subject was satya (not mithya). Prevents false assertions from 'there are 5' or 'how many animals are there'. For dvandva subjects ('cats and dogs are animals'), assertion-bandha needs to accumulate subject list \u2014 currently only binds last subject before copula."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-29",
+    "at": "2026-03-22T03:01:09",
+    "details": {
+      "type": "discovery",
+      "title": "tantra4 directory created with 61 files: 13 pipeline tantras (762 lines, down from 1035) + 48 named concept tantras (815 lines). Four composition layers: (1) Primitives \u2014 has-text, has-items, is-empty, last-of, triple-subj/edge/obj. (2) Operations \u2014 triples-by-edge, triples-by-edges, non-reflexive, append-triples, word-resolve, is-direction, is-system-concept, is-question-grade, detect-direction, mithya-words, word-bigrams, last-concept, concept-in-grade, current-grade, is-boundary, read-signal, write-signal, write-signals, has-grammar-sthita, resolve-or-self. (3) Structures \u2014 word-info, fold-state, split-result, solve-for-result, anumana-result, viveka-result, derive-result (named field access replacing positional nth). (4) Compositions \u2014 question-concept, question-words, grade-direction, grade-numbers, user-concepts, split-grades, grade-words, detect-viveka, detect-anumana, detect-count, format-strand, weave-strands, join-with, words-to-str. Key structural change: detect-signals writes signal pairs to graph via write-signals, dispatch-answer reads via read-signal. Adding a new dispatch mode = one detect-X tantra returning signal pairs, no index tracking. Pipeline tantras shrunk 26% total (273 lines saved)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-30",
+    "at": "2026-03-22T03:01:24",
+    "details": {
+      "type": "discovery",
+      "title": "Information theory connection to pipeline formalized. The graph already has nodes for the full Shannon model: transducer (emit-triples), encoding/decoding (word\u2194triple conversion), channel (question graph), noise (mithya), redundancy (monotonicity), capacity (fixpoint saturation), mutual-information (shared structure word\u2194concept). Pipeline layers map to info theory: construct=encoding, refine=error-correction (monotone enrichment removes ambiguity), detect=decoding (extracts intent signals), dispatch=decoding (selects strategy from channel), emit=re-encoding (graph\u2192natural language). The monotonicity constraint = no information loss in the channel. The fixpoint = channel capacity (iterate until saturated). assertion-bandha = redundancy extraction (IS-A encoded redundantly in sentence, extracted to single swarupa edge). sankhya-bandha = signal binding (floating number is noise, binding to concept converts noise to signal, reduces entropy). swarupa-anuvada = error correction via redundancy (swarupa edge is structural redundancy, propagation fills in missing signals)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-31",
+    "at": "2026-03-22T03:01:33",
+    "details": {
+      "type": "discovery",
+      "title": "Signal bus architecture: detect-signals and dispatch-answer now communicate through named graph edges instead of a positional list. detect-X tantras (detect-viveka, detect-anumana, detect-count) each return signal pairs [[name, value], ...]. detect-signals merges all pairs and writes them to the graph via write-signals as [_signal, name, value] triples. dispatch-answer reads them via read-signal. The contract is symmetric: write-signal/read-signal are inverses. Adding a new dispatch mode requires only: (1) write a detect-X tantra returning signal pairs, (2) add read-signal calls in dispatch-answer. No positional coupling, no index tracking. This mirrors the encoding/decoding duality from information theory \u2014 detect encodes intent into the channel, dispatch decodes it."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-12",
+    "at": "2026-03-22T03:01:41",
+    "details": {
+      "type": "quirk",
+      "title": "tantra4 analysis tooling added: python3 -m tools tantra4 [analyze|summary|nesting|queries|idioms|compose]. Finds deep nesting, long expressions, graph query patterns, repeated idioms, composition opportunities, inline expressions that could use existing helpers, verbose lambdas. Used iteratively to extract 48 named concepts across 3 rounds of analysis."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-11",
+    "at": "2026-03-22T03:01:53",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-20",
+    "at": "2026-03-22T03:02:00",
+    "details": {
+      "type": "step",
+      "title": "tantra4 created: 61 files with 4-layer composition (primitives \u2192 operations \u2192 structures \u2192 compositions). Signal bus via write-signals/read-signal. Pipeline tantras 26% smaller. Next: swap into live pipeline, test, om node updates for new helpers."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-20",
+    "at": "2026-03-22T12:45:54",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-20",
+    "at": "2026-03-22T12:45:54",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-11",
+    "at": "2026-03-22T12:46:16",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-11",
+    "at": "2026-03-22T12:46:16",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-12",
+    "at": "2026-03-22T12:46:23",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-32",
+    "at": "2026-03-22T12:46:36",
+    "details": {
+      "type": "discovery",
+      "title": "Variable-name collisions in tantras: tantra parameter and variable names that match word-node aliases silently resolve to graph nodes instead of bound values. word-node maps role\u2192op-role, pair\u2192pair, hit\u2192kshaya, found\u2192vriddhi, base\u2192acid-base, name\u2192(broken param binding). Lambda params shadow correctly but takes params and let bindings do not when the word-node returns a different name. Built collision scanner (python3 -c script) to find all 11 collisions. Safe when word-node maps to same name (state\u2192state, result\u2192result). Dangerous when maps to different name (4 found: base\u2192acid-base, found\u2192vriddhi, hit\u2192kshaya, m\u2192metre)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-33",
+    "at": "2026-03-22T12:46:45",
+    "details": {
+      "type": "discovery",
+      "title": "Plural morphology already works via shabda-anveshana path 3: walk-in vachana-bahu sthita \u2192 english-plural-* rules \u2192 strip suffix, check stem via lookup. birds\u2192bird, velocities\u2192velocity, cats\u2192cat. Three om nodes declare the rules: english-plural-regular (suffix:s), english-plural-es (suffix:es), english-plural-ies (suffix:ies, stem-suffix:y). is-plural tantra created to distinguish morpheme-stripped words from exact/alias matches."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-34",
+    "at": "2026-03-22T12:46:58",
+    "details": {
+      "type": "discovery",
+      "title": "count-chain aggregation false trigger: when left/remaining creates [entity, swarupa, kshaya], count-chain's has-swarupa check activates the aggregation path (meant for cat-is-animal category counting) instead of the arithmetic fold path. Fix: filter direction nodes (kshaya/vriddhi) from swarupa edge check. Also fixed swarupa-anuvada propagating sankhya values to direction nodes."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-13",
+    "at": "2026-03-22T12:47:08",
+    "details": {
+      "type": "quirk",
+      "title": "Old tantras in brahman/yantra/_old/ were shadowing new tantra4 rewrites \u2014 engine loads both directories and last-wins. All previous test runs were executing old code. Moved _old/ to history/yantra_old/ to activate new tantras. 138\u2192125 tantras loaded. This revealed all collision bugs and logic issues in the never-tested new code."
+    }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-22T12:47:15",
+    "details": {
+      "passed": 32,
+      "xfailed": 31,
+      "failed": 5
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-21",
+    "at": "2026-03-22T12:47:46",
+    "details": {
+      "type": "step",
+      "title": "tantra4 live: old tantras moved to history, 10 collision fixes, swarupa-anuvada direction guard, count-chain aggregation guard. 32p/31x/5xpass."
+    }
   }
 ]

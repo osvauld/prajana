@@ -1,0 +1,19 @@
+tantra3 ownership-concepts
+
+-- collects concepts that are owned by entities via shashthi-vibhakti.
+-- ownership edges: [concept, shashthi-vibhakti, entity] where obj ≠ reflexive marker.
+--
+-- "mass owned by ball-A" → ["mass"]
+-- used to exclude owned concepts from flat given-value listing.
+
+takes graph
+
+result = reduce graph [] (fn acc tri ->
+  cond (and (eq (nth tri 1) "shashthi-vibhakti")
+            (neq (to-string (nth tri 2)) "shashthi-vibhakti"))
+    (append acc [(to-string (nth tri 0))])
+  otherwise acc)
+
+return result
+
+done
