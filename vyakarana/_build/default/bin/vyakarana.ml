@@ -198,11 +198,24 @@ let () =
           (String.concat ", " dirs);
       Om_parser.load_dirs ~emit_meta:(not quiet_startup) dirs k0
   in
-  (* load external shabda files from brahman/shabda/ directory *)
-  let shabda_loaded = List.fold_left (fun acc d ->
-    let shabda_dir = Filename.concat d "shabda" in
-    acc + Setu_shabda.load_shabda_dir shabda_dir
-  ) 0 dirs in
+  (* load external shabda files from brahman/shabda/ directory.
+     dirs may be subdirs (brahman/sangati) or root (brahman) — try both levels. *)
+  let shabda_loaded =
+    let seen = Hashtbl.create 4 in
+    let try_dir d acc =
+      if Hashtbl.mem seen d then acc
+      else begin
+        Hashtbl.replace seen d true;
+        acc + Setu_shabda.load_shabda_dir d
+      end
+    in
+    List.fold_left (fun acc d ->
+      (* try d/shabda (if d is brahman root) *)
+      let acc = try_dir (Filename.concat d "shabda") acc in
+      (* try parent/shabda (if d is brahman/sangati etc.) *)
+      let parent = Filename.dirname d in
+      try_dir (Filename.concat parent "shabda") acc
+    ) 0 dirs in
   if shabda_loaded > 0 && not quiet_startup then
     Printf.printf "shabda: %d entries loaded from external .shabda files\n%!"
       shabda_loaded;

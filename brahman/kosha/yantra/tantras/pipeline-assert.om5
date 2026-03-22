@@ -1,0 +1,7 @@
+(kosha pipeline-assert
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya raw-graph)
+  (phala asserted-graph)
+  (krama pipeline-refine)
+  (kriya assertion-bandha))

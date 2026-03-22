@@ -1,0 +1,14 @@
+; a morphism from a structure to itself: f: X → X.
+; every tantra in avrti-refine is an endomorphism on the question graph.
+; composition of endomorphisms is again an endomorphism (closure).
+; iterated self-application IS avrti: f ∘ f ∘ f ∘ ... → fixpoint.
+
+(kosha endomorphism
+  (karma algebra-varga)
+  (swarupa morphism)
+  (abheda homomorphism)
+  (sthita function category)
+  (kriya composition avrti)
+  (phala fixed-point convergence)
+  (siddha closure associativity)
+  (pratipaksha isomorphism))

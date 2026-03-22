@@ -1,0 +1,8 @@
+; numbers and functions not expressible as roots of polynomials
+; exponential, logarithm, sine, cosine, pi, e
+
+(kosha transcendental-varga
+  (vishesa number-varga)
+  (viparita algebraic)
+  (drishthanta exponential logarithm)
+  (yukta pi euler))

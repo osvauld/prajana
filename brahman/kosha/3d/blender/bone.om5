@@ -1,0 +1,17 @@
+; physical properties: a bone is also a physical link with mass and inertia
+; this bridges domain-3d and domain-physics / domain-robotics
+; the bone's kona IS the joint angle — same quantity, two perspectives:
+; 3D view:    quaternion rotation in scene-graph transform chain
+; physics view: kona state with angular-velocity kramanusara
+; in the robotics context the bone's world pose is composed from the
+; scene-graph transform chain (bone.parent × bone.local = bone.world)
+; the FK (forward kinematics) result IS this transform composition
+
+(kosha bone
+  (sthita domain-3d armature)
+  (swarupa transform sambandha)
+  (yukta quaternion parent child mass moment-of-inertia kona angular-velocity scene-graph)
+  (ahara weight-paint)
+  (phala vertex)
+  (abheda rekha)
+  (siddha fk))

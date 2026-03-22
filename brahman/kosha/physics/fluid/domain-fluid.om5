@@ -1,0 +1,4 @@
+(kosha domain-fluid
+  (vishesa fluid-varga)
+  (sthita domain-math)
+  (yukta pressure density viscosity velocity gradient divergence curl laplacian continuity navier-stokes bernoulli thermodynamics energy))

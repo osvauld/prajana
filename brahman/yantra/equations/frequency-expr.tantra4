@@ -1,3 +1,0 @@
--- f = 1/T
-(tantra frequency-expr (period)
-  (reciprocal period))

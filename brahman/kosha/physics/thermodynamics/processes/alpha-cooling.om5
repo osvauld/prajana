@@ -1,0 +1,11 @@
+; heat parameter starts at 1, decays geometrically toward 0 each tick
+; scales all forces; simulation stops when alpha below minimum threshold
+
+(kosha alpha-cooling
+  (vishesa thermodynamics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (abheda annealing)
+  (yukta thermodynamics decay force-directed simulation velocity-decay)
+  (sthita heat-parameter)
+  (kriya alpha geometric-decay)
+  (phala convergence equilibrium))

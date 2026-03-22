@@ -1,0 +1,12 @@
+; sentence — the unit of meaning that contains a finite verb (tinanta)
+; the site where grammar produces meaning: vibhakti relations between subanta
+; and the tinanta (with its kala, prayoga, vachana, purusa) yield a complete thought
+; 
+; sphoTa: meaning arrives whole at the sentence level, not word by word
+; the vakya is the minimal unit of semantic completeness
+
+(sangati vakya
+  (sthita bhasha-swarupa)
+  (swarupa tinanta sphoTa)
+  (phala artha-dhvani)
+  (yukta vibhakti prathama-vibhakti))

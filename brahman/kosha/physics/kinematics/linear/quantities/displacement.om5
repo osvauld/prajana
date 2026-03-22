@@ -1,0 +1,7 @@
+; kramanusara chain: displacement is the root spatial quantity
+; d(displacement)/d(time) = velocity
+
+(kosha displacement
+  (vishesa linear-motion-varga)
+  (phala krama velocity-kramanusara)
+  (yukta kshetrajna direction viveka))

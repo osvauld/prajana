@@ -10,7 +10,6 @@ open Proof_graph
    canonical implementations live in setu_shabda.ml — this forwards for callers
    that still refer to Setu.read_shabda etc. *)
 
-let parse_shabda = Setu_shabda.parse_shabda
 let raw_shabda_for_node = Setu_shabda.raw_shabda_for_node
 let merge_shabda_priority = Setu_shabda.merge_shabda_priority
 let read_shabda = Setu_shabda.read_shabda

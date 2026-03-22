@@ -1,0 +1,14 @@
+; cluster for all thermodynamic quantities: heat, temperature, entropy.
+; thermodynamics is physics of energy in its thermal (disordered) form.
+; heat IS molecular kinetic energy — spanda at the atomic level.
+; cross-links to energy-varga: thermal energy is a form of energy.
+; units: temperature in kelvin; heat/entropy in joules and joules/kelvin
+; sangati roots
+; entropy's definition S = k·ln(W) is atemporal: kaala is not the apeksha
+; apeksha for entropy kramanusara is ushna (temperature), not thaalam (time)
+
+(kosha thermodynamics-varga
+  (vishesa physics-varga energy-varga)
+  (swarupa subanta spanda)
+  (matra kelvin joule)
+  (yukta niyama avastha kaala))

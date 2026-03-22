@@ -1,0 +1,27 @@
+; a molecule is chiral if it cannot be superimposed on its mirror image.
+; the most common source: a carbon bonded to 4 different groups (chiral centre).
+; the two non-superimposable mirror images are enantiomers.
+; identical physical properties except: rotate polarised light in opposite directions.
+; R/S nomenclature (Cahn-Ingold-Prelog): priority rules assign R or S to each centre.
+; 
+; biological significance is profound:
+; all natural amino acids are L (left-handed) — not D.
+; all natural sugars are D (right-handed) — not L.
+; enzymes are chiral — they only bind one enantiomer.
+; most drugs are chiral — only one enantiomer is active.
+; thalidomide: one enantiomer sedative, the other teratogenic.
+; 
+; diastereomers: stereoisomers that are NOT mirror images.
+; n chiral centres → up to 2^n stereoisomers.
+; racemic mixture: equal amounts of R and S. optically inactive.
+; 
+; chirality is the kosha's polarity at the molecular level —
+; same atoms, same bonds, but the left hand is not the right hand.
+
+(kosha chirality
+  (vishesa organic-varga)
+  (swarupa stereochemistry mirror-image enantiomer)
+  (sthita carbon domain-chemistry domain-biology)
+  (siddha four-bond)
+  (yukta diastereomer amino-acid sugar drug)
+  (abheda polarity))

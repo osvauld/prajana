@@ -1,0 +1,13 @@
+; partial-derivative: kramanusara of a multi-variable expression
+; w.r.t. one apeksha variable, all others held constant (treated as sthira-apeksha)
+; d(f)/d(x_j) where x_0..x_{n-1} are inputs and only x_j is the apeksha
+
+(mantra partial-derivative
+  (karma calculus-varga)
+  (swarupa kramanusara)
+  (abheda derivative)
+  (yukta apeksha sthira-apeksha)
+  (siddha viveka chala-apeksha)
+  (ahara aneka)
+  (phala eka-apeksha)
+  (janaka jacobian gradient))

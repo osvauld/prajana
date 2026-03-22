@@ -1,0 +1,12 @@
+; relational algebra selection: σ_P(R) — filter rows by predicate P.
+; the most frequent pattern in tantras (168 occurrences):
+; graph | where [s, e, o] | and (eq e "satya") | collect s
+; is exactly σ_{e="satya"}(π_s(G)).
+; pure: no state, no side effects. composes freely.
+
+(kosha selection
+  (karma algebra-varga)
+  (swarupa morphism)
+  (sthita function partial-order set)
+  (janya predicate relation)
+  (phala subset))

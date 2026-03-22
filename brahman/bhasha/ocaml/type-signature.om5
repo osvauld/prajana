@@ -1,0 +1,5 @@
+(bhasha type-signature
+  (abheda pramana)
+  (sthita type-system domain-ocaml domain-language)
+  (siddha type-checking)
+  (yukta ocaml-syntax correctness-check))

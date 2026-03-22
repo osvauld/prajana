@@ -1,0 +1,8 @@
+(kosha pipeline-construct
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya sentence)
+  (phala raw-graph)
+  (krama pipeline-assert)
+  (kriya materialize-question-graph shabda-anveshana sandhi-viveka emit-triples build-question-graph)
+  (abheda transducer))

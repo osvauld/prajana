@@ -1,0 +1,16 @@
+; Total momentum of a system of particles: P_total = sum(m_i * v_i)
+; This is a conservation principle, not a single-step formula.
+; 
+; It cannot be derived from a single [mass, sankhya, val] + [velocity, sankhya, val].
+; It requires a dvandva group (multi-entity collection) — Phase 4.
+; 
+; Conservation form: P_before = P_after  (closed system)
+; Derivation form:   P_total = reduce particles 0 (fn acc p -> add acc (mul p.mass p.velocity))
+; 
+; NOT a mantra node. Registered as a kosha concept only.
+; Will become a nyaya-step node when dvandva groups are implemented.
+
+(kosha total-momentum
+  (vishesa linear-motion-varga)
+  (swarupa momentum)
+  (sthita samgraha niyama))

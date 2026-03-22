@@ -1,0 +1,7 @@
+; energy per unit charge driving current through a circuit
+
+(kosha voltage
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta volt joule coulomb current resistance field potential-energy)
+  (abheda shakti))

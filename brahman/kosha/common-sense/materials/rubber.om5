@@ -1,0 +1,20 @@
+; natural rubber: polyisoprene (C5H8)n. latex from Hevea brasiliensis.
+; synthetic rubber: styrene-butadiene (SBR), neoprene, silicone.
+; an elastic polymer: long cross-linked chains stretch and return.
+; vulcanisation (Goodyear 1844): sulfur cross-links between chains.
+; cross-linking increases elasticity, strength, temperature resistance.
+; without vulcanisation: sticky in heat, brittle in cold.
+; 
+; properties:
+; elastic (e ≈ 0.75-0.85 depending on compound)
+; electrical insulator (no free electrons)
+; water resistant (non-polar chains repel water)
+; low thermal conductivity (polymer — insulator)
+; damping: absorbs vibration (used in mounts, tyres)
+; coefficient of friction: high (grip)
+
+(kosha rubber
+  (vishesa common-sense-varga materials-varga organic-varga)
+  (swarupa polymer elastic insulator)
+  (sthita solid)
+  (yukta coefficient-of-restitution domain-3d pbr))

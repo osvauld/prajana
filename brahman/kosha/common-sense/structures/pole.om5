@@ -1,0 +1,18 @@
+; a long, thin, rigid structural element — vertical or horizontal.
+; vertical pole: flagpole, lamppost, column, pillar.
+; horizontal pole: beam, rod, axle, rail.
+; a pole is a one-dimensional structural object in 3d space:
+; it has length but its cross-section is negligible at everyday scale.
+; 
+; in physics: the pole is the simplest rigid body.
+; a pendulum is a mass on a pole (or string).
+; a lever is a horizontal pole with a fulcrum.
+; torque: force applied perpendicular to a pole at a distance r → τ = r × F.
+; 
+; in 3d/pratibimba: a cylinder mesh with high length/width ratio.
+
+(kosha pole
+  (vishesa structures-varga common-sense-varga)
+  (swarupa rigid elongated)
+  (yukta torque lever domain-3d)
+  (sthita solid))

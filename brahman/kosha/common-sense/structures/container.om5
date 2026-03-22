@@ -1,0 +1,21 @@
+; a structure that holds things inside it. defines an enclosed volume.
+; the container is the kshetra: the bounded field that holds its contents.
+; what a container does:
+; holds liquids: cup, bottle, tank, pot — liquid fills to surface level
+; holds gases: sealed vessel — gas pressure acts on all walls
+; holds solids: box, bag, bin — things rest inside
+; 
+; container in thermodynamics: the ideal gas law assumes a sealed container.
+; PV = nRT: P is pressure on walls. V is container volume.
+; heating a sealed container of gas: pressure rises (V constant, T rises → P rises).
+; a pot of water: open container. water heated → temperature rises → boils → steam escapes.
+; 
+; pressure vessel: a container designed to hold pressurised gas or liquid.
+; failure: if internal pressure > material strength → explosion (rapid release).
+; 
+; in 3d: a container is a concave mesh — interior visible, exterior is structure.
+
+(kosha container
+  (vishesa structures-varga common-sense-varga)
+  (swarupa enclosure)
+  (yukta volume liquid gas solid pressure temperature normal-force domain-3d))

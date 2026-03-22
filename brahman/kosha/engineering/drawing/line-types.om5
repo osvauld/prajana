@@ -1,0 +1,48 @@
+; every line in an engineering drawing has a specific meaning.
+; the type of line (weight, style, pattern) IS the language.
+; a viewer trained in engineering drawing reads the lines the way
+; a musician reads notation — each symbol carries precise meaning.
+; 
+; VISIBLE OUTLINE (continuous thick, 0.5-0.7mm):
+; the edges and outlines you can see from that view.
+; the most important line — defines the shape.
+; 
+; HIDDEN DETAIL (dashed thin, 0.25-0.35mm):
+; edges and features hidden behind visible surfaces.
+; a hole going through the back — shown as dashes.
+; allows seeing internal features without section views.
+; 
+; CENTRE LINE (chain: long dash, dot, long dash, 0.25mm):
+; axes of symmetry. centres of circles, holes, cylinders.
+; extends slightly beyond the feature. always used for circles.
+; two intersecting centre lines mark the centre of a circle.
+; 
+; CUTTING PLANE (thick chain with arrows at ends):
+; shows where the section cut is taken.
+; arrows show direction of viewing for the section.
+; labelled A-A, B-B to match the section view.
+; 
+; DIMENSION LINE (thin continuous with arrowheads):
+; shows the extent of a measured dimension.
+; arrowheads touch the extension lines.
+; value written above the line (ISO) or in a gap (ASME).
+; 
+; EXTENSION LINE (thin continuous):
+; extends from the feature to the dimension line.
+; small gap at the feature. extends slightly beyond dimension line.
+; 
+; HATCHING (thin continuous at 45°):
+; fills cut surfaces in section views.
+; shows material has been cut.
+; different patterns for different materials (steel, cast iron, aluminium).
+; 
+; PHANTOM LINE (chain: long dash, two dots):
+; shows alternative positions of moving parts.
+; shows adjacent parts (context, not part of this drawing).
+; shows repeated features.
+
+(kosha line-types
+  (vishesa drawing-varga engineering-varga)
+  (swarupa subanta)
+  (yukta visible-line hidden-line centre-line dimension)
+  (abheda language))

@@ -32,6 +32,7 @@ from .cli_vy import cmd_vy, cmd_ask, ensure_vy
 from .cli_analysis import cmd_analyze
 from .cli_tantra4 import cmd_tantra4
 from .cli_vyakarana import cmd_vyakarana
+from .cli_om5 import cmd_om5
 
 
 # ── test ──────────────────────────────────────────────────────────────────────
@@ -368,6 +369,7 @@ Examples:
         "analyze": cmd_analyze,
         "tantra4": cmd_tantra4,
         "vyakarana": cmd_vyakarana,
+        "om5": cmd_om5,
     }
 
     fn = dispatch.get(args.mode)

@@ -1,0 +1,6 @@
+(kosha list
+  (vishesa number-varga)
+  (sthita matra)
+  (swarupa list)
+  (abheda vrnda)
+  (yukta sequence float vrnda))

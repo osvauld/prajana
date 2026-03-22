@@ -1,3 +1,0 @@
--- v_rel = v_observer - v_observed
-(tantra relative-velocity-expr (observer-velocity observed-velocity)
-  (sub observer-velocity observed-velocity))

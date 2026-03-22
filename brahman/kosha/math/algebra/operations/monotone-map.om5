@@ -1,0 +1,12 @@
+; a function that preserves order: if a ≤ b then f(a) ≤ f(b).
+; every pipeline tantra is monotone: triples are only added, never removed.
+; this is the key property that guarantees fixpoint existence (Knaster-Tarski).
+; monotone endomorphism on a complete lattice has a least fixpoint.
+
+(kosha monotone-map
+  (karma algebra-varga)
+  (swarupa morphism order-preserving)
+  (abheda endomorphism)
+  (sthita partial-order lattice)
+  (yukta structure)
+  (siddha fixed-point))

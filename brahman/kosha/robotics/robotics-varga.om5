@@ -1,0 +1,11 @@
+; root cluster for all robotics domain nodes.
+; robotics is physics (kinematics, dynamics) enacted through computation (control, planning).
+; the kinematic chain IS the scene-graph: geometry + physics + algorithm together.
+; domain identity
+; sangati roots
+
+(kosha robotics-varga
+  (sthita domain-robotics)
+  (vishesa physics-varga cs-varga)
+  (swarupa subanta)
+  (yukta gati kona seema niyama kaala mula-shakti))

@@ -1,3 +1,0 @@
--- F = G·m1·m2 / r²
-(tantra gravitational-force-expr (gravitational-constant mass1 mass2 radius)
-  (div (mul gravitational-constant (mul mass1 mass2)) (square radius)))

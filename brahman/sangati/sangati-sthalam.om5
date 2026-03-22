@@ -1,0 +1,8 @@
+; the space of connection — where all relations gather
+; sangati, sambandha, abhisarana, rachana
+; members point here via sangati-sthalam-sthita
+
+(sangati sangati-sthalam
+  (sthita mula-sthalam)
+  (swarupa sambandha)
+  (yukta rachana))

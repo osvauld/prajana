@@ -1,0 +1,6 @@
+; animal-varga IS-A living-varga.
+; yukta edges: properties all animals have
+
+(kosha animal-varga
+  (swarupa living)
+  (yukta sensing moving))

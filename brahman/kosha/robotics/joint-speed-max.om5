@@ -1,0 +1,23 @@
+; the maximum angular (or linear) speed a joint can sustain
+; a physical limit imposed by the motor / actuator at that joint
+; 
+; for revolute joints: in radian-per-second
+; for prismatic joints: in metre-per-second
+; 
+; role in motion planning:
+; the bottleneck joint — the one where |Δθ| / joint-speed-max is largest —
+; determines the minimum motion time T for synchronized motion
+; all other joints are scaled to finish at the same time T
+; ω[i] = Δθ[i] / T  (actual speed, ≤ joint-speed-max[i])
+; 
+; in the chala-apeksha model:
+; joint-speed-max is defined in the joint's own frame (chala-apeksha)
+; the actual world-frame tip velocity depends on the full Jacobian
+; (joint-speed-max alone does not bound end-effector speed)
+
+(kosha joint-speed-max
+  (swarupa subanta)
+  (sthita domain-robotics seema chala-apeksha)
+  (yukta kinematic-chain joint)
+  (abheda angular-velocity)
+  (matra radian-per-second))

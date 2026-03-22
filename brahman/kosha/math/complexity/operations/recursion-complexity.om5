@@ -1,0 +1,6 @@
+; cross-ref to CS recursion; complexity view of recursive computation
+
+(kosha recursion-complexity
+  (karma complexity-varga)
+  (yukta avrti)
+  (abheda recursion))

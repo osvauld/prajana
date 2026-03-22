@@ -1,0 +1,13 @@
+; Fe. proton-26. period 4, transition metal. valence: 2 or 3 (Fe²⁺, Fe³⁺).
+; most used structural metal. core of the earth is iron-nickel.
+; ferromagnetic: iron, cobalt, nickel are the only room-temperature ferromagnets.
+; haemoglobin: Fe²⁺ at centre of porphyrin ring — binds and releases O2.
+; steel: iron + carbon (0.02–2.1%). cast iron >2.1% carbon.
+; rusting: 4Fe + 3O2 + 6H2O → 4Fe(OH)3 → Fe2O3·nH2O (oxidation).
+; most abundant element on earth by mass (32% of earth's total mass).
+
+(kosha iron
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-twenty-six transition-metal ferromagnetic conductor)
+  (yukta valence-two valence-three haemoglobin oxygen steel alloy oxidation)
+  (janya nuclear-fusion))

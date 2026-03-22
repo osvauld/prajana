@@ -1,0 +1,5 @@
+; anchor node for all English-language surface forms
+; every bhasha node in this directory carries english-sthita pointing here
+
+(bhasha english
+  (sthita bhasha-swarupa))

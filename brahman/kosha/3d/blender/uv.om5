@@ -1,0 +1,6 @@
+(kosha uv
+  (swarupa projection)
+  (sthita domain-3d mesh domain-math)
+  (yukta vertex float)
+  (ahara texture)
+  (abheda vector))

@@ -1,0 +1,32 @@
+; e = (v2_after - v1_after) / (v1_before - v2_before)
+; 
+; the single number that spans the entire spectrum of real collisions.
+; it is the ratio of relative separation speed to relative approach speed.
+; not a force. not an energy. a ratio — dimensionless.
+; 
+; e = 1  : the collision is perfectly elastic. bodies bounce away at full speed.
+; the relative separation speed equals the relative approach speed.
+; kinetic energy is fully conserved.
+; 
+; e = 0  : the collision is perfectly inelastic. bodies stick together.
+; the relative separation speed is zero — they move as one.
+; maximum kinetic energy is lost (converted to heat, deformation, sound).
+; 
+; 0 < e < 1 : partial elasticity. real rubber balls, real cars, real baseballs.
+; some KE is lost. the bodies separate, but slower than they approached.
+; 
+; e > 1  : superelastic. explosive separation — energy added by internal mechanism.
+; rare. a spring-loaded toy, an explosion between bodies on contact.
+; 
+; the coefficient of restitution is a material property — it describes the
+; interaction between two specific materials, not either body alone.
+; it is a property of the sparsha (contact), not of the kshetrajna (individual).
+; bounds declare the spectrum
+
+(kosha coefficient-of-restitution
+  (vishesa collision-varga)
+  (swarupa subanta scalar)
+  (siddha dimensionless)
+  (yukta velocity material)
+  (abheda ratio sparsha)
+  (drishthanta elastic-collision inelastic-collision))

@@ -1,0 +1,6 @@
+(bhasha compiler
+  (kriya tantra)
+  (siddha type-checking)
+  (yukta correctness-check)
+  (phala runtime)
+  (sthita domain-ocaml domain-language))

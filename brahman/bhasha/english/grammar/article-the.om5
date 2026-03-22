@@ -1,0 +1,6 @@
+; used when the referent is specific/known: "THE kinetic energy"
+; used after "square root of", "cosine of", etc.
+
+(bhasha article-the
+  (swarupa article)
+  (sthita definite))

@@ -1,0 +1,13 @@
+; cluster for electromagnetic field quantities: electric field, magnetic field.
+; fields are continuous distributions of force through space.
+; a field assigns a force vector to every point in space.
+; Maxwell's equations are the niyama of this cluster.
+; units: electric field in V/m; magnetic field in tesla (kg⋅s⁻²⋅A⁻¹)
+; sangati roots
+
+(kosha field-varga
+  (vishesa electromagnetism-varga)
+  (swarupa subanta)
+  (matra volt metre ampere second)
+  (yukta mula-shakti taranga spanda niyama)
+  (sthita kshetra))

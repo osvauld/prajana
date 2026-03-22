@@ -1,0 +1,6 @@
+; living-varga IS-A taxonomy-varga (root of the living classification).
+; yukta edges: properties all living things have
+
+(kosha living-varga
+  (swarupa taxonomy)
+  (yukta breathing growing))

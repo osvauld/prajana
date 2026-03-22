@@ -1,0 +1,9 @@
+; cluster for atomic structure: atom, nucleus, proton, neutron, electron-shell, isotope, valence.
+; atomic structure is quantum mechanics applied to electrons and nuclei.
+; the periodic table is the ordered classification of atomic structures.
+; sangati roots
+
+(kosha atomic-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta)
+  (yukta mula-shakti spanda seema avastha svayambhu))

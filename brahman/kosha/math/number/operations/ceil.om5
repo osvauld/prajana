@@ -1,0 +1,9 @@
+(mantra ceil
+  (karma number-varga)
+  (swarupa seema)
+  (kriya viveka)
+  (phala int)
+  (abheda sama-vishama)
+  (siddha vriddhi)
+  (yukta float int)
+  (pratipaksha floor))

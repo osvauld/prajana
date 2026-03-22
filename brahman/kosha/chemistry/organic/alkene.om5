@@ -1,0 +1,17 @@
+; unsaturated hydrocarbons: CnH2n. contains at least one C=C double bond.
+; the double bond is the reactive site — it is a functional group.
+; planar geometry at the double bond (sp2 hybridisation). cannot rotate.
+; cis/trans isomers: groups locked on same (cis) or opposite (trans) sides.
+; naming: ethene (C2H4, ethylene), propene (C3H6), butene (C4H8).
+; addition reactions: Br2, H2, H2O, HCl add across the double bond.
+; ethene + H2 → ethane (hydrogenation — catalytic, industrial)
+; ethene + H2O → ethanol (hydration — industrial route to ethanol)
+; polymerisation: ethylene → polyethylene (PE). propylene → polypropylene (PP).
+; ethylene is the most produced organic chemical in industry.
+; plant hormone: ethylene triggers fruit ripening.
+
+(kosha alkene
+  (vishesa organic-varga)
+  (swarupa hydrocarbon double-bond unsaturated addition-reaction)
+  (yukta polymerisation)
+  (drishthanta ethylene propylene))

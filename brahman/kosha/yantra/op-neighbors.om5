@@ -1,0 +1,7 @@
+; returns all nodes adjacent to the given node (both in and out edges).
+; used by avrti.tantra for spreading activation across the graph.
+
+(kosha op-neighbors
+  (kriya op-class-projection)
+  (swarupa graph-walk)
+  (yukta avrti))

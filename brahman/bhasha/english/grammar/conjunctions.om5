@@ -1,0 +1,8 @@
+; conjunctions: words that join elements in lists or conditions.
+; used by compose-formula-body.tantra to join krama-rhs variable names.
+; used by compose-response.tantra to list given values.
+
+(bhasha conjunction
+  (swarupa avyaya nipata)
+  (sthita english dvandva)
+  (yukta dhatu))

@@ -1,0 +1,25 @@
+; common-sense is what anyone knows before studying anything.
+; not physics, not mathematics — the ground of everyday experience.
+; a ball falls. water is wet. a heavy thing is hard to lift.
+; fire is hot. ice is cold. things wear out over time.
+; 
+; this domain is the bridge between ordinary language and formal knowing.
+; when someone says "the ball moves fast" they are not citing Newton.
+; they are pointing at something they have seen a thousand times.
+; the pipeline must meet them there — recognise the pointing — before
+; it can ask whether physics is relevant.
+; 
+; common-sense nodes do not have mantras. they have swarupa (nature)
+; and sambandha (connections to formal domains). they are the
+; entry points through which everyday language finds its way into
+; the graph. once recognised, physics or chemistry or biology
+; can take over and give the formal structure.
+; 
+; the three pillars of common-sense:
+; objects  — things that exist, can be pointed at, can be named
+; qualities — properties that are directly perceived (fast, heavy, hot)
+; events   — things that happen (falls, collides, melts)
+
+(kosha domain-common-sense
+  (sthita domain-kosha)
+  (yukta physics biology language meta))

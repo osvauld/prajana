@@ -1,0 +1,8 @@
+; resistance of a fluid to shear: mu, the internal friction between layers
+
+(kosha viscosity
+  (vishesa fluid-varga)
+  (swarupa subanta scalar)
+  (abheda float friction-force)
+  (yukta velocity mass-density navier-stokes reynolds-number)
+  (kriya laplacian))

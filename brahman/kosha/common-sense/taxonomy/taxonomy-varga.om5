@@ -1,0 +1,24 @@
+; root cluster for the IS-A classification system.
+; taxonomy is the grammar of kinds — what IS a kind of what.
+; this is the structural ground for syllogism and categorical inference.
+; 
+; in the proof graph, IS-A is the swarupa edge.
+; "cat is a mammal" = [cat, swarupa, mammal]
+; "mammal is an animal" = [mammal, swarupa, animal]
+; walking the swarupa chain from cat reaches animal — this IS anumana.
+; 
+; properties (yukta edges) are inherited along the swarupa chain.
+; if animal has breathing-yukta, and cat has mammal-swarupa and mammal has
+; animal-swarupa, then cat inherits breathing through the chain.
+; the anumana-viveka tantra walks this structure at query time.
+; 
+; this mirrors how biology-varga, cell-varga, genetics-varga form
+; a classification within the biology domain — except taxonomy applies
+; to common-sense kinds before formal domains take over.
+; sangati roots for the classification act itself
+
+(kosha taxonomy-varga
+  (sthita domain-common-sense)
+  (vishesa common-sense-varga)
+  (swarupa subanta)
+  (yukta swarupa krama viveka))

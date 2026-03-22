@@ -1,0 +1,6 @@
+(kosha float
+  (sthita domain-cs parishishtha matra)
+  (swarupa primitive-type ieee754)
+  (siddha approximate)
+  (abheda sankhya)
+  (janya domain-math-float))

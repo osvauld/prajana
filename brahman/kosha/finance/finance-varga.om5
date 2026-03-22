@@ -1,0 +1,11 @@
+; root cluster for all finance domain nodes.
+; finance is grounded in mathematics: probability, calculus, statistics.
+; economic quantities are measures that change over time.
+; domain identity
+; sangati roots
+
+(kosha finance-varga
+  (sthita domain-finance)
+  (vishesa math-varga)
+  (swarupa subanta)
+  (yukta matra kaala kramanusara seema avastha))

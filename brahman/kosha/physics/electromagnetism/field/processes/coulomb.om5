@@ -1,0 +1,12 @@
+; inverse-square force between two charged particles
+
+(kosha coulomb
+  (vishesa field-varga)
+  (swarupa tinanta bhave-prayoga)
+  (siddha inverse-square-law)
+  (yukta elementary-charge repulsion attraction)
+  (sthita particle-a particle-b distance)
+  (kriya inverse-square)
+  (phala force direction)
+  (janya electric-field)
+  (abheda gravitational-force))

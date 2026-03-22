@@ -1,0 +1,8 @@
+(kosha ring
+  (vishesa algebra-varga)
+  (sthita group)
+  (yukta monoid identity-element commutativity)
+  (kriya addition multiplication)
+  (siddha distributivity)
+  (janya ideal graded-ring quotient)
+  (drishthanta int polynomial))

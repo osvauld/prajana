@@ -1,0 +1,5 @@
+(kosha string
+  (sthita matra domain-language cs-string)
+  (swarupa string)
+  (abheda varna)
+  (yukta sequence token))

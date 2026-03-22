@@ -1,0 +1,5 @@
+; additive join: "mass AND velocity", "force AND displacement"
+
+(bhasha conj-and
+  (swarupa conjunction)
+  (sthita dvandva))

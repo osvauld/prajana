@@ -1,0 +1,5 @@
+; used in computation results: "this GIVES 22.5 J"
+
+(bhasha copula-gives
+  (swarupa copula)
+  (sthita vartamana-kaala result))

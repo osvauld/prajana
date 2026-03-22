@@ -1,0 +1,6 @@
+; present participle: -ing suffix → verb form (shatr-pratyaya)
+; walking → walk, running → run, eating → eat
+; used as guard: word ending in -ing is likely a verb, not a dravya
+
+(bhasha english-shatr-ing
+  (sthita english shatr-pratyaya))

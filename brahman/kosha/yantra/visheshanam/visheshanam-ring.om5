@@ -1,0 +1,27 @@
+; the ring of edge dimensions.
+; core 10: declared by the visheshanam-<name> nodes themselves (ring-sthita).
+; sangati dimensions: claimed here — the ring reaches down to structural truths.
+; sangati nodes stay pure; the ring declares membership, not the other way around.
+; core 10 members (already self-declared via ring-sthita on their own nodes)
+; sangati-level grammar dimensions (ring claims them)
+; apeksha: with-respect-to — the denominator of a derivative.
+; d(displacement)/d(time): displacement is kramanusara, time is apeksha.
+; morphological / argument dimensions (linguistic, Phase 1)
+; grammatical dimensions (Paninian, Phase 1)
+; IS-A inheritance dims (Phase 2.5)
+; grammar signal dimensions (sandhi-viveka layer — S2)
+; these are the Sanskrit grammar roots that bhasha grammar nodes point to via "-sthita" slokas.
+; registering them as dimensions means: walk-in "X" "yukta" containing "visheshanam-ring"
+; is the clean graph-grounded test that X is a grammar signal node.
+; question graph dimensions (prashna layer)
+; uses Sanskrit grammar roots directly — no q-* aliases.
+; matra-yukta (unit→matra), krama-yukta (paired-with→krama),
+; vishesa-yukta (instance-of→vishesa) already registered above.
+; relational dimensions (sambandha — newly grounded sangati nodes)
+; temporal/sequential dimensions (parampara)
+; state dimensions (bhava)
+; boundary dimensions
+
+(kosha visheshanam-ring
+  (sthita yantra domain-yantra ring group)
+  (yukta visheshanam-swarupa visheshanam-abheda visheshanam-drishthanta visheshanam-sthita visheshanam-yukta visheshanam-siddha visheshanam-kriya visheshanam-phala visheshanam-janya visheshanam-pratipaksha sandhi matra krama kramanusara avastha apeksha ahara dhatu vrnda kala prayoga vachana purusa vishesa amsha dvitiya-vibhakti trtiya-vibhakti chaturthi-vibhakti panchami-vibhakti saptami-vibhakti bhuta-kaala vartamana-kaala bhavishya-kaala satya mithya sankhya shashthi-vibhakti prathama-vibhakti vidhi-kaala naama-mudra asprista-sankhya rashi-bandha viraam dvandva adhikarana naama-pratibodha janaka rahita lakshana karma poorva paschat purva garbha antya nirodha paripurna atita bhanga daatri vibheda atikrama))

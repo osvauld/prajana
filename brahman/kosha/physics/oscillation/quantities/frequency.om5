@@ -1,0 +1,10 @@
+; frequency = 1/period; unit: hertz = 1/second
+
+(kosha frequency
+  (vishesa oscillation-varga)
+  (swarupa subanta)
+  (abheda thaalam avrti angular-velocity swara)
+  (sthita spanda niyama)
+  (yukta prakaasha energy jerk)
+  (pratipaksha period)
+  (matra hertz))

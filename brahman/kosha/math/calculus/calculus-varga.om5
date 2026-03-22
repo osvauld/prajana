@@ -1,0 +1,9 @@
+; cluster for calculus quantities: derivatives, integrals, limits, series.
+; calculus studies continuous change — how quantities vary with respect to others.
+; kramanusara (derivative) and sama-kalana (integral) are the two operations.
+; sangati roots
+
+(kosha calculus-varga
+  (vishesa math-varga)
+  (swarupa kramanusara)
+  (yukta kaala seema niyama viveka))

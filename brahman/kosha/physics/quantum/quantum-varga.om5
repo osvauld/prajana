@@ -1,0 +1,12 @@
+; cluster for all quantum physics quantities: spin, entanglement, superposition, tunneling.
+; quantum physics is physics at the smallest scale — where discreteness emerges.
+; grounded in linear algebra (math-varga): states are vectors, operators are matrices.
+; Planck constant is the fundamental seema between classical and quantum regimes.
+; units: action in joule-seconds (ℏ); energy in eV or joules
+; sangati roots
+
+(kosha quantum-varga
+  (vishesa physics-varga math-varga)
+  (swarupa subanta)
+  (matra joule second)
+  (yukta mula-shakti spanda seema avastha svayambhu))

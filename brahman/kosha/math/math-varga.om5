@@ -1,0 +1,8 @@
+; root cluster for all mathematics domain nodes.
+; domain identity is carried here; leaves inherit via varga-vishesa chain.
+; domain identity
+; sangati roots: mathematics is grounded in measure, law, and structure
+
+(kosha math-varga
+  (sthita domain-math)
+  (yukta matra niyama viveka))

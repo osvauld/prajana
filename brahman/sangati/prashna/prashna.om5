@@ -1,0 +1,10 @@
+; the question graph root — the directed graph structure of a question.
+; distinct from the bhasha/grammar node "prashna" (which identifies question words).
+; q-prashna is the structural type of the question graph itself.
+; words become nodes (vertices), relationships become typed edges.
+
+(sangati q-prashna
+  (sthita vakya)
+  (yukta sambandha)
+  (swarupa directed-graph)
+  (kriya viveka))

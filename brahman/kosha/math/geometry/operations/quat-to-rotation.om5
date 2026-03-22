@@ -1,0 +1,10 @@
+; convert unit quaternion [w,x,y,z] to 3×3 rotation matrix
+; R[0][0] = 1-2(y²+z²),  R[0][1] = 2(xy-wz),  R[0][2] = 2(xz+wy)
+; R[1][0] = 2(xy+wz),    R[1][1] = 1-2(x²+z²), R[1][2] = 2(yz-wx)
+; R[2][0] = 2(xz-wy),    R[2][1] = 2(yz+wx),   R[2][2] = 1-2(x²+y²)
+
+(mantra quat-to-rotation
+  (karma geometry-varga)
+  (vishesa quaternion-varga)
+  (abheda rotation-matrix)
+  (krama square multiplication subtraction addition))

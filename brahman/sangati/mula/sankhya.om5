@@ -1,0 +1,24 @@
+; sankhya: the numeric magnitude aspect of a rashi.
+; answers "how much" — not "what" (that is vishesa) nor "in what terms" (that is matra).
+; 
+; sankhya is NOT the quantity itself. the quantity is rashi.
+; rashi = vishesa + sankhya + matra  (what kind + how much + in what unit)
+; 
+; a rashi may exist without a sankhya:
+; v1 with vishesa→velocity but no sankhya → symbolic, uninstantiated quantity
+; v1 with vishesa→velocity, sankhya→"20.0", matra→metre-per-second → fully bound
+; 
+; as an edge in the question graph:
+; [v1, sankhya, "20.0"]   — v1's magnitude has been resolved to 20.0
+; [v1, sankhya, "20.0"]   is not the same as v1 — v1 is the rashi, "20.0" is its sankhya
+; 
+; asprista-sankhya is sankhya that has not yet found its rashi owner.
+; discrete: int, float are sankhya-abheda (species of sankhya)
+; dvaya (two) and traya (three) have sankhya-swarupa — they are numeric by nature
+
+(sangati sankhya
+  (yukta rashi matra tat-kshana parampara)
+  (phala asprista-sankhya)
+  (siddha discrete)
+  (abheda purna)
+  (sthita krama))

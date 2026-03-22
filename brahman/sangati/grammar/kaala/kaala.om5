@@ -1,0 +1,10 @@
+; grammatical tense values are amshas of kaala — they together constitute the tense system
+; members point here via kaala-amsha
+
+(sangati kaala
+  (swarupa brahma)
+  (kriya spanda)
+  (yukta karma kshetrajna)
+  (sthita om kshetra)
+  (poorva prakaasha)
+  (janaka thaalam))

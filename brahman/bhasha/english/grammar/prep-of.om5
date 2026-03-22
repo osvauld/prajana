@@ -1,0 +1,8 @@
+; value-assignment: "v1 OF 20", "v2 OF 30" — connects rashi label to its magnitude
+; distinct from has/have/with (shashthi-vibhakti) which signal entity ownership
+; sandhi-viveka promotes this to [of, rashi-bandha, rashi-bandha]
+; consumed by sankhya-bandha: asprista-sankhya after rashi-bandha binds to preceding label
+
+(bhasha prep-of
+  (swarupa preposition)
+  (sthita sambandha rashi-bandha))

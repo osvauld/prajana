@@ -1,0 +1,6 @@
+(kosha monoid
+  (vishesa algebra-varga)
+  (sthita group)
+  (yukta associativity identity-element)
+  (drishthanta addition multiplication)
+  (abheda op-class-monoid))

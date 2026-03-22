@@ -1,0 +1,23 @@
+; synthetic polymer. the defining material of the modern world.
+; made from petroleum-derived monomers via polymerisation.
+; 
+; two main types:
+; thermoplastic: can be remelted and reshaped. most common.
+; PE (polyethylene): bags, bottles. PP (polypropylene): food containers.
+; PVC: pipes, insulation. PET: drink bottles, polyester fabric.
+; PS (polystyrene): foam packaging. nylon (polyamide): rope, clothing.
+; thermoset: cross-linked, cannot be remelted.
+; epoxy, bakelite, polyurethane (rigid foam), vulcanised rubber.
+; 
+; properties (thermoplastic):
+; solid at room temperature. softens above glass transition temperature Tg.
+; lightweight (density 0.9-1.4 g/cm³ — floats in water except PET, PVC)
+; electrical insulator. thermal insulator.
+; variable elasticity: PE is flexible (e≈0.6), PS is brittle (e≈0.2).
+; not biodegradable (most). UV degrades over years → microplastics.
+
+(kosha plastic
+  (vishesa common-sense-varga materials-varga organic-varga)
+  (swarupa polymer synthetic insulator lightweight)
+  (sthita solid)
+  (yukta domain-3d pbr))

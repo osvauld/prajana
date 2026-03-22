@@ -1,0 +1,7 @@
+(kosha scene-graph
+  (abheda proof-graph)
+  (sthita domain-3d)
+  (swarupa nigamana parampara eka-aneka)
+  (yukta object transform parent child shakha)
+  (phala world-space)
+  (siddha dag))

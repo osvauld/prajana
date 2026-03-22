@@ -1,0 +1,10 @@
+; spreading from high to low concentration: driven by the Laplacian
+
+(kosha diffusion
+  (vishesa fluid-varga)
+  (swarupa tinanta bhave-prayoga)
+  (kriya laplacian)
+  (sthita gradient)
+  (ahara mass-density)
+  (phala entropy)
+  (abheda second-law wave))

@@ -1,0 +1,6 @@
+(kosha pipeline-proof-emit
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya answer expanded-graph)
+  (phala formatted-answer)
+  (kriya emit-udaharana-upanaya emit-pratijna emit-nigamana emit-hetu emit-count emit-anumana emit-reasoning pramana-bandha))

@@ -1,0 +1,13 @@
+; Ag. proton-47. period 5, transition metal. valence: 1.
+; highest electrical conductivity of all elements.
+; highest thermal conductivity of all metals.
+; antimicrobial: Ag⁺ ions disrupt bacterial cell membranes.
+; photography: AgBr crystals on film decompose under light (photochemistry).
+; mirrors: silver coating on glass (highest optical reflectivity).
+; alloys: sterling silver (92.5% Ag + 7.5% Cu).
+
+(kosha silver
+  (sthita element domain-chemistry)
+  (swarupa proton-forty-seven transition-metal conductor antimicrobial reflective)
+  (yukta valence-one photography mirror)
+  (janya nuclear-fusion))

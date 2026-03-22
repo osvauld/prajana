@@ -1,0 +1,6 @@
+; bird-varga IS-A animal-varga.
+; yukta edges: properties all birds have
+
+(kosha bird-varga
+  (swarupa animal)
+  (yukta wings feathers egg-laying))

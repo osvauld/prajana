@@ -1,0 +1,4 @@
+(kosha depth-first
+  (karma graph-varga)
+  (swarupa graph-walk)
+  (yukta avrti krama))

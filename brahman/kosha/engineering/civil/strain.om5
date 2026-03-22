@@ -1,0 +1,20 @@
+; fractional deformation of a material under stress. ε = ΔL/L. dimensionless.
+; how much does a material deform per unit of its original length?
+; a 1m steel rod under tension elongates 0.1mm → strain = 0.0001.
+; 
+; elastic strain: remove stress → material returns to original shape.
+; plastic strain: beyond yield point → permanent deformation remains.
+; 
+; Young's modulus E = σ/ε (within elastic limit).
+; stiff materials: high E (steel 200 GPa, concrete 30 GPa).
+; flexible materials: low E (rubber 0.01-0.1 GPa, wood 10 GPa along grain).
+; 
+; Poisson's ratio ν: when a material stretches in one direction,
+; it contracts in the perpendicular direction. ν = lateral strain / axial strain.
+; for most metals ν ≈ 0.3. rubber ν ≈ 0.5 (nearly incompressible).
+
+(kosha strain
+  (vishesa civil-varga engineering-varga)
+  (swarupa subanta elastic)
+  (yukta stress young-modulus)
+  (siddha dimensionless))

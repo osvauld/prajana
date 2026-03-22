@@ -57,7 +57,7 @@ let register_tantra_in_graph (k : proof_graph) (t : tantra) : unit =
   let all_edges = input_edges @ output_edges in
   let node : nigamana = {
     name = t.t_name; layer = "yantra"; slokas = [];
-    edges = all_edges; satya = 0.0; shabda = "";
+    edges = all_edges; satya = 0.0; shabda = ""; krama = "";
   } in
   (* only add if no existing node (don't overwrite sangati/kosha nodes) *)
   match Proof_graph.find k t.t_name with
@@ -282,7 +282,7 @@ let add_edge_to_graph (k : proof_graph) (e : Proof_graph.typed_edge) : bool =
        (* source node not yet in graph — create a stub *)
        let stub : Proof_graph.nigamana = {
          name = e.Proof_graph.source; layer = "kosha";
-         slokas = []; edges = [e]; satya = 0.0; shabda = "";
+         slokas = []; edges = [e]; satya = 0.0; shabda = ""; krama = "";
        } in
        ignore (Proof_graph.join k stub));
     k.Proof_graph.all_edges := e :: !(k.Proof_graph.all_edges);
@@ -392,4 +392,60 @@ let build_index ?(graph : proof_graph option) (dirs : string list) : tantra_inde
   List.iter (fun dir ->
     load_tantra_dir ?graph idx dir
   ) tantra_dirs;
+  (* pass 4: generate synthetic tantras from mantra krama expressions.
+     a mantra node with krama = "half ( mul mass ( square velocity ) )"
+     and janya edges [mass, velocity] becomes a tantra equivalent to:
+       (tantra <name>-krama (mass velocity) (half (mul mass (square velocity)))) *)
+  (match graph with
+   | None -> ()
+   | Some k ->
+     Hashtbl.iter (fun node_name n ->
+       if n.Proof_graph.krama <> "" && n.Proof_graph.layer = "mantra" then begin
+         (* derive tantra name from node: ke-mantra → ke-krama, or node-name-krama *)
+         let tname =
+           if Str.string_match (Str.regexp "\\(.*\\)-mantra$") node_name 0 then
+             Str.matched_group 1 node_name ^ "-krama"
+           else
+             node_name ^ "-krama"
+         in
+         (* skip if a tantra with this name already exists *)
+         if not (Hashtbl.mem idx.by_name tname) then begin
+           (* collect janya edges as parameter names *)
+           let janya_names = List.filter_map (fun e ->
+             if e.Proof_graph.source = node_name
+                && e.Proof_graph.relation = Proof_graph.janya
+             then Some e.Proof_graph.target
+             else None
+           ) n.Proof_graph.edges in
+           if janya_names <> [] then begin
+             (* parse krama expression string *)
+             let body = Yantra_expr_parser.parse_expr_string n.Proof_graph.krama in
+             let params = List.map (fun name ->
+               { tp_name = name; tp_canonical = name;
+                 tp_type = "float"; tp_unit = None; tp_avastha = None }
+             ) janya_names in
+             let t : tantra = {
+               t_name = tname;
+               t_file = "(krama:" ^ node_name ^ ")";
+               t_inputs = params;
+               t_lets = [("result", body)];
+               t_returns = [{ tp_name = "result"; tp_canonical = "result";
+                              tp_type = "float"; tp_unit = None; tp_avastha = None }];
+             } in
+             register_tantra idx t;
+             (* add kriya edge so execute-mantra can find the krama tantra *)
+             let kriya_edge = {
+               Proof_graph.source = node_name;
+               target = tname;
+               relation = Proof_graph.kriya;
+             } in
+             let n' = { n with Proof_graph.edges = kriya_edge :: n.Proof_graph.edges } in
+             Hashtbl.replace k.Proof_graph.nodes node_name n';
+             k.Proof_graph.all_edges := kriya_edge :: !(k.Proof_graph.all_edges);
+             Printf.printf "krama: %s → tantra %s (%d params)\n"
+               node_name tname (List.length janya_names)
+           end
+         end
+       end
+     ) k.Proof_graph.nodes);
   idx

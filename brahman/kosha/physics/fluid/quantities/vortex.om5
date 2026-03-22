@@ -1,0 +1,7 @@
+; rotating region of fluid defined by nonzero curl of the velocity field
+
+(kosha vortex
+  (vishesa fluid-varga)
+  (swarupa curl)
+  (yukta velocity turbulence angular-momentum)
+  (abheda avrti spanda))

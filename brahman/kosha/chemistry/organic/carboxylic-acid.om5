@@ -1,0 +1,25 @@
+; carboxyl group -COOH: a carbonyl C=O and hydroxyl -OH on the same carbon.
+; the most important acidic functional group in organic chemistry.
+; donates H⁺ to water: R-COOH ⇌ R-COO⁻ + H⁺ (weak acid, pKa ~ 4-5)
+; the carboxylate R-COO⁻ is the conjugate base — resonance stabilised.
+; 
+; naming: methanoic (formic) HCOOH, ethanoic (acetic) CH3COOH,
+; propanoic CH3CH2COOH. suffix: -oic acid or -ic acid.
+; 
+; reactions:
+; esterification: -COOH + -OH → -COO- + H2O (with acid catalyst)
+; amide formation: -COOH + -NH2 → -CONH- + H2O (peptide bond!)
+; reduction: -COOH → -CHO (aldehyde) → -CH2OH (alcohol)
+; decarboxylation: -COOH → -H + CO2 (beta-keto acids, metabolic)
+; 
+; acetic acid: CH3COOH. vinegar. pKa 4.76.
+; fatty acids: long-chain carboxylic acids. palmitic C16, stearic C18.
+; amino acids: all contain -COOH + -NH2. zwitterion at physiological pH.
+; citric acid: tricarboxylic acid. Krebs cycle. lemon juice.
+
+(kosha carboxylic-acid
+  (vishesa organic-varga)
+  (sthita functional-group)
+  (swarupa carboxyl acid proton-donor)
+  (yukta esterification amide-bond)
+  (drishthanta fatty-acid amino-acid acetic-acid))

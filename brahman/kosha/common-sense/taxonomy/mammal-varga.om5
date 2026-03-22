@@ -1,0 +1,9 @@
+; mammal-varga IS-A animal-varga.
+; boot pass: mammal-varga has animal-swarupa → animal-varga exists → [mammal-varga, varga, animal-varga]
+; then cat has mammal-swarupa → mammal-varga exists → [cat, varga, mammal-varga]
+; varga-inheritance chains: cat → mammal-varga → animal-varga → living-varga
+; yukta edges: properties all mammals have — inherited by everything in this varga
+
+(kosha mammal-varga
+  (swarupa animal)
+  (yukta warm-blooded heart))

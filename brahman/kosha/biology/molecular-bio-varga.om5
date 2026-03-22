@@ -1,0 +1,9 @@
+; cluster for molecular biology: DNA, RNA, gene, codon, nucleotide, protein, enzyme.
+; molecular biology reads life as information encoded in molecular sequences.
+; the central dogma: DNA → RNA → Protein.
+; sangati roots
+
+(kosha molecular-bio-varga
+  (vishesa biology-varga)
+  (swarupa subanta krama)
+  (yukta sandhi niyama avastha viveka))

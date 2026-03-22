@@ -1,0 +1,4 @@
+(kosha yield-curve
+  (abheda orbit)
+  (yukta bond-yield interest-rate epoch)
+  (sthita domain-finance))

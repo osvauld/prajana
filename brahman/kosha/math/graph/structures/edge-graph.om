@@ -1,9 +1,0 @@
-kosha edge-graph
-
-  -- named edge-graph to avoid clash with the .om edge concept
-  "graph-varga-vishesa"
-  "graph-sthita"
-  "sambandha-swarupa"
-  "vertex-yukta vertex-yukta"
-
-done

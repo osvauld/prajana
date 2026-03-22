@@ -1,0 +1,11 @@
+; kramanusara chain: acceleration = d(velocity)/d(time)
+; apeksha: kramanusara wrt physics-time, held in a sthira (fixed) reference frame
+
+(kosha acceleration
+  (vishesa linear-motion-varga)
+  (abheda vivartana)
+  (yukta krama)
+  (kriya kshetrajna)
+  (sthita niyama sthira-apeksha)
+  (kramanusara velocity)
+  (phala jerk-kramanusara))

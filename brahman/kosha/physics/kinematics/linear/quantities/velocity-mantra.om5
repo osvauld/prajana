@@ -1,0 +1,7 @@
+(mantra velocity-mantra
+  (vishesa linear-motion-varga)
+  (varga physics-mantra)
+  (swarupa velocity)
+  (phala velocity)
+  (janya initial-velocity acceleration time)
+  (krama add initial-velocity ( mul acceleration time )))

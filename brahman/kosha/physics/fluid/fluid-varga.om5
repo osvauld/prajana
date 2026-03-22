@@ -1,0 +1,12 @@
+; cluster for all fluid dynamics quantities: pressure, viscosity, flow, turbulence.
+; fluid dynamics sits at the intersection of physics and mathematics.
+; Navier-Stokes equations are PDEs — both physics and applied mathematics.
+; continuum mechanics: fluid is treated as continuous matter (not discrete particles).
+; units: pressure in pascals (N/m²); viscosity in Pa⋅s; flow in m³/s
+; sangati roots
+
+(kosha fluid-varga
+  (vishesa physics-varga math-varga)
+  (swarupa subanta)
+  (matra pascal metre second)
+  (yukta gati sandhi spanda niyama kaala))

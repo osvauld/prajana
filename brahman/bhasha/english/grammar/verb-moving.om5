@@ -1,0 +1,7 @@
+; "moving" (present participle) signals ongoing linear motion.
+; same treatment as "moves": grammar, dropped by BQG.
+; example: "a moving body with velocity 10 m/s" →
+; "moving" dropped, "body" stays mithya, "with" fires R8 correctly.
+
+(bhasha verb-moving
+  (sthita english kartari-prayoga))

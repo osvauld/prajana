@@ -1,0 +1,7 @@
+; scalar multiplication of a matrix: B[i][j] = s * A[i][j]
+
+(mantra mat-scale
+  (karma geometry-varga)
+  (swarupa matrix)
+  (yukta mat-add)
+  (krama multiplication))

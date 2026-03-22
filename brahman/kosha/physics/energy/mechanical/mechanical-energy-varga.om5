@@ -1,0 +1,12 @@
+; cluster for mechanical energy quantities: kinetic, potential, work, path-energy.
+; mechanical energy is energy in its motion and position forms.
+; KE = ½mv²; PE = mgh; Work = F⋅d — all are joules.
+; conservation: in the absence of friction, KE + PE = constant.
+; units: joules (kg⋅m²⋅s⁻²)
+; sangati roots
+
+(kosha mechanical-energy-varga
+  (vishesa energy-varga)
+  (swarupa subanta shakti)
+  (matra joule kilogram metre second)
+  (yukta gati niyama avastha))

@@ -1,0 +1,35 @@
+; cluster for civil engineering: structures that shape space.
+; civil engineering is the oldest engineering discipline —
+; the pyramids, the Parthenon, the Roman aqueducts, the Eiffel Tower.
+; all of them ask the same question: will gravity be resisted?
+; 
+; the fundamental problem of civil engineering:
+; gravity pulls everything downward. structures must resist this.
+; the structure must transfer all loads safely to the ground.
+; the ground is the ultimate support — everything rests on it.
+; 
+; three types of internal force in a structure:
+; compression: material is being squeezed. concrete, stone, masonry are strong.
+; arch and dome — all compression, no tension.
+; tension:     material is being pulled apart. steel, rope, cable are strong.
+; suspension bridge — all cables in tension.
+; shear:       material is being slid sideways. failure at joints, welds.
+; 
+; the key quantities:
+; stress:   force per unit area. σ = F/A.  (pascals)
+; strain:   fractional deformation. ε = ΔL/L. (dimensionless)
+; Young's modulus: E = σ/ε. stiffness of material.
+; yield strength: stress at which permanent deformation begins.
+; ultimate strength: stress at fracture.
+; safety factor: ultimate strength / working stress. must be > 1 (typically 3-10).
+; 
+; materials:
+; concrete: strong in compression (30-50 MPa), weak in tension (3 MPa).
+; steel:    strong in both (yield: 250-700 MPa).
+; stone:    strong in compression only. no tensile strength.
+; reinforced concrete: concrete + steel rebar — strong in both.
+
+(kosha civil-varga
+  (vishesa engineering-varga)
+  (swarupa subanta)
+  (yukta gravity normal-force compression tension shear stress strain concrete steel stone safety-factor))

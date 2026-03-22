@@ -1,0 +1,26 @@
+; inorganic solids with ordered atomic structure (crystalline) or disordered (amorphous).
+; minerals are the inorganic face of the earth: rocks, sand, clay, salt, gems.
+; what defines a mineral:
+; naturally occurring, inorganic, solid, definite chemical composition,
+; ordered internal structure (crystal lattice, except amorphous like glass).
+; 
+; three main bond types in minerals:
+; ionic:    NaCl, CaCO3, CaF2 — ions in lattice. soluble in water. brittle.
+; covalent: SiO2 (quartz), diamond — strong network. insoluble. hard.
+; mixed:    most silicates — partial covalent Si-O with ionic metal cations.
+; 
+; silicates are the most abundant mineral class (90% of earth's crust).
+; SiO4 tetrahedron is the fundamental unit — Si bonded to 4 O atoms.
+; different ways of linking tetrahedra give different mineral structures:
+; isolated:  olivine  — SiO4⁴⁻ units, Mg/Fe²⁺
+; chains:    pyroxene — single chain
+; sheets:    clay, mica — layered sheets (explains cleavage and softness)
+; 3D framework: quartz, feldspar — fully linked tetrahedra
+; 3d / pratibimba
+
+(kosha minerals-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta inorganic crystalline)
+  (sthita solid roughness metallic-zero)
+  (yukta ionic-bond covalent-bond pbr)
+  (drishthanta silica calcite clay))

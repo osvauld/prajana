@@ -1,0 +1,7 @@
+; question words: interrogatives that mark the query target.
+; used by classify-word.tantra to emit intent:solve-for token.
+
+(bhasha prashna
+  (swarupa avyaya nipata)
+  (sthita english prashna-amsha)
+  (yukta dhatu))

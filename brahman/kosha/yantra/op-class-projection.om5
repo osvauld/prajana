@@ -1,0 +1,9 @@
+; unary transforms / extractors: abs, sin, cos, sqrt, length, exists, etc.
+; these ARE morphisms: structure-preserving maps from one space to another.
+; pure: no state, no side effects. same input → same output.
+
+(kosha op-class-projection
+  (swarupa yantra shuddhi)
+  (ahara eka)
+  (phala siddha)
+  (abheda morphism))

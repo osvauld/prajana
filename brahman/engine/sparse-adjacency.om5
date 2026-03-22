@@ -1,0 +1,7 @@
+(kosha sparse-adjacency
+  (sthita proof-graph startup)
+  (abheda matrix-multiplication)
+  (swarupa csr array float)
+  (janya map fold)
+  (kriya dot-product materialize spmv)
+  (yukta ppr visheshanam))

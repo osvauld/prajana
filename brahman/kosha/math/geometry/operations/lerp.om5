@@ -1,0 +1,8 @@
+; linear interpolation between two values along a straight path
+; t=0 gives a, t=1 gives b, t=0.5 gives midpoint
+
+(kosha lerp
+  (vishesa interpolation-varga geometry-varga)
+  (swarupa linear)
+  (yukta seema krama animation)
+  (drishthanta slerp))

@@ -1,0 +1,6 @@
+(kosha curve
+  (sthita domain-3d domain-math)
+  (swarupa vector parametric)
+  (yukta interpolation bezier spline)
+  (janya vertex)
+  (phala mesh))

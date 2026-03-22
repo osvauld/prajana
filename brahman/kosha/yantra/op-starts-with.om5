@@ -1,0 +1,4 @@
+; string prefix test. starts-with s prefix → bool.
+
+(kosha op-starts-with
+  (kriya op-class-relation))

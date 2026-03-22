@@ -1,0 +1,17 @@
+; apply fn repeatedly until output equals input (structural equality).
+; terminates when the graph stabilises — the natural avrti fixpoint condition.
+; fixpoint x (fn s -> ...) = stable s
+; 
+; requires monotone endomorphism:
+; endomorphism: f: G → G (same type in and out)
+; monotone: if G ⊆ G' then f(G) ⊆ f(G') (only adds, never removes)
+; Knaster-Tarski: monotone f on complete lattice has least fixpoint.
+; this is WHY avrti-refine terminates: triples only added, never removed.
+
+(kosha op-fixpoint
+  (kriya op-class-higher-order)
+  (swarupa krama)
+  (abheda parampara avrti)
+  (janya endomorphism)
+  (sthita monotone-map lattice)
+  (phala convergence fixed-point))

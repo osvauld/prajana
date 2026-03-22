@@ -1,0 +1,12 @@
+; Na. proton-11. period 3, group 1 alkali metal. valence: 1 (loses 1 electron).
+; highly reactive — reacts violently with water: 2Na + 2H2O → 2NaOH + H2.
+; in ionic form Na⁺: essential for nerve impulses, muscle contraction, osmosis.
+; NaCl (table salt): Na⁺ + Cl⁻ — the most familiar ionic compound.
+; sodium-vapour lamps: characteristic yellow light (589nm emission).
+
+(kosha sodium
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-eleven alkali-metal)
+  (yukta valence-one water nerve-impulse osmosis)
+  (janya nuclear-fusion)
+  (siddha ionic-bond))

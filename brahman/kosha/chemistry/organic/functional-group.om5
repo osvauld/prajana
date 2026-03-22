@@ -1,0 +1,33 @@
+; the reactive site of an organic molecule. the part that determines chemistry.
+; organic chemistry is fundamentally the study of functional groups:
+; what they do, how they react, how they transform into each other.
+; 
+; a functional group is a specific arrangement of atoms that:
+; 1. is present across many different molecules
+; 2. reacts in a predictable way regardless of the rest of the molecule
+; 3. defines the class the molecule belongs to
+; 
+; the carbon skeleton (backbone) carries the functional groups.
+; the backbone determines shape, size, and physical properties.
+; the functional groups determine chemical reactivity.
+; this separation — backbone + functional group — is the grammar of organic chemistry.
+; 
+; major functional groups (each has its own node):
+; hydroxyl -OH     → alcohol. hydrophilic. hydrogen bonds. e.g. ethanol
+; carboxyl -COOH   → carboxylic acid. donates H⁺. e.g. acetic acid, amino acids
+; amino    -NH2    → amine. accepts H⁺ (basic). e.g. amino acids, amines
+; carbonyl C=O     → aldehyde (terminal) or ketone (internal). reactive.
+; ester    -COO-   → from acid + alcohol. fragrance, fats, plastics.
+; ether    -O-     → between two carbons. low reactivity. solvent.
+; thiol    -SH     → like hydroxyl but sulfur. disulfide bonds in proteins.
+; phosphate -OPO3  → backbone of DNA/RNA, ATP energy currency.
+; double bond C=C  → alkene. reactive. addition reactions. polymerisation.
+; triple bond C≡C  → alkyne. very reactive. acetylene welding.
+
+(kosha functional-group
+  (vishesa organic-varga chemistry-varga)
+  (swarupa subanta reactive-site)
+  (yukta carbon backbone)
+  (sthita molecule)
+  (phala reactivity class)
+  (drishthanta hydroxyl carboxyl amino carbonyl ester phosphate))

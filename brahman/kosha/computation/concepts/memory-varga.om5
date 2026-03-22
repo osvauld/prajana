@@ -1,0 +1,9 @@
+; cluster for memory and binding concepts: variable, binding, scope, mutation, stack.
+; memory is the avastha-holder of computation — it stores the state between steps.
+; binding names a value; scope limits where that name is valid.
+; sangati roots
+
+(kosha memory-varga
+  (vishesa cs-varga)
+  (swarupa subanta avastha)
+  (yukta niyama seema smarana))

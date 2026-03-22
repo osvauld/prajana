@@ -1,0 +1,8 @@
+; P = VI: electric power
+; mantra: P = VI
+
+(kosha electric-power
+  (vishesa circuit-varga)
+  (swarupa power)
+  (yukta voltage current)
+  (matra watt))

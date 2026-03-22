@@ -1,0 +1,20 @@
+; the earth's surface. the ultimate resting place for all falling objects.
+; gravity pulls everything toward the ground.
+; the ground is the reference level for potential energy (PE = mgh, h=0 at ground).
+; the ground exerts normal force upward on anything resting on it.
+; 
+; collision with ground: coefficient of restitution depends on both the object
+; and the ground material.
+; rubber ball on concrete: e ≈ 0.8 → bounces
+; clay ball on ground: e ≈ 0 → sticks
+; steel ball on steel: e ≈ 0.65 → bounces moderately
+; 
+; ground as reference frame: sthira-apeksha.
+; velocity measured "wrt ground" means wrt sthira-apeksha.
+; gravitational potential energy zero point.
+
+(kosha ground
+  (vishesa structures-varga common-sense-varga)
+  (swarupa horizontal)
+  (yukta normal-force collision-varga domain-3d)
+  (sthita gravity potential-energy-reference sthira-apeksha))

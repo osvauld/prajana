@@ -1,0 +1,12 @@
+; cluster for all oscillation and wave quantities: periodic, repeating motion.
+; frequency, period, amplitude are universal across all oscillating systems —
+; mechanical, electrical, optical, quantum.
+; connects to math-varga: Fourier analysis, harmonic series are mathematical structure.
+; units: frequency in hertz (1/s); period in seconds; amplitude in domain units
+; sangati roots
+
+(kosha oscillation-varga
+  (vishesa physics-varga math-varga)
+  (swarupa subanta spanda)
+  (matra hertz second)
+  (yukta taranga spanda-matra kaala avrti))

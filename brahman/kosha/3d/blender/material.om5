@@ -1,0 +1,4 @@
+(kosha material
+  (sthita domain-3d pbr)
+  (swarupa shader)
+  (yukta mesh texture color roughness metallic))

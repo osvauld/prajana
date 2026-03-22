@@ -1,0 +1,8 @@
+; cluster for geometric structures: coordinates, vectors, matrices, manifolds, topology.
+; geometry studies shape, distance, and transformation in space.
+; linear algebra is the foundation: vectors and matrices encode spatial relationships.
+; sangati roots
+
+(kosha geometry-varga
+  (vishesa math-varga)
+  (yukta kshetra kona rekha bindu aayaama))

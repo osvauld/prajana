@@ -1,0 +1,8 @@
+; transpose: flip rows and columns — M^T[i][j] = M[j][i]
+; (mat-transpose is self-inverse: (A^T)^T = A)
+
+(mantra mat-transpose
+  (karma geometry-varga)
+  (swarupa matrix)
+  (pratipaksha mat-transpose)
+  (krama index-swap))

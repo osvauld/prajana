@@ -1,0 +1,7 @@
+; element-wise matrix addition: C[i][j] = A[i][j] + B[i][j]
+
+(mantra mat-add
+  (karma geometry-varga)
+  (swarupa matrix)
+  (yukta mat-scale)
+  (krama addition))

@@ -1,0 +1,11 @@
+; cluster for linear force quantities: forces acting along straight-line directions.
+; all forces here cause linear acceleration (F = ma).
+; specific forces: gravity, friction, normal, tension, spring, drag, centripetal.
+; units: newtons (kg⋅m⋅s⁻²)
+; sangati roots
+
+(kosha linear-force-varga
+  (vishesa dynamics-varga)
+  (swarupa subanta)
+  (matra newton kilogram metre second)
+  (yukta mula-shakti gati niyama direction))

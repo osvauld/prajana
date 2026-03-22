@@ -1,0 +1,27 @@
+; cluster for all metallic elements and their shared properties.
+; what makes a metal a metal: the electron sea.
+; valence electrons are delocalised across the whole lattice — not bound
+; to individual atoms. this one structural fact explains everything:
+; conduction:   electrons flow freely → conducts electricity and heat
+; lustre:       free electrons reflect photons → shiny surface
+; malleability: layers slide without breaking bonds → can be hammered flat
+; ductility:    can be drawn into wires without fracturing
+; 
+; metallic bond: weaker than covalent, stronger than van der Waals.
+; metals form positive ions (cations) — they lose electrons readily.
+; most elements in the periodic table are metals (~80%).
+; 
+; sub-classifications:
+; alkali metals    (group 1): Li, Na, K, Rb, Cs — very reactive, soft, low mp
+; alkaline earth   (group 2): Be, Mg, Ca, Sr, Ba — harder, higher mp
+; transition metals (d-block): Fe, Cu, Zn, Ag, Au, Ti — variable valence, complex ions
+; post-transition: Al, Sn, Pb — between transition metals and metalloids
+; connections
+; 3d / pratibimba
+
+(kosha metals-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta electron-sea conductor lustrous malleable ductile cation metallic)
+  (sthita metallic-bond solid)
+  (siddha ionic-bond)
+  (yukta heat-transfer alloy oxidation pbr))

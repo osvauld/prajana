@@ -1,0 +1,8 @@
+; cluster for number types: integer, float, real, rational, irrational, complex, prime.
+; number theory studies the intrinsic properties of numbers and their relationships.
+; the hierarchy: natural ⊂ integer ⊂ rational ⊂ real ⊂ complex.
+; sangati roots
+
+(kosha number-varga
+  (vishesa math-varga)
+  (yukta matra niyama eka shunya))

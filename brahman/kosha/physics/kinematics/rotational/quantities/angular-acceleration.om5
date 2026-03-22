@@ -1,0 +1,11 @@
+; d(angular-velocity)/d(time): alpha
+; caused by torque via Newton's 2nd law for rotation: alpha = torque / I
+; apeksha: kramanusara wrt physics-time, held in a sthira (fixed) reference frame
+
+(kosha angular-acceleration
+  (vishesa rotational-motion-varga)
+  (abheda acceleration)
+  (yukta kona torque moment-of-inertia)
+  (swarupa avrti)
+  (kramanusara angular-velocity)
+  (sthita sthira-apeksha))

@@ -1,0 +1,11 @@
+; root cluster for all chemistry domain nodes.
+; chemistry sits at the intersection of physics (atomic forces) and
+; mathematics (molecular geometry, reaction rates).
+; domain identity
+; sangati roots
+
+(kosha chemistry-varga
+  (sthita domain-chemistry)
+  (vishesa physics-varga math-varga)
+  (swarupa subanta)
+  (yukta sandhi mula-shakti spanda matra))

@@ -1,0 +1,17 @@
+; an enclosed space bounded by walls, floor, and ceiling.
+; the fundamental unit of built indoor space.
+; a room defines a closed system for indoor physics:
+; fixed volume (approximately): air pressure equilibrates with outside via gaps
+; gravity acts inside exactly as outside
+; temperature is relatively uniform (well-mixed air)
+; all falling objects eventually reach the floor
+; 
+; a room is a container for air, for people, for objects.
+; acoustics: sound reflects from walls, floor, ceiling — reverberation.
+; thermally: room temperature = the baseline of all everyday thermal questions.
+; "room temperature" = 20°C (293K) — the default condition in the kosha.
+
+(kosha room
+  (vishesa structures-varga common-sense-varga)
+  (swarupa container enclosure)
+  (yukta wall floor ceiling temperature air domain-3d))

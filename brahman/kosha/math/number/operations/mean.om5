@@ -1,0 +1,9 @@
+; arithmetic mean: central value of a dataset
+; sum of all values divided by count
+
+(kosha mean
+  (vishesa statistics-varga)
+  (swarupa central-tendency)
+  (yukta data)
+  (janaka variance std-dev)
+  (abheda distribution expected-value))

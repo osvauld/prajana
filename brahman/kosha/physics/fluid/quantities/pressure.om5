@@ -1,0 +1,9 @@
+; force per unit area; scalar field that drives fluid from high to low
+
+(kosha pressure
+  (vishesa fluid-varga)
+  (swarupa subanta scalar)
+  (abheda float)
+  (ahara force)
+  (phala area)
+  (yukta gradient density navier-stokes bernoulli))

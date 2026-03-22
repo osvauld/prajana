@@ -1,0 +1,21 @@
+; the mass of a robot link — determines inertia and gravitational load
+; 
+; same concept as mass in physics but scoped to a link entity in a kinematic chain
+; each link in an n-DOF arm has its own mass — the scene extractor binds
+; this per entity, not as a global value
+; 
+; affects:
+; moment-of-inertia: I = (1/3)·m·L²  (rod about proximal end)
+; gravitational torque: τ_grav = m·g·L/2·cos(θ_world)
+; Newton-Euler dynamics: inertia matrix coupling between joints
+; 
+; in the chala-apeksha model: the mass of link[i] contributes to the
+; torque required at joint[j] for ALL j ≤ i (every ancestor joint must
+; support and accelerate this mass)
+
+(kosha link-mass
+  (swarupa subanta)
+  (sthita domain-robotics)
+  (yukta kinematic-chain link moment-of-inertia torque)
+  (abheda mass)
+  (matra kilogram))

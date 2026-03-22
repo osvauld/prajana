@@ -1,0 +1,8 @@
+; p + ½ρv² + ρgh = constant: energy conserved along a streamline
+
+(kosha bernoulli
+  (vishesa fluid-varga)
+  (yukta pressure mass-density velocity energy)
+  (swarupa conservation)
+  (abheda first-law)
+  (sthita continuity))

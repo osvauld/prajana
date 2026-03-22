@@ -1,0 +1,8 @@
+; tan(θ) = sin(θ)/cos(θ)
+
+(mantra tangent
+  (karma number-varga)
+  (vishesa trigonometry-varga)
+  (yukta sine cosine kona)
+  (pratipaksha arctangent)
+  (krama sine cosine division))

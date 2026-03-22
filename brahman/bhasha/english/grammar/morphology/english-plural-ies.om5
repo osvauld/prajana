@@ -1,0 +1,5 @@
+; strip -ies, add -y to recover stem
+; velocity → velocities, frequency → frequencies, density → densities
+
+(bhasha english-plural-ies
+  (sthita english vachana-bahu))

@@ -1,0 +1,9 @@
+; cluster for macroeconomic quantities: inflation, deflation, interest-rate, money-supply, business-cycle.
+; macroeconomics studies economy-wide quantities and their rates of change.
+; inflation and interest rates are kramanusara quantities: rates of change of price and money.
+; sangati roots
+
+(kosha macro-varga
+  (vishesa finance-varga)
+  (swarupa subanta)
+  (yukta kramanusara kaala spanda avastha niyama))

@@ -1,0 +1,8 @@
+(kosha pipeline-expand
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya refined-graph)
+  (phala expanded-graph)
+  (krama pipeline-detect)
+  (abheda morphism)
+  (kriya kosha-expand))

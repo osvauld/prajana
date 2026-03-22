@@ -1,0 +1,9 @@
+; rho*dv/dt + v·grad(v) = -grad(p) + mu*laplacian(v) + f
+; the master equation of fluid motion
+
+(kosha navier-stokes
+  (vishesa fluid-varga)
+  (yukta mass-density pressure viscosity velocity gradient laplacian divergence)
+  (sthita continuity)
+  (abheda bernoulli newton-second-law-motion)
+  (kriya avrti))

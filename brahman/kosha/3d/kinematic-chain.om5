@@ -1,0 +1,37 @@
+; a kinematic chain is an armature seen from both the 3D and physics perspectives
+; it is the bridge between domain-3d and domain-robotics / domain-physics
+; 
+; 3D perspective:
+; a DAG of bones whose transforms compose from root to tip via scene-graph
+; each bone has a local rotation (kona as quaternion) and a world-space pose
+; the tip bone's world-space position IS the end-effector location (bindu)
+; 
+; physics perspective:
+; each bone is a rigid link with mass and moment of inertia
+; each joint is a kona with angular-velocity (kramanusara of kona wrt time)
+; motion planning operates in the joint-space (kona space)
+; torque and power are the physical costs of moving through that space
+; 
+; the FK (forward kinematics) IS scene-graph composition:
+; bone.world = parent.world × bone.local(kona)
+; end-effector-bindu = tip-bone.world.position
+; 
+; the IK (inverse kinematics) inverts this:
+; given end-effector-bindu → find kona values for each bone
+; 
+; the motion plan IS a keyframe trajectory in joint-space:
+; kona(t=0) = theta-current → kona(t=T) = theta-target
+; interpolated along the krama axis (time)
+; 3D structure
+; physics quantities carried by each link
+; kinematic operations
+; the end-effector position is a bindu in world-space / aayaama-dvaya
+; motion plan bridges to 3D animation
+
+(kosha kinematic-chain
+  (sthita domain-3d domain-physics domain-robotics aayaama-dvaya)
+  (swarupa armature)
+  (yukta bone scene-graph mass moment-of-inertia kona angular-velocity torque kramanusara apeksha move-time)
+  (phala world-space bindu)
+  (siddha fk ik)
+  (abheda keyframe interpolation))

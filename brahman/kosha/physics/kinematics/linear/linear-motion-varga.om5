@@ -1,0 +1,12 @@
+; cluster for linear kinematic quantities: the time-derivative chain in straight-line motion.
+; displacement → velocity → acceleration → jerk — each is d/dt of the previous.
+; the chain is: L → L⋅T⁻¹ → L⋅T⁻² → L⋅T⁻³
+; units: base unit is metre for spatial extent, second for time
+; sangati roots
+
+(kosha linear-motion-varga
+  (vishesa kinematics-varga)
+  (swarupa subanta gati)
+  (matra metre second)
+  (yukta vega kramanusara avastha)
+  (sthita kshetra))

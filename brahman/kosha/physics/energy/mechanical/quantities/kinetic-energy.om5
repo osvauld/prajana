@@ -1,0 +1,9 @@
+; KE = ½mv²: energy of motion
+
+(kosha kinetic-energy
+  (vishesa mechanical-energy-varga)
+  (swarupa subanta energy)
+  (abheda motion work)
+  (yukta mass velocity power derivative momentum conservation)
+  (phala scalar)
+  (pratipaksha potential-energy))

@@ -1,0 +1,11 @@
+; multiplicative damping applied directly to velocity each tick: vx *= decay
+; distinct from drag-force (which is a force proportional to velocity)
+
+(kosha velocity-decay
+  (vishesa mechanical-energy-varga)
+  (swarupa tinanta bhave-prayoga)
+  (abheda damping friction-force drag-force)
+  (yukta velocity-step alpha-cooling damped-oscillation)
+  (sthita velocity)
+  (kriya scalar-multiplication)
+  (phala velocity))

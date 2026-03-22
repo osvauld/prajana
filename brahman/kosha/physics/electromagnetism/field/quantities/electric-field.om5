@@ -1,0 +1,7 @@
+; force per unit charge: N/C = V/m
+
+(kosha electric-field
+  (vishesa field-varga)
+  (swarupa subanta)
+  (abheda field)
+  (yukta newton coulomb voltage metre force charge))

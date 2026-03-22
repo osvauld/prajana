@@ -1,7 +1,0 @@
-kosha op-ends-with
-
-  "op-class-relation-kriya"
-
-  -- string suffix test. ends-with s suffix → bool.
-
-done

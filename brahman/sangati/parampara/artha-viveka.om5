@@ -1,0 +1,24 @@
+; artha-viveka: the discernment that separates meaning (artha) from its surface vehicle (dhvani)
+; 
+; this IS the operation the pipeline performs on English input.
+; NOT sankshepa (compression): sankshepa preserves the surface and reconstructs it exactly.
+; artha-viveka is artha-lossless (meaning preserved) and dhvani-lossy (surface dissolved).
+; the reverse direction is anuvada (re-expression of artha in fresh dhvani), not decompression.
+; 
+; dhvani: the English words, word-order, articles, prepositions, punctuation — the vehicle
+; artha:  the physics scenario, the relations, the intent — what is pointed at
+; viveka: the precise act of discernment — separating pointer from pointed-at
+; 
+; parishishtha (remainder after artha-viveka) = dhvani-fragments without independent artha.
+; articles, copulas, word-order noise. at fixpoint, parishishtha → shunya.
+; what remains genuinely unresolved after fixpoint is asprista, not mithya.
+
+(sangati artha-viveka
+  (kriya bhasha-swarupa artha-graha)
+  (sthita viveka)
+  (swarupa artha-dhvani-viveka)
+  (rahita dhvani)
+  (siddha sphoTa)
+  (poorva anuvada)
+  (janya mithya)
+  (phala asprista))

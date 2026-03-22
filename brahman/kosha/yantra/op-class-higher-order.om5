@@ -1,0 +1,14 @@
+; operations that take functions as arguments.
+; reduce, map, filter, fixpoint, iterate, first-match.
+; these ARE the abstract computational patterns:
+; reduce = catamorphism (fold)
+; map = functor lift
+; filter = selection
+; fixpoint = Knaster-Tarski convergence
+
+(kosha op-class-higher-order
+  (swarupa yantra dvi-ahara)
+  (yukta tantra morphism)
+  (ahara kriya)
+  (abheda endomorphism)
+  (sthita category))

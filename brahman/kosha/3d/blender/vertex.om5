@@ -1,0 +1,4 @@
+(kosha vertex
+  (swarupa vector)
+  (sthita domain-3d domain-math mesh)
+  (yukta position normal edge face float))

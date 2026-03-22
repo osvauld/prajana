@@ -1,0 +1,11 @@
+; cluster for all kinematic quantities: motion described without cause.
+; kinematics asks WHERE and HOW FAST — not WHY.
+; all kinematic quantities are time-dependent and can have initial/final states.
+; units: all kinematic quantities are composed from metre and second
+; sangati roots
+
+(kosha kinematics-varga
+  (vishesa physics-varga)
+  (swarupa subanta gati)
+  (matra metre second)
+  (yukta kaala avastha kramanusara))

@@ -1,0 +1,8 @@
+; |q| = sqrt(w² + x² + y² + z²): same as vec-norm for 4-component vector
+
+(mantra quat-norm
+  (karma geometry-varga)
+  (vishesa quaternion-varga)
+  (abheda vec-norm)
+  (yukta aayaama-chatur)
+  (krama square addition square-root))

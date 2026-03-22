@@ -1,0 +1,20 @@
+; robotics composes from 3D spatial structure and physics kinematics
+; the workspace IS aayaama-dvaya — the 2D tala for a planar arm
+; each link IS a rekha (directed segment) in that tala
+; each joint IS a sandhi — where two rekha meet with a kona (angle) state
+; the kinematic chain IS the scene-graph — transforms compose from base to tip
+; angular velocity IS kramanusara of kona wrt time (same as physics, different quantity)
+; spatial structure — the workspace
+; structural elements
+; kinematic quantities (from physics, reused as-is)
+; derivative structure
+; kinematic chain bridges 3D and physics perspectives
+; the arm IS a kinematic-chain: scene-graph compose = FK, invert = IK
+; bone world-space position = end-effector bindu in aayaama-dvaya
+; motion plan = keyframe trajectory in joint-space (kona space)
+; computation: inverse kinematics, forward kinematics, motion planning
+
+(kosha domain-robotics
+  (yukta domain-3d domain-physics domain-math akasham bindu rekha armature bone scene-graph kona angular-velocity time velocity displacement kramanusara apeksha kinematic-chain world-space)
+  (sthita aayaama-dvaya tala)
+  (siddha yantra upakarana))

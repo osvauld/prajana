@@ -1,0 +1,9 @@
+; cluster for raga concepts: raga, arohana, avarohana, vadi-swara, nyasa, gamaka.
+; a raga is a melodic framework — a specific selection and ordering of swaras.
+; arohana (ascent) and avarohana (descent) define the raga's movement through swara space.
+; sangati roots
+
+(kosha raga-varga
+  (vishesa sangeetham-varga)
+  (swarupa subanta krama)
+  (yukta viveka avastha gati naada))

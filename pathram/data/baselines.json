@@ -75,5 +75,12 @@
     "failed": 4,
     "session_id": null,
     "at": "2026-03-22T16:45:07"
+  },
+  {
+    "passed": 31,
+    "xfailed": 33,
+    "failed": 3,
+    "session_id": null,
+    "at": "2026-03-22T20:59:47"
   }
 ]

@@ -1,0 +1,7 @@
+; root cluster for all engineering domain nodes.
+
+(kosha engineering-varga
+  (sthita domain-engineering)
+  (vishesa physics-varga chemistry-varga)
+  (swarupa subanta)
+  (yukta niyama seema viveka matra))

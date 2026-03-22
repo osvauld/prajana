@@ -1,0 +1,30 @@
+; redox: electron transfer between chemical species.
+; oxidation: loss of electrons (OIL — Oxidation Is Loss).
+; reduction: gain of electrons (RIG — Reduction Is Gain).
+; they always occur together — one species loses what another gains.
+; 
+; oxidation state: formal charge if all bonds were ionic.
+; oxidation: oxidation state increases (more positive).
+; reduction: oxidation state decreases (more negative).
+; 
+; the oxidising agent: accepts electrons (gets reduced).
+; the reducing agent: donates electrons (gets oxidised).
+; 
+; everyday examples:
+; rusting: 4Fe + 3O2 → 2Fe2O3  (Fe oxidised 0→+3, O reduced 0→-2)
+; fire: C + O2 → CO2  (C oxidised 0→+4)
+; battery: chemical → electrical energy via controlled redox
+; photosynthesis: CO2 reduced to glucose (light drives the reaction)
+; respiration: glucose oxidised to CO2 (energy released as ATP)
+; bleaching: oxidising agent destroys colour by oxidising chromophores
+; 
+; electrochemistry: redox reactions in solution.
+; standard electrode potential E°: measure of tendency to be reduced.
+; Nernst equation: E = E° - (RT/nF)ln(Q).
+
+(kosha oxidation-reduction
+  (vishesa chemistry-varga)
+  (swarupa reaction tinanta bhave-prayoga electron-transfer oxidation reduction)
+  (drishthanta rusting combustion battery)
+  (abheda respiration photosynthesis)
+  (sthita domain-chemistry domain-biology))

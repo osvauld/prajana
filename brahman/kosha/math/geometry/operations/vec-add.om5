@@ -1,0 +1,9 @@
+; component-wise addition of two n-dimensional vectors
+; [a1,a2,...,an] + [b1,b2,...,bn] = [a1+b1, a2+b2,...,an+bn]
+
+(mantra vec-add
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda addition)
+  (yukta aayaama)
+  (krama addition))

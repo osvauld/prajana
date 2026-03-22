@@ -1,0 +1,7 @@
+; unary minus: negation is self-inverse
+
+(mantra neg
+  (karma number-varga)
+  (abheda negation)
+  (swarupa additive-inverse)
+  (pratipaksha neg))

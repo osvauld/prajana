@@ -1,0 +1,9 @@
+; L = I * omega = r × p; conserved when no external torque acts
+
+(kosha angular-momentum
+  (vishesa rotational-motion-varga)
+  (abheda momentum)
+  (swarupa rotation)
+  (yukta moment-of-inertia angular-velocity conservation torque derivative)
+  (siddha cross-product)
+  (phala vector))

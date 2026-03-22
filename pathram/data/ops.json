@@ -2841,5 +2841,356 @@
       "new": "superseded",
       "pointer": "plan.step-42"
     }
+  },
+  {
+    "op": "update_baseline",
+    "entry_id": "baseline",
+    "at": "2026-03-22T20:59:47",
+    "details": {
+      "passed": 31,
+      "xfailed": 33,
+      "failed": 3
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-29",
+    "at": "2026-03-22T21:00:01",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-29",
+    "at": "2026-03-22T21:00:01",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-30",
+    "at": "2026-03-22T21:00:01",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-30",
+    "at": "2026-03-22T21:00:01",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-31",
+    "at": "2026-03-22T21:00:01",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-31",
+    "at": "2026-03-22T21:00:01",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-32",
+    "at": "2026-03-22T21:00:02",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-32",
+    "at": "2026-03-22T21:00:02",
+    "details": {
+      "fields": [
+        "body"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-44",
+    "at": "2026-03-22T21:00:14",
+    "details": {
+      "type": "discovery",
+      "title": "Pipe operator missing from new parser: Yantra_expr_parser had no pipe support (| where | collect | filter | map etc). Added to yantra_tokeniser.ml (| as token delimiter) and yantra_expr_parser.ml (full pipe handling: where/collect/filter/map/all/any/find/reduce). This was the root cause of 'no match' regression after Phase 1 parser swap."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-45",
+    "at": "2026-03-22T21:00:25",
+    "details": {
+      "type": "discovery",
+      "title": "188 silently dropped edges: 15 Sanskrit concepts (janaka, rahita, lakshana, poorva, etc.) used as compound suffixes in om slokas but never existed as standalone nodes. om_parser.ml only registers dynamic dimensions for suffixes that are known node names. Created 15 sangati nodes + visheshanam-ring entries. Now 72 total visheshanam suffixes (11 core + 36 ring + 24 ad-hoc + 1 alias). Verified 99/100 against live engine."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-46",
+    "at": "2026-03-22T21:00:37",
+    "details": {
+      "type": "discovery",
+      "title": "karma+lakshana enable structural math reasoning: karma (operation-of-varga) gives 38 number ops, 9 algebra ops, 6 set ops, 4 calculus ops, 32 geometry ops, 5 graph ops, 3 probability ops \u2014 all discoverable by graph walk. lakshana (property-of-varga) gives associativity, commutativity, closure, inverse-element, identity-element, distributivity \u2014 structural guarantees for safe formula manipulation. Together they enable: (1) inverse op discovery via karma+pratipaksha, (2) commutativity checks before operand reordering, (3) invertibility validation via inverse-element lakshana, (4) entity classification (op vs property via karma vs lakshana)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "discoveries.discovery-47",
+    "at": "2026-03-22T21:00:48",
+    "details": {
+      "type": "discovery",
+      "title": "invert-math gap: current invert-math tantra only handles single-op mantras (momentum: mul \u2192 div). KE mantra has no math-op shabda \u2014 uses execute-chain krama instead. KE inversion (v=sqrt(2*KE/m)) requires multi-step chain reversal: walk krama in reverse, pratipaksha each step (half\u2192double, mul\u2192div, square\u2192sqrt). All inverse pairs exist in graph and share number-varga (validated by test). Need invert-krama tantra."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-43",
+    "at": "2026-03-22T21:01:25",
+    "details": {
+      "type": "step",
+      "title": "Om5 conversion tool: tools/om5.py + cli_om5.py + om5_verify.py. 72 suffixes, 99/100 match vs OCaml. 8 om files fixed."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-44",
+    "at": "2026-03-22T21:01:25",
+    "details": {
+      "type": "step",
+      "title": "Ground 15 missing visheshanam dims: created sangati nodes + ring entries for janaka, rahita, lakshana, poorva, paschat, garbha, antya, nirodha, paripurna, daatri, vibheda, atita, bhanga, atikrama, purva. 188 edges unlocked."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-45",
+    "at": "2026-03-22T21:01:25",
+    "details": {
+      "type": "step",
+      "title": "Pipe operator in expr parser: added | tokenization + full pipe handling (where/collect/filter/map/all/any/find/reduce) to Yantra_expr_parser. Fixed pipeline regression."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-46",
+    "at": "2026-03-22T21:01:26",
+    "details": {
+      "type": "step",
+      "title": "Edge dimension tests: 72 passed / 7 xfailed in test_edges.py. L1 edge exists, L2 walk traversal, L3 graph self-reasoning (inverse plans, entity classification, robotics chain, pure math)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-47",
+    "at": "2026-03-22T21:01:26",
+    "details": {
+      "type": "step",
+      "title": "invert-krama tantra: multi-step formula inversion. Walk krama chain in reverse, pratipaksha each step. Unlocks KE\u2192velocity, KE\u2192mass, any multi-op mantra. Uses krama + pratipaksha + karma (varga validation) + lakshana (invertibility check)."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-48",
+    "at": "2026-03-22T21:01:26",
+    "details": {
+      "type": "step",
+      "title": "lakshana-query tantra: detect 'properties of X' pattern, walk lakshana dimension. Unlocks test_what_are_properties_of_algebra."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-49",
+    "at": "2026-03-22T21:01:26",
+    "details": {
+      "type": "step",
+      "title": "karma-query tantra: detect 'operations in X' pattern, walk karma dimension. Unlocks test_what_operations_in_calculus."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-50",
+    "at": "2026-03-22T21:01:26",
+    "details": {
+      "type": "step",
+      "title": "rahita-query tantra: detect negation/absence patterns, walk rahita. Unlocks test_what_is_jada_without."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-51",
+    "at": "2026-03-22T21:01:26",
+    "details": {
+      "type": "step",
+      "title": "janaka-query tantra: detect generate/produce patterns, walk janaka. Unlocks test_what_does_vector_space_generate."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-52",
+    "at": "2026-03-22T21:01:26",
+    "details": {
+      "type": "step",
+      "title": "torque-compute: add math-op:multiplication shabda to torque-mantra. Enables existing invert-math for robotics. Unlocks test_3dof_arm_torque."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "plan.step-53",
+    "at": "2026-03-22T21:01:26",
+    "details": {
+      "type": "step",
+      "title": "op-validity-check: pre-inversion validation via lakshana. Check inverse-element, closure, commutativity on varga before inverting. Structural safety net for all formula manipulation."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-47",
+    "at": "2026-03-22T21:12:25",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-38",
+    "at": "2026-03-22T21:12:29",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-38",
+    "at": "2026-03-22T21:39:43",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-39",
+    "at": "2026-03-22T21:39:49",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-40",
+    "at": "2026-03-22T21:39:55",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-40",
+    "at": "2026-03-22T22:00:58",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-15",
+    "at": "2026-03-22T22:01:10",
+    "details": {
+      "type": "quirk",
+      "title": "Dissolved 8/10 equation tantras into krama on om5 mantra nodes. Remaining 2: period-expr (uses shabda lookup for pi constant - needs let bindings), relative-velocity-expr (janya names don't match param names - both are 'velocity'). Synthetic tantra generation from krama works via auto-generated kriya edge. nigamana type now has krama field."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-41",
+    "at": "2026-03-22T22:01:17",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-41",
+    "at": "2026-03-22T22:11:22",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-16",
+    "at": "2026-03-22T22:31:45",
+    "details": {
+      "type": "quirk",
+      "title": "Om5 migration step-42: .om files removed, om5 parser loads all 1625 nodes. Ring dim discovery works (72 dims via om5). But 23 test regressions from: (1) slokas-after-done content now included (21 tantra metadata files had leaked edges), (2) empty response bodies for physics/viveka tests \u2014 likely edge count or satya differences from the migration. Need to investigate which new edges cause pipeline breakage."
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-17",
+    "at": "2026-03-22T23:06:12",
+    "details": {
+      "type": "quirk",
+      "title": "shabda loading was broken: load_shabda_dir looked for shabda/ inside each subdir (brahman/sangati/shabda) instead of sibling (brahman/shabda). Fixed vyakarana.ml to try both d/shabda and parent(d)/shabda. Now loads 1190 entries. relation-axioms add 6446 structural edges (symmetric abheda/swarupa/yukta/pratipaksha, dual janya\u2194phala). Graph went from 1679 nodes / 11810 edges to 2363 nodes / 24223 edges. word-node now resolves (find\u2192vidhi-kaala, is\u2192copula, and\u2192dvandva). setu_shabda.ml cleaned: removed parse_shabda flat parser, load_flat_file, is_sexp_format auto-detect, inline om shabda fallback. Only sexp format remains. tools/tantras.py parse_sexp fixed: strip leading comments before matching tantra header."
+    }
+  },
+  {
+    "op": "update_entry",
+    "entry_id": "plan.step-42",
+    "at": "2026-03-22T23:06:43",
+    "details": {
+      "fields": [
+        "meta"
+      ]
+    }
+  },
+  {
+    "op": "create_entry",
+    "entry_id": "notes.quirk-18",
+    "at": "2026-03-22T23:06:57",
+    "details": {
+      "type": "quirk",
+      "title": "Root cause of 25\u219254 test failures: shabda was NEVER loading in the live server. The shabda dir path assumed shabda/ was a child of each corpus subdir (brahman/sangati/shabda) but it's a sibling (brahman/shabda). This means: (1) word-node always returned None \u2014 'find', 'compute', 'has', 'was' etc never resolved to grammar nodes, (2) no relation-axioms fired \u2014 0 symmetric/dual edges added, (3) no op arities from shabda \u2014 parse-arity:2 for add/mul missing, (4) no eval: dispatch \u2014 execute-mantra couldn't find op implementations via shabda. The previous 132-pass baseline was achieved WITHOUT shabda \u2014 all grammar resolution was failing silently. Now with shabda loading, the graph is structurally correct (6446 axiom edges, word resolution works) but pipeline tantras need adjustment for the richer topology."
+    }
   }
 ]

@@ -1,0 +1,6 @@
+; domain anchor for mathematics.
+; leaves no longer need domain-math-sthita directly;
+; they inherit it through math-varga via has_domain_sthita inheritance walk.
+
+(kosha domain-math
+  (yukta kramanusara apeksha))

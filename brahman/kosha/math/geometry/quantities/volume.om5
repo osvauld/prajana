@@ -1,0 +1,8 @@
+; volume: the amount of 3D space enclosed by a closed surface.
+; SI unit: cubic-metre (m³).
+; janya for mass-density-mantra (ρ = m/V).
+
+(kosha volume
+  (vishesa geometry-varga)
+  (swarupa scalar)
+  (abheda float))

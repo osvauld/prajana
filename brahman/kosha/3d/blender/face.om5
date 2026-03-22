@@ -1,0 +1,4 @@
+(kosha face
+  (sthita domain-3d mesh)
+  (yukta vertex edge normal winding)
+  (swarupa polygon))

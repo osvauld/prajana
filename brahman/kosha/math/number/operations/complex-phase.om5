@@ -1,0 +1,8 @@
+; arg(a+bi) = atan2(b, a): angle in complex plane
+
+(mantra complex-phase
+  (karma number-varga)
+  (vishesa complex-varga)
+  (swarupa kona)
+  (abheda argument)
+  (krama arctangent))

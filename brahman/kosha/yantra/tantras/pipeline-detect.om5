@@ -1,0 +1,8 @@
+(kosha pipeline-detect
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala intent-signals)
+  (krama pipeline-dispatch)
+  (kriya detect-signals shashthi-sparsha sankhya-sparsha mantra-coverage bound-state anumana-sparsha prathama-sparsha extract-solve-for)
+  (abheda morphism))

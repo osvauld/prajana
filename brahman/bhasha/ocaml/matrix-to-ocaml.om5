@@ -1,0 +1,7 @@
+(bhasha matrix-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita matrix domain-ocaml domain-language)
+  (yukta matrix-multiplication execution)
+  (phala matrix ocaml)
+  (siddha correctness-check))

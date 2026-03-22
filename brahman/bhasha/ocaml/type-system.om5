@@ -1,0 +1,5 @@
+(bhasha type-system
+  (abheda pramana niyama)
+  (sthita language domain-ocaml domain-language pramana)
+  (kriya type-checking)
+  (yukta ocaml viveka))

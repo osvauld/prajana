@@ -1,0 +1,7 @@
+; named edge-graph to avoid clash with the .om edge concept
+
+(kosha edge-graph
+  (vishesa graph-varga)
+  (sthita graph)
+  (swarupa sambandha)
+  (yukta vertex))

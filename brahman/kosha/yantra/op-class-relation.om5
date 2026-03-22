@@ -1,0 +1,9 @@
+; predicates returning boolean: eq, neq, gt, lt, ge, le, member, etc.
+; these define order relations on values.
+; gt/lt/ge/le form a partial-order (reflexive, antisymmetric, transitive).
+; eq/neq define equivalence classes.
+
+(kosha op-class-relation
+  (swarupa yantra sambandha dvi-ahara)
+  (phala satya)
+  (abheda partial-order))

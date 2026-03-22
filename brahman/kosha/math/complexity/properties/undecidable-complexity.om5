@@ -1,0 +1,6 @@
+; distinct from logic/undecidable: complexity-theoretic undecidability
+
+(kosha undecidable-complexity
+  (lakshana complexity-varga)
+  (abheda undecidable)
+  (pratipaksha niyama))

@@ -1,0 +1,10 @@
+; Euclidean norm (length) of an n-dimensional vector
+; |v| = sqrt(v1² + v2² + ... + vn²) = sqrt(v · v)
+
+(mantra vec-norm
+  (karma geometry-varga)
+  (kriya vector)
+  (phala scalar)
+  (abheda norm)
+  (yukta mula-ganana aayaama)
+  (krama square addition square-root))

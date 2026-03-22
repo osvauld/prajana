@@ -1,0 +1,19 @@
+; sthira-apeksha: a fixed reference frame — the denominator does not itself move
+; 
+; the canonical cases:
+; time  — passes uniformly, has no velocity or acceleration of its own
+; world-frame — the base coordinate system, never displaced by any motion
+; base-joint  — the root of a kinematic chain, fixed to the ground
+; 
+; kramanusara wrt sthira-apeksha = ordinary derivative: d(x)/dt
+; no transport term, no Coriolis, no centripetal correction needed
+; this is the apeksha of velocity, acceleration, jerk in standard physics
+; 
+; in the graph: all existing kramanusara edges (velocity, acceleration, jerk,
+; angular-velocity, angular-acceleration) implicitly use sthira-apeksha
+
+(sangati sthira-apeksha
+  (swarupa apeksha)
+  (drishthanta kaala akasham)
+  (abheda world-space)
+  (yukta kramanusara))

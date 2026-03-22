@@ -1,3 +1,0 @@
--- a = (v - u) / t
-(tantra acceleration-expr (final-velocity initial-velocity time)
-  (div (sub final-velocity initial-velocity) time))

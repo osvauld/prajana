@@ -1,0 +1,6 @@
+; past participle: -ed suffix → verb form (kta-pratyaya)
+; walked → walk, jumped → jump, removed → remove
+; used as guard: word ending in -ed is likely a verb, not a dravya
+
+(bhasha english-kta-ed
+  (sthita english kta-pratyaya))

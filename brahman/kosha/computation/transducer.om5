@@ -1,0 +1,13 @@
+; a finite state transducer: reads input, maintains state, emits output.
+; emit-triples IS a transducer:
+; input:  (word, info) stream from the sentence
+; state:  [current-grade, entity-registry, binding-ledger, grammar-trail]
+; output: triples [subject, edge, object]
+; the state encodes the epistemic position: what has been seen, what is active.
+; each word advances the state and may emit zero or more triples.
+
+(kosha transducer
+  (vishesa computation-varga)
+  (abheda morphism op-reduce)
+  (sthita function recursion sequence domain-computation)
+  (yukta fold map))

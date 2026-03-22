@@ -1,0 +1,8 @@
+(kosha pbr
+  (sthita domain-3d domain-physics shader)
+  (swarupa material)
+  (yukta roughness metallic albedo normal-map)
+  (siddha energy)
+  (abheda photon)
+  (ahara light)
+  (phala color))

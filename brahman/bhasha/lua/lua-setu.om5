@@ -1,0 +1,5 @@
+(bhasha lua-setu
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita domain-lua domain-language krama viveka-krama abhava vivartana aadana-yugma thaalam)
+  (yukta table variable assignment field-access function function-call method-call return loop iteration state-update module-system metatable closure runtime nil raylib-setu english-to-lua lua-to-lua karma))

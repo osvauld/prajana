@@ -1,0 +1,11 @@
+; cluster for electrical circuit quantities: current, voltage, resistance, capacitance, inductance.
+; circuit quantities describe charge flow and energy storage in discrete components.
+; Ohm's law (V = IR), Kirchhoff's laws are the niyama of this cluster.
+; units: ampere, volt, ohm, farad, henry
+; sangati roots
+
+(kosha circuit-varga
+  (vishesa electromagnetism-varga)
+  (swarupa subanta)
+  (matra ampere volt coulomb second)
+  (yukta gati niyama sandhi kaala seema))

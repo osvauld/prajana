@@ -1,0 +1,9 @@
+; cluster for type system concepts: primitive types, composite types, type constructors.
+; types classify values and constrain operations — the niyama of computation.
+; type theory is grounded in logic (math-varga).
+; sangati roots
+
+(kosha type-varga
+  (vishesa cs-varga)
+  (swarupa subanta)
+  (yukta jati niyama viveka seema))

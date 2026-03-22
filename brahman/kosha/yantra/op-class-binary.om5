@@ -1,0 +1,9 @@
+; asymmetric binary operations: sub, div, power, mod, max, min, atan2.
+; unlike monoid ops, these are NOT commutative: f(a,b) ≠ f(b,a).
+; they have inverses (pratipaksha) but no identity element.
+; group-like: inverses exist, but weaker than monoid (no fold guarantee).
+
+(kosha op-class-binary
+  (swarupa yantra dvi-ahara shuddhi)
+  (sthita asama group)
+  (yukta pratipaksha))

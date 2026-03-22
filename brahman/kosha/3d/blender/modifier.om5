@@ -1,0 +1,7 @@
+(kosha modifier
+  (sthita domain-3d)
+  (ahara mesh)
+  (phala mesh)
+  (swarupa stack kriya)
+  (yukta subdivision boolean-operation geometry-nodes)
+  (siddha non-destructive))

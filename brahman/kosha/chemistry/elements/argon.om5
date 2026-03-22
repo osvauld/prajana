@@ -1,0 +1,12 @@
+; Ar. proton-18. period 3, group 18 noble gas. valence: 0.
+; most abundant noble gas on earth (0.93% of atmosphere).
+; chemically inert. used as inert atmosphere in welding, incandescent bulbs.
+; argon-potassium dating: K-40 decays to Ar-40 (half-life 1.25 billion years).
+; used in plasma cutting, laser technology, semiconductor manufacturing.
+; slightly denser than air — sinks to low points.
+
+(kosha argon
+  (sthita element domain-chemistry)
+  (swarupa proton-eighteen noble-gas inert)
+  (yukta valence-zero atmosphere welding semiconductor)
+  (janya nuclear-fusion))

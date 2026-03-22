@@ -1,0 +1,7 @@
+; atomic masses, melting/boiling points, bond energies, pKa values,
+; enthalpies of combustion, electronegativity, physical chemistry constants.
+; all values at standard conditions (298.15 K, 1 atm) unless noted.
+
+(kosha chemistry-constants
+  (vishesa chemistry-varga)
+  (sthita matra niyama))

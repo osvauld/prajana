@@ -1,0 +1,7 @@
+(bhasha physics-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita force velocity domain-ocaml domain-language)
+  (yukta force-apply velocity-step position-step execution ocaml-syntax type-signature)
+  (phala displacement ocaml)
+  (siddha correctness-check))

@@ -1,0 +1,10 @@
+; height is vertical displacement from a reference point (ground).
+; this is the h in PE = mgh: distance above the gravitational reference plane.
+; rotational equivalent: angular-displacement (theta from reference position).
+
+(kosha height
+  (vishesa linear-motion-varga)
+  (abheda displacement)
+  (yukta direction)
+  (janaka potential-energy)
+  (apeksha gravity))

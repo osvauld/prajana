@@ -1,0 +1,11 @@
+; cluster for all energy quantities: the capacity to do work.
+; energy is conserved across all conversions: mechanical, thermal, electrical, chemical.
+; the conservation law is the deepest niyama of physics.
+; units: energy is kg⋅m²⋅s⁻² (joule)
+; sangati roots
+
+(kosha energy-varga
+  (vishesa physics-varga)
+  (swarupa subanta shakti)
+  (matra joule kilogram metre second)
+  (yukta niyama spanda kaala))

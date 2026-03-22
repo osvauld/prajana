@@ -1,0 +1,34 @@
+; a dome is an arch rotated 360° around its vertical axis.
+; the dome is the most efficient large-span structure.
+; pure compression throughout (no tension in a true catenary dome).
+; spans vast spaces with minimal material — a thin shell.
+; 
+; structural behaviour:
+; meridional forces: compression along the lines from apex to base (like arch ribs).
+; hoop forces: in upper part compression (rings holding inward).
+; in lower part tension (rings pulling outward against spreading).
+; this is why masonry domes crack near the base (tension in stone = crack).
+; tension ring at the base resolves the horizontal thrust (iron ring, concrete ring).
+; 
+; the Pantheon (Rome, 125 AD):
+; 43.3m diameter concrete dome. 43.3m height from floor to oculus.
+; the sphere fits exactly — a perfect geometric statement.
+; unreinforced concrete: varying aggregate (pumice at top → lighter → less thrust).
+; the oculus (9m hole at apex): reduces weight. provides light. completes the form.
+; 
+; geodesic dome (Buckminster Fuller):
+; sphere approximated by triangular network.
+; triangles are rigid. the whole structure acts in tension and compression.
+; maximum volume per unit surface area — minimum material for enclosed space.
+; all members approximately equal length — efficient fabrication.
+; 
+; pendentives and squinches:
+; the problem: a circular dome on a square room.
+; pendentive: spherical triangle of masonry filling the corner (Byzantine).
+; squinch: small arch across the corner (Islamic, Romanesque).
+; both transition from square base to circular drum — the geometry solved.
+
+(kosha dome
+  (vishesa architecture-varga civil-varga engineering-varga)
+  (swarupa subanta compression arch)
+  (yukta geometry sphere concrete stone gravity))

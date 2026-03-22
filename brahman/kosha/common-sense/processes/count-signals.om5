@@ -1,0 +1,10 @@
+; question-sentence signal words for count direction.
+; "how many are left" → kshaya (subtraction expected)
+; "how many in total" → vriddhi (addition expected)
+; 
+; distinct from common-sense-events (premise verbs).
+; these are question-level intent signals.
+
+(kosha count-signals
+  (sthita common-sense-varga)
+  (yukta kshaya vriddhi))

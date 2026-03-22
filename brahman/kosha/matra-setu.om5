@@ -1,0 +1,6 @@
+(kosha matra-setu
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita matra setu-kosha)
+  (yukta float int list array scalar string token newton metre second kilogram currency ratio constant planck-constant speed-of-light electron-mass elementary-charge gravitational-constant boltzmann-constant avogadro-constant)
+  (phala float int string))

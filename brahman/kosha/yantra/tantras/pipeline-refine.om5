@@ -1,0 +1,8 @@
+(kosha pipeline-refine
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya asserted-graph)
+  (phala refined-graph)
+  (krama pipeline-expand)
+  (kriya op-fixpoint grade-sparsha)
+  (abheda endomorphism))

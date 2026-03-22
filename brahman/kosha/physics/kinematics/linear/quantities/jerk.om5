@@ -1,0 +1,12 @@
+; kramanusara chain: jerk = d(acceleration)/d(time) = d³(displacement)/d(time)³
+; L·T⁻³: three applications of kramanusara wrt time
+; apeksha: kramanusara wrt physics-time, held in a sthira (fixed) reference frame
+; spanda: jerk is where the derivative chain meets vibration
+; in SHM, jerk = -omega² * velocity — the felt oscillation
+
+(kosha jerk
+  (vishesa linear-motion-varga)
+  (abheda vivartana spanda)
+  (yukta krama)
+  (kramanusara acceleration)
+  (sthita sthira-apeksha))

@@ -1,0 +1,10 @@
+; [a,b] * [c,d] = [ac-bd, ad+bc]
+; real part: ac - bd
+; imaginary part: ad + bc
+
+(mantra complex-mul
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda multiplication)
+  (swarupa bilinear)
+  (krama multiplication subtraction addition))

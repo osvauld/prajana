@@ -1,0 +1,10 @@
+; music-ir — resonance as backend-neutral timed events
+; one of the pratibimba (renderer) family.
+; translates graph energy/relations into structured timing + voice + event data.
+; consumed by Rust orchestrator, native audio, and Raylib playback.
+
+(bhasha music-ir
+  (yukta pratibimba thaalam swara voice event music-ir-setu)
+  (swarupa setu)
+  (phala naada)
+  (sthita domain-sangeetham domain-language))

@@ -1,0 +1,11 @@
+; W = F·d·cos(θ): energy transferred to a system
+
+(kosha work
+  (vishesa mechanical-energy-varga)
+  (abheda energy)
+  (kriya force)
+  (yukta displacement kona antiderivative conservation)
+  (siddha dot-product)
+  (phala scalar)
+  (janaka potential-energy kinetic-energy)
+  (sthita niyama))

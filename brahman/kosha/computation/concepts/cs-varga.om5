@@ -1,0 +1,11 @@
+; root cluster for all computer science domain nodes.
+; cs is grounded in mathematics: type theory, logic, computability.
+; every cs concept inherits domain-cs-sthita through this node.
+; domain identity
+; sangati roots
+
+(kosha cs-varga
+  (sthita domain-cs)
+  (vishesa math-varga)
+  (swarupa subanta)
+  (yukta niyama krama viveka))
