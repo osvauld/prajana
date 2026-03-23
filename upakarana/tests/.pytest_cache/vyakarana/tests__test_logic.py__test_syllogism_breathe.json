@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_syllogism_breathe",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.133
+}

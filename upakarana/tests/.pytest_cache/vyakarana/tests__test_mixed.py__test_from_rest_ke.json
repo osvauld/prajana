@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_from_rest_ke",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.48
+}

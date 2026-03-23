@@ -1,0 +1,27 @@
+{
+  "test": "tests/test_edges.py::TestInverseGraphStructure::test_ke_mantra_knows_inputs_and_output",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"kinetic-energy-mantra\" \"janya\"",
+      "output": [
+        "velocity",
+        "mass"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"kinetic-energy-mantra\" \"phala\"",
+      "output": [
+        "kinetic-energy"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

@@ -1,0 +1,21 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningPureMath::test_graph_ops_inventory",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"graph-varga\" \"karma\"",
+      "output": [
+        "spanning-tree",
+        "shortest-path",
+        "graph-walk",
+        "depth-first",
+        "breadth-first"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

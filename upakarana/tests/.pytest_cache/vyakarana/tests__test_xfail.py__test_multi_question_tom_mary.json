@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_multi_question_tom_mary",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.224,
+  "xfail": {
+    "reason": "multi_question: two questions, two answers",
+    "strict": true,
+    "gate": "multi_question: multiple questions in one paragraph",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 383
+  }
+}

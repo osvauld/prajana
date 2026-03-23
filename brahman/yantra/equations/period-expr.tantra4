@@ -1,5 +1,0 @@
--- T = 2π/ω
-(tantra period-expr (angular-velocity)
-  (pi-str (nth (split-numeric (shabda "physics-constants" "pi")) 0))
-  (pi-val (to-number pi-str))
-  (div (double pi-val) angular-velocity))

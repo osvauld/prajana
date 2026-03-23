@@ -1,0 +1,82 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningInverse::test_all_krama_ops_have_inverses",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"half\" \"pratipaksha\"",
+      "output": [
+        "double"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"double\" \"pratipaksha\"",
+      "output": [
+        "half"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"square\" \"pratipaksha\"",
+      "output": [
+        "square-root"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"square-root\" \"pratipaksha\"",
+      "output": [
+        "square"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"multiplication\" \"pratipaksha\"",
+      "output": [
+        "division"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"division\" \"pratipaksha\"",
+      "output": [
+        "reciprocal",
+        "reciprocal",
+        "multiplication"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"addition\" \"pratipaksha\"",
+      "output": [
+        "subtraction"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"subtraction\" \"pratipaksha\"",
+      "output": [
+        "addition"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_edges.py::TestPoorvaEdges::test_aarambham_preceded_by_abhava",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"aarambham\" \"poorva\"",
+      "output": [
+        "abhava",
+        "avrti"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

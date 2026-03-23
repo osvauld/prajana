@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_missing_data_no_match",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.195
+}

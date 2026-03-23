@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestLakshanaOpValidation::test_subtraction_has_inverse",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"subtraction\" \"pratipaksha\"",
+      "output": [
+        "addition"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

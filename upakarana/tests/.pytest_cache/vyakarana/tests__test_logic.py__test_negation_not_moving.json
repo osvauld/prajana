@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_negation_not_moving",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.085
+}

@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_evaluator.py::test_let_binding",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "let x = add 1 2 in x",
+      "output": 3,
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

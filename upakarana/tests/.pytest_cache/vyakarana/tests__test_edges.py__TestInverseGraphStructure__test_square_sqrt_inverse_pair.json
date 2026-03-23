@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_edges.py::TestInverseGraphStructure::test_square_sqrt_inverse_pair",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"square\" \"pratipaksha\"",
+      "output": [
+        "square-root"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"square-root\" \"pratipaksha\"",
+      "output": [
+        "square"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

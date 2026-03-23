@@ -1,0 +1,38 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningClassification::test_what_else_can_i_compute_from_same_inputs",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"mass\" \"janya\"",
+      "output": [
+        "newton-second-law-motion",
+        "momentum-mantra",
+        "mass-density-mantra",
+        "potential-energy-mantra",
+        "kinetic-energy-mantra",
+        "centripetal-force-mantra",
+        "heating",
+        "falling"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk-in \"velocity\" \"janya\"",
+      "output": [
+        "acceleration-kramanusara",
+        "acceleration-kramanusara",
+        "angular-velocity-mantra",
+        "momentum-mantra",
+        "kinetic-energy-mantra",
+        "centripetal-force-mantra"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

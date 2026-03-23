@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningPureMath::test_distributivity_connects_two_vargas",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"distributivity\" \"lakshana\"",
+      "output": [
+        "algebra-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

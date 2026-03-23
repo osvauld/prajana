@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_logic_count_all_wings",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.193
+}

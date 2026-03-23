@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_acceleration_from_suvat",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.511
+}

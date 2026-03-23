@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_entity.py::test_three_entity_specific_query",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.457
+}

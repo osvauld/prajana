@@ -8,10 +8,10 @@ import os
 from collections import defaultdict
 from pathlib import Path
 
-from upakarana.paths import V2_DIR
+from upakarana.paths import TESTS_DIR
 from upakarana.testing.gates import gate_from_reason
 
-DEFAULT_CACHE = Path(V2_DIR) / ".pytest_cache" / "vyakarana"
+DEFAULT_CACHE = TESTS_DIR / ".pytest_cache" / "vyakarana"
 
 
 def load(cache_dir=None):
@@ -76,7 +76,7 @@ def slowest_calls(entries, top_n=10):
     for e in entries:
         for call in e.get("calls", []):
             all_calls.append({
-                "test": e.get("name", "?"),
+                "test": e.get("test", "?"),
                 "method": call.get("method", "?"),
                 "input": call.get("input", "")[:80],
                 "elapsed_ms": call.get("elapsed_ms", 0),

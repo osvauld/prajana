@@ -1,0 +1,136 @@
+"""test_comparison.py — viveka (direct), superlative, computed, proportional, ranking.
+"""
+
+
+# ── direct comparison: raw values ─────────────────────────────────────────────
+
+
+def test_viveka_heavier(vy):
+    """Direct mass comparison: ball-A (5) > ball-B (3)"""
+    r = vy.answer("ball-A has mass 5. ball-B has mass 3. which is heavier")
+    assert "ball-A" in r
+
+
+def test_viveka_lighter(vy):
+    """Inverse: ball-B is lighter"""
+    r = vy.answer("ball-A has mass 5. ball-B has mass 3. which is lighter")
+    assert "ball-B" in r
+
+
+def test_viveka_faster(vy):
+    """Velocity comparison"""
+    r = vy.answer("car-A has velocity 80. car-B has velocity 60. which is faster")
+    assert "car-A" in r
+
+
+def test_viveka_slower(vy):
+    r = vy.answer("car-A has velocity 80. car-B has velocity 60. which is slower")
+    assert "car-B" in r
+
+
+def test_viveka_equal(vy):
+    """Equal values: both should be mentioned or tied response"""
+    r = vy.answer("ball-A has mass 5. ball-B has mass 5. which is heavier")
+    assert "ball-A" in r or "ball-B" in r or "equal" in r.lower() or "same" in r.lower()
+
+
+# ── superlative: three entities ───────────────────────────────────────────────
+
+
+def test_superlative_lightest(vy):
+    """Three balls: lightest is ball-B (mass 3)"""
+    r = vy.answer("ball-A has mass 5. ball-B has mass 3. ball-C has mass 7. which is lightest")
+    assert "ball-B" in r
+
+
+def test_superlative_heaviest(vy):
+    """Three balls: heaviest is ball-C (mass 7)"""
+    r = vy.answer("ball-A has mass 5. ball-B has mass 3. ball-C has mass 7. which is heaviest")
+    assert "ball-C" in r
+
+
+def test_superlative_fastest(vy):
+    r = vy.answer(
+        "car-A has velocity 30. car-B has velocity 50. car-C has velocity 20. which is fastest"
+    )
+    assert "car-B" in r
+
+
+# ── computed comparison: derive then compare ──────────────────────────────────
+
+
+def test_compute_compare_ke(vy):
+    """ball-A KE=9, ball-B KE=25. ball-B has more KE"""
+    r = vy.answer(
+        "ball-A has mass 2 and velocity 3. ball-B has mass 2 and velocity 5. "
+        "which has more kinetic energy"
+    )
+    assert "ball-B" in r
+
+
+def test_compute_compare_ke_values_present(vy):
+    """Both KE values appear in the answer"""
+    r = vy.answer(
+        "ball-A has mass 2 and velocity 3. ball-B has mass 2 and velocity 5. "
+        "which has more kinetic energy"
+    )
+    assert "9" in r or "25" in r
+
+
+def test_compute_compare_momentum(vy):
+    """ball-A p=6, ball-B p=20. ball-B has more momentum"""
+    r = vy.answer(
+        "ball-A has mass 3 and velocity 2. ball-B has mass 4 and velocity 5. "
+        "which has more momentum"
+    )
+    assert "ball-B" in r
+
+
+# ── count comparison ──────────────────────────────────────────────────────────
+
+
+def test_count_compare_jars(vy):
+    """jar-A=8, jar-B=12 → jar-B has more"""
+    r = vy.answer("jar-A has 8 marbles. jar-B has 12 marbles. which jar has more marbles")
+    assert "jar-B" in r
+
+
+def test_count_compare_after_change(vy):
+    """box-A: 5+3=8, box-B: 6 → box-A has more"""
+    r = vy.answer(
+        "box-A has 5 items. 3 more were added to box-A. box-B has 6 items. which has more items"
+    )
+    assert "box-A" in r or "box-a" in r.lower()
+
+
+# ── proportional reasoning ────────────────────────────────────────────────────
+
+
+def test_proportional_ke_double_velocity(vy):
+    """Doubling velocity → 4x KE. ball-A v=10 KE=250, ball-B v=20 KE=1000"""
+    r = vy.answer(
+        "ball-A has mass 5 and velocity 10. ball-B has mass 5 and velocity 20. "
+        "find kinetic energy of ball-A. find kinetic energy of ball-B"
+    )
+    assert "250" in r and "1000" in r
+
+
+def test_proportional_momentum_double_mass(vy):
+    """Doubling mass → 2x momentum"""
+    r = vy.answer(
+        "ball-A has mass 3 and velocity 10. ball-B has mass 6 and velocity 10. "
+        "find momentum of ball-A. find momentum of ball-B"
+    )
+    assert "30" in r and "60" in r
+
+
+# ── relative comparison ────────────────────────────────────────────────────────
+
+
+def test_relative_velocity(vy):
+    """ball-A v=10, ball-B v=3 → relative velocity = 7"""
+    r = vy.answer(
+        "ball-A has velocity 10. ball-B has velocity 3. "
+        "find relative velocity of ball-A with respect to ball-B"
+    )
+    assert "7" in r

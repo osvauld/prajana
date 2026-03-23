@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_is_copula_binds",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.016
+}

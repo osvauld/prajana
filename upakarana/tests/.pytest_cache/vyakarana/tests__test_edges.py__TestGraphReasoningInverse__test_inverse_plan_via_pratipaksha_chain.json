@@ -1,0 +1,35 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningInverse::test_inverse_plan_via_pratipaksha_chain",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"half\" \"pratipaksha\"",
+      "output": [
+        "double"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"multiplication\" \"pratipaksha\"",
+      "output": [
+        "division"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"square\" \"pratipaksha\"",
+      "output": [
+        "square-root"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

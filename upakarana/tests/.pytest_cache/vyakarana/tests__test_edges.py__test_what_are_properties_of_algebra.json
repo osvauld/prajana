@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_edges.py::test_what_are_properties_of_algebra",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.208,
+  "xfail": {
+    "reason": "lakshana_query: no tantra walks lakshana yet",
+    "strict": true,
+    "gate": "other:test_edges",
+    "file": "/home/abe/agent_x/upakarana/tests/test_edges.py",
+    "line": 527
+  }
+}

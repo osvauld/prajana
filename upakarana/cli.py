@@ -18,7 +18,7 @@ def cmd_om(args):
     if args.action == "summary":
         _print_json(om5.summary(nodes))
     elif args.action == "search":
-        results = om5.search(nodes, args.pattern)
+        results = om5.search(nodes, args.pattern or args.name)
         for r in results:
             print(f"  {r['name']:30s} [{r['layer']}] {r['domain']}")
             for m in r["matches"][:3]:
@@ -49,7 +49,7 @@ def cmd_tantra(args):
     if args.action == "summary":
         _print_json(tantra4.summary(tantras))
     elif args.action == "search":
-        results = tantra4.search(tantras, args.pattern)
+        results = tantra4.search(tantras, args.pattern or args.name)
         for r in results:
             print(f"  {r['name']:30s} [{r['group']}]")
             for m in r["matches"][:3]:
@@ -85,7 +85,7 @@ def cmd_shabda(args):
     if args.action == "summary":
         _print_json(shabda.summary(nodes))
     elif args.action == "search":
-        results = shabda.search(nodes, args.pattern)
+        results = shabda.search(nodes, args.pattern or args.name)
         for r in results:
             print(f"  {r['name']}")
     elif args.action == "node":
@@ -100,6 +100,46 @@ def cmd_shabda(args):
         print(f"{len(gaps)} nodes with kriya/phala but no shabda:")
         for g in gaps[:20]:
             print(f"  {g['name']:30s} [{g['layer']}] {g['domain']}")
+
+    elif args.action == "roles":
+        from upakarana.analysis.signals import shabda_roles
+        r = shabda_roles()
+
+        print("── Existing roles → pipeline outcome ──")
+        for role, outcome in r["role_outcomes"].items():
+            nodes_with_role = r["by_role"].get(role, [])
+            all_words = [w for n in nodes_with_role for w in n["words"]]
+            print(f"\n  [{role}] ({len(nodes_with_role)} nodes)  →  {outcome}")
+            if all_words:
+                print(f"    words: {', '.join(sorted(set(all_words))[:12])}")
+            else:
+                for n in nodes_with_role[:5]:
+                    print(f"    {n['name']}")
+
+        print("\n── Missing roles (no pipeline wiring yet) ──")
+        for role, outcome in r["missing_roles"].items():
+            print(f"  [{role}]  →  {outcome}")
+
+        print(f"\n── Shunya-state nodes ({len(r['shunya_states'])}) ──")
+        for s in r["shunya_states"]:
+            words = ', '.join(s['words']) if s['words'] else "NO WORD KEY"
+            abheda = ', '.join(s['abheda']) if s['abheda'] else "—"
+            flag = "" if s["has_word"] else " ← NEEDS word:"
+            print(f"  {s['name']:35s}  abheda={abheda}  words={words}{flag}")
+
+        print(f"\n── Word collisions: {r['collision_count']} ambiguous words ──")
+        for w, ns in sorted(r["collisions"].items())[:15]:
+            print(f"  {w:20s} → {list(set(ns))}")
+
+    elif args.action == "coverage":
+        from upakarana.analysis.signals import shabda_roles
+        r = shabda_roles()
+        print("── Word coverage by domain ──")
+        print(f"  {'domain':15s}  {'coverage':10s}  nodes")
+        for domain, stats in r["domain_coverage"].items():
+            pct = stats["with_word"] * 100 // stats["total"] if stats["total"] else 0
+            bar = "█" * (pct // 10) + "░" * (10 - pct // 10)
+            print(f"  {domain:15s}  {bar}  {pct:3d}%  ({stats['with_word']}/{stats['total']})")
 
 
 # --- Engine commands ---
@@ -182,8 +222,17 @@ def cmd_test(args):
     elif args.action == "failed":
         from upakarana.testing.cache import load, failed
         _, entries = load()
-        for e in failed(entries):
-            print(f"  {e.get('name', '?')}: {e.get('error', '?')[:80]}")
+        fl = failed(entries)
+        print(f"{len(fl)} failed tests:")
+        for e in fl:
+            test = e.get("test", "?")
+            fail = e.get("failure") or {}
+            expected = fail.get("expected", "")
+            got = fail.get("got", "")
+            detail = f"expected={expected}" if expected else ""
+            if got:
+                detail += f" got={got[:60]}"
+            print(f"  {test:60s}  {detail}")
 
 
 # --- Cache commands ---
@@ -381,7 +430,7 @@ def build_parser():
 
     # shabda
     s = sub.add_parser("shabda", help="Shabda queries")
-    s.add_argument("action", choices=["summary", "search", "node", "gaps"])
+    s.add_argument("action", choices=["summary", "search", "node", "gaps", "roles", "coverage"])
     s.add_argument("name", nargs="?")
     s.add_argument("--pattern", "-p")
 
@@ -441,7 +490,7 @@ def build_parser():
         "flow", "fingerprint",
         "swarupa", "components",
         "ring",
-        "signals", "patterns", "grounding", "vocabulary",
+        "signals", "signals-gap", "patterns", "grounding", "vocabulary",
     ])
     s.add_argument("name", nargs="?")
     s.add_argument("--layer", "-l")
@@ -575,6 +624,40 @@ def cmd_analyze(args):
             print(f"  {s['signal']:25s} [{status:6s}] ← {prods:30s} → {cons}")
         if result["dead"]:
             print(f"\n{len(result['dead'])} dead signals (written, never read)")
+
+    elif args.action == "signals-gap":
+        from upakarana.analysis.signals import signals_gap
+        r = signals_gap()
+
+        print("── Dispatch modes in detect-signals ──")
+        for m in r["dispatch_modes"]:
+            print(f"  {m}")
+
+        print("\n── Intent words (role=intent → dispatch trigger) ──")
+        for name, d in sorted(r["intent_words"].items()):
+            status = "wired" if d["wired"] else "UNWIRED"
+            print(f"  {name:25s} [{status}]  words: {', '.join(d['words'][:6])}")
+
+        print("\n── Shunya-state nodes (yukta=shunya → absence signal) ──")
+        for name, d in sorted(r["shunya_nodes"].items()):
+            wired = "wired" if d["wired_in_detect"] else "UNWIRED"
+            words = ', '.join(d['words']) if d['words'] else "NO WORD KEY"
+            abheda = ', '.join(d['abheda']) if d['abheda'] else "—"
+            print(f"  {name:30s} [{wired}]  abheda={abheda}  words={words}")
+
+        print("\n── Negation/pratishedha nodes ──")
+        for name, d in sorted(r["negation_nodes"].items()):
+            wired = "wired" if d["wired_in_detect"] else "UNWIRED"
+            print(f"  {name:25s} [{wired}]  words: {', '.join(d['words'])}  eval={d['eval']}")
+
+        print(f"\n── Pratipaksha pairs in graph: {r['pratipaksha_pairs_count']} ──")
+        for a, b in r["pratipaksha_sample"]:
+            print(f"  {a} ↔ {b}")
+
+        print("\n── Gaps ──")
+        print(f"  shunya nodes unwired from detect-signals: {r['gaps']['shunya_unwired']}")
+        print(f"  shunya nodes with no word key:            {r['gaps']['shunya_no_word']}")
+        print(f"  negation nodes unwired:                   {r['gaps']['negation_unwired']}")
 
     elif args.action == "patterns":
         from upakarana.analysis.tantras import classify_patterns
@@ -765,6 +848,7 @@ def _all_possible_commands():
         "om summary", "om search", "om source", "om domain", "om with-relation",
         "tantra summary", "tantra search", "tantra source", "tantra group", "tantra callgraph",
         "shabda summary", "shabda search", "shabda node", "shabda gaps",
+        "shabda roles", "shabda coverage",
         "vy start", "vy stop", "vy status", "vy reload", "vy eval", "vy ask", "vy walk", "vy inspect",
         "test list", "test summary", "test run", "test failed",
         "cache summary", "cache gates", "cache slow",
@@ -773,7 +857,7 @@ def _all_possible_commands():
         "ocaml consolidate", "ocaml summary", "ocaml functions", "ocaml state",
         "q op", "q ops", "q dispatch", "q missing", "q explain", "q overview", "q node", "q eval",
         "a ghosts", "a incoming", "a hubs", "a orphans", "a flow", "a fingerprint",
-        "a swarupa", "a components", "a ring", "a siblings", "a signals",
+        "a swarupa", "a components", "a ring", "a siblings", "a signals", "a signals-gap",
         "a patterns", "a grounding", "a vocabulary",
         "usage report", "usage never",
     ]

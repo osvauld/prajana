@@ -350,97 +350,218 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     ) VNone)
 
   | "krama-path" ->
-    (* Given a mantra name and a solve-target variable name,
-       parse the krama s-expr and return the list of op nodes
-       on the path from root to that variable.
+    (* Given a mantra name, solve-target, and bindings,
+       parse the krama s-expr and return [op, arg-index, sibling-value]
+       triples on the path from root to that variable.
+       sibling-value = the evaluated result of the other branch at each binary op.
        e.g. krama "half ( mul mass ( square velocity ) )"
-            target "velocity"
-            → ["half"; "mul"; "square"] *)
+            target "mass", bindings [["velocity","5."]]
+            → [["half","0",""], ["mul","0","25"]]
+       The sibling (square velocity) is evaluated to 25 using bindings.
+       For unary ops, sibling-value is "". *)
     let mantra_name = eval_str 0 in
     let target = eval_str 1 in
+    let bindings_v = eval_lst 2 in
     Some (with_node k mantra_name (fun n ->
       let krama = n.krama in
       if krama = "" then VList []
       else
-        let toks = String.split_on_char ' ' krama
-          |> List.filter (fun s -> s <> "") in
-        (* Build set of janya (input variable) names for this mantra *)
+        (* Build bindings map *)
+        let binds = Hashtbl.create 8 in
+        List.iter (fun pair ->
+          match pair with
+          | VList [VString concept; VFloat v] ->
+            Hashtbl.replace binds concept v
+          | VList [VString concept; v] ->
+            Hashtbl.replace binds concept (as_float v)
+          | _ -> ()
+        ) bindings_v;
+        (* Also bind constants *)
         let janya_names = List.filter_map (fun e ->
           if e.source = mantra_name && e.relation = janya
           then Some e.target else None
         ) n.edges in
-        (* A token is an op if it's not a janya variable and not a paren *)
+        List.iter (fun jn ->
+          if not (Hashtbl.mem binds jn) then begin
+            let sh = Vidya.read_shabda k jn in
+            match List.assoc_opt "constants-key" sh with
+            | Some ck ->
+              let csh = Vidya.read_shabda k "physics-constants" in
+              (match List.assoc_opt ck csh with
+               | Some vs ->
+                 (try Hashtbl.replace binds jn (float_of_string (String.trim vs))
+                  with _ -> ())
+               | None -> ())
+            | None -> ()
+          end
+        ) janya_names;
+        let toks = String.split_on_char ' ' krama
+          |> List.filter (fun s -> s <> "") in
         let is_op tok =
           tok <> "(" && tok <> ")" &&
           not (List.mem tok janya_names)
         in
-        (* parse_expr: parse one expression, return (path option, remaining tokens).
-           An expression is either:
-           - a variable name (leaf)
-           - an op followed by its args (some may be sub-exprs in parens)
-           - ( expr ) — parenthesized sub-expression *)
+        (* Resolve op name → eval name *)
+        let resolve_op tok =
+          match !eval_ctx with
+          | Some ctx ->
+            (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
+             | Some _ -> tok
+             | None ->
+               let sh = Vidya.read_shabda k tok in
+               (match List.assoc_opt "eval" sh with
+                | Some ev -> String.trim ev
+                | None -> tok))
+          | None -> tok
+        in
+        (* Evaluate a krama sub-expression with bindings *)
+        let rec eval_sub toks =
+          match toks with
+          | [] -> VNone, []
+          | "(" :: rest ->
+            let (v, rest2) = eval_sub rest in
+            let rest3 = match rest2 with ")" :: r -> r | r -> r in
+            v, rest3
+          | ")" :: rest -> VNone, rest
+          | tok :: rest ->
+            if Hashtbl.mem binds tok then
+              VFloat (Hashtbl.find binds tok), rest
+            else
+              match float_of_string_opt tok with
+              | Some f -> VFloat f, rest
+              | None ->
+                let eval_name = resolve_op tok in
+                let arity =
+                  let sh = Vidya.read_shabda k tok in
+                  match List.assoc_opt "arity" sh with
+                  | Some a -> (try int_of_string (String.trim a) with _ -> 2)
+                  | None ->
+                    if List.mem eval_name ["half";"double";"square";"sqrt";
+                       "neg";"reciprocal";"abs";"floor";"ceil";
+                       "sin";"cos";"tan";"asin";"acos";"atan";
+                       "log";"exp"] then 1 else 2
+                in
+                let args = ref [] in
+                let remaining = ref rest in
+                for _ = 1 to arity do
+                  let (v, r) = eval_sub !remaining in
+                  args := v :: !args;
+                  remaining := r
+                done;
+                let arg_vals = List.rev !args in
+                let arg_exprs = List.map (fun v -> match v with
+                  | VFloat f -> Lit f | _ -> Lit 0.0) arg_vals in
+                let lit_eval _k _e expr = match expr with
+                  | Lit f -> VFloat f | StrLit s -> VString s
+                  | BoolLit b -> VBool b | _ -> VNone in
+                let result = match !_eval_pure_op_raw lit_eval k
+                  (Hashtbl.create 0) eval_name arg_exprs with
+                | Some v -> v
+                | None -> VNone
+                in
+                result, !remaining
+        in
+        (* Skip a sub-expression without evaluating, return remaining tokens *)
+        let rec _skip_expr toks =
+          match toks with
+          | [] -> []
+          | ")" :: _ -> toks
+          | "(" :: rest ->
+            let rest2 = _skip_expr rest in
+            let rest3 = match rest2 with ")" :: r -> r | r -> r in
+            rest3
+          | tok :: rest ->
+            if is_op tok then
+              let sh = Vidya.read_shabda k tok in
+              let arity = match List.assoc_opt "arity" sh with
+                | Some a -> (try int_of_string (String.trim a) with _ -> 2)
+                | None -> let en = resolve_op tok in
+                  if List.mem en ["half";"double";"square";"sqrt";
+                     "neg";"reciprocal";"abs";"floor";"ceil";
+                     "sin";"cos";"tan";"asin";"acos";"atan";
+                     "log";"exp"] then 1 else 2
+              in
+              let remaining = ref rest in
+              for _ = 1 to arity do
+                remaining := _skip_expr !remaining
+              done;
+              !remaining
+            else rest (* leaf variable — just skip *)
+        in
+        (* Evaluate a sub-expression from token list, return (value, remaining) *)
+        let eval_sibling toks =
+          let (v, rest) = eval_sub toks in
+          let s = match v with
+            | VFloat f ->
+              let i = int_of_float f in
+              if Float.equal (float_of_int i) f then string_of_int i
+              else Printf.sprintf "%g" f
+            | VString s -> s
+            | _ -> ""
+          in
+          s, rest
+        in
+        (* parse_expr: return (path option, remaining tokens).
+           Path is a list of (op_name, arg_index, sibling_value) triples. *)
         let rec parse_expr toks =
           match toks with
           | [] -> None, []
           | ")" :: _ -> None, toks
           | "(" :: rest ->
             let (result, rest2) = parse_expr rest in
-            (* consume closing ) *)
             let rest3 = match rest2 with ")" :: r -> r | r -> r in
             result, rest3
           | tok :: rest ->
             if tok = target then Some [], rest
             else if is_op tok then
-              (* collect args until ) or end, searching each for target *)
-              let rec collect_args remaining =
-                match remaining with
-                | [] -> None, []
-                | ")" :: _ -> None, remaining
-                | _ ->
-                  let (found, rest2) = parse_expr remaining in
-                  (match found with
-                   | Some ops -> Some (tok :: ops), rest2
-                   | None -> collect_args rest2)
+              let sh = Vidya.read_shabda k tok in
+              let arity = match List.assoc_opt "arity" sh with
+                | Some a -> (try int_of_string (String.trim a) with _ -> 2)
+                | None -> let en = resolve_op tok in
+                  if List.mem en ["half";"double";"square";"sqrt";
+                     "neg";"reciprocal";"abs";"floor";"ceil";
+                     "sin";"cos";"tan";"asin";"acos";"atan";
+                     "log";"exp"] then 1 else 2
               in
-              collect_args rest
+              if arity = 1 then begin
+                let (found, rest2) = parse_expr rest in
+                match found with
+                | Some ops -> Some ((tok, 0, "") :: ops), rest2
+                | None -> None, rest2
+              end else begin
+                (* Binary op: parse first arg *)
+                let (found1, rest2) = parse_expr rest in
+                match found1 with
+                | Some ops ->
+                  (* Target in arg 0 — evaluate the sibling (arg 1) *)
+                  let (sib_val, rest3) = eval_sibling rest2 in
+                  Some ((tok, 0, sib_val) :: ops), rest3
+                | None ->
+                  (* Target not in arg 0 — parse arg 1 *)
+                  let (found2, rest3) = parse_expr rest2 in
+                  (match found2 with
+                   | Some ops ->
+                     (* Target in arg 1 — need sibling value from arg 0.
+                        But we already consumed arg 0! We need to re-eval it.
+                        Restart: skip arg0, but first eval it. *)
+                     (* We already advanced past arg0 (rest → rest2).
+                        Re-tokenize arg0 from original rest to eval it. *)
+                     (* Actually, arg0 was parsed by parse_expr which consumed tokens.
+                        We need to evaluate the same tokens. Let's re-eval from rest. *)
+                     let (sib_val, _) = eval_sibling rest in
+                     Some ((tok, 1, sib_val) :: ops), rest3
+                   | None -> None, rest3)
+              end
             else
-              (* variable but not target — skip *)
               None, rest
         in
         let (result, _) = parse_expr toks in
         match result with
-        | Some ops -> VList (List.map (fun s -> VString s) ops)
+        | Some ops -> VList (List.map (fun (op, idx, sib) ->
+            VList [VString op; VString (string_of_int idx); VString sib]
+          ) ops)
         | None -> VList []
     ) (VList []))
-
-  | "op-pratipaksha" ->
-    (* Given an op eval name (e.g. "mul"), find the node via eval_index,
-       walk its pratipaksha edge, return the inverse op's eval name.
-       e.g. "mul" → multiplication → pratipaksha → division → "div"
-       O(1) via eval_index — no graph scanning. *)
-    let eval_name = eval_str 0 in
-    let node_name = match find k eval_name with
-      | Some _ -> eval_name
-      | None ->
-        match !eval_ctx with
-        | Some ctx ->
-          (match Hashtbl.find_opt ctx.ctx_index.eval_index eval_name with
-           | Some name -> name | None -> "")
-        | None -> ""
-    in
-    Some (if node_name = "" then VString ""
-    else
-      let inv_nodes = List.filter_map (fun e ->
-        if e.source = node_name && e.relation = pratipaksha
-        then Some e.target else None
-      ) (match find k node_name with Some n -> n.edges | None -> []) in
-      match inv_nodes with
-      | inv_name :: _ ->
-        let sh = Vidya.raw_shabda_for_node k inv_name in
-        (match List.assoc_opt "eval" sh with
-         | Some ev -> VString (String.trim ev)
-         | None -> VString inv_name)
-      | [] -> VString "")
 
   | "exists" ->
     Some (VBool (as_bool (eval_arg 0)))
@@ -702,8 +823,7 @@ let register_primitive_arities () =
   r "node-slokas"         1;
   r "node-krama"          1;
   r "eval-krama"          2;
-  r "krama-path"          2;
-  r "op-pratipaksha"      1;
+  r "krama-path"          3;
   r "word-node"           1;
   r "eval-node"           1;
   r "lookup-word"         1;

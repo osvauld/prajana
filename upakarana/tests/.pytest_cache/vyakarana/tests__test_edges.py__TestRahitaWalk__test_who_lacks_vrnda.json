@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestRahitaWalk::test_who_lacks_vrnda",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"vrnda\" \"rahita\"",
+      "output": [
+        "primitive-type"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

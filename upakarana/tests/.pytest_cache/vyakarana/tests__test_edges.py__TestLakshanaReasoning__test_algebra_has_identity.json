@@ -1,0 +1,23 @@
+{
+  "test": "tests/test_edges.py::TestLakshanaReasoning::test_algebra_has_identity",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"algebra-varga\" \"lakshana\"",
+      "output": [
+        "inverse-element",
+        "identity-element",
+        "closure",
+        "filtration",
+        "distributivity",
+        "commutativity",
+        "associativity"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

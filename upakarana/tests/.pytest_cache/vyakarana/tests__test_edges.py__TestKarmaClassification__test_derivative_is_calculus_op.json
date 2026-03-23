@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestKarmaClassification::test_derivative_is_calculus_op",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"derivative\" \"karma\"",
+      "output": [
+        "calculus-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningRobotics::test_torque_mantra_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"torque\" \"phala\"",
+      "output": [
+        "torque-mantra"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

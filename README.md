@@ -11,7 +11,7 @@ a graph. 1579 nodes, 46 edge types, ~11000 edges. each node is a concept with a 
 it answers questions. not by lookup — by structural derivation. you give it a sentence in English, it resolves each word to a graph node, finds the right formula (mantra), executes it, and returns a proven answer with full attribution.
 
 ```bash
-python3 -m tools ask "mass is 5 and velocity is 10. find kinetic energy"
+.venv/bin/python3 -m upakarana ask "mass is 5 and velocity is 10. find kinetic energy"
 ```
 ```
 [we seek] : kinetic-energy.
@@ -31,12 +31,12 @@ it can also count, compare, chain multi-step derivations, handle multi-entity pr
 cd vyakarana && opam install . --deps-only && dune build && cd ..
 
 # ask questions (auto-starts the graph server)
-python3 -m tools ask "mass is 10 and acceleration is 5. find force"
-python3 -m tools ask "10 birds sat on a tree. 3 flew away. how many are left?"
-python3 -m tools ask "ball-A has mass 5. ball-B has mass 3. which is heavier?"
+.venv/bin/python3 -m upakarana ask "mass is 10 and acceleration is 5. find force"
+.venv/bin/python3 -m upakarana ask "10 birds sat on a tree. 3 flew away. how many are left?"
+.venv/bin/python3 -m upakarana ask "ball-A has mass 5. ball-B has mass 3. which is heavier?"
 
 # interactive repl
-python3 -m tools ask
+.venv/bin/python3 -m upakarana ask
 ```
 
 the `ask` command starts the vyakarana server automatically. the first call takes a moment; subsequent calls are fast.
@@ -45,50 +45,50 @@ the `ask` command starts the vyakarana server automatically. the first call take
 
 ## how to use the tools
 
-everything runs through `python3 -m tools [mode] [args]`. this is the main interface.
+everything runs through `.venv/bin/python3 -m upakarana [mode] [args]` (analysis, engine, tests) and `.venv/bin/python3 -m pathram2 [cmd]` (documentation, journaling). always use the project venv.
 
 ### ask questions
 
 ```bash
-python3 -m tools ask "ball has mass 5 velocity 10. find kinetic energy"
-python3 -m tools ask "a bird has 8 apples. 3 flew away. how many are left?"
-python3 -m tools ask "ball-A has mass 5. ball-B has mass 3. which is heavier?"
-python3 -m tools ask   # interactive repl — keep asking
+.venv/bin/python3 -m upakarana ask "ball has mass 5 velocity 10. find kinetic energy"
+.venv/bin/python3 -m upakarana ask "a bird has 8 apples. 3 flew away. how many are left?"
+.venv/bin/python3 -m upakarana ask "ball-A has mass 5. ball-B has mass 3. which is heavier?"
+.venv/bin/python3 -m upakarana ask   # interactive repl — keep asking
 ```
 
 ### inspect the live graph
 
 ```bash
-python3 -m tools vy inspect momentum          # full node: satya, shabda, edges
-python3 -m tools vy walk 'addition abheda'    # transitive chain walk
-python3 -m tools vy triples mass              # all triples touching a node
-python3 -m tools vy eval 'shabda "addition" "eval"'   # evaluate any expression
-python3 -m tools vy mantras 'ball has mass 5. find kinetic energy'  # which mantras fire
-python3 -m tools vy trace 'ball has mass 5. find kinetic energy'    # pipeline stages
+.venv/bin/python3 -m upakarana vy inspect momentum          # full node: satya, shabda, edges
+.venv/bin/python3 -m upakarana vy walk 'addition abheda'    # transitive chain walk
+.venv/bin/python3 -m upakarana vy triples mass              # all triples touching a node
+.venv/bin/python3 -m upakarana vy eval 'shabda "addition" "eval"'   # evaluate any expression
+.venv/bin/python3 -m upakarana vy mantras 'ball has mass 5. find kinetic energy'  # which mantras fire
+.venv/bin/python3 -m upakarana vy trace 'ball has mass 5. find kinetic energy'    # pipeline stages
 ```
 
 ### analyze the knowledge base (no server needed)
 
 ```bash
-python3 -m tools om summary                   # 1579 nodes across 4 layers
-python3 -m tools om domain kosha/physics      # browse a domain
-python3 -m tools om search "pratipaksha"      # regex search across all nodes
-python3 -m tools tantra summary               # 75 tantras, call structure
-python3 -m tools tantra lint                  # find hardcoded refs, word lists
-python3 -m tools shabda summary               # word index, shabda keys, gaps
-python3 -m tools shabda lookup heavier        # trace a word to its graph node
-python3 -m tools shabda eval                  # all fireable operations
-python3 -m tools search "viveka"              # search both tantras and om
+.venv/bin/python3 -m upakarana om summary                   # 1579 nodes across 4 layers
+.venv/bin/python3 -m upakarana om domain kosha/physics      # browse a domain
+.venv/bin/python3 -m upakarana om search "pratipaksha"      # regex search across all nodes
+.venv/bin/python3 -m upakarana tantra summary               # 75 tantras, call structure
+.venv/bin/python3 -m upakarana tantra lint                  # find hardcoded refs, word lists
+.venv/bin/python3 -m upakarana shabda summary               # word index, shabda keys, gaps
+.venv/bin/python3 -m upakarana shabda lookup heavier        # trace a word to its graph node
+.venv/bin/python3 -m upakarana shabda eval                  # all fireable operations
+.venv/bin/python3 -m upakarana search "viveka"              # search both tantras and om
 ```
 
 ### run the tests
 
 ```bash
-python3 -m tools test run                     # full suite (81 passing, 36 xfailed)
-python3 -m tools test run test_ke_basic       # one test by name
-python3 -m tools test run pipeline            # one layer
-python3 -m tools cache summary                # test result analysis
-python3 -m tools cache failed                 # diagnose failures
+.venv/bin/python3 -m upakarana test run                     # full suite (81 passing, 36 xfailed)
+.venv/bin/python3 -m upakarana test run test_ke_basic       # one test by name
+.venv/bin/python3 -m upakarana test run pipeline            # one layer
+.venv/bin/python3 -m upakarana cache summary                # test result analysis
+.venv/bin/python3 -m upakarana cache failed                 # diagnose failures
 ```
 
 read the tests to understand what the system can do — they are the specification:
@@ -98,7 +98,7 @@ read the tests to understand what the system can do — they are the specificati
 - `tools/v2/test_evaluator.py` — tantra language primitives
 - `tools/v2/test_graph.py` — graph walk and shabda lookups
 
-full tools documentation: `tools/README.md`
+full upakarana documentation: `upakarana/README.md`
 
 ---
 
@@ -118,12 +118,15 @@ agent_x/
                       anuvada (reasoning), yantra_eval_primitives (builtins)
     bin/              entry point — loads graph, serves queries
 
-  tools/            python CLI for everything
-    v2/               test suite (81 passing / 36 xfailed)
+  upakarana/        python CLI — analysis, engine, tests (replaces tools/)
+    parsers/          om5, tantra4, shabda parsers
+    engine/           vyakarana server lifecycle + client
+    analysis/         graph analysis (ghosts, edges, rings, signals, ...)
+    testing/          test discovery, running, cache, gates
 
-  pathram/          living documentation system
-    output/           emitted docs (whitepaper, pipeline, discoveries, ...)
-    data/             structured state (JSON)
+  pathram2/         graph-native knowledge tracker (replaces pathram/)
+    graph/            LMDB-backed graph with composable queries
+    data/             persistent storage
 ```
 
 ### brahman — the graph
@@ -196,38 +199,38 @@ answer = (emit ∘ pramana ∘ execute ∘ match ∘ expand ∘ refine ∘ build
 
 ## documentation
 
-all documentation lives in `pathram/` — a living documentation system with structured state, cross-references, and live data integration.
+all documentation lives in `pathram2/` — a graph-native knowledge tracker with typed nodes, semantic edges, session tracking, and composable queries.
 
-### read documentation
+### read and query
 
 ```bash
-python3 -m pathram glance                     # 20-line summary with live stats
-python3 -m pathram index                      # full table of contents
-python3 -m pathram show whitepaper            # render one doc
-python3 -m pathram topic karaka               # cross-source search (docs + om + tantras + shabda)
-python3 -m pathram search "graded ring"       # regex search across all docs
-python3 -m pathram steps                      # plan steps with status
+.venv/bin/python3 -m pathram2 glance                     # quick summary: nodes, sessions, discoveries, branches
+.venv/bin/python3 -m pathram2 journal                    # last 5 sessions
+.venv/bin/python3 -m pathram2 today                      # everything touched today
+.venv/bin/python3 -m pathram2 search "graded ring"       # regex across all nodes
+.venv/bin/python3 -m pathram2 steps                      # list steps with status
+.venv/bin/python3 -m pathram2 show NODE_ID               # full node + edges
+.venv/bin/python3 -m pathram2 query type=discovery sort=created_at limit=10
 ```
 
 ### record things as you work
 
 ```bash
-python3 -m pathram discover "insight text"    # record a discovery
-python3 -m pathram note "gotcha" --type quirk # record a quirk
-python3 -m pathram step-add "task" --doc plan # add a plan step
-python3 -m pathram baseline 81 36 0           # update test baseline
+.venv/bin/python3 -m pathram2 session-start "investigating X"
+.venv/bin/python3 -m pathram2 add discovery "insight" --body "details"
+.venv/bin/python3 -m pathram2 add quirk "gotcha" --body "explanation"
+.venv/bin/python3 -m pathram2 add step "task" --status pending
+.venv/bin/python3 -m pathram2 session-end
 ```
 
-### emitted documents (in `pathram/output/`)
+### track non-linear work
 
-- `whitepaper.md` — mathematical foundations of the proof graph
-- `pipeline.md` — the computation pipeline: sentence → answer
-- `discoveries.md` — insights discovered during development
-- `principles.md` — structural rules of the system
-- `tests.md` — test categories and what they protect
-- `roadmap.md` — xfail gates as the development roadmap
-
-full pathram documentation: `pathram/README.md`
+```bash
+.venv/bin/python3 -m pathram2 branch FROM "reason" "tangent title"
+.venv/bin/python3 -m pathram2 return NODE_ID
+.venv/bin/python3 -m pathram2 branches                   # open tangents
+.venv/bin/python3 -m pathram2 tree                       # branch DAG
+```
 
 ---
 
@@ -268,7 +271,7 @@ a node becomes high-satya because many things connect to it, cite it, and are th
 you give the engine a sentence. it classifies each word, resolves it through `abheda` edges, then walks the graph outward in passes — each pass discovering what the previous pass connected to.
 
 ```bash
-python3 -m tools vy eval 'avrti "entropy decay signal loss"'
+.venv/bin/python3 -m upakarana vy eval 'avrti "entropy decay signal loss"'
 ```
 
 the fold does not retrieve a record. it unfolds the graph around the query, pass by pass. the response shows you the shape of the neighborhood.
@@ -281,35 +284,35 @@ the fold does not retrieve a record. it unfolds the graph around the query, pass
 
 ```bash
 cd vyakarana && opam install . --deps-only && dune build && cd ..
-python3 -m tools ask "mass is 5 and velocity is 10. find kinetic energy"
+.venv/bin/python3 -m upakarana ask "mass is 5 and velocity is 10. find kinetic energy"
 ```
 
 **step 2 — read the tests**
 
 ```bash
-cat tools/v2/test_answers.py    # what questions work
-cat tools/v2/test_xfail.py      # what questions don't work yet (the roadmap)
+.venv/bin/python3 -m upakarana test list               # all tests with xfail gates
+.venv/bin/python3 -m upakarana test run                 # run the suite
 ```
 
 **step 3 — explore the graph**
 
 ```bash
-python3 -m tools vy inspect pramana
-python3 -m tools shabda lookup heavier
-python3 -m tools om domain kosha/physics
+.venv/bin/python3 -m upakarana vy inspect pramana
+.venv/bin/python3 -m upakarana shabda lookup heavier
+.venv/bin/python3 -m upakarana om domain kosha/physics
 ```
 
 **step 4 — read the documentation**
 
 ```bash
-python3 -m pathram glance
-python3 -m pathram show whitepaper
-python3 -m pathram topic "graded ring"
+.venv/bin/python3 -m pathram2 glance
+.venv/bin/python3 -m pathram2 show whitepaper
+.venv/bin/python3 -m pathram2 topic "graded ring"
 ```
 
 **step 5 — ask an LLM**
 
-give an LLM access to the tools. tell it to run `python3 -m tools ask` with various questions, inspect nodes, trace the pipeline. the LLM interprets the edges, the satya scores, the connections. you follow the thread.
+give an LLM access to upakarana and pathram2. it should use `.venv/bin/python3 -m upakarana` for analysis and `.venv/bin/python3 -m pathram2` for documenting findings. see `CLAUDE.md` for the full LLM protocol.
 
 this is the practice. you bring the curiosity. the graph provides the structure. understanding arrives through the asking.
 
@@ -317,6 +320,6 @@ this is the practice. you bring the curiosity. the graph provides the structure.
 
 ## go deeper
 
-- `pathram/output/whitepaper.md` — mathematical foundations: the visheshanam ring, mantra signatures, graded ring input semantics, pipeline as function composition
-- `tools/README.md` — complete tools reference: all modes, all commands, test suite details
-- `pathram/README.md` — documentation system: how to record, query, and emit docs
+- `CLAUDE.md` — LLM protocol: analysis steps, documentation workflow, all commands
+- `upakarana/README.md` — complete upakarana reference: all modes, all commands
+- `tools/README.md` — legacy tools reference (deprecated, use upakarana)

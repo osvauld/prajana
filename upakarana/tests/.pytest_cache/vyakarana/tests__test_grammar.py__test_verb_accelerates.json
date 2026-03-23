@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_verb_accelerates",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.017
+}

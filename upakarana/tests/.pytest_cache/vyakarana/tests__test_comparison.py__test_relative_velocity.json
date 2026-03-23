@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_comparison.py::test_relative_velocity",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.108
+}

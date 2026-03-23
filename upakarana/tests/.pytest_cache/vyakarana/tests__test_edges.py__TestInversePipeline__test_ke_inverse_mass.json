@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_edges.py::TestInversePipeline::test_ke_inverse_mass",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.254
+}

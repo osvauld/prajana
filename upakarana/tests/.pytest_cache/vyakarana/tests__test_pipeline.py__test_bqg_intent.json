@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_pipeline.py::test_bqg_intent",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.004
+}

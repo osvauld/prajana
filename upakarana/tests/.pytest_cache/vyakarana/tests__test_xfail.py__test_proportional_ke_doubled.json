@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_proportional_ke_doubled",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.515,
+  "xfail": {
+    "reason": "proportional reasoning: doubling velocity \u2192 4x KE",
+    "strict": true,
+    "gate": "viveka: proportional reasoning",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 472
+  }
+}

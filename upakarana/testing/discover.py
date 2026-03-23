@@ -7,7 +7,7 @@ import ast
 import os
 import re
 
-from upakarana.paths import ROOT, V2_DIR
+from upakarana.paths import ROOT, TESTS_DIR
 from upakarana.testing.gates import gate_from_reason
 
 FILE_TO_LAYER = {
@@ -19,6 +19,12 @@ FILE_TO_LAYER = {
     "test_edges.py": "edges",
     "test_grammar.py": "grammar",
     "test_tantras.py": "tantras",
+    "test_physics.py": "physics",
+    "test_entity.py": "entity",
+    "test_comparison.py": "comparison",
+    "test_arithmetic.py": "arithmetic",
+    "test_logic.py": "logic",
+    "test_mixed.py": "mixed",
 }
 
 
@@ -26,7 +32,7 @@ def _layer_from_path(path):
     fname = os.path.basename(path)
     if fname in FILE_TO_LAYER:
         return FILE_TO_LAYER[fname]
-    rel = os.path.relpath(path, str(V2_DIR))
+    rel = os.path.relpath(path, str(TESTS_DIR))
     parts = rel.replace(os.sep, "/").split("/")
     parts[-1] = parts[-1].replace("test_", "").replace(".py", "")
     return "/".join(parts)
@@ -100,10 +106,10 @@ def parse_file(path):
 
 
 def find_test_files():
-    if not os.path.exists(str(V2_DIR)):
+    if not os.path.exists(str(TESTS_DIR)):
         return []
     results = []
-    for dirpath, _, filenames in os.walk(str(V2_DIR)):
+    for dirpath, _, filenames in os.walk(str(TESTS_DIR)):
         for f in filenames:
             if f.startswith("test_") and f.endswith(".py"):
                 results.append(os.path.join(dirpath, f))

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_torque_basic",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.268
+}

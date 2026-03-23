@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestInverseOps::test_addition_subtraction",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"addition\" \"pratipaksha\"",
+      "output": [
+        "subtraction"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

@@ -298,19 +298,16 @@ let apply_relation_axioms (k : proof_graph) : int * (string * int * int) list =
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
-  Hashtbl.iter (fun node_name _n ->
+  let naama_dim = match visheshanam_of_string "naama" with
+    | Some d -> d | None -> register_dimension "naama" in
+  Hashtbl.iter (fun node_name n ->
+    (* word index: walk naama edges (graph-native, emitted by emit_shabda_edges) *)
+    List.iter (fun e ->
+      if e.source = node_name && e.relation = naama_dim then
+        Hashtbl.replace idx.word_index e.target node_name
+    ) n.edges;
+    (* eval index: still from shabda store — eval is internal, not a word *)
     let pairs = Vidya.raw_shabda_for_node k node_name in
-    (* word index: word → node_name *)
-    (match List.assoc_opt "word" pairs with
-    | None -> ()
-    | Some words_str ->
-      let words = String.split_on_char ',' words_str in
-      List.iter (fun w ->
-        let w = String.trim w in
-        if String.length w > 0 then
-          Hashtbl.replace idx.word_index w node_name
-      ) words);
-    (* eval index: eval-name → node_name *)
     (match List.assoc_opt "eval" pairs with
     | None -> ()
     | Some eval_name ->

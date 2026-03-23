@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestKarmaClassification::test_set_union_is_set_op",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"set-union\" \"karma\"",
+      "output": [
+        "set-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

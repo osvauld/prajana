@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_arithmetic.py::test_multi_question_two_answers",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.184
+}

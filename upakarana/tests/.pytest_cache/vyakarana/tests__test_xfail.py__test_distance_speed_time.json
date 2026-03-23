@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_distance_speed_time",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.251,
+  "xfail": {
+    "reason": "distance = speed * time not in pipeline",
+    "strict": true,
+    "gate": "arithmetic: plain count not in pipeline",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 314
+  }
+}

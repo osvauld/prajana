@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_evaluator.py::test_reduce_cond_max",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "reduce [3, 1, 4, 1, 5] 0 (fn a x -> cond (gt x a) x a)",
+      "output": 5,
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

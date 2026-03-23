@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_xfail.py::test_dvandva_count_basket",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.138
+}

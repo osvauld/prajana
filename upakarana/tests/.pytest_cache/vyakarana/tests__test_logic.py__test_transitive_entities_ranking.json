@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_transitive_entities_ranking",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.281
+}

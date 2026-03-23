@@ -1,0 +1,32 @@
+{
+  "test": "tests/test_mixed.py::test_session_three_turns",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "ask",
+      "input": "mass is 5",
+      "session_id": "test-mixed-session-v2",
+      "output": "no match",
+      "elapsed_ms": 260,
+      "error": null
+    },
+    {
+      "method": "ask",
+      "input": "velocity is 10",
+      "session_id": "test-mixed-session-v2",
+      "output": "no match",
+      "elapsed_ms": 262,
+      "error": null
+    },
+    {
+      "method": "ask",
+      "input": "find kinetic energy",
+      "session_id": "test-mixed-session-v2",
+      "output": "kinetic-energy = 250",
+      "elapsed_ms": 32,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.556
+}

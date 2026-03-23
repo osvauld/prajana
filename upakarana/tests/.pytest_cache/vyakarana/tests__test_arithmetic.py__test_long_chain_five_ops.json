@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_arithmetic.py::test_long_chain_five_ops",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.206
+}

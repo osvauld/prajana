@@ -1,0 +1,24 @@
+{
+  "test": "tests/test_answers.py::test_session_entity_persists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "ask",
+      "input": "electron has mass 9.109e-31",
+      "session_id": "test-entity-persist-v2",
+      "output": "no match",
+      "elapsed_ms": 248,
+      "error": null
+    },
+    {
+      "method": "ask",
+      "input": "find momentum given velocity 1e6",
+      "session_id": "test-entity-persist-v2",
+      "output": "momentum = 9.109e-25",
+      "elapsed_ms": 48,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.297
+}

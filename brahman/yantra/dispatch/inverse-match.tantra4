@@ -9,11 +9,12 @@
     let swarupa-l   = nth contract 5
     let mphala      = cond (has-items phala-l) (nth phala-l 0) otherwise ""
     let mswarupa    = cond (has-items swarupa-l) (nth swarupa-l 0) otherwise ""
-    let has-math-op = gt (string-length (shabda ms "math-op")) 0
+    let has-krama   = has-text (node-krama ms)
+    let invertible  = has-krama
     let sf-is-janya = member solve-for janya
     let other-janya = filter janya (fn j -> not (eq j solve-for))
     let others-ok   = reduce other-janya true (fn a r ->
       (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
     let phala-bound = (or (member mphala bcs) (member mswarupa bcs) (member (shabda ms "name") bcs))
-    cond (or (has-items acc) (not has-math-op) (not sf-is-janya) (not others-ok) (not phala-bound)) acc
+    cond (or (has-items acc) (not invertible) (not sf-is-janya) (not others-ok) (not phala-bound)) acc
     otherwise [m, vps, "inverse"])))

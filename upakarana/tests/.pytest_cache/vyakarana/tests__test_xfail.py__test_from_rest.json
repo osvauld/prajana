@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_from_rest",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.023,
+  "xfail": {
+    "reason": "'from rest' should mean initial-velocity=0",
+    "strict": true,
+    "gate": "parsing: natural phrasing not handled",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 173
+  }
+}

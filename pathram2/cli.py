@@ -547,6 +547,11 @@ def main():
     if not args.command:
         parser.print_help()
         return
+
+    # Track usage (shared with upakarana)
+    from upakarana.usage import track
+    track(f"pathram2 {args.command}", None)
+
     handler = DISPATCH.get(args.command)
     if handler:
         handler(args)

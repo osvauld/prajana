@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_xfail.py::test_inverse_suvat_time",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.256
+}

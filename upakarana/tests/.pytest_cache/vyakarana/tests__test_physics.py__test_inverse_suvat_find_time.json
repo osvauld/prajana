@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_inverse_suvat_find_time",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.258
+}

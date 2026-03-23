@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_chain_inverse_find_force",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.671
+}

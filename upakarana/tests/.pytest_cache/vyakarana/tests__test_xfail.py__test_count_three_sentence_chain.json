@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_xfail.py::test_count_three_sentence_chain",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.162
+}

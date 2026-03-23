@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_pipeline.py::test_rashi_sankhya_bind",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.029
+}

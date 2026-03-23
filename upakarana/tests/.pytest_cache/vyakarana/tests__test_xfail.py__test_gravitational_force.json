@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_gravitational_force",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.288,
+  "xfail": {
+    "reason": "sthita-viveka: flat concept lookup can't assign two masses to mass1/mass2 slots",
+    "strict": true,
+    "gate": "sthita-viveka: multi-slot entity assignment",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 107
+  }
+}

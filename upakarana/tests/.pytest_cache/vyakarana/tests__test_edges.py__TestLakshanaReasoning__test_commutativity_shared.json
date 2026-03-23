@@ -1,0 +1,19 @@
+{
+  "test": "tests/test_edges.py::TestLakshanaReasoning::test_commutativity_shared",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"commutativity\" \"lakshana\"",
+      "output": [
+        "number-varga",
+        "set-varga",
+        "algebra-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

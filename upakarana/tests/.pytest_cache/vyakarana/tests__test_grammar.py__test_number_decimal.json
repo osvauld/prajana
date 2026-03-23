@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_number_decimal",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.017
+}

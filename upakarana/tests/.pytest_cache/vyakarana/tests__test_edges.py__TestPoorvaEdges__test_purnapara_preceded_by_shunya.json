@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestPoorvaEdges::test_purnapara_preceded_by_shunya",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"purnapara\" \"poorva\"",
+      "output": [
+        "shunya"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

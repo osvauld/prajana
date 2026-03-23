@@ -4,7 +4,9 @@ import os
 import re
 import subprocess
 
-from upakarana.paths import V2_DIR, VENV_PYTEST
+from upakarana.paths import ROOT, TESTS_DIR, VENV_PYTEST
+
+_UPAKARANA_DIR = ROOT / "upakarana"
 
 
 def _pytest_bin():
@@ -16,7 +18,7 @@ def _pytest_bin():
 def _build_args(layer=None, gate=None, name=None, pattern=None,
                 path=None, last_failed=False, socket_path=None,
                 verbose=False, timeout=120):
-    args = [_pytest_bin(), str(V2_DIR)]
+    args = [_pytest_bin(), str(TESTS_DIR)]
     if socket_path:
         args.extend(["--socket", socket_path])
     if verbose:
@@ -32,7 +34,7 @@ def _build_args(layer=None, gate=None, name=None, pattern=None,
     if pattern:
         args.extend(["-k", pattern])
     if path:
-        args[-1] = path  # replace V2_DIR with specific path
+        args[-1] = path  # replace TESTS_DIR with specific path
     return args
 
 
@@ -70,7 +72,8 @@ def run(**kwargs):
     timeout = kwargs.pop("timeout", 120)
     args = _build_args(**kwargs)
     try:
-        proc = subprocess.run(args, capture_output=True, text=True, timeout=timeout)
+        proc = subprocess.run(args, capture_output=True, text=True, timeout=timeout,
+                              cwd=str(_UPAKARANA_DIR))
         result = _parse_output(proc.stdout, proc.stderr, proc.returncode)
         result["stdout"] = proc.stdout
         result["stderr"] = proc.stderr

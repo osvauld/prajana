@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_answers.py::test_ke_different_values",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.399
+}

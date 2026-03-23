@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_transitive_is_a_three_hop",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.2
+}

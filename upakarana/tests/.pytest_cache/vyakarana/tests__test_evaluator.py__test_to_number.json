@@ -1,0 +1,22 @@
+{
+  "test": "tests/test_evaluator.py::test_to_number",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "to-number \"42\"",
+      "output": 42,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "to-number \"hello\"",
+      "output": null,
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

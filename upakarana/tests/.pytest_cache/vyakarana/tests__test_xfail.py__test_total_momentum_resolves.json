@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_xfail.py::test_total_momentum_resolves",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.036
+}

@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_edges.py::TestRahitaEdges::test_jada_without_iccha",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"jada\" \"rahita\"",
+      "output": [
+        "sva-dharana",
+        "aadana-visarjana",
+        "karma",
+        "iccha"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

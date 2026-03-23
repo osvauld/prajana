@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_tense_past_then_present",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.388
+}

@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_syllogism",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.134,
+  "xfail": {
+    "reason": "syllogism not implemented: needs assertion-bandha + chain walk",
+    "strict": true,
+    "gate": "logic_nyaya: P8d anumana not built",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 281
+  }
+}

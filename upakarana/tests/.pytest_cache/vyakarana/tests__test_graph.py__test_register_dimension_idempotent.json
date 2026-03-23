@@ -1,0 +1,22 @@
+{
+  "test": "tests/test_graph.py::test_register_dimension_idempotent",
+  "outcome": "failed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "register-dimension \"satya\"",
+      "output": "register-dimension",
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "register-dimension \"satya\"",
+      "output": "register-dimension",
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

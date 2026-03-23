@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_orbital_radius",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.014,
+  "xfail": {
+    "reason": "trigram: orbital-radius not in kosha",
+    "strict": true,
+    "gate": "sandhi-kosha only handles bigrams",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 164
+  }
+}

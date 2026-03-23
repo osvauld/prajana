@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_chain_strand_intermediate",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.54
+}

@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestKarmaClassification::test_addition_is_number_op",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"addition\" \"karma\"",
+      "output": [
+        "number-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_shunya_rest_no_momentum",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.098
+}

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_arithmetic.py::test_subtract_two_sentences",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.133
+}

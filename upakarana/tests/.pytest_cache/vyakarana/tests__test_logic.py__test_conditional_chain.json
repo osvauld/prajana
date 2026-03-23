@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_conditional_chain",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.222
+}

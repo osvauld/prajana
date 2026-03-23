@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_tense_velocity_override",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.398
+}

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_edges.py::TestInversePipeline::test_momentum_inverse_mass",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.247
+}

@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_edges.py::TestKarmaWalk::test_calculus_operations",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"calculus-varga\" \"karma\"",
+      "output": [
+        "partial-derivative",
+        "fourier-transform",
+        "derivative",
+        "antiderivative"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

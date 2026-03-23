@@ -1,0 +1,19 @@
+-- shunya-bandha: scan for signal-word nodes and emit zero bindings.
+-- a satya node with shabda signal=shunya + signal-concept=X emits [X, sankhya, 0].
+-- e.g. initial-rest (signal-concept=velocity, signal=shunya) → [velocity, sankhya, 0]
+(tantra shunya-bandha (graph)
+
+  (satya-nodes (graph | where [s, e, o] | and (eq e "satya") | collect (to-string s)))
+  (already-bound (graph | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)))
+
+  (new-triples (reduce satya-nodes [] (fn acc nd ->
+    let sig      = shabda nd "signal"
+    let concept  = shabda nd "signal-concept"
+    let is-shunya = eq sig "shunya"
+    let has-concept = has-text concept
+    let already  = member concept already-bound
+    cond (and is-shunya has-concept (not already))
+      (append acc [[concept, "satya", concept], [concept, "sankhya", "0."]])
+    otherwise acc)))
+
+  (append graph new-triples))

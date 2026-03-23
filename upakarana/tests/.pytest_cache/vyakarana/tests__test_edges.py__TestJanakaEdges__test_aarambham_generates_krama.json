@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestJanakaEdges::test_aarambham_generates_krama",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"aarambham\" \"janaka\"",
+      "output": [
+        "krama"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

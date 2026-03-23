@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_universal_with_exception",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.102
+}

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_edges.py::TestInversePipeline::test_force_inverse_acceleration",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.242
+}

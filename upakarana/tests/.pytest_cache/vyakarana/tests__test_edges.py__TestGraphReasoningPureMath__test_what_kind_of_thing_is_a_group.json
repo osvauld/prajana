@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningPureMath::test_what_kind_of_thing_is_a_group",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"group\" \"swarupa\"",
+      "output": [
+        "sequence",
+        "sequence",
+        "dharma-anvaya",
+        "set"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

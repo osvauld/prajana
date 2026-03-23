@@ -1,0 +1,64 @@
+{
+  "test": "tests/test_evaluator.py::test_arithmetic",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "add 3 4",
+      "output": 7,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "sub 10 3",
+      "output": 7,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "mul 6 7",
+      "output": 42,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "div 10 2",
+      "output": 5,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "sqrt 9",
+      "output": 3,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "power 2 10",
+      "output": 1024,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "abs -5",
+      "output": 5,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "div 5 0",
+      "output": 0,
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_edges.py::TestJanakaEdges::test_vector_space_generates_subspace",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"vector-space\" \"janaka\"",
+      "output": [
+        "orthogonal",
+        "subspace"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

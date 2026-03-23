@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_from_rest_initial_velocity",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.019
+}

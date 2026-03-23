@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_comparison.py::test_compute_compare_ke",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.213
+}
