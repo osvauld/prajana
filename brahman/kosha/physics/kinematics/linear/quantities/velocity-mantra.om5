@@ -4,4 +4,4 @@
   (swarupa velocity)
   (phala velocity)
   (janya initial-velocity acceleration time)
-  (krama add initial-velocity ( mul acceleration time )))
+  (krama addition initial-velocity ( multiplication acceleration time )))

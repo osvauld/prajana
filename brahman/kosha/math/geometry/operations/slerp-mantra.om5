@@ -6,4 +6,4 @@
   (vishesa interpolation-varga quaternion-varga)
   (abheda lerp)
   (swarupa spherical)
-  (krama quat-conjugate quat-mul arctangent sine))
+  (krama quat-conjugate quat-multiplication arctangent sine))

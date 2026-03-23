@@ -4,4 +4,4 @@
   (swarupa acceleration)
   (phala acceleration)
   (janya final-velocity initial-velocity time)
-  (krama div ( sub final-velocity initial-velocity ) time))
+  (krama division ( subtraction final-velocity initial-velocity ) time))

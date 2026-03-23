@@ -4,4 +4,4 @@
   (swarupa potential-energy)
   (phala potential-energy)
   (janya mass gravity height)
-  (krama mul mass ( mul gravity height )))
+  (krama multiplication mass ( multiplication gravity height )))

@@ -3,4 +3,5 @@
   (varga physics-mantra)
   (swarupa spring-force)
   (phala spring-force)
-  (janya spring-constant displacement))
+  (janya spring-constant displacement)
+  (krama multiplication spring-constant displacement))
