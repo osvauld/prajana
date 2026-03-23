@@ -1,7 +1,8 @@
 ; possession verb: "ball HAS mass 5 kg"
 ; signals entity→property ownership in question graphs
 ; has IS shashthi-vibhakti expressed as an English verb
+; has = present tense, singular (third person)
 
 (bhasha verb-has
   (swarupa kriya)
-  (sthita sambandha shashthi-vibhakti))
+  (sthita sambandha shashthi-vibhakti eka-vachana vartamana-kaala prathama-purusa))

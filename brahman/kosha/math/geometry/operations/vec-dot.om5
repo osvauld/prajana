@@ -9,4 +9,5 @@
   (phala scalar)
   (abheda dot-product)
   (yukta aayaama)
-  (krama multiplication addition))
+  (krama multiplication addition)
+  (pratipaksha vec-cross))

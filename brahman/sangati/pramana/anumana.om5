@@ -1,0 +1,18 @@
+; anumana: inference — knowing what is not directly seen from what is seen.
+; one of the classical pramanas alongside pratyaksha (direct perception).
+;
+; the system uses anumana when:
+; "a cat is an animal. there are 5 cats. how many animals?"
+; → infer animal-count from cat-count via swarupa chain.
+;
+; structurally: walk swarupa edges to reach what is asked about
+; from what is given. the inference is the walk itself.
+
+(sangati anumana
+  (swarupa pramana)
+  (sthita pramana-sthalam)
+  (kriya viveka)
+  (janya pratyaksha)
+  (phala satya)
+  (abheda nyaya)
+  (siddha parampara))

@@ -1,26 +1,4 @@
 (library
  (name vyakarana_lib)
  (libraries unix str)
- (modules
-    proof_graph
-    event
-    om_parser
-    om5_parser
-    om_writer
-    om_edit
-    setu_shabda
-    setu_classify
-    setu
-    anuvada
-    socket
-   yantra_types
-   yantra_tokeniser
-    yantra_arity
-    yantra_expr_parser
-    yantra_tantra_sexp
-   yantra_index
-   yantra_ops
-   yantra_eval_primitives
-   yantra_pipeline_ops
-   yantra_eval
-   yantra))
+ (modules prakriti kriya_types vidya vakya kriya_ops vak kriya_graph karma jnana kriya_eval kriya dvara))

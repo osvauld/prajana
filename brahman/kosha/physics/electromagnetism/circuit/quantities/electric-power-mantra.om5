@@ -3,4 +3,5 @@
   (varga physics-mantra)
   (swarupa electric-power)
   (phala electric-power)
-  (janya voltage current))
+  (janya voltage current)
+  (krama multiplication voltage current))

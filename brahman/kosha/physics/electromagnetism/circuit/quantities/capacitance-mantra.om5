@@ -3,4 +3,5 @@
   (varga physics-mantra)
   (swarupa capacitance)
   (phala capacitance)
-  (janya charge voltage))
+  (janya charge voltage)
+  (krama division charge voltage))

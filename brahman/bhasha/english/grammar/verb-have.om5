@@ -1,7 +1,8 @@
 ; possession verb (plural / infinitive form): "objects HAVE mass"
 ; structurally identical to "has" as a possession signal in question graphs
 ; have IS shashthi-vibhakti expressed as an English verb
+; have = present tense, plural (or first/second person)
 
 (bhasha verb-have
   (swarupa kriya)
-  (sthita sambandha shashthi-vibhakti))
+  (sthita sambandha shashthi-vibhakti bahu-vachana vartamana-kaala))

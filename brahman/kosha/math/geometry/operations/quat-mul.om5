@@ -10,4 +10,5 @@
   (abheda rotation)
   (swarupa composition non-commutative)
   (yukta quat-conjugate)
-  (krama multiplication subtraction addition))
+  (krama multiplication subtraction addition)
+  (pratipaksha quat-conjugate))

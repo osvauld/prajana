@@ -3,4 +3,5 @@
   (varga physics-mantra)
   (swarupa mass-density)
   (phala mass-density)
-  (janya mass volume))
+  (janya mass volume)
+  (krama division mass volume))

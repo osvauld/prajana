@@ -1,0 +1,7 @@
+; possession verb (past tense): "ball HAD mass 5 kg"
+; past tense of has/have — same shashthi-vibhakti role
+; had = past tense, any number
+
+(bhasha verb-had
+  (swarupa kriya)
+  (sthita sambandha shashthi-vibhakti bhuta-kaala))

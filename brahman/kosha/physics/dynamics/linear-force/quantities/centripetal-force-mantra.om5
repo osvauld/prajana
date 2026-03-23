@@ -4,4 +4,4 @@
   (swarupa centripetal-force)
   (phala centripetal-force)
   (janya mass velocity radius)
-  (krama div ( mul mass ( square velocity ) ) radius))
+  (krama division ( multiplication mass ( square velocity ) ) radius))

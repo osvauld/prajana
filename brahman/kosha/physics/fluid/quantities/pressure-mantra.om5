@@ -3,4 +3,5 @@
   (varga physics-mantra)
   (swarupa pressure)
   (phala pressure)
-  (janya force area))
+  (janya force area)
+  (krama division force area))

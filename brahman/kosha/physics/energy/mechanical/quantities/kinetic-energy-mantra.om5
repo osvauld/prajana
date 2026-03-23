@@ -4,4 +4,4 @@
   (swarupa kinetic-energy)
   (phala kinetic-energy)
   (janya mass velocity)
-  (krama half ( mul mass ( square velocity ) )))
+  (krama half ( multiplication mass ( square velocity ) )))

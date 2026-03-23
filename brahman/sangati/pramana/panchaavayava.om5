@@ -1,0 +1,19 @@
+; panchaavayava: the five-limbed proof structure from nyaya.
+; every answer the system produces follows this structure:
+; pratijna (thesis) → hetu (reason) → udaharana (example) → upanaya (application) → nigamana (conclusion)
+;
+; the emit layer implements this:
+; emit-pratijna ("we have") → emit-hetu ("we seek") → emit-udaharana-upanaya ("we know/see") → emit-nigamana ("we find")
+;
+; the structure is not imposed — it arises from the graph walk:
+; pratijna reads what is given, hetu reads what is sought,
+; udaharana walks the mantra edges, upanaya substitutes values,
+; nigamana reads the derived result.
+
+(sangati panchaavayava
+  (swarupa nyaya)
+  (sthita pramana-sthalam)
+  (yukta pratijnaa hetu udaharana upanaya nigamana)
+  (kriya pramana)
+  (phala anuvada)
+  (siddha parampara))

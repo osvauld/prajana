@@ -4,7 +4,9 @@
 -- emits: [entity, prathama-vibhakti, object] + [concept, shashthi-vibhakti, entity]
 -- runs before vibhakti-shashthi so entity edges are available for scoping.
 (tantra shashthi-possession (graph)
-  (possession-verbs (split (shabda "verb-has" "word") ","))
+  (possession-verbs (append (split (shabda "verb-has" "word") ",")
+    (append (split (shabda "verb-have" "word") ",")
+            (split (shabda "verb-had" "word") ","))))
   (grades (split-grades graph))
   (new-triples (reduce grades [] (fn acc grade ->
     let st = reduce grade [[], "", false, ""] (fn st tri ->

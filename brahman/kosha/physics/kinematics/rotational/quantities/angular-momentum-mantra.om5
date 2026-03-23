@@ -3,4 +3,5 @@
   (varga physics-mantra)
   (swarupa angular-momentum)
   (phala angular-momentum)
-  (janya moment-of-inertia angular-velocity))
+  (janya moment-of-inertia angular-velocity)
+  (krama multiplication moment-of-inertia angular-velocity))

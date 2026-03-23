@@ -487,7 +487,17 @@ shabda vartamana-kaala
 done
 
 shabda verb-has
-  (word has,have,had)
+  (word has)
+  (role possession)
+done
+
+shabda verb-have
+  (word have)
+  (role possession)
+done
+
+shabda verb-had
+  (word had)
   (role possession)
 done
 

@@ -3,4 +3,5 @@
   (varga physics-mantra)
   (swarupa photon)
   (phala photon-energy)
-  (janya planck-constant frequency))
+  (janya planck-constant frequency)
+  (krama multiplication planck-constant frequency))

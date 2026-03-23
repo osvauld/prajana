@@ -3,5 +3,5 @@
   (varga physics-mantra)
   (swarupa period)
   (phala period)
-  (kriya period-expr)
-  (janya angular-velocity))
+  (janya angular-velocity)
+  (krama division ( multiplication 2 pi ) angular-velocity))

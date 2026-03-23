@@ -2,4 +2,5 @@
   (vishesa graph-varga)
   (sthita graph)
   (swarupa path)
-  (yukta avrti))
+  (yukta avrti)
+  (pratipaksha acyclicity tree))

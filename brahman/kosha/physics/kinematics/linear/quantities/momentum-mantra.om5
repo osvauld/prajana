@@ -3,4 +3,5 @@
   (varga physics-mantra)
   (swarupa momentum)
   (phala momentum)
-  (janya mass velocity))
+  (janya mass velocity)
+  (krama multiplication mass velocity))
