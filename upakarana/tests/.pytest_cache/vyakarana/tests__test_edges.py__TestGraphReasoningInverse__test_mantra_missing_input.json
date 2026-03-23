@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningInverse::test_mantra_missing_input",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"kinetic-energy-mantra\" \"janya\"",
+      "output": [
+        "velocity",
+        "mass"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

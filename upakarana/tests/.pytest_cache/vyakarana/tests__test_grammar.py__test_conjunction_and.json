@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_conjunction_and",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.031
+}

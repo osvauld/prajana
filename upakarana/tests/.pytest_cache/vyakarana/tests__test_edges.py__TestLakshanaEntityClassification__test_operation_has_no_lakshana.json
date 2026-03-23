@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_edges.py::TestLakshanaEntityClassification::test_operation_has_no_lakshana",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"addition\" \"lakshana\"",
+      "output": [],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

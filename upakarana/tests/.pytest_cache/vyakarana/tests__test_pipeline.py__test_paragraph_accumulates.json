@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_pipeline.py::test_paragraph_accumulates",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.049
+}

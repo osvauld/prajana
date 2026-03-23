@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_moving_at_ke",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.266,
+  "xfail": {
+    "reason": "'moving at' not recognised as velocity signal",
+    "strict": true,
+    "gate": "kosha: missing concept node",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 138
+  }
+}

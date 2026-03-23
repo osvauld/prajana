@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_physics_count_total_ke",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.425
+}

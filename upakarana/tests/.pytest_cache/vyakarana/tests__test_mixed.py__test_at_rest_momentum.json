@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_at_rest_momentum",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.36
+}

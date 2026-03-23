@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_inverse_electric_power_find_current",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.221
+}

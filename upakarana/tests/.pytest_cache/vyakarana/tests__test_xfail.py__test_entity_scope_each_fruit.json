@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_entity_scope_each_fruit",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.157,
+  "xfail": {
+    "reason": "entity_scope: per-entity count after subtraction",
+    "strict": true,
+    "gate": "entity_scope: per-entity scoped count",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 359
+  }
+}

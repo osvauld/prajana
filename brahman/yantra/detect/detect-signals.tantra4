@@ -2,10 +2,12 @@
 (tantra detect-signals (expanded)
   (sf-raw (extract-solve-for expanded))
   (has-intent (solve-for-result sf-raw "has-intent"))
+  (shunya-signals (detect-shunya expanded))
   (viveka-signals (detect-viveka expanded))
   (anumana-signals (detect-anumana expanded))
   (count-signals (detect-count expanded))
-  (dispatch-mode (cond (has-items anumana-signals) "anumana"
+  (dispatch-mode (cond (and (has-items shunya-signals) (not has-intent)) "shunya"
+    (has-items anumana-signals) "anumana"
     (has-items viveka-signals) "viveka"
     (has-items count-signals) "count"
     has-intent "derive"
@@ -16,6 +18,7 @@
     otherwise []))
   (all-signals (append [["dispatch-mode", dispatch-mode]]
     (append base-signals
+    (append shunya-signals
     (append viveka-signals
-    (append anumana-signals count-signals)))))
+    (append anumana-signals count-signals))))))
   (write-signals expanded all-signals))

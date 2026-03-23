@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_multi_question_intermediate",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.257,
+  "xfail": {
+    "reason": "multi_question: intermediate and final count",
+    "strict": true,
+    "gate": "multi_question: multiple questions in one paragraph",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 394
+  }
+}

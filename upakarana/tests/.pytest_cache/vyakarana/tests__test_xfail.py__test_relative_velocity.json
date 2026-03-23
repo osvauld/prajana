@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_relative_velocity",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.117,
+  "xfail": {
+    "reason": "relative-velocity concept not in kosha",
+    "strict": true,
+    "gate": "relative-velocity: kosha concept missing",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 233
+  }
+}

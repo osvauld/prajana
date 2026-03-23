@@ -1,0 +1,19 @@
+{
+  "test": "tests/test_evaluator.py::test_cond_inside_map",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "map [-1, 2, -3] (fn x -> cond (gt x 0) x 0)",
+      "output": [
+        0,
+        2,
+        0
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

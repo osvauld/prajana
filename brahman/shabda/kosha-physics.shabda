@@ -37,7 +37,6 @@ done
 shabda angular-momentum-mantra
   (name angular-momentum)
   (unit kilogram-metre-squared-per-second)
-  (math-op multiplication)
 done
 
 shabda angular-velocity
@@ -48,7 +47,6 @@ done
 shabda angular-velocity-mantra
   (name angular-velocity)
   (unit radian-per-second)
-  (math-op division)
 done
 
 shabda bernoulli
@@ -73,7 +71,6 @@ done
 shabda capacitance-mantra
   (name capacitance)
   (unit farad)
-  (math-op division)
 done
 
 shabda centripetal-force
@@ -134,10 +131,6 @@ shabda current-flow
   (pos verb)
 done
 
-shabda decelerate-to-rest
-  (pos verb)
-done
-
 shabda diffusion
   (alias diffusion)
   (desc the-spreading-of-a-quantity-from-high-to-low-concentration-driven-by-the-laplacian)
@@ -180,7 +173,6 @@ done
 shabda electric-power-mantra
   (name electric-power)
   (unit watt)
-  (math-op multiplication)
 done
 
 shabda electromagnetism
@@ -213,7 +205,9 @@ shabda fluid-varga
 done
 
 shabda free-fall
-  (pos verb)
+  (word dropped)
+  (signal-concept velocity)
+  (signal shunya)
 done
 
 shabda frequency
@@ -234,7 +228,6 @@ done
 shabda friction-force-mantra
   (name friction-force)
   (unit newton)
-  (math-op multiplication)
 done
 
 shabda gas
@@ -270,7 +263,9 @@ shabda height
 done
 
 shabda horizontal-motion
-  (pos adj)
+  (word horizontal horizontally)
+  (signal-concept kona)
+  (signal shunya)
 done
 
 shabda inductance
@@ -279,7 +274,9 @@ shabda inductance
 done
 
 shabda initial-rest
-  (pos adj)
+  (word rest stationary still)
+  (signal-concept velocity)
+  (signal shunya)
 done
 
 shabda jacobian
@@ -357,7 +354,6 @@ done
 shabda mass-density-mantra
   (name density)
   (unit kilogram-per-cubic-metre)
-  (math-op division)
 done
 
 shabda mechanical-energy-varga
@@ -383,7 +379,6 @@ done
 shabda momentum-mantra
   (name momentum)
   (unit kilogram-metre-per-second)
-  (math-op multiplication)
 done
 
 shabda move-to
@@ -403,7 +398,6 @@ done
 shabda newton-second-law-motion
   (name newton-second-law-motion)
   (unit newton)
-  (math-op multiplication)
   (alias newton-second-law-motion)
   (desc F-equals-ma-force-is-mass-times-acceleration)
 done
@@ -411,7 +405,6 @@ done
 shabda ohm-law
   (name ohm-law)
   (unit volt)
-  (math-op multiplication)
 done
 
 shabda optics-varga
@@ -469,7 +462,6 @@ done
 shabda photon-energy-mantra
   (name photon-energy)
   (unit joule)
-  (math-op multiplication)
 done
 
 shabda physics-time
@@ -516,7 +508,6 @@ done
 shabda pressure-mantra
   (name pressure)
   (unit pascal)
-  (math-op division)
 done
 
 shabda prohibition
@@ -549,7 +540,6 @@ done
 shabda relative-velocity-mantra
   (name relative-velocity)
   (unit metre-per-second)
-  (math-op subtraction)
 done
 
 shabda repulsion
@@ -621,7 +611,6 @@ done
 shabda spring-force-mantra
   (name spring-force)
   (unit newton)
-  (math-op multiplication)
 done
 
 shabda standard-model
@@ -662,7 +651,6 @@ done
 shabda torque-mantra
   (name torque)
   (unit newton-metre)
-  (math-op multiplication)
 done
 
 shabda trajectory
@@ -726,5 +714,7 @@ shabda work-mantra
 done
 
 shabda zero-friction-surface
-  (pos adj)
+  (word frictionless smooth)
+  (signal-concept ghasana)
+  (signal shunya)
 done

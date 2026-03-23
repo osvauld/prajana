@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_answers.py::test_chain_force_via_suvat",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.767
+}

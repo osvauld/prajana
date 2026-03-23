@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_arithmetic.py::test_entity_scope_two_fruits",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.125
+}

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_disjunctive_syllogism",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.099
+}

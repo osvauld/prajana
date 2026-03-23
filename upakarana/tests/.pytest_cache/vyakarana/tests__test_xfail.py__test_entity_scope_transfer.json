@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_entity_scope_transfer",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.172,
+  "xfail": {
+    "reason": "entity_scope: two-entity transfer",
+    "strict": true,
+    "gate": "entity_scope: per-entity scoped count",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 369
+  }
+}

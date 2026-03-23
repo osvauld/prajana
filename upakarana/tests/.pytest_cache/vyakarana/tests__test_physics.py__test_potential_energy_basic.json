@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_potential_energy_basic",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.459
+}

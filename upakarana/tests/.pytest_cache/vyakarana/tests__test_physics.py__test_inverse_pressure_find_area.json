@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_inverse_pressure_find_area",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.237
+}

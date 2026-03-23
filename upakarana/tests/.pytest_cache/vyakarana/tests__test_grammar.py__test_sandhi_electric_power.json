@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_sandhi_electric_power",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.013
+}

@@ -1,11 +1,10 @@
 ; v_rel = v_observer - v_observed.
-; two-participant mantra: both inputs are "velocity" from different entities.
-; the proof graph supplies both participants' values via scope-entity dispatch.
-; uses math-op path (subtraction) in execute-mantra, not krama/kriya.
-; shabda has math-op:subtraction — handles forward and inverse.
+; two-participant mantra: both inputs come from relative-vps as named pair.
+; match-mantra routes through relative-vps → observer-velocity / observed-velocity bindings.
+; krama path handles forward and invert-krama handles inverse.
 ;
-; multi-entity: derive-step must not fire this blindly with one velocity.
-; match-mantra routes it through relative-vps which collects both values.
+; multi-entity: derive-step won't fire this — observer-velocity/observed-velocity
+; are not in normal single-entity bindings.
 
 (mantra relative-velocity-mantra
   (vishesa linear-motion-varga)
@@ -13,4 +12,5 @@
   (swarupa relative-velocity)
   (phala relative-velocity)
   (yukta multi-entity)
-  (janya velocity velocity))
+  (janya observer-velocity observed-velocity)
+  (krama subtraction observer-velocity observed-velocity))

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_physics_logic_inheritance",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.481
+}

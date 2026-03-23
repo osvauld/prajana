@@ -1,7 +1,8 @@
 -- the answer is the anumana answer, the viveka answer, the count answer, or the derived answer.
 (tantra dispatch-answer (expanded refined)
   (mode (read-signal expanded "dispatch-mode"))
-  (cond (eq mode "anumana") (dispatch-anumana expanded refined)
+  (cond (eq mode "shunya")  (dispatch-shunya expanded refined)
+        (eq mode "anumana") (dispatch-anumana expanded refined)
         (eq mode "viveka")  (dispatch-viveka expanded refined)
         (eq mode "count")   (dispatch-count expanded refined)
         (eq mode "derive")  (dispatch-derive expanded refined)

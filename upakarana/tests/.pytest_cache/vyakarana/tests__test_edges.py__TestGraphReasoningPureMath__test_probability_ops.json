@@ -1,0 +1,19 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningPureMath::test_probability_ops",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"probability-varga\" \"karma\"",
+      "output": [
+        "normalisation",
+        "marginalisation",
+        "bayes"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

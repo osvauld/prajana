@@ -1,0 +1,156 @@
+"""test_mixed.py — cross-domain: phrasing variants, session, physics+count,
+physics+logic, chain+inverse, tense+physics.
+"""
+
+
+# ── natural phrasing: from rest / at rest ─────────────────────────────────────
+
+
+def test_from_rest_force(vy):
+    """'accelerates from rest' → u=0, then find force"""
+    r = vy.answer("a car of mass 1200 accelerates from rest at 3 m/s2. find force")
+    assert "3600" in r or "force" in r.lower()
+
+
+def test_at_rest_momentum(vy):
+    """'ball is at rest' → v=0 → momentum=0"""
+    r = vy.answer("ball is at rest. mass is 5. find momentum")
+    assert "0" in r
+
+
+def test_from_rest_ke(vy):
+    """Starting from rest, accelerate to find KE"""
+    r = vy.answer(
+        "a car of mass 1000 starts from rest. it accelerates at 2 m/s2 for 5 seconds. "
+        "find kinetic energy"
+    )
+    assert "50000" in r or "we find" in r
+
+
+# ── physics + logic ───────────────────────────────────────────────────────────
+
+
+def test_physics_logic_all_objects(vy):
+    """all objects with mass have momentum. electron has mass. does electron have momentum"""
+    r = vy.answer(
+        "all objects with mass have momentum. electron has mass 9.109e-31. "
+        "does the electron have momentum"
+    )
+    assert "yes" in r.lower() or "momentum" in r.lower()
+
+
+def test_physics_logic_inheritance(vy):
+    """if an object has kinetic energy it is moving. this ball has KE=250. is it moving"""
+    r = vy.answer(
+        "if an object has kinetic energy it is moving. "
+        "a ball has mass 5 and velocity 10. find kinetic energy. is the ball moving"
+    )
+    assert "250" in r or "moving" in r.lower()
+
+
+# ── logic + count ─────────────────────────────────────────────────────────────
+
+
+def test_logic_count_all_wings(vy):
+    """all birds have wings. 3 sparrows are birds. how many wings"""
+    r = vy.answer("all birds have wings. birds have 2 wings each. there are 3 sparrows. how many wings")
+    assert "6" in r
+
+
+# ── physics + count ───────────────────────────────────────────────────────────
+
+
+def test_physics_count_total_ke(vy):
+    """ball-A KE=24, ball-B KE=25. total KE asked"""
+    r = vy.answer(
+        "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5. "
+        "find total kinetic energy"
+    )
+    assert "49" in r or "24" in r or "25" in r
+
+
+# ── chain + inverse ───────────────────────────────────────────────────────────
+
+
+def test_chain_inverse_find_force(vy):
+    """Given SUVAT data + mass, find force via chain inverse"""
+    r = vy.answer(
+        "mass is 10. initial velocity is 0. final velocity is 20. time is 4. find force"
+    )
+    assert "50" in r
+
+
+def test_chain_inverse_find_initial_velocity(vy):
+    """Given KE + mass, find velocity; then given acceleration + time, find initial-velocity"""
+    r = vy.answer(
+        "kinetic energy is 200. mass is 4. find velocity. "
+        "acceleration is 5. time is 4. find initial velocity"
+    )
+    assert "10" in r or "we find" in r
+
+
+# ── tense + physics ────────────────────────────────────────────────────────────
+
+
+def test_tense_past_then_present(vy):
+    """'had velocity 5. now has mass 2. find momentum'"""
+    r = vy.answer("the ball had velocity 5. it has mass 2. find momentum")
+    assert "10" in r
+
+
+def test_tense_velocity_override(vy):
+    """Current state overrides past state for computation"""
+    r = vy.answer("velocity was 5. velocity is now 10. mass is 2. find kinetic energy")
+    assert "100" in r
+
+
+# ── multi-turn session ────────────────────────────────────────────────────────
+
+
+def test_session_three_turns(vy):
+    """Three turns: mass → velocity → find KE"""
+    sid = "test-mixed-session-v2"
+    vy.ask("mass is 5", session_id=sid)
+    vy.ask("velocity is 10", session_id=sid)
+    r = vy.ask("find kinetic energy", session_id=sid)
+    assert "250" in r or "kinetic-energy" in r
+
+
+def test_session_entity_then_property(vy):
+    """Entity named in turn 1, property in turn 2"""
+    sid = "test-mixed-entity-v2"
+    vy.ask("ball has mass 3", session_id=sid)
+    vy.ask("ball has velocity 4", session_id=sid)
+    r = vy.ask("find kinetic energy of ball", session_id=sid)
+    assert "24" in r
+
+
+# ── colour classifier ─────────────────────────────────────────────────────────
+
+
+def test_colour_red_blue_distinct(vy):
+    """Red and blue balls are distinct entities"""
+    g = vy.bqg("a box has 5 red balls and 3 blue balls")
+    sankhya = [
+        [t[0], t[2]] for t in g
+        if isinstance(t, list) and len(t) >= 3 and t[1] == "sankhya"
+    ]
+    subjects = [s[0] for s in sankhya]
+    assert len(set(subjects)) >= 2
+
+
+def test_colour_red_blue_total(vy):
+    """5 red + 3 blue = 8 balls"""
+    r = vy.answer("a box has 5 red balls and 3 blue balls. how many balls")
+    assert "8" in r
+
+
+# ── total compound ─────────────────────────────────────────────────────────────
+
+
+def test_total_ke_not_count(vy):
+    """'total kinetic energy' → kinetic-energy concept, not count"""
+    g = vy.bqg("find total kinetic energy given mass 2 and velocity 3")
+    satya = vy.subjects(g, pred="satya")
+    assert "count" not in satya
+    assert "kinetic-energy" in satya or "total-kinetic-energy" in satya

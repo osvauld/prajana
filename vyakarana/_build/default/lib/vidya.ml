@@ -112,6 +112,41 @@ let load_shabda_dir (dir : string) : int =
     !count
   end
 
+(* emit_shabda_edges: project key shabda fields as graph edges.
+   Called after shabda + graph are both loaded. Creates:
+   - naama edges: word key → one edge per word (node --naama--> word)
+   - signal edges: signal-concept + signal → graph-native shunya composition
+   This makes word lookup graph-walkable instead of hashtable-only. *)
+let emit_shabda_edges (k : proof_graph) : int =
+  let naama_dim = register_dimension "naama" in
+  let count = ref 0 in
+  Hashtbl.iter (fun node_name pairs ->
+    match List.assoc_opt "word" pairs with
+    | None -> ()
+    | Some words_str ->
+      let words = String.split_on_char ',' words_str in
+      let new_edges = ref [] in
+      List.iter (fun w ->
+        let w = String.trim w in
+        if String.length w > 0 then begin
+          new_edges := { source = node_name; target = w; relation = naama_dim } :: !new_edges;
+          incr count
+        end
+      ) words;
+      if !new_edges <> [] then begin
+        let n = match Hashtbl.find_opt k.nodes node_name with
+          | Some existing -> { existing with edges = existing.edges @ !new_edges }
+          | None ->
+            (* shabda-only node: no .om5 file, create minimal stub *)
+            { name = node_name; layer = "shabda"; slokas = [];
+              edges = !new_edges; satya = 0.0; shabda = ""; krama = "" }
+        in
+        Hashtbl.replace k.nodes node_name n;
+        k.all_edges := !new_edges @ !(k.all_edges)
+      end
+  ) _shabda_store;
+  !count
+
 (* ═══════════════════════════════════════════════════════════════════════════
    2. SHABDA READER — inheritance-aware
    ═══════════════════════════════════════════════════════════════════════════ *)

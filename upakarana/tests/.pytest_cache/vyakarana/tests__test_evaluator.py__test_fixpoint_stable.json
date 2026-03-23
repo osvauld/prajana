@@ -1,0 +1,21 @@
+{
+  "test": "tests/test_evaluator.py::test_fixpoint_stable",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "fixpoint [[\"a\", \"b\", \"c\"]] (fn g -> g)",
+      "output": [
+        [
+          "a",
+          "b",
+          "c"
+        ]
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

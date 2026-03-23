@@ -1,0 +1,21 @@
+{
+  "test": "tests/test_pipeline.py::test_sandhi_grammar_has",
+  "outcome": "failed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "sandhi-viveka [[\"has\", \"mithya\", \"has\"]]",
+      "output": [
+        [
+          "has",
+          "mithya",
+          "has"
+        ]
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

@@ -1,0 +1,31 @@
+{
+  "test": "tests/test_pipeline.py::test_avrti_sankhya_bound",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "fixpoint [[\"mass\", \"satya\", \"mass\"], [\"5\", \"asprista-sankhya\", \"5.\"]] avrti-refine",
+      "output": [
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "mass",
+          "sankhya",
+          "5."
+        ]
+      ],
+      "elapsed_ms": 7,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.011
+}

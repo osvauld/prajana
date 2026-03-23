@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_sandhi_potential_energy",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.015
+}

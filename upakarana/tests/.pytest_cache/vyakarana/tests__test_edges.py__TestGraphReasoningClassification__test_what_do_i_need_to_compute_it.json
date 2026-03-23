@@ -1,0 +1,28 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningClassification::test_what_do_i_need_to_compute_it",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"kinetic-energy\" \"phala\"",
+      "output": [
+        "kinetic-energy-mantra",
+        "falling"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"kinetic-energy-mantra\" \"janya\"",
+      "output": [
+        "velocity",
+        "mass"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_answers.py::test_no_match_missing_data",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.191
+}

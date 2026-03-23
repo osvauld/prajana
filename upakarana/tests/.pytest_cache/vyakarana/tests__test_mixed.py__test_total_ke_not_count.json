@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_mixed.py::test_total_ke_not_count",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.028
+}

@@ -1,0 +1,19 @@
+{
+  "test": "tests/test_edges.py::TestRahitaWalk::test_who_lacks_iccha",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"iccha\" \"rahita\"",
+      "output": [
+        "visha-anu",
+        "jada",
+        "amino-acid"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_from_rest_in_answer",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.402
+}

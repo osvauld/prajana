@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_graph.py::test_walk_forward",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "walk",
+      "input": "mass \"matra\"",
+      "output": [
+        "kilogram"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_which_more_ke_computed",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.218,
+  "xfail": {
+    "reason": "compute-then-compare not implemented: viveka compares raw values, not derived",
+    "strict": true,
+    "gate": "viveka: compute-then-compare not built",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 244
+  }
+}

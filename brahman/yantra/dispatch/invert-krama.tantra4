@@ -1,10 +1,12 @@
 -- invert a mantra via its krama s-expression.
--- walks the krama tree to find the path to solve-for,
--- then reverses and applies each op's pratipaksha.
+-- walks the krama tree from root to solve-for,
+-- undoing each op from outermost inward.
+-- commutativity is read from the graph (commutativity → drishthanta).
+-- krama-path returns [op, arg-idx, sibling-value] with sibling already evaluated.
 (tantra invert-krama (mantra bindings solve-for)
 
-  -- get the op-chain: list of ops from root to solve-for variable
-  (ops (krama-path mantra solve-for))
+  -- get the op-chain: list of [op, arg-idx, sibling-value] triples
+  (ops (krama-path mantra solve-for bindings))
 
   -- phala concept (what the mantra computes)
   (phala (nth (walk mantra "phala") 0))
@@ -15,40 +17,27 @@
   (phala-val (reduce bindings "" (fn a kv ->
     cond (eq (nth kv 0) phala-concept) (nth kv 1) otherwise a)))
 
-  -- janya list (input variables)
-  (janya (walk mantra "janya"))
+  -- commutative ops from graph
+  (comm-ops (walk "commutativity" "drishthanta"))
 
-  -- resolve a concept to its value: check bindings, then constants
-  -- (used for "other arg" in binary ops during inversion)
-
-  -- reverse the ops and apply pratipaksha with accumulated value
-  (reversed (reverse ops))
-
-  (reduce reversed phala-val (fn acc op ->
-    -- get the inverse op via pratipaksha edge
-    let inv-node = nth (walk op "pratipaksha") 0
-    let inv-eval = shabda inv-node "eval"
-    let arity    = shabda op "arity"
-    -- unary op: just apply inverse
+  -- reduce root-to-leaf: undo outermost op first, work inward
+  (reduce ops phala-val (fn acc step ->
+    let op-name  = nth step 0
+    let arg-idx  = nth step 1
+    let sib-val  = nth step 2
+    let arity    = shabda op-name "arity"
+    let inv-name = shabda op-name "inverse"
+    let inv-eval = shabda inv-name "eval"
+    let op-eval  = shabda op-name "eval"
+    -- unary: apply inverse
     cond (eq arity "1")
       (apply-op inv-eval [acc])
     otherwise
-      -- binary op: need the "other" arg value
-      -- get the krama s-expr to find which arg position solve-for is in
-      let krama-str   = node-krama mantra
-      -- find the other arg for this op from bindings or constants
-      let other-args  = filter janya (fn j ->
-        let on-path = reduce ops false (fn found o -> cond found true otherwise (eq o j))
-        cond (eq j solve-for) false
-        otherwise (not on-path))
-      let other-val = reduce other-args acc (fn a concept ->
-        let ck = shabda concept "constants-key"
-        let from-const = cond (has-text ck)
-          (nth (split-numeric (shabda "physics-constants" ck)) 0)
-          otherwise ""
-        let from-bind = reduce bindings "" (fn a2 kv ->
-          cond (eq (nth kv 0) concept) (nth kv 1) otherwise a2)
-        cond (has-text from-bind) from-bind
-        otherwise (cond (has-text from-const) from-const
-        otherwise a))
-      (apply-op inv-eval [acc, other-val]))))
+      -- binary: use evaluated sibling value directly
+      let is-comm = member op-name comm-ops
+      -- arg[0] or commutative: inverse [acc, sibling]
+      -- arg[1] non-commutative: same op [sibling, acc]
+      cond (or (eq arg-idx "0") is-comm)
+        (apply-op inv-eval [acc, sib-val])
+      otherwise
+        (apply-op op-eval [sib-val, acc]))))

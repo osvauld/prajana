@@ -1,0 +1,23 @@
+{
+  "test": "tests/test_graph.py::test_walk_in_reverse",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "walk_in",
+      "input": "kilogram \"matra\"",
+      "output": [
+        "link-mass",
+        "mechanical-energy-varga",
+        "energy-varga",
+        "rotational-force-varga",
+        "mass",
+        "linear-force-varga",
+        "dynamics-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

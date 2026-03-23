@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_double_negation",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.142
+}

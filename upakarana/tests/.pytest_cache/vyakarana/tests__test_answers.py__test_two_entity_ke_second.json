@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_answers.py::test_two_entity_ke_second",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.495
+}

@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_car_from_rest_force",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.389,
+  "xfail": {
+    "reason": "'from rest' confusion: 'rest' maps to count-remaining",
+    "strict": true,
+    "gate": "parsing: natural phrasing not handled",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 180
+  }
+}

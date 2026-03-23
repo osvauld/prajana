@@ -1,0 +1,28 @@
+{
+  "test": "tests/test_pipeline.py::test_match_forward",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "match-mantra [[\"mass\", \"satya\", \"mass\"], [\"5\", \"asprista-sankhya\", \"5.\"], [\"velocity\", \"satya\", \"velocity\"], [\"10\", \"asprista-sankhya\", \"10.\"], [\".\", \"viraam\", \".\"], [\"find\", \"vidhi-kaala\", \"solve-for\"], [\"kinetic-energy\", \"satya\", \"kinetic-energy\"], [\"mass\", \"sankhya\", \"5.\"], [\"velocity\", \"sankhya\", \"10.\"]]",
+      "output": [
+        "kinetic-energy-mantra",
+        [
+          [
+            "mass",
+            "5."
+          ],
+          [
+            "velocity",
+            "10."
+          ]
+        ],
+        "forward"
+      ],
+      "elapsed_ms": 12,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.044
+}

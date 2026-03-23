@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_period_from_angular_velocity",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.687
+}

@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_evaluator.py::test_reduce_empty",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "reduce [] \"init\" (fn a x -> a)",
+      "output": "init",
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

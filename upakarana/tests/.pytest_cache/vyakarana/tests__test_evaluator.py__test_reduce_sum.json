@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_evaluator.py::test_reduce_sum",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "reduce [1, 2, 3] 0 (fn a x -> add a x)",
+      "output": 6,
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

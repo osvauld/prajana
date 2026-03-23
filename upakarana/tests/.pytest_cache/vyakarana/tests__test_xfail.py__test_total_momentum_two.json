@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_total_momentum_two",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.523,
+  "xfail": {
+    "reason": "dvandva: total-momentum requires iterating over entity-owned momenta and summing",
+    "strict": true,
+    "gate": "dvandva: per-entity instance-map",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 54
+  }
+}

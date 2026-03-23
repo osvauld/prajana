@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_comparison.py::test_proportional_momentum_double_mass",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.489
+}

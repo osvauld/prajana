@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_pipeline.py::test_agra_bandha_labelling",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.09
+}

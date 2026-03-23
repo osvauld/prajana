@@ -1,0 +1,29 @@
+{
+  "test": "tests/test_pipeline.py::test_kosha_walk_surfaces_relations",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "walk",
+      "input": "kinetic-energy \"janya\"",
+      "output": [
+        "falling",
+        "falling",
+        "kinetic-energy-mantra",
+        "kinetic-energy-mantra"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "walk",
+      "input": "mass \"matra\"",
+      "output": [
+        "kilogram"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

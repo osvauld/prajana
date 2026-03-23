@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_inverse_suvat_find_initial_velocity",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.25
+}

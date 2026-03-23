@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningRobotics::test_moment_of_inertia_in_rotational_varga",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"moment-of-inertia\" \"vishesa\"",
+      "output": [
+        "rotational-force-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

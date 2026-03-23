@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_entity.py::test_unnamed_entity_computes",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.349
+}

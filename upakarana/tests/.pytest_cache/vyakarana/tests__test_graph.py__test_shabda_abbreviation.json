@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_graph.py::test_shabda_abbreviation",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "shabda-anveshana \"kg\"",
+      "output": "kilogram",
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

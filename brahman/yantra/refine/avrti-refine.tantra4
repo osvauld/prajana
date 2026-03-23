@@ -12,4 +12,5 @@
   (after-vishesa-bind (vishesa-bandhana after-rashi-viveka))
   (after-rashi-anuvada (rashi-anuvada after-vishesa-bind))
   (after-sankhya-bandha (sankhya-bandha after-rashi-anuvada))
-  (swarupa-anuvada after-sankhya-bandha))
+  (after-swarupa (swarupa-anuvada after-sankhya-bandha))
+  (shunya-bandha after-swarupa))

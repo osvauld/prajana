@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_negation_not_emits_satya",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.014
+}

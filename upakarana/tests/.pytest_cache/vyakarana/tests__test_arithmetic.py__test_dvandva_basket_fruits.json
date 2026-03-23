@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_arithmetic.py::test_dvandva_basket_fruits",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.118
+}

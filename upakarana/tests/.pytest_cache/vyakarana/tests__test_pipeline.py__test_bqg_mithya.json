@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_pipeline.py::test_bqg_mithya",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.002
+}

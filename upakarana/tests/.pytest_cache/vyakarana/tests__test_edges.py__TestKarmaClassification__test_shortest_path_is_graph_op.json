@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestKarmaClassification::test_shortest_path_is_graph_op",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"shortest-path\" \"karma\"",
+      "output": [
+        "graph-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

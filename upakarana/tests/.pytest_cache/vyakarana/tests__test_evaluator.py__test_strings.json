@@ -1,0 +1,47 @@
+{
+  "test": "tests/test_evaluator.py::test_strings",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "split \"a-b-c\" \"-\"",
+      "output": [
+        "a",
+        "b",
+        "c"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "substr \"kilogram\" 0 4",
+      "output": "kilo",
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "starts-with \"kilogram\" \"kilo\"",
+      "output": true,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "ends-with \"velocities\" \"ies\"",
+      "output": true,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "string-length \"mass\"",
+      "output": 4,
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

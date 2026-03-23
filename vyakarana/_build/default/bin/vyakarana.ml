@@ -206,6 +206,9 @@ let () =
     ) 0 dirs in
   if shabda_loaded > 0 && not quiet_startup then
     Printf.printf "shabda: %d entries loaded from external .shabda files\n%!" shabda_loaded;
+  let naama_edges = Vidya.emit_shabda_edges k0 in
+  if naama_edges > 0 && not quiet_startup then
+    Printf.printf "naama: %d word edges emitted into graph\n%!" naama_edges;
   let yantra_idx = Kriya.build_index ~graph:k0 dirs in
   Prakriti.materialize_csr k0;
   Prakriti.compute_visheshanam_entropy_weights k0;

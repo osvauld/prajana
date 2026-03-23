@@ -1,0 +1,422 @@
+{
+  "total": 377,
+  "passed": 289,
+  "failed": 55,
+  "xfailed": 33,
+  "xpassed": 0,
+  "skipped": 0,
+  "failed_tests": [
+    {
+      "test": "tests/test_arithmetic.py::test_distribution_per",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.233
+    },
+    {
+      "test": "tests/test_arithmetic.py::test_entity_scope_apples_sold",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.1
+    },
+    {
+      "test": "tests/test_arithmetic.py::test_entity_scope_two_fruits",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.125
+    },
+    {
+      "test": "tests/test_arithmetic.py::test_multiplication_bags_apples",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.111
+    },
+    {
+      "test": "tests/test_arithmetic.py::test_multiplication_children_coins",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.084
+    },
+    {
+      "test": "tests/test_arithmetic.py::test_multiplication_tables_legs",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.123
+    },
+    {
+      "test": "tests/test_arithmetic.py::test_physics_count_total_mass",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.241
+    },
+    {
+      "test": "tests/test_comparison.py::test_compute_compare_ke_values_present",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.228
+    },
+    {
+      "test": "tests/test_comparison.py::test_proportional_ke_double_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.479
+    },
+    {
+      "test": "tests/test_comparison.py::test_proportional_momentum_double_mass",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.489
+    },
+    {
+      "test": "tests/test_comparison.py::test_relative_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.108
+    },
+    {
+      "test": "tests/test_edges.py::TestInversePipeline::test_ke_inverse_mass",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.254
+    },
+    {
+      "test": "tests/test_edges.py::TestInversePipeline::test_ke_inverse_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.245
+    },
+    {
+      "test": "tests/test_grammar.py::test_from_rest_initial_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.019
+    },
+    {
+      "test": "tests/test_grammar.py::test_sandhi_electric_power",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.013
+    },
+    {
+      "test": "tests/test_grammar.py::test_trigram_electric_field_strength",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.021
+    },
+    {
+      "test": "tests/test_grammar.py::test_verb_moves_at",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.017
+    },
+    {
+      "test": "tests/test_grammar.py::test_verb_moving_at",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.267
+    },
+    {
+      "test": "tests/test_graph.py::test_node_satya_known",
+      "failure": {},
+      "calls": 1,
+      "duration": 0.002
+    },
+    {
+      "test": "tests/test_graph.py::test_node_satya_unknown",
+      "failure": {},
+      "calls": 1,
+      "duration": 0.001
+    },
+    {
+      "test": "tests/test_graph.py::test_register_dimension_idempotent",
+      "failure": {},
+      "calls": 2,
+      "duration": 0.002
+    },
+    {
+      "test": "tests/test_logic.py::test_conditional_chain",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.222
+    },
+    {
+      "test": "tests/test_logic.py::test_disjunctive_syllogism",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.099
+    },
+    {
+      "test": "tests/test_logic.py::test_double_negation",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.142
+    },
+    {
+      "test": "tests/test_logic.py::test_modus_ponens",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.119
+    },
+    {
+      "test": "tests/test_logic.py::test_pratishedha_not_at_rest_has_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.087
+    },
+    {
+      "test": "tests/test_logic.py::test_syllogism_breathe",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.133
+    },
+    {
+      "test": "tests/test_logic.py::test_transitive_entities_ranking",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.281
+    },
+    {
+      "test": "tests/test_logic.py::test_transitive_greater",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.115
+    },
+    {
+      "test": "tests/test_logic.py::test_transitive_three_step",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.162
+    },
+    {
+      "test": "tests/test_logic.py::test_universal_with_exception",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.102
+    },
+    {
+      "test": "tests/test_mixed.py::test_chain_inverse_find_force",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.671
+    },
+    {
+      "test": "tests/test_mixed.py::test_chain_inverse_find_initial_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.443
+    },
+    {
+      "test": "tests/test_mixed.py::test_logic_count_all_wings",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.193
+    },
+    {
+      "test": "tests/test_mixed.py::test_physics_count_total_ke",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.425
+    },
+    {
+      "test": "tests/test_mixed.py::test_physics_logic_all_objects",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.202
+    },
+    {
+      "test": "tests/test_physics.py::test_angular_velocity_basic",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.739
+    },
+    {
+      "test": "tests/test_physics.py::test_chain_force_via_suvat",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.776
+    },
+    {
+      "test": "tests/test_physics.py::test_chain_ke_via_suvat",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.654
+    },
+    {
+      "test": "tests/test_physics.py::test_chain_momentum_via_suvat",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.62
+    },
+    {
+      "test": "tests/test_physics.py::test_electric_power_basic",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.447
+    },
+    {
+      "test": "tests/test_physics.py::test_inverse_angular_velocity_find_radius",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.637
+    },
+    {
+      "test": "tests/test_physics.py::test_inverse_electric_power_find_current",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.221
+    },
+    {
+      "test": "tests/test_physics.py::test_period_from_angular_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.687
+    },
+    {
+      "test": "tests/test_physics.py::test_photon_energy_basic",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.482
+    },
+    {
+      "test": "tests/test_physics.py::test_torque_basic",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.268
+    },
+    {
+      "test": "tests/test_physics.py::test_velocity_suvat",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.42
+    },
+    {
+      "test": "tests/test_physics.py::test_zero_initial_velocity_suvat",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.413
+    },
+    {
+      "test": "tests/test_pipeline.py::test_rashi_instance",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.028
+    },
+    {
+      "test": "tests/test_pipeline.py::test_rashi_sankhya_bind",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.029
+    },
+    {
+      "test": "tests/test_pipeline.py::test_sandhi_grammar_has",
+      "failure": {},
+      "calls": 1,
+      "duration": 0.003
+    },
+    {
+      "test": "tests/test_pipeline.py::test_sandhi_tense_was",
+      "failure": {},
+      "calls": 1,
+      "duration": 0.003
+    },
+    {
+      "test": "tests/test_xfail.py::test_inverse_ke_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.249
+    },
+    {
+      "test": "tests/test_xfail.py::test_inverse_suvat_initial_velocity",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.252
+    },
+    {
+      "test": "tests/test_xfail.py::test_inverse_suvat_time",
+      "failure": {},
+      "calls": 0,
+      "duration": 0.256
+    }
+  ],
+  "slow_tests": [
+    {
+      "test": "tests/test_physics.py::test_centripetal_force_basic",
+      "duration": 0.805
+    },
+    {
+      "test": "tests/test_physics.py::test_chain_force_via_suvat",
+      "duration": 0.776
+    },
+    {
+      "test": "tests/test_answers.py::test_chain_force_via_suvat",
+      "duration": 0.767
+    },
+    {
+      "test": "tests/test_physics.py::test_angular_velocity_basic",
+      "duration": 0.739
+    },
+    {
+      "test": "tests/test_physics.py::test_period_from_angular_velocity",
+      "duration": 0.687
+    },
+    {
+      "test": "tests/test_mixed.py::test_chain_inverse_find_force",
+      "duration": 0.671
+    },
+    {
+      "test": "tests/test_physics.py::test_chain_ke_via_suvat",
+      "duration": 0.654
+    },
+    {
+      "test": "tests/test_answers.py::test_chain_ke_via_suvat",
+      "duration": 0.639
+    },
+    {
+      "test": "tests/test_physics.py::test_inverse_angular_velocity_find_radius",
+      "duration": 0.637
+    },
+    {
+      "test": "tests/test_physics.py::test_chain_momentum_via_suvat",
+      "duration": 0.62
+    },
+    {
+      "test": "tests/test_mixed.py::test_session_entity_then_property",
+      "duration": 0.567
+    },
+    {
+      "test": "tests/test_mixed.py::test_session_three_turns",
+      "duration": 0.556
+    },
+    {
+      "test": "tests/test_entity.py::test_session_accumulate_properties",
+      "duration": 0.549
+    },
+    {
+      "test": "tests/test_answers.py::test_session_accumulate",
+      "duration": 0.548
+    },
+    {
+      "test": "tests/test_physics.py::test_chain_strand_intermediate",
+      "duration": 0.54
+    },
+    {
+      "test": "tests/test_physics.py::test_frequency_from_period",
+      "duration": 0.539
+    },
+    {
+      "test": "tests/test_xfail.py::test_total_momentum_three",
+      "duration": 0.523
+    },
+    {
+      "test": "tests/test_xfail.py::test_total_momentum_two",
+      "duration": 0.523
+    },
+    {
+      "test": "tests/test_answers.py::test_two_entity_ke_first",
+      "duration": 0.519
+    },
+    {
+      "test": "tests/test_xfail.py::test_proportional_ke_doubled",
+      "duration": 0.515
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_comparison.py::test_proportional_ke_double_velocity",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.479
+}

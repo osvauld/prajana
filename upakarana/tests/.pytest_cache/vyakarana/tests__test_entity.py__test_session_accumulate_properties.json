@@ -1,0 +1,32 @@
+{
+  "test": "tests/test_entity.py::test_session_accumulate_properties",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "ask",
+      "input": "mass is 5",
+      "session_id": "test-entity-accumulate-v2",
+      "output": "no match",
+      "elapsed_ms": 261,
+      "error": null
+    },
+    {
+      "method": "ask",
+      "input": "velocity is 10",
+      "session_id": "test-entity-accumulate-v2",
+      "output": "no match",
+      "elapsed_ms": 253,
+      "error": null
+    },
+    {
+      "method": "ask",
+      "input": "find kinetic energy",
+      "session_id": "test-entity-accumulate-v2",
+      "output": "kinetic-energy = 250",
+      "elapsed_ms": 33,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.549
+}

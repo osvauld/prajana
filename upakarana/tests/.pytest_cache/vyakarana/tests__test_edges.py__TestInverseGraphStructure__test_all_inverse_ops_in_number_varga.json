@@ -1,0 +1,62 @@
+{
+  "test": "tests/test_edges.py::TestInverseGraphStructure::test_all_inverse_ops_in_number_varga",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"half\" \"karma\"",
+      "output": [
+        "number-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"double\" \"karma\"",
+      "output": [
+        "number-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"square\" \"karma\"",
+      "output": [
+        "number-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"square-root\" \"karma\"",
+      "output": [
+        "number-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"multiplication\" \"karma\"",
+      "output": [
+        "number-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"division\" \"karma\"",
+      "output": [
+        "number-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

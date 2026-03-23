@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_zero_velocity_ke",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.362
+}

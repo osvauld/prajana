@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_arithmetic.py::test_physics_count_total_mass",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.241
+}

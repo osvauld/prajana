@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_evaluator.py::test_split_numeric",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "split-numeric \"5kg\"",
+      "output": [
+        "5.",
+        "kg"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

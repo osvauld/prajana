@@ -1,0 +1,58 @@
+{
+  "test": "tests/test_evaluator.py::test_lists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "append [\"a\"] [\"b\", \"c\"]",
+      "output": [
+        "a",
+        "b",
+        "c"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "sum [1, 2, 3, 4]",
+      "output": 10,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "length [\"a\", \"b\", \"c\"]",
+      "output": 3,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "nth [\"x\", \"y\"] 0",
+      "output": "x",
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "nth [\"a\", \"b\"] 99",
+      "output": null,
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "unique [\"a\", \"b\", \"a\", \"c\", \"b\"]",
+      "output": [
+        "a",
+        "b",
+        "c"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_edges.py::TestKarmaClassification::test_morphism_is_algebra_op",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"morphism\" \"karma\"",
+      "output": [
+        "set-varga",
+        "algebra-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

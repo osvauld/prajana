@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_answers.py::test_viveka_lightest",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.159
+}

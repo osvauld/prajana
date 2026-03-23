@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningRobotics::test_3dof_arm_torque",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.227,
+  "xfail": {
+    "reason": "robotics: no 3DOF arm tantra yet",
+    "strict": true,
+    "gate": "other:test_edges",
+    "file": "/home/abe/agent_x/upakarana/tests/test_edges.py",
+    "line": 476
+  }
+}

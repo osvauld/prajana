@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_arithmetic.py::test_dvandva_three_kinds",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.135
+}

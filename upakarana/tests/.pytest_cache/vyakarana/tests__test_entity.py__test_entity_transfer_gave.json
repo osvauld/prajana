@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_entity.py::test_entity_transfer_gave",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.112
+}

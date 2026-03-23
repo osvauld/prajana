@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_comparison.py::test_count_compare_after_change",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.142
+}

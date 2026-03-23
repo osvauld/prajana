@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningRobotics::test_angular_velocity_mantra_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"angular-velocity\" \"phala\"",
+      "output": [
+        "angular-velocity-mantra",
+        "velocity-plan"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

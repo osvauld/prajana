@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_electric_field_strength",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.022,
+  "xfail": {
+    "reason": "sandhi-kosha only handles bigrams; electric-field-strength is a trigram",
+    "strict": true,
+    "gate": "sandhi-kosha only handles bigrams",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 155
+  }
+}

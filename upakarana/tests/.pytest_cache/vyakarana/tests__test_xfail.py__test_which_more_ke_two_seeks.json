@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_which_more_ke_two_seeks",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.215,
+  "xfail": {
+    "reason": "compute-then-compare: two seeks needed",
+    "strict": true,
+    "gate": "viveka: compute-then-compare not built",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 255
+  }
+}

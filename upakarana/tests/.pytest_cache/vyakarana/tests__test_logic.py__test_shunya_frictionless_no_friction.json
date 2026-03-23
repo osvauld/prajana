@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_logic.py::test_shunya_frictionless_no_friction",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.066
+}

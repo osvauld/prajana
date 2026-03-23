@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningRobotics::test_torque_inputs",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"torque-mantra\" \"janya\"",
+      "output": [
+        "angular-acceleration",
+        "moment-of-inertia"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

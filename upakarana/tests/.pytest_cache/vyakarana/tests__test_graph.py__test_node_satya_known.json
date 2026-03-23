@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_graph.py::test_node_satya_known",
+  "outcome": "failed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "node-satya \"mass\"",
+      "output": null,
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

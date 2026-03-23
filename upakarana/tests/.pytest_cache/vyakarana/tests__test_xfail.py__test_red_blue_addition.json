@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_xfail.py::test_red_blue_addition",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.108
+}

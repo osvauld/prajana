@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_edges.py::TestGraphReasoningRobotics::test_angular_chain",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"angular-acceleration\" \"janya\"",
+      "output": [
+        "torque-mantra"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"angular-acceleration\" \"kramanusara\"",
+      "output": [
+        "angular-velocity"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

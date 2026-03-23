@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_answers.py::test_count_named_entity_total",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.113
+}

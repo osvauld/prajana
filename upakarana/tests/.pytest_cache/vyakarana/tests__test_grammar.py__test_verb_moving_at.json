@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_grammar.py::test_verb_moving_at",
+  "outcome": "failed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.267
+}

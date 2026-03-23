@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_inverse_momentum_find_mass",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.328
+}

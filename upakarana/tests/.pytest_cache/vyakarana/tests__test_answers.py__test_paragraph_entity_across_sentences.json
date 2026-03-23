@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_answers.py::test_paragraph_entity_across_sentences",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.344
+}

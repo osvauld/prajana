@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_physics.py::test_centripetal_force_basic",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.805
+}

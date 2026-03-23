@@ -1,0 +1,19 @@
+{
+  "test": "tests/test_evaluator.py::test_map_transform",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "map [1, 2, 3] (fn x -> mul x 2)",
+      "output": [
+        2,
+        4,
+        6
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}

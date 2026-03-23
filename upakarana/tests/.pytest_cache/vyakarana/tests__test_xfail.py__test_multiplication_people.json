@@ -1,0 +1,14 @@
+{
+  "test": "tests/test_xfail.py::test_multiplication_people",
+  "outcome": "xfailed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.103,
+  "xfail": {
+    "reason": "multiplication: people with coins",
+    "strict": true,
+    "gate": "multiplication: 'each' triggers multiply",
+    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
+    "line": 427
+  }
+}

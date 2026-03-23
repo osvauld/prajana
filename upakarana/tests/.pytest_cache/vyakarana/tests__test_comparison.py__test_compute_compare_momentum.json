@@ -1,0 +1,7 @@
+{
+  "test": "tests/test_comparison.py::test_compute_compare_momentum",
+  "outcome": "passed",
+  "calls": [],
+  "failure": null,
+  "duration": 0.215
+}

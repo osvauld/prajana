@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_edges.py::TestRahitaEdges::test_nil_without_shunya",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"nil\" \"rahita\"",
+      "output": [
+        "shunya"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.0
+}
