@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_final_momentum_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"final-momentum\" \"swarupa\"",
+      "output": [
+        "momentum",
+        "momentum"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

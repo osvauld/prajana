@@ -1,7 +1,46 @@
 {
   "test": "tests/test_grammar.py::test_verb_accelerates",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "a car accelerates at 3 m/s2",
+      "output": [
+        [
+          "car-motion",
+          "satya",
+          "car-motion"
+        ],
+        [
+          "accelerates",
+          "mithya",
+          "accelerates"
+        ],
+        [
+          "at",
+          "adhikarana",
+          "at"
+        ],
+        [
+          "3",
+          "asprista-sankhya",
+          "3."
+        ],
+        [
+          "m/s2",
+          "mithya",
+          "m/s2"
+        ],
+        [
+          "car-motion",
+          "sankhya",
+          "3."
+        ]
+      ],
+      "elapsed_ms": 55,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.017
+  "duration": 0.057
 }

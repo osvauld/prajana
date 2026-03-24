@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_normal_force",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find normal force",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "normal-force",
+          "satya",
+          "normal-force"
+        ]
+      ],
+      "elapsed_ms": 19,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.02
+}

@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_qword_find",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find velocity",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ]
+      ],
+      "elapsed_ms": 25,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.007
+  "duration": 0.026
 }

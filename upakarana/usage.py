@@ -53,6 +53,17 @@ def track(command, action=None):
     _save(data)
 
 
+def track_miss(command, action=None):
+    """Record a no-match invocation (command ran but returned zero results)."""
+    data = _load()
+    key = f"{command} {action}" if action else command
+    if key not in data["commands"]:
+        return  # track() should have been called first
+    entry = data["commands"][key]
+    entry["misses"] = entry.get("misses", 0) + 1
+    _save(data)
+
+
 def bump_session():
     """Increment session counter (call once per CLI invocation)."""
     data = _load()
@@ -68,13 +79,20 @@ def report():
     # Sort by count descending
     by_count = sorted(commands.items(), key=lambda x: -x[1]["count"])
 
+    total_misses = sum(v.get("misses", 0) for v in commands.values())
+    miss_commands = [(k, v) for k, v in by_count if v.get("misses", 0) > 0]
+
     return {
         "sessions": data.get("sessions", 0),
         "first_use": data.get("first_use"),
         "total_invocations": sum(v["count"] for v in commands.values()),
+        "total_misses": total_misses,
         "unique_commands": len(commands),
         "top": [{"command": k, "count": v["count"], "last": v["last"]}
                 for k, v in by_count[:20]],
+        "misses": [{"command": k, "misses": v["misses"], "count": v["count"],
+                     "rate": round(v["misses"] / v["count"] * 100, 1) if v["count"] else 0}
+                    for k, v in miss_commands],
         "all": {k: v["count"] for k, v in by_count},
     }
 

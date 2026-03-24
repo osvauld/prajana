@@ -3,6 +3,24 @@
   "outcome": "passed",
   "calls": [
     {
+      "method": "raw_bqg",
+      "input": "mass 5",
+      "output": [
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ]
+      ],
+      "elapsed_ms": 9,
+      "error": null
+    },
+    {
       "method": "eval",
       "input": "fixpoint [[\"mass\", \"satya\", \"mass\"], [\"5\", \"asprista-sankhya\", \"5.\"]] avrti-refine",
       "output": [
@@ -22,10 +40,10 @@
           "5."
         ]
       ],
-      "elapsed_ms": 7,
+      "elapsed_ms": 40,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.011
+  "duration": 0.051
 }

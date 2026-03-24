@@ -1,0 +1,47 @@
+{
+  "test": "tests/test_avastha.py::test_force_variant_inherits_vishesa",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"force\" \"vishesa\"",
+      "output": [
+        "linear-force-varga"
+      ],
+      "elapsed_ms": 1,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"centripetal-force\" \"vishesa\"",
+      "output": [
+        "linear-force-varga",
+        "linear-force-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"drag-force\" \"vishesa\"",
+      "output": [
+        "linear-force-varga",
+        "linear-force-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"elastic-force\" \"vishesa\"",
+      "output": [
+        "linear-force-varga",
+        "linear-force-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

@@ -1,7 +1,22 @@
 {
   "test": "tests/test_logic.py::test_disjunctive_syllogism",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "the ball is red or blue. the ball is not red. what color is the ball",
+      "output": "we ask: does negation inherit disjunction?. we see: disjunction reachable from negation. no \u2014 negation does not have disjunction",
+      "elapsed_ms": 405,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.099
+  "duration": 0.41,
+  "xfail": {
+    "reason": "disjunctive: disjunctive syllogism not built",
+    "strict": true,
+    "gate": "logic_nyaya: P8d anumana not built",
+    "file": "/home/abe/agent_x/upakarana/tests/test_logic.py",
+    "line": 130
+  }
 }

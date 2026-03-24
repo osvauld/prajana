@@ -1,7 +1,61 @@
 {
   "test": "tests/test_grammar.py::test_has_possession",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "ball has mass 5",
+      "output": [
+        [
+          "ball",
+          "mithya",
+          "ball"
+        ],
+        [
+          "has",
+          "mithya",
+          "has"
+        ],
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "mass",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "mass",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball",
+          "prathama-vibhakti",
+          "object"
+        ],
+        [
+          "mass",
+          "shashthi-vibhakti",
+          "ball"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "5."
+        ]
+      ],
+      "elapsed_ms": 79,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.021
+  "duration": 0.081
 }

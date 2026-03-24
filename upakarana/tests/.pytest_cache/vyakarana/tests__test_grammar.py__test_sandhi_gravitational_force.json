@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_gravitational_force",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find gravitational force",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "gravitational-force",
+          "satya",
+          "gravitational-force"
+        ]
+      ],
+      "elapsed_ms": 58,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.016
+  "duration": 0.06
 }

@@ -1,7 +1,15 @@
 {
   "test": "tests/test_logic.py::test_is_a_direct",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "a sparrow is a bird. birds have wings. does a sparrow have wings",
+      "output": "we assert: sparrow IS-A bird. we ask: does wings inherit bird?. we see: chain reaches bird via IS-A. no \u2014 wings does not have bird",
+      "elapsed_ms": 455,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.139
+  "duration": 0.457
 }

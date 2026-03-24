@@ -1,14 +1,48 @@
 {
   "test": "tests/test_xfail.py::test_moves_at_velocity",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "a proton moves at 2e6 m/s",
+      "output": [
+        [
+          "proton",
+          "satya",
+          "proton"
+        ],
+        [
+          "at",
+          "adhikarana",
+          "at"
+        ],
+        [
+          "2e6",
+          "asprista-sankhya",
+          "2000000."
+        ],
+        [
+          "m/s",
+          "mithya",
+          "m/s"
+        ],
+        [
+          "proton",
+          "sankhya",
+          "2000000."
+        ]
+      ],
+      "elapsed_ms": 40,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.017,
+  "duration": 0.051,
   "xfail": {
     "reason": "'moves at' not recognised as velocity signal",
     "strict": true,
     "gate": "kosha: missing concept node",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 131
+    "line": 107
   }
 }

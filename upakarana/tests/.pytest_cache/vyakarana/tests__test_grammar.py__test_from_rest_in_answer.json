@@ -1,7 +1,15 @@
 {
   "test": "tests/test_grammar.py::test_from_rest_in_answer",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "a car of mass 1200 accelerates from rest at 3 m/s2. find force",
+      "output": "we have: mass=1200.; mass=3.; and velocity=0..we seek: force.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=0., mass=3..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=0., mass=3..no match",
+      "elapsed_ms": 781,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.402
+  "duration": 0.783
 }

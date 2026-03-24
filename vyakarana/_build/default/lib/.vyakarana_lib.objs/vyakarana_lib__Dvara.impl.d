@@ -1,1 +1,1 @@
-lib/dvara.ml: Buffer Filename Hashtbl Jnana Karma Kriya Kriya_eval Kriya_types List Option Prakriti Printexc Printf String Unix Vakya
+lib/dvara.ml: Atomic Buffer Domain Filename Fun Hashtbl Jnana Karma Kriya Kriya_eval Kriya_types List Mutex Option Prakriti Printexc Printf String StringMap Unix Vakya

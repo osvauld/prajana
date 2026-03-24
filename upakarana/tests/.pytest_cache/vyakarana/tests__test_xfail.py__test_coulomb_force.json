@@ -1,14 +1,22 @@
 {
   "test": "tests/test_xfail.py::test_coulomb_force",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "particle-A has charge 1.6e-19. particle-B has charge 1.6e-19. find coulomb force given radius 1e-10",
+      "output": "we have: particle-A (charge=1.6e-19); particle-B (charge=1.6e-19); and radius=1e-10.we seek: coulomb.no match",
+      "elapsed_ms": 707,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.29,
+  "duration": 0.714,
   "xfail": {
     "reason": "sthita-viveka: same slot assignment gap for charge1/charge2",
     "strict": true,
     "gate": "sthita-viveka: multi-slot entity assignment",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 118
+    "line": 94
   }
 }

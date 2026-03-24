@@ -1,6 +1,6 @@
 {
   "test": "tests/test_graph.py::test_node_satya_unknown",
-  "outcome": "failed",
+  "outcome": "xfailed",
   "calls": [
     {
       "method": "eval",
@@ -11,5 +11,12 @@
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.004,
+  "xfail": {
+    "reason": "graph primitive: node-satya returns string not number",
+    "strict": true,
+    "gate": "graph_primitive: node-satya / register-dimension return type",
+    "file": "/home/abe/agent_x/upakarana/tests/test_graph.py",
+    "line": 41
+  }
 }

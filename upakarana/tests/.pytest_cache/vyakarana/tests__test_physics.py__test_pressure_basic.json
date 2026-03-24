@@ -1,7 +1,15 @@
 {
   "test": "tests/test_physics.py::test_pressure_basic",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "force is 100 and area is 5. find pressure",
+      "output": "we have: force=100. and area=5..we seek: pressure.we know: pressure-mantra (area, force \u2192 pressure).we see: area=5., force=100..we find: pressure = 20",
+      "elapsed_ms": 417,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.436
+  "duration": 0.419
 }

@@ -1,7 +1,15 @@
 {
   "test": "tests/test_physics.py::test_mass_density_basic",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "mass is 500 and volume is 2. find mass density",
+      "output": "we have: mass=500. and volume=2..we seek: mass-density.we know: mass-density-mantra (volume, mass \u2192 mass-density).we see: volume=2., mass=500..we find: mass-density = 250",
+      "elapsed_ms": 431,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.424
+  "duration": 0.432
 }

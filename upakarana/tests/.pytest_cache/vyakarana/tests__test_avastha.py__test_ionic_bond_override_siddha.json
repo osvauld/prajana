@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_ionic_bond_override_siddha",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"ionic-bond\" \"siddha\"",
+      "output": [
+        "positive-negative",
+        "positive-negative"
+      ],
+      "elapsed_ms": 1,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

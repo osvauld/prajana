@@ -1,7 +1,46 @@
 {
   "test": "tests/test_grammar.py::test_number_decimal",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "mass is 2.5",
+      "output": [
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "2.5",
+          "asprista-sankhya",
+          "2.5"
+        ],
+        [
+          "mass",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "mass",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "2.5"
+        ]
+      ],
+      "elapsed_ms": 53,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.017
+  "duration": 0.055
 }

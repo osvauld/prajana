@@ -1,7 +1,36 @@
 {
   "test": "tests/test_pipeline.py::test_bqg_unit_binding",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "raw_bqg",
+      "input": "mass 5 kg",
+      "output": [
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "mass",
+          "sankhya",
+          "5."
+        ],
+        [
+          "mass",
+          "matra",
+          "kilogram"
+        ]
+      ],
+      "elapsed_ms": 24,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.006
+  "duration": 0.026
 }

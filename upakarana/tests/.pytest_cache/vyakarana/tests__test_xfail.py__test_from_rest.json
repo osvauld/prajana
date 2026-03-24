@@ -1,14 +1,63 @@
 {
   "test": "tests/test_xfail.py::test_from_rest",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "accelerates from rest at 3 m/s2",
+      "output": [
+        [
+          "accelerates",
+          "mithya",
+          "accelerates"
+        ],
+        [
+          "from",
+          "apadana",
+          "from"
+        ],
+        [
+          "initial-rest",
+          "satya",
+          "initial-rest"
+        ],
+        [
+          "at",
+          "adhikarana",
+          "at"
+        ],
+        [
+          "3",
+          "asprista-sankhya",
+          "3."
+        ],
+        [
+          "m/s2",
+          "mithya",
+          "m/s2"
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "0."
+        ]
+      ],
+      "elapsed_ms": 59,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.023,
+  "duration": 0.069,
   "xfail": {
     "reason": "'from rest' should mean initial-velocity=0",
     "strict": true,
     "gate": "parsing: natural phrasing not handled",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 173
+    "line": 149
   }
 }

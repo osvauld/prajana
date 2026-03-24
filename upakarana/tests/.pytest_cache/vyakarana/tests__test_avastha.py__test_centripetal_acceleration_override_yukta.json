@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_centripetal_acceleration_override_yukta",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"centripetal-acceleration\" \"yukta\"",
+      "output": [
+        "radius",
+        "velocity",
+        "velocity",
+        "radius"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

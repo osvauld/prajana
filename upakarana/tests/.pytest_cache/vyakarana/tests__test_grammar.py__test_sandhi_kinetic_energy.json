@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_kinetic_energy",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find kinetic energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "kinetic-energy",
+          "satya",
+          "kinetic-energy"
+        ]
+      ],
+      "elapsed_ms": 18,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.014
+  "duration": 0.019
 }

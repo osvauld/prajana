@@ -1,14 +1,22 @@
 {
   "test": "tests/test_xfail.py::test_entity_scope_each_fruit",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "a shop has 10 apples and 8 oranges. 3 apples were sold. how many of each are left",
+      "output": "no match",
+      "elapsed_ms": 332,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.157,
+  "duration": 0.342,
   "xfail": {
     "reason": "entity_scope: per-entity count after subtraction",
     "strict": true,
     "gate": "entity_scope: per-entity scoped count",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 359
+    "line": 335
   }
 }

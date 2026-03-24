@@ -1,14 +1,22 @@
 {
   "test": "tests/test_xfail.py::test_area_rectangle",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "a rectangle has length 8 and width 5. find area",
+      "output": "no match",
+      "elapsed_ms": 132,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.069,
+  "duration": 0.139,
   "xfail": {
     "reason": "area = length * width not in pipeline",
     "strict": true,
     "gate": "arithmetic: plain count not in pipeline",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 320
+    "line": 296
   }
 }

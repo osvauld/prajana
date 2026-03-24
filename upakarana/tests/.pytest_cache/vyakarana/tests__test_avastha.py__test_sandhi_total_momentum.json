@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_total_momentum",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find total momentum",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "total-momentum",
+          "satya",
+          "total-momentum"
+        ]
+      ],
+      "elapsed_ms": 20,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.022
+}

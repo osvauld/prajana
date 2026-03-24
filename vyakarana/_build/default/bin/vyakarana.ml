@@ -122,13 +122,13 @@ let rec madakkal (k : Prakriti.proof_graph) (idx : Kriya.tantra_index)
       if String.length y.sentence > 5 && String.sub y.sentence 0 5 = "EVAL:" then begin
         let expr_str = String.trim (String.sub y.sentence 5 (String.length y.sentence - 5)) in
         let expr = Kriya.parse_expr_string expr_str in
-        let env  = Kriya.new_env () in
         let tnames = List.map (fun t -> Kriya.VString t.Kriya.t_name)
           !(idx.all_tantras) in
-        Hashtbl.replace env "_tantra_index" (Kriya.VList tnames);
-        Kriya.eval_ctx := Some { Kriya.ctx_index = idx; ctx_session = session };
-        let result = Kriya.eval k env expr in
-        Kriya.eval_ctx := None;
+        let env = Kriya.StringMap.add "_tantra_index" (Kriya.VList tnames) Kriya.StringMap.empty in
+        Domain.DLS.set Kriya._eval_ctx (Some { Kriya.ctx_index = idx; ctx_session = session });
+        let result = Fun.protect
+          ~finally:(fun () -> Domain.DLS.set Kriya._eval_ctx None)
+          (fun () -> Kriya.eval k env expr) in
         Printf.printf "%s\n%!" (Kriya.as_string result)
       end else
         (match Kriya.run_anuvada_ganana k idx session y.sentence with
@@ -206,6 +206,9 @@ let () =
     ) 0 dirs in
   if shabda_loaded > 0 && not quiet_startup then
     Printf.printf "shabda: %d entries loaded from external .shabda files\n%!" shabda_loaded;
+  let avastha_generated = Jnana.expand_avastha k0 in
+  if avastha_generated > 0 && not quiet_startup then
+    Printf.printf "avastha: generated %d child nodes\n%!" avastha_generated;
   let naama_edges = Vidya.emit_shabda_edges k0 in
   if naama_edges > 0 && not quiet_startup then
     Printf.printf "naama: %d word edges emitted into graph\n%!" naama_edges;

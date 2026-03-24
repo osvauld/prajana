@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_centripetal_force",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find centripetal force",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "centripetal-force",
+          "satya",
+          "centripetal-force"
+        ]
+      ],
+      "elapsed_ms": 24,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.015
+  "duration": 0.025
 }

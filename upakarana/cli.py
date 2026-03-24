@@ -13,12 +13,15 @@ def _print_json(data):
 
 def cmd_om(args):
     from upakarana.parsers import om5
+    from upakarana.usage import track_miss
     nodes = om5.load_all()
 
     if args.action == "summary":
         _print_json(om5.summary(nodes))
     elif args.action == "search":
         results = om5.search(nodes, args.pattern or args.name)
+        if not results:
+            track_miss("om", "search")
         for r in results:
             print(f"  {r['name']:30s} [{r['layer']}] {r['domain']}")
             for m in r["matches"][:3]:
@@ -28,13 +31,18 @@ def cmd_om(args):
         if node:
             print(node["source"])
         else:
+            track_miss("om", "source")
             print(f"Not found: {args.name}", file=sys.stderr)
     elif args.action == "domain":
         info = om5.by_domain(nodes, depth=args.depth)
+        if not info:
+            track_miss("om", "domain")
         for dom, ns in info.items():
             print(f"  {dom}: {len(ns)} nodes")
     elif args.action == "with-relation":
         results = om5.with_relation(nodes, args.relation)
+        if not results:
+            track_miss("om", "with-relation")
         print(f"{len(results)} nodes with {args.relation}:")
         for n in results[:20]:
             print(f"  {n['name']}")
@@ -44,12 +52,15 @@ def cmd_om(args):
 
 def cmd_tantra(args):
     from upakarana.parsers import tantra4
+    from upakarana.usage import track_miss
     tantras = tantra4.load_all()
 
     if args.action == "summary":
         _print_json(tantra4.summary(tantras))
     elif args.action == "search":
         results = tantra4.search(tantras, args.pattern or args.name)
+        if not results:
+            track_miss("tantra", "search")
         for r in results:
             print(f"  {r['name']:30s} [{r['group']}]")
             for m in r["matches"][:3]:
@@ -59,11 +70,14 @@ def cmd_tantra(args):
         if t:
             print(t["source"])
         else:
+            track_miss("tantra", "source")
             print(f"Not found: {args.name}", file=sys.stderr)
     elif args.action == "group":
         groups = tantra4.by_group(tantras)
         if args.name:
             gs = groups.get(args.name, [])
+            if not gs:
+                track_miss("tantra", "group")
             for t in gs:
                 print(f"  {t['name']:30s} {t['lines']}L")
         else:
@@ -80,12 +94,15 @@ def cmd_tantra(args):
 
 def cmd_shabda(args):
     from upakarana.parsers import shabda
+    from upakarana.usage import track_miss
     nodes = shabda.load_all()
 
     if args.action == "summary":
         _print_json(shabda.summary(nodes))
     elif args.action == "search":
         results = shabda.search(nodes, args.pattern or args.name)
+        if not results:
+            track_miss("shabda", "search")
         for r in results:
             print(f"  {r['name']}")
     elif args.action == "node":
@@ -93,6 +110,7 @@ def cmd_shabda(args):
         if node:
             _print_json({"name": node["name"], "fields": node["fields"]})
         else:
+            track_miss("shabda", "node")
             print(f"Not found: {args.name}", file=sys.stderr)
     elif args.action == "gaps":
         from upakarana.analysis.static import shabda_gaps
@@ -163,7 +181,10 @@ def cmd_vy(args):
         from upakarana.engine.client import Client
         c = Client()
         try:
-            result = c.eval(args.expr)
+            expr = args.expr or args.name
+            if not expr:
+                print("usage: upakarana vy eval '<expr>'", file=sys.stderr); return
+            result = c.eval(expr)
             if isinstance(result, (list, dict)):
                 _print_json(result)
             else:
@@ -174,17 +195,23 @@ def cmd_vy(args):
         from upakarana.engine.client import Client
         c = Client()
         try:
-            print(c.ask(args.question))
+            question = args.question or args.name
+            if not question:
+                print("usage: upakarana vy ask '<question>'", file=sys.stderr); return
+            print(c.ask(question))
         finally:
             c.close()
     elif args.action == "walk":
         from upakarana.engine.client import Client
+        from upakarana.usage import track_miss
         c = Client()
         try:
             if args.incoming:
                 result = c.walk_in(args.node, args.relation)
             else:
                 result = c.walk(args.node, args.relation)
+            if not result:
+                track_miss("vy", "walk")
             for r in result:
                 print(f"  {r}")
         finally:
@@ -201,6 +228,19 @@ def cmd_vy(args):
 # --- Test commands ---
 
 def cmd_test(args):
+    # resolve positional filter shorthand
+    if getattr(args, "filter", None) and not args.layer and not args.gate and not args.pattern:
+        f = args.filter
+        known_layers = {"evaluator", "graph", "edges", "pipeline", "answers", "xfail",
+                        "physics", "logic", "grammar", "reasoning", "comparison",
+                        "arithmetic", "mixed", "entity"}
+        if f.startswith("gate:"):
+            args.gate = f[5:]
+        elif f in known_layers:
+            args.layer = f
+        else:
+            args.pattern = f
+
     if args.action == "list":
         from upakarana.testing.discover import load_all, summary, filter_tests
         tests = load_all()
@@ -238,7 +278,7 @@ def cmd_test(args):
 # --- Cache commands ---
 
 def cmd_cache(args):
-    from upakarana.testing.cache import load, summarize, by_gate, slowest_calls
+    from upakarana.testing.cache import load, summarize, by_gate, slowest_calls, slowest_tests, timing_by_layer
 
     _, entries = load()
     if args.action == "summary":
@@ -248,8 +288,18 @@ def cmd_cache(args):
         for gate, es in sorted(gates.items()):
             print(f"  {gate}: {len(es)}")
     elif args.action == "slow":
+        print("── Slowest tests (wall-clock) ──")
+        for t in slowest_tests(entries):
+            print(f"  {t['duration_s']:6.3f}s  {t['calls']} calls  ({t['call_ms']:4d}ms)  [{t['outcome']:>7s}]  {t['test']}")
+        print()
+        print("── Slowest calls ──")
         for c in slowest_calls(entries):
-            print(f"  {c['elapsed_ms']:6d}ms {c['test']:30s} {c['method']}")
+            print(f"  {c['elapsed_ms']:6d}ms {c['test']:55s} {c['method']}")
+        print()
+        print("── Timing by layer ──")
+        layers = timing_by_layer(entries)
+        for layer, d in layers.items():
+            print(f"  {d['duration_s']:6.1f}s  {d['count']:3d} tests  ({d['call_ms']:5d}ms calls)  {layer}")
 
 
 # --- Lint commands ---
@@ -309,6 +359,9 @@ def cmd_search(args):
         for r in shabda.search(nodes, args.pattern):
             results.append(("shabda", r["name"], ""))
 
+    if not results:
+        from upakarana.usage import track_miss
+        track_miss("search")
     print(f"{len(results)} matches:")
     for kind, name, ctx in results:
         print(f"  [{kind:8s}] {name:30s} {ctx}")
@@ -348,18 +401,24 @@ def cmd_ocaml(args):
         print(f"\nHashtbls ({len(state['hashtbls'])}):")
         for h in state["hashtbls"]:
             print(f"  {h['module']:20s} {h['name']}")
+    elif args.action == "parallel":
+        ocaml.print_parallelism(modules)
 
 
 # --- Query commands ---
 
 def cmd_query(args):
     from upakarana.query import Q
+    from upakarana.usage import track_miss
     q = Q()
 
     if args.action == "op":
         if not args.name:
             print("usage: upakarana query op <name>", file=sys.stderr); return
-        _print_json(q.op(args.name))
+        result = q.op(args.name)
+        if not result or result.get("error"):
+            track_miss("q", "op")
+        _print_json(result)
     elif args.action == "ops":
         ops = q.ops(args.pattern)
         for o in ops:
@@ -397,7 +456,10 @@ def cmd_query(args):
     elif args.action == "node":
         if not args.name:
             print("usage: upakarana query node <name>", file=sys.stderr); return
-        _print_json(q.node(args.name))
+        result = q.node(args.name)
+        if not result or result.get("error"):
+            track_miss("q", "node")
+        _print_json(result)
     elif args.action == "eval":
         if not args.expr:
             print("usage: upakarana query eval --expr '<expr>'", file=sys.stderr); return
@@ -447,6 +509,7 @@ def build_parser():
     # test
     s = sub.add_parser("test", help="Test operations")
     s.add_argument("action", choices=["list", "summary", "run", "failed"])
+    s.add_argument("filter", nargs="?", help="shorthand: layer name, gate:NAME, or test pattern")
     s.add_argument("--layer", "-l")
     s.add_argument("--gate", "-g")
     s.add_argument("--pattern", "-p")
@@ -473,7 +536,7 @@ def build_parser():
     # ocaml
     s = sub.add_parser("ocaml", help="OCaml codebase analysis")
     s.add_argument("action", choices=["report", "darshana", "patterns", "coupling",
-                                       "consolidate", "summary", "functions", "state"])
+                                       "consolidate", "summary", "functions", "state", "parallel"])
 
     # query
     s = sub.add_parser("q", help="Query primitives (LLM-friendly)")
@@ -491,6 +554,10 @@ def build_parser():
         "swarupa", "components",
         "ring",
         "signals", "signals-gap", "patterns", "grounding", "vocabulary",
+        "parallel", "compose",
+        "compose-inherit", "compose-validity", "compose-words",
+        "compose-rules", "compose-gen", "compose-curated",
+        "compose-logic", "compose-lift", "compose-inverse",
     ])
     s.add_argument("name", nargs="?")
     s.add_argument("--layer", "-l")
@@ -528,6 +595,9 @@ def cmd_analyze(args):
         if not args.name:
             print("usage: upakarana a incoming <name>", file=sys.stderr); return
         edges = incoming(args.name)
+        if not edges:
+            from upakarana.usage import track_miss
+            track_miss("a", "incoming")
         print(f"{len(edges)} incoming edges for {args.name}:")
         for e in edges:
             print(f"  {e['source']:30s} --{e['relation']:20s} [{e['source_layer']}]")
@@ -685,6 +755,245 @@ def cmd_analyze(args):
             for h in helpers:
                 print(f"  {h['name']:30s} {h['lines']}L calls={h['calls']}")
 
+    elif args.action == "parallel":
+        from upakarana.analysis.tantras import print_parallelism
+        print_parallelism()
+
+    elif args.action == "compose":
+        from upakarana.analysis.compose import full_analysis
+        r = full_analysis()
+
+        print(f"── Composition overview ──")
+        print(f"  Compound nodes:     {r['compound_count']}")
+        print(f"  Base concepts:      {r['base_count']}")
+        print(f"  Composition chains: {r['chain_count']}")
+        print(f"  Synthetic (bare):   {r['synthetic_count']}")
+        print(f"  Generator bases:    {r['generator_count']}")
+
+        print(f"\n── Base concepts → variants ──")
+        for base, info in sorted(r["bases"].items(),
+                key=lambda x: -(len(x[1]["prefix_variants"]) + len(x[1]["suffix_variants"])))[:20]:
+            pv = len(info["prefix_variants"])
+            sv = len(info["suffix_variants"])
+            prefix_names = [c["prefix"]["qualifier"] for c in info["prefix_variants"]]
+            suffix_names = [c["suffix"]["type"] for c in info["suffix_variants"]]
+            parts = []
+            if prefix_names:
+                parts.append(f"qualifiers: {','.join(prefix_names)}")
+            if suffix_names:
+                parts.append(f"types: {','.join(suffix_names)}")
+            detail = "  ".join(parts)
+            print(f"  {base:30s} {pv+sv:2d} variants  {detail}")
+
+        print(f"\n── Qualifier categories ──")
+        for cat, quals in sorted(r["categories"].items()):
+            total = sum(len(ns) for ns in quals.values())
+            qual_list = ", ".join(f"{q}({len(ns)})" for q, ns in sorted(quals.items()))
+            print(f"  {cat:12s} ({total:2d}):  {qual_list}")
+
+        print(f"\n── Composition chains (multi-level) ──")
+        for chain in r["chains"][:10]:
+            print(f"  {' → '.join(chain)}")
+
+        print(f"\n── Potential generators (avastha edges for base om5) ──")
+        for base, info in sorted(r["generators"].items(),
+                key=lambda x: -len(x[1]["generators"]))[:12]:
+            gens = info["generators"]
+            gen_strs = [f"(avastha {g['qualifier']} {g['context']})" for g in gens]
+            print(f"  {base}.om5:")
+            for gs in gen_strs:
+                print(f"    {gs}")
+
+        if r["synthetic"]:
+            print(f"\n── Synthetic nodes needing enrichment ──")
+            for s in r["synthetic"][:10]:
+                if s["prefix"]:
+                    p = s["prefix"]
+                    print(f"  {s['name']:30s}  = {p['qualifier']} + {p['base']}  [{p['category']}]  needs: swarupa→{p['base']}, sthita→{p['context']}")
+
+    elif args.action == "compose-inherit":
+        from upakarana.analysis.compose import inheritance_analysis
+        ia = inheritance_analysis()
+        print(f"── Edge inheritance: compound vs base ({len(ia)} compounds) ──\n")
+        for item in ia:
+            tag = "AUTO" if item["generatable"] and item["unique_edge_count"] <= 2 else \
+                  "SEMI" if item["generatable"] else "MANUAL"
+            swr = "Y" if item["swarupa_to_base"] else "N"
+            vsh = "Y" if item["vishesa_match"] else "N"
+            print(f"  [{tag:6s}] {item['name']:30s} (base: {item['base']})")
+            print(f"           swarupa->base: {swr}  vishesa-match: {vsh}  "
+                  f"unique: {item['unique_edge_count']}  overrides: {item['override_count']}")
+            if item["inherited"]:
+                parts = [f"{r}:{','.join(ts)}" for r, ts in item["inherited"].items()]
+                print(f"           inherited: {'; '.join(parts)}")
+            if item["overridden"]:
+                parts = [f"{r}:{','.join(ts)}" for r, ts in item["overridden"].items()]
+                print(f"           overridden: {'; '.join(parts)}")
+            if item["only_compound"]:
+                parts = [f"{r}:{','.join(ts)}" for r, ts in item["only_compound"].items()]
+                print(f"           only-compound: {'; '.join(parts)}")
+            if item["only_base"]:
+                print(f"           only-base: {', '.join(item['only_base'])}")
+            print()
+
+    elif args.action == "compose-validity":
+        from upakarana.analysis.compose import validity_matrix
+        vm = validity_matrix()
+        print(f"── Validity matrix ──")
+        print(f"  Existing (qualifier,base) pairs: {vm['existing_count']}")
+        print(f"  Valid missing candidates:        {vm['valid_missing_count']}")
+
+        print(f"\n── Existing by base ──")
+        for base, quals in sorted(vm["by_base"].items(), key=lambda x: -len(x[1])):
+            print(f"  {base:25s} [{len(quals):2d}]: {', '.join(sorted(quals))}")
+
+        print(f"\n── Accepted categories per base ──")
+        for base, cats in sorted(vm["domain_categories"].items()):
+            print(f"  {base:25s} {sorted(cats)}")
+
+        print(f"\n── Valid missing candidates ──")
+        for m in sorted(vm["valid_missing"], key=lambda x: (x["base"], x["qualifier"])):
+            print(f"  {m['name']:35s} = {m['qualifier']:12s} + {m['base']:20s} [{m['category']}] ctx={m['context']}")
+
+    elif args.action == "compose-rules":
+        from upakarana.analysis.compose import edge_inheritance_rules
+        rules = edge_inheritance_rules()
+        print(f"── Edge inheritance rules (derived from {len(rules)} relations) ──\n")
+        for rel, r in sorted(rules.items(), key=lambda x: x[1]["action"]):
+            print(f"  {rel:20s} -> {r['action']:18s}  "
+                  f"inh={r['inherited']:2d}  ovr={r['overridden']:2d}  "
+                  f"comp={r['only_compound']:2d}  base={r['only_base']:2d}")
+
+    elif args.action == "compose-words":
+        from upakarana.analysis.compose import word_form_inventory
+        wf = word_form_inventory()
+        print(f"── Word form inventory ──")
+        print(f"  Compounds with shabda:    {wf['existing_count']}")
+        print(f"  Compounds without shabda: {wf['missing_count']}")
+
+        print(f"\n── Shabda field frequency ──")
+        for field, count in sorted(wf["field_frequency"].items(), key=lambda x: -x[1]):
+            print(f"  {field:20s} {count:3d} nodes")
+
+        if wf["missing_words"]:
+            print(f"\n── Missing shabda (compounds without word entries) ──")
+            for name in wf["missing_words"]:
+                print(f"  {name}")
+
+        print(f"\n── Existing shabda samples ──")
+        for name, fields in list(wf["existing_words"].items())[:8]:
+            print(f"  {name}: {fields}")
+
+    elif args.action == "compose-gen":
+        from upakarana.analysis.compose import generatability_report
+        gr = generatability_report()
+        print(f"── Generatability report ──")
+        print(f"  AUTO (pure generation):    {gr['auto_count']}")
+        print(f"  SEMI (generation+overrides): {gr['semi_count']}")
+        print(f"  MANUAL (hand-written):     {gr['manual_count']}")
+
+        if gr["auto"]:
+            print(f"\n── AUTO: can dissolve into base om5 ──")
+            for item in gr["auto"]:
+                print(f"  {item['name']:30s} -> {item['base']}.om5 (avastha {item['qualifier']} ...)")
+
+        if gr["semi"]:
+            print(f"\n── SEMI: need override declarations ──")
+            for item in gr["semi"]:
+                overrides = list(item["only_compound"].keys())
+                print(f"  {item['name']:30s} -> {item['base']}.om5 + overrides: {overrides}")
+
+        if gr["manual"]:
+            print(f"\n── MANUAL: must remain separate om5 ──")
+            for item in gr["manual"]:
+                print(f"  {item['name']:30s}  unique={item['unique_edge_count']} overrides={item['override_count']}")
+
+    elif args.action == "compose-curated":
+        from upakarana.analysis.compose import curated_validity
+        cv = curated_validity()
+        print(f"── Curated validity ──")
+        print(f"  Total candidates:  {cv['total_candidates']}")
+        print(f"  Already exist:     {cv['existing_count']}")
+        print(f"  To generate:       {cv['missing_count']}")
+
+        print(f"\n── Missing by base ──")
+        for base, items in sorted(cv["missing_by_base"].items(), key=lambda x: -len(x[1])):
+            quals = [m["qualifier"] for m in items]
+            print(f"  {base:25s} [{len(items):2d}]: {', '.join(quals)}")
+
+        print(f"\n── Full candidate list ──")
+        for c in sorted(cv["existing"] + cv["missing"], key=lambda x: (x["base"], x["qualifier"])):
+            tag = "EXISTS" if c["in_graph"] else "GEN"
+            print(f"  [{tag:6s}] {c['name']:35s} = {c['qualifier']:12s} + {c['base']:20s} [{c['category']}] ctx={c['context']}")
+
+    elif args.action == "compose-logic":
+        from upakarana.analysis.compose import logic_generator_analysis
+        la = logic_generator_analysis()
+        print(f"── Logic generator analysis ──")
+        print(f"  Total existing: {la['total_existing']}")
+        print(f"  Total missing:  {la['total_missing']}")
+
+        for group in la["groups"]:
+            print(f"\n── {group['group']} (base: {group['base']}, layer: {group['layer']}) ──")
+
+            if group["existing"]:
+                for item in group["existing"]:
+                    tag = "IN-GRAPH" if item["in_graph"] else "MISSING"
+                    print(f"  [{tag:8s}] {item['name']}")
+
+            if group["missing"]:
+                print(f"  --- to generate ---")
+                for item in group["missing"]:
+                    edges_str = ", ".join(f"{k}:{v}" for k, v in item["edges"].items())
+                    print(f"  [GEN     ] {item['name']:30s} — {item['description']}")
+                    print(f"              edges: {edges_str}")
+
+    elif args.action == "compose-lift":
+        from upakarana.analysis.compose import space_lift_analysis
+        sla = space_lift_analysis()
+        total_existing = sum(s["existing_count"] for s in sla)
+        total_missing = sum(s["missing_count"] for s in sla)
+        print(f"── Space-lift analysis ──")
+        print(f"  Total existing lifted ops: {total_existing}")
+        print(f"  Total missing lifts:       {total_missing}")
+
+        for space in sla:
+            print(f"\n── {space['space']} ({space['prefix']}-*) ──")
+            print(f"  domain: {space['domain']}")
+            if space["existing"]:
+                print(f"  existing ({space['existing_count']}):")
+                for e in space["existing"]:
+                    print(f"    {e['name']:30s} ← {e['base_op']}")
+            if space["missing"]:
+                print(f"  missing ({space['missing_count']}):")
+                for m in space["missing"]:
+                    print(f"    {m['name']:30s} ← {m['base_op']} (gen)")
+
+    elif args.action == "compose-inverse":
+        from upakarana.analysis.compose import pratipaksha_analysis
+        pa = pratipaksha_analysis()
+        print(f"── Pratipaksha (inverse) analysis ──")
+        print(f"  Inverse pairs:       {pa['pair_count']}")
+        print(f"  Self-inverse:        {len(pa['self_inverse'])}")
+        print(f"  Unidirectional:      {len(pa['unidirectional'])}")
+        print(f"  Ops without inverse: {pa['missing_count']}")
+
+        print(f"\n── Inverse pairs ──")
+        for p in pa["pairs"]:
+            tag = "SELF" if p["self_inverse"] else ("BIDI" if p["bidirectional"] else "UNI ")
+            b_tag = "" if p["b_exists"] else " [MISSING]"
+            print(f"  [{tag}] {p['a']:30s} <-> {p['b']}{b_tag}")
+
+        if pa["unidirectional"]:
+            print(f"\n── Unidirectional (missing back-edge) ──")
+            for p in pa["unidirectional"]:
+                print(f"  {p['a']:30s} -> {p['b']} (no pratipaksha back)")
+
+        if pa["missing_inverses"][:15]:
+            print(f"\n── Operations without any inverse ({pa['missing_count']} total, showing 15) ──")
+            for m in pa["missing_inverses"][:15]:
+                print(f"  {m['name']:30s} ({m['domain']})")
+
 
 def cmd_live(args):
     from upakarana.analysis.live import connect
@@ -822,11 +1131,16 @@ def cmd_usage(args):
     if args.action == "report":
         print(f"Sessions: {r['sessions']}")
         print(f"Total invocations: {r['total_invocations']}")
+        print(f"Total misses: {r['total_misses']}")
         print(f"Unique commands: {r['unique_commands']}")
         print(f"First use: {r['first_use']}")
         print(f"\nTop commands:")
         for t in r["top"]:
             print(f"  {t['command']:30s} {t['count']:5d}x  last: {t['last']}")
+        if r["misses"]:
+            print(f"\nNo-match commands:")
+            for m in sorted(r["misses"], key=lambda x: -x["misses"]):
+                print(f"  {m['command']:30s} {m['misses']:5d}/{m['count']} ({m['rate']}%)")
     elif args.action == "never":
         all_cmds = _all_possible_commands()
         unused = never_used(all_cmds)
@@ -854,11 +1168,12 @@ def _all_possible_commands():
         "cache summary", "cache gates", "cache slow",
         "lint", "health", "search",
         "ocaml report", "ocaml darshana", "ocaml patterns", "ocaml coupling",
-        "ocaml consolidate", "ocaml summary", "ocaml functions", "ocaml state",
+        "ocaml consolidate", "ocaml summary", "ocaml functions", "ocaml state", "ocaml parallel",
         "q op", "q ops", "q dispatch", "q missing", "q explain", "q overview", "q node", "q eval",
         "a ghosts", "a incoming", "a hubs", "a orphans", "a flow", "a fingerprint",
         "a swarupa", "a components", "a ring", "a siblings", "a signals", "a signals-gap",
-        "a patterns", "a grounding", "a vocabulary",
+        "a compose",
+        "a patterns", "a grounding", "a vocabulary", "a parallel",
         "usage report", "usage never",
     ]
 

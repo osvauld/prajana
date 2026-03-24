@@ -1,7 +1,15 @@
 {
   "test": "tests/test_edges.py::TestInversePipeline::test_force_inverse_acceleration",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "force is 50 and mass is 10. find acceleration",
+      "output": "we have: force=50. and mass=10..we seek: acceleration.we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: mass=10..we find: acceleration = acceleration = 5",
+      "elapsed_ms": 547,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.242
+  "duration": 0.548
 }

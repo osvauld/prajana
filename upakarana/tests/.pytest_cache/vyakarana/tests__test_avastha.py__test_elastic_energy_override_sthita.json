@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_elastic_energy_override_sthita",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"elastic-energy\" \"sthita\"",
+      "output": [
+        "deformation",
+        "sthiti",
+        "sthiti",
+        "deformation"
+      ],
+      "elapsed_ms": 1,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

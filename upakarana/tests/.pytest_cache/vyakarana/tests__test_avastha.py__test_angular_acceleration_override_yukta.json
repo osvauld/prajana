@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_angular_acceleration_override_yukta",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"angular-acceleration\" \"yukta\"",
+      "output": [
+        "chala-apeksha",
+        "chala-apeksha",
+        "tangential-acceleration",
+        "tangential-acceleration",
+        "torque",
+        "moment-of-inertia",
+        "kona",
+        "kona",
+        "moment-of-inertia",
+        "torque"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

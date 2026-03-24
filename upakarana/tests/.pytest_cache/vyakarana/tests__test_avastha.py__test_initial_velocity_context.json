@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_initial_velocity_context",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"initial-velocity\" \"sthita\"",
+      "output": [
+        "aarambham",
+        "aarambham"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

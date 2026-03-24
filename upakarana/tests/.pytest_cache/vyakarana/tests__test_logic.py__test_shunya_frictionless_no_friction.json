@@ -1,7 +1,15 @@
 {
   "test": "tests/test_logic.py::test_shunya_frictionless_no_friction",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "the surface is frictionless. is there friction",
+      "output": "we have: zero-friction-surface (signal: ghasana is shunya). we ask: does ghasana exist?. we know: zero-friction-surface declares ghasana = shunya (absent). we see: ghasana is absent due to zero-friction-surface. no \u2014 ghasana is absent because ghasana is shunya",
+      "elapsed_ms": 306,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.066
+  "duration": 0.307
 }

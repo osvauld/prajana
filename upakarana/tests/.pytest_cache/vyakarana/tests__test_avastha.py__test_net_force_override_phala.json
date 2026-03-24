@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_net_force_override_phala",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"net-force\" \"phala\"",
+      "output": [
+        "acceleration",
+        "acceleration"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

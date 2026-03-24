@@ -1,0 +1,22 @@
+{
+  "test": "tests/test_avastha.py::test_covalent_bond_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"covalent-bond\" \"swarupa\"",
+      "output": [
+        "peptide",
+        "peptide",
+        "dvandva-shakti",
+        "bond",
+        "bond",
+        "dvandva-shakti"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.004
+}

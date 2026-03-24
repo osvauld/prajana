@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_elastic_energy",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find elastic energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "elastic-energy",
+          "satya",
+          "elastic-energy"
+        ]
+      ],
+      "elapsed_ms": 17,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.019
+}

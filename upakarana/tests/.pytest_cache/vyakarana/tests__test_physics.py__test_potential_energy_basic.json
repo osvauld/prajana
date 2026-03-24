@@ -1,7 +1,15 @@
 {
   "test": "tests/test_physics.py::test_potential_energy_basic",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "mass is 5. gravity is 9.8. height is 10. find potential energy",
+      "output": "we have: mass=5.; gravity=9.8; and height=10..we seek: potential-energy.we know: potential-energy-mantra (height, gravity, mass \u2192 potential-energy).we see: height=10., gravity=9.8, mass=5..we find: potential-energy = 490",
+      "elapsed_ms": 613,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.459
+  "duration": 0.614
 }

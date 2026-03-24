@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_covalent_bond_override_abheda",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"covalent-bond\" \"abheda\"",
+      "output": [
+        "rekha",
+        "rekha"
+      ],
+      "elapsed_ms": 1,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

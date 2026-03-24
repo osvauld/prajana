@@ -1,7 +1,15 @@
 {
   "test": "tests/test_comparison.py::test_superlative_heaviest",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "ball-A has mass 5. ball-B has mass 3. ball-C has mass 7. which is heaviest",
+      "output": "we have: ball-A (=5.); ball-B (=3.); and ball-C (=7.).we seek: which is viveka-max.we know: greater  means viveka-max.we see: 7. > 5. (ball-C  > ball-A ).we find: ball-C is the viveka-max",
+      "elapsed_ms": 545,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.161
+  "duration": 0.547
 }

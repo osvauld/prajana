@@ -1,7 +1,26 @@
 {
   "test": "tests/test_pipeline.py::test_sandhi_compound",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find kinetic energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "kinetic-energy",
+          "satya",
+          "kinetic-energy"
+        ]
+      ],
+      "elapsed_ms": 26,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.013
+  "duration": 0.028
 }

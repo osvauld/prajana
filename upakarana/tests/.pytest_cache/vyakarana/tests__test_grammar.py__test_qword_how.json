@@ -1,7 +1,31 @@
 {
   "test": "tests/test_grammar.py::test_qword_how",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "how much energy",
+      "output": [
+        [
+          "how",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "much",
+          "mithya",
+          "much"
+        ],
+        [
+          "energy",
+          "satya",
+          "energy"
+        ]
+      ],
+      "elapsed_ms": 27,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.011
+  "duration": 0.028
 }

@@ -1,0 +1,47 @@
+{
+  "test": "tests/test_avastha.py::test_energy_variant_inherits_vishesa",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"energy\" \"vishesa\"",
+      "output": [
+        "mechanical-energy-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"thermal-energy\" \"vishesa\"",
+      "output": [
+        "mechanical-energy-varga",
+        "mechanical-energy-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"nuclear-energy\" \"vishesa\"",
+      "output": [
+        "mechanical-energy-varga",
+        "mechanical-energy-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"magnetic-energy\" \"vishesa\"",
+      "output": [
+        "mechanical-energy-varga",
+        "mechanical-energy-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.004
+}

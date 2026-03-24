@@ -1,14 +1,22 @@
 {
   "test": "tests/test_xfail.py::test_relative_velocity",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "ball-A has velocity 10. ball-B has velocity 3. find relative velocity of ball-A with respect to ball-B",
+      "output": "no match",
+      "elapsed_ms": 330,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.117,
+  "duration": 0.346,
   "xfail": {
     "reason": "relative-velocity concept not in kosha",
     "strict": true,
     "gate": "relative-velocity: kosha concept missing",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 233
+    "line": 209
   }
 }

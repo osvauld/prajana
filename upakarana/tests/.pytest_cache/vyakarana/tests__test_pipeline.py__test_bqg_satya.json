@@ -1,7 +1,26 @@
 {
   "test": "tests/test_pipeline.py::test_bqg_satya",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "raw_bqg",
+      "input": "find force",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "force",
+          "satya",
+          "force"
+        ]
+      ],
+      "elapsed_ms": 22,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.005
+  "duration": 0.023
 }

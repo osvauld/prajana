@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_tangential_acceleration_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"tangential-acceleration\" \"swarupa\"",
+      "output": [
+        "acceleration",
+        "acceleration"
+      ],
+      "elapsed_ms": 4,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.007
+}

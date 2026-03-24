@@ -1,0 +1,46 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_average_velocity",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "average velocity is 15",
+      "output": [
+        [
+          "average-velocity",
+          "satya",
+          "average-velocity"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "15",
+          "asprista-sankhya",
+          "15."
+        ],
+        [
+          "average-velocity",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "average-velocity",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "average-velocity",
+          "sankhya",
+          "15."
+        ]
+      ],
+      "elapsed_ms": 83,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.084
+}

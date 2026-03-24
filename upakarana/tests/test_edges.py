@@ -256,13 +256,11 @@ class TestInversePipeline:
         r = vy.answer("force is 50 and mass is 10. find acceleration")
         assert "5" in r
 
-    @xfail(strict=True, reason="inverse_math: KE needs sqrt+division chain")
     def test_ke_inverse_velocity(self, vy):
         """KE=250, m=5 → v=sqrt(2*KE/m)=10. Multi-step inversion."""
         r = vy.answer("kinetic energy is 250 and mass is 5. find velocity")
         assert "10" in r
 
-    @xfail(strict=True, reason="inverse_math: KE inversion for mass")
     def test_ke_inverse_mass(self, vy):
         """KE=200, v=10 → m=2*KE/v²=4."""
         r = vy.answer("kinetic energy is 200 and velocity is 10. find mass")

@@ -1,7 +1,15 @@
 {
   "test": "tests/test_logic.py::test_shunya_stationary_no_velocity",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "the car is stationary. does the car have velocity",
+      "output": "we have: initial-rest (signal: velocity is shunya). we ask: does velocity exist?. we know: initial-rest declares velocity = shunya (absent). we see: velocity is absent due to initial-rest. no \u2014 velocity is absent because velocity is shunya",
+      "elapsed_ms": 728,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.1
+  "duration": 0.729
 }

@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_drag_force_override_sthita",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"drag-force\" \"sthita\"",
+      "output": [
+        "motion",
+        "ghasana",
+        "ghasana",
+        "motion"
+      ],
+      "elapsed_ms": 1,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_tension_force",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find tension force",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "tension-force",
+          "satya",
+          "tension-force"
+        ]
+      ],
+      "elapsed_ms": 26,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.027
+}

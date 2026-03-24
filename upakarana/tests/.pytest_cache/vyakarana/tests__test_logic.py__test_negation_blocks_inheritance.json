@@ -1,7 +1,15 @@
 {
   "test": "tests/test_logic.py::test_negation_blocks_inheritance",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "a cat is not a fish. fish live in water. does a cat live in water",
+      "output": "we assert: cat IS-A negation. we ask: does water-material inherit negation?. we see: chain reaches negation via IS-A. no \u2014 water-material does not have negation",
+      "elapsed_ms": 591,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.185
+  "duration": 0.593
 }

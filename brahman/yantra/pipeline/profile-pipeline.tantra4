@@ -1,0 +1,52 @@
+-- profile-pipeline: timed version of anuvada-ganana for profiling.
+-- Returns [[label, ms], ...] timing breakdown instead of answer.
+(tantra profile-pipeline (sentence)
+  (p-bqg (profile-step "bqg" (build-question-graph sentence)))
+  (raw-graph (nth p-bqg 0))
+
+  (p-index (profile-step "index" (index-graph raw-graph)))
+  (indexed (nth p-index 0))
+
+  (p-assert (profile-step "assertion" (assertion-bandha raw-graph)))
+  (asserted (nth p-assert 0))
+
+  (p-refine (profile-step "refine" (avrti-refine-v2 asserted)))
+  (refined (nth p-refine 0))
+
+  -- grade-split
+  (boundary-edge (shabda "graded-ring" "grade-boundary"))
+  (intra-boundary (shabda "graded-ring" "intra-grade-boundary"))
+  (p-grades (profile-step "grade-split" (reduce refined [[], []] (fn state triple ->
+    let completed = nth state 0
+    let current   = nth state 1
+    let e = nth triple 1
+    cond (or (eq (to-string e) boundary-edge) (eq (to-string e) intra-boundary))
+      [(append completed [(append current [triple])]), []]
+    otherwise
+      [completed, (append current [triple])]))))
+  (grade-state (nth p-grades 0))
+  (completed-grades (nth grade-state 0))
+  (final-grade (nth grade-state 1))
+  (all-grades (append completed-grades [final-grade]))
+
+  (p-count (profile-step "count-chain" (count-chain refined all-grades)))
+  (after-grades (nth p-count 0))
+
+  (p-expand (profile-step "kosha-expand" (kosha-expand after-grades)))
+  (expanded (nth p-expand 0))
+
+  (p-detect (profile-step "detect-signals" (detect-signals expanded)))
+  (signaled (nth p-detect 0))
+
+  (p-dispatch (profile-step "dispatch" (dispatch-answer signaled refined)))
+
+  -- collect timings
+  [[(nth p-bqg 2), (nth p-bqg 1)],
+   [(nth p-index 2), (nth p-index 1)],
+   [(nth p-assert 2), (nth p-assert 1)],
+   [(nth p-refine 2), (nth p-refine 1)],
+   [(nth p-grades 2), (nth p-grades 1)],
+   [(nth p-count 2), (nth p-count 1)],
+   [(nth p-expand 2), (nth p-expand 1)],
+   [(nth p-detect 2), (nth p-detect 1)],
+   [(nth p-dispatch 2), (nth p-dispatch 1)]])

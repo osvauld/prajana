@@ -1,7 +1,46 @@
 {
   "test": "tests/test_pipeline.py::test_sandhi_avastha",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "initial velocity 5 final velocity 20",
+      "output": [
+        [
+          "initial-velocity",
+          "satya",
+          "initial-velocity"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "final-velocity",
+          "satya",
+          "final-velocity"
+        ],
+        [
+          "20",
+          "asprista-sankhya",
+          "20."
+        ],
+        [
+          "initial-velocity",
+          "sankhya",
+          "5."
+        ],
+        [
+          "final-velocity",
+          "sankhya",
+          "20."
+        ]
+      ],
+      "elapsed_ms": 61,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.012
+  "duration": 0.063
 }

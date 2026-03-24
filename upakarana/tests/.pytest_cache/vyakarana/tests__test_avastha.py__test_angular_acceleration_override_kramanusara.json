@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_angular_acceleration_override_kramanusara",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"angular-acceleration\" \"kramanusara\"",
+      "output": [
+        "angular-velocity",
+        "angular-velocity"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

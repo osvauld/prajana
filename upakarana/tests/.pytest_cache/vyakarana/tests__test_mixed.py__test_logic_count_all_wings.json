@@ -1,7 +1,22 @@
 {
   "test": "tests/test_mixed.py::test_logic_count_all_wings",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "all birds have wings. birds have 2 wings each. there are 3 sparrows. how many wings",
+      "output": "we have: all bird have wings.we know: 2 plus (0 \u2192 2).we find: 2 wings",
+      "elapsed_ms": 656,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.193
+  "duration": 0.661,
+  "xfail": {
+    "reason": "multiplication: logic + count \u2014 'each' multiply with syllogism",
+    "strict": true,
+    "gate": "logic_nyaya: P8d anumana not built",
+    "file": "/home/abe/agent_x/upakarana/tests/test_mixed.py",
+    "line": 59
+  }
 }

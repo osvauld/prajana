@@ -1,7 +1,15 @@
 {
   "test": "tests/test_physics.py::test_chain_momentum_via_suvat",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "initial velocity is 0. acceleration is 5. time is 4. mass is 3. find momentum",
+      "output": "we have: initial-velocity=0.; acceleration=5.; time=4.; and mass=3..we seek: momentum.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=20, mass=3..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=20, mass=3..we know: velocity-mantra (time, acceleration, initial-velocity \u2192 velocity).we see: time=4., acceleration=5., initial-velocity=0..we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=5., mass=3..we find: momentum = 60",
+      "elapsed_ms": 679,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.62
+  "duration": 0.681
 }

@@ -1,7 +1,41 @@
 {
   "test": "tests/test_grammar.py::test_article_the_concept",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "what is the force",
+      "output": [
+        [
+          "what",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "force",
+          "satya",
+          "force"
+        ],
+        [
+          "force",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "force",
+          "vachana",
+          "eka-vachana"
+        ]
+      ],
+      "elapsed_ms": 64,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.018
+  "duration": 0.065
 }

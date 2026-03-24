@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_friction_force_override_phala",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"friction-force\" \"phala\"",
+      "output": [
+        "kshaya",
+        "kshaya"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

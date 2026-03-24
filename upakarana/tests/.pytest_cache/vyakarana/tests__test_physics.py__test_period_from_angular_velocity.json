@@ -1,7 +1,22 @@
 {
   "test": "tests/test_physics.py::test_period_from_angular_velocity",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "angular velocity is 6.283. find period",
+      "output": "we have: angular-velocity=6.283.we seek: period.we know: photon-energy-mantra (frequency, planck-constant \u2192 photon-energy).we see: frequency=inf.we know: frequency-mantra (period \u2192 frequency).we see: period=0.we know: period-mantra (angular-velocity \u2192 period).we see: angular-velocity=6.283.we find: period = 0",
+      "elapsed_ms": 326,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.687
+  "duration": 0.333,
+  "xfail": {
+    "reason": "compound word: 'angular velocity' value bleeds from velocity binding",
+    "strict": true,
+    "gate": "compound_word: multi-word concept missing word: mapping",
+    "file": "/home/abe/agent_x/upakarana/tests/test_physics.py",
+    "line": 119
+  }
 }

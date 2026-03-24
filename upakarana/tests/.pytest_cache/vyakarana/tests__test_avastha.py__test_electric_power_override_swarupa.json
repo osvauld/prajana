@@ -1,0 +1,19 @@
+{
+  "test": "tests/test_avastha.py::test_electric_power_override_swarupa",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"electric-power\" \"swarupa\"",
+      "output": [
+        "electric-power-mantra",
+        "electric-power-mantra",
+        "power"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

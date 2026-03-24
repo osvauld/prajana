@@ -1,7 +1,22 @@
 {
   "test": "tests/test_logic.py::test_double_negation",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "it is not true that the ball is not moving. is the ball moving",
+      "output": "we assert: pronoun-it IS-A negation. we ask: does true inherit negation?. we see: chain reaches negation via IS-A. no \u2014 true does not have negation",
+      "elapsed_ms": 516,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.142
+  "duration": 0.521,
+  "xfail": {
+    "reason": "negation: double negation cancellation not built",
+    "strict": true,
+    "gate": "negation: pratishedha / double-negation logic",
+    "file": "/home/abe/agent_x/upakarana/tests/test_logic.py",
+    "line": 120
+  }
 }

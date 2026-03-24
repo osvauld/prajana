@@ -1,6 +1,7 @@
 ; kramanusara chain: velocity = d(displacement)/d(time)
 ; apeksha: kramanusara wrt physics-time, held in a sthira (fixed) reference frame
-; avastha: initial-velocity and final-velocity are velocity wearing a state
+; avastha generators: each (avastha qualifier context) expands into a child node
+;   qualifier-velocity with swarupa→velocity, sthita→context
 
 (kosha velocity
   (vishesa linear-motion-varga)
@@ -9,4 +10,5 @@
   (yukta kshetrajna direction)
   (kramanusara displacement)
   (phala acceleration-kramanusara)
-  (drishthanta purva-avastha uttara-avastha))
+  (drishthanta purva-avastha uttara-avastha)
+  (avastha initial final average tangential radial linear centripetal))

@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_thermal_energy",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find thermal energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "thermal-energy",
+          "satya",
+          "thermal-energy"
+        ]
+      ],
+      "elapsed_ms": 27,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.029
+}

@@ -1,7 +1,15 @@
 {
   "test": "tests/test_answers.py::test_ke_different_values",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "mass is 2 and velocity is 4. find kinetic energy",
+      "output": "we have: mass=2. and velocity=4..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=4., mass=2..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=4., mass=2..we find: kinetic-energy = 16",
+      "elapsed_ms": 422,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.399
+  "duration": 0.423
 }

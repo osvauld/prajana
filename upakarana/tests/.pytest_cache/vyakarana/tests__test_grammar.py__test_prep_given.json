@@ -1,7 +1,15 @@
 {
   "test": "tests/test_grammar.py::test_prep_given",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "find kinetic energy given mass 5 and velocity 10",
+      "output": "we have: mass=5. and velocity=10..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=10., mass=5..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=10., mass=5..we find: kinetic-energy = 250",
+      "elapsed_ms": 482,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.347
+  "duration": 0.483
 }

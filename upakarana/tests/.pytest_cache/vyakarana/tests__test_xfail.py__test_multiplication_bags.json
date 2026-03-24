@@ -1,14 +1,22 @@
 {
   "test": "tests/test_xfail.py::test_multiplication_bags",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "there are 3 bags. each bag has 5 apples. how many apples are there in total",
+      "output": "we have: there 3 bags.we know: 5 plus (3 \u2192 8).we find: 8 apples there total",
+      "elapsed_ms": 337,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.141,
+  "duration": 0.345,
   "xfail": {
     "reason": "multiplication: bags with items",
     "strict": true,
     "gate": "multiplication: 'each' triggers multiply",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 418
+    "line": 394
   }
 }

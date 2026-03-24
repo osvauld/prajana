@@ -1,7 +1,15 @@
 {
   "test": "tests/test_arithmetic.py::test_number_before_noun",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "3 birds sat on a tree. 2 flew away. how many birds are left",
+      "output": "we have: 3 bird sat tree.we know: 2 minus (3 \u2192 1).we find: 1 bird left",
+      "elapsed_ms": 553,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.127
+  "duration": 0.555
 }

@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_potential_energy",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find potential energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "potential-energy",
+          "satya",
+          "potential-energy"
+        ]
+      ],
+      "elapsed_ms": 21,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.015
+  "duration": 0.023
 }

@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_damped_oscillation",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find damped oscillation",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "damped-oscillation",
+          "satya",
+          "damped-oscillation"
+        ]
+      ],
+      "elapsed_ms": 39,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.04
+}

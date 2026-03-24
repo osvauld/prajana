@@ -1,7 +1,51 @@
 {
   "test": "tests/test_grammar.py::test_article_a_entity",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "a proton has mass 1.67e-27",
+      "output": [
+        [
+          "proton",
+          "satya",
+          "proton"
+        ],
+        [
+          "has",
+          "mithya",
+          "has"
+        ],
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "1.67e-27",
+          "asprista-sankhya",
+          "1.67e-27"
+        ],
+        [
+          "mass",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "mass",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "1.67e-27"
+        ]
+      ],
+      "elapsed_ms": 141,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.022
+  "duration": 0.142
 }

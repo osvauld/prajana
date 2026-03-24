@@ -1,7 +1,22 @@
 {
   "test": "tests/test_logic.py::test_transitive_entities_ranking",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "ball-A is heavier than ball-B. ball-B is heavier than ball-C. which is the heaviest",
+      "output": "we seek: viveka-max.no match",
+      "elapsed_ms": 444,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.281
+  "duration": 0.452,
+  "xfail": {
+    "reason": "transitivity: entity ranking via comparison chain",
+    "strict": true,
+    "gate": "logic_nyaya: P8d anumana not built",
+    "file": "/home/abe/agent_x/upakarana/tests/test_logic.py",
+    "line": 89
+  }
 }

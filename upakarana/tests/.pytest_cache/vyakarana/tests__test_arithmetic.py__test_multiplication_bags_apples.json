@@ -1,7 +1,22 @@
 {
   "test": "tests/test_arithmetic.py::test_multiplication_bags_apples",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "there are 3 bags. each bag has 5 apples. how many apples are there in total",
+      "output": "we have: there 3 bags.we know: 5 plus (3 \u2192 8).we find: 8 apples there total",
+      "elapsed_ms": 449,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.111
+  "duration": 0.455,
+  "xfail": {
+    "reason": "multiplication: bags with items",
+    "strict": true,
+    "gate": "multiplication: 'each' triggers multiply",
+    "file": "/home/abe/agent_x/upakarana/tests/test_arithmetic.py",
+    "line": 106
+  }
 }

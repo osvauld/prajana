@@ -8,10 +8,10 @@
       "output": [
         "division"
       ],
-      "elapsed_ms": 0,
+      "elapsed_ms": 1,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.0
+  "duration": 0.002
 }

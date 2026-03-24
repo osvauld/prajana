@@ -1,7 +1,22 @@
 {
   "test": "tests/test_arithmetic.py::test_entity_scope_apples_sold",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "a shop has 10 apples. 3 apples were sold. how many apples are left",
+      "output": "no match",
+      "elapsed_ms": 412,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.1
+  "duration": 0.417,
+  "xfail": {
+    "reason": "entity_scope: per-entity count after subtraction",
+    "strict": true,
+    "gate": "entity_scope: per-entity scoped count",
+    "file": "/home/abe/agent_x/upakarana/tests/test_arithmetic.py",
+    "line": 140
+  }
 }

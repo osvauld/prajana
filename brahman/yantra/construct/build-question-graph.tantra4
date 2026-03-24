@@ -1,7 +1,27 @@
 -- build question graph from sentence words.
 (tantra build-question-graph (sentence)
   (sent-punct [".", "?", "!", ","])
-  (words (split sentence " "))
+  (raw-words (split sentence " "))
+  -- compound pre-pass: merge consecutive words that form avastha compounds.
+  -- uses compound_word_index (reverse of expand_avastha) to check bigrams
+  -- BEFORE individual word resolution, so "elastic energy" → "elastic-energy"
+  -- even when "elastic" has a solo word mapping to "elasticity".
+  (merged (reduce raw-words [[], ""] (fn acc word ->
+    let result     = nth acc 0
+    let prev-clean = nth acc 1
+    let wlen       = string-length word
+    let last-ch    = cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise ""
+    let has-punct  = member last-ch sent-punct
+    let clean      = cond has-punct (substr word 0 (sub wlen 1)) otherwise word
+    let compound   = cond (has-text prev-clean) (word-node-compound prev-clean clean) otherwise _none
+    cond (exists compound)
+      let n      = length result
+      let prefix = map (range (sub n 1)) (fn i -> nth result i)
+      let final  = cond has-punct (concat (to-string compound) last-ch) otherwise (to-string compound)
+      [(append prefix [final]), ""]
+    otherwise
+      [(append result [word]), clean])))
+  (words (nth merged 0))
   (graph (reduce words [] (fn g word ->
     let wlen      = string-length word
     let last-ch   = (cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise "")
@@ -18,13 +38,16 @@
     let un        = (cond (has-text uni-str) (shabda-anveshana uni-str) otherwise "")
     let is-dvandva  = has-grammar-sthita nd rl "dvandva"
     let is-locative = has-grammar-sthita nd rl "saptami-vibhakti"
+    let is-ablative = has-grammar-sthita nd rl "panchami-vibhakti"
+    let is-vibhakti = or is-locative is-ablative
+    let vibhakti-edge = cond is-locative "adhikarana" is-ablative "apadana" otherwise ""
     let current-grade = reduce g [] (fn a t -> cond (or (eq (nth t 1) "viraam") (eq (nth t 1) "dvandva")) [] otherwise (append a [t]))
     let entity-reg = triples-by-edge g "satya"
     let bind-ledger = filter g (fn t -> (or (eq (nth t 1) "sankhya") (eq (nth t 1) "matra")))
-    let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala")))
+    let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "apadana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala")))
     let subgraphs = [current-grade, entity-reg, bind-ledger, grammar-trail]
     let info      = [(to-string nd), rl, ly, nv, (to-string un)]
-    let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]] is-locative [[clean, "adhikarana", clean]] otherwise (emit-triples clean info subgraphs)
+    let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]] is-vibhakti [[clean, vibhakti-edge, clean]] otherwise (emit-triples clean info subgraphs)
     let with-word = (append g triples)
     (cond (has-text punct) (append with-word [[punct, "viraam", punct]]) otherwise with-word))))
   (sandhi-viveka graph))

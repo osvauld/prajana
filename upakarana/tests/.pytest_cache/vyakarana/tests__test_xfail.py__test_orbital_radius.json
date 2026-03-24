@@ -1,14 +1,38 @@
 {
   "test": "tests/test_xfail.py::test_orbital_radius",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find orbital radius",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "orbital",
+          "satya",
+          "orbital"
+        ],
+        [
+          "radius",
+          "satya",
+          "radius"
+        ]
+      ],
+      "elapsed_ms": 23,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.014,
+  "duration": 0.033,
   "xfail": {
     "reason": "trigram: orbital-radius not in kosha",
     "strict": true,
     "gate": "sandhi-kosha only handles bigrams",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 164
+    "line": 140
   }
 }

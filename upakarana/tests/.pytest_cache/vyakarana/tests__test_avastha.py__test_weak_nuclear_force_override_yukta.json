@@ -1,0 +1,24 @@
+{
+  "test": "tests/test_avastha.py::test_weak_nuclear_force_override_yukta",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"weak-nuclear-force\" \"yukta\"",
+      "output": [
+        "radioactivity",
+        "radioactivity",
+        "domain-physics",
+        "domain-physics",
+        "nuclear-force",
+        "kshaya",
+        "kshaya",
+        "nuclear-force"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

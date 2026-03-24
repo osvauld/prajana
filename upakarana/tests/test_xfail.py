@@ -73,32 +73,8 @@ def test_total_momentum_three(vy):
 # ── gate: inverse_math ─────────────────────────────────────────────────────────
 
 
-@xfail(
-    strict=True,
-    reason="bound-vals returns [] on fixpoint graph — invert-math cannot fire",
-)
-def test_inverse_ke_velocity(vy):
-    """KE=50, m=2 → v≈7.07"""
-    r = vy.answer("kinetic energy is 50 and mass is 2. find velocity")
-    assert "7.07" in r
-
-
-@xfail(strict=True, reason="bound-vals issue — same root cause")
-def test_inverse_suvat_time(vy):
-    """u=0, a=5, v=20 → t=4"""
-    r = vy.answer(
-        "initial velocity is 0. acceleration is 5. final velocity is 20. find time"
-    )
-    assert "4" in r
-
-
-@xfail(strict=True, reason="bound-vals issue — same root cause")
-def test_inverse_suvat_initial_velocity(vy):
-    """v=30, a=5, t=4 → u=10"""
-    r = vy.answer(
-        "final velocity is 30. acceleration is 5. time is 4. find initial velocity"
-    )
-    assert "10" in r
+## inverse_ke_velocity, inverse_suvat_time, inverse_suvat_initial_velocity
+## moved to test_physics.py — these now pass after invert-krama work
 
 
 # ── gate: sthita_viveka ────────────────────────────────────────────────────────

@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_radial_acceleration_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"radial-acceleration\" \"swarupa\"",
+      "output": [
+        "acceleration",
+        "acceleration"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

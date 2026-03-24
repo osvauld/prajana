@@ -1,7 +1,22 @@
 {
   "test": "tests/test_mixed.py::test_physics_logic_all_objects",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "all objects with mass have momentum. electron has mass 9.109e-31. does the electron have momentum",
+      "output": "no match",
+      "elapsed_ms": 752,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.202
+  "duration": 0.758,
+  "xfail": {
+    "reason": "syllogism: universal assertion chain not built",
+    "strict": true,
+    "gate": "logic_nyaya: P8d anumana not built",
+    "file": "/home/abe/agent_x/upakarana/tests/test_mixed.py",
+    "line": 37
+  }
 }

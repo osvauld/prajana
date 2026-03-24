@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_drag_force_override_abheda",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"drag-force\" \"abheda\"",
+      "output": [
+        "velocity-decay",
+        "velocity-decay",
+        "kshaya",
+        "kshaya"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

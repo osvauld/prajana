@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_angular_acceleration_override_vishesa",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"angular-acceleration\" \"vishesa\"",
+      "output": [
+        "rotational-motion-varga",
+        "linear-motion-varga",
+        "linear-motion-varga",
+        "rotational-motion-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

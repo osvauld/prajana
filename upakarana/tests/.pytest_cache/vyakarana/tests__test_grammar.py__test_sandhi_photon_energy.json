@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_photon_energy",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find photon energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "photon-energy",
+          "satya",
+          "photon-energy"
+        ]
+      ],
+      "elapsed_ms": 24,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.014
+  "duration": 0.025
 }

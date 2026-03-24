@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_spring_force",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find spring force",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "spring-force",
+          "satya",
+          "spring-force"
+        ]
+      ],
+      "elapsed_ms": 20,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.016
+  "duration": 0.022
 }

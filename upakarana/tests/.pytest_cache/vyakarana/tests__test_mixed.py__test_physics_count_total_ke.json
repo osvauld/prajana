@@ -1,7 +1,15 @@
 {
   "test": "tests/test_mixed.py::test_physics_count_total_ke",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5. find total kinetic energy",
+      "output": "we have: ball-A (mass=3., velocity=4.) and ball-B (mass=3., velocity=4.).we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=5., mass=2..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=5., mass=2..we find: kinetic-energy = 24",
+      "elapsed_ms": 943,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.425
+  "duration": 0.945
 }

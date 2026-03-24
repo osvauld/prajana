@@ -1,18 +1,21 @@
 (* kriya_types.ml — AST, values, tantra, env, session.
    all type definitions for the evaluator layer.
-   replaces yantra_types.ml with scan remnants removed.
 
    sections:
      1. tantra params
      2. expression AST (scan_stmt, scan_branch, expr)
-     3. runtime values + env
+     3. runtime values + env (StringMap — immutable, zero-cost share)
      4. tantra + tantra_index
      5. binding + session + result
      6. scene comprehension types
      7. value coercions + json
-     8. make_eval_arg *)
+     8. eval_engine record (replaces forward refs)
+     9. make_eval_arg *)
 
 open Prakriti
+
+(* immutable persistent map for environments — zero-cost "copy" via structural sharing *)
+module StringMap = Map.Make(String)
 
 (* ═══════════════════════════════════════════════════════════════════════════
    1. TANTRA PARAMS
@@ -70,8 +73,15 @@ type value =
   | VBinding of string * float
   | VNone
   | VFn      of string list * expr * env
+  | VGraph   of graph_index
 
-and env = (string, value) Hashtbl.t
+(* indexed triple-list: flat triples + edge-type index. pure value, no mutation. *)
+and graph_index = {
+  gi_triples : value list;                           (* [[s,e,o], ...] *)
+  gi_by_edge : (string, (string * string) list) Hashtbl.t;  (* edge → [(s,o), ...] *)
+}
+
+and env = value StringMap.t
 
 (* ═══════════════════════════════════════════════════════════════════════════
    4. TANTRA + TANTRA_INDEX
@@ -94,6 +104,7 @@ type tantra_index = {
   all_tantras  : tantra list ref;
   word_index   : (string, string) Hashtbl.t;
   eval_index   : (string, string) Hashtbl.t;
+  compound_word_index : (string, string) Hashtbl.t;
 }
 
 (* ═══════════════════════════════════════════════════════════════════════════
@@ -123,6 +134,60 @@ type yantra_result = {
   yr_code       : string;
   yr_raw_output : string;
 }
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5b. EVAL CONTEXT + ENGINE (replaces 4 forward refs with 1 Atomic record)
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+type eval_context = {
+  ctx_index   : tantra_index;
+  ctx_session : session;
+}
+
+(* bundled evaluator dispatch — single Atomic ref replaces 4 mutable forward refs *)
+type eval_engine = {
+  eval         : proof_graph -> env -> expr -> value;
+  eval_tantra  : proof_graph -> tantra -> (string * value) list -> value;
+  eval_pure_op : (proof_graph -> env -> expr -> value) ->
+                 proof_graph -> env -> string -> expr list -> value option;
+  eval_pipeline_op : (proof_graph -> env -> expr -> value) ->
+                     proof_graph -> env -> string -> expr list -> value option;
+}
+
+let _engine : eval_engine Atomic.t = Atomic.make {
+  eval = (fun _ _ _ -> VNone);
+  eval_tantra = (fun _ _ _ -> VNone);
+  eval_pure_op = (fun _ _ _ _ _ -> None);
+  eval_pipeline_op = (fun _ _ _ _ _ -> None);
+}
+
+(* domain-local eval context — each Domain gets its own, no cross-request clobber *)
+let _eval_ctx : eval_context option Domain.DLS.key =
+  Domain.DLS.new_key (fun () -> None)
+
+let last_invoked_tantra : string Atomic.t = Atomic.make ""
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5c. SESSION OVERLAY — per-domain triple subgraph
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+(* session subgraph: BQG triples live here instead of flat list.
+   dual-indexed for O(1) lookup by source node AND by edge type.
+   domain-local: each concurrent request has its own overlay. *)
+type session_overlay = {
+  by_source : (string, Prakriti.typed_edge list) Hashtbl.t;
+  by_edge   : (int, (string * string) list) Hashtbl.t;  (* dimension → (source, target) pairs *)
+  triples   : (string * int * string) list ref;          (* all triples for reconstruction *)
+}
+
+let new_session_overlay () = {
+  by_source = Hashtbl.create 32;
+  by_edge   = Hashtbl.create 16;
+  triples   = ref [];
+}
+
+let _session_overlay : session_overlay Domain.DLS.key =
+  Domain.DLS.new_key (fun () -> new_session_overlay ())
 
 (* ═══════════════════════════════════════════════════════════════════════════
    6. SCENE COMPREHENSION TYPES
@@ -173,7 +238,7 @@ let make_binding ?(unit_=None) ?(source="user") ?(confidence=1.0) ?(ttl=None) na
     b_timestamp = Unix.gettimeofday (); b_source = source;
     b_confidence = confidence; b_ttl = ttl }
 
-let new_env () : env = Hashtbl.create 16
+let new_env () : env = StringMap.empty
 
 let as_float = function
   | VFloat f -> f
@@ -195,6 +260,7 @@ let rec as_string = function
   | VList items ->
     "[" ^ String.concat ", " (List.map as_string items) ^ "]"
   | VFn _ -> "<fn>"
+  | VGraph g -> as_string (VList g.gi_triples)
 
 let rec val_to_json = function
   | VString s  -> "\"" ^ json_escape s ^ "\""
@@ -206,6 +272,7 @@ let rec val_to_json = function
   | VNode n    -> "\"" ^ json_escape n ^ "\""
   | VNone      -> "null"
   | VFn _      -> "\"<fn>\""
+  | VGraph g   -> val_to_json (VList g.gi_triples)
   | VPair (n, v) ->
     Printf.sprintf "{\"name\":%s,\"value\":%s}" (je n) (val_to_json v)
   | VBinding (n, v) ->
@@ -223,11 +290,28 @@ let as_bool = function
   | VPair _ -> true
   | VBinding _ -> true
   | VFn _ -> true
+  | VGraph g -> g.gi_triples <> []
 
 let as_list = function
   | VList l -> l
+  | VGraph g -> g.gi_triples
   | VNone -> []
   | v -> [v]
+
+(* build graph index from flat triple list — O(n) *)
+let index_triples (triples : value list) : graph_index =
+  let by_edge = Hashtbl.create 16 in
+  List.iter (fun triple ->
+    match triple with
+    | VList (VString s :: VString e :: rest) ->
+      let o_str = match rest with
+        | [VString o] -> o | [VNode o] -> o
+        | [v] -> as_string v | _ -> "" in
+      let existing = match Hashtbl.find_opt by_edge e with Some l -> l | None -> [] in
+      Hashtbl.replace by_edge e ((s, o_str) :: existing)
+    | _ -> ()
+  ) triples;
+  { gi_triples = triples; gi_by_edge = by_edge }
 
 (* ═══════════════════════════════════════════════════════════════════════════
    8. AST → JSON SERIALIZATION

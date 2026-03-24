@@ -1,50 +1,24 @@
-(* kriya_graph.ml — graph ops + dispatch + forward refs.
+(* kriya_graph.ml — graph ops + dispatch + engine wiring.
    replaces yantra_eval_primitives.ml (647L) + yantra_pipeline_ops.ml (68L).
    the dispatch chains: eval_graph_op → eval_pure_op → eval_pipeline_op → tantra fallback.
 
+   env is immutable StringMap — no env_copy.
+   4 forward refs replaced by single _engine Atomic record in kriya_types.
+   eval_ctx is Atomic in kriya_types.
+
    sections:
-     1. eval context + forward refs
-     2. helpers — env_copy, pair_field, call_tantra_opt
-     3. eval_graph_op — graph/field/context ops (24 match arms)
-     4. eval_pipeline_op — session ops + unknown fallback
-     5. eval_call — chained dispatch
-     6. register_primitive_arities *)
+     1. helpers — pair_field, call_tantra_opt
+     2. eval_graph_op — graph/field/context ops
+     3. eval_pipeline_op — session ops + unknown fallback
+     4. eval_call — chained dispatch
+     5. register_primitive_arities *)
 
 open Prakriti
 open Kriya_types
 
 (* ═══════════════════════════════════════════════════════════════════════════
-   1. EVAL CONTEXT + FORWARD REFS
+   1. HELPERS
    ═══════════════════════════════════════════════════════════════════════════ *)
-
-type eval_context = {
-  ctx_index   : tantra_index;
-  ctx_session : session;
-}
-let eval_ctx : eval_context option ref = ref None
-
-let _eval_ref : (proof_graph -> env -> expr -> value) ref =
-  ref (fun _ _ _ -> VNone)
-
-let _eval_tantra_ref : (proof_graph -> tantra -> (string * value) list -> value) ref =
-  ref (fun _ _ _ -> VNone)
-
-let _eval_pure_op_raw : ((proof_graph -> env -> expr -> value) -> proof_graph -> env -> string -> expr list -> value option) ref =
-  ref (fun _e_eval _k _e _op _args -> None)
-
-let _eval_pipeline_op_raw : ((proof_graph -> env -> expr -> value) -> proof_graph -> env -> string -> expr list -> value option) ref =
-  ref (fun _e_eval _k _e _op _args -> None)
-
-let last_invoked_tantra : string ref = ref ""
-
-(* ═══════════════════════════════════════════════════════════════════════════
-   2. HELPERS
-   ═══════════════════════════════════════════════════════════════════════════ *)
-
-let env_copy (e : env) : env =
-  let e2 = Hashtbl.create (Hashtbl.length e) in
-  Hashtbl.iter (fun k v -> Hashtbl.replace e2 k v) e;
-  e2
 
 let pair_field (items : value list) (key : string) : value option =
   List.find_map (function
@@ -55,15 +29,112 @@ let pair_field (items : value list) (key : string) : value option =
 
 let call_tantra_opt (k : proof_graph) (name : string)
     (inputs : (string * value) list) ~(default : value) : value =
-  match !eval_ctx with
+  match Domain.DLS.get _eval_ctx with
   | Some ctx ->
     (match Hashtbl.find_opt ctx.ctx_index.by_name name with
-     | Some t -> !_eval_tantra_ref k t inputs
+     | Some t -> (Atomic.get _engine).eval_tantra k t inputs
      | None   -> default)
   | None -> default
 
 (* ═══════════════════════════════════════════════════════════════════════════
-   3. EVAL_GRAPH_OP — graph, field-accessor, and context operations
+   1b. OM-CONTRACT CACHE — process-level cache for mantra contracts.
+   Proof graph mantra edges are immutable after boot, so contracts
+   never change. First call computes + caches, subsequent calls O(1).
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let _om_contract_cache : (string, value) Hashtbl.t = Hashtbl.create 64
+
+let om_contract_compute (k : proof_graph) (node_name : string) : value =
+  let edges = edges_of k node_name in
+  let dedup rel_name =
+    match visheshanam_of_string rel_name with
+    | None -> VList []
+    | Some vish ->
+      let seen = Hashtbl.create 8 in
+      VList (List.filter_map (fun edge ->
+        if edge.relation = vish && edge.source = node_name
+           && not (Hashtbl.mem seen edge.target) then begin
+          Hashtbl.replace seen edge.target true;
+          Some (VNode edge.target)
+        end else None
+      ) edges)
+  in
+  VList [dedup "janya"; dedup "phala"; dedup "kriya";
+         dedup "yukta"; dedup "sthita"; dedup "swarupa";
+         dedup "abheda"]
+
+let om_contract_cached (k : proof_graph) (node_name : string) : value =
+  match Hashtbl.find_opt _om_contract_cache node_name with
+  | Some v -> v
+  | None ->
+    let v = om_contract_compute k node_name in
+    Hashtbl.replace _om_contract_cache node_name v;
+    v
+
+(* ── mantra-select index: precomputed reverse lookup ───────────────────
+   Built lazily on first call. Maps:
+     "" → all mantra nodes
+     concept → mantras where concept appears in janya/phala/swarupa/name *)
+let _mantra_select_cache : (string, value list) Hashtbl.t option Atomic.t = Atomic.make None
+
+let walk_in_raw (k : proof_graph) (node_name : string) (rel_name : string) : string list =
+  match visheshanam_of_string rel_name with
+  | None -> []
+  | Some vish ->
+    List.filter_map (fun edge ->
+      if edge.relation = vish && edge.target = node_name then Some edge.source
+      else None
+    ) !(k.all_edges)
+
+let build_mantra_select_index (k : proof_graph) : (string, value list) Hashtbl.t =
+  let all_mantras =
+    let phys = walk_in_raw k "physics-mantra" "varga" in
+    let math = walk_in_raw k "math-mantra" "varga" in
+    List.map (fun n -> VNode n) (phys @ math)
+  in
+  let idx = Hashtbl.create 64 in
+  Hashtbl.replace idx "" all_mantras;
+  List.iter (fun m ->
+    let name = as_string m in
+    let contract = om_contract_cached k name in
+    match contract with
+    | VList items ->
+      let get_strings i =
+        match List.nth_opt items i with
+        | Some (VList vs) -> List.map as_string vs
+        | _ -> []
+      in
+      let janya = get_strings 0 in
+      let phala = get_strings 1 in
+      let swarupa = get_strings 5 in
+      let sh = Vidya.read_shabda k name in
+      let mname = match List.assoc_opt "name" sh with Some v -> v | None -> "" in
+      let all_concepts = janya @ phala @ swarupa @
+        (if mname <> "" then [mname] else []) in
+      List.iter (fun c ->
+        let existing = match Hashtbl.find_opt idx c with Some l -> l | None -> [] in
+        if not (List.memq m existing) then
+          Hashtbl.replace idx c (m :: existing)
+      ) all_concepts
+    | _ -> ()
+  ) all_mantras;
+  idx
+
+let mantra_select_cached (k : proof_graph) (solve_for : string) : value list =
+  let idx = match Atomic.get _mantra_select_cache with
+    | Some i -> i
+    | None ->
+      let i = build_mantra_select_index k in
+      Atomic.set _mantra_select_cache (Some i);
+      i
+  in
+  if solve_for = "" then
+    match Hashtbl.find_opt idx "" with Some l -> l | None -> []
+  else
+    match Hashtbl.find_opt idx solve_for with Some l -> l | None -> []
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   2. EVAL_GRAPH_OP — graph, field-accessor, and context operations
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
@@ -120,23 +191,13 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   | "om-contract" ->
     let node_name = eval_str 0 in
-    let edges = edges_of k node_name in
-    let dedup rel_name =
-      match visheshanam_of_string rel_name with
-      | None -> VList []
-      | Some vish ->
-        let seen = Hashtbl.create 8 in
-        VList (List.filter_map (fun edge ->
-          if edge.relation = vish && edge.source = node_name
-             && not (Hashtbl.mem seen edge.target) then begin
-            Hashtbl.replace seen edge.target true;
-            Some (VNode edge.target)
-          end else None
-        ) edges)
-    in
-    Some (VList [dedup "janya"; dedup "phala"; dedup "kriya";
-                 dedup "yukta"; dedup "sthita"; dedup "swarupa";
-                 dedup "abheda"])
+    Some (om_contract_cached k node_name)
+
+  | "mantra-select" ->
+    (* Cached mantra candidate selection. O(1) lookup replaces tantra
+       that does walk-in + filter with om-contract per mantra. *)
+    let solve_for = eval_str 0 in
+    Some (VList (mantra_select_cached k solve_for))
 
   | "has" ->
     let node_name = eval_str 0 in
@@ -235,17 +296,13 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     Some (with_node k name (fun n -> VString n.krama) (VString ""))
 
   | "eval-krama" ->
-    (* Evaluate a mantra's krama s-expression directly.
-       Args: mantra-name, bindings (list of [concept, value] pairs).
-       Resolves op node-names → eval-names via eval_index, then evaluates.
-       No synthetic tantra needed. *)
     let mantra_name = eval_str 0 in
     let bindings_v = eval_lst 1 in
     Some (with_node k mantra_name (fun n ->
       let krama = n.krama in
       if krama = "" then VNone
       else
-        (* Build bindings map: concept-name → float value *)
+        (* Build bindings map: concept-name → float value (local Hashtbl, not env) *)
         let binds = Hashtbl.create 8 in
         List.iter (fun pair ->
           match pair with
@@ -276,14 +333,11 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
         ) janya_names;
         (* Resolve op name → eval name using eval_index *)
         let resolve_op tok =
-          match !eval_ctx with
+          match Domain.DLS.get _eval_ctx with
           | Some ctx ->
             (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
-             | Some _node_name ->
-               (* tok IS an eval name, use it directly *)
-               tok
+             | Some _node_name -> tok
              | None ->
-               (* tok might be a node name — look up its eval shabda *)
                let sh = Vidya.read_shabda k tok in
                (match List.assoc_opt "eval" sh with
                 | Some ev -> String.trim ev
@@ -303,28 +357,23 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
             v, rest3
           | ")" :: rest -> VNone, rest
           | tok :: rest ->
-            (* Is it a bound variable? *)
             if Hashtbl.mem binds tok then
               VFloat (Hashtbl.find binds tok), rest
             else
-              (* Try as a numeric literal *)
               match float_of_string_opt tok with
               | Some f -> VFloat f, rest
               | None ->
-                (* It's an op — resolve to eval name *)
                 let eval_name = resolve_op tok in
-                (* Determine arity from shabda *)
                 let arity =
                   let sh = Vidya.read_shabda k tok in
                   match List.assoc_opt "arity" sh with
                   | Some a -> (try int_of_string (String.trim a) with _ -> 2)
-                  | None -> (* check if known unary *)
+                  | None ->
                     if List.mem eval_name ["half";"double";"square";"sqrt";
                        "neg";"reciprocal";"abs";"floor";"ceil";
                        "sin";"cos";"tan";"asin";"acos";"atan";
                        "log";"exp"] then 1 else 2
                 in
-                (* Evaluate arity args *)
                 let args = ref [] in
                 let remaining = ref rest in
                 for _ = 1 to arity do
@@ -338,8 +387,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
                 let lit_eval _k _e expr = match expr with
                   | Lit f -> VFloat f | StrLit s -> VString s
                   | BoolLit b -> VBool b | _ -> VNone in
-                let result = match !_eval_pure_op_raw lit_eval k
-                  (Hashtbl.create 0) eval_name arg_exprs with
+                let result = match (Atomic.get _engine).eval_pure_op lit_eval k
+                  StringMap.empty eval_name arg_exprs with
                 | Some v -> v
                 | None -> VNone
                 in
@@ -350,15 +399,6 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     ) VNone)
 
   | "krama-path" ->
-    (* Given a mantra name, solve-target, and bindings,
-       parse the krama s-expr and return [op, arg-index, sibling-value]
-       triples on the path from root to that variable.
-       sibling-value = the evaluated result of the other branch at each binary op.
-       e.g. krama "half ( mul mass ( square velocity ) )"
-            target "mass", bindings [["velocity","5."]]
-            → [["half","0",""], ["mul","0","25"]]
-       The sibling (square velocity) is evaluated to 25 using bindings.
-       For unary ops, sibling-value is "". *)
     let mantra_name = eval_str 0 in
     let target = eval_str 1 in
     let bindings_v = eval_lst 2 in
@@ -366,7 +406,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
       let krama = n.krama in
       if krama = "" then VList []
       else
-        (* Build bindings map *)
+        (* Build bindings map (local Hashtbl, not env) *)
         let binds = Hashtbl.create 8 in
         List.iter (fun pair ->
           match pair with
@@ -376,7 +416,6 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
             Hashtbl.replace binds concept (as_float v)
           | _ -> ()
         ) bindings_v;
-        (* Also bind constants *)
         let janya_names = List.filter_map (fun e ->
           if e.source = mantra_name && e.relation = janya
           then Some e.target else None
@@ -401,9 +440,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
           tok <> "(" && tok <> ")" &&
           not (List.mem tok janya_names)
         in
-        (* Resolve op name → eval name *)
         let resolve_op tok =
-          match !eval_ctx with
+          match Domain.DLS.get _eval_ctx with
           | Some ctx ->
             (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
              | Some _ -> tok
@@ -414,7 +452,6 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
                 | None -> tok))
           | None -> tok
         in
-        (* Evaluate a krama sub-expression with bindings *)
         let rec eval_sub toks =
           match toks with
           | [] -> VNone, []
@@ -454,14 +491,13 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
                 let lit_eval _k _e expr = match expr with
                   | Lit f -> VFloat f | StrLit s -> VString s
                   | BoolLit b -> VBool b | _ -> VNone in
-                let result = match !_eval_pure_op_raw lit_eval k
-                  (Hashtbl.create 0) eval_name arg_exprs with
+                let result = match (Atomic.get _engine).eval_pure_op lit_eval k
+                  StringMap.empty eval_name arg_exprs with
                 | Some v -> v
                 | None -> VNone
                 in
                 result, !remaining
         in
-        (* Skip a sub-expression without evaluating, return remaining tokens *)
         let rec _skip_expr toks =
           match toks with
           | [] -> []
@@ -486,9 +522,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
                 remaining := _skip_expr !remaining
               done;
               !remaining
-            else rest (* leaf variable — just skip *)
+            else rest
         in
-        (* Evaluate a sub-expression from token list, return (value, remaining) *)
         let eval_sibling toks =
           let (v, rest) = eval_sub toks in
           let s = match v with
@@ -501,8 +536,6 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
           in
           s, rest
         in
-        (* parse_expr: return (path option, remaining tokens).
-           Path is a list of (op_name, arg_index, sibling_value) triples. *)
         let rec parse_expr toks =
           match toks with
           | [] -> None, []
@@ -529,25 +562,15 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
                 | Some ops -> Some ((tok, 0, "") :: ops), rest2
                 | None -> None, rest2
               end else begin
-                (* Binary op: parse first arg *)
                 let (found1, rest2) = parse_expr rest in
                 match found1 with
                 | Some ops ->
-                  (* Target in arg 0 — evaluate the sibling (arg 1) *)
                   let (sib_val, rest3) = eval_sibling rest2 in
                   Some ((tok, 0, sib_val) :: ops), rest3
                 | None ->
-                  (* Target not in arg 0 — parse arg 1 *)
                   let (found2, rest3) = parse_expr rest2 in
                   (match found2 with
                    | Some ops ->
-                     (* Target in arg 1 — need sibling value from arg 0.
-                        But we already consumed arg 0! We need to re-eval it.
-                        Restart: skip arg0, but first eval it. *)
-                     (* We already advanced past arg0 (rest → rest2).
-                        Re-tokenize arg0 from original rest to eval it. *)
-                     (* Actually, arg0 was parsed by parse_expr which consumed tokens.
-                        We need to evaluate the same tokens. Let's re-eval from rest. *)
                      let (sib_val, _) = eval_sibling rest in
                      Some ((tok, 1, sib_val) :: ops), rest3
                    | None -> None, rest3)
@@ -649,28 +672,37 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   | "word-node" ->
     let word = eval_str 0 in
-    Some (match !eval_ctx with
+    Some (match Domain.DLS.get _eval_ctx with
      | Some ctx ->
        (match Hashtbl.find_opt ctx.ctx_index.word_index word with
         | Some node_name -> VString node_name | None -> VNone)
      | None -> VNone)
 
+  | "word-node-compound" ->
+    (* reverse of expand_avastha: check if two words form a known compound.
+       e.g., word-node-compound "elastic" "energy" → "elastic-energy" *)
+    let w1 = eval_str 0 in
+    let w2 = eval_str 1 in
+    let key = w1 ^ " " ^ w2 in
+    Some (match Domain.DLS.get _eval_ctx with
+     | Some ctx ->
+       (match Hashtbl.find_opt ctx.ctx_index.compound_word_index key with
+        | Some compound_name -> VString compound_name | None -> VNone)
+     | None -> VNone)
+
   | "eval-node" ->
-    (* Given an eval name (e.g. "mul"), return the node name ("multiplication").
-       O(1) lookup via eval_index built at load time. *)
     let ev = eval_str 0 in
-    Some (match !eval_ctx with
+    Some (match Domain.DLS.get _eval_ctx with
      | Some ctx ->
        (match Hashtbl.find_opt ctx.ctx_index.eval_index ev with
         | Some node_name -> VString node_name | None ->
-          (* fallback: maybe ev IS the node name *)
           (match find k ev with Some _ -> VString ev | None -> VNone))
      | None -> VNone)
 
   | "call-tantra" ->
     let tname = eval_str 0 in
     let arg_list = eval_lst 1 in
-    Some (match !eval_ctx with
+    Some (match Domain.DLS.get _eval_ctx with
      | Some ctx ->
        (match Hashtbl.find_opt ctx.ctx_index.by_name tname with
         | None -> VNone
@@ -681,13 +713,305 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
               else Printf.sprintf "arg%d" i in
             (param_name, v)
           ) arg_list in
-          !_eval_tantra_ref k t input_values)
+          (Atomic.get _engine).eval_tantra k t input_values)
      | None -> VNone)
+
+  | "propagate-derive" ->
+    (* Reactive derivation: propagate bindings through janya edges.
+       Takes a triple-graph. For each sankhya binding, walks janya edges
+       backwards to find mantras that might fire. Fires them, propagates
+       new derivations recursively. No fixpoint needed.
+       Returns enriched graph with all derivable values. *)
+    let graph_v = eval_lst 0 in
+    (* extract bound concepts from sankhya triples *)
+    let bound_concepts = Hashtbl.create 16 in
+    let vps = ref [] in
+    List.iter (fun triple ->
+      match triple with
+      | VList [VString s; VString "sankhya"; VString v] ->
+        Hashtbl.replace bound_concepts s true;
+        vps := VList [VString s; VString v] :: !vps
+      | VList [VString s; VString "sankhya"; VFloat f] ->
+        Hashtbl.replace bound_concepts s true;
+        let vs = if Float.is_integer f && Float.is_finite f
+          then Printf.sprintf "%g" f else Printf.sprintf "%g" f in
+        vps := VList [VString s; VString vs] :: !vps
+      | _ -> ()
+    ) graph_v;
+    (* collect all mantras whose phala edges could fire *)
+    let janya_dim = match visheshanam_of_string "janya" with
+      | Some d -> d | None -> register_dimension "janya" in
+    let phala_dim = match visheshanam_of_string "phala" with
+      | Some d -> d | None -> register_dimension "phala" in
+    let swarupa_dim = match visheshanam_of_string "swarupa" with
+      | Some d -> d | None -> register_dimension "swarupa" in
+    (* recursive propagation *)
+    let new_triples = ref [] in
+    let fired_mantras = Hashtbl.create 8 in
+    let rec propagate concept =
+      (* find mantras that have this concept as janya *)
+      let edges = !(k.all_edges) in
+      let affected = List.filter_map (fun e ->
+        if e.relation = janya_dim && e.target = concept then Some e.source
+        else None
+      ) edges in
+      List.iter (fun mantra_name ->
+        if Hashtbl.mem fired_mantras mantra_name then ()
+        else begin
+          (* get this mantra's janya and phala *)
+          let m_edges = edges_of k mantra_name in
+          let m_janya = List.filter_map (fun e ->
+            if e.relation = janya_dim && e.source = mantra_name then Some e.target else None
+          ) m_edges in
+          let m_phala = List.filter_map (fun e ->
+            if e.relation = phala_dim && e.source = mantra_name then Some e.target else None
+          ) m_edges in
+          let m_swarupa = List.filter_map (fun e ->
+            if e.relation = swarupa_dim && e.source = mantra_name then Some e.target else None
+          ) m_edges in
+          let phala_name = match m_phala with
+            | p :: _ -> p
+            | [] -> match m_swarupa with s :: _ -> s | [] ->
+              let sh = Vidya.read_shabda k mantra_name in
+              (match List.assoc_opt "name" sh with Some n -> String.trim n | None -> "")
+          in
+          (* skip if phala already bound *)
+          if Hashtbl.mem bound_concepts phala_name then ()
+          else begin
+            (* check all janya are bound (or are constants) *)
+            let all_ok = List.for_all (fun jn ->
+              Hashtbl.mem bound_concepts jn ||
+              (let sh = Vidya.read_shabda k jn in
+               match List.assoc_opt "constants-key" sh with
+               | Some ck -> String.length (String.trim ck) > 0
+               | None -> false)
+            ) m_janya in
+            if all_ok then begin
+              Hashtbl.replace fired_mantras mantra_name true;
+              (* fire via execute-mantra tantra *)
+              let vps_val = VList !vps in
+              let result = call_tantra_opt k "execute-mantra"
+                [("mantra", VString mantra_name);
+                 ("bindings", vps_val);
+                 ("mode", VString "forward");
+                 ("solve-for", VString "")]
+                ~default:VNone in
+              let result_str = as_string result in
+              if String.length result_str > 0 && result_str <> "" then begin
+                (* add derived binding *)
+                Hashtbl.replace bound_concepts phala_name true;
+                vps := VList [VString phala_name; VString result_str] :: !vps;
+                new_triples :=
+                  VList [VString phala_name; VString "sankhya"; VString result_str] ::
+                  VList [VString phala_name; VString "derived-by"; VString mantra_name] ::
+                  !new_triples;
+                (* recursively propagate the new derivation *)
+                propagate phala_name
+              end
+            end
+          end
+        end
+      ) affected
+    in
+    (* trigger propagation from each initially bound concept *)
+    let initial_concepts = Hashtbl.fold (fun c _ acc -> c :: acc) bound_concepts [] in
+    List.iter propagate initial_concepts;
+    (* build fired-matches list: [[mantra, vps, "forward"], ...] for dispatch *)
+    let fired_list = Hashtbl.fold (fun mname _ acc ->
+      VList [VString mname; VList !vps; VString "forward"] :: acc
+    ) fired_mantras [] in
+    (* return [enriched-graph, fired-matches, vps] *)
+    Some (VList [
+      VList (graph_v @ !new_triples);
+      VList fired_list;
+      VList !vps;
+    ])
+
+  (* ── session overlay primitives ────────────────────────────────────────── *)
+
+  | "session-emit" ->
+    (* Emit a triple into the session overlay. O(1) insert into both indices.
+       Auto-registers unknown edge types as new dimensions. *)
+    let source   = eval_str 0 in
+    let rel_name = eval_str 1 in
+    let target   = eval_str 2 in
+    let vish = match visheshanam_of_string rel_name with
+      | Some v -> v
+      | None -> register_dimension rel_name in
+    (let vish = vish in
+       let overlay = Domain.DLS.get _session_overlay in
+       let edge : typed_edge = { source; target; relation = vish } in
+       (* index by source *)
+       let existing = match Hashtbl.find_opt overlay.by_source source with
+         | Some es -> es | None -> [] in
+       Hashtbl.replace overlay.by_source source (edge :: existing);
+       (* index by edge type *)
+       let by_e = match Hashtbl.find_opt overlay.by_edge vish with
+         | Some ps -> ps | None -> [] in
+       Hashtbl.replace overlay.by_edge vish ((source, target) :: by_e);
+       (* also index by target for walk-in *)
+       let existing_tgt = match Hashtbl.find_opt overlay.by_source target with
+         | Some es -> es | None -> [] in
+       Hashtbl.replace overlay.by_source target (edge :: existing_tgt);
+       (* record for reconstruction *)
+       overlay.triples := (source, vish, target) :: !(overlay.triples);
+       Some (VNode source))
+
+  | "session-by-edge" ->
+    (* O(1) lookup: all (source, target) pairs with given edge type in session.
+       Replaces: graph | where [s,e,o] | and (eq e "X") | collect [s, o] *)
+    let rel_name = eval_str 0 in
+    Some (match visheshanam_of_string rel_name with
+     | None -> VList []
+     | Some vish ->
+       let overlay = Domain.DLS.get _session_overlay in
+       match Hashtbl.find_opt overlay.by_edge vish with
+       | None -> VList []
+       | Some pairs -> VList (List.map (fun (s, t) ->
+           VList [VString s; VString t]) pairs))
+
+  | "session-triples" ->
+    (* Return all session triples as [[s, e, o], ...] for compatibility. *)
+    let overlay = Domain.DLS.get _session_overlay in
+    Some (VList (List.map (fun (s, rel, t) ->
+      VList [VString s; VString (string_of_visheshanam rel); VString t]
+    ) !(overlay.triples)))
+
+  | "session-clear" ->
+    (* Clear session overlay — call at start of each query. *)
+    let overlay = Domain.DLS.get _session_overlay in
+    Hashtbl.clear overlay.by_source;
+    Hashtbl.clear overlay.by_edge;
+    overlay.triples := [];
+    Some VNone
+
+  | "session-has-edge" ->
+    (* Does ANY triple with this edge type exist in session? O(1) check. *)
+    let rel_name = eval_str 0 in
+    Some (match visheshanam_of_string rel_name with
+     | None -> VBool false
+     | Some vish ->
+       let overlay = Domain.DLS.get _session_overlay in
+       VBool (Hashtbl.mem overlay.by_edge vish))
+
+  | "session-subjects" ->
+    (* All subjects (sources) with given edge type. O(1) + map.
+       Replaces: graph | where [s,e,o] | and (eq e "X") | collect (to-string s) *)
+    let rel_name = eval_str 0 in
+    Some (match visheshanam_of_string rel_name with
+     | None -> VList []
+     | Some vish ->
+       let overlay = Domain.DLS.get _session_overlay in
+       match Hashtbl.find_opt overlay.by_edge vish with
+       | None -> VList []
+       | Some pairs -> VList (List.map (fun (s, _) -> VString s) pairs))
+
+  | "session-value" ->
+    (* Get the object of a specific (subject, edge) pair. O(1).
+       Replaces: reduce graph "" (fn a t -> cond (and (eq s X) (eq e Y)) o a) *)
+    let subject  = eval_str 0 in
+    let rel_name = eval_str 1 in
+    Some (match visheshanam_of_string rel_name with
+     | None -> VNone
+     | Some vish ->
+       let overlay = Domain.DLS.get _session_overlay in
+       match Hashtbl.find_opt overlay.by_edge vish with
+       | None -> VNone
+       | Some pairs ->
+         match List.find_opt (fun (s, _) -> s = subject) pairs with
+         | Some (_, t) -> VString t | None -> VNone)
+
+  (* ── indexed graph primitives (pure value, no mutation) ──────────────── *)
+
+  | "index-graph" ->
+    (* Build indexed graph from flat triple list. O(n) build, O(1) lookups. *)
+    let triples = eval_lst 0 in
+    Some (VGraph (index_triples triples))
+
+  | "idx-subjects" ->
+    (* All subjects with given edge type. O(1). *)
+    let g = eval_arg 0 in
+    let edge_type = eval_str 1 in
+    Some (match g with
+     | VGraph gi ->
+       (match Hashtbl.find_opt gi.gi_by_edge edge_type with
+        | None -> VList []
+        | Some pairs -> VList (List.map (fun (s, _) -> VString s) pairs))
+     | _ -> VList [])
+
+  | "idx-by-edge" ->
+    (* All (subject, object) pairs with given edge type. O(1). *)
+    let g = eval_arg 0 in
+    let edge_type = eval_str 1 in
+    Some (match g with
+     | VGraph gi ->
+       (match Hashtbl.find_opt gi.gi_by_edge edge_type with
+        | None -> VList []
+        | Some pairs -> VList (List.map (fun (s, o) ->
+            VList [VString s; VString o]) pairs))
+     | _ -> VList [])
+
+  | "idx-has-edge" ->
+    (* Does any triple with this edge type exist? O(1). *)
+    let g = eval_arg 0 in
+    let edge_type = eval_str 1 in
+    Some (match g with
+     | VGraph gi -> VBool (Hashtbl.mem gi.gi_by_edge edge_type)
+     | _ -> VBool false)
+
+  | "idx-value" ->
+    (* Get object for specific (subject, edge) pair. O(1). *)
+    let g = eval_arg 0 in
+    let subject = eval_str 1 in
+    let edge_type = eval_str 2 in
+    Some (match g with
+     | VGraph gi ->
+       (match Hashtbl.find_opt gi.gi_by_edge edge_type with
+        | None -> VNone
+        | Some pairs ->
+          match List.find_opt (fun (s, _) -> s = subject) pairs with
+          | Some (_, o) -> VString o | None -> VNone)
+     | _ -> VNone)
+
+  | "idx-append" ->
+    (* Append triples to indexed graph, updating index. O(k) for k new triples. *)
+    let g = eval_arg 0 in
+    let new_triples = eval_lst 1 in
+    Some (match g with
+     | VGraph gi ->
+       let by_edge = Hashtbl.copy gi.gi_by_edge in
+       List.iter (fun triple ->
+         match triple with
+         | VList (VString s :: VString e :: rest) ->
+           let o = match rest with VString o :: _ -> o | _ -> as_string (VList rest) in
+           let existing = match Hashtbl.find_opt by_edge e with Some l -> l | None -> [] in
+           Hashtbl.replace by_edge e ((s, o) :: existing)
+         | _ -> ()
+       ) new_triples;
+       VGraph { gi_triples = gi.gi_triples @ new_triples; gi_by_edge = by_edge }
+     | VList existing ->
+       VGraph (index_triples (existing @ new_triples))
+     | _ -> VGraph (index_triples new_triples))
+
+  (* ── profiling primitives ──────────────────────────────────────────── *)
+
+  | "clock-ms" ->
+    (* Returns current monotonic clock in milliseconds (float). *)
+    Some (VFloat (Unix.gettimeofday () *. 1000.0))
+
+  | "profile-step" ->
+    (* Evaluate an expression and return [result, elapsed-ms, label].
+       Usage: (profile-step "label" <expr>) *)
+    let label = eval_str 0 in
+    let t0 = Unix.gettimeofday () in
+    let result = e_eval k e (List.nth args 1) in
+    let elapsed = (Unix.gettimeofday () -. t0) *. 1000.0 in
+    Some (VList [result; VFloat elapsed; VString label])
 
   | _ -> None
 
 (* ═══════════════════════════════════════════════════════════════════════════
-   4. EVAL_PIPELINE_OP — session ops + unknown fallback
+   3. EVAL_PIPELINE_OP — session ops + unknown fallback
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
@@ -695,7 +1019,7 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
   match op with
   | "remember-bindings" ->
     let items = as_list (e_eval k e (List.nth args 0)) in
-    (match !eval_ctx with
+    (match Domain.DLS.get _eval_ctx with
      | None ->
        Some (VList [VString "error"; VString "missing eval context"; VFloat 0.0; VString ""; VString ""])
      | Some ctx ->
@@ -718,16 +1042,18 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
           VList [VString "error"; VString "no bindings"; VFloat 0.0; VString ""; VString ""]))
 
   | _ ->
-    (match Hashtbl.find_opt e op with
+    (* try env-bound function *)
+    (match StringMap.find_opt op e with
      | Some (VFn (params, body, captured)) ->
-       let local = env_copy captured in
-       List.iteri (fun i param ->
+       let local = List.fold_left (fun env_acc (i, param) ->
          if i < List.length args then
-           Hashtbl.replace local param (e_eval k e (List.nth args i))
-       ) params;
+           StringMap.add param (e_eval k e (List.nth args i)) env_acc
+         else env_acc
+       ) captured (List.mapi (fun i p -> (i, p)) params) in
        Some (e_eval k local body)
      | _ ->
-       (match !eval_ctx with
+       (* try tantra lookup *)
+       (match Domain.DLS.get _eval_ctx with
         | Some ctx ->
           (match Hashtbl.find_opt ctx.ctx_index.by_name op with
            | Some t ->
@@ -735,30 +1061,31 @@ let eval_pipeline_op (e_eval : proof_graph -> env -> expr -> value)
                let v = if i < List.length args then e_eval k e (List.nth args i) else VNone in
                (inp.tp_name, v)
              ) t.t_inputs in
-             Some (!_eval_tantra_ref k t input_values)
+             Some ((Atomic.get _engine).eval_tantra k t input_values)
            | None -> None)
         | None -> None))
 
 (* ═══════════════════════════════════════════════════════════════════════════
-   5. EVAL_CALL — chained dispatch
+   4. EVAL_CALL — chained dispatch
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : value =
-  let e_eval = !_eval_ref in
+  let eng = Atomic.get _engine in
+  let e_eval = eng.eval in
   match eval_graph_op e_eval k e op args with
   | Some v -> v
   | None ->
-    match !_eval_pure_op_raw e_eval k e op args with
+    match eng.eval_pure_op e_eval k e op args with
     | Some v -> v
     | None ->
-      match !_eval_pipeline_op_raw e_eval k e op args with
+      match eng.eval_pipeline_op e_eval k e op args with
       | Some v -> v
       | None ->
         let apply_op_vals prim_name op_args =
           let lifted = List.map (fun v -> match v with
             | VFloat f -> Lit f | VString s -> StrLit s
             | VBool b -> BoolLit b | _ -> Lit (as_float v)) op_args in
-          match !_eval_pure_op_raw e_eval k e prim_name lifted with
+          match eng.eval_pure_op e_eval k e prim_name lifted with
           | Some v -> v
           | None ->
             (match eval_graph_op e_eval k e prim_name lifted with
@@ -775,7 +1102,7 @@ let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : val
           in
           apply_op_vals prim_name op_args_v
         | _ ->
-          (match !eval_ctx with
+          (match Domain.DLS.get _eval_ctx with
            | Some ctx ->
              (match Hashtbl.find_opt ctx.ctx_index.by_name op with
               | Some t ->
@@ -786,14 +1113,14 @@ let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : val
                     else Printf.sprintf "arg%d" i in
                   (param_name, v)
                 ) arg_vals in
-                !_eval_tantra_ref k t input_values
+                eng.eval_tantra k t input_values
               | None ->
                 Printf.printf "eval: unknown operation '%s'\n%!" op; VNone)
            | None ->
                Printf.printf "eval: unknown operation '%s'\n%!" op; VNone))
 
 (* ═══════════════════════════════════════════════════════════════════════════
-   6. REGISTER_PRIMITIVE_ARITIES
+   5. REGISTER_PRIMITIVE_ARITIES
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let register_primitive_arities () =
@@ -810,6 +1137,23 @@ let register_primitive_arities () =
   r "ppr"                 3;
   r "emit-node"           4;
   r "emit-edge"           3;
+  r "propagate-derive"    1;
+  r "index-graph"          1;
+  r "idx-subjects"         2;
+  r "idx-by-edge"          2;
+  r "idx-has-edge"         2;
+  r "idx-value"            3;
+  r "idx-append"           2;
+  r "mantra-select"        1;
+  r "clock-ms"             0;
+  r "profile-step"         2;
+  r "session-emit"         3;
+  r "session-by-edge"      1;
+  r "session-triples"      0;
+  r "session-clear"        0;
+  r "session-has-edge"     1;
+  r "session-subjects"     1;
+  r "session-value"        2;
   r "om-janya"            1;
   r "om-phala"            1;
   r "om-kriya"            1;
@@ -825,6 +1169,7 @@ let register_primitive_arities () =
   r "eval-krama"          2;
   r "krama-path"          3;
   r "word-node"           1;
+  r "word-node-compound"  2;
   r "eval-node"           1;
   r "lookup-word"         1;
   r "apply-op"            2;
@@ -870,7 +1215,10 @@ let register_primitive_arities () =
   r "range"               1;
   r "map"                 2;
   r "filter"              2;
+  r "pmap"                2;
+  r "pfilter"             2;
   r "reduce"              3;
+  r "preduce"             3;
   r "fixpoint"            2;
   r "iterate"             3;
   r "add"                (-1);

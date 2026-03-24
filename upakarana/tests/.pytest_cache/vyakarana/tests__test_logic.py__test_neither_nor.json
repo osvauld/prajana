@@ -1,7 +1,15 @@
 {
   "test": "tests/test_logic.py::test_neither_nor",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "neither the ball is red nor is it blue. is the ball red",
+      "output": "no match",
+      "elapsed_ms": 195,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.064
+  "duration": 0.196
 }

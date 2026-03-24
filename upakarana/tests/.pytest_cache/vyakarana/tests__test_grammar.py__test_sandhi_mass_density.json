@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_mass_density",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find mass density",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "mass-density",
+          "satya",
+          "mass-density"
+        ]
+      ],
+      "elapsed_ms": 33,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.014
+  "duration": 0.035
 }

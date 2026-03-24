@@ -1,8 +1,26 @@
--- main computation pipeline.
+-- anuvada-ganana: indexed graph pipeline.
+-- BQG → refine-v2 → grade-split → count-chain → detect → dispatch.
+-- Single input: sentence string. Session logic lives in session-anuvada.
 (tantra anuvada-ganana (sentence)
   (raw-graph (build-question-graph sentence))
   (asserted (assertion-bandha raw-graph))
-  (refined (grade-sparsha asserted))
-  (expanded (kosha-expand refined))
+  (refined (avrti-refine-v2 asserted))
+  -- grade-split + count-chain
+  (boundary-edge (shabda "graded-ring" "grade-boundary"))
+  (intra-boundary (shabda "graded-ring" "intra-grade-boundary"))
+  (grade-state (reduce refined [[], []] (fn state triple ->
+    let completed = nth state 0
+    let current   = nth state 1
+    let e = nth triple 1
+    cond (or (eq (to-string e) boundary-edge) (eq (to-string e) intra-boundary))
+      [(append completed [(append current [triple])]), []]
+    otherwise
+      [completed, (append current [triple])])))
+  (completed-grades (nth grade-state 0))
+  (final-grade (nth grade-state 1))
+  (all-grades (append completed-grades [final-grade]))
+  (after-grades (count-chain refined all-grades))
+  -- expand + detect + dispatch
+  (expanded (kosha-expand after-grades))
   (signaled (detect-signals expanded))
   (dispatch-answer signaled refined))
