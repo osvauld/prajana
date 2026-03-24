@@ -4,4 +4,5 @@
 (kosha displacement
   (vishesa linear-motion-varga)
   (phala krama velocity-kramanusara)
-  (yukta kshetrajna direction viveka))
+  (yukta kshetrajna direction viveka)
+  (avastha angular total linear radial tangential initial final average))

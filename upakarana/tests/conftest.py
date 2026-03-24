@@ -114,6 +114,54 @@ class RecordingClient:
             })
         return result
 
+    def answer(self, sentence: str) -> str:
+        t0 = time.monotonic()
+        error = None
+        result = None
+        try:
+            result = self._client.answer(sentence)
+        except Exception as e:
+            error = str(e)
+            raise
+        finally:
+            self._calls.append({
+                "method": "answer", "input": sentence, "output": result,
+                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+            })
+        return result
+
+    def bqg(self, sentence: str) -> Any:
+        t0 = time.monotonic()
+        error = None
+        result = None
+        try:
+            result = self._client.bqg(sentence)
+        except Exception as e:
+            error = str(e)
+            raise
+        finally:
+            self._calls.append({
+                "method": "bqg", "input": sentence, "output": result,
+                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+            })
+        return result
+
+    def raw_bqg(self, sentence: str) -> Any:
+        t0 = time.monotonic()
+        error = None
+        result = None
+        try:
+            result = self._client.raw_bqg(sentence)
+        except Exception as e:
+            error = str(e)
+            raise
+        finally:
+            self._calls.append({
+                "method": "raw_bqg", "input": sentence, "output": result,
+                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+            })
+        return result
+
     def elapsed_ms(self, expr: str) -> tuple[Any, int]:
         t0 = time.monotonic()
         error = None

@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_drag_force",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find drag force",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "drag-force",
+          "satya",
+          "drag-force"
+        ]
+      ],
+      "elapsed_ms": 30,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.031
+}

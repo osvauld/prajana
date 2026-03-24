@@ -1,7 +1,61 @@
 {
   "test": "tests/test_entity.py::test_named_entity_ownership",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "ball has mass 5",
+      "output": [
+        [
+          "ball",
+          "mithya",
+          "ball"
+        ],
+        [
+          "has",
+          "mithya",
+          "has"
+        ],
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "mass",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "mass",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball",
+          "prathama-vibhakti",
+          "object"
+        ],
+        [
+          "mass",
+          "shashthi-vibhakti",
+          "ball"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "5."
+        ]
+      ],
+      "elapsed_ms": 88,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.022
+  "duration": 0.09
 }

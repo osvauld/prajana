@@ -1,7 +1,71 @@
 {
   "test": "tests/test_grammar.py::test_number_comma_adjacent",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "mass is 5, velocity is 10",
+      "output": [
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          ",",
+          "viraam",
+          ","
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "10",
+          "asprista-sankhya",
+          "10."
+        ],
+        [
+          "velocity",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "velocity",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "5."
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "10."
+        ]
+      ],
+      "elapsed_ms": 106,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.029
+  "duration": 0.107
 }

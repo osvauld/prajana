@@ -10,7 +10,8 @@
   (threshold 0.001)
   (top-k 100)
   (new-triples (cond (eq (length sc) 0) []
-    otherwise (reduce sc [] (fn acc seed ->
+    -- parallel: each seed's PPR walk is independent
+    otherwise (preduce sc [] (fn acc seed ->
       let results  = ppr seed-pairs seed []
       let filtered = reduce results [] (fn facc pr ->
         let nm    = to-string (nth pr 0)

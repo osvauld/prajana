@@ -1,14 +1,22 @@
 {
   "test": "tests/test_edges.py::test_what_operations_in_calculus",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "what operations belong to calculus",
+      "output": "we seek: calculus.no match",
+      "elapsed_ms": 107,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.168,
+  "duration": 0.118,
   "xfail": {
     "reason": "karma_query: no tantra walks karma yet",
     "strict": true,
     "gate": "other:test_edges",
     "file": "/home/abe/agent_x/upakarana/tests/test_edges.py",
-    "line": 545
+    "line": 543
   }
 }

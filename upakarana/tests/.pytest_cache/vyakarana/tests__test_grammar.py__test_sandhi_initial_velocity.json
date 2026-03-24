@@ -1,7 +1,46 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_initial_velocity",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "initial velocity is 5",
+      "output": [
+        [
+          "initial-velocity",
+          "satya",
+          "initial-velocity"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "initial-velocity",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "initial-velocity",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "initial-velocity",
+          "sankhya",
+          "5."
+        ]
+      ],
+      "elapsed_ms": 46,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.013
+  "duration": 0.048
 }

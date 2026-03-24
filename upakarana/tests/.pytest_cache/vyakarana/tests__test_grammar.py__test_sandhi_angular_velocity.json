@@ -1,7 +1,46 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_angular_velocity",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "angular velocity is 10",
+      "output": [
+        [
+          "angular-velocity",
+          "satya",
+          "angular-velocity"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "10",
+          "asprista-sankhya",
+          "10."
+        ],
+        [
+          "angular-velocity",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "angular-velocity",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "angular-velocity",
+          "sankhya",
+          "10."
+        ]
+      ],
+      "elapsed_ms": 69,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.02
+  "duration": 0.071
 }

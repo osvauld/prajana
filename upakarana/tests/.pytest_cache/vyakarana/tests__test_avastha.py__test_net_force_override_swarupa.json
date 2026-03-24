@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_net_force_override_swarupa",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"net-force\" \"swarupa\"",
+      "output": [
+        "force",
+        "force",
+        "force",
+        "force"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

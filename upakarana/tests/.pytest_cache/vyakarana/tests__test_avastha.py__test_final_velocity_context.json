@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_final_velocity_context",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"final-velocity\" \"sthita\"",
+      "output": [
+        "antya",
+        "antya"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

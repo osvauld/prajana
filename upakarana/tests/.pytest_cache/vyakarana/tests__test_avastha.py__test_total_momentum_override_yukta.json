@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_total_momentum_override_yukta",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"total-momentum\" \"yukta\"",
+      "output": [
+        "conservation",
+        "velocity",
+        "mass",
+        "kshetra"
+      ],
+      "elapsed_ms": 1,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

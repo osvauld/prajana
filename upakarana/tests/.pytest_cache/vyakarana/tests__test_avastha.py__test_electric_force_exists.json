@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_electric_force_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"electric-force\" \"swarupa\"",
+      "output": [
+        "force",
+        "force"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

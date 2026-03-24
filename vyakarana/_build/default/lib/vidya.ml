@@ -112,6 +112,17 @@ let load_shabda_dir (dir : string) : int =
     !count
   end
 
+(* inject_shabda: programmatically add shabda entries (used by generators).
+   Merges with existing entries — does not overwrite. *)
+let inject_shabda (node_name : string) (pairs : (string * string) list) : unit =
+  let existing = match Hashtbl.find_opt _shabda_store node_name with
+    | Some p -> p | None -> [] in
+  (* merge: new pairs take priority for new keys, keep existing for conflicts *)
+  let seen = Hashtbl.create 8 in
+  List.iter (fun (k, _) -> Hashtbl.replace seen k true) existing;
+  let new_pairs = List.filter (fun (k, _) -> not (Hashtbl.mem seen k)) pairs in
+  Hashtbl.replace _shabda_store node_name (existing @ new_pairs)
+
 (* emit_shabda_edges: project key shabda fields as graph edges.
    Called after shabda + graph are both loaded. Creates:
    - naama edges: word key → one edge per word (node --naama--> word)

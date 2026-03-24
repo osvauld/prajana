@@ -1,0 +1,61 @@
+-- profile-refine: detailed timing of refine fixpoint.
+(tantra profile-refine (sentence)
+  (raw-graph (build-question-graph sentence))
+  (asserted (assertion-bandha raw-graph))
+
+  -- time individual refine steps on the asserted graph
+  (graph (cond (exists asserted) asserted otherwise []))
+  (p-sandhi-kosha (profile-step "sandhi-kosha" (sandhi-kosha graph)))
+  (after-sk (nth p-sandhi-kosha 0))
+
+  (has-mithya (idx-has-edge (index-graph asserted) "mithya"))
+  (p-sandhi-avastha (profile-step "sandhi-avastha" (cond has-mithya (sandhi-avastha after-sk) otherwise after-sk)))
+  (after-sa (nth p-sandhi-avastha 0))
+
+  (p-sandhi-band (profile-step "sandhi-bandhana" (sandhi-bandhana after-sa)))
+  (after-sb (nth p-sandhi-band 0))
+
+  (p-vyak (profile-step "vyakarana-sparsha" (vyakarana-sparsha after-sb)))
+  (after-vk (nth p-vyak 0))
+
+  (p-poss (profile-step "shashthi-possession" (shashthi-possession after-vk)))
+  (after-pos (nth p-poss 0))
+
+  (p-vibh (profile-step "vibhakti-shashthi" (vibhakti-shashthi after-pos)))
+  (after-vib (nth p-vibh 0))
+
+  (p-vinst (profile-step "vishesa-instance" (vishesa-instance after-vib)))
+  (after-vi (nth p-vinst 0))
+
+  (p-rashi (profile-step "rashi-viveka" (rashi-viveka after-vi)))
+  (after-rv (nth p-rashi 0))
+
+  (p-vband (profile-step "vishesa-bandhana" (vishesa-bandhana after-rv)))
+  (after-vb (nth p-vband 0))
+
+  (p-ranuvada (profile-step "rashi-anuvada" (rashi-anuvada after-vb)))
+  (after-ra (nth p-ranuvada 0))
+
+  (indexed (index-graph after-ra))
+  (p-sankhya (profile-step "sankhya-bandha-v2" (sankhya-bandha-v2 indexed)))
+  (after-sk2 (nth p-sankhya 0))
+
+  (p-swarupa (profile-step "swarupa-anuvada" (swarupa-anuvada after-sk2)))
+  (after-sw (nth p-swarupa 0))
+
+  (indexed2 (index-graph after-sw))
+  (p-shunya (profile-step "shunya-bandha-v2" (shunya-bandha-v2 indexed2)))
+
+  [[(nth p-sandhi-kosha 2), (nth p-sandhi-kosha 1)],
+   [(nth p-sandhi-avastha 2), (nth p-sandhi-avastha 1)],
+   [(nth p-sandhi-band 2), (nth p-sandhi-band 1)],
+   [(nth p-vyak 2), (nth p-vyak 1)],
+   [(nth p-poss 2), (nth p-poss 1)],
+   [(nth p-vibh 2), (nth p-vibh 1)],
+   [(nth p-vinst 2), (nth p-vinst 1)],
+   [(nth p-rashi 2), (nth p-rashi 1)],
+   [(nth p-vband 2), (nth p-vband 1)],
+   [(nth p-ranuvada 2), (nth p-ranuvada 1)],
+   [(nth p-sankhya 2), (nth p-sankhya 1)],
+   [(nth p-swarupa 2), (nth p-swarupa 1)],
+   [(nth p-shunya 2), (nth p-shunya 1)]])

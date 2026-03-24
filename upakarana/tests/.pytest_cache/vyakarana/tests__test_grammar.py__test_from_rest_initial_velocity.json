@@ -1,7 +1,63 @@
 {
   "test": "tests/test_grammar.py::test_from_rest_initial_velocity",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "accelerates from rest at 3 m/s2",
+      "output": [
+        [
+          "accelerates",
+          "mithya",
+          "accelerates"
+        ],
+        [
+          "from",
+          "apadana",
+          "from"
+        ],
+        [
+          "initial-rest",
+          "satya",
+          "initial-rest"
+        ],
+        [
+          "at",
+          "adhikarana",
+          "at"
+        ],
+        [
+          "3",
+          "asprista-sankhya",
+          "3."
+        ],
+        [
+          "m/s2",
+          "mithya",
+          "m/s2"
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "0."
+        ]
+      ],
+      "elapsed_ms": 61,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.019
+  "duration": 0.072,
+  "xfail": {
+    "reason": "from rest: 'rest' maps to count-remaining, not initial-velocity=0",
+    "strict": true,
+    "gate": "parsing: natural phrasing not handled",
+    "file": "/home/abe/agent_x/upakarana/tests/test_grammar.py",
+    "line": 253
+  }
 }

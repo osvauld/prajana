@@ -1,7 +1,22 @@
 {
   "test": "tests/test_physics.py::test_inverse_electric_power_find_current",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "electric power is 1100 and voltage is 220. find current",
+      "output": "we have: voltage=1100. and voltage=220..we seek: current.no match",
+      "elapsed_ms": 304,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.221
+  "duration": 0.311,
+  "xfail": {
+    "reason": "compound word: 'electric power' unfused \u2014 'electric' has no word: mapping",
+    "strict": true,
+    "gate": "compound_word: multi-word concept missing word: mapping",
+    "file": "/home/abe/agent_x/upakarana/tests/test_physics.py",
+    "line": 228
+  }
 }

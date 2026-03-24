@@ -1,0 +1,22 @@
+{
+  "test": "tests/test_avastha.py::test_ionic_bond_override_sthita",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"ionic-bond\" \"sthita\"",
+      "output": [
+        "domain-chemistry",
+        "chemical-bond",
+        "vidyut",
+        "vidyut",
+        "chemical-bond",
+        "domain-chemistry"
+      ],
+      "elapsed_ms": 1,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.005
+}

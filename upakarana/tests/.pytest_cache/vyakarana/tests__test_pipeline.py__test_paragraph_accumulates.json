@@ -1,7 +1,86 @@
 {
   "test": "tests/test_pipeline.py::test_paragraph_accumulates",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "mass is 5. velocity is 10. find kinetic energy",
+      "output": [
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          ".",
+          "viraam",
+          "."
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "10",
+          "asprista-sankhya",
+          "10."
+        ],
+        [
+          ".",
+          "viraam",
+          "."
+        ],
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "kinetic-energy",
+          "satya",
+          "kinetic-energy"
+        ],
+        [
+          "kinetic-energy",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "kinetic-energy",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "5."
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "10."
+        ]
+      ],
+      "elapsed_ms": 173,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.049
+  "duration": 0.174
 }

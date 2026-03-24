@@ -1,7 +1,22 @@
 {
   "test": "tests/test_grammar.py::test_verb_moving_at",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "the electron has mass 9.109e-31 kg. it is moving at 1e6 m/s. find kinetic energy",
+      "output": "we have: mass=9.109e-31 and pronoun-it=1000000..we seek: kinetic-energy.no match",
+      "elapsed_ms": 505,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.267
+  "duration": 0.517,
+  "xfail": {
+    "reason": "'moving at' not recognised as velocity signal",
+    "strict": true,
+    "gate": "kosha: missing concept node",
+    "file": "/home/abe/agent_x/upakarana/tests/test_grammar.py",
+    "line": 236
+  }
 }

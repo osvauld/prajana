@@ -1,7 +1,15 @@
 {
   "test": "tests/test_edges.py::TestInversePipeline::test_ke_inverse_velocity",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "kinetic energy is 250 and mass is 5. find velocity",
+      "output": "we have: kinetic-energy=250. and mass=5..we seek: velocity.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: mass=5..we find: velocity = velocity = 10",
+      "elapsed_ms": 477,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.245
+  "duration": 0.478
 }

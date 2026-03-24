@@ -1,7 +1,38 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_electric_power",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find electric power",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "electric",
+          "mithya",
+          "electric"
+        ],
+        [
+          "power",
+          "mithya",
+          "power"
+        ]
+      ],
+      "elapsed_ms": 20,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.013
+  "duration": 0.026,
+  "xfail": {
+    "reason": "compound word: 'electric' has no word: mapping for sandhi fusion",
+    "strict": true,
+    "gate": "compound_word: multi-word concept missing word: mapping",
+    "file": "/home/abe/agent_x/upakarana/tests/test_grammar.py",
+    "line": 48
+  }
 }

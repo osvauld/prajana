@@ -1,9 +1,17 @@
 {
   "test": "tests/test_xfail.py::test_total_momentum_three",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5. ball-C has mass 5 and velocity 6. find total momentum",
+      "output": "we have: ball-A (mass=3., velocity=4.); ball-B (mass=3., velocity=4.); and ball-C (mass=3., velocity=4.).we seek: total-momentum.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=6., mass=5..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=6., mass=5..no match",
+      "elapsed_ms": 1186,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.523,
+  "duration": 1.192,
   "xfail": {
     "reason": "dvandva: same pattern, three entities",
     "strict": true,

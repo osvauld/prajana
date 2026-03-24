@@ -1,7 +1,46 @@
 {
   "test": "tests/test_grammar.py::test_copula_are",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "all cats are animals",
+      "output": [
+        [
+          "all",
+          "mithya",
+          "all"
+        ],
+        [
+          "cat",
+          "satya",
+          "cat"
+        ],
+        [
+          "are",
+          "copula",
+          "are"
+        ],
+        [
+          "animal",
+          "satya",
+          "animal"
+        ],
+        [
+          "animal",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "animal",
+          "vachana",
+          "bahu-vachana"
+        ]
+      ],
+      "elapsed_ms": 33,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.012
+  "duration": 0.034
 }

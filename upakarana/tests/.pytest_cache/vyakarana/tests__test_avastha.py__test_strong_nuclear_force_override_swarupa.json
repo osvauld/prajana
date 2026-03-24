@@ -1,0 +1,22 @@
+{
+  "test": "tests/test_avastha.py::test_strong_nuclear_force_override_swarupa",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"strong-nuclear-force\" \"swarupa\"",
+      "output": [
+        "drdha-bandha",
+        "sambandha",
+        "nuclear-force",
+        "nuclear-force",
+        "sambandha",
+        "drdha-bandha"
+      ],
+      "elapsed_ms": 5,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.006
+}

@@ -3,6 +3,59 @@
   "outcome": "passed",
   "calls": [
     {
+      "method": "bqg",
+      "input": "mass 5 velocity 10. find kinetic energy",
+      "output": [
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "10",
+          "asprista-sankhya",
+          "10."
+        ],
+        [
+          ".",
+          "viraam",
+          "."
+        ],
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "kinetic-energy",
+          "satya",
+          "kinetic-energy"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "5."
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "10."
+        ]
+      ],
+      "elapsed_ms": 107,
+      "error": null
+    },
+    {
       "method": "eval",
       "input": "match-mantra [[\"mass\", \"satya\", \"mass\"], [\"5\", \"asprista-sankhya\", \"5.\"], [\"velocity\", \"satya\", \"velocity\"], [\"10\", \"asprista-sankhya\", \"10.\"], [\".\", \"viraam\", \".\"], [\"find\", \"vidhi-kaala\", \"solve-for\"], [\"kinetic-energy\", \"satya\", \"kinetic-energy\"], [\"mass\", \"sankhya\", \"5.\"], [\"velocity\", \"sankhya\", \"10.\"]]",
       "output": [
@@ -19,10 +72,10 @@
         ],
         "forward"
       ],
-      "elapsed_ms": 12,
+      "elapsed_ms": 9,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.044
+  "duration": 0.118
 }

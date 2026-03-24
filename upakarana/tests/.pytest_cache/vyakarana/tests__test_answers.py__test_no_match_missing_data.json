@@ -1,7 +1,15 @@
 {
   "test": "tests/test_answers.py::test_no_match_missing_data",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "mass is 5. find kinetic energy",
+      "output": "we have: mass=5..we seek: kinetic-energy.no match",
+      "elapsed_ms": 331,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.191
+  "duration": 0.333
 }

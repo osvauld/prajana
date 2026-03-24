@@ -85,6 +85,37 @@ def slowest_calls(entries, top_n=10):
     return all_calls[:top_n]
 
 
+def slowest_tests(entries, top_n=20):
+    """Slowest tests by wall-clock duration."""
+    timed = []
+    for e in entries:
+        dur = e.get("duration", 0)
+        call_ms = sum(c.get("elapsed_ms", 0) for c in e.get("calls", []))
+        timed.append({
+            "test": e.get("test", "?"),
+            "duration_s": round(dur, 3),
+            "call_ms": call_ms,
+            "calls": len(e.get("calls", [])),
+            "outcome": e.get("outcome", "?"),
+        })
+    timed.sort(key=lambda t: -t["duration_s"])
+    return timed[:top_n]
+
+
+def timing_by_layer(entries):
+    """Aggregate timing by test layer (file)."""
+    from collections import defaultdict
+    layers = defaultdict(lambda: {"duration_s": 0, "count": 0, "call_ms": 0})
+    for e in entries:
+        test_path = e.get("test", "").split("::")[0].split("/")[-1]
+        layer = test_path.replace("test_", "").replace(".py", "") if test_path else "unknown"
+        layers[layer]["duration_s"] += e.get("duration", 0)
+        layers[layer]["count"] += 1
+        layers[layer]["call_ms"] += sum(c.get("elapsed_ms", 0) for c in e.get("calls", []))
+    return {k: {**v, "duration_s": round(v["duration_s"], 1)}
+            for k, v in sorted(layers.items(), key=lambda x: -x[1]["duration_s"])}
+
+
 def summarize(entries):
     """Full summary dict."""
     outcomes = by_outcome(entries)

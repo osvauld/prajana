@@ -1,14 +1,22 @@
 {
   "test": "tests/test_xfail.py::test_multiplication_tables_legs",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "there are 4 tables. each table has 4 legs. how many legs are there in total",
+      "output": "we have: there 4 table.we know: 4 plus (4 \u2192 8).we find: 8 legs there total",
+      "elapsed_ms": 490,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.14,
+  "duration": 0.498,
   "xfail": {
     "reason": "multiplication: 'each' should trigger multiply",
     "strict": true,
     "gate": "multiplication: 'each' triggers multiply",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 409
+    "line": 385
   }
 }

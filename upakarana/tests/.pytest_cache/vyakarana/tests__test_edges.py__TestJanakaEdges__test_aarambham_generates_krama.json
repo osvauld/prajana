@@ -8,10 +8,10 @@
       "output": [
         "krama"
       ],
-      "elapsed_ms": 0,
+      "elapsed_ms": 4,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.005
 }

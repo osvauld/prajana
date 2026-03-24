@@ -1,12 +1,12 @@
 {
   "test": "tests/test_graph.py::test_register_dimension_idempotent",
-  "outcome": "failed",
+  "outcome": "xfailed",
   "calls": [
     {
       "method": "eval",
       "input": "register-dimension \"satya\"",
       "output": "register-dimension",
-      "elapsed_ms": 0,
+      "elapsed_ms": 8,
       "error": null
     },
     {
@@ -18,5 +18,12 @@
     }
   ],
   "failure": null,
-  "duration": 0.002
+  "duration": 0.024,
+  "xfail": {
+    "reason": "graph primitive: register-dimension return value mismatch",
+    "strict": true,
+    "gate": "graph_primitive: node-satya / register-dimension return type",
+    "file": "/home/abe/agent_x/upakarana/tests/test_graph.py",
+    "line": 74
+  }
 }

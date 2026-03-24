@@ -1,7 +1,58 @@
 {
   "test": "tests/test_grammar.py::test_trigram_electric_field_strength",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "electric field strength is 0.1",
+      "output": [
+        [
+          "electric-field",
+          "satya",
+          "electric-field"
+        ],
+        [
+          "strength",
+          "satya",
+          "strength"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "0.1",
+          "asprista-sankhya",
+          "0.1"
+        ],
+        [
+          "strength",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "strength",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "strength",
+          "sankhya",
+          "0.1"
+        ]
+      ],
+      "elapsed_ms": 52,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.021
+  "duration": 0.062,
+  "xfail": {
+    "reason": "compound trigram: 'electric field strength' is a three-word compound",
+    "strict": true,
+    "gate": "sandhi-kosha only handles bigrams",
+    "file": "/home/abe/agent_x/upakarana/tests/test_grammar.py",
+    "line": 77
+  }
 }

@@ -1,7 +1,15 @@
 {
   "test": "tests/test_xfail.py::test_red_blue_addition",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "a box has 5 red balls and 3 blue balls. how many balls",
+      "output": "we have: container has 5 red balls 3 blue balls.we know: 3 plus (5 \u2192 8).we find: 8 balls",
+      "elapsed_ms": 354,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.108
+  "duration": 0.355
 }

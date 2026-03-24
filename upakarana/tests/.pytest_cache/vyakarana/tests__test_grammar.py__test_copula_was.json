@@ -1,7 +1,46 @@
 {
   "test": "tests/test_grammar.py::test_copula_was",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "velocity was 10",
+      "output": [
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "was",
+          "copula",
+          "was"
+        ],
+        [
+          "10",
+          "asprista-sankhya",
+          "10."
+        ],
+        [
+          "velocity",
+          "kaala",
+          "bhuta-kaala"
+        ],
+        [
+          "velocity",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "10."
+        ]
+      ],
+      "elapsed_ms": 51,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.015
+  "duration": 0.052
 }

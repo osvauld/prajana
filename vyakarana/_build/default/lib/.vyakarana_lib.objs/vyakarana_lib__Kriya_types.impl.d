@@ -1,1 +1,1 @@
-lib/kriya_types.ml: Float Hashtbl List Prakriti Printf String Unix
+lib/kriya_types.ml: Atomic Domain Float Hashtbl List Map Prakriti Printf String Unix

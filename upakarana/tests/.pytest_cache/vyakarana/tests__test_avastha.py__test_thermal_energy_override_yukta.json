@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_thermal_energy_override_yukta",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"thermal-energy\" \"yukta\"",
+      "output": [
+        "temperature",
+        "temperature"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.004
+}

@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_thermal_energy_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"thermal-energy\" \"swarupa\"",
+      "output": [
+        "energy",
+        "energy"
+      ],
+      "elapsed_ms": 5,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.006
+}

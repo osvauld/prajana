@@ -29,6 +29,7 @@ let empty_index () : tantra_index = {
   all_tantras = ref [];
   word_index  = Hashtbl.create 256;
   eval_index  = Hashtbl.create 256;
+  compound_word_index = Hashtbl.create 128;
 }
 
 let add_to_list_table tbl key value =
@@ -294,6 +295,110 @@ let apply_relation_axioms (k : proof_graph) : int * (string * int * int) list =
   (total, summary)
 
 (* ═══════════════════════════════════════════════════════════════════════════
+   5.5 AVASTHA GENERATOR — expand (avastha q1 q2 ...) edges into child nodes
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+(* qualifier → sangati context mapping.
+   Mirrors upakarana/analysis/compose.py QUALIFIER_CONTEXT.
+   Each qualifier generates: qualifier-base node with sthita→context. *)
+let _qualifier_context : (string, string) Hashtbl.t =
+  let tbl = Hashtbl.create 64 in
+  List.iter (fun (q, ctx) -> Hashtbl.replace tbl q ctx) [
+    (* temporal *)
+    "initial", "aarambham"; "final", "antya"; "average", "madhya";
+    (* spatial *)
+    "angular", "kona"; "linear", "rekha"; "centripetal", "kendra";
+    "radial", "kendra"; "tangential", "sparsha"; "normal", "lamba";
+    "net", "samanya"; "total", "dvandva"; "relative", "apeksha";
+    (* domain — force/energy source *)
+    "kinetic", "gati"; "potential", "sthiti"; "elastic", "sthiti";
+    "electric", "vidyut"; "gravitational", "gurutva"; "magnetic", "ayaskanta";
+    "thermal", "ushna"; "nuclear", "paramanu"; "photon", "prakasha";
+    "spring", "sthiti"; "friction", "ghasana"; "drag", "ghasana";
+    "tension", "tana"; "applied", "prayoga";
+    (* intensity *)
+    "strong", "vriddhi"; "weak", "kshaya"; "damped", "kshaya"; "rated", "matra";
+    (* chemistry *)
+    "covalent", "sahabhaga"; "ionic", "vidyut"; "hydrogen", "setu";
+  ];
+  tbl
+
+let expand_avastha (k : proof_graph) : int =
+  let avastha_dim = match visheshanam_of_string "avastha" with
+    | Some d -> d | None -> register_dimension "avastha" in
+  let swarupa_dim = match visheshanam_of_string "swarupa" with
+    | Some d -> d | None -> failwith "swarupa dimension not registered" in
+  let sthita_dim = match visheshanam_of_string "sthita" with
+    | Some d -> d | None -> failwith "sthita dimension not registered" in
+  let vishesa_dim = match visheshanam_of_string "vishesa" with
+    | Some d -> d | None -> failwith "vishesa dimension not registered" in
+  let generated = ref 0 in
+  (* collect base→qualifiers from avastha edges *)
+  let work = ref [] in
+  Hashtbl.iter (fun base_name base_node ->
+    let qualifiers = List.filter_map (fun e ->
+      if e.source = base_name && e.relation = avastha_dim then Some e.target
+      else None
+    ) base_node.edges in
+    if qualifiers <> [] then
+      work := (base_name, base_node, qualifiers) :: !work
+  ) k.nodes;
+  (* generate child nodes *)
+  List.iter (fun (base_name, base_node, qualifiers) ->
+    (* collect vishesa targets from base for inheritance *)
+    let base_vishesa = List.filter_map (fun e ->
+      if e.source = base_name && e.relation = vishesa_dim then Some e.target
+      else None
+    ) base_node.edges in
+    List.iter (fun qualifier ->
+      let child_name = qualifier ^ "-" ^ base_name in
+      (* skip if node already exists (hand-written om5 takes priority) *)
+      match find k child_name with
+      | Some _ -> ()
+      | None ->
+        let context = match Hashtbl.find_opt _qualifier_context qualifier with
+          | Some ctx -> ctx | None -> qualifier in
+        (* build edges: swarupa→base, sthita→context, inherit vishesa *)
+        let edges = ref [
+          { source = child_name; target = base_name; relation = swarupa_dim };
+          { source = child_name; target = context; relation = sthita_dim };
+        ] in
+        List.iter (fun v ->
+          edges := { source = child_name; target = v; relation = vishesa_dim } :: !edges
+        ) base_vishesa;
+        (* apply shabda overrides: keys like "override-sthita: orbit" *)
+        let override_pairs = Vidya.raw_shabda_for_node k child_name in
+        List.iter (fun (key, value) ->
+          if String.length key > 9 && String.sub key 0 9 = "override-" then begin
+            let rel_name = String.sub key 9 (String.length key - 9) in
+            match visheshanam_of_string rel_name with
+            | None -> ()
+            | Some rel_dim ->
+              let targets = String.split_on_char ',' value in
+              List.iter (fun t ->
+                let t = String.trim t in
+                if String.length t > 0 then
+                  edges := { source = child_name; target = t; relation = rel_dim } :: !edges
+              ) targets
+          end
+        ) override_pairs;
+        let edges_list = List.rev !edges in
+        let child : nigamana = {
+          name = child_name; layer = base_node.layer;
+          slokas = []; edges = edges_list; satya = 0.0; shabda = ""; krama = "";
+        } in
+        ignore (join k child);
+        List.iter (fun e -> k.all_edges := e :: !(k.all_edges)) edges_list;
+        (* inject shabda word: entry so word index picks up the compound name *)
+        let word_forms = [child_name; String.concat " " (String.split_on_char '-' child_name)] in
+        let word_str = String.concat "," word_forms in
+        Vidya.inject_shabda child_name [("word", word_str)];
+        incr generated
+    ) qualifiers
+  ) !work;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
    6. WORD + EVAL INDEX
    ═══════════════════════════════════════════════════════════════════════════ *)
 
@@ -314,6 +419,24 @@ let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
       let ev = String.trim eval_name in
       if String.length ev > 0 then
         Hashtbl.replace idx.eval_index ev node_name)
+  ) k.nodes;
+  (* compound word index: reverse of expand_avastha.
+     for each base with (avastha q1 q2 ...), register "q1 base" → q1-base.
+     same avastha edges used for generation AND recognition. *)
+  let avastha_dim = match visheshanam_of_string "avastha" with
+    | Some d -> d | None -> register_dimension "avastha" in
+  Hashtbl.iter (fun base_name base_node ->
+    List.iter (fun e ->
+      if e.source = base_name && e.relation = avastha_dim then begin
+        let qualifier = e.target in
+        let compound = qualifier ^ "-" ^ base_name in
+        (* only register if compound node actually exists *)
+        if Hashtbl.mem k.nodes compound then begin
+          let key = qualifier ^ " " ^ base_name in
+          Hashtbl.replace idx.compound_word_index key compound
+        end
+      end
+    ) base_node.edges
   ) k.nodes
 
 (* ═══════════════════════════════════════════════════════════════════════════

@@ -1,7 +1,56 @@
 {
   "test": "tests/test_grammar.py::test_tense_had",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "ball had velocity 5",
+      "output": [
+        [
+          "ball",
+          "mithya",
+          "ball"
+        ],
+        [
+          "had",
+          "mithya",
+          "had"
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "velocity",
+          "kaala",
+          "bhuta-kaala"
+        ],
+        [
+          "ball",
+          "prathama-vibhakti",
+          "object"
+        ],
+        [
+          "velocity",
+          "shashthi-vibhakti",
+          "ball"
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "5."
+        ]
+      ],
+      "elapsed_ms": 60,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.019
+  "duration": 0.062
 }

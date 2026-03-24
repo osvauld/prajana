@@ -43,6 +43,21 @@ GATE_KEYWORDS = {
     "multiplication": ("multiplication", "multiplication: 'each' triggers multiply"),
     "count_compare": ("count_compare", "count_compare: count then viveka comparison"),
     "long_chain": ("long_chain", "long_chain: 4+ grade count chains"),
+    "compound word": ("compound_word", "compound_word: multi-word concept missing word: mapping"),
+    "compound_word": ("compound_word", "compound_word: multi-word concept missing word: mapping"),
+    "negation": ("negation", "negation: pratishedha / double-negation logic"),
+    "pratishedha": ("negation", "negation: pratishedha / double-negation logic"),
+    "disjunctive": ("disjunctive", "disjunctive: disjunctive syllogism"),
+    "conditional chain": ("conditional_chain", "conditional_chain: chained implications"),
+    "quantifier": ("quantifier", "quantifier: universal/existential with exception"),
+    "tense": ("tense", "tense: past/future temporal handling"),
+    "rashi": ("rashi", "rashi: symbolic variable names"),
+    "graph primitive": ("graph_primitive", "graph_primitive: node-satya / register-dimension return type"),
+    "node-satya": ("graph_primitive", "graph_primitive: node-satya / register-dimension return type"),
+    "register-dimension": ("graph_primitive", "graph_primitive: node-satya / register-dimension return type"),
+    "unit parse": ("unit_parse", "unit_parse: unit words in natural language"),
+    "chain inverse": ("chain_inverse", "chain_inverse: multi-step inverse solve"),
+    "sandhi grammar": ("sandhi_grammar", "sandhi_grammar: grammar word promotion in sandhi-viveka"),
 }
 
 

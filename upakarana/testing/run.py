@@ -17,8 +17,10 @@ def _pytest_bin():
 
 def _build_args(layer=None, gate=None, name=None, pattern=None,
                 path=None, last_failed=False, socket_path=None,
-                verbose=False, timeout=120):
+                verbose=False, timeout=120, parallel="auto"):
     args = [_pytest_bin(), str(TESTS_DIR)]
+    if parallel:
+        args.extend(["-n", str(parallel)])
     if socket_path:
         args.extend(["--socket", socket_path])
     if verbose:

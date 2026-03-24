@@ -1,7 +1,22 @@
 {
   "test": "tests/test_entity.py::test_three_entity_specific_query",
-  "outcome": "passed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "ball-A has mass 3. ball-B has mass 5. ball-C has mass 7. find kinetic energy of ball-B given velocity 4",
+      "output": "we have: ball-A (mass=3.); ball-B (mass=3.); ball-C (mass=3.); and velocity=4..we seek: kinetic-energy of ball-B.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=4., mass=5..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=4., mass=5..we find: kinetic-energy = 24",
+      "elapsed_ms": 940,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.457
+  "duration": 0.946,
+  "xfail": {
+    "reason": "entity_scope: three-entity scoping picks wrong entity values",
+    "strict": true,
+    "gate": "entity_scope: per-entity scoped count",
+    "file": "/home/abe/agent_x/upakarana/tests/test_entity.py",
+    "line": 83
+  }
 }

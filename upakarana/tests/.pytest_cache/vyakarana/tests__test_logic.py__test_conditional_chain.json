@@ -1,7 +1,22 @@
 {
   "test": "tests/test_logic.py::test_conditional_chain",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "if temperature rises then ice melts. if ice melts then water appears. temperature rose. is water present",
+      "output": "we ask: does temperature inherit implication?. we see: implication reachable from temperature. no \u2014 temperature does not have implication",
+      "elapsed_ms": 680,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.222
+  "duration": 0.688,
+  "xfail": {
+    "reason": "conditional chain: chained implications not built",
+    "strict": true,
+    "gate": "conditional_chain: chained implications",
+    "file": "/home/abe/agent_x/upakarana/tests/test_logic.py",
+    "line": 146
+  }
 }

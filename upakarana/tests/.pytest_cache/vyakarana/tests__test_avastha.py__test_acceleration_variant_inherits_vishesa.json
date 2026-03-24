@@ -1,0 +1,37 @@
+{
+  "test": "tests/test_avastha.py::test_acceleration_variant_inherits_vishesa",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"acceleration\" \"vishesa\"",
+      "output": [
+        "linear-motion-varga"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"centripetal-acceleration\" \"vishesa\"",
+      "output": [
+        "linear-motion-varga",
+        "linear-motion-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"tangential-acceleration\" \"vishesa\"",
+      "output": [
+        "linear-motion-varga",
+        "linear-motion-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

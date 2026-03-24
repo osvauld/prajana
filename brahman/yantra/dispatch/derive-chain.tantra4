@@ -14,7 +14,8 @@
 
   -- reconstruct producing matches from derived-by edges in final graph
   (producing (cond has-new
-    (reduce all-ms [] (fn acc m ->
+    -- parallel: each mantra coverage check is independent
+    (preduce all-ms [] (fn acc m ->
       let ms = to-string m
       let ct = om-contract ms
       let ph = nth ct 1

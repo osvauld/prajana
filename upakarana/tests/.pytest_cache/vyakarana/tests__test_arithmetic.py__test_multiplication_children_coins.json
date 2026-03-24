@@ -1,7 +1,22 @@
 {
   "test": "tests/test_arithmetic.py::test_multiplication_children_coins",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "6 children each have 4 coins. how many coins are there in total",
+      "output": "we have: 6 children each have 4 coins.we find: 6 coins there total",
+      "elapsed_ms": 339,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.084
+  "duration": 0.343,
+  "xfail": {
+    "reason": "multiplication: people with coins",
+    "strict": true,
+    "gate": "multiplication: 'each' triggers multiply",
+    "file": "/home/abe/agent_x/upakarana/tests/test_arithmetic.py",
+    "line": 113
+  }
 }

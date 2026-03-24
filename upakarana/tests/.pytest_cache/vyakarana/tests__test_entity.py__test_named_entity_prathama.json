@@ -1,7 +1,61 @@
 {
   "test": "tests/test_entity.py::test_named_entity_prathama",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "ball-A has mass 3",
+      "output": [
+        [
+          "ball-A",
+          "mithya",
+          "ball-A"
+        ],
+        [
+          "has",
+          "mithya",
+          "has"
+        ],
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "3",
+          "asprista-sankhya",
+          "3."
+        ],
+        [
+          "mass",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "mass",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball-A",
+          "prathama-vibhakti",
+          "object"
+        ],
+        [
+          "mass",
+          "shashthi-vibhakti",
+          "ball-A"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "3."
+        ]
+      ],
+      "elapsed_ms": 68,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.021
+  "duration": 0.07
 }

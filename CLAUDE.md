@@ -73,6 +73,15 @@ All graph analysis, tantra inspection, shabda queries, live engine interaction, 
 | `a vocabulary` | Vocabulary coverage |
 | `a grounding` | Grounding analysis |
 | `a siblings` | Sibling node analysis |
+| `a compose` | Composition overview (compounds, bases, chains) |
+| `a compose-gen` | Generatability: auto/semi/manual classification |
+| `a compose-curated` | Curated validity matrix for generation |
+| `a compose-inherit` | Edge inheritance analysis per compound |
+| `a compose-rules` | Which relations inherit vs override |
+| `a compose-words` | Shabda/word coverage gaps |
+| `a compose-logic` | Logic node generation plan |
+| `a compose-lift` | Space-lift analysis (scalar→vec/mat/complex) |
+| `a compose-inverse` | Pratipaksha pair completeness |
 | `ocaml report` | OCaml codebase analysis |
 | `ocaml darshana` | Darshana analysis |
 | `ocaml patterns` | Pattern detection |

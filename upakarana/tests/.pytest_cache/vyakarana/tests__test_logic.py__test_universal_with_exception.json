@@ -1,7 +1,22 @@
 {
   "test": "tests/test_logic.py::test_universal_with_exception",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "all birds can fly. penguins are birds. penguins cannot fly. can sparrows fly",
+      "output": "we ask: does bird inherit quantifier?. we see: quantifier reachable from bird. no \u2014 bird does not have quantifier",
+      "elapsed_ms": 353,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.102
+  "duration": 0.359,
+  "xfail": {
+    "reason": "quantifier: universal with exception override not built",
+    "strict": true,
+    "gate": "quantifier: universal/existential with exception",
+    "file": "/home/abe/agent_x/upakarana/tests/test_logic.py",
+    "line": 166
+  }
 }

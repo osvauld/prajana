@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_radial_acceleration_override_abheda",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"radial-acceleration\" \"abheda\"",
+      "output": [
+        "centripetal-acceleration",
+        "centripetal-acceleration"
+      ],
+      "elapsed_ms": 1,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

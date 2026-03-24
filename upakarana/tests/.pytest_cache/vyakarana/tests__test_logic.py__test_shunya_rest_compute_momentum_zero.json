@@ -1,7 +1,15 @@
 {
   "test": "tests/test_logic.py::test_shunya_rest_compute_momentum_zero",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "ball is at rest. mass is 5. find momentum",
+      "output": "we have: mass=5. and velocity=0..we seek: momentum.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=0., mass=5..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=0., mass=5..we find: momentum = 0",
+      "elapsed_ms": 557,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.357
+  "duration": 0.559
 }

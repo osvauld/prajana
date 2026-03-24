@@ -1,7 +1,51 @@
 {
   "test": "tests/test_grammar.py::test_prep_per",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "a train travels at 60 km per hour",
+      "output": [
+        [
+          "train",
+          "mithya",
+          "train"
+        ],
+        [
+          "travels",
+          "mithya",
+          "travels"
+        ],
+        [
+          "at",
+          "adhikarana",
+          "at"
+        ],
+        [
+          "60",
+          "asprista-sankhya",
+          "60."
+        ],
+        [
+          "km",
+          "satya",
+          "km"
+        ],
+        [
+          "hour",
+          "mithya",
+          "hour"
+        ],
+        [
+          "km",
+          "sankhya",
+          "60."
+        ]
+      ],
+      "elapsed_ms": 59,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.017
+  "duration": 0.06
 }

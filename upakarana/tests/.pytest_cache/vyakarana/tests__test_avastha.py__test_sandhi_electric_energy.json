@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_electric_energy",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find electric energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "electric-energy",
+          "satya",
+          "electric-energy"
+        ]
+      ],
+      "elapsed_ms": 23,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.024
+}

@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_centripetal_acceleration",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find centripetal acceleration",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "centripetal-acceleration",
+          "satya",
+          "centripetal-acceleration"
+        ]
+      ],
+      "elapsed_ms": 29,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.031
+}

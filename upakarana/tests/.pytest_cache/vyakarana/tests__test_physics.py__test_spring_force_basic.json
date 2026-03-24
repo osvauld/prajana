@@ -1,7 +1,15 @@
 {
   "test": "tests/test_physics.py::test_spring_force_basic",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "spring constant is 200 and displacement is 0.05. find spring force",
+      "output": "we have: spring-constant=200. and displacement=0.05.we seek: spring-force.we know: spring-force-mantra (displacement, spring-constant \u2192 spring-force).we see: displacement=0.05, spring-constant=200..we find: spring-force = 10",
+      "elapsed_ms": 528,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.444
+  "duration": 0.529
 }

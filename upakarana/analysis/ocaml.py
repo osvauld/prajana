@@ -182,8 +182,8 @@ def detect_patterns(modules):
         if "with_node" in src:
             patterns["with_node"].append(name)
 
-        # env_copy usage
-        if "env_copy" in src:
+        # env_copy usage (actual calls, not comments)
+        if re.search(r'(?<![\w-])env_copy\b', src) and re.search(r'^let\s.*env_copy|[^(]\benv_copy\s', src, re.M):
             patterns["env_copy"].append(name)
 
         # Hashtbl.find_opt → match pattern
@@ -434,6 +434,212 @@ def print_coupling(modules=None):
     for name, c in sorted(cp.items(), key=lambda x: -(x[1]["in"] + x[1]["out"])):
         if c["in"] + c["out"] > 0:
             print(f"  {name:20s} in={c['in']} out={c['out']}  ← {c['dependents']}  → {c['depends_on']}")
+    print()
+
+
+# ── parallelism readiness ──────────────────────────────────────────────────
+
+
+def parallelism_audit(modules=None):
+    """Audit the codebase for parallelism readiness.
+
+    Checks:
+    1. Mutable shared state (refs, hashtbls at module level)
+    2. env_copy sites (→ must become immutable map)
+    3. Global refs (eval_ctx, session_store, etc.)
+    4. Forward refs (wire pattern — not domain-safe)
+    5. Side-effecting primitives (emit-edge, write-signal)
+    6. Pure vs impure function classification
+    7. Domain/Thread/Eio usage (existing concurrency)
+    8. Hashtbl.replace in evaluator (→ must become Map.add)
+    """
+    if modules is None:
+        modules = parse_all()
+
+    # 1. Module-level mutable state
+    global_state = []
+    for m in modules.values():
+        for r in m["ref_names"]:
+            global_state.append({"name": r, "module": m["name"], "kind": "ref"})
+        for h in m["ht_names"]:
+            global_state.append({"name": h, "module": m["name"], "kind": "hashtbl"})
+
+    # 2. env_copy sites
+    env_copies = []
+    for m in modules.values():
+        for match in re.finditer(r"env_copy\b", m["source"]):
+            line = m["source"][:match.start()].count("\n") + 1
+            env_copies.append({"module": m["name"], "line": line})
+
+    # 3. Forward refs (ref (fun ...))
+    fwd_refs = []
+    for m in modules.values():
+        for fr in m["fwd_refs"]:
+            fwd_refs.append({"name": fr, "module": m["name"]})
+
+    # 4. Hashtbl.replace in evaluator modules (kriya_*)
+    ht_replace_sites = []
+    for m in modules.values():
+        for match in re.finditer(r"Hashtbl\.replace\b", m["source"]):
+            line = m["source"][:match.start()].count("\n") + 1
+            # Get context line
+            lines = m["source"].split("\n")
+            ctx = lines[line - 1].strip()[:100] if line <= len(lines) else ""
+            ht_replace_sites.append({
+                "module": m["name"], "line": line, "context": ctx,
+            })
+
+    # 5. Side-effecting string-dispatch arms (emit, write, set)
+    side_effects = []
+    for m in modules.values():
+        for match in re.finditer(r'\| "(emit-\w+|write-\w+|set-\w+)"', m["source"]):
+            op = match.group(1)
+            side_effects.append({"op": op, "module": m["name"]})
+
+    # 6. Concurrency imports
+    concurrency = []
+    for m in modules.values():
+        for kw in ["Domain", "Thread", "Lwt", "Eio", "Mutex", "Atomic"]:
+            if kw in m["source"]:
+                concurrency.append({"keyword": kw, "module": m["name"]})
+
+    # 7. Pure function candidates (no ref, no Hashtbl.replace, no global access)
+    pure_fns = []
+    impure_fns = []
+    for m in modules.values():
+        if m["name"] not in ("kriya_ops", "kriya_graph", "kriya_eval"):
+            continue
+        for match in re.finditer(r"^let (?:rec )?([\w']+)\s*([^=]*?)\s*=", m["source"], re.M):
+            fn_name = match.group(1)
+            start = match.start()
+            # Find end (next top-level let or end of file)
+            next_let = re.search(r"\n(?:let |$)", m["source"][start + 1:])
+            end = start + 1 + next_let.start() if next_let else len(m["source"])
+            body = m["source"][start:end]
+            has_mutation = bool(re.search(
+                r"Hashtbl\.replace|Hashtbl\.add|:=|ref\s|Buffer\.", body
+            ))
+            if has_mutation:
+                impure_fns.append({"fn": fn_name, "module": m["name"]})
+            else:
+                pure_fns.append({"fn": fn_name, "module": m["name"]})
+
+    # 8. Classify blockers
+    blockers = []
+    if env_copies:
+        blockers.append({
+            "blocker": "mutable env (Hashtbl)",
+            "sites": len(env_copies),
+            "fix": "Hashtbl.t → StringMap.t (immutable persistent map)",
+            "effort": "medium",
+        })
+    if fwd_refs:
+        blockers.append({
+            "blocker": "forward refs (global mutable fn pointers)",
+            "sites": len(fwd_refs),
+            "fix": "pass eval_fn as parameter or use first-class modules",
+            "effort": "medium",
+        })
+    global_hts = [s for s in global_state if s["kind"] == "hashtbl"
+                  and s["module"] in ("kriya_graph", "kriya_eval", "kriya_ops")]
+    if global_hts:
+        blockers.append({
+            "blocker": "global hashtbls in evaluator",
+            "sites": len(global_hts),
+            "fix": "thread-local or pass as parameter",
+            "effort": "small",
+        })
+    if side_effects:
+        blockers.append({
+            "blocker": "side-effecting primitives",
+            "sites": len(side_effects),
+            "fix": "buffer effects in pmap, commit after join",
+            "effort": "medium",
+        })
+
+    return {
+        "global_state": global_state,
+        "env_copy_sites": env_copies,
+        "forward_refs": fwd_refs,
+        "ht_replace_sites": ht_replace_sites,
+        "side_effect_ops": side_effects,
+        "concurrency_imports": concurrency,
+        "evaluator_purity": {
+            "pure": len(pure_fns),
+            "impure": len(impure_fns),
+            "pure_fns": pure_fns,
+            "impure_fns": impure_fns,
+        },
+        "blockers": blockers,
+    }
+
+
+def print_parallelism(modules=None):
+    """Print parallelism readiness report."""
+    if modules is None:
+        modules = parse_all()
+
+    audit = parallelism_audit(modules)
+
+    print(f"\n{'=' * 80}")
+    print(f"  PARALLELISM READINESS AUDIT")
+    print(f"{'=' * 80}\n")
+
+    # Blockers
+    print("  ── Blockers ──")
+    for b in audit["blockers"]:
+        print(f"    [{b['effort']:6s}] {b['blocker']} ({b['sites']} sites)")
+        print(f"            fix: {b['fix']}")
+    print()
+
+    # Global state
+    print(f"  ── Global mutable state ({len(audit['global_state'])}) ──")
+    for s in audit["global_state"]:
+        print(f"    {s['kind']:7s}  {s['module']:20s}  {s['name']}")
+    print()
+
+    # Forward refs
+    if audit["forward_refs"]:
+        print(f"  ── Forward refs ({len(audit['forward_refs'])}) ──")
+        for fr in audit["forward_refs"]:
+            print(f"    {fr['module']:20s}  {fr['name']}")
+        print()
+
+    # Hashtbl.replace sites
+    print(f"  ── Hashtbl.replace ({len(audit['ht_replace_sites'])}) ──")
+    for s in audit["ht_replace_sites"]:
+        print(f"    {s['module']:20s}:{s['line']:4d}  {s['context']}")
+    print()
+
+    # env_copy sites
+    print(f"  ── env_copy ({len(audit['env_copy_sites'])}) ──")
+    for s in audit["env_copy_sites"]:
+        print(f"    {s['module']:20s}:{s['line']:4d}")
+    print()
+
+    # Side effects
+    if audit["side_effect_ops"]:
+        print(f"  ── Side-effecting ops ({len(audit['side_effect_ops'])}) ──")
+        for s in audit["side_effect_ops"]:
+            print(f"    {s['module']:20s}  {s['op']}")
+        print()
+
+    # Purity
+    p = audit["evaluator_purity"]
+    print(f"  ── Evaluator purity: {p['pure']} pure, {p['impure']} impure ──")
+    if p["impure_fns"]:
+        print("    impure:")
+        for f in p["impure_fns"]:
+            print(f"      {f['module']:20s}  {f['fn']}")
+    print()
+
+    # Concurrency
+    if audit["concurrency_imports"]:
+        print(f"  ── Existing concurrency ──")
+        for c in audit["concurrency_imports"]:
+            print(f"    {c['module']:20s}  {c['keyword']}")
+    else:
+        print("  ── No concurrency imports found ──")
     print()
 
 

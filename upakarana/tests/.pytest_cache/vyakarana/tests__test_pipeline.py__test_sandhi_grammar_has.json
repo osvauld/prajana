@@ -1,6 +1,6 @@
 {
   "test": "tests/test_pipeline.py::test_sandhi_grammar_has",
-  "outcome": "failed",
+  "outcome": "xfailed",
   "calls": [
     {
       "method": "eval",
@@ -17,5 +17,12 @@
     }
   ],
   "failure": null,
-  "duration": 0.003
+  "duration": 0.008,
+  "xfail": {
+    "reason": "sandhi grammar: 'has' promotion to shashthi-vibhakti in sandhi-viveka",
+    "strict": true,
+    "gate": "sandhi_grammar: grammar word promotion in sandhi-viveka",
+    "file": "/home/abe/agent_x/upakarana/tests/test_pipeline.py",
+    "line": 62
+  }
 }

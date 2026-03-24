@@ -1,1 +1,1 @@
-lib/kriya_graph.ml: Float Hashtbl Kriya_types List Prakriti Printf String Unix Vak Vakya Vidya
+lib/kriya_graph.ml: Atomic Domain Float Hashtbl Kriya_types List Prakriti Printf String StringMap Unix Vak Vakya Vidya

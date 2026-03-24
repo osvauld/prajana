@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_gravitational_force_override_sthita",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"gravitational-force\" \"sthita\"",
+      "output": [
+        "niyama",
+        "gurutva",
+        "gurutva",
+        "niyama"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

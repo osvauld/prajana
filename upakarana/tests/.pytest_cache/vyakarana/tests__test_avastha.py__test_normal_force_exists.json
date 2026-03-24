@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_normal_force_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"normal-force\" \"swarupa\"",
+      "output": [
+        "force",
+        "force"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

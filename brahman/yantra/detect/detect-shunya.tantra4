@@ -6,8 +6,8 @@
 
   (satya-nodes (expanded | where [s, e, o] | and (eq e "satya") | collect (to-string s)))
 
-  -- find shunya-signal nodes and what they signal
-  (shunya-info (reduce satya-nodes [] (fn acc nd ->
+  -- find shunya-signal nodes and what they signal (parallel: shabda lookups are independent)
+  (shunya-info (preduce satya-nodes [] (fn acc nd ->
     let sig     = shabda nd "signal"
     let concept = shabda nd "signal-concept"
     cond (and (eq sig "shunya") (has-text concept))
@@ -27,8 +27,8 @@
   (other-concepts (filter satya-nodes (fn nd ->
     (and (neq nd shunya-source) (neq nd shunya-concept)))))
 
-  -- inherited match: a concept depends on shunya-concept via mantra janya
-  (dependent-concepts (reduce other-concepts [] (fn acc qc ->
+  -- inherited match: a concept depends on shunya-concept via mantra janya (parallel per concept)
+  (dependent-concepts (preduce other-concepts [] (fn acc qc ->
     let mantras-for = mantra-select qc
     let needs-shunya = reduce mantras-for false (fn found m ->
       let ms = to-string m

@@ -1,7 +1,71 @@
 {
   "test": "tests/test_grammar.py::test_conjunction_if_then",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "if mass is 5 then find force",
+      "output": [
+        [
+          "if",
+          "mithya",
+          "if"
+        ],
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "5",
+          "asprista-sankhya",
+          "5."
+        ],
+        [
+          "then",
+          "mithya",
+          "then"
+        ],
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "force",
+          "satya",
+          "force"
+        ],
+        [
+          "force",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "force",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "mass",
+          "sankhya",
+          "5."
+        ],
+        [
+          "force",
+          "sankhya",
+          "5."
+        ]
+      ],
+      "elapsed_ms": 171,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.044
+  "duration": 0.172
 }

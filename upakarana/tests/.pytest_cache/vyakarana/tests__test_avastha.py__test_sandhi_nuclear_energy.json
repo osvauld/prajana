@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_nuclear_energy",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find nuclear energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "nuclear-energy",
+          "satya",
+          "nuclear-energy"
+        ]
+      ],
+      "elapsed_ms": 30,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.032
+}

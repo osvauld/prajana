@@ -141,16 +141,19 @@ type session_entry = {
 }
 
 let session_store : (string, session_entry) Hashtbl.t = Hashtbl.create 16
+let session_mu = Mutex.create ()
 
 let get_or_create_session (sid : string) : session_entry =
-  match Hashtbl.find_opt session_store sid with
-  | Some entry -> entry
-  | None ->
-    let entry = {
-      se_graph = []; se_turn = 0; se_turn_id = "prashna-0";
-      se_yantra = Kriya_eval.new_session ();
-    } in
-    Hashtbl.replace session_store sid entry; entry
+  Mutex.lock session_mu;
+  Fun.protect ~finally:(fun () -> Mutex.unlock session_mu) (fun () ->
+    match Hashtbl.find_opt session_store sid with
+    | Some entry -> entry
+    | None ->
+      let entry = {
+        se_graph = []; se_turn = 0; se_turn_id = "prashna-0";
+        se_yantra = Kriya_eval.new_session ();
+      } in
+      Hashtbl.replace session_store sid entry; entry)
 
 (* ═══════════════════════════════════════════════════════════════════════════
    3. RESPONSE BUILDERS
@@ -490,9 +493,8 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
               (match expr_ast with
                | None -> error_response "" "" "" "PARSE_ERROR" ("cannot parse: " ^ expr_str)
                | Some expr_ast ->
-                 let env = Kriya.new_env () in
                  let tnames = List.map (fun t -> VString t.t_name) !(yantra_idx.all_tantras) in
-                 Hashtbl.replace env "_tantra_index" (VList tnames);
+                 let env = StringMap.add "_tantra_index" (VList tnames) StringMap.empty in
                  let result =
                    Kriya_eval.with_eval_ctx yantra_idx yantra_session
                      (fun () -> Kriya.eval k env expr_ast) ~default:VNone in
@@ -569,7 +571,11 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                 with exn -> error_response "" "" "" "PARSE_ERROR" (Printexc.to_string exn)))
           | Some "end-session" ->
             let ses_id = opt_field line "session_id" in
-            if ses_id <> "" then Hashtbl.remove session_store ses_id;
+            if ses_id <> "" then begin
+              Mutex.lock session_mu;
+              Fun.protect ~finally:(fun () -> Mutex.unlock session_mu)
+                (fun () -> Hashtbl.remove session_store ses_id)
+            end;
             "{\"status\":\"ok\",\"command\":\"end-session\"}"
           | Some "create-node" | Some "delete-node"
           | Some "add-sloka" | Some "remove-sloka" | Some "set-shabda"
@@ -643,12 +649,17 @@ let serve (k : proof_graph) (yantra_idx : tantra_index) (yantra_session : sessio
   let sock = Unix.socket Unix.PF_UNIX Unix.SOCK_STREAM 0 in
   Unix.bind sock (Unix.ADDR_UNIX socket_path);
   Unix.listen sock 16;
-  Printf.printf "vyakarana socket listening: %s\n%!" socket_path;
+  Printf.printf "vyakarana socket listening: %s (concurrent)\n%!" socket_path;
+  (* concurrent: spawn a domain per client connection *)
+  let active = Atomic.make 0 in
   while true do
     let (client, _) = Unix.accept sock in
-    let ic = Unix.in_channel_of_descr client in
-    let oc = Unix.out_channel_of_descr client in
-    (try handle_client k yantra_idx yantra_session dirs ic oc
-     with exn -> Printf.eprintf "client error: %s\n%!" (Printexc.to_string exn));
-    (try Unix.close client with Unix.Unix_error _ -> ())
+    ignore (Domain.spawn (fun () ->
+      Atomic.incr active;
+      let ic = Unix.in_channel_of_descr client in
+      let oc = Unix.out_channel_of_descr client in
+      (try handle_client k yantra_idx yantra_session dirs ic oc
+       with exn -> Printf.eprintf "client error: %s\n%!" (Printexc.to_string exn));
+      (try Unix.close client with Unix.Unix_error _ -> ());
+      Atomic.decr active))
   done

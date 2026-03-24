@@ -1,7 +1,76 @@
 {
   "test": "tests/test_grammar.py::test_prep_of",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find kinetic energy of ball-A given mass 3 and velocity 4",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "kinetic-energy",
+          "satya",
+          "kinetic-energy"
+        ],
+        [
+          "of",
+          "mithya",
+          "of"
+        ],
+        [
+          "ball-A",
+          "mithya",
+          "ball-A"
+        ],
+        [
+          "given",
+          "mithya",
+          "given"
+        ],
+        [
+          "mass",
+          "satya",
+          "mass"
+        ],
+        [
+          "3",
+          "asprista-sankhya",
+          "3."
+        ],
+        [
+          "and",
+          "dvandva",
+          "dvandva"
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "4",
+          "asprista-sankhya",
+          "4."
+        ],
+        [
+          "mass",
+          "sankhya",
+          "3."
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "4."
+        ]
+      ],
+      "elapsed_ms": 149,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.041
+  "duration": 0.151
 }

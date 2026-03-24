@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_sandhi_angular_momentum",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find angular momentum",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "angular-momentum",
+          "satya",
+          "angular-momentum"
+        ]
+      ],
+      "elapsed_ms": 14,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.011
+  "duration": 0.016
 }

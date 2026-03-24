@@ -1,7 +1,41 @@
 {
   "test": "tests/test_grammar.py::test_negation_not_emits_satya",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "the ball is not moving",
+      "output": [
+        [
+          "ball",
+          "mithya",
+          "ball"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "negation",
+          "satya",
+          "negation"
+        ],
+        [
+          "negation",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "negation",
+          "vachana",
+          "eka-vachana"
+        ]
+      ],
+      "elapsed_ms": 45,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.014
+  "duration": 0.047
 }

@@ -1,7 +1,22 @@
 {
   "test": "tests/test_logic.py::test_modus_ponens",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "if it rains the ground is wet. it rained. is the ground wet",
+      "output": "we ask: does pronoun-it inherit implication?. we see: implication reachable from pronoun-it. no \u2014 pronoun-it does not have implication",
+      "elapsed_ms": 461,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.119
+  "duration": 0.479,
+  "xfail": {
+    "reason": "syllogism: modus ponens implication not built",
+    "strict": true,
+    "gate": "logic_nyaya: P8d anumana not built",
+    "file": "/home/abe/agent_x/upakarana/tests/test_logic.py",
+    "line": 64
+  }
 }

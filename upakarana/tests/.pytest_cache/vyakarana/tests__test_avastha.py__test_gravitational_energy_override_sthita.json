@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_gravitational_energy_override_sthita",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"gravitational-energy\" \"sthita\"",
+      "output": [
+        "kshetra",
+        "gurutva",
+        "gurutva",
+        "kshetra"
+      ],
+      "elapsed_ms": 3,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.004
+}

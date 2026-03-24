@@ -1,0 +1,20 @@
+{
+  "test": "tests/test_avastha.py::test_nuclear_energy_override_sthita",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"nuclear-energy\" \"sthita\"",
+      "output": [
+        "atom",
+        "paramanu",
+        "paramanu",
+        "atom"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

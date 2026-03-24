@@ -1,7 +1,8 @@
 -- inverse-match: find a mantra where solve-for is a janya and phala is bound.
 (tantra inverse-match (candidates vps bcs solve-for)
 
-  (reduce candidates [] (fn acc m ->
+  -- parallel: each candidate check is independent graph walk + shabda lookup
+  (preduce candidates [] (fn acc m ->
     let ms          = to-string m
     let contract    = om-contract ms
     let janya       = nth contract 0

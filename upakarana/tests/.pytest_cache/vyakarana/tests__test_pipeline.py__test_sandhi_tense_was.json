@@ -1,6 +1,6 @@
 {
   "test": "tests/test_pipeline.py::test_sandhi_tense_was",
-  "outcome": "failed",
+  "outcome": "xfailed",
   "calls": [
     {
       "method": "eval",
@@ -17,5 +17,12 @@
     }
   ],
   "failure": null,
-  "duration": 0.003
+  "duration": 0.008,
+  "xfail": {
+    "reason": "tense: 'was' promotion to bhuta-kaala in sandhi-viveka",
+    "strict": true,
+    "gate": "tense: past/future temporal handling",
+    "file": "/home/abe/agent_x/upakarana/tests/test_pipeline.py",
+    "line": 69
+  }
 }

@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_average_velocity_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"average-velocity\" \"swarupa\"",
+      "output": [
+        "velocity",
+        "velocity"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

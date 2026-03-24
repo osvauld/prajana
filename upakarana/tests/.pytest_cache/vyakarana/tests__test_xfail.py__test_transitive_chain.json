@@ -1,14 +1,22 @@
 {
   "test": "tests/test_xfail.py::test_transitive_chain",
   "outcome": "xfailed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "a is greater than b. b is greater than c. is a greater than c.",
+      "output": "no match",
+      "elapsed_ms": 356,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.103,
+  "duration": 0.365,
   "xfail": {
     "reason": "transitivity not implemented: needs graph walk chain",
     "strict": true,
     "gate": "logic_nyaya: P8d anumana not built",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 266
+    "line": 242
   }
 }

@@ -1,7 +1,41 @@
 {
   "test": "tests/test_grammar.py::test_qword_which",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "which is heavier",
+      "output": [
+        [
+          "which",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "viveka-max",
+          "satya",
+          "viveka-max"
+        ],
+        [
+          "viveka-max",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "viveka-max",
+          "vachana",
+          "eka-vachana"
+        ]
+      ],
+      "elapsed_ms": 49,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.012
+  "duration": 0.051
 }

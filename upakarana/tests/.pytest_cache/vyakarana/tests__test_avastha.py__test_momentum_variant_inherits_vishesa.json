@@ -1,0 +1,36 @@
+{
+  "test": "tests/test_avastha.py::test_momentum_variant_inherits_vishesa",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"momentum\" \"vishesa\"",
+      "output": [
+        "linear-motion-varga"
+      ],
+      "elapsed_ms": 3,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"initial-momentum\" \"vishesa\"",
+      "output": [
+        "linear-motion-varga",
+        "linear-motion-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    },
+    {
+      "method": "eval",
+      "input": "walk \"total-momentum\" \"vishesa\"",
+      "output": [
+        "linear-motion-varga"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.006
+}

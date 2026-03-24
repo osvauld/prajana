@@ -1,7 +1,22 @@
 {
   "test": "tests/test_comparison.py::test_relative_velocity",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "ball-A has velocity 10. ball-B has velocity 3. find relative velocity of ball-A with respect to ball-B",
+      "output": "no match",
+      "elapsed_ms": 446,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.108
+  "duration": 0.451,
+  "xfail": {
+    "reason": "relative-velocity concept not wired in pipeline",
+    "strict": true,
+    "gate": "relative-velocity: kosha concept missing",
+    "file": "/home/abe/agent_x/upakarana/tests/test_comparison.py",
+    "line": 137
+  }
 }

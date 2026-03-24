@@ -1,7 +1,46 @@
 {
   "test": "tests/test_grammar.py::test_number_scientific",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "charge is 1.6e-19",
+      "output": [
+        [
+          "charge",
+          "satya",
+          "charge"
+        ],
+        [
+          "is",
+          "copula",
+          "is"
+        ],
+        [
+          "1.6e-19",
+          "asprista-sankhya",
+          "1.6e-19"
+        ],
+        [
+          "charge",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "charge",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "charge",
+          "sankhya",
+          "1.6e-19"
+        ]
+      ],
+      "elapsed_ms": 33,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.01
+  "duration": 0.035
 }

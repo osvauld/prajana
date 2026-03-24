@@ -1,0 +1,26 @@
+{
+  "test": "tests/test_avastha.py::test_sandhi_magnetic_energy",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "find magnetic energy",
+      "output": [
+        [
+          "find",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "magnetic-energy",
+          "satya",
+          "magnetic-energy"
+        ]
+      ],
+      "elapsed_ms": 15,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.017
+}

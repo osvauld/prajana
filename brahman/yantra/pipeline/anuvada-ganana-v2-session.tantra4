@@ -1,0 +1,38 @@
+-- anuvada-ganana: session-subgraph pipeline.
+-- BQG output loaded into session overlay for O(1) indexed refine.
+(tantra anuvada-ganana (sentence)
+
+  -- clear session overlay
+  (session-clear)
+
+  -- 1. BQG: parse words → flat list
+  (raw-graph (build-question-graph sentence))
+
+  -- 2. load BQG triples into session overlay for indexed access
+  (map raw-graph (fn t ->
+    session-emit (to-string (nth t 0)) (to-string (nth t 1)) (to-string (nth t 2))))
+
+  -- 3. assert + refine using session-indexed v2 steps
+  (asserted (assertion-bandha raw-graph))
+  (refined (fixpoint asserted (fn g -> avrti-refine-v2 g)))
+
+  -- 4. grade-split + count-chain (same as grade-sparsha body)
+  (boundary-edge (shabda "graded-ring" "grade-boundary"))
+  (intra-boundary (shabda "graded-ring" "intra-grade-boundary"))
+  (grade-state (reduce refined [[], []] (fn state triple ->
+    let completed = nth state 0
+    let current   = nth state 1
+    let e = nth triple 1
+    cond (or (eq (to-string e) boundary-edge) (eq (to-string e) intra-boundary))
+      [(append completed [(append current [triple])]), []]
+    otherwise
+      [completed, (append current [triple])])))
+  (completed-grades (nth grade-state 0))
+  (final-grade (nth grade-state 1))
+  (all-grades (append completed-grades [final-grade]))
+  (after-grades (count-chain refined all-grades))
+
+  -- 5. expand + detect + dispatch
+  (expanded (kosha-expand after-grades))
+  (signaled (detect-signals expanded))
+  (dispatch-answer signaled refined))

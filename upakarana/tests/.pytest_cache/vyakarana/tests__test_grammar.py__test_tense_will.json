@@ -1,7 +1,61 @@
 {
   "test": "tests/test_grammar.py::test_tense_will",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "will have velocity 10",
+      "output": [
+        [
+          "will",
+          "mithya",
+          "will"
+        ],
+        [
+          "have",
+          "mithya",
+          "have"
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ],
+        [
+          "10",
+          "asprista-sankhya",
+          "10."
+        ],
+        [
+          "velocity",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "velocity",
+          "vachana",
+          "bahu-vachana"
+        ],
+        [
+          "will",
+          "prathama-vibhakti",
+          "object"
+        ],
+        [
+          "velocity",
+          "shashthi-vibhakti",
+          "will"
+        ],
+        [
+          "velocity",
+          "sankhya",
+          "10."
+        ]
+      ],
+      "elapsed_ms": 64,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.019
+  "duration": 0.066
 }

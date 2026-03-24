@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_qword_determine",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "determine velocity",
+      "output": [
+        [
+          "determine",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "velocity",
+          "satya",
+          "velocity"
+        ]
+      ],
+      "elapsed_ms": 14,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.007
+  "duration": 0.015
 }

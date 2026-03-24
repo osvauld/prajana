@@ -1,7 +1,22 @@
 {
   "test": "tests/test_physics.py::test_photon_energy_basic",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "planck constant is 6.626e-34. frequency is 5e14. find photon energy",
+      "output": "we have: constant=6.626e-34 and frequency=5e+14.we seek: photon-energy.we know: photon-energy-mantra (frequency, planck-constant \u2192 photon-energy).we see: frequency=5e+14.we find: photon-energy = 0",
+      "elapsed_ms": 632,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.482
+  "duration": 0.641,
+  "xfail": {
+    "reason": "compound word: 'planck constant' and 'photon energy' missing word: mappings",
+    "strict": true,
+    "gate": "compound_word: multi-word concept missing word: mapping",
+    "file": "/home/abe/agent_x/upakarana/tests/test_physics.py",
+    "line": 126
+  }
 }

@@ -2,6 +2,7 @@
 
 Categorizes tantras by computational pattern.
 Checks if tantras are grounded in sangati/kosha concepts.
+Parallelism readiness analysis for pmap/pfilter/preduce.
 """
 
 import re
@@ -158,3 +159,145 @@ def helper_vocabulary(root=None):
         vocab[layer].append({"name": name, "lines": lines, "calls": calls})
 
     return vocab
+
+
+def parallelism_candidates(root=None):
+    """Analyze tantras for pmap/pfilter/preduce upgrade candidates.
+
+    Classifies each reduce/map/filter usage by:
+    1. Is the lambda body pure (no emit-edge, write-signal, etc)?
+    2. Does the lambda do graph walks (walk, om-*, shabda)?
+    3. What is the iteration source (graph-all-nodes, walk-in, etc)?
+    4. Is the reduce accumulator a list-append pattern?
+
+    Categories:
+      pmap-ready     — map with pure lambda doing graph work
+      pfilter-ready  — filter with pure lambda
+      preduce-ready  — reduce with list-append accumulator + pure body
+      side-effects   — has emit/write in body (can't parallelize)
+      sequential     — accumulator-dependent (not list-append)
+      trivial        — body too simple to benefit from parallelism
+    """
+    tantras = tantra4.load_all(root)
+
+    side_effect_ops = {"emit-edge", "emit-node", "write-signal", "set-shabda",
+                       "remember-bindings", "set-comment"}
+    graph_ops = {"walk", "walk-in", "om-janya", "om-phala", "om-kriya",
+                 "om-yukta", "om-sthita", "om-swarupa", "om-abheda",
+                 "om-contract", "shabda", "lookup", "edges", "neighbors",
+                 "avrti", "ppr", "node-layer", "node-krama", "eval-krama",
+                 "krama-path", "word-node", "eval-node"}
+    tantra_call_ops = {"call-tantra"}
+
+    candidates = {
+        "pmap-ready": [], "pfilter-ready": [], "preduce-ready": [],
+        "side-effects": [], "sequential": [], "trivial": [],
+        "already-parallel": [],
+    }
+
+    for name, t in sorted(tantras.items()):
+        src = t["source"]
+
+        # Already using parallel ops?
+        if re.search(r'\bpmap\b|\bpfilter\b|\bpreduce\b', src):
+            candidates["already-parallel"].append({
+                "tantra": name, "ops": re.findall(r'\b(pmap|pfilter|preduce)\b', src),
+            })
+            continue
+
+        # Find all reduce/map/filter calls with their context
+        for match in re.finditer(
+            r'\b(reduce|map|filter)\s+(\S+)\s+', src
+        ):
+            op = match.group(1)
+            source_var = match.group(2)
+            # Extract the lambda body (rough — up to matching paren depth)
+            pos = match.end()
+            rest = src[pos:]
+
+            # Check for side effects in the rest of this expression
+            has_side_effects = any(se in rest for se in side_effect_ops)
+            has_graph_ops = any(go in rest for go in graph_ops)
+            has_tantra_calls = any(tc in rest for tc in tantra_call_ops)
+            has_append = "append" in rest and op == "reduce"
+            has_let = "let " in rest[:200]  # let bindings in lambda body
+
+            # Classify
+            entry = {
+                "tantra": name,
+                "op": op,
+                "source": source_var,
+                "has_graph": has_graph_ops,
+                "has_tantra_calls": has_tantra_calls,
+                "has_side_effects": has_side_effects,
+                "lines": t["lines"],
+                "group": t["group"],
+            }
+
+            if has_side_effects:
+                candidates["side-effects"].append(entry)
+            elif op == "map" and (has_graph_ops or has_tantra_calls):
+                candidates["pmap-ready"].append(entry)
+            elif op == "filter" and (has_graph_ops or has_tantra_calls):
+                candidates["pfilter-ready"].append(entry)
+            elif op == "reduce" and has_append and (has_graph_ops or has_tantra_calls or has_let):
+                candidates["preduce-ready"].append(entry)
+            elif op == "reduce":
+                candidates["sequential"].append(entry)
+            elif not has_graph_ops and not has_tantra_calls:
+                candidates["trivial"].append(entry)
+            else:
+                # map/filter with graph ops but small bodies
+                if op == "map":
+                    candidates["pmap-ready"].append(entry)
+                else:
+                    candidates["pfilter-ready"].append(entry)
+
+    # Summary
+    summary = {k: len(v) for k, v in candidates.items()}
+    summary["total_parallelizable"] = (
+        summary["pmap-ready"] + summary["pfilter-ready"] + summary["preduce-ready"]
+    )
+
+    return {"candidates": candidates, "summary": summary}
+
+
+def print_parallelism(root=None):
+    """Print parallelism candidate analysis."""
+    result = parallelism_candidates(root)
+    candidates = result["candidates"]
+    summary = result["summary"]
+
+    print(f"\n{'=' * 80}")
+    print(f"  TANTRA PARALLELISM CANDIDATES")
+    print(f"{'=' * 80}\n")
+
+    print(f"  Total parallelizable: {summary['total_parallelizable']}")
+    print(f"    pmap-ready:    {summary['pmap-ready']}")
+    print(f"    pfilter-ready: {summary['pfilter-ready']}")
+    print(f"    preduce-ready: {summary['preduce-ready']}")
+    print(f"  Blocked:")
+    print(f"    side-effects:  {summary['side-effects']}")
+    print(f"    sequential:    {summary['sequential']}")
+    print(f"    trivial:       {summary['trivial']}")
+    if summary.get("already-parallel", 0):
+        print(f"  Already parallel: {summary['already-parallel']}")
+    print()
+
+    for category in ["preduce-ready", "pmap-ready", "pfilter-ready"]:
+        items = candidates[category]
+        if not items:
+            continue
+        print(f"  ── {category} ({len(items)}) ──")
+        for c in items:
+            graph = "graph" if c["has_graph"] else ""
+            tantra = "tantra-call" if c["has_tantra_calls"] else ""
+            flags = " ".join(f for f in [graph, tantra] if f)
+            print(f"    {c['tantra']:35s} {c['op']:8s} source={c['source']:20s} [{flags}]")
+        print()
+
+    if candidates["side-effects"]:
+        print(f"  ── side-effects (blocked) ({len(candidates['side-effects'])}) ──")
+        for c in candidates["side-effects"]:
+            print(f"    {c['tantra']:35s} {c['op']:8s}")
+        print()

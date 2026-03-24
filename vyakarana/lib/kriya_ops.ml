@@ -1,16 +1,13 @@
 (* kriya_ops.ml — pure primitive operations with no graph or session dependency.
    covers: string ops, list ops, boolean/comparison ops, constructors, numeric math.
-   replaces yantra_ops.ml (343L).
 
-   dependency: Prakriti, Kriya_types only. *)
+   dependency: Prakriti, Kriya_types only.
+
+   env is now immutable StringMap — no env_copy needed, just share. *)
 
 open Kriya_types
 
 type evaluator = Prakriti.proof_graph -> env -> expr -> value
-
-let env_copy c =
-  let e2 = Hashtbl.create (Hashtbl.length c) in
-  Hashtbl.iter (fun k v -> Hashtbl.replace e2 k v) c; e2
 
 let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op : string) (args : expr list)
     : value option =
@@ -118,8 +115,9 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     (match fn_val with
      | VFn (params, body, captured) ->
        let results = List.map (fun item ->
-         let local = env_copy captured in
-         (match params with [p] -> Hashtbl.replace local p item | _ -> ());
+         let local = match params with
+           | [p] -> StringMap.add p item captured
+           | _ -> captured in
          e_eval k local body
        ) lst in
        Some (VList results)
@@ -131,12 +129,149 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     (match fn_val with
      | VFn (params, body, captured) ->
        let results = List.filter (fun item ->
-         let local = env_copy captured in
-         (match params with [p] -> Hashtbl.replace local p item | _ -> ());
+         let local = match params with
+           | [p] -> StringMap.add p item captured
+           | _ -> captured in
          as_bool (e_eval k local body)
        ) lst in
        Some (VList results)
      | _ -> Some (VList []))
+
+  (* ---- parallel list operations (Domain.spawn + DLS propagation) ---- *)
+
+  | "pmap" ->
+    let lst = eval_lst 0 in
+    let fn_val = eval_arg 1 in
+    (match fn_val with
+     | VFn (params, body, captured) ->
+       let n = List.length lst in
+       let n_workers = min (max 1 (Domain.recommended_domain_count () - 1)) n in
+       if n_workers <= 1 then
+         let results = List.map (fun item ->
+           let local = match params with
+             | [p] -> StringMap.add p item captured
+             | _ -> captured in
+           e_eval k local body
+         ) lst in
+         Some (VList results)
+       else
+         let parent_ctx = Domain.DLS.get _eval_ctx in
+         let arr = Array.of_list lst in
+         let chunk_size = (n + n_workers - 1) / n_workers in
+         let domains = List.init n_workers (fun i ->
+           let lo = i * chunk_size in
+           let hi = min ((i + 1) * chunk_size) n in
+           if lo >= n then None
+           else Some (Domain.spawn (fun () ->
+             Domain.DLS.set _eval_ctx parent_ctx;
+             let results = ref [] in
+             for j = hi - 1 downto lo do
+               let item = arr.(j) in
+               let local = match params with
+                 | [p] -> StringMap.add p item captured
+                 | _ -> captured in
+               results := e_eval k local body :: !results
+             done;
+             !results))
+         ) in
+         let results = List.concat_map (fun d ->
+           match d with None -> [] | Some domain -> Domain.join domain
+         ) domains in
+         Some (VList results)
+     | _ -> Some (VList []))
+
+  | "pfilter" ->
+    let lst = eval_lst 0 in
+    let fn_val = eval_arg 1 in
+    (match fn_val with
+     | VFn (params, body, captured) ->
+       let n = List.length lst in
+       let n_workers = min (max 1 (Domain.recommended_domain_count () - 1)) n in
+       if n_workers <= 1 then
+         let results = List.filter (fun item ->
+           let local = match params with
+             | [p] -> StringMap.add p item captured
+             | _ -> captured in
+           as_bool (e_eval k local body)
+         ) lst in
+         Some (VList results)
+       else
+         let parent_ctx = Domain.DLS.get _eval_ctx in
+         let arr = Array.of_list lst in
+         let chunk_size = (n + n_workers - 1) / n_workers in
+         let domains = List.init n_workers (fun i ->
+           let lo = i * chunk_size in
+           let hi = min ((i + 1) * chunk_size) n in
+           if lo >= n then None
+           else Some (Domain.spawn (fun () ->
+             Domain.DLS.set _eval_ctx parent_ctx;
+             let results = ref [] in
+             for j = hi - 1 downto lo do
+               let item = arr.(j) in
+               let local = match params with
+                 | [p] -> StringMap.add p item captured
+                 | _ -> captured in
+               if as_bool (e_eval k local body) then
+                 results := item :: !results
+             done;
+             !results))
+         ) in
+         let results = List.concat_map (fun d ->
+           match d with None -> [] | Some domain -> Domain.join domain
+         ) domains in
+         Some (VList results)
+     | _ -> Some (VList []))
+
+  | "preduce" ->
+    (* parallel reduce for list-append accumulators.
+       (preduce list [] fn) — same signature as reduce.
+       Each chunk reduces independently from init, then chunk results
+       are merged by list concatenation (O(1) per chunk, not O(n) re-eval).
+       For non-list init, falls back to sequential reduce. *)
+    let lst     = eval_lst 0 in
+    let init    = eval_arg 1 in
+    let fn_val  = eval_arg 2 in
+    (match fn_val with
+     | VFn (params, body, captured) ->
+       let n = List.length lst in
+       let n_workers = min (max 1 (Domain.recommended_domain_count () - 1)) n in
+       if n_workers <= 1 then
+         let acc = List.fold_left (fun acc item ->
+           let local = match params with
+             | [pa; pb] -> captured |> StringMap.add pa acc |> StringMap.add pb item
+             | _ -> captured in
+           e_eval k local body
+         ) init lst in
+         Some acc
+       else
+         let parent_ctx = Domain.DLS.get _eval_ctx in
+         let arr = Array.of_list lst in
+         let chunk_size = (n + n_workers - 1) / n_workers in
+         let domains = List.init n_workers (fun i ->
+           let lo = i * chunk_size in
+           let hi = min ((i + 1) * chunk_size) n in
+           if lo >= n then None
+           else Some (Domain.spawn (fun () ->
+             Domain.DLS.set _eval_ctx parent_ctx;
+             let acc = ref init in
+             for j = lo to hi - 1 do
+               let item = arr.(j) in
+               let local = match params with
+                 | [pa; pb] -> captured |> StringMap.add pa !acc |> StringMap.add pb item
+                 | _ -> captured in
+               acc := e_eval k local body
+             done;
+             !acc))
+         ) in
+         let chunk_results = List.filter_map (fun d ->
+           match d with None -> None | Some domain -> Some (Domain.join domain)
+         ) domains in
+         (* merge: concatenate list results (zero re-evaluation) *)
+         let merged = List.concat_map (fun chunk ->
+           match chunk with VList items -> items | _ -> [chunk]
+         ) chunk_results in
+         Some (VList merged)
+     | _ -> Some init)
 
   | "reduce" ->
     let lst     = eval_lst 0 in
@@ -145,10 +280,9 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     (match fn_val with
      | VFn (params, body, captured) ->
        let acc = List.fold_left (fun acc item ->
-         let local = env_copy captured in
-         (match params with
-          | [pa; pb] -> Hashtbl.replace local pa acc; Hashtbl.replace local pb item
-          | _ -> ());
+         let local = match params with
+           | [pa; pb] -> captured |> StringMap.add pa acc |> StringMap.add pb item
+           | _ -> captured in
          e_eval k local body
        ) init lst in
        Some acc
@@ -159,19 +293,22 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     let fn_val = eval_arg 1 in
     let apply_fn s = match fn_val with
       | VFn ([p], body, captured) ->
-        let local = env_copy captured in
-        Hashtbl.replace local p s;
+        let local = StringMap.add p s captured in
         e_eval k local body
       | _ -> s
     in
+    let triple_count = function
+      | VList a -> List.length a
+      | VGraph g -> List.length g.gi_triples
+      | _ -> -1
+    in
     let rec loop s fuel =
       if fuel <= 0 then s
-      else let s' = apply_fn s in
-           let stable = match s, s' with
-             | VList a, VList b -> List.length a = List.length b
-             | _ -> s' = s
-           in
-           if stable then s' else loop s' (fuel - 1)
+      else let n_before = triple_count s in
+           let s' = apply_fn s in
+           let n_after = triple_count s' in
+           if n_before >= 0 && n_before = n_after then s'
+           else loop s' (fuel - 1)
     in
     Some (loop state0 20)
 

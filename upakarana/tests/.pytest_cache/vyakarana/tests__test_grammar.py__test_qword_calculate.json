@@ -1,7 +1,26 @@
 {
   "test": "tests/test_grammar.py::test_qword_calculate",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "bqg",
+      "input": "calculate momentum",
+      "output": [
+        [
+          "calculate",
+          "vidhi-kaala",
+          "solve-for"
+        ],
+        [
+          "momentum",
+          "satya",
+          "momentum"
+        ]
+      ],
+      "elapsed_ms": 38,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.007
+  "duration": 0.04
 }

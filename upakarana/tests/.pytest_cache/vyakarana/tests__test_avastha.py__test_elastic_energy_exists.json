@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_avastha.py::test_elastic_energy_exists",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"elastic-energy\" \"swarupa\"",
+      "output": [
+        "energy",
+        "energy"
+      ],
+      "elapsed_ms": 2,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

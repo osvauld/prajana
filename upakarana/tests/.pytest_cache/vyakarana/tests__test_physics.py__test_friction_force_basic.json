@@ -1,7 +1,15 @@
 {
   "test": "tests/test_physics.py::test_friction_force_basic",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "coefficient is 0.3 and normal force is 100. find friction force",
+      "output": "we have: coefficient=0.3 and normal-force=100..we seek: friction-force.we know: friction-force-mantra (normal-force, coefficient \u2192 friction-force).we see: normal-force=100., coefficient=0.3.we find: friction-force = 30",
+      "elapsed_ms": 628,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.445
+  "duration": 0.629
 }

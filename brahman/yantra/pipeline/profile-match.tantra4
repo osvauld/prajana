@@ -1,0 +1,41 @@
+-- profile-match: detailed timing of match-mantra internals.
+(tantra profile-match (sentence)
+  (raw-graph (build-question-graph sentence))
+  (asserted (assertion-bandha raw-graph))
+  (refined (fixpoint asserted (fn g -> avrti-refine-v2 g)))
+  (expanded (kosha-expand refined))
+  (signaled (detect-signals expanded))
+  (enriched (nth (propagate-derive signaled) 0))
+
+  -- now profile match-mantra internals
+  (p-sf (profile-step "extract-solve-for" (extract-solve-for enriched)))
+  (sf-result (nth p-sf 0))
+  (has-intent (nth sf-result 0))
+  (solve-for (nth sf-result 1))
+  (scope-entity (nth sf-result 2))
+
+  (p-scope (profile-step "scope-vps" (scope-vps enriched scope-entity)))
+  (svps (nth p-scope 0))
+  (eff-vps (nth svps 0))
+  (eff-bcs (nth svps 1))
+
+  (p-rel (profile-step "relative-vps" (relative-vps enriched scope-entity)))
+  (rel-vps (nth p-rel 0))
+  (final-vps (cond (has-items rel-vps) rel-vps otherwise eff-vps))
+  (final-bcs (cond (has-items rel-vps) (rel-vps | collect (nth _it 0)) otherwise eff-bcs))
+
+  (p-select (profile-step "mantra-select" (cond (has-text solve-for) (mantra-select solve-for) otherwise (mantra-select ""))))
+  (candidates (nth p-select 0))
+
+  (p-fwd (profile-step "forward-match" (forward-match candidates final-vps final-bcs solve-for)))
+  (fwd (nth p-fwd 0))
+
+  (p-inv (profile-step "inverse-match" (cond (has-items fwd) [] otherwise (inverse-match candidates final-vps final-bcs solve-for))))
+
+  [[(nth p-sf 2), (nth p-sf 1)],
+   [(nth p-scope 2), (nth p-scope 1)],
+   [(nth p-rel 2), (nth p-rel 1)],
+   [(nth p-select 2), (nth p-select 1)],
+   [(nth p-fwd 2), (nth p-fwd 1)],
+   [(nth p-inv 2), (nth p-inv 1)],
+   ["candidates-count", (length candidates)]])

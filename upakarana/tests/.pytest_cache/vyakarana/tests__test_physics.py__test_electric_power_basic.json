@@ -1,7 +1,22 @@
 {
   "test": "tests/test_physics.py::test_electric_power_basic",
-  "outcome": "failed",
-  "calls": [],
+  "outcome": "xfailed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "voltage is 220 and current is 5. find electric power",
+      "output": "we have: current=5..we seek: voltage.we know: electric-power-mantra (current, voltage \u2192 electric-power).we see: current=5., voltage=220..we find: voltage = 220.",
+      "elapsed_ms": 419,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.447
+  "duration": 0.427,
+  "xfail": {
+    "reason": "compound word: 'electric' has no word: mapping, electric-power unfused",
+    "strict": true,
+    "gate": "compound_word: multi-word concept missing word: mapping",
+    "file": "/home/abe/agent_x/upakarana/tests/test_physics.py",
+    "line": 81
+  }
 }

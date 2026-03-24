@@ -1,0 +1,28 @@
+{
+  "test": "tests/test_avastha.py::test_ionic_bond_override_yukta",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"ionic-bond\" \"yukta\"",
+      "output": [
+        "chemical-bond",
+        "chemical-bond",
+        "construction-varga",
+        "construction-varga",
+        "domain-chemistry",
+        "domain-chemistry",
+        "minerals-varga",
+        "minerals-varga",
+        "dissolution",
+        "dissolution",
+        "polarity",
+        "polarity"
+      ],
+      "elapsed_ms": 0,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

@@ -1,7 +1,15 @@
 {
   "test": "tests/test_arithmetic.py::test_subtract_two_sentences",
   "outcome": "passed",
-  "calls": [],
+  "calls": [
+    {
+      "method": "answer",
+      "input": "10 birds sat on a tree. 3 flew away. how many birds are left",
+      "output": "we have: 10 bird sat tree.we know: 3 minus (10 \u2192 7).we find: 7 bird left",
+      "elapsed_ms": 421,
+      "error": null
+    }
+  ],
   "failure": null,
-  "duration": 0.133
+  "duration": 0.422
 }

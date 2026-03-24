@@ -1,0 +1,230 @@
+; avastha-overrides: per-qualifier edge overrides for generated nodes.
+; keys: override-<relation> with comma-separated targets.
+; read by expand_avastha in jnana.ml after shabda loading.
+
+; --- force variants ---
+
+shabda centripetal-force
+  (override-sthita orbit)
+  (override-abheda abhisarana force)
+  (override-yukta motion)
+done
+
+shabda drag-force
+  (override-sthita motion)
+  (override-abheda kshaya)
+  (override-yukta force taranga)
+done
+
+shabda friction-force
+  (override-sthita motion)
+  (override-abheda samsarga)
+  (override-phala kshaya)
+  (override-yukta force)
+done
+
+shabda gravitational-force
+  (override-sthita niyama)
+  (override-phala abhisarana)
+  (override-swarupa aneka-eka)
+  (override-kriya kshetrajna)
+done
+
+shabda net-force
+  (override-phala acceleration)
+  (override-swarupa force)
+done
+
+shabda normal-force
+  (override-sthita contact)
+  (override-abheda sama-nila)
+  (override-yukta force)
+done
+
+shabda nuclear-force
+  (override-sthita atom)
+  (override-vishesa quantum-varga)
+  (override-yukta force strong-nuclear-force weak-nuclear-force)
+done
+
+shabda spring-force
+  (override-sthita displacement)
+  (override-abheda avrti)
+  (override-yukta force)
+done
+
+shabda tension-force
+  (override-abheda tantu)
+  (override-yukta force motion)
+done
+
+shabda elastic-force
+  (override-sthita deformation)
+  (override-abheda avrti)
+  (override-yukta force)
+done
+
+shabda electric-force
+  (override-sthita kshetra)
+  (override-yukta charge)
+done
+
+shabda magnetic-force
+  (override-sthita kshetra)
+  (override-yukta charge motion)
+done
+
+shabda applied-force
+  (override-sthita contact)
+  (override-yukta force)
+done
+
+; --- energy variants ---
+
+shabda thermal-energy
+  (override-sthita ushna)
+  (override-yukta temperature)
+done
+
+shabda elastic-energy
+  (override-sthita deformation)
+  (override-yukta spring-force displacement)
+done
+
+shabda gravitational-energy
+  (override-sthita kshetra)
+  (override-yukta mass height gravitational-constant)
+done
+
+shabda nuclear-energy
+  (override-sthita atom)
+  (override-yukta mass)
+done
+
+shabda electric-energy
+  (override-sthita kshetra)
+  (override-yukta charge voltage)
+done
+
+shabda magnetic-energy
+  (override-sthita kshetra)
+  (override-yukta current)
+done
+
+; --- momentum variants ---
+
+shabda initial-momentum
+  (override-yukta mass initial-velocity)
+done
+
+shabda final-momentum
+  (override-yukta mass final-velocity)
+done
+
+shabda total-momentum
+  (override-yukta conservation dvandva)
+done
+
+shabda linear-momentum
+  (override-abheda momentum)
+done
+
+; --- velocity variants ---
+
+shabda initial-velocity
+  (override-yukta aarambham)
+done
+
+shabda final-velocity
+  (override-yukta antya)
+done
+
+shabda average-velocity
+  (override-yukta displacement time)
+done
+
+; --- acceleration variants ---
+
+shabda centripetal-acceleration
+  (override-sthita orbit)
+  (override-yukta velocity radius)
+done
+
+shabda tangential-acceleration
+  (override-sthita sparsha)
+  (override-yukta angular-acceleration radius)
+done
+
+shabda radial-acceleration
+  (override-sthita kendra)
+  (override-abheda centripetal-acceleration)
+done
+
+; --- nuclear-force sub-variants ---
+
+shabda strong-nuclear-force
+  (override-swarupa sambandha drdha-bandha)
+  (override-yukta nuclear-force sama-nila)
+done
+
+shabda weak-nuclear-force
+  (override-swarupa kshaya-pravaha)
+  (override-yukta kshaya nuclear-force)
+done
+
+; --- bond variants ---
+
+shabda covalent-bond
+  (override-sthita domain-chemistry kshetrajna-yugma niyama)
+  (override-swarupa dvandva-shakti)
+  (override-abheda rekha)
+  (override-phala viveka)
+  (override-yukta prakaasha)
+done
+
+shabda ionic-bond
+  (override-sthita chemical-bond domain-chemistry)
+  (override-swarupa dvandva-shakti electron-transfer)
+  (override-abheda masculine-feminine)
+  (override-siddha positive-negative)
+  (override-yukta polarity)
+done
+
+; --- power/constant variants ---
+
+shabda electric-power
+  (override-swarupa power)
+  (override-vishesa circuit-varga)
+  (override-yukta current voltage)
+  (override-matra watt)
+done
+
+shabda gravitational-constant
+  (override-sthita constant)
+  (override-vishesa quantum-varga)
+  (override-abheda gravitational-force)
+  (override-yukta kilogram metre newton)
+  (override-siddha svayambhu)
+done
+
+; --- acceleration variants ---
+
+shabda angular-acceleration
+  (override-vishesa rotational-motion-varga)
+  (override-swarupa avrti)
+  (override-abheda acceleration)
+  (override-kramanusara angular-velocity)
+  (override-yukta kona moment-of-inertia torque)
+  (override-pratipaksha moment-of-inertia)
+done
+
+; --- oscillation variants ---
+
+shabda damped-oscillation
+  (override-vishesa oscillation-varga)
+  (override-swarupa wave)
+  (override-yukta cosine sine drag-force)
+  (override-phala convergence)
+  (override-kriya avrti)
+  (override-sthita spanda ananta)
+done

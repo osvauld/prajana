@@ -7,18 +7,18 @@
       "input": "electron has mass 9.109e-31",
       "session_id": "test-entity-persist-v2",
       "output": "no match",
-      "elapsed_ms": 248,
+      "elapsed_ms": 254,
       "error": null
     },
     {
       "method": "ask",
       "input": "find momentum given velocity 1e6",
       "session_id": "test-entity-persist-v2",
-      "output": "momentum = 9.109e-25",
-      "elapsed_ms": 48,
+      "output": "we have: mass=9.109e-31 and velocity=1000000..we seek: momentum.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=1000000., mass=9.109e-31.we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=1000000., mass=9.109e-31.we find: momentum = 9.109e-25",
+      "elapsed_ms": 355,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.297
+  "duration": 0.611
 }
