@@ -1,0 +1,396 @@
+; ═══════════════════════════════════════════════════════════════════
+; biology — 50 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha active-site
+  (swarupa svabhava function artha)
+  (abheda kartha sphoTa bija-nyasa)
+  (kriya sparsha)
+  (phala folding iccha group)
+  (sthita protein enzyme domain-biology)
+  (yukta substrate)
+  (drishthanta bhava mula-svabhava)
+  (siddha sama-nila svayambhu))
+
+(kosha adenine
+  (swarupa purine hydrogen-bond-two)
+  (sthita nitrogenous-base nitrogen atp domain-biology domain-chemistry)
+  (yukta carbon hydrogen nad coenzyme dna rna energy)
+  (siddha thymine-sama-nila uracil-sama-nila)
+  (drishthanta artha-dhvani))
+
+(kosha alpha-helix
+  (swarupa avrti secondary-structure)
+  (drishthanta double-helix-viveka vrtta-stambha)
+  (sthita sequence peptide domain-biology)
+  (siddha hydrogen-bond svayambhu chirality)
+  (kriya sama-nila)
+  (phala mula-svabhava folding)
+  (abheda spanda-avrti avrti)
+  (yukta tertiary-structure))
+
+(kosha amino-acid
+  (swarupa monomer)
+  (sthita nitrogen group folding domain-biology domain-chemistry)
+  (yukta carbon amine carboxyl)
+  (siddha svabhava water-visarjana)
+  (janya protein peptide sequence)
+  (kriya covalent-bond)
+  (phala ribosome translation)
+  (drishthanta vrnda-ganita holder-giver)
+  (rahita iccha)
+  (abheda sama-nila))
+
+(kosha atp
+  (swarupa nucleotide)
+  (sthita phosphate sugar karma domain-biology domain-chemistry)
+  (phala energy ahara adp)
+  (siddha spanda)
+  (kriya sambandha visarjana)
+  (janya mitochondria)
+  (yukta enzyme metabolism yantra phosphorus oxygen))
+
+(kosha base-pairing
+  (abheda sandhi sama-nila)
+  (swarupa abheda sambandha eka-eka)
+  (siddha anuvada purine-pyrimidine-sama-vishama svabhava)
+  (kriya hydrogen-bond)
+  (sthita nitrogenous-base adenine thymine guanine cytosine uracil double-helix dna domain-biology)
+  (phala sparsha artha)
+  (yukta rna)
+  (drishthanta iccha))
+
+(kosha beta-sheet
+  (abheda dvividha-marga mithuna sama-nila)
+  (sthita sequence peptide domain-biology)
+  (siddha hydrogen-bond)
+  (swarupa antiparallel secondary-structure planar)
+  (phala folding mula-svabhava)
+  (drishthanta alpha-helix-viveka)
+  (yukta tertiary-structure))
+
+(kosha biology-setu
+  (swarupa setu)
+  (sthita domain-biology domain-language)
+  (yukta shabda visheshanam))
+
+(kosha biology-varga
+  (sthita domain-biology)
+  (vishesa chemistry-varga)
+  (swarupa subanta)
+  (yukta spanda sva-dharana kramanusara avastha))
+
+(kosha cell-varga
+  (vishesa biology-varga)
+  (swarupa subanta spanda)
+  (yukta sva-dharana seema avastha kaala))
+
+(kosha codon-table
+  (swarupa anuvada)
+  (abheda setu sandhi purna)
+  (yukta codon amino-acid start-codon stop-codon codon-bias organism)
+  (siddha svayambhu sama-vishama redundancy)
+  (kriya gene-synthesis)
+  (sthita translation domain-biology))
+
+(kosha codon
+  (swarupa pada nucleotide-traya)
+  (abheda matrika varna)
+  (sthita gene domain-biology)
+  (phala protein)
+  (kriya anuvada)
+  (yukta artha))
+
+(kosha cytosine
+  (swarupa pyrimidine hydrogen-bond-three)
+  (sthita nitrogenous-base nitrogen domain-biology domain-chemistry)
+  (yukta carbon oxygen hydrogen methylation dna rna)
+  (siddha guanine-sama-nila)
+  (drishthanta tirodhana))
+
+(kosha dna
+  (swarupa kshetra nucleotide-polymer double-helix)
+  (sthita niyama krama iccha life artha-krama domain-biology)
+  (abheda matrika avrti parampara)
+  (yukta jiva-sphurana sva-dharana prakaasha)
+  (drishthanta rekha dvandva-shakti))
+
+(kosha domain-biology
+  (sthita spanda)
+  (janya anu polymer)
+  (yukta sva-dharana eka-kosha visha-anu dna gene genome rna protein heredity replication kavaca bija-nyasa)
+  (drishthanta prajna-vriddhi))
+
+(kosha double-helix
+  (swarupa avrti dna antiparallel)
+  (abheda dvividha-marga shiva-shakti mithuna parampara)
+  (sthita base-pairing iccha domain-biology)
+  (kriya sandhi spanda)
+  (siddha hydrogen-bond sama-nila anuvada)
+  (drishthanta taranga))
+
+(kosha enzyme
+  (abheda kshetrajna)
+  (sthita kshetra niyama domain-biology)
+  (siddha svabhava visarjana)
+  (kriya prakaasha)
+  (phala sambandha)
+  (yukta viveka))
+
+(kosha expression
+  (domain kosha/biology)
+  (abheda spanda)
+  (kriya varna)
+  (sthita rna domain-biology)
+  (phala gene protein))
+
+(kosha folding
+  (swarupa avrti)
+  (abheda spanda-avrti alpha-helix beta-sheet mula-svabhava)
+  (siddha vivartana samsarga svayambhu sphoTa vrnda-ganita)
+  (sthita sequence iccha domain-biology)
+  (kriya hydrogen-bond sama-vishama)
+  (phala svabhava active-site function group)
+  (drishthanta bhava misfolding-viveka))
+
+(kosha gene-group
+  (abheda group vrnda-ganita)
+  (swarupa vrnda)
+  (yukta gene operon pathway identity inverse)
+  (siddha closure associativity sphoTa sandhi)
+  (phala mula-svabhava svabhava behaviour phenotype)
+  (drishthanta bhava)
+  (sthita iccha domain-biology domain-math)
+  (kriya avrti samsarga))
+
+(kosha gene
+  (abheda kshetrajna bija-nyasa)
+  (kriya prakaasha)
+  (sthita niyama kshetra iccha life domain-biology)
+  (yukta artha-krama)
+  (siddha svayambhu))
+
+(kosha genetics-varga
+  (vishesa biology-varga)
+  (swarupa subanta)
+  (yukta krama smarana niyama avastha parampara))
+
+(kosha genome
+  (abheda matrika)
+  (sthita varna domain-biology)
+  (yukta dna heredity))
+
+(kosha guanine
+  (swarupa purine hydrogen-bond-three)
+  (sthita nitrogenous-base nitrogen domain-biology domain-chemistry)
+  (yukta carbon oxygen hydrogen gtp dna rna)
+  (siddha cytosine-sama-nila sambandha)
+  (abheda sthiti))
+
+(kosha heredity
+  (abheda svabhava)
+  (sthita dna genome domain-biology)
+  (yukta x-y-chromosome)
+  (swarupa eka-aneka))
+
+(kosha life
+  (abheda jiva)
+  (yukta cell protein enzyme)
+  (sthita dna gene domain-biology)
+  (kriya metabolism replication)
+  (janya jiva-sphurana))
+
+(kosha metabolism
+  (sthita kshetra artha-krama niyama domain-biology)
+  (swarupa yantra aadana-visarjana)
+  (abheda avrti karma)
+  (yukta kshetrajna prakaasha)
+  (siddha jiva-sphurana)
+  (kriya sva-dharana life))
+
+(kosha mitochondria
+  (swarupa yantra)
+  (abheda agni pitta)
+  (sthita ahara thermodynamics domain-biology)
+  (phala atp energy karma)
+  (yukta oxygen glucose kavaca dna eka-kosha)
+  (siddha sva-dharana jivamsha)
+  (kriya visarjana spanda)
+  (drishthanta visha-anu))
+
+(kosha molecular-bio-varga
+  (vishesa biology-varga)
+  (swarupa subanta krama)
+  (yukta sandhi niyama avastha viveka))
+
+(kosha nitrogenous-base
+  (abheda varna adenine guanine cytosine thymine uracil)
+  (drishthanta matrika)
+  (swarupa nitrogen)
+  (yukta carbon hydrogen oxygen codon purine pyrimidine dna rna)
+  (sthita nucleotide spanda domain-biology)
+  (kriya hydrogen-bond)
+  (siddha samsarga interference))
+
+(kosha nucleotide
+  (swarupa matrika monomer)
+  (sthita spanda nitrogenous-base sugar cell water domain-biology)
+  (siddha samsarga interference sama-nila)
+  (yukta covalent-bond phosphate carbon nitrogen oxygen hydrogen replication)
+  (janya dna gene codon)
+  (drishthanta parampara))
+
+(kosha operon
+  (swarupa gene-group)
+  (abheda vrnda bija-nyasa)
+  (sthita promoter iccha domain-biology)
+  (yukta gene avahana)
+  (siddha sandhi)
+  (janya transcription))
+
+(kosha pathway
+  (janya gene-group)
+  (swarupa enzyme aneka-eka)
+  (abheda sequence parampara)
+  (kriya sandhi avrti)
+  (yukta metabolism)
+  (phala atp)
+  (sthita domain-biology))
+
+(kosha peptide
+  (abheda sandhi)
+  (swarupa covalent-bond directionality)
+  (kriya amino-acid)
+  (siddha water-visarjana)
+  (yukta nitrogen carbon oxygen n-terminus c-terminus)
+  (janya sequence protein)
+  (drishthanta avrti group vrnda-ganita)
+  (sthita domain-biology domain-chemistry))
+
+(kosha promoter
+  (abheda avahana)
+  (sthita iccha dna gene operon domain-biology)
+  (janya transcription)
+  (kriya rna-polymerase)
+  (yukta expression strength organism codon-bias)
+  (siddha svayambhu)
+  (drishthanta bija-nyasa tirodhana-viveka))
+
+(kosha protein
+  (abheda kshetrajna varna)
+  (sthita kshetra niyama domain-biology)
+  (yukta life prakaasha)
+  (phala rachana visarjana)
+  (kriya viveka))
+
+(kosha purine
+  (swarupa nitrogenous-base ring)
+  (abheda dvividha-marga adenine guanine)
+  (sthita nitrogen domain-biology domain-chemistry)
+  (yukta carbon dna rna atp)
+  (siddha pyrimidine-sama-nila))
+
+(kosha pyrimidine
+  (swarupa nitrogenous-base ring)
+  (sthita nitrogen domain-biology domain-chemistry)
+  (yukta carbon oxygen dna rna)
+  (abheda cytosine thymine uracil)
+  (siddha purine-sama-nila))
+
+(kosha replication
+  (kriya bija-nyasa eka-kosha)
+  (sthita dna domain-biology)
+  (phala heredity jiva-sphurana life)
+  (yukta nucleotide)
+  (abheda sva-dharana avrti)
+  (siddha interference))
+
+(kosha ribosome
+  (swarupa yantra)
+  (sthita rna domain-biology)
+  (phala protein karma)
+  (kriya codon translation avrti bija-nyasa)
+  (yukta eka-kosha mitochondria)
+  (siddha svayambhu)
+  (janya gene)
+  (drishthanta sama-nila))
+
+(kosha rna
+  (abheda varna)
+  (sthita matrika domain-biology)
+  (yukta expression translation))
+
+(kosha sequence
+  (domain kosha/biology)
+  (abheda pada parampara avrti)
+  (swarupa varna-chain group)
+  (sthita amino-acid peptide iccha domain-biology)
+  (janya gene codon translation)
+  (siddha order)
+  (phala folding svabhava artha function))
+
+(kosha start-codon
+  (abheda bija-nyasa avahana)
+  (swarupa atg)
+  (phala methionine)
+  (yukta adenine thymine guanine)
+  (kriya ribosome)
+  (janya translation)
+  (sthita iccha gene codon-table domain-biology)
+  (siddha svayambhu))
+
+(kosha stop-codon
+  (abheda viraam visarjana taa tag tga)
+  (phala translation release)
+  (kriya protein-visarjana ribosome)
+  (siddha svayambhu purna)
+  (sthita gene codon-table domain-biology)
+  (janya folding))
+
+(kosha tertiary-structure
+  (abheda sphoTa)
+  (swarupa mula-svabhava svabhava)
+  (yukta alpha-helix beta-sheet hydrophobic hydrophilic)
+  (phala folding sequence avrti active-site function)
+  (siddha sama-vishama svayambhu)
+  (drishthanta shiva-shakti)
+  (sthita domain-biology))
+
+(kosha thymine
+  (swarupa pyrimidine hydrogen-bond-two)
+  (sthita nitrogenous-base nitrogen dna domain-biology domain-chemistry)
+  (yukta carbon oxygen hydrogen methyl)
+  (siddha adenine-sama-nila sva-dharana)
+  (abheda kavaca)
+  (rahita rna))
+
+(kosha transcription
+  (abheda anuvada)
+  (swarupa expression eka-eka)
+  (sthita dna nucleus domain-biology)
+  (phala rna mrna)
+  (janya promoter translation)
+  (kriya rna-polymerase iccha gene)
+  (siddha base-pairing)
+  (yukta uracil start-codon stop-codon))
+
+(kosha translation
+  (domain kosha/biology)
+  (abheda anuvada)
+  (sthita rna)
+  (phala protein)
+  (kriya decoding)
+  (swarupa aneka-eka))
+
+(kosha uracil
+  (swarupa pyrimidine hydrogen-bond-two)
+  (sthita nitrogenous-base nitrogen rna domain-biology domain-chemistry)
+  (yukta carbon oxygen hydrogen)
+  (siddha adenine-sama-nila visarjana)
+  (drishthanta thymine-viveka)
+  (rahita methyl dna)
+  (abheda tat-kshana))
+
+(kosha virus
+  (swarupa visha-anu)
+  (sthita domain-biology))

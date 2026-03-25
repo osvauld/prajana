@@ -1,0 +1,64 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-probability — 13 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha bayes
+  (karma probability-varga)
+  (sthita conditional)
+  (yukta viparita))
+
+(kosha marginalisation
+  (karma probability-varga)
+  (sthita distribution))
+
+(kosha normalisation
+  (karma probability-varga)
+  (sthita distribution)
+  (yukta purna))
+
+(kosha probability-varga
+  (vishesa math-varga)
+  (yukta matra viveka seema))
+
+(kosha conditional
+  (domain kosha/math/probability/properties)
+  (lakshana probability-varga)
+  (yukta apeksha))
+
+(kosha independence
+  (lakshana probability-varga)
+  (pratipaksha apeksha))
+
+(kosha distribution
+  (vishesa probability-varga)
+  (sthita probability)
+  (yukta random-variable))
+
+(kosha event
+  (vishesa probability-varga)
+  (sthita sample-space)
+  (abheda set))
+
+(kosha expected-value
+  (vishesa probability-varga)
+  (sthita random-variable)
+  (yukta matra))
+
+(kosha probability
+  (vishesa probability-varga)
+  (yukta matra seema))
+
+(kosha random-variable
+  (vishesa probability-varga)
+  (yukta chala-apeksha))
+
+(kosha sample-space
+  (vishesa probability-varga)
+  (abheda set)
+  (yukta purna))
+
+(kosha variance
+  (domain kosha/math/probability/structures)
+  (vishesa probability-varga)
+  (sthita random-variable expected-value)
+  (yukta spanda))

@@ -6,7 +6,7 @@
       "method": "eval",
       "input": "walk \"mass\" \"karma\"",
       "output": [],
-      "elapsed_ms": 1,
+      "elapsed_ms": 0,
       "error": null
     },
     {
@@ -20,5 +20,5 @@
     }
   ],
   "failure": null,
-  "duration": 0.003
+  "duration": 0.001
 }

@@ -1,0 +1,29 @@
+-- sankhya-bandha-v2: indexed graph version.
+-- existing-sankhya scan → O(1) idx lookup.
+-- split-grades + inner reduce stay sequential (order-dependent).
+(tantra sankhya-bandha-v2 (g)
+  (graph (cond (exists g) g otherwise []))
+  (already-bound (nth (bound-state graph) 0))
+  (existing-sankhya (idx-subjects g "sankhya"))
+  (grades (split-grades graph))
+  (new-bindings (reduce grades [] (fn acc grade ->
+    let paired = reduce grade [[], "", ""] (fn st tri ->
+      let pairs   = nth st 0
+      let active  = nth st 1
+      let pending = nth st 2
+      let edge = to-string (nth tri 1)
+      let word = to-string (nth tri 0)
+      let val  = to-string (nth tri 2)
+      let is-signal = has-text (shabda word "signal")
+      cond (eq edge "satya")
+        (cond is-signal [pairs, active, pending]
+          (and (has-text pending) (not (member word already-bound)) (not (member word existing-sankhya)))
+            [(append pairs [[word, "sankhya", pending]]), word, ""]
+          otherwise [pairs, word, ""])
+      (eq edge "asprista-sankhya")
+        (cond (and (has-text active) (not (member active already-bound)) (not (member active existing-sankhya)))
+          [(append pairs [[active, "sankhya", val]]), active, ""]
+          otherwise [pairs, active, val])
+      otherwise st)
+    (append acc (nth paired 0)))))
+  (idx-append g new-bindings))

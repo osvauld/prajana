@@ -1,0 +1,171 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-foundation — 25 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha bond
+  (vishesa physics-varga)
+  (swarupa sambandha)
+  (sthita particle-a particle-b rest-length stiffness damping-coefficient)
+  (yukta spring-force damped-oscillation tension-force)
+  (kriya hooke damper)
+  (phala direction force equilibrium)
+  (avastha covalent ionic hydrogen))
+
+(kosha corruption
+  (abheda entropy context-degradation concealment disorder)
+  (sthita second-law)
+  (swarupa kshaya)
+  (yukta tirodhana drag-force friction-force corruption-in-language corruption-in-math)
+  (phala energy information structure)
+  (vishesa thermodynamics-varga))
+
+(kosha direction
+  (abheda abhisarana)
+  (sthita artha kshetra)
+  (phala viveka)
+  (yukta kshetrajna)
+  (vishesa physics-varga))
+
+(kosha disorder
+  (abheda entropy kshaya)
+  (sthita second-law spanda)
+  (yukta structure decay)
+  (vishesa thermodynamics-varga))
+
+(kosha domain-physics
+  (yukta energy space gravity quantum entanglement photon electron atom motion kinematics equations-of-motion newton-second-law-motion mass momentum velocity speed acceleration displacement direction force net-force gravitational-force normal-force friction-force tension-force spring-force drag-force centripetal-force nuclear-force strong-nuclear-force weak-nuclear-force orbit thermodynamics zeroth-law first-law second-law third-law absolute-zero planck-relation kramanusara avastha apeksha string-theory upakarana domain-chemistry)
+  (siddha yantra observation sambandha)
+  (kriya measurement)
+  (phala atom))
+
+(kosha equations-of-motion
+  (sthita artha-krama niyama krama)
+  (yukta prakaasha velocity acceleration displacement momentum)
+  (siddha kinematics motion)
+  (vishesa kinematics-varga))
+
+(kosha field
+  (domain kosha/physics)
+  (swarupa vector-space)
+  (yukta coordinate gradient divergence curl derivative antiderivative)
+  (abheda kshetra)
+  (sthita mula-shakti domain-math)
+  (janaka gravitational-field electric-field magnetic-field)
+  (vishesa physics-varga))
+
+(kosha kilogram
+  (sthita matra)
+  (swarupa float)
+  (abheda float)
+  (yukta mass ghana)
+  (vishesa physics-varga))
+
+(kosha kinematics
+  (abheda gati motion)
+  (sthita krama niyama kshetra)
+  (yukta thaalam kaala velocity acceleration momentum)
+  (siddha equations-of-motion)
+  (vishesa kinematics-varga))
+
+(kosha matra-aayaama
+  (vishesa physics-varga)
+  (sthita matra yantra)
+  (yukta kramanusara aayaama))
+
+(kosha matra-beeja
+  (vishesa physics-varga)
+  (sthita matra yantra))
+
+(kosha matra-guna
+  (vishesa physics-varga)
+  (sthita matra yantra)
+  (swarupa guna)
+  (yukta sankhya))
+
+(kosha metre
+  (sthita matra)
+  (swarupa float)
+  (abheda float)
+  (yukta length space displacement)
+  (vishesa physics-varga))
+
+(kosha motion
+  (domain kosha/physics)
+  (abheda gati)
+  (sthita krama kshetra)
+  (yukta thaalam kaala kinematics velocity acceleration)
+  (phala displacement)
+  (vishesa kinematics-varga))
+
+(mantra newton-second-law-motion
+  (vishesa dynamics-varga)
+  (varga physics-mantra)
+  (abheda equations-of-motion)
+  (sthita mass acceleration)
+  (phala force)
+  (janya mass acceleration)
+  (krama multiplication mass acceleration))
+
+(kosha newton
+  (sthita matra)
+  (swarupa float)
+  (abheda float)
+  (yukta force kilogram metre second)
+  (vishesa physics-varga))
+
+(kosha nuclear-force
+  (vishesa quantum-varga)
+  (yukta force strong-nuclear-force weak-nuclear-force)
+  (sthita atom)
+  (avastha strong weak))
+
+(kosha physics-constants
+  (vishesa physics-varga)
+  (sthita matra niyama))
+
+(kosha physics-varga
+  (vishesa math-varga)
+  (yukta gati matra niyama kaala mula-shakti sambandha prasarana))
+
+(kosha radian
+  (domain kosha/physics)
+  (sthita matra)
+  (swarupa float)
+  (abheda float)
+  (yukta kona angle)
+  (vishesa physics-varga))
+
+(kosha second
+  (sthita matra)
+  (swarupa float)
+  (abheda float)
+  (yukta kaala duration)
+  (vishesa physics-varga))
+
+(kosha space
+  (vishesa physics-varga)
+  (abheda kshetra)
+  (yukta aayaama)
+  (sthita prakaasha))
+
+(kosha thermodynamics
+  (sthita krama kshetra niyama)
+  (yukta kshetrajna kshaya)
+  (phala samskaara)
+  (vishesa thermodynamics-varga))
+
+(kosha physics-time
+  (abheda spanda-matra)
+  (sthita kaala matra)
+  (yukta kshetrajna velocity avrti)
+  (vishesa kinematics-varga)
+  (matra second))
+
+(kosha trajectory
+  (swarupa gati)
+  (sthita krama sthira-apeksha akasham)
+  (yukta kaala)
+  (phala chala-apeksha-krama)
+  (siddha bindu-krama)
+  (janaka angular-displacement path-energy)
+  (vishesa kinematics-varga))

@@ -1,0 +1,60 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-complexity — 13 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha complexity-varga
+  (vishesa math-varga cs-varga)
+  (yukta krama seema))
+
+(kosha induction
+  (karma complexity-varga)
+  (yukta parampara krama))
+
+(kosha invariant
+  (karma complexity-varga)
+  (yukta svabhava purna))
+
+(kosha recursion-complexity
+  (karma complexity-varga)
+  (yukta avrti)
+  (abheda recursion))
+
+(kosha reduction
+  (karma complexity-varga)
+  (yukta sambandha krama))
+
+(kosha intractable
+  (lakshana complexity-varga)
+  (pratipaksha tractable))
+
+(kosha tractable
+  (lakshana complexity-varga)
+  (yukta seema)
+  (pratipaksha intractable))
+
+(kosha undecidable-complexity
+  (lakshana complexity-varga)
+  (abheda undecidable)
+  (pratipaksha niyama))
+
+(kosha O-notation
+  (vishesa complexity-varga)
+  (yukta seema matra))
+
+(kosha complexity-class
+  (vishesa complexity-varga)
+  (yukta vrnda))
+
+(kosha decision-problem
+  (vishesa complexity-varga)
+  (yukta viveka))
+
+(kosha space-complexity
+  (vishesa complexity-varga)
+  (sthita O-notation)
+  (yukta matra))
+
+(kosha time-complexity
+  (vishesa complexity-varga)
+  (sthita O-notation)
+  (yukta krama))

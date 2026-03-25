@@ -1,0 +1,110 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-fluid — 15 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha domain-fluid
+  (vishesa fluid-varga)
+  (sthita domain-math)
+  (yukta pressure density viscosity velocity gradient divergence curl laplacian continuity navier-stokes bernoulli thermodynamics energy))
+
+(kosha fluid-varga
+  (vishesa physics-varga math-varga)
+  (swarupa subanta)
+  (matra pascal metre second)
+  (yukta gati sandhi spanda niyama kaala))
+
+(kosha advection
+  (vishesa fluid-varga)
+  (swarupa tinanta bhave-prayoga transport)
+  (yukta velocity gradient continuity)
+  (sthita navier-stokes))
+
+(kosha bernoulli
+  (vishesa fluid-varga)
+  (yukta pressure mass-density velocity energy)
+  (swarupa conservation)
+  (abheda first-law)
+  (sthita continuity))
+
+(kosha continuity
+  (vishesa fluid-varga)
+  (yukta mass-density velocity divergence)
+  (swarupa conservation)
+  (abheda first-law)
+  (sthita navier-stokes))
+
+(kosha diffusion
+  (vishesa fluid-varga)
+  (swarupa tinanta bhave-prayoga)
+  (kriya laplacian)
+  (sthita gradient)
+  (ahara mass-density)
+  (phala entropy)
+  (abheda second-law wave))
+
+(kosha navier-stokes
+  (vishesa fluid-varga)
+  (yukta mass-density pressure viscosity velocity gradient laplacian divergence)
+  (sthita continuity)
+  (abheda bernoulli newton-second-law-motion)
+  (kriya avrti))
+
+(mantra mass-density-mantra
+  (vishesa fluid-varga)
+  (varga physics-mantra)
+  (swarupa mass-density)
+  (phala mass-density)
+  (janya mass volume)
+  (krama division mass volume))
+
+(kosha mass-density
+  (vishesa fluid-varga)
+  (swarupa subanta scalar)
+  (abheda float density)
+  (ahara mass)
+  (phala volume)
+  (yukta pressure viscosity continuity navier-stokes))
+
+(mantra pressure-mantra
+  (vishesa fluid-varga)
+  (varga physics-mantra)
+  (swarupa pressure)
+  (phala pressure)
+  (janya force area)
+  (krama division force area))
+
+(kosha pressure
+  (vishesa fluid-varga)
+  (swarupa subanta scalar)
+  (abheda float)
+  (ahara force)
+  (phala area)
+  (yukta gradient density navier-stokes bernoulli))
+
+(kosha reynolds-number
+  (vishesa fluid-varga)
+  (swarupa subanta scalar)
+  (abheda float)
+  (yukta mass-density velocity viscosity)
+  (siddha dimensionless)
+  (phala turbulence laminar))
+
+(kosha turbulence
+  (vishesa fluid-varga)
+  (siddha reynolds-number)
+  (yukta velocity curl vortex entropy)
+  (abheda avrti)
+  (phala navier-stokes))
+
+(kosha viscosity
+  (vishesa fluid-varga)
+  (swarupa subanta scalar)
+  (abheda float friction-force)
+  (yukta velocity mass-density navier-stokes reynolds-number)
+  (kriya laplacian))
+
+(kosha vortex
+  (vishesa fluid-varga)
+  (swarupa curl)
+  (yukta velocity turbulence angular-momentum)
+  (abheda avrti spanda))

@@ -1,0 +1,95 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-logic — 21 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha logic-varga
+  (vishesa math-varga)
+  (yukta viveka niyama satya))
+
+(mantra conjunction
+  (domain kosha/math/logic/operations)
+  (karma logic-varga)
+  (yukta dvandva))
+
+(mantra disjunction
+  (karma logic-varga))
+
+(mantra implication
+  (karma logic-varga)
+  (yukta sambandha krama))
+
+(mantra inversion
+  (swarupa inference)
+  (yukta pratipaksha))
+
+(mantra modus-ponens
+  (swarupa inference)
+  (janya implication))
+
+(mantra negation
+  (domain kosha/math/logic/operations)
+  (karma logic-varga)
+  (yukta viparita))
+
+(mantra quantifier
+  (karma logic-varga)
+  (yukta vrnda))
+
+(mantra substitution
+  (swarupa inference))
+
+(kosha viveka-max
+  (vishesa logic-varga)
+  (swarupa viveka)
+  (abheda max)
+  (yukta comparison inference))
+
+(kosha viveka-min
+  (vishesa logic-varga)
+  (swarupa viveka)
+  (abheda min)
+  (yukta comparison inference))
+
+(kosha completeness
+  (lakshana logic-varga)
+  (yukta purna))
+
+(kosha consistency
+  (lakshana logic-varga)
+  (pratipaksha contradiction))
+
+(kosha soundness
+  (lakshana logic-varga)
+  (yukta satya))
+
+(kosha axiom
+  (vishesa logic-varga)
+  (yukta niralamba svayambhu)
+  (sthita niyama))
+
+(kosha contradiction
+  (vishesa logic-varga)
+  (pratipaksha satya consistency))
+
+(kosha inference
+  (vishesa logic-varga)
+  (yukta viveka kramanusara))
+
+(kosha proof
+  (domain kosha/math/logic/structures)
+  (vishesa logic-varga)
+  (yukta satya niyama krama)
+  (phala theorem))
+
+(kosha proposition
+  (vishesa logic-varga)
+  (yukta satya viveka))
+
+(kosha theorem
+  (vishesa logic-varga)
+  (yukta satya)
+  (siddha niyama))
+
+(kosha undecidable
+  (vishesa logic-varga)
+  (pratipaksha niyama))

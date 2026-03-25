@@ -1,91 +1,17 @@
 {
   "total": 490,
-  "passed": 409,
-  "failed": 0,
+  "passed": 408,
+  "failed": 1,
   "xfailed": 81,
   "xpassed": 0,
   "skipped": 0,
-  "failed_tests": [],
-  "slow_tests": [
+  "failed_tests": [
     {
-      "test": "tests/test_xfail.py::test_total_momentum_three",
-      "duration": 1.192
-    },
-    {
-      "test": "tests/test_xfail.py::test_car_from_rest_force",
-      "duration": 0.989
-    },
-    {
-      "test": "tests/test_mixed.py::test_from_rest_ke",
-      "duration": 0.98
-    },
-    {
-      "test": "tests/test_logic.py::test_existential",
-      "duration": 0.974
-    },
-    {
-      "test": "tests/test_entity.py::test_two_entity_scope_first",
-      "duration": 0.969
-    },
-    {
-      "test": "tests/test_comparison.py::test_proportional_momentum_double_mass",
-      "duration": 0.963
-    },
-    {
-      "test": "tests/test_answers.py::test_two_entity_ke_first",
-      "duration": 0.961
-    },
-    {
-      "test": "tests/test_comparison.py::test_proportional_ke_double_velocity",
-      "duration": 0.955
-    },
-    {
-      "test": "tests/test_comparison.py::test_compute_compare_ke_values_present",
-      "duration": 0.953
-    },
-    {
-      "test": "tests/test_entity.py::test_three_entity_specific_query",
-      "duration": 0.946
-    },
-    {
-      "test": "tests/test_mixed.py::test_physics_count_total_ke",
-      "duration": 0.945
-    },
-    {
-      "test": "tests/test_xfail.py::test_total_momentum_two",
-      "duration": 0.942
-    },
-    {
-      "test": "tests/test_mixed.py::test_chain_inverse_find_initial_velocity",
-      "duration": 0.929
-    },
-    {
-      "test": "tests/test_xfail.py::test_which_more_ke_computed",
-      "duration": 0.919
-    },
-    {
-      "test": "tests/test_physics.py::test_centripetal_force_basic",
-      "duration": 0.914
-    },
-    {
-      "test": "tests/test_entity.py::test_two_entity_scope_second",
-      "duration": 0.901
-    },
-    {
-      "test": "tests/test_mixed.py::test_physics_logic_inheritance",
-      "duration": 0.896
-    },
-    {
-      "test": "tests/test_xfail.py::test_which_more_ke_two_seeks",
-      "duration": 0.878
-    },
-    {
-      "test": "tests/test_comparison.py::test_compute_compare_momentum",
-      "duration": 0.876
-    },
-    {
-      "test": "tests/test_comparison.py::test_compute_compare_ke",
-      "duration": 0.843
+      "test": "tests/test_grammar.py::test_negation_not_emits_satya",
+      "failure": {},
+      "calls": 1,
+      "duration": 0.033
     }
-  ]
+  ],
+  "slow_tests": []
 }

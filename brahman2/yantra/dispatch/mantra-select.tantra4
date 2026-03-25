@@ -1,0 +1,20 @@
+-- mantra-select: om-driven mantra candidate filtering via varga walk.
+(tantra mantra-select (solve-for)
+
+  -- varga walk: O(25) instead of graph-all-nodes O(2210)
+  (mantra-nodes (append (walk-in "physics-mantra" "varga") (walk-in "math-mantra" "varga")))
+
+  -- when no solve-for, return all
+  (cond (not (exists solve-for))
+    mantra-nodes
+    otherwise (filter mantra-nodes (fn m ->
+      let ms       = to-string m
+      let contract = om-contract ms
+      let janya    = map (nth contract 0) (fn j -> to-string j)
+      let phala    = map (nth contract 1) (fn p -> to-string p)
+      let swarupa  = map (nth contract 5) (fn s -> to-string s)
+      let mname    = shabda ms "name"
+      (or (eq mname solve-for)
+          (member solve-for phala)
+          (member solve-for swarupa)
+          (member solve-for janya))))))

@@ -1,0 +1,21 @@
+-- inverse-match: find a mantra where solve-for is a janya and phala is bound.
+(tantra inverse-match (candidates vps bcs solve-for)
+
+  -- parallel: each candidate check is independent graph walk + shabda lookup
+  (preduce candidates [] (fn acc m ->
+    let ms          = to-string m
+    let contract    = om-contract ms
+    let janya       = nth contract 0
+    let phala-l     = nth contract 1
+    let swarupa-l   = nth contract 5
+    let mphala      = cond (has-items phala-l) (nth phala-l 0) otherwise ""
+    let mswarupa    = cond (has-items swarupa-l) (nth swarupa-l 0) otherwise ""
+    let has-krama   = has-text (node-krama ms)
+    let invertible  = has-krama
+    let sf-is-janya = member solve-for janya
+    let other-janya = filter janya (fn j -> not (eq j solve-for))
+    let others-ok   = reduce other-janya true (fn a r ->
+      (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
+    let phala-bound = (or (member mphala bcs) (member mswarupa bcs) (member (shabda ms "name") bcs))
+    cond (or (has-items acc) (not invertible) (not sf-is-janya) (not others-ok) (not phala-bound)) acc
+    otherwise [m, vps, "inverse"])))

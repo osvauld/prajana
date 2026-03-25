@@ -1,0 +1,61 @@
+# kosha/robotics — shabda extracted from .om files
+# 12 entries
+
+shabda domain-robotics
+  (desc "robotics, robot-arm, manipulator")
+done
+
+shabda joint
+  (alias joint, revolute-joint, prismatic-joint, spherical-joint)
+  (desc "the-dof-carrying-connector-between-links")
+done
+
+shabda joint-angle
+  (alias joint-angle, theta, joint-state)
+  (desc "the-dof-value-of-a-joint-angle-for-revolute-distance-for-prismatic")
+done
+
+shabda joint-speed-max
+  (alias joint-speed-max, omega-max, max-speed)
+  (desc "the-maximum-angular-speed-of-a-joint-set-by-the-actuator")
+done
+
+shabda link
+  (alias link, rigid-link, arm-segment)
+  (desc "the-rigid-body-between-two-joints-carries-mass-and-inertia-no-dof-of-its-own")
+done
+
+shabda link-length
+  (alias link-length)
+  (desc "the-physical-length-of-a-robot-link")
+done
+
+shabda link-mass
+  (alias link-mass, link-weight)
+  (desc "the-mass-of-a-robot-link-determines-inertia-and-gravitational-load-per-link-entity")
+done
+
+shabda rated-power
+  (alias rated-power, power-rating, max-power)
+  (desc "the-maximum-power-the-motor-at-a-joint-can-deliver")
+done
+
+shabda rated-torque
+  (alias rated-torque, max-torque, torque-rating)
+  (desc "the-maximum-torque-the-motor-at-a-joint-can-deliver")
+done
+
+shabda robotics-varga
+  (alias robotics-varga)
+  (desc "root-cluster-for-all-robotics-domain-nodes")
+done
+
+shabda target-orientation
+  (alias target-orientation, end-effector-orientation, goal-orientation)
+  (desc "the-world-space-rotation-the-end-effector-must-achieve-paired-with-target-position-for-full-pose")
+done
+
+shabda target-position
+  (alias target-position, target, end-effector-target, goal-position)
+  (desc "the-world-space-bindu-the-end-effector-must-reach-n-dimensional-sthira-apeksha")
+done

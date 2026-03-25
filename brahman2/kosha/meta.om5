@@ -1,0 +1,51 @@
+; ═══════════════════════════════════════════════════════════════════
+; meta — 9 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha domain-meta
+  (yukta framework system investigation question truth-computation epoch fold))
+
+(kosha epoch
+  (abheda epoch-swarupa)
+  (yukta time)
+  (sthita domain-meta))
+
+(kosha fold
+  (domain kosha/meta)
+  (abheda jnana-madakkal)
+  (yukta convergence)
+  (sthita domain-meta))
+
+(kosha framework
+  (abheda tantra)
+  (yukta instrument)
+  (sthita domain-meta))
+
+(kosha investigation
+  (abheda anveshana)
+  (yukta what question)
+  (sthita domain-meta))
+
+(kosha question
+  (abheda prashna-amsha)
+  (yukta what)
+  (sthita domain-meta))
+
+(kosha system
+  (abheda tantra framework)
+  (yukta instrument)
+  (sthita domain-meta))
+
+(kosha tantra-viveka
+  (abheda pramana)
+  (swarupa viveka)
+  (yukta pratyaksha nigamana)
+  (sthita nyaya domain-meta)
+  (kriya yantra)
+  (siddha satya-ganana))
+
+(kosha truth-computation
+  (abheda satya-ganana)
+  (siddha convergence)
+  (yukta truth-weight)
+  (sthita domain-meta))

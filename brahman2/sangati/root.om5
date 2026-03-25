@@ -1,0 +1,71 @@
+; ═══════════════════════════════════════════════════════════════════
+; root — 13 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati bhava-sthalam
+  (sthita jiva-sthalam)
+  (swarupa spanda)
+  (yukta rasa thaalam))
+
+(sangati brahman-sthalam
+  (swarupa purna ananta)
+  (siddha svayambhu))
+
+(sangati chetan-sthalam
+  (sthita jiva-sthalam)
+  (swarupa sakshi)
+  (yukta prajna pratibodha))
+
+(sangati darshana-sthalam
+  (sthita vidya-sthalam)
+  (swarupa darshana)
+  (yukta pratibodha))
+
+(sangati jiva-sthalam
+  (sthita mula-sthalam)
+  (swarupa jiva)
+  (yukta sva-dharana iccha))
+
+(sangati mula-sthalam
+  (sthita brahman-sthalam)
+  (swarupa niralamba)
+  (yukta svabhava))
+
+(sangati parampara-sthalam
+  (sthita mula-sthalam)
+  (swarupa krama)
+  (yukta avrti samskaara))
+
+(sangati pramana-sthalam
+  (sthita mula-sthalam)
+  (swarupa satya)
+  (yukta viveka))
+
+(sangati sangati-sthalam
+  (sthita mula-sthalam)
+  (swarupa sambandha)
+  (yukta rachana))
+
+(sangati spanda-sthalam
+  (sthita brahman-sthalam)
+  (swarupa spanda)
+  (yukta avrti))
+
+(sangati vak-sthalam
+  (sthita mula-sthalam)
+  (swarupa naada)
+  (yukta sphoTa varna))
+
+(sangati vidya-sthalam
+  (sthita mula-sthalam)
+  (swarupa vidya)
+  (yukta pratyaksha))
+
+(sangati visheshanam
+  (swarupa ring sambandha)
+  (abheda typed-edge)
+  (yukta swarupa abheda sthita yukta siddha kriya phala janya drishthanta pratipaksha nigamana additive-identity multiplicative-identity pratipaksha-inverse-element)
+  (sthita proof-graph)
+  (janya om-parser graded-ring filtration)
+  (kriya anuvada yukta-addition kriya-multiplication)
+  (siddha distributivity non-commutative))

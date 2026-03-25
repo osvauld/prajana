@@ -1,0 +1,43 @@
+-- derive-chain: iterate derive-step to fixpoint, returns [steps, final-graph].
+(tantra derive-chain (graph)
+
+  (all-ms (mantra-select ""))
+
+  -- run derive-step to fixpoint: graph grows until stable
+  (final-graph (fixpoint graph (fn g -> derive-step g)))
+
+  -- extract what was derived: concepts with derived-by edges (not in original)
+  (orig-bcs ((sankhya-sparsha graph) | collect (to-string (nth _it 0))))
+  (final-bcs ((sankhya-sparsha final-graph) | collect (to-string (nth _it 0))))
+  (new-concepts (filter final-bcs (fn c -> not (member c orig-bcs))))
+  (has-new (has-items new-concepts))
+
+  -- reconstruct producing matches from derived-by edges in final graph
+  (producing (cond has-new
+    -- parallel: each mantra coverage check is independent
+    (preduce all-ms [] (fn acc m ->
+      let ms = to-string m
+      let ct = om-contract ms
+      let ph = nth ct 1
+      let jy = nth ct 0
+      let covers = reduce new-concepts false (fn matched c ->
+        or matched (member (to-string c) (map ph (fn p -> to-string p))))
+      let janya-bound = reduce jy true (fn ok j ->
+        and ok (member (to-string j) final-bcs))
+      let cur-vp = sankhya-sparsha final-graph
+      cond (and covers janya-bound)
+        (let vp = reduce jy [] (fn acc2 j ->
+           let v = reduce cur-vp "" (fn a2 kv ->
+             cond (eq (to-string (nth kv 0)) (to-string j)) (to-string (nth kv 1)) otherwise a2)
+           cond (has-text v) (append acc2 [[j, v]]) otherwise acc2)
+         append acc [[m, vp]])
+      otherwise acc))
+    otherwise []))
+
+  -- solve-match on converged graph
+  (final-sm (cond has-new (match-mantra final-graph) otherwise []))
+
+  -- single step entry (fixpoint collapses all rounds into one)
+  (steps (cond has-new [[new-concepts, producing, final-sm]] otherwise []))
+
+  [steps, final-graph])

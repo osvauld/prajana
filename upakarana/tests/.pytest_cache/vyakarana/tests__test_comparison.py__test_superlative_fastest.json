@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "car-A has velocity 30. car-B has velocity 50. car-C has velocity 20. which is fastest",
       "output": "we have: car-A (=30.); car-B (=50.); and car-C (=20.).we seek: which is viveka-max.we know: greater  means viveka-max.we see: 50. > 30. (car-B  > car-A ).we find: car-B is the viveka-max",
-      "elapsed_ms": 503,
+      "elapsed_ms": 192,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.504
+  "duration": 0.193
 }

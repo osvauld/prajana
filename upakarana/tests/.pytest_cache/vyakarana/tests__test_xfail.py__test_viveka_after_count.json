@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "box-A has 5 items. 3 more were added to box-A. box-B has 6 items. which has more items",
       "output": "we have: box-A (=5.) and box-B (=6.).we seek: which is viveka-max.we know: greater  means viveka-max.we see: 6. > 5. (box-B  > box-A ).we find: box-B is viveka-max than box-A",
-      "elapsed_ms": 537,
+      "elapsed_ms": 132,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.543
+  "duration": 0.132
 }

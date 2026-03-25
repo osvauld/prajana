@@ -1,0 +1,30 @@
+; ═══════════════════════════════════════════════════════════════════
+; strudel — 4 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(bhasha ornament-to-strudel
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita gamaka domain-sangeetham domain-language)
+  (phala strudel)
+  (yukta spanda gati viraam vriddhi kshaya laghu manda purna tivra ardha))
+
+(bhasha strudel-setu
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita domain-sangeetham domain-language)
+  (yukta strudel swara-to-strudel ornament-to-strudel thaalam shabda visheshanam))
+
+(bhasha strudel
+  (yukta pratibimba swara thaalam swara-to-strudel ornament-to-strudel strudel-setu)
+  (swarupa setu stack)
+  (phala naada)
+  (sthita layer domain-sangeetham domain-language)
+  (abheda avrti))
+
+(bhasha swara-to-strudel
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita swara domain-sangeetham domain-language)
+  (phala strudel)
+  (yukta shadja rishabha gandhara madhyama panchama dhaivata nishada))

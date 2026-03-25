@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "a train travels at 60 km per hour for 2 hours. how far does it go",
       "output": "we have: km=60. and km=2..we seek: pronoun-it.no match",
-      "elapsed_ms": 342,
+      "elapsed_ms": 103,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.35,
+  "duration": 0.107,
   "xfail": {
     "reason": "distance = speed * time not in pipeline",
     "strict": true,

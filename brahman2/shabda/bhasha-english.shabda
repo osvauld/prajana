@@ -1,0 +1,542 @@
+# bhasha/english — shabda extracted from .om files
+# 105 entries
+
+shabda action
+  (word action)
+  (alias action, process, operation, transformation)
+done
+
+shabda angle
+  (word angle)
+  (alias angle, corner, direction, orientation)
+done
+
+shabda article
+  (alias a, an, the)
+  (desc "noun-phrase-determiner")
+done
+
+shabda article-a
+  (word a)
+  (role grammar)
+done
+
+shabda article-an
+  (word an)
+  (role grammar)
+done
+
+shabda article-the
+  (word the)
+  (role grammar)
+done
+
+shabda bhave-prayoga
+  (alias impersonal-voice)
+  (desc "pure-process-no-agent-no-patient")
+done
+
+shabda bhavishya-kaala
+  (alias future-tense)
+  (desc "action-yet-to-come")
+done
+
+shabda bhuta-kaala
+  (alias past-tense)
+  (desc "action-prior-to-now")
+done
+
+shabda boundary
+  (word boundary)
+  (alias boundary, limit, edge, threshold)
+done
+
+shabda branch
+  (word branch)
+  (alias branch, fork, subdivision, sub-tree)
+done
+
+shabda collection
+  (word collection)
+  (alias collection, set, group, ensemble)
+done
+
+shabda combination
+  (alias combination)
+  (desc "selection-of-r-items-from-n-order-does-not-matter-n-choose-r-n-factorial-over-r-factorial-times-n-minus-r-factorial")
+done
+
+shabda complete
+  (word complete)
+  (alias complete, whole, full, entire)
+done
+
+shabda composition
+  (desc "composition, compose, function-composition")
+done
+
+shabda conj-and
+  (word and)
+  (role grammar)
+done
+
+shabda conj-given
+  (word given)
+  (role grammar)
+done
+
+shabda conj-or
+  (word or)
+  (role grammar)
+done
+
+shabda conj-where
+  (word where)
+  (role grammar)
+done
+
+shabda conjunction
+  (word and both)
+  (eval and)
+  (arity 2)
+  (name logical-and)
+  (desc "logical-AND-true-only-when-both-operands-are-true")
+done
+
+shabda contact
+  (word contact)
+  (alias contact, touch, interface)
+done
+
+shabda copula
+  (word are is be was were)
+  (alias is, are, was, were, equals, equaled, gives)
+  (desc "linking-verb-connecting-subject-to-predicate")
+done
+
+shabda copula-are
+  (word are)
+  (role grammar)
+done
+
+shabda copula-equals
+  (word equals)
+  (role grammar)
+done
+
+shabda copula-gives
+  (word gives)
+  (role grammar)
+done
+
+shabda copula-is
+  (word is)
+  (role grammar)
+done
+
+shabda copula-was
+  (word was)
+  (role grammar)
+done
+
+shabda copula-were
+  (word were)
+  (role grammar)
+done
+
+shabda decay
+  (word decay)
+  (alias decay, reduction, loss, dissipation)
+done
+
+shabda distinction
+  (word distinction)
+  (alias distinction, discrimination, separation, difference)
+done
+
+shabda dual
+  (word dual)
+  (alias dual, pair, two-sided, binary, both)
+done
+
+shabda element
+  (desc "element, member, set-membership")
+done
+
+shabda english
+  (alias English)
+  (desc "the-english-language-surface-layer")
+done
+
+shabda english-kta-ed
+  (suffix ed)
+  (alias stem-suffix:)
+done
+
+shabda english-kta-ied
+  (suffix ied)
+  (stem-suffix y)
+done
+
+shabda english-plural-es
+  (suffix es)
+done
+
+shabda english-plural-ies
+  (suffix ies)
+  (stem-suffix y)
+done
+
+shabda english-plural-regular
+  (suffix s)
+done
+
+shabda english-shatr-ing
+  (suffix ing)
+  (alias stem-suffix:)
+done
+
+shabda equal
+  (word equal)
+  (alias equal, same, balanced, equivalent, uniform)
+done
+
+shabda extension
+  (word extension)
+  (alias extension, expansion, spread, propagation)
+done
+
+shabda foundational
+  (word foundational)
+  (alias foundational, axiomatic, self-grounding, self-evident, primitive)
+done
+
+shabda growth
+  (word growth)
+  (alias growth, increase, amplification)
+done
+
+shabda independent
+  (word independent)
+  (alias free, independent, autonomous, unconstrained)
+done
+
+shabda infinite
+  (word infinite)
+  (alias infinite, unbounded, endless, unlimited)
+done
+
+shabda inherent
+  (word inherent)
+  (alias inherent, intrinsic, own-nature, essential, innate)
+done
+
+shabda input
+  (word input)
+  (alias input, intake, reception)
+done
+
+shabda inverse
+  (degree -1)
+  (per-element no)
+  (invertible yes)
+  (inverse inverse)
+done
+
+shabda iteration
+  (word iteration)
+  (alias repetition, iteration, cycle, recurrence, loop)
+done
+
+shabda karmani-prayoga
+  (alias passive-voice)
+  (desc "patient-foregrounded")
+done
+
+shabda kartari-prayoga
+  (alias active-voice)
+  (desc "agent-foregrounded")
+done
+
+shabda knowledge
+  (word knowledge)
+  (alias knowledge, learning, understanding, science)
+done
+
+shabda logic
+  (word logic)
+  (alias logic, reasoning, inference, rule)
+done
+
+shabda motion
+  (word motion)
+  (alias motion, vibration, oscillation, dynamics)
+done
+
+shabda negation
+  (word not without absent)
+  (eval not)
+  (arity 1)
+  (name logical-not)
+  (desc "logical-operation-that-inverts-the-truth-value-of-a-proposition")
+done
+
+shabda one
+  (word one)
+  (alias one, single, unit, unity)
+done
+
+shabda pair
+  (word pair)
+  (alias pair, duality, two, binary)
+done
+
+shabda prashna
+  (word what how which when where)
+  (role intent)
+done
+
+shabda prep-at
+  (word at)
+  (role grammar)
+done
+
+shabda prep-by
+  (word by)
+  (role grammar)
+done
+
+shabda prep-for
+  (word for)
+  (role grammar)
+done
+
+shabda prep-from
+  (word from)
+  (role grammar)
+done
+
+shabda prep-in
+  (word in)
+  (role grammar)
+done
+
+shabda prep-of
+  (word of)
+  (role rashi-bandha)
+done
+
+shabda prep-on
+  (word on)
+  (role grammar)
+done
+
+shabda prep-over
+  (word over)
+  (role grammar)
+done
+
+shabda prep-per
+  (word per)
+  (role grammar)
+done
+
+shabda prep-to
+  (word to)
+  (role grammar)
+done
+
+shabda prep-with
+  (word with)
+  (role possession)
+done
+
+shabda preposition
+  (alias of, by, from, through, along, toward, at, in, with, over, per)
+  (desc "relational-connective")
+done
+
+shabda pronoun-it
+  (word it)
+  (role pronoun)
+done
+
+shabda pronoun-its
+  (word its)
+  (role pronoun)
+done
+
+shabda pronoun-their
+  (word their)
+  (role pronoun)
+done
+
+shabda proof
+  (alias proof)
+  (desc "ordered-chain-of-logical-steps-establishing-a-theorem")
+done
+
+shabda purpose
+  (word purpose)
+  (alias purpose, goal, objective, aim, intent)
+done
+
+shabda quantity
+  (word quantity)
+  (alias measure, quantity, amount, magnitude)
+done
+
+shabda relation
+  (word relation)
+  (alias relation, connection, link, bond, coupling)
+done
+
+shabda relative
+  (word relative)
+  (alias relative, dependent, with-respect-to, proportional)
+done
+
+shabda result
+  (word result)
+  (alias result, output, fruit, effect)
+done
+
+shabda rule
+  (word rule)
+  (alias rule, constraint, law, principle, regulation)
+done
+
+shabda sambhavana-kaala
+  (alias modal-tense)
+  (desc "possibility-necessity-capability")
+done
+
+shabda self
+  (word self)
+  (alias self, own, intrinsic, inherent)
+done
+
+shabda sentence
+  (word sentence)
+  (alias sentence, statement, expression, utterance)
+done
+
+shabda sequence
+  (alias sequence)
+  (desc "an-ordered-list-of-elements-indexed-by-position-the-discrete-parampara")
+done
+
+shabda some
+  (word some)
+  (role grammar)
+done
+
+shabda something
+  (word something)
+  (role grammar)
+done
+
+shabda state
+  (word state)
+  (alias state, condition, configuration)
+done
+
+shabda summary
+  (word summary)
+  (alias summary, compression, abstraction, condensation)
+done
+
+shabda thing
+  (word thing)
+  (role grammar)
+done
+
+shabda time
+  (word time)
+  (alias time, duration, interval, temporal)
+done
+
+shabda transform
+  (alias transform)
+  (desc "the-matrix-that-encodes-translation-rotation-and-scale")
+done
+
+shabda translation
+  (word translation)
+  (alias translation, mapping, transformation, rendering)
+done
+
+shabda true
+  (word true)
+  (alias true, real, actual, valid, correct)
+done
+
+shabda truth
+  (word truth)
+  (alias truth, axiom, universal-truth, ground-truth)
+done
+
+shabda variable
+  (alias variable)
+  (desc "a-placeholder-for-an-unspecified-value-the-chala-apeksha-in-an-expression")
+done
+
+shabda vartamana-kaala
+  (alias present-tense)
+  (desc "action-at-the-current-moment")
+done
+
+shabda verb-has
+  (word has)
+  (role possession)
+done
+
+shabda verb-have
+  (word have)
+  (role possession)
+done
+
+shabda verb-had
+  (word had)
+  (role possession)
+done
+
+shabda verb-have
+  (word have)
+  (role possession)
+done
+
+shabda verb-moves
+  (word moves)
+  (role grammar)
+done
+
+shabda verb-moving
+  (word moving)
+  (role grammar)
+done
+
+shabda verb-rotates
+  (word rotates)
+  (role grammar)
+done
+
+shabda verb-rotating
+  (word rotating)
+  (role grammar)
+done
+
+shabda vidhi-kaala
+  (word find compute calculate determine solve)
+  (role intent)
+done
+
+shabda wave
+  (word wave)
+  (alias wave, oscillation, ripple)
+done
+
+shabda zero
+  (alias zero)
+  (desc "the-additive-identity-the-void-that-enables-counting-shunya")
+done

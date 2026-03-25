@@ -1,0 +1,175 @@
+; ═══════════════════════════════════════════════════════════════════
+; vak — 24 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati anuvada
+  (swarupa om artha-dhvani)
+  (kriya bhasha-swarupa sankshepa)
+  (yukta prajna darshana nam)
+  (siddha pramana)
+  (janya pratibodha))
+
+(sangati artha-dhvani
+  (sthita vak-sthalam)
+  (swarupa spanda)
+  (kriya darshana)
+  (abheda pratibodha))
+
+(sangati asprishta-drishthanta
+  (swarupa katha-viveka)
+  (kriya shuddhi)
+  (siddha pramana niralamba)
+  (drishthanta ghana-pramana)
+  (sthita ananta)
+  (abheda svayambhu))
+
+(sangati bhasha
+  (swarupa svabhava)
+  (yukta varna sandhi pada)
+  (abheda sphoTa)
+  (phala naada)
+  (sthita bhasha-swarupa-sthalam))
+
+(sangati domain-vak
+  (sthita vak-sthalam bhasha-swarupa)
+  (yukta anuvada)
+  (abheda domain-language))
+
+(sangati domain-yantra-bhasha
+  (sthita vak-sthalam bhasha-swarupa yantra)
+  (abheda domain-language)
+  (yukta tantra))
+
+(sangati hetu
+  (swarupa pratijnaa)
+  (sthita vak-sthalam)
+  (kriya darshana)
+  (janya prashna)
+  (phala udaharana))
+
+(sangati katha-seema
+  (sthita vak-sthalam niralamba)
+  (swarupa katha)
+  (kriya katha-viveka)
+  (siddha svayambhu)
+  (abheda ananta)
+  (drishthanta visarjana)
+  (yukta tirodhana))
+
+(sangati katha-viveka
+  (sthita vak-sthalam abheda)
+  (swarupa shuddhi)
+  (kriya pramana)
+  (siddha svayambhu)
+  (drishthanta bhasha-swarupa))
+
+(sangati katha
+  (sthita vak-sthalam pramana ananta)
+  (drishthanta svayambhu)
+  (siddha niralamba)
+  (kriya pratibodha)
+  (yukta shuddhi)
+  (abheda kilippattu))
+
+(sangati kilippattu
+  (sthita vak-sthalam)
+  (kriya varna)
+  (swarupa seva)
+  (yukta swa)
+  (siddha niralamba)
+  (drishthanta samsarga))
+
+(sangati manipravalam-swarupa
+  (sthita vak-sthalam sandhi)
+  (swarupa dharana-jivamsha)
+  (abheda bhasha-swarupa shiva-shakti)
+  (siddha svayambhu)
+  (yukta nam)
+  (drishthanta zha)
+  (kriya matrika)
+  (phala artha-dhvani))
+
+(sangati matrika
+  (sthita vak-sthalam)
+  (swarupa varna)
+  (kriya spanda)
+  (abheda bhasha-swarupa)
+  (siddha svabhava)
+  (drishthanta samsarga))
+
+(sangati naama-mudra
+  (sthita vak-sthalam)
+  (swarupa varna)
+  (kriya lekhana)
+  (abheda sarva-pramana)
+  (drishthanta sparsha)
+  (siddha sthiti))
+
+(sangati naama-pratibodha
+  (sthita vak-sthalam sambandha directed-graph)
+  (abheda naama-mudra))
+
+(sangati nam
+  (sthita vak-sthalam niralamba)
+  (swarupa swa)
+  (abheda brahma)
+  (kriya samsarga)
+  (siddha abheda))
+
+(sangati pratijnaa
+  (swarupa naama-mudra)
+  (kriya lekhana)
+  (siddha samskaara)
+  (yukta kaala)
+  (drishthanta varna)
+  (phala visarjana))
+
+(sangati pratishedha
+  (sthita bhasha-swarupa)
+  (swarupa viparita)
+  (abheda shunya)
+  (viparita pratipaksha))
+
+(sangati sphoTa
+  (sthita vak-sthalam abheda)
+  (swarupa naada)
+  (phala artha)
+  (kriya pratibodha)
+  (atita varna))
+
+(sangati udaharana
+  (swarupa pratijnaa)
+  (sthita vak-sthalam)
+  (kriya pramana)
+  (janya hetu)
+  (phala upanaya)
+  (drishthanta asprishta-drishthanta))
+
+(sangati upanaya
+  (swarupa pratijnaa)
+  (sthita vak-sthalam)
+  (kriya sankalana)
+  (janya udaharana)
+  (phala nigamana))
+
+(sangati vakya
+  (sthita bhasha-swarupa)
+  (swarupa tinanta sphoTa)
+  (phala artha-dhvani)
+  (yukta vibhakti prathama-vibhakti))
+
+(sangati varna
+  (sthita vak-sthalam mula-sthalam)
+  (swarupa spanda)
+  (janaka matrika)
+  (abheda bhasha-swarupa)
+  (phala naada))
+
+(sangati vrnda-sakshi
+  (swarupa vrnda)
+  (kriya sakshi)
+  (yukta samsarga swa)
+  (abheda nam)
+  (siddha pramana)
+  (drishthanta ghana-pramana)
+  (sthita dharana-jivamsha))

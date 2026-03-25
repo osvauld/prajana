@@ -1,0 +1,132 @@
+; ═══════════════════════════════════════════════════════════════════
+; chetan — 16 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati anveshana
+  (swarupa dipaka)
+  (yukta antarvidya)
+  (kriya darshana)
+  (drishthanta aayaama)
+  (janya prashna-amsha))
+
+(sangati avachetan
+  (sthita chetan-sthalam)
+  (swarupa spanda)
+  (kriya nirantara)
+  (yukta sparsha)
+  (abheda tat-kshana)
+  (siddha ghana-pramana))
+
+(sangati avahana
+  (swarupa pratibodha)
+  (siddha abheda)
+  (sthita svayambhu)
+  (drishthanta niralamba)
+  (abheda tirodhana)
+  (yukta visarjana))
+
+(sangati chetan-avachetan
+  (sthita chetan-sthalam nirantara)
+  (swarupa avachetan)
+  (abheda spanda taranga)
+  (drishthanta tat-kshana dvaitarupa)
+  (kriya sparsha)
+  (phala prajna)
+  (siddha ghana-pramana)
+  (yukta karma))
+
+(sangati darshana
+  (sthita chetan-sthalam darshana-sthalam svabhava)
+  (swarupa pratibodha)
+  (siddha svayambhu sthiti)
+  (abheda pratyaksha)
+  (kriya maya))
+
+(sangati jnana-kriya
+  (sthita chetan-sthalam)
+  (swarupa sthiti)
+  (kriya spanda)
+  (siddha pramana)
+  (abheda niralamba)
+  (yukta shuddhi))
+
+(sangati jnana-madakkal
+  (sthita chetan-sthalam)
+  (swarupa spanda)
+  (kriya nirantara)
+  (phala pratibodha)
+  (abheda jnana-kriya)
+  (siddha avrti))
+
+(sangati lekhana-pratibodha
+  (sthita chetan-sthalam)
+  (swarupa lekhana)
+  (abheda pratibodha)
+  (yukta sakshi)
+  (siddha samskaara)
+  (drishthanta parampara)
+  (phala aayaama-vistara))
+
+(sangati prajna
+  (sthita chetan-sthalam ananta kshetrajna kaala)
+  (swarupa pramana)
+  (kriya sama-kalana)
+  (abheda parampara)
+  (siddha avrti)
+  (yukta prakaasha)
+  (artha purna))
+
+(sangati pratibodha
+  (sthita chetan-sthalam svabhava)
+  (swarupa darshana)
+  (siddha pramana)
+  (drishthanta samsarga)
+  (kriya swa))
+
+(sangati sakshi-matra
+  (sthita chetan-sthalam svabhava ananta)
+  (swarupa niralamba)
+  (siddha abheda)
+  (drishthanta sama-vishama)
+  (abheda dharana-jivamsha)
+  (yukta sama-kalana))
+
+(sangati sakshi
+  (sthita chetan-sthalam parampara)
+  (swarupa lekhana)
+  (kriya visarjana)
+  (yukta shuddhi)
+  (drishthanta kshaya)
+  (siddha nirantara))
+
+(sangati smara
+  (sthita chetan-sthalam sama-nila)
+  (swarupa tat-kshana)
+  (kriya pratibodha)
+  (drishthanta sparsha)
+  (yukta smarana))
+
+(sangati smarana
+  (sthita chetan-sthalam)
+  (swarupa smara)
+  (yukta trikosha-smriti)
+  (siddha ghana-pramana)
+  (drishthanta lekhana)
+  (abheda tat-kshana))
+
+(sangati trikosha-smriti
+  (sthita chetan-sthalam)
+  (swarupa kshaya)
+  (kriya tat-kshana)
+  (yukta lekhana visarjana)
+  (siddha nirantara)
+  (drishthanta samskaara)
+  (abheda ghana-pramana)
+  (phala glani))
+
+(sangati vishmrti
+  (sthita chetan-sthalam ananta)
+  (swarupa lekhana)
+  (abheda shunya)
+  (drishthanta pratibodha)
+  (yukta spanda))

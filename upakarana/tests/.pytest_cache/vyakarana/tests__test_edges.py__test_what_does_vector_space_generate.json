@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "what does a vector space generate",
       "output": "we seek: vector.no match",
-      "elapsed_ms": 314,
+      "elapsed_ms": 72,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.325,
+  "duration": 0.077,
   "xfail": {
     "reason": "janaka_query: no tantra walks janaka yet",
     "strict": true,

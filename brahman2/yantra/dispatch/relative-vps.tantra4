@@ -1,0 +1,31 @@
+-- relative-vps: build paired velocity values for observer/observed entities.
+(tantra relative-vps (graph scope-entity)
+
+  (sf-result (extract-solve-for graph))
+  (solve-for (nth sf-result 1))
+
+  -- only fire for relative-velocity with a named scope
+  (other-entities (cond (and (eq (to-string solve-for) "relative-velocity") (exists scope-entity))
+    ((prathama-sparsha graph) | where [s] | and (neq (to-string s) (to-string scope-entity)) | collect s)
+    otherwise []))
+
+  -- scope-entity's owned velocity
+  (scoped-result (scope-vps graph scope-entity))
+  (scoped-vps (nth scoped-result 0))
+
+  (cond (has-items other-entities)
+    (let other-entity    = nth other-entities 0
+     let v-observer-list = scoped-vps | where [c, v] | and (eq (to-string c) "velocity") | collect v
+     let v-observer      = nth v-observer-list 0
+     -- other entity's velocity via shashthi-vibhakti ownership
+     let other-owned     = shashthi-sparsha graph (to-string other-entity)
+     let v-other-list    = reduce other-owned [] (fn acc concept ->
+       cond (eq (to-string concept) "velocity")
+         (let val = query-edge-of graph (to-string concept) "sankhya"
+          cond (exists val) (append acc [(to-string val)]) otherwise acc)
+       otherwise acc)
+     let v-other = nth v-other-list 0
+     cond (and (exists v-observer) (exists v-other))
+       [["observer-velocity", v-observer], ["observed-velocity", v-other]]
+     otherwise [])
+    otherwise []))

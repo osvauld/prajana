@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "there are 5 cats and 3 dogs. how many animals are there",
       "output": "we have: there 5 cat 3 dog.we know: 3 plus (5 \u2192 8).we find: 8 animal there",
-      "elapsed_ms": 441,
+      "elapsed_ms": 88,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.442
+  "duration": 0.089
 }

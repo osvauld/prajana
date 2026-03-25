@@ -5,11 +5,11 @@
     {
       "method": "answer",
       "input": "find kinetic energy given initial velocity 0 acceleration 4 time 5 mass 10",
-      "output": "we have: initial-velocity=0.; acceleration=4.; time=5.; and mass=10..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=20, mass=10..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=20, mass=10..we know: velocity-mantra (time, acceleration, initial-velocity \u2192 velocity).we see: time=5., acceleration=4., initial-velocity=0..we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=4., mass=10..we find: kinetic-energy = 2000",
-      "elapsed_ms": 667,
+      "output": "we have: initial-velocity=0.; acceleration=4.; time=5.; and mass=10..we seek: kinetic-energy.we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=4., mass=10..we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=20, mass=10..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=20, mass=10..we know: velocity-mantra (time, acceleration, initial-velocity \u2192 velocity).we see: time=5., acceleration=4., initial-velocity=0..we find: kinetic-energy = 2000",
+      "elapsed_ms": 181,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.668
+  "duration": 0.182
 }

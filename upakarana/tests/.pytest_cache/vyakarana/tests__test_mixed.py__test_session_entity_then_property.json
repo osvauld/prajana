@@ -7,7 +7,7 @@
       "input": "ball has mass 3",
       "session_id": "test-mixed-entity-v2",
       "output": "no match",
-      "elapsed_ms": 144,
+      "elapsed_ms": 58,
       "error": null
     },
     {
@@ -15,7 +15,7 @@
       "input": "ball has velocity 4",
       "session_id": "test-mixed-entity-v2",
       "output": "no match",
-      "elapsed_ms": 127,
+      "elapsed_ms": 60,
       "error": null
     },
     {
@@ -23,10 +23,10 @@
       "input": "find kinetic energy of ball",
       "session_id": "test-mixed-entity-v2",
       "output": "we have: velocity=4. and mass=3..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=4., mass=3..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=4., mass=3..we find: kinetic-energy = 24",
-      "elapsed_ms": 181,
+      "elapsed_ms": 91,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.454
+  "duration": 0.212
 }

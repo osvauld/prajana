@@ -1,0 +1,18 @@
+; ═══════════════════════════════════════════════════════════════════
+; prashna — 4 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati asprista-sankhya
+  (sthita prashna asprista sankhya mithya-satya))
+
+(sangati mithya
+  (sthita avidya q-prashna mithya-satya))
+
+(sangati q-prashna
+  (sthita vakya)
+  (yukta sambandha)
+  (swarupa directed-graph)
+  (kriya viveka))
+
+(sangati rashi-bandha
+  (sthita prashna sankhya sambandha))

@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "a car of mass 1000 starts from rest. it accelerates at 2 m/s2 for 5 seconds. find kinetic energy",
       "output": "we have: mass=1000.; pronoun-it=2.; pronoun-it=5.; velocity=0.; and second=5..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=0., mass=1000..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=0., mass=1000..we find: kinetic-energy = 0",
-      "elapsed_ms": 978,
+      "elapsed_ms": 266,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.98
+  "duration": 0.267
 }

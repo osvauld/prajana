@@ -1,0 +1,23 @@
+; ═══════════════════════════════════════════════════════════════════
+; render — 3 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(bhasha music-ir
+  (domain bhasha/render)
+  (yukta pratibimba thaalam swara voice event music-ir-setu)
+  (swarupa setu)
+  (phala naada)
+  (sthita domain-sangeetham domain-language))
+
+(bhasha pratibimba
+  (swarupa naada)
+  (phala spanda)
+  (sthita domain-language)
+  (yukta strudel music-ir resonance-ir raylib pratibimba-setu))
+
+(bhasha resonance-ir
+  (domain bhasha/render)
+  (yukta pratibimba satya avrti thaalam resonance-ir-setu)
+  (swarupa setu)
+  (phala spanda)
+  (sthita domain-sangeetham domain-language))

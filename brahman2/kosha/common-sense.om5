@@ -1,0 +1,254 @@
+; ═══════════════════════════════════════════════════════════════════
+; common-sense — 48 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha common-sense-varga
+  (sthita domain-common-sense)
+  (yukta physics math))
+
+(kosha domain-common-sense
+  (sthita domain-kosha)
+  (yukta physics biology language meta))
+
+(kosha location-varga
+  (vishesa common-sense-varga)
+  (yukta physics apeksha direction sthira-apeksha)
+  (abheda displacement))
+
+(kosha air
+  (vishesa common-sense-varga materials-varga)
+  (sthita gas)
+  (yukta nitrogen oxygen domain-3d)
+  (swarupa transparent insulator))
+
+(kosha clay
+  (vishesa common-sense-varga materials-varga minerals-varga)
+  (swarupa clay-mineral inelastic deformable)
+  (sthita solid)
+  (yukta water domain-3d pbr))
+
+(kosha glass
+  (vishesa common-sense-varga materials-varga minerals-varga)
+  (swarupa silica amorphous transparent brittle)
+  (sthita solid)
+  (yukta coefficient-of-restitution domain-3d pbr))
+
+(kosha ice
+  (vishesa common-sense-varga materials-varga)
+  (abheda water)
+  (sthita solid)
+  (phala phase-change-freeze)
+  (swarupa crystalline transparent)
+  (yukta domain-3d pbr))
+
+(kosha materials-varga
+  (vishesa common-sense-varga)
+  (yukta physics thermodynamics chemistry))
+
+(kosha metal
+  (vishesa common-sense-varga materials-varga metals-varga)
+  (sthita solid)
+  (swarupa conductor lustrous malleable)
+  (yukta coefficient-of-restitution domain-3d pbr))
+
+(kosha phase
+  (domain kosha/common-sense/materials)
+  (vishesa common-sense-varga materials-varga)
+  (yukta thermodynamics temperature domain-3d mesh material))
+
+(kosha plastic
+  (vishesa common-sense-varga materials-varga organic-varga)
+  (swarupa polymer synthetic insulator lightweight)
+  (sthita solid)
+  (yukta domain-3d pbr))
+
+(kosha elasticity
+  (vishesa common-sense-varga materials-varga)
+  (swarupa subanta)
+  (yukta coefficient-of-restitution spring-force collision-varga))
+
+(kosha hardness
+  (vishesa common-sense-varga materials-varga)
+  (swarupa subanta)
+  (yukta normal-force pressure compression))
+
+(kosha opacity
+  (vishesa common-sense-varga materials-varga)
+  (swarupa subanta)
+  (yukta photon pbr domain-3d))
+
+(kosha thermal-conductivity
+  (vishesa common-sense-varga materials-varga)
+  (swarupa subanta)
+  (yukta heat-transfer temperature))
+
+(kosha rubber
+  (vishesa common-sense-varga materials-varga organic-varga)
+  (swarupa polymer elastic insulator)
+  (sthita solid)
+  (yukta coefficient-of-restitution domain-3d pbr))
+
+(kosha stone
+  (vishesa common-sense-varga materials-varga minerals-varga)
+  (sthita solid)
+  (swarupa hard brittle dense)
+  (yukta coefficient-of-restitution domain-3d pbr))
+
+(kosha water-material
+  (vishesa common-sense-varga materials-varga)
+  (abheda water)
+  (sthita liquid)
+  (swarupa transparent solvent)
+  (yukta domain-3d pbr))
+
+(kosha wood
+  (vishesa common-sense-varga materials-varga organic-varga composites-varga)
+  (swarupa polymer insulator flammable)
+  (yukta cellulose lignin domain-3d pbr)
+  (sthita solid))
+
+(kosha car-motion
+  (vishesa common-sense-varga processes-varga)
+  (swarupa tinanta bhave-prayoga)
+  (yukta combustion mechanical-energy-varga kinetic-energy friction-force heat-transfer first-law second-law newton-second-law-motion hydrocarbon rubber steel))
+
+(kosha common-sense-events
+  (sthita common-sense-varga)
+  (yukta kshaya vriddhi subtraction addition))
+
+(kosha count-signals
+  (sthita common-sense-varga)
+  (yukta kshaya vriddhi))
+
+(kosha falling
+  (vishesa common-sense-varga processes-varga)
+  (swarupa tinanta bhave-prayoga)
+  (janya gravity height mass)
+  (phala velocity kinetic-energy collision-varga)
+  (abheda velocity)
+  (yukta potential-energy kinetic-energy coefficient-of-restitution normal-force))
+
+(kosha heating
+  (vishesa common-sense-varga processes-varga)
+  (swarupa tinanta bhave-prayoga)
+  (janya heat-transfer mass)
+  (phala temperature phase-change-boil phase-change-freeze)
+  (yukta hydrogen-bond latent-heat thermodynamics-varga)
+  (drishthanta water))
+
+(kosha ceiling
+  (vishesa structures-varga common-sense-varga)
+  (swarupa horizontal overhead upper-boundary)
+  (yukta normal-force collision-varga domain-3d)
+  (sthita gravity)
+  (abheda ceil)
+  (pratipaksha floor))
+
+(kosha container
+  (vishesa structures-varga common-sense-varga)
+  (swarupa enclosure)
+  (yukta volume liquid gas solid pressure temperature normal-force domain-3d))
+
+(kosha floor
+  (domain kosha/common-sense/structures)
+  (vishesa structures-varga common-sense-varga)
+  (swarupa horizontal indoor)
+  (yukta normal-force collision-varga friction-force domain-3d)
+  (sthita gravity)
+  (abheda floor))
+
+(kosha ground
+  (vishesa structures-varga common-sense-varga)
+  (swarupa horizontal)
+  (yukta normal-force collision-varga domain-3d)
+  (sthita gravity potential-energy-reference sthira-apeksha))
+
+(kosha pole
+  (vishesa structures-varga common-sense-varga)
+  (swarupa rigid elongated)
+  (yukta torque lever domain-3d)
+  (sthita solid))
+
+(kosha room
+  (vishesa structures-varga common-sense-varga)
+  (swarupa container enclosure)
+  (yukta wall floor ceiling temperature air domain-3d))
+
+(kosha shelf
+  (vishesa structures-varga common-sense-varga)
+  (swarupa horizontal elevated)
+  (yukta normal-force potential-energy height wall domain-3d)
+  (sthita gravity))
+
+(kosha structures-varga
+  (vishesa common-sense-varga)
+  (swarupa subanta)
+  (yukta normal-force constraint collision-varga domain-3d)
+  (sthita gravity solid))
+
+(kosha surface
+  (vishesa structures-varga common-sense-varga)
+  (swarupa interface)
+  (yukta normal-force friction-force collision-varga contact domain-3d))
+
+(kosha wall
+  (vishesa structures-varga common-sense-varga)
+  (swarupa vertical barrier)
+  (yukta normal-force collision-varga domain-3d))
+
+(kosha animal-varga
+  (swarupa living)
+  (yukta sensing moving))
+
+(kosha animal
+  (swarupa living)
+  (yukta breathing)
+  (sthita taxonomy-varga))
+
+(kosha bird-varga
+  (swarupa animal)
+  (yukta wings feathers egg-laying))
+
+(kosha breathing
+  (sthita taxonomy-varga))
+
+(kosha cat
+  (swarupa mammal)
+  (sthita taxonomy-varga))
+
+(kosha dog
+  (swarupa mammal)
+  (sthita taxonomy-varga))
+
+(kosha heart
+  (sthita taxonomy-varga))
+
+(kosha human
+  (swarupa mammal)
+  (sthita taxonomy-varga))
+
+(kosha living-varga
+  (swarupa taxonomy)
+  (yukta breathing growing))
+
+(kosha living
+  (sthita taxonomy-varga)
+  (yukta breathing))
+
+(kosha mammal-varga
+  (swarupa animal)
+  (yukta warm-blooded heart))
+
+(kosha mammal
+  (swarupa animal)
+  (sthita taxonomy-varga))
+
+(kosha sparrow
+  (swarupa bird)
+  (sthita taxonomy-varga))
+
+(kosha taxonomy-varga
+  (sthita domain-common-sense)
+  (vishesa common-sense-varga)
+  (swarupa subanta)
+  (yukta swarupa krama viveka))

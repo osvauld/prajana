@@ -1,0 +1,126 @@
+; ═══════════════════════════════════════════════════════════════════
+; geometry — 19 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati aayaama-dvaya
+  (swarupa aayaama)
+  (sthita bindu rekha tala)
+  (yukta aayaama-eka))
+
+(sangati aayaama-eka
+  (swarupa aayaama)
+  (sthita shunya bindu rekha)
+  (viparita dvaya))
+
+(sangati aayaama
+  (swarupa ananta)
+  (yukta antarvidya akasham)
+  (abheda purna)
+  (sthita brahma shunya bindu rekha tala)
+  (kriya darshana)
+  (janaka aayaama-dvaya aayaama-eka aayaama-vistara))
+
+(sangati akasham
+  (swarupa ananta)
+  (abheda purna)
+  (siddha svayambhu)
+  (sthita bindu rekha tala vrtta gola))
+
+(sangati apeksha
+  (yukta viveka sankhya sambandha)
+  (sthita kramanusara)
+  (janya matra)
+  (abheda sthira-apeksha chala-apeksha)
+  (pratipaksha independence))
+
+(sangati bindu-dvaya
+  (swarupa dvaya)
+  (sthita akasham)
+  (yukta bindu dura)
+  (janaka rekha dirgha-vrtta ativakra))
+
+(sangati bindu
+  (swarupa kshetra)
+  (sthita akasham)
+  (abheda shunya)
+  (rahita aayaama)
+  (janaka rekha vrtta gola))
+
+(sangati chala-apeksha
+  (swarupa apeksha)
+  (sthita krama parampara)
+  (yukta kramanusara angular-velocity angular-acceleration kona sambandha)
+  (pratipaksha sthira-apeksha))
+
+(sangati dura
+  (swarupa matra)
+  (sthita akasham bindu-dvaya)
+  (yukta sama)
+  (abheda rekha gati)
+  (janaka sama-dura))
+
+(sangati gola
+  (swarupa kshetra)
+  (sthita akasham sama-dura)
+  (yukta bindu dura)
+  (janya vrtta)
+  (abheda purna))
+
+(sangati kona
+  (swarupa kshetra)
+  (sthita tala bindu dvaya)
+  (yukta rekha-dvaya vrtta)
+  (abheda viparita)
+  (drishthanta avrti)
+  (janaka radian trikona)
+  (ahara sine cosine tangent)
+  (matra radian))
+
+(sangati rekha-dvaya
+  (swarupa dvaya)
+  (sthita tala bindu)
+  (yukta rekha)
+  (janaka kona))
+
+(sangati rekha
+  (swarupa kshetra sambandha)
+  (sthita akasham bindu-dvaya aayaama-eka)
+  (abheda tantu))
+
+(sangati sama-dura
+  (swarupa sama)
+  (yukta dura)
+  (sthita bindu akasham)
+  (janaka vrtta gola))
+
+(sangati sthira-apeksha
+  (swarupa apeksha)
+  (drishthanta kaala akasham)
+  (abheda world-space)
+  (yukta kramanusara)
+  (pratipaksha chala-apeksha))
+
+(sangati tala
+  (swarupa kshetra)
+  (sthita akasham aayaama-dvaya vrtta trikona)
+  (yukta rekha))
+
+(sangati traya
+  (swarupa sankhya)
+  (yukta dvaya)
+  (janaka trikona))
+
+(sangati vakra
+  (swarupa kshetra)
+  (sthita akasham)
+  (janya rekha)
+  (yukta bindu)
+  (abheda avrti)
+  (janaka vrtta dirgha-vrtta))
+
+(sangati vrtta
+  (swarupa kshetra vakra)
+  (sthita tala sama-dura)
+  (yukta bindu dura)
+  (abheda avrti)
+  (janaka gola))

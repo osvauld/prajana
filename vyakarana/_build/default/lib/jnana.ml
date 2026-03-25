@@ -53,7 +53,8 @@ let register_tantra_in_graph (k : proof_graph) (t : tantra) : unit =
   ) t.t_returns in
   let all_edges = input_edges @ output_edges in
   let node : nigamana = {
-    name = t.t_name; layer = "yantra"; slokas = [];
+    name = t.t_name; layer = "yantra"; domain = "";
+    slokas = [];
     edges = all_edges; satya = 0.0; shabda = ""; krama = "";
   } in
   match find k t.t_name with
@@ -252,7 +253,7 @@ let add_edge_to_graph (k : proof_graph) (e : typed_edge) : bool =
        ignore (join k merged)
      | None ->
        let stub : nigamana = {
-         name = e.source; layer = "kosha";
+         name = e.source; layer = "kosha"; domain = "";
          slokas = []; edges = [e]; satya = 0.0; shabda = ""; krama = "";
        } in
        ignore (join k stub));
@@ -327,11 +328,11 @@ let expand_avastha (k : proof_graph) : int =
   let avastha_dim = match visheshanam_of_string "avastha" with
     | Some d -> d | None -> register_dimension "avastha" in
   let swarupa_dim = match visheshanam_of_string "swarupa" with
-    | Some d -> d | None -> failwith "swarupa dimension not registered" in
+    | Some d -> d | None -> register_dimension "swarupa" in
   let sthita_dim = match visheshanam_of_string "sthita" with
-    | Some d -> d | None -> failwith "sthita dimension not registered" in
+    | Some d -> d | None -> register_dimension "sthita" in
   let vishesa_dim = match visheshanam_of_string "vishesa" with
-    | Some d -> d | None -> failwith "vishesa dimension not registered" in
+    | Some d -> d | None -> register_dimension "vishesa" in
   let generated = ref 0 in
   (* collect base→qualifiers from avastha edges *)
   let work = ref [] in
@@ -384,7 +385,7 @@ let expand_avastha (k : proof_graph) : int =
         ) override_pairs;
         let edges_list = List.rev !edges in
         let child : nigamana = {
-          name = child_name; layer = base_node.layer;
+          name = child_name; layer = base_node.layer; domain = "";
           slokas = []; edges = edges_list; satya = 0.0; shabda = ""; krama = "";
         } in
         ignore (join k child);
@@ -399,13 +400,444 @@ let expand_avastha (k : proof_graph) : int =
   !generated
 
 (* ═══════════════════════════════════════════════════════════════════════════
+   5b. RECIPROCAL EDGE GENERATORS
+   Automatically mirror edges that should be symmetric or reciprocal:
+   - abheda: A≡B → B≡A
+   - pratipaksha: A↔B → B↔A
+   - janya/phala: A-janya→B → B-phala→A (and vice versa)
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_reciprocals (k : proof_graph) : int =
+  let generated = ref 0 in
+  (* symmetric relations: if A→B exists, add B→A *)
+  let symmetric_rels = ["abheda"; "pratipaksha"] in
+  List.iter (fun rel_name ->
+    match visheshanam_of_string rel_name with
+    | None -> ()
+    | Some rel_dim ->
+      let work = ref [] in
+      Hashtbl.iter (fun source_name node ->
+        List.iter (fun e ->
+          if e.source = source_name && e.relation = rel_dim then begin
+            (* check if reverse exists *)
+            match Hashtbl.find_opt k.nodes e.target with
+            | None -> ()
+            | Some target_node ->
+              let has_reverse = List.exists (fun re ->
+                re.source = e.target && re.target = source_name && re.relation = rel_dim
+              ) target_node.edges in
+              if not has_reverse then
+                work := (e.target, source_name, rel_dim) :: !work
+          end
+        ) node.edges
+      ) k.nodes;
+      List.iter (fun (src, tgt, rel) ->
+        let edge = { source = src; target = tgt; relation = rel } in
+        (match Hashtbl.find_opt k.nodes src with
+         | Some n -> Hashtbl.replace k.nodes src { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+         | None -> ())
+      ) !work
+  ) symmetric_rels;
+  (* reciprocal pairs: janya/phala — if A-janya→B, add B-phala→A *)
+  (match visheshanam_of_string "janya", visheshanam_of_string "phala" with
+  | Some janya_dim, Some phala_dim ->
+    let work = ref [] in
+    Hashtbl.iter (fun source_name node ->
+      List.iter (fun e ->
+        if e.source = source_name then begin
+          if e.relation = janya_dim then begin
+            match Hashtbl.find_opt k.nodes e.target with
+            | None -> ()
+            | Some tn ->
+              let has = List.exists (fun re ->
+                re.source = e.target && re.target = source_name && re.relation = phala_dim
+              ) tn.edges in
+              if not has then
+                work := (e.target, source_name, phala_dim) :: !work
+          end else if e.relation = phala_dim then begin
+            match Hashtbl.find_opt k.nodes e.target with
+            | None -> ()
+            | Some tn ->
+              let has = List.exists (fun re ->
+                re.source = e.target && re.target = source_name && re.relation = janya_dim
+              ) tn.edges in
+              if not has then
+                work := (e.target, source_name, janya_dim) :: !work
+          end
+        end
+      ) node.edges
+    ) k.nodes;
+    List.iter (fun (src, tgt, rel) ->
+      let edge = { source = src; target = tgt; relation = rel } in
+      (match Hashtbl.find_opt k.nodes src with
+       | Some n -> Hashtbl.replace k.nodes src { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+       | None -> ())
+    ) !work
+  | _ -> ());
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5c. VARGA MEMBERSHIP GENERATOR
+   If a node has (vishesa varga-name), auto-add reverse: varga gets
+   swarupa-child edge pointing to the member. This makes vargas browsable
+   from the varga node downward, not just from members upward.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_varga_membership (k : proof_graph) : int =
+  let generated = ref 0 in
+  let vishesa_dim = match visheshanam_of_string "vishesa" with
+    | Some d -> d | None -> register_dimension "vishesa" in
+  let swarupa_dim = match visheshanam_of_string "swarupa" with
+    | Some d -> d | None -> register_dimension "swarupa" in
+  let work = ref [] in
+  Hashtbl.iter (fun member_name node ->
+    (* skip mantra nodes — they have their own swarupa pointing to concept *)
+    if node.layer = "mantra" then ()
+    else
+    List.iter (fun e ->
+      if e.source = member_name && e.relation = vishesa_dim then begin
+        (* member has vishesa→varga, check if varga has swarupa→member *)
+        let varga_name = e.target in
+        match Hashtbl.find_opt k.nodes varga_name with
+        | None -> ()
+        | Some varga_node ->
+          let has = List.exists (fun re ->
+            re.source = varga_name && re.target = member_name && re.relation = swarupa_dim
+          ) varga_node.edges in
+          if not has then
+            work := (varga_name, member_name, swarupa_dim) :: !work
+      end
+    ) node.edges
+  ) k.nodes;
+  List.iter (fun (src, tgt, rel) ->
+    let edge = { source = src; target = tgt; relation = rel } in
+    (match Hashtbl.find_opt k.nodes src with
+     | Some n -> Hashtbl.replace k.nodes src { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+     | None -> ())
+  ) !work;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5d. SWARUPA CHILDREN REVERSE
+   If child has swarupa→parent, add parent→swarupa→child (reverse IS-A).
+   Makes parents browsable downward. Skips avastha-generated children
+   (they already have reverse links from expand_avastha).
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_swarupa_reverse (k : proof_graph) : int =
+  let generated = ref 0 in
+  let swarupa_dim = match visheshanam_of_string "swarupa" with
+    | Some d -> d | None -> register_dimension "swarupa" in
+  let work = ref [] in
+  Hashtbl.iter (fun child_name node ->
+    List.iter (fun e ->
+      if e.source = child_name && e.relation = swarupa_dim then begin
+        let parent_name = e.target in
+        match Hashtbl.find_opt k.nodes parent_name with
+        | None -> ()
+        | Some parent_node ->
+          let has = List.exists (fun re ->
+            re.source = parent_name && re.target = child_name && re.relation = swarupa_dim
+          ) parent_node.edges in
+          if not has then
+            work := (parent_name, child_name, swarupa_dim) :: !work
+      end
+    ) node.edges
+  ) k.nodes;
+  List.iter (fun (src, tgt, rel) ->
+    let edge = { source = src; target = tgt; relation = rel } in
+    (match Hashtbl.find_opt k.nodes src with
+     | Some n -> Hashtbl.replace k.nodes src { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+     | None -> ())
+  ) !work;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5e. STHITA REVERSE (context membership)
+   If member has sthita→context, add context→sthita→member.
+   Makes context nodes browsable downward.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_sthita_reverse (k : proof_graph) : int =
+  let generated = ref 0 in
+  let sthita_dim = match visheshanam_of_string "sthita" with
+    | Some d -> d | None -> register_dimension "sthita" in
+  let work = ref [] in
+  Hashtbl.iter (fun member_name node ->
+    List.iter (fun e ->
+      if e.source = member_name && e.relation = sthita_dim then begin
+        let context_name = e.target in
+        match Hashtbl.find_opt k.nodes context_name with
+        | None -> ()
+        | Some ctx_node ->
+          let has = List.exists (fun re ->
+            re.source = context_name && re.target = member_name && re.relation = sthita_dim
+          ) ctx_node.edges in
+          if not has then
+            work := (context_name, member_name, sthita_dim) :: !work
+      end
+    ) node.edges
+  ) k.nodes;
+  List.iter (fun (src, tgt, rel) ->
+    let edge = { source = src; target = tgt; relation = rel } in
+    (match Hashtbl.find_opt k.nodes src with
+     | Some n -> Hashtbl.replace k.nodes src { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+     | None -> ())
+  ) !work;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5f. MATRA INHERITANCE
+   If child has swarupa→parent and parent has matra edges but child doesn't,
+   child inherits parent's units.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_matra_inheritance (k : proof_graph) : int =
+  let generated = ref 0 in
+  let swarupa_dim = match visheshanam_of_string "swarupa" with
+    | Some d -> d | None -> register_dimension "swarupa" in
+  let matra_dim = match visheshanam_of_string "matra" with
+    | Some d -> d | None -> register_dimension "matra" in
+  let work = ref [] in
+  Hashtbl.iter (fun child_name node ->
+    (* skip if child already has matra edges *)
+    let has_matra = List.exists (fun e ->
+      e.source = child_name && e.relation = matra_dim
+    ) node.edges in
+    if not has_matra then begin
+      (* find swarupa parent with matra *)
+      List.iter (fun e ->
+        if e.source = child_name && e.relation = swarupa_dim then begin
+          match Hashtbl.find_opt k.nodes e.target with
+          | None -> ()
+          | Some parent ->
+            List.iter (fun pe ->
+              if pe.source = e.target && pe.relation = matra_dim then
+                work := (child_name, pe.target, matra_dim) :: !work
+            ) parent.edges
+        end
+      ) node.edges
+    end
+  ) k.nodes;
+  (* deduplicate *)
+  let unique = Hashtbl.create 16 in
+  List.iter (fun (s, t, r) ->
+    let key = s ^ "|" ^ t in
+    if not (Hashtbl.mem unique key) then begin
+      Hashtbl.replace unique key true;
+      let edge = { source = s; target = t; relation = r } in
+      (match Hashtbl.find_opt k.nodes s with
+       | Some n -> Hashtbl.replace k.nodes s { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+       | None -> ())
+    end
+  ) !work;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5g. REVERSE AWARENESS GENERATORS
+   For siddha, kriya, drishthanta: if A→B via rel, B gets reverse awareness.
+   - siddha:     A grounded-in B → B has siddha→A (knows what it grounds)
+   - kriya:      A operates-as B → B has kriya→A (knows who uses it)
+   - drishthanta: A exemplifies B → B has drishthanta→A (knows its examples)
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_awareness_reverse (k : proof_graph) : int =
+  let generated = ref 0 in
+  let rels = ["siddha"; "kriya"; "drishthanta"] in
+  List.iter (fun rel_name ->
+    match visheshanam_of_string rel_name with
+    | None -> ()
+    | Some rel_dim ->
+      let work = ref [] in
+      Hashtbl.iter (fun source_name node ->
+        List.iter (fun e ->
+          if e.source = source_name && e.relation = rel_dim then begin
+            match Hashtbl.find_opt k.nodes e.target with
+            | None -> ()
+            | Some target_node ->
+              let has = List.exists (fun re ->
+                re.source = e.target && re.target = source_name && re.relation = rel_dim
+              ) target_node.edges in
+              if not has then
+                work := (e.target, source_name, rel_dim) :: !work
+          end
+        ) node.edges
+      ) k.nodes;
+      List.iter (fun (src, tgt, rel) ->
+        let edge = { source = src; target = tgt; relation = rel } in
+        (match Hashtbl.find_opt k.nodes src with
+         | Some n -> Hashtbl.replace k.nodes src { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+         | None -> ())
+      ) !work
+  ) rels;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5h. YUKTA SAME-LAYER RECIPROCAL
+   If A and B are in the same layer and A yukta B, add B yukta A.
+   Cross-layer yukta is directional (kosha depends on sangati, not reverse).
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_yukta_same_layer (k : proof_graph) : int =
+  let generated = ref 0 in
+  match visheshanam_of_string "yukta" with
+  | None -> 0
+  | Some yukta_dim ->
+    let work = ref [] in
+    Hashtbl.iter (fun source_name node ->
+      List.iter (fun e ->
+        if e.source = source_name && e.relation = yukta_dim then begin
+          match Hashtbl.find_opt k.nodes e.target with
+          | None -> ()
+          | Some target_node ->
+            (* only same layer *)
+            if node.layer = target_node.layer then begin
+              let has = List.exists (fun re ->
+                re.source = e.target && re.target = source_name && re.relation = yukta_dim
+              ) target_node.edges in
+              if not has then
+                work := (e.target, source_name, yukta_dim) :: !work
+            end
+        end
+      ) node.edges
+    ) k.nodes;
+    List.iter (fun (src, tgt, rel) ->
+      let edge = { source = src; target = tgt; relation = rel } in
+      (match Hashtbl.find_opt k.nodes src with
+       | Some n -> Hashtbl.replace k.nodes src { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+       | None -> ())
+    ) !work;
+    !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5i. EDGE INHERITANCE
+   If child has swarupa→parent, child inherits parent's yukta, sthita,
+   siddha, abheda edges (unless child already has that relation).
+   Only inherits if child has NO edges of that relation type.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_edge_inheritance (k : proof_graph) : int =
+  let generated = ref 0 in
+  let swarupa_dim = match visheshanam_of_string "swarupa" with
+    | Some d -> d | None -> register_dimension "swarupa" in
+  let inherit_rels = List.filter_map visheshanam_of_string
+    ["yukta"; "sthita"; "siddha"; "abheda"] in
+  let work = ref [] in
+  Hashtbl.iter (fun child_name node ->
+    (* skip mantra nodes *)
+    if node.layer = "mantra" then ()
+    else begin
+      (* find swarupa parents — same layer only to avoid cross-layer pollution *)
+      let parents = List.filter_map (fun e ->
+        if e.source = child_name && e.relation = swarupa_dim then
+          match Hashtbl.find_opt k.nodes e.target with
+          | Some p when p.layer = node.layer -> Some p
+          | _ -> None
+        else None
+      ) node.edges in
+      List.iter (fun rel_dim ->
+        (* only inherit if child has NO edges of this relation *)
+        let child_has = List.exists (fun e ->
+          e.source = child_name && e.relation = rel_dim
+        ) node.edges in
+        if not child_has then
+          List.iter (fun parent ->
+            List.iter (fun pe ->
+              if pe.source = parent.name && pe.relation = rel_dim
+                 && pe.target <> child_name && pe.target <> parent.name then
+                work := (child_name, pe.target, rel_dim) :: !work
+            ) parent.edges
+          ) parents
+      ) inherit_rels
+    end
+  ) k.nodes;
+  (* deduplicate *)
+  let seen = Hashtbl.create 64 in
+  List.iter (fun (src, tgt, rel) ->
+    let key = src ^ "|" ^ tgt ^ "|" ^ (string_of_int rel) in
+    if not (Hashtbl.mem seen key) then begin
+      Hashtbl.replace seen key true;
+      let edge = { source = src; target = tgt; relation = rel } in
+      (match Hashtbl.find_opt k.nodes src with
+       | Some n -> Hashtbl.replace k.nodes src { n with edges = edge :: n.edges }; k.all_edges := edge :: !(k.all_edges); incr generated
+       | None -> ())
+    end
+  ) !work;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   5j. VARGA PATTERN REPLICATION
+   If >60% of a varga's members share an edge (rel, target), members
+   missing it get it too. Consensus-based enrichment.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_varga_patterns (k : proof_graph) : int =
+  let generated = ref 0 in
+  let vishesa_dim = match visheshanam_of_string "vishesa" with
+    | Some d -> d | None -> register_dimension "vishesa" in
+  (* collect varga→members *)
+  let varga_members : (string, string list) Hashtbl.t = Hashtbl.create 32 in
+  Hashtbl.iter (fun member_name node ->
+    List.iter (fun e ->
+      if e.source = member_name && e.relation = vishesa_dim then begin
+        let existing = try Hashtbl.find varga_members e.target with Not_found -> [] in
+        Hashtbl.replace varga_members e.target (member_name :: existing)
+      end
+    ) node.edges
+  ) k.nodes;
+  (* for each varga with 5+ members, find consensus edges *)
+  Hashtbl.iter (fun _varga_name members ->
+    let n_members = List.length members in
+    if n_members >= 5 then begin
+      (* count (rel, target) occurrences across members *)
+      let edge_counts : (int * string, int) Hashtbl.t = Hashtbl.create 32 in
+      List.iter (fun member ->
+        match Hashtbl.find_opt k.nodes member with
+        | None -> ()
+        | Some node ->
+          if node.layer <> "mantra" then
+          List.iter (fun e ->
+            if e.source = member && e.relation <> vishesa_dim then begin
+              let key = (e.relation, e.target) in
+              let c = try Hashtbl.find edge_counts key with Not_found -> 0 in
+              Hashtbl.replace edge_counts key (c + 1)
+            end
+          ) node.edges
+      ) members;
+      (* apply consensus edges (>60%) to members missing them *)
+      let threshold = n_members * 6 / 10 in
+      Hashtbl.iter (fun (rel, target) count ->
+        if count >= threshold then
+          List.iter (fun member ->
+            match Hashtbl.find_opt k.nodes member with
+            | None -> ()
+            | Some node ->
+              if node.layer = "mantra" then ()
+              else
+              let has = List.exists (fun e ->
+                e.source = member && e.relation = rel && e.target = target
+              ) node.edges in
+              if not has then begin
+                let edge = { source = member; target; relation = rel } in
+                Hashtbl.replace k.nodes member { node with edges = edge :: node.edges };
+                k.all_edges := edge :: !(k.all_edges);
+                incr generated
+              end
+          ) members
+      ) edge_counts
+    end
+  ) varga_members;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
    6. WORD + EVAL INDEX
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
   let naama_dim = match visheshanam_of_string "naama" with
     | Some d -> d | None -> register_dimension "naama" in
-  Hashtbl.iter (fun node_name n ->
+  Hashtbl.iter (fun _key n ->
+    let node_name = n.name in
     (* word index: walk naama edges (graph-native, emitted by emit_shabda_edges) *)
     List.iter (fun e ->
       if e.source = node_name && e.relation = naama_dim then
@@ -425,13 +857,14 @@ let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
      same avastha edges used for generation AND recognition. *)
   let avastha_dim = match visheshanam_of_string "avastha" with
     | Some d -> d | None -> register_dimension "avastha" in
-  Hashtbl.iter (fun base_name base_node ->
+  Hashtbl.iter (fun _key base_node ->
+    let base_name = base_node.name in
     List.iter (fun e ->
       if e.source = base_name && e.relation = avastha_dim then begin
         let qualifier = e.target in
         let compound = qualifier ^ "-" ^ base_name in
-        (* only register if compound node actually exists *)
-        if Hashtbl.mem k.nodes compound then begin
+        (* only register if compound node actually exists — check both plain and domain-qualified *)
+        if Hashtbl.mem k.nodes compound || find k compound <> None then begin
           let key = qualifier ^ " " ^ base_name in
           Hashtbl.replace idx.compound_word_index key compound
         end

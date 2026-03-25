@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "6 children each have 4 coins. how many coins are there in total",
       "output": "we have: 6 children each have 4 coins.we find: 6 coins there total",
-      "elapsed_ms": 339,
+      "elapsed_ms": 94,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.343,
+  "duration": 0.096,
   "xfail": {
     "reason": "multiplication: people with coins",
     "strict": true,

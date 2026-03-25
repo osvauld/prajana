@@ -1,0 +1,68 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-ik — 9 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha dls-pseudoinverse
+  (swarupa tinanta bhave-prayoga viparita)
+  (sthita domain-robotics)
+  (siddha krama viveka ik)
+  (yukta seema norm-seema)
+  (nirodha singularity)
+  (viparita jacobian)
+  (phala minimum-norm joint-space))
+
+(kosha locate
+  (swarupa tinanta bhave-prayoga)
+  (sthita domain-robotics)
+  (ahara ik)
+  (yukta aayaama)
+  (abheda bindu))
+
+(kosha move-to
+  (swarupa tinanta bhave-prayoga)
+  (kriya gati)
+  (yukta aayaama))
+
+(kosha reach-target
+  (swarupa tinanta bhave-prayoga)
+  (sthita domain-robotics)
+  (ahara ik)
+  (kriya gati)
+  (yukta aayaama))
+
+(kosha rotate-by
+  (swarupa tinanta bhave-prayoga)
+  (kriya gati)
+  (yukta kona))
+
+(mantra jacobian-mantra
+  (swarupa jacobian)
+  (krama fk addition subtraction division)
+  (kriya execute-chain)
+  (sthita implication)
+  (janya fk angles epsilon))
+
+(kosha jacobian
+  (sthita domain-robotics krama)
+  (yukta apeksha)
+  (ahara chala-apeksha joint-space dls-pseudoinverse)
+  (phala sthira-apeksha task-space)
+  (swarupa partial-derivative)
+  (siddha matrix ik)
+  (abheda kinematic-chain)
+  (kramanusara fk))
+
+(kosha joint-space
+  (sthita domain-robotics chala-apeksha)
+  (swarupa akasham)
+  (yukta kona aayaama-vistara)
+  (abheda kinematic-chain vector-space)
+  (ahara fk)
+  (phala ik))
+
+(kosha task-space
+  (sthita domain-robotics sthira-apeksha)
+  (swarupa akasham bindu)
+  (phala kinematic-chain fk)
+  (ahara ik)
+  (drishthanta aayaama-dvaya aayaama-traya))

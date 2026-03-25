@@ -1,0 +1,72 @@
+# sangati/sambandha — shabda extracted from .om files
+# 14 entries
+
+shabda aneka
+  (alias many)
+  (desc "multiplicity-the-general-more-than-one-precondition-for-all-relationship-cardinality")
+done
+
+shabda aneka-aneka
+  (alias many-to-many)
+  (desc "web-not-tree-any-source-may-connect-to-any-target-the-general-samsarga-without-hierarchy")
+done
+
+shabda aneka-eka
+  (alias many-to-one)
+  (desc "many-sources-one-target-the-direction-of-convergence-integration-and-gravitational-pull")
+done
+
+shabda dvaya
+  (alias two-the-pair)
+  (desc "the-principle-of-twoness-the-minimal-multiplicity-that-creates-relation-and-polarity")
+done
+
+shabda eka
+  (alias one, unity)
+  (desc "the-indivisible-singular")
+done
+
+shabda eka-aneka
+  (alias one-to-many)
+  (desc "one-root-many-branches-the-structural-direction-of-all-hierarchy-and-symmetry-breaking")
+done
+
+shabda eka-eka
+  (alias one-to-one)
+  (desc "bijection-each-source-maps-to-exactly-one-target-and-no-target-is-shared-isomorphism-at-its-root")
+done
+
+shabda parishishtha
+  (alias remainder)
+  (desc "what-the-integration-leaves-behind")
+done
+
+shabda parishishtha-sankshepa
+  (alias remainder-compressed)
+  (desc "the-residue-distilled")
+done
+
+shabda sama-kalana
+  (alias integration)
+  (desc "the-gathering-into-wholeness")
+done
+
+shabda sambandha
+  (alias the-connection-that-carries-typed-meaning-from-one-phala-to-one-ahara)
+  (desc "structural-relationship-wire-synapse-bond-coupling")
+done
+
+shabda sangati
+  (alias connection)
+  (desc "the-meeting-that-produces-meaning")
+done
+
+shabda sankshepa
+  (alias compression)
+  (desc "the-distilling-that-keeps-the-essence")
+done
+
+shabda setu
+  (alias bridge)
+  (desc "the-connection-that-translates-between-two-domains")
+done

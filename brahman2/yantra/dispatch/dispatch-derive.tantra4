@@ -1,0 +1,15 @@
+-- derive dispatch: physics computation — propagate bindings, emit reasoning.
+-- uses propagate-derive (reactive, edge-triggered) which returns
+-- [enriched-graph, fired-matches, vps] — no separate match-mantra needed.
+(tantra dispatch-derive (expanded refined)
+  (sf (read-signal expanded "solve-for"))
+  (scope-entity (read-signal expanded "scope-entity"))
+  -- reactive propagation returns [graph, matches, vps]
+  (prop-result (propagate-derive expanded))
+  (enriched (nth prop-result 0))
+  (fired (nth prop-result 1))
+  -- match-mantra on enriched graph (propagation already derived all values)
+  (mm (match-mantra enriched))
+  (result (cond (has-items mm) (execute-matched mm sf) otherwise "no match"))
+  (proof-graph (pramana-bandha enriched mm result sf scope-entity false [] [] ""))
+  (emit-reasoning proof-graph))

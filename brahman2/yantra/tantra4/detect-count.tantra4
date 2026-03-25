@@ -1,0 +1,7 @@
+-- detects count result from graph signals.
+(tantra detect-count (expanded)
+  (total-raw (expanded | where [s, e, o] | and (eq (to-string s) "count-total") | and (eq e "sankhya") | collect o))
+  (remaining-raw (expanded | where [s, e, o] | and (eq (to-string s) "count-remaining") | and (eq e "sankhya") | collect o))
+  (cond (has-items total-raw) [["count-result", (nth total-raw 0)]]
+    (has-items remaining-raw) [["count-result", (nth remaining-raw 0)]]
+    otherwise []))

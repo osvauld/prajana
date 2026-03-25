@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "some metals are magnetic. iron is a magnetic metal. is iron a metal",
       "output": "we assert: metal IS-A magnetic and iron IS-A magnetic. we ask: does iron inherit magnetic?. we know: iron IS-A magnetic. we see: chain reaches magnetic via IS-A. yes \u2014 iron has magnetic",
-      "elapsed_ms": 972,
+      "elapsed_ms": 252,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.974
+  "duration": 0.253
 }

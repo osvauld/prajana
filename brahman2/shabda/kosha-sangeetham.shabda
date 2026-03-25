@@ -1,0 +1,50 @@
+# kosha/sangeetham — shabda extracted from .om files
+# 11 entries
+
+shabda andolan
+  (desc "spanda, manda, avrti, shruti, gamaka")
+done
+
+shabda domain-sangeetham
+  (desc "music, sangeetham, carnatic")
+done
+
+shabda kan-swara
+  (desc "sparsha, laghu, kshana, pratibeshi, swara")
+done
+
+shabda kshaya-laya
+  (desc "kshaya, manda, laya, spanda, thaalam, viraam")
+done
+
+shabda laya-varga
+  (alias laya-varga)
+  (desc "cluster-for-rhythm-concepts-laya-thaalam-vriddhi-kshaya")
+done
+
+shabda meend
+  (desc "gati, avicchinna, sandhi, shruti, swara")
+done
+
+shabda nyasa
+  (desc "viraam, sthiti, anta, akshara, vadi-swara, sphoTa")
+done
+
+shabda raga-varga
+  (alias raga-varga)
+  (desc "cluster-for-raga-concepts-raga-arohana-avarohana-vadi-gamaka")
+done
+
+shabda sangeetham-varga
+  (alias sangeetham-varga)
+  (desc "root-cluster-for-all-sangeetham-domain-nodes")
+done
+
+shabda swara-varga
+  (alias swara-varga)
+  (desc "cluster-for-swara-concepts-shadja-rishabha-gandhara-madhyama-panchama-dhaivata-nishada")
+done
+
+shabda vriddhi-laya
+  (desc "vriddhi, tivra, laya, spanda, thaalam")
+done

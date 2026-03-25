@@ -1,0 +1,411 @@
+; ═══════════════════════════════════════════════════════════════════
+; english — 107 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(bhasha action
+  (sthita english kriya))
+
+(bhasha angle
+  (sthita english kona))
+
+(bhasha boundary
+  (sthita english seema))
+
+(bhasha branch
+  (sthita english shakha))
+
+(bhasha collection
+  (sthita english vrnda))
+
+(bhasha combination
+  (domain bhasha/english)
+  (sthita english samsarga))
+
+(bhasha complete
+  (sthita english purna))
+
+(bhasha composition
+  (domain bhasha/english)
+  (sthita english rachana))
+
+(bhasha contact
+  (sthita english sparsha))
+
+(bhasha decay
+  (sthita english kshaya))
+
+(bhasha distinction
+  (sthita english viveka))
+
+(bhasha dual
+  (sthita english dvandva))
+
+(bhasha element
+  (domain bhasha/english)
+  (sthita english anu))
+
+(bhasha english
+  (sthita bhasha-swarupa))
+
+(bhasha equal
+  (sthita english sama))
+
+(bhasha extension
+  (sthita english prasarana))
+
+(bhasha foundational
+  (sthita english niralamba))
+
+(bhasha article-a
+  (swarupa article)
+  (sthita indefinite))
+
+(bhasha article-an
+  (swarupa article)
+  (sthita indefinite))
+
+(bhasha article-the
+  (swarupa article)
+  (sthita definite))
+
+(bhasha article
+  (swarupa avyaya nipata)
+  (sthita english viveka)
+  (yukta dhatu))
+
+(bhasha bhave-prayoga
+  (domain bhasha/english/grammar)
+  (swarupa avyaya)
+  (sthita english bhave-prayoga)
+  (yukta dhatu))
+
+(bhasha bhavishya-kaala
+  (domain bhasha/english/grammar)
+  (swarupa avyaya)
+  (sthita english bhavishya-kaala)
+  (yukta dhatu))
+
+(bhasha bhuta-kaala
+  (domain bhasha/english/grammar)
+  (swarupa avyaya)
+  (sthita english bhuta-kaala)
+  (yukta dhatu))
+
+(bhasha conj-and
+  (swarupa conjunction)
+  (sthita dvandva))
+
+(bhasha conj-given
+  (swarupa conjunction)
+  (sthita ahara))
+
+(bhasha conj-or
+  (swarupa conjunction)
+  (sthita vikalpa))
+
+(bhasha conj-where
+  (swarupa conjunction)
+  (sthita vivaksha))
+
+(bhasha conjunction
+  (domain bhasha/english/grammar)
+  (swarupa avyaya nipata)
+  (sthita english dvandva)
+  (yukta dhatu))
+
+(bhasha copula-are
+  (swarupa copula)
+  (sthita vartamana-kaala bahu-vachana))
+
+(bhasha copula-equals
+  (swarupa copula)
+  (sthita vartamana-kaala formula))
+
+(bhasha copula-gives
+  (swarupa copula)
+  (sthita vartamana-kaala result))
+
+(bhasha copula-is
+  (swarupa copula)
+  (sthita vartamana-kaala eka-vachana))
+
+(bhasha copula-was
+  (swarupa copula)
+  (sthita bhuta-kaala eka-vachana))
+
+(bhasha copula-were
+  (swarupa copula)
+  (sthita bhuta-kaala bahu-vachana))
+
+(bhasha copula
+  (swarupa avyaya tinanta)
+  (sthita english sambandha)
+  (yukta dhatu))
+
+(bhasha english-grammar-signals
+  (sthita english)
+  (yukta sambodhana abhisambodhana aamantrana))
+
+(bhasha karmani-prayoga
+  (domain bhasha/english/grammar)
+  (swarupa avyaya)
+  (sthita english karmani-prayoga)
+  (yukta dhatu))
+
+(bhasha kartari-prayoga
+  (domain bhasha/english/grammar)
+  (swarupa avyaya)
+  (sthita english kartari-prayoga)
+  (yukta dhatu))
+
+(bhasha english-kta-ed
+  (sthita english kta-pratyaya))
+
+(bhasha english-kta-ied
+  (sthita english kta-pratyaya))
+
+(bhasha english-plural-es
+  (sthita english vachana-bahu))
+
+(bhasha english-plural-ies
+  (sthita english vachana-bahu))
+
+(bhasha english-plural-regular
+  (sthita english vachana-bahu))
+
+(bhasha english-shatr-ing
+  (sthita english shatr-pratyaya))
+
+(bhasha prashna
+  (swarupa avyaya nipata)
+  (sthita english prashna-amsha)
+  (yukta dhatu))
+
+(bhasha prep-at
+  (swarupa preposition)
+  (sthita seema saptami-vibhakti))
+
+(bhasha prep-by
+  (swarupa preposition)
+  (sthita kriya trtiya-vibhakti))
+
+(bhasha prep-for
+  (swarupa preposition)
+  (sthita prayojana chaturthi-vibhakti))
+
+(bhasha prep-from
+  (swarupa preposition)
+  (sthita janya panchami-vibhakti))
+
+(bhasha prep-in
+  (swarupa preposition)
+  (sthita antar saptami-vibhakti))
+
+(bhasha prep-of
+  (swarupa preposition)
+  (sthita sambandha rashi-bandha))
+
+(bhasha prep-on
+  (swarupa preposition)
+  (sthita sthiti saptami-vibhakti))
+
+(bhasha prep-over
+  (swarupa preposition)
+  (sthita division))
+
+(bhasha prep-per
+  (swarupa preposition)
+  (sthita matra))
+
+(bhasha prep-to
+  (swarupa preposition)
+  (sthita phala chaturthi-vibhakti))
+
+(bhasha prep-with
+  (swarupa preposition)
+  (sthita sambandha shashthi-vibhakti))
+
+(bhasha preposition
+  (swarupa avyaya nipata)
+  (sthita english sambandha)
+  (yukta dhatu))
+
+(bhasha pronoun-it
+  (swarupa avyaya)
+  (sthita english naama-pratibodha eka-vachana))
+
+(bhasha pronoun-its
+  (swarupa avyaya)
+  (sthita english naama-pratibodha eka-vachana))
+
+(bhasha pronoun-their
+  (swarupa avyaya)
+  (sthita english naama-pratibodha bahu-vachana))
+
+(bhasha sambhavana-kaala
+  (domain bhasha/english/grammar)
+  (swarupa avyaya)
+  (sthita english sambhavana-kaala)
+  (yukta dhatu))
+
+(bhasha some
+  (swarupa amsha)
+  (sthita english))
+
+(bhasha something
+  (swarupa amsha)
+  (sthita padartha english))
+
+(bhasha thing
+  (swarupa padartha)
+  (sthita english))
+
+(bhasha vartamana-kaala
+  (domain bhasha/english/grammar)
+  (swarupa avyaya)
+  (sthita english vartamana-kaala)
+  (yukta dhatu))
+
+(bhasha verb-had
+  (swarupa kriya)
+  (sthita sambandha shashthi-vibhakti bhuta-kaala))
+
+(bhasha verb-has
+  (swarupa kriya)
+  (sthita sambandha shashthi-vibhakti eka-vachana vartamana-kaala prathama-purusa))
+
+(bhasha verb-have
+  (swarupa kriya)
+  (sthita sambandha shashthi-vibhakti bahu-vachana vartamana-kaala))
+
+(bhasha verb-moves
+  (sthita english kartari-prayoga))
+
+(bhasha verb-moving
+  (sthita english kartari-prayoga))
+
+(bhasha verb-rotates
+  (sthita english kartari-prayoga))
+
+(bhasha verb-rotating
+  (sthita english kartari-prayoga))
+
+(bhasha vidhi-kaala
+  (domain bhasha/english/grammar)
+  (swarupa avyaya)
+  (sthita english vidhi-kaala)
+  (yukta dhatu))
+
+(bhasha growth
+  (sthita english vriddhi))
+
+(bhasha independent
+  (domain bhasha/english)
+  (sthita english swatantra))
+
+(bhasha infinite
+  (sthita english ananta))
+
+(bhasha inherent
+  (sthita english svabhava))
+
+(bhasha input
+  (sthita english ahara))
+
+(bhasha inverse
+  (domain bhasha/english)
+  (sthita english viparita))
+
+(bhasha iteration
+  (sthita english avrti))
+
+(bhasha knowledge
+  (sthita english vidya))
+
+(bhasha logic
+  (sthita english nyaya))
+
+(bhasha motion
+  (domain bhasha/english)
+  (sthita english spanda))
+
+(bhasha negation
+  (domain bhasha/english)
+  (sthita english pratishedha))
+
+(bhasha one
+  (domain bhasha/english)
+  (sthita english eka))
+
+(bhasha pair
+  (sthita english dvaya))
+
+(bhasha proof
+  (domain bhasha/english)
+  (sthita english pramana))
+
+(bhasha purpose
+  (sthita english prayojana))
+
+(bhasha quantity
+  (domain bhasha/english)
+  (sthita english matra))
+
+(bhasha relation
+  (sthita english sambandha))
+
+(bhasha relative
+  (sthita english apeksha))
+
+(bhasha result
+  (sthita english phala))
+
+(bhasha rule
+  (sthita english niyama))
+
+(bhasha self
+  (domain bhasha/english)
+  (sthita english swa))
+
+(bhasha sentence
+  (sthita english vakya))
+
+(bhasha sequence
+  (domain bhasha/english)
+  (sthita english parampara))
+
+(bhasha state
+  (sthita english sthiti))
+
+(bhasha summary
+  (sthita english sankshepa))
+
+(bhasha time
+  (sthita english kaala))
+
+(bhasha transform
+  (domain bhasha/english)
+  (sthita english vikrita))
+
+(bhasha translation
+  (domain bhasha/english)
+  (sthita english anuvada))
+
+(bhasha true
+  (sthita english satya))
+
+(bhasha truth
+  (domain bhasha/english)
+  (sthita english sangati))
+
+(bhasha variable
+  (domain bhasha/english)
+  (sthita english chala))
+
+(bhasha wave
+  (domain bhasha/english)
+  (sthita english taranga))
+
+(bhasha zero
+  (domain bhasha/english)
+  (sthita english shunya))

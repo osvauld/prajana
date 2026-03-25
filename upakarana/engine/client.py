@@ -145,9 +145,14 @@ class Client:
     def _edit(self, command, **kwargs):
         return self._check(self._call({"command": command, **kwargs}))
 
-    def create_node(self, path, layer, name, slokas=None, shabda=""):
+    def create_node(self, path, layer, name, edges=None, comments=None):
+        """Create a new om5 node.
+
+        edges: dict of {relation: [targets]} e.g. {"swarupa": ["velocity"], "sthita": ["kona"]}
+        comments: list of comment strings (written as ; lines above the node)
+        """
         return self._edit("create-node", path=path, layer=layer, name=name,
-                          slokas=slokas or [], shabda=shabda)
+                          edges=edges or {}, comments=comments or [])
 
     def delete_node(self, name):
         return self._edit("delete-node", name=name)

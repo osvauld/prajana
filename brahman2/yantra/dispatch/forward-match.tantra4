@@ -1,0 +1,12 @@
+-- forward-match: find a mantra where all janya are bound (forward mode).
+(tantra forward-match (candidates vps bcs solve-for)
+
+  (reduce candidates [] (fn acc m ->
+    let ms          = to-string m
+    let contract    = om-contract ms
+    let janya       = nth contract 0
+    let sf-is-janya = member solve-for janya
+    let all-ok      = reduce janya true (fn a r ->
+      (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
+    cond (or (has-items acc) (not all-ok) sf-is-janya) acc
+    otherwise [m, vps, "forward"])))

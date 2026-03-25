@@ -1,0 +1,9 @@
+-- finds entity-value pair that wins under an operation (max or min).
+(tantra select-extremum (ev-pairs op-eval)
+  (cond (has-items ev-pairs)
+    (reduce ev-pairs (nth ev-pairs 0) (fn best kv ->
+      let best-val = to-number (nth best 1)
+      let kv-val   = to-number (nth kv 1)
+      cond (eq (apply-op op-eval [kv-val, best-val]) kv-val) kv
+      otherwise best))
+    otherwise []))

@@ -293,8 +293,9 @@ def test_distance_speed_time(vy):
     assert "120" in r
 
 
-@xfail(strict=True, reason="area = length * width not in pipeline")
+@xfail(strict=True, reason="rectangle area mantra not in pipeline")
 def test_area_rectangle(vy):
+    """rectangle area mantra: A = length × width."""
     r = vy.answer("a rectangle has length 8 and width 5. find area")
     assert "40" in r
 

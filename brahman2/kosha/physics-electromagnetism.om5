@@ -1,0 +1,196 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-electromagnetism — 28 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha circuit-varga
+  (vishesa electromagnetism-varga)
+  (swarupa subanta)
+  (matra ampere volt coulomb second)
+  (yukta gati niyama sandhi kaala seema))
+
+(kosha charge-accumulate
+  (vishesa circuit-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala charge)
+  (yukta coulomb))
+
+(kosha current-flow
+  (vishesa circuit-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala current)
+  (yukta ampere))
+
+(mantra capacitance-mantra
+  (vishesa circuit-varga)
+  (varga physics-mantra)
+  (swarupa capacitance)
+  (phala capacitance)
+  (janya charge voltage)
+  (krama division charge voltage))
+
+(kosha capacitance
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta coulomb volt charge voltage)
+  (abheda dharana))
+
+(kosha circuit
+  (vishesa circuit-varga)
+  (swarupa avrti)
+  (yukta voltage current resistance capacitance inductance))
+
+(kosha current
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta ampere coulomb second voltage resistance electron charge)
+  (abheda pravaha))
+
+(mantra electric-power-mantra
+  (vishesa circuit-varga)
+  (varga physics-mantra)
+  (swarupa electric-power)
+  (phala electric-power)
+  (janya voltage current)
+  (krama multiplication voltage current))
+
+(kosha electric-power
+  (vishesa circuit-varga)
+  (swarupa power)
+  (yukta voltage current)
+  (matra watt))
+
+(kosha inductance
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta volt ampere second current magnetic-field))
+
+(mantra ohm-law
+  (vishesa circuit-varga)
+  (varga physics-mantra)
+  (swarupa voltage)
+  (yukta current resistance)
+  (sthita niyama)
+  (janya current resistance)
+  (krama multiplication current resistance))
+
+(kosha resistance
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta ohm volt ampere voltage current)
+  (abheda virodha))
+
+(kosha voltage
+  (vishesa circuit-varga)
+  (swarupa subanta)
+  (yukta volt joule coulomb current resistance field potential-energy)
+  (abheda shakti))
+
+(kosha electromagnetism-varga
+  (vishesa physics-varga energy-varga)
+  (swarupa subanta)
+  (matra ampere coulomb volt)
+  (yukta mula-shakti taranga spanda kaala))
+
+(kosha field-varga
+  (vishesa electromagnetism-varga)
+  (swarupa subanta)
+  (matra volt metre ampere second)
+  (yukta mula-shakti taranga spanda niyama)
+  (sthita kshetra))
+
+(kosha coulomb
+  (vishesa field-varga)
+  (swarupa tinanta bhave-prayoga)
+  (siddha inverse-square-law)
+  (yukta elementary-charge repulsion attraction)
+  (sthita particle-a particle-b distance)
+  (kriya inverse-square)
+  (phala force direction)
+  (janya electric-field)
+  (abheda gravitational-force))
+
+(kosha repulsion
+  (vishesa field-varga)
+  (swarupa dhurana)
+  (siddha coulomb inverse-square-law)
+  (sthita particle-a particle-b distance)
+  (kriya inverse-square)
+  (phala force direction-away)
+  (yukta force-directed)
+  (abheda bond))
+
+(kosha electric-field
+  (vishesa field-varga)
+  (swarupa subanta)
+  (abheda field)
+  (yukta newton coulomb voltage metre force charge))
+
+(kosha electromagnetism
+  (vishesa field-varga)
+  (swarupa dvandva-shakti)
+  (siddha maxwell)
+  (janya prakaasha)
+  (yukta coulomb electron photon))
+
+(kosha magnetic-field
+  (vishesa field-varga)
+  (swarupa subanta)
+  (abheda field)
+  (yukta force current velocity charge))
+
+(kosha optics-varga
+  (vishesa electromagnetism-varga oscillation-varga)
+  (swarupa subanta taranga)
+  (matra metre hertz second)
+  (yukta spanda seema vega))
+
+(kosha diffraction
+  (vishesa optics-varga oscillation-varga)
+  (sthita spanda)
+  (swarupa wave)
+  (abheda interference)
+  (yukta superposition boundary space sine cosine harmonic constructive destructive)
+  (siddha fourier-transform)
+  (phala spectrum)
+  (drishthanta dna alpha-helix))
+
+(kosha refraction
+  (vishesa optics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala kona)
+  (yukta refractive-index))
+
+(kosha specular-reflection
+  (vishesa optics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala kona)
+  (yukta mirror))
+
+(mantra photon-energy-mantra
+  (vishesa electromagnetism-varga)
+  (varga physics-mantra)
+  (swarupa photon)
+  (phala photon-energy)
+  (janya planck-constant frequency)
+  (krama multiplication planck-constant frequency))
+
+(kosha photon-energy
+  (swarupa energy subanta)
+  (yukta photon frequency planck-constant)
+  (phala scalar)
+  (vishesa quantum-varga))
+
+(kosha photon
+  (vishesa optics-varga oscillation-varga)
+  (abheda prakaasha quantum)
+  (sthita spanda wave-particle)
+  (swarupa kshetra)
+  (siddha niyama))
+
+(kosha spectrum
+  (vishesa optics-varga oscillation-varga)
+  (sthita prakaasha krama kshetra)
+  (phala viveka fourier-transform sankshepa)
+  (swarupa frequency svabhava)
+  (abheda varna-chain ghana-pramana purna)
+  (yukta harmonic))

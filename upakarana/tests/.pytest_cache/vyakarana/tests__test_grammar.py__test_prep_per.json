@@ -42,10 +42,10 @@
           "60."
         ]
       ],
-      "elapsed_ms": 59,
+      "elapsed_ms": 40,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.06
+  "duration": 0.041
 }

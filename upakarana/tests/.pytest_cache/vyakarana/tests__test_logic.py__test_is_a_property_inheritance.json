@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "metals conduct electricity. copper is a metal. does copper conduct electricity",
       "output": "we assert: copper IS-A metal. we ask: does copper inherit metal?. we know: copper IS-A metal. we see: chain reaches metal via IS-A. yes \u2014 copper has metal",
-      "elapsed_ms": 779,
+      "elapsed_ms": 290,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.78
+  "duration": 0.29
 }

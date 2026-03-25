@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "all cats are animals. all animals breathe. do cats breathe",
       "output": "we assert: cat IS-A animal and animal IS-A breathing. we ask: does breathing inherit breathing?. we see: chain reaches breathing via IS-A. no \u2014 breathing does not have breathing",
-      "elapsed_ms": 606,
+      "elapsed_ms": 66,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.608
+  "duration": 0.067
 }

@@ -1,0 +1,21 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-constraints — 4 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha capability-bound
+  (swarupa tinanta bhave-prayoga)
+  (sthita shakti seema))
+
+(kosha hard-constraint
+  (swarupa tinanta bhave-prayoga)
+  (kriya seema)
+  (yukta niyama))
+
+(kosha prohibition
+  (swarupa tinanta bhave-prayoga)
+  (kriya pratishedha)
+  (phala pratipaksha))
+
+(kosha soft-constraint
+  (swarupa tinanta bhave-prayoga)
+  (yukta niyama))

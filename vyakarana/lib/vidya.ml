@@ -145,14 +145,15 @@ let emit_shabda_edges (k : proof_graph) : int =
         end
       ) words;
       if !new_edges <> [] then begin
-        let n = match Hashtbl.find_opt k.nodes node_name with
+        let n = match find k node_name with
           | Some existing -> { existing with edges = existing.edges @ !new_edges }
           | None ->
             (* shabda-only node: no .om5 file, create minimal stub *)
-            { name = node_name; layer = "shabda"; slokas = [];
+            { name = node_name; layer = "shabda"; domain = "";
+              slokas = [];
               edges = !new_edges; satya = 0.0; shabda = ""; krama = "" }
         in
-        Hashtbl.replace k.nodes node_name n;
+        ignore (join k n);
         k.all_edges := !new_edges @ !(k.all_edges)
       end
   ) _shabda_store;

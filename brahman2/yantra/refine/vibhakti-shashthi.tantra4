@@ -1,0 +1,29 @@
+-- entity detection + concept ownership from possession signal (grade-scoped).
+(tantra vibhakti-shashthi (graph)
+  (existing-entities (graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect (to-string s)))
+  (grades (split-grades graph))
+  (new-triples (reduce grades [] (fn acc grade ->
+    let st = reduce grade [[], "", false, ""] (fn st tri ->
+      let result     = nth st 0
+      let label      = nth st 1
+      let has-entity = nth st 2
+      let cur-entity = nth st 3
+      let edge = to-string (nth tri 1)
+      let word = to-string (nth tri 0)
+      let obj  = to-string (nth tri 2)
+      cond (eq edge "vidhi-kaala") [result, "", false, ""]
+      (and (eq edge "viraam") (or (eq word ".") (eq word "?") (eq word "!"))) [result, "", false, ""]
+      (and (eq edge "shashthi-vibhakti") (eq obj "shashthi-vibhakti") (has-text label))
+        (cond (member label existing-entities)
+          [result, "", true, label]
+          otherwise [(append result [[label, "prathama-vibhakti", "object"]]), "", true, label])
+      (and (eq edge "shashthi-vibhakti") (eq obj "shashthi-vibhakti")) [result, "", false, cur-entity]
+      (eq edge "shashthi-vibhakti") [result, label, has-entity, cur-entity]
+      (and (eq edge "satya") has-entity (has-text cur-entity))
+        [(append result [[word, "shashthi-vibhakti", cur-entity]]), label, true, cur-entity]
+      (eq edge "satya") [result, word, has-entity, cur-entity]
+      (eq edge "rashi-bandha") [result, "", has-entity, cur-entity]
+      (eq edge "mithya") [result, (cond (has-text label) (concat label "-" word) otherwise word), has-entity, cur-entity]
+      otherwise st)
+    (append acc (nth st 0)))))
+  (append-triples graph new-triples))

@@ -1,0 +1,6 @@
+-- unpacks a count fold state by field name.
+(tantra fold-field (state field)
+  (cond (eq field "value") (nth state 0)
+    (eq field "steps") (nth state 1)
+    (eq field "started") (nth state 2)
+    otherwise ""))

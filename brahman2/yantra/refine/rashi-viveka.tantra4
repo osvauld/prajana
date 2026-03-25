@@ -1,0 +1,23 @@
+-- bind numbers to rashi instances via gate signal (grade-scoped).
+-- pattern: vishesa/rashi instance + rashi-bandha gate + asprista-sankhya = binding.
+(tantra rashi-viveka (graph)
+  (rashi-labels (graph | where [s, e, o] | and (eq e "vishesa") | and (eq o "rashi") | collect s))
+  (already-bound (nth (bound-state graph) 0))
+  (grades (split-grades graph))
+  -- within each grade, track rashi + gate + number
+  (new-triples (reduce grades [] (fn acc grade ->
+    let bound = reduce grade [[], "", false] (fn st tri ->
+      let result    = nth st 0
+      let last-inst = nth st 1
+      let saw-gate  = nth st 2
+      let edge = to-string (nth tri 1)
+      let word = to-string (nth tri 0)
+      cond (and (eq edge "vishesa") (member word rashi-labels))
+        [result, word, false]
+      (and (eq edge "rashi-bandha") (has-text last-inst))
+        [result, last-inst, true]
+      (and (eq edge "asprista-sankhya") saw-gate (has-text last-inst) (not (member last-inst already-bound)))
+        [(append result [[last-inst, "sankhya", (nth tri 2)]]), "", false]
+      otherwise [result, last-inst, false])
+    (append acc (nth bound 0)))))
+  (append-triples graph new-triples))

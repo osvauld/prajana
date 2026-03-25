@@ -1,0 +1,566 @@
+; ═══════════════════════════════════════════════════════════════════
+; yantra — 132 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha op-abheda-of
+  (kriya op-class-projection))
+
+(kosha op-abs
+  (kriya op-class-projection))
+
+(kosha op-acos
+  (kriya op-class-projection))
+
+(kosha op-add
+  (kriya op-class-monoid))
+
+(kosha op-and
+  (kriya op-class-monoid))
+
+(kosha op-append
+  (kriya op-class-monoid))
+
+(kosha op-asin
+  (kriya op-class-projection))
+
+(kosha op-atan2
+  (kriya op-class-binary))
+
+(kosha op-avrti
+  (kriya op-class-keyed))
+
+(kosha op-bind
+  (kriya op-class-constructor))
+
+(kosha op-ceil
+  (kriya op-class-projection))
+
+(kosha op-char-at
+  (kriya op-class-keyed))
+
+(kosha op-class-binary
+  (swarupa yantra dvi-ahara shuddhi)
+  (sthita asama group)
+  (yukta pratipaksha))
+
+(kosha op-class-constructor
+  (swarupa yantra nirmana ananta-ahara)
+  (phala mula))
+
+(kosha op-class-higher-order
+  (swarupa yantra dvi-ahara)
+  (yukta tantra morphism)
+  (ahara kriya)
+  (abheda endomorphism)
+  (sthita category))
+
+(kosha op-class-keyed
+  (swarupa yantra dvi-ahara aadana)
+  (sthita kosha))
+
+(kosha op-class-monoid
+  (swarupa yantra avrti)
+  (kriya samgraha)
+  (yukta ananta))
+
+(kosha op-class-pipeline
+  (swarupa yantra krama dvi-ahara)
+  (krama phala)
+  (abheda endomorphism monotone-map))
+
+(kosha op-class-projection
+  (swarupa yantra shuddhi)
+  (ahara eka)
+  (phala siddha)
+  (abheda morphism))
+
+(kosha op-class-relation
+  (swarupa yantra sambandha dvi-ahara)
+  (phala satya)
+  (abheda partial-order))
+
+(kosha op-classify
+  (kriya op-class-projection))
+
+(kosha op-concat
+  (kriya op-class-monoid))
+
+(kosha op-context-score
+  (kriya op-class-keyed))
+
+(kosha op-cos
+  (kriya op-class-projection))
+
+(kosha op-div
+  (kriya op-class-binary))
+
+(kosha op-domain-of
+  (kriya op-class-projection))
+
+(kosha op-edge-weight
+  (kriya op-class-projection))
+
+(kosha op-edges
+  (kriya op-class-projection))
+
+(kosha op-ends-with
+  (kriya op-class-relation))
+
+(kosha op-eq
+  (kriya op-class-relation))
+
+(kosha op-execute-plan
+  (kriya op-class-projection))
+
+(kosha op-exists
+  (kriya op-class-projection))
+
+(kosha op-factorial
+  (kriya op-class-projection))
+
+(kosha op-filter
+  (kriya op-class-higher-order)
+  (abheda selection)
+  (sthita partial-order lattice)
+  (phala subset))
+
+(kosha op-first-match
+  (kriya op-class-higher-order))
+
+(kosha op-fixpoint
+  (kriya op-class-higher-order)
+  (swarupa krama)
+  (abheda parampara avrti)
+  (janya endomorphism)
+  (sthita monotone-map lattice)
+  (phala convergence fixed-point))
+
+(kosha op-flatten
+  (kriya op-class-projection))
+
+(kosha op-floor
+  (kriya op-class-projection))
+
+(kosha op-ge
+  (kriya op-class-relation))
+
+(kosha op-gt
+  (kriya op-class-relation))
+
+(kosha op-has
+  (kriya op-class-keyed))
+
+(kosha op-iccha-status
+  (kriya op-class-projection))
+
+(kosha op-incoming-to
+  (kriya op-class-projection))
+
+(kosha op-is-tantra
+  (kriya op-class-projection))
+
+(kosha op-iterate
+  (kriya op-class-higher-order)
+  (swarupa krama)
+  (abheda parampara))
+
+(kosha op-join
+  (kriya op-class-keyed))
+
+(kosha op-kind
+  (kriya op-class-projection))
+
+(kosha op-le
+  (kriya op-class-relation))
+
+(kosha op-length
+  (kriya op-class-projection))
+
+(kosha op-log
+  (kriya op-class-projection))
+
+(kosha op-lookup
+  (kriya op-class-projection))
+
+(kosha op-lower
+  (kriya op-class-projection))
+
+(kosha op-lt
+  (kriya op-class-relation))
+
+(kosha op-map
+  (kriya op-class-higher-order)
+  (abheda morphism endomorphism)
+  (yukta structure))
+
+(kosha op-max
+  (kriya op-class-binary))
+
+(kosha op-member
+  (kriya op-class-relation))
+
+(kosha op-min
+  (kriya op-class-binary))
+
+(kosha op-mod
+  (kriya op-class-binary))
+
+(kosha op-mul
+  (kriya op-class-monoid))
+
+(kosha op-name
+  (kriya op-class-projection))
+
+(kosha op-neg
+  (kriya op-class-projection))
+
+(kosha op-neighbors
+  (kriya op-class-projection)
+  (swarupa graph-walk)
+  (yukta avrti))
+
+(kosha op-neq
+  (kriya op-class-relation))
+
+(kosha op-node-satya
+  (kriya op-class-projection))
+
+(kosha op-node
+  (kriya op-class-projection))
+
+(kosha op-not
+  (kriya op-class-projection))
+
+(kosha op-nth
+  (kriya op-class-keyed))
+
+(kosha op-op-to-tantra
+  (kriya op-class-projection))
+
+(kosha op-or
+  (kriya op-class-monoid))
+
+(kosha op-pair
+  (kriya op-class-constructor))
+
+(kosha op-power
+  (kriya op-class-binary))
+
+(kosha op-print
+  (kriya op-class-projection))
+
+(kosha op-reduce
+  (kriya op-class-higher-order)
+  (swarupa krama)
+  (abheda parampara fold scan-accumulate transducer)
+  (sthita monoid)
+  (yukta convergence)
+  (siddha associativity closure))
+
+(kosha op-remember-bindings
+  (kriya op-class-projection))
+
+(kosha op-render-node
+  (kriya op-class-projection))
+
+(kosha op-resolve-chain
+  (kriya op-class-pipeline))
+
+(kosha op-resolve-direct
+  (kriya op-class-pipeline))
+
+(kosha op-resolve-inverse
+  (kriya op-class-pipeline))
+
+(kosha op-resolve-reason
+  (kriya op-class-pipeline))
+
+(kosha op-role
+  (kriya op-class-projection))
+
+(kosha op-session-bindings
+  (kriya op-class-projection))
+
+(kosha op-shabda
+  (kriya op-class-keyed))
+
+(kosha op-sin
+  (kriya op-class-projection))
+
+(kosha op-split
+  (kriya op-class-keyed))
+
+(kosha op-sqrt
+  (kriya op-class-projection))
+
+(kosha op-starts-with
+  (kriya op-class-relation))
+
+(kosha op-string-length
+  (kriya op-class-projection))
+
+(kosha op-sub
+  (kriya op-class-binary))
+
+(kosha op-tan
+  (kriya op-class-projection))
+
+(kosha op-to-english-relation
+  (kriya op-class-projection))
+
+(kosha op-to-english
+  (kriya op-class-projection))
+
+(kosha op-to-number
+  (kriya op-class-projection))
+
+(kosha op-to-string
+  (kriya op-class-projection))
+
+(kosha op-tokenise
+  (kriya op-class-projection))
+
+(kosha op-unique
+  (kriya op-class-projection))
+
+(kosha op-upper
+  (kriya op-class-projection))
+
+(kosha op-value
+  (kriya op-class-projection))
+
+(kosha op-walk-in
+  (kriya op-class-keyed))
+
+(kosha op-walk
+  (kriya op-class-keyed))
+
+(kosha dispatch-anumana
+  (swarupa pipeline-dispatch)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala anumana-result)
+  (kriya anumana-viveka-yukta anumana-viveka))
+
+(kosha dispatch-count
+  (swarupa pipeline-dispatch)
+  (sthita domain-yantra)
+  (janya refined-graph)
+  (phala count-result)
+  (kriya count-chain)
+  (abheda fold))
+
+(kosha dispatch-derive
+  (swarupa pipeline-dispatch)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala computed-answer)
+  (abheda endomorphism)
+  (kriya execute-matched match-mantra derive-chain))
+
+(kosha dispatch-viveka
+  (swarupa pipeline-dispatch)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala viveka-winner)
+  (abheda fold)
+  (kriya viveka-ganana))
+
+(kosha pipeline-assert
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya raw-graph)
+  (phala asserted-graph)
+  (krama pipeline-refine)
+  (kriya assertion-bandha))
+
+(kosha pipeline-construct
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya sentence)
+  (phala raw-graph)
+  (krama pipeline-assert)
+  (kriya materialize-question-graph shabda-anveshana sandhi-viveka emit-triples build-question-graph)
+  (abheda transducer))
+
+(kosha pipeline-detect
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala intent-signals)
+  (krama pipeline-dispatch)
+  (kriya detect-signals shashthi-sparsha sankhya-sparsha mantra-coverage bound-state anumana-sparsha prathama-sparsha extract-solve-for)
+  (abheda morphism))
+
+(kosha pipeline-dispatch
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya intent-signals expanded-graph)
+  (phala answer)
+  (krama pipeline-proof-emit)
+  (kriya dispatch-answer))
+
+(kosha pipeline-expand
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya refined-graph)
+  (phala expanded-graph)
+  (krama pipeline-detect)
+  (abheda morphism)
+  (kriya kosha-expand))
+
+(kosha pipeline-proof-emit
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya answer expanded-graph)
+  (phala formatted-answer)
+  (kriya emit-udaharana-upanaya emit-pratijna emit-nigamana emit-hetu emit-count emit-anumana emit-reasoning pramana-bandha))
+
+(kosha pipeline-refine
+  (swarupa yantra-varga)
+  (sthita domain-yantra)
+  (janya asserted-graph)
+  (phala refined-graph)
+  (krama pipeline-expand)
+  (kriya op-fixpoint grade-sparsha)
+  (abheda endomorphism))
+
+(kosha refine-rashi-anuvada
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-sankhya-bandha)
+  (abheda endomorphism)
+  (kriya rashi-anuvada))
+
+(kosha refine-rashi-viveka
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-vishesa-bandhana)
+  (abheda endomorphism)
+  (kriya rashi-viveka))
+
+(kosha refine-sandhi-avastha
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-sandhi-bandhana)
+  (abheda endomorphism)
+  (kriya sandhi-avastha))
+
+(kosha refine-sandhi-bandhana
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-vibhakti-shashthi)
+  (abheda endomorphism)
+  (kriya sandhi-bandhana))
+
+(kosha refine-sandhi-kosha
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-sandhi-avastha)
+  (abheda endomorphism)
+  (kriya sandhi-kosha))
+
+(kosha refine-sankhya-bandha
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-swarupa-anuvada)
+  (abheda endomorphism)
+  (kriya sankhya-bandha))
+
+(kosha refine-swarupa-anuvada
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (abheda endomorphism)
+  (kriya swarupa-anuvada))
+
+(kosha refine-vibhakti-shashthi
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-vishesa-instance)
+  (abheda endomorphism)
+  (kriya vibhakti-shashthi))
+
+(kosha refine-vishesa-bandhana
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-rashi-anuvada)
+  (abheda endomorphism)
+  (kriya vishesa-bandhana))
+
+(kosha refine-vishesa-instance
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-rashi-viveka)
+  (abheda endomorphism)
+  (kriya vishesa-instance))
+
+(kosha visheshanam-abheda
+  (sthita yantra domain-yantra ring group)
+  (yukta visheshanam-swarupa)
+  (abheda equivalence-relation quotient))
+
+(kosha visheshanam-drishthanta
+  (sthita yantra domain-yantra ring))
+
+(kosha visheshanam-janya
+  (sthita yantra domain-yantra ring)
+  (pratipaksha visheshanam-phala))
+
+(kosha visheshanam-kriya
+  (sthita yantra domain-yantra ring)
+  (abheda multiplication composition morphism)
+  (yukta identity-element))
+
+(kosha visheshanam-phala
+  (sthita yantra domain-yantra ring)
+  (pratipaksha visheshanam-janya))
+
+(kosha visheshanam-pratipaksha
+  (sthita yantra domain-yantra ring group)
+  (abheda inverse-element))
+
+(kosha visheshanam-ring
+  (sthita yantra domain-yantra ring group)
+  (yukta visheshanam-swarupa visheshanam-abheda visheshanam-drishthanta visheshanam-sthita visheshanam-yukta visheshanam-siddha visheshanam-kriya visheshanam-phala visheshanam-janya visheshanam-pratipaksha sandhi matra krama kramanusara avastha apeksha ahara dhatu vrnda kala prayoga vachana purusa vishesa amsha dvitiya-vibhakti trtiya-vibhakti chaturthi-vibhakti panchami-vibhakti saptami-vibhakti bhuta-kaala vartamana-kaala bhavishya-kaala satya mithya sankhya shashthi-vibhakti prathama-vibhakti vidhi-kaala naama-mudra asprista-sankhya rashi-bandha viraam dvandva adhikarana naama-pratibodha janaka rahita lakshana karma poorva paschat purva garbha antya nirodha paripurna atita bhanga daatri vibheda atikrama))
+
+(kosha visheshanam-siddha
+  (sthita yantra domain-yantra ring))
+
+(kosha visheshanam-sthita
+  (sthita yantra domain-yantra ring)
+  (abheda partial-order)
+  (janya filtration lattice graded-ring))
+
+(kosha visheshanam-swarupa
+  (sthita yantra domain-yantra ring group)
+  (yukta visheshanam-abheda)
+  (abheda multiplicative-identity morphism))
+
+(kosha visheshanam-yukta
+  (sthita yantra domain-yantra ring)
+  (abheda addition)
+  (yukta additive-identity))
+
+(kosha yantra-varga
+  (vishesa math-varga)
+  (yukta niyama krama tantra))

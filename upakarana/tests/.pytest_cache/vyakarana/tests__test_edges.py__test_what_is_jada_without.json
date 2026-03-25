@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "what is jada devoid of",
       "output": "we ask: does jada inherit prep-of?. we see: prep-of reachable from jada. no \u2014 jada does not have prep-of",
-      "elapsed_ms": 87,
+      "elapsed_ms": 52,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.109,
+  "duration": 0.058,
   "xfail": {
     "reason": "rahita_query: no tantra walks rahita yet",
     "strict": true,

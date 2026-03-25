@@ -1,0 +1,114 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-dynamics — 14 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha dynamics-varga
+  (vishesa physics-varga)
+  (swarupa subanta)
+  (matra newton kilogram metre second)
+  (yukta mula-shakti gati niyama kaala))
+
+(kosha linear-force-varga
+  (vishesa dynamics-varga)
+  (swarupa subanta)
+  (matra newton kilogram metre second)
+  (yukta mula-shakti gati niyama direction))
+
+(kosha force-apply
+  (vishesa linear-force-varga)
+  (swarupa tinanta bhave-prayoga float list)
+  (abheda karma newton)
+  (sthita force mass)
+  (phala acceleration)
+  (kriya scalar-multiplication)
+  (janya map))
+
+(mantra centripetal-force-mantra
+  (vishesa linear-force-varga)
+  (varga physics-mantra)
+  (swarupa centripetal-force)
+  (phala centripetal-force)
+  (janya mass velocity radius)
+  (krama division ( multiplication mass ( square velocity ) ) radius))
+
+(kosha force
+  (vishesa linear-force-varga)
+  (swarupa subanta)
+  (abheda karma)
+  (phala krama)
+  (kriya kshetrajna momentum)
+  (yukta vivartana acceleration)
+  (avastha gravitational electric magnetic friction spring centripetal normal net drag tension nuclear elastic applied radial tangential))
+
+(mantra friction-force-mantra
+  (vishesa linear-force-varga)
+  (varga physics-mantra)
+  (swarupa friction-force)
+  (phala friction-force)
+  (janya coefficient normal-force)
+  (krama multiplication coefficient normal-force))
+
+(mantra gravitational-force-mantra
+  (vishesa linear-force-varga)
+  (varga physics-mantra)
+  (swarupa gravitational-force)
+  (phala gravitational-force)
+  (janya gravitational-constant mass1 mass2 radius)
+  (krama division ( multiplication gravitational-constant ( multiplication mass1 mass2 ) ) ( square radius )))
+
+(kosha gravity
+  (vishesa linear-force-varga)
+  (abheda abhisarana)
+  (swarupa abhisarana kshetra float)
+  (sthita niyama constant)
+  (yukta kshetrajna)
+  (poorva prakaasha)
+  (siddha svayambhu))
+
+(kosha mass
+  (vishesa linear-force-varga)
+  (swarupa subanta)
+  (abheda ghana samskaara)
+  (sthita kshetrajna niyama)
+  (yukta kshetra)
+  (rahita vivartana)
+  (matra kilogram))
+
+(mantra spring-force-mantra
+  (vishesa linear-force-varga)
+  (varga physics-mantra)
+  (swarupa spring-force)
+  (phala spring-force)
+  (janya spring-constant displacement)
+  (krama multiplication spring-constant displacement))
+
+(kosha moment-of-inertia
+  (vishesa rotational-force-varga)
+  (swarupa subanta rotation)
+  (abheda mass)
+  (yukta distance power angular-momentum torque)
+  (siddha antiderivative)
+  (pratipaksha angular-acceleration))
+
+(mantra torque-mantra
+  (vishesa rotational-force-varga)
+  (varga physics-mantra)
+  (swarupa torque)
+  (phala torque)
+  (janya moment-of-inertia angular-acceleration)
+  (krama multiplication moment-of-inertia angular-acceleration))
+
+(kosha torque
+  (vishesa rotational-force-varga mechanical-energy-varga)
+  (swarupa subanta rotation)
+  (abheda force)
+  (yukta kona moment-of-inertia angular-momentum)
+  (siddha cross-product)
+  (phala vector)
+  (janaka angular-acceleration))
+
+(kosha rotational-force-varga
+  (vishesa dynamics-varga)
+  (swarupa subanta)
+  (matra newton kilogram metre second)
+  (yukta mula-shakti kona gati niyama))

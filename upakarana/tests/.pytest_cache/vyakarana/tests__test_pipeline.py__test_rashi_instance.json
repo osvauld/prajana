@@ -22,12 +22,12 @@
           "rashi"
         ]
       ],
-      "elapsed_ms": 79,
+      "elapsed_ms": 56,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.086,
+  "duration": 0.06,
   "xfail": {
     "reason": "rashi: symbolic variable names not parsed",
     "strict": true,

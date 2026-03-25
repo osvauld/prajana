@@ -1,0 +1,556 @@
+; ═══════════════════════════════════════════════════════════════════
+; chemistry — 82 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha atom-function
+  (kriya element)
+  (phala int electron-shell valence mass)
+  (swarupa setu)
+  (yukta proton-count neutron-count domain-ocaml)
+  (siddha isotope)
+  (sthita nuclear-fusion domain-chemistry))
+
+(kosha atom-ocaml
+  (sthita chemistry-to-ocaml domain-ocaml)
+  (swarupa atom-function sambandha)
+  (siddha ocaml-syntax)
+  (yukta proton neutron type-signature)
+  (phala electron-shell valence))
+
+(kosha atomic-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta)
+  (yukta mula-shakti spanda seema avastha svayambhu))
+
+(kosha boron
+  (sthita element domain-chemistry)
+  (swarupa proton-five)
+  (yukta valence-three asprishta-satya)
+  (janya nuclear-fusion)
+  (siddha life-possible))
+
+(kosha carbon
+  (sthita element domain-chemistry)
+  (swarupa proton-six)
+  (yukta valence-four life hydrocarbon polymer)
+  (abheda holder-giver)
+  (siddha four-bond)
+  (kriya chain)
+  (janya nuclear-fusion)
+  (phala star))
+
+(kosha chemistry-constants
+  (vishesa chemistry-varga)
+  (sthita matra niyama))
+
+(kosha chemistry-to-ocaml
+  (swarupa setu)
+  (yukta domain-chemistry domain-ocaml element type-signature)
+  (kriya atom-function)
+  (siddha ocaml-syntax correctness-check))
+
+(kosha chemistry-varga
+  (sthita domain-chemistry)
+  (vishesa physics-varga math-varga)
+  (swarupa subanta)
+  (yukta sandhi mula-shakti spanda matra))
+
+(kosha alloy
+  (vishesa composites-varga chemistry-varga)
+  (sthita metals-varga)
+  (swarupa metallic-bond)
+  (yukta lattice)
+  (drishthanta substitutional interstitial steel brass bronze))
+
+(kosha composites-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta matrix aneka-eka)
+  (yukta reinforcement)
+  (drishthanta alloy concrete bone wood))
+
+(kosha concrete
+  (vishesa composites-varga chemistry-varga)
+  (yukta calcium silicon water compressive-strength steel reinforcement)
+  (sthita solid domain-chemistry))
+
+(kosha steel
+  (vishesa composites-varga)
+  (swarupa alloy conductor metallic)
+  (yukta iron carbon ferromagnetic)
+  (sthita solid domain-chemistry))
+
+(kosha cement-chemistry
+  (vishesa construction-varga chemistry-varga)
+  (swarupa reaction exothermic polymer)
+  (yukta calcium silicon aluminium water dissolution calcite clay-mineral concrete))
+
+(kosha construction-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta)
+  (yukta calcium silicon aluminium iron covalent-bond ionic-bond civil-varga architecture)
+  (sthita solid))
+
+(kosha glass-chemistry
+  (vishesa construction-varga chemistry-varga)
+  (yukta silicon oxygen sodium calcium silica glass)
+  (sthita covalent-bond)
+  (swarupa amorphous transparent))
+
+(kosha lime-chemistry
+  (vishesa construction-varga chemistry-varga)
+  (swarupa reaction exothermic cycle)
+  (yukta calcium carbon oxygen water calcite oxidation-reduction))
+
+(kosha steel-chemistry
+  (vishesa construction-varga chemistry-varga)
+  (yukta iron carbon oxidation-reduction steel)
+  (swarupa alloy))
+
+(kosha timber-chemistry
+  (vishesa construction-varga chemistry-varga organic-varga)
+  (swarupa polymer)
+  (yukta cellulose lignin water combustion wood))
+
+(kosha domain-chemistry
+  (sthita domain-physics)
+  (yukta upakarana nucleus proton neutron nuclear-fusion radioactivity isotope isomer element carbon hydrogen oxygen nitrogen silicon sulfur boron electron-shell orbital valence covalent-bond ionic-bond hydrogen-bond molecule monomer polymer hydrocarbon atom-function chemistry-to-ocaml)
+  (siddha yantra))
+
+(kosha electron-shell
+  (sthita electron domain-chemistry)
+  (yukta nucleus orbital)
+  (swarupa wave eka-aneka)
+  (abheda superposition shunya)
+  (phala valence))
+
+(kosha element
+  (domain kosha/chemistry)
+  (swarupa kshetra proton-count)
+  (sthita niyama domain-chemistry)
+  (yukta kshetrajna prakaasha electron-shell)
+  (siddha identity)
+  (phala valence))
+
+(kosha aluminium
+  (sthita element domain-chemistry)
+  (swarupa proton-thirteen post-transition-metal lightweight corrosion-resistant conductor)
+  (yukta valence-three alloy)
+  (janya nuclear-fusion))
+
+(kosha argon
+  (sthita element domain-chemistry)
+  (swarupa proton-eighteen noble-gas inert)
+  (yukta valence-zero atmosphere welding semiconductor)
+  (janya nuclear-fusion))
+
+(kosha calcium
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-twenty alkaline-earth-metal)
+  (yukta valence-two bone muscle blood concrete)
+  (janya nuclear-fusion)
+  (abheda limestone))
+
+(kosha chlorine
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-seventeen halogen)
+  (yukta valence-seven sodium water)
+  (janya nuclear-fusion)
+  (siddha ionic-bond covalent-bond))
+
+(kosha copper
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-twenty-nine transition-metal conductor antimicrobial)
+  (yukta valence-two alloy)
+  (janya nuclear-fusion)
+  (abheda brass bronze))
+
+(kosha gold
+  (sthita element domain-chemistry)
+  (swarupa proton-seventy-nine transition-metal corrosion-resistant malleable conductor)
+  (yukta valence-one valence-three)
+  (phala neutron-star)
+  (siddha r-process))
+
+(kosha iron
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-twenty-six transition-metal ferromagnetic conductor)
+  (yukta valence-two valence-three haemoglobin oxygen steel alloy oxidation)
+  (janya nuclear-fusion))
+
+(kosha lead
+  (sthita element domain-chemistry)
+  (swarupa proton-eighty-two post-transition-metal dense toxic)
+  (yukta valence-two radiation-shield battery uranium)
+  (phala radioactive-decay))
+
+(kosha magnesium
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-twelve alkaline-earth-metal)
+  (yukta valence-two chlorophyll photosynthesis aluminium alloy)
+  (janya nuclear-fusion))
+
+(kosha neon
+  (sthita element domain-chemistry)
+  (swarupa proton-ten noble-gas inert)
+  (yukta valence-zero light-emitting)
+  (janya nuclear-fusion))
+
+(kosha potassium
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-nineteen alkali-metal)
+  (yukta valence-one water nerve-impulse heart plant)
+  (janya nuclear-fusion)
+  (siddha ionic-bond))
+
+(kosha silver
+  (sthita element domain-chemistry)
+  (swarupa proton-forty-seven transition-metal conductor antimicrobial reflective)
+  (yukta valence-one photography mirror)
+  (janya nuclear-fusion))
+
+(kosha sodium
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-eleven alkali-metal)
+  (yukta valence-one water nerve-impulse osmosis)
+  (janya nuclear-fusion)
+  (siddha ionic-bond))
+
+(kosha zinc
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-thirty transition-metal corrosion-resistant)
+  (yukta valence-two galvanisation enzyme immune alloy brass)
+  (janya nuclear-fusion))
+
+(kosha hydrocarbon
+  (yukta carbon hydrogen polymer energy)
+  (sthita covalent-bond domain-chemistry)
+  (siddha life))
+
+(kosha hydrogen-bond
+  (sthita chemical-bond domain-chemistry)
+  (swarupa weak-force sambandha dvandva-shakti)
+  (abheda zha)
+  (yukta approach-without-contact water dna protein))
+
+(kosha hydrogen
+  (sthita element domain-chemistry)
+  (swarupa proton-one)
+  (yukta valence-one water hydrocarbon)
+  (janya nuclear-fusion)
+  (abheda svayambhu))
+
+(kosha isomer
+  (swarupa same-set-different-arrangement eka-eka)
+  (abheda anagram element raga)
+  (sthita molecule domain-chemistry)
+  (vibheda structure)
+  (drishthanta graph))
+
+(kosha isotope
+  (sthita element domain-chemistry)
+  (abheda proton karma)
+  (vibheda neutron)
+  (swarupa same-identity-different-load)
+  (yukta radioactivity stability))
+
+(kosha metals-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta electron-sea conductor lustrous malleable ductile cation metallic)
+  (sthita metallic-bond solid)
+  (siddha ionic-bond)
+  (yukta heat-transfer alloy oxidation pbr))
+
+(kosha transition-metals-varga
+  (vishesa metals-varga chemistry-varga)
+  (swarupa d-orbital coloured-compound catalytic)
+  (yukta variable-valence magnetic)
+  (drishthanta iron copper zinc))
+
+(kosha calcite
+  (vishesa minerals-varga)
+  (yukta calcium carbon oxygen acid dissolution)
+  (sthita ionic-bond domain-chemistry)
+  (abheda limestone marble chalk))
+
+(kosha clay-mineral
+  (vishesa minerals-varga)
+  (yukta aluminium silicon oxygen hydrogen water)
+  (swarupa layered plasticity deformable)
+  (abheda ceramic porcelain)
+  (sthita domain-chemistry))
+
+(kosha minerals-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta inorganic crystalline)
+  (sthita solid roughness metallic-zero)
+  (yukta ionic-bond covalent-bond pbr)
+  (drishthanta silica calcite clay))
+
+(kosha silica
+  (vishesa minerals-varga)
+  (yukta silicon oxygen)
+  (sthita covalent-bond domain-chemistry)
+  (drishthanta crystalline amorphous)
+  (abheda glass quartz sand))
+
+(kosha molecular-varga
+  (vishesa chemistry-varga)
+  (swarupa subanta sandhi)
+  (yukta mula-shakti spanda avastha niyama))
+
+(kosha molecule
+  (abheda kshetra)
+  (yukta sambandha)
+  (sthita niyama vrnda domain-chemistry)
+  (phala rachana)
+  (swarupa sthiti))
+
+(kosha monomer
+  (sthita molecule domain-chemistry)
+  (swarupa unit)
+  (abheda matra matrika)
+  (janya polymer)
+  (yukta chain))
+
+(kosha neutron
+  (sthita nucleus strong-nuclear-force domain-chemistry)
+  (janya quark)
+  (swarupa neutral)
+  (abheda purna-neti)
+  (kriya stability)
+  (yukta up-down-down)
+  (siddha isotope))
+
+(kosha nitrogen
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-seven nitrogenous-base)
+  (yukta valence-three life protein dna rna atp amino-acid)
+  (janya nuclear-fusion)
+  (kriya ring)
+  (drishthanta varna))
+
+(kosha nuclear-fusion
+  (kriya strong-nuclear-force)
+  (yukta gravity)
+  (phala element energy)
+  (abheda prashna-amsha multiplication)
+  (swarupa womb)
+  (sthita star domain-physics domain-chemistry)
+  (siddha mass-kshaya))
+
+(kosha nucleus
+  (swarupa mula)
+  (yukta proton neutron)
+  (sthita strong-nuclear-force atom spanda domain-chemistry)
+  (abheda dense)
+  (siddha sambandha))
+
+(kosha orbital
+  (abheda kshetra)
+  (sthita kshetrajna niyama domain-chemistry domain-quantum)
+  (poorva prakaasha)
+  (phala viveka collapse)
+  (yukta abhava superposition))
+
+(kosha organic-varga
+  (vishesa chemistry-varga biology-varga)
+  (swarupa subanta)
+  (yukta sandhi krama vrnda avastha))
+
+(kosha alcohol
+  (vishesa organic-varga)
+  (sthita functional-group)
+  (swarupa hydroxyl hydrophilic)
+  (yukta hydrogen-bond oxidation esterification dehydration)
+  (drishthanta ethanol methanol glycerol))
+
+(kosha alkane
+  (vishesa organic-varga)
+  (swarupa hydrocarbon single-bond saturated nonpolar)
+  (yukta combustion)
+  (drishthanta methane ethane octane))
+
+(kosha alkene
+  (vishesa organic-varga)
+  (swarupa hydrocarbon double-bond unsaturated addition-reaction)
+  (yukta polymerisation)
+  (drishthanta ethylene propylene))
+
+(kosha amine
+  (vishesa organic-varga)
+  (sthita functional-group domain-chemistry domain-biology)
+  (swarupa amino base proton-acceptor)
+  (yukta lone-pair amide-bond peptide-bond)
+  (drishthanta amino-acid neurotransmitter))
+
+(kosha aromatic
+  (vishesa organic-varga)
+  (swarupa ring delocalised-pi)
+  (siddha huckel)
+  (yukta stability electrophilic-substitution amino-acid dna heme)
+  (drishthanta benzene toluene phenol))
+
+(kosha carbonyl
+  (vishesa organic-varga)
+  (sthita functional-group domain-chemistry domain-biology)
+  (swarupa carbonyl electrophilic polar-bond)
+  (yukta nucleophilic-addition oxidation reduction)
+  (drishthanta aldehyde ketone))
+
+(kosha carboxylic-acid
+  (vishesa organic-varga)
+  (sthita functional-group)
+  (swarupa carboxyl acid proton-donor)
+  (yukta esterification amide-bond)
+  (drishthanta fatty-acid amino-acid acetic-acid))
+
+(kosha chirality
+  (vishesa organic-varga)
+  (swarupa stereochemistry mirror-image enantiomer)
+  (sthita carbon domain-chemistry domain-biology)
+  (siddha four-bond)
+  (yukta diastereomer amino-acid sugar drug)
+  (abheda polarity))
+
+(kosha ester
+  (vishesa organic-varga)
+  (sthita functional-group domain-chemistry domain-biology)
+  (swarupa ester condensation)
+  (yukta hydrolysis fragrance polymer)
+  (abheda fat)
+  (drishthanta triglyceride polyester))
+
+(kosha functional-group
+  (vishesa organic-varga chemistry-varga)
+  (swarupa subanta reactive-site)
+  (yukta carbon backbone)
+  (sthita molecule)
+  (phala reactivity class)
+  (drishthanta hydroxyl carboxyl amino carbonyl ester phosphate))
+
+(kosha organic-varga-extended
+  (vishesa organic-varga chemistry-varga)
+  (swarupa subanta backbone)
+  (yukta functional-group stereochemistry aromatic addition elimination substitution)
+  (drishthanta functional-group alkane alkene alcohol carboxylic-acid amine))
+
+(kosha oxygen
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-eight)
+  (yukta valence-two life water nucleotide phosphate sugar hydrogen-bond)
+  (janya nuclear-fusion)
+  (siddha covalent-bond))
+
+(kosha phosphate
+  (janya phosphorus)
+  (yukta oxygen nucleotide dna rna energy atp chain)
+  (siddha valence-five covalent-bond)
+  (abheda holder-giver)
+  (swarupa backbone)
+  (kriya sambandha)
+  (sthita domain-chemistry domain-biology))
+
+(kosha phosphorus
+  (sthita element domain-chemistry domain-biology)
+  (swarupa proton-fifteen)
+  (yukta valence-five atp dna rna nucleotide)
+  (janya nuclear-fusion phosphate)
+  (phala star)
+  (kriya backbone)
+  (siddha chain covalent-bond)
+  (abheda holder-giver))
+
+(kosha polymer
+  (sthita krama vrnda niyama domain-chemistry)
+  (krama kshetra)
+  (abheda parampara)
+  (yukta artha-krama)
+  (swarupa eka-aneka))
+
+(kosha proton
+  (sthita nucleus strong-nuclear-force domain-chemistry)
+  (janya quark)
+  (swarupa positive)
+  (siddha element-identity)
+  (abheda masculine)
+  (yukta up-up-down))
+
+(kosha radioactivity
+  (kriya nucleus)
+  (swarupa kshaya kshaya-pravaha)
+  (phala visarjana)
+  (yukta weak-nuclear-force isotope alpha-beta-gamma)
+  (siddha stability)
+  (abheda decay)
+  (sthita domain-chemistry))
+
+(kosha acid-base
+  (vishesa chemistry-varga)
+  (swarupa reaction tinanta bhave-prayoga proton-transfer neutralisation)
+  (yukta pH pKa buffer amino-acid blood protein)
+  (sthita domain-chemistry domain-biology))
+
+(kosha combustion
+  (vishesa chemistry-varga)
+  (swarupa reaction oxidation tinanta bhave-prayoga exothermic)
+  (yukta oxygen hydrocarbon fuel)
+  (phala carbon-dioxide water heat)
+  (abheda respiration)
+  (sthita domain-chemistry domain-biology))
+
+(kosha dissolution
+  (vishesa chemistry-varga)
+  (swarupa reaction tinanta bhave-prayoga solvent)
+  (yukta solute polar ionic-bond water concentration solubility)
+  (drishthanta NaCl sugar))
+
+(kosha oxidation-reduction
+  (vishesa chemistry-varga)
+  (swarupa reaction tinanta bhave-prayoga electron-transfer oxidation reduction)
+  (drishthanta rusting combustion battery)
+  (abheda respiration photosynthesis)
+  (sthita domain-chemistry domain-biology))
+
+(kosha reaction
+  (vishesa chemistry-varga)
+  (swarupa tinanta bhave-prayoga sandhi vivartana)
+  (yukta conservation enthalpy entropy gibbs equilibrium)
+  (drishthanta combustion dissolution oxidation))
+
+(kosha silicon
+  (sthita element domain-chemistry)
+  (swarupa proton-fourteen semiconductor)
+  (yukta valence-four asprishta-satya computer)
+  (abheda carbon)
+  (siddha life-possible))
+
+(kosha sugar
+  (sthita carbon nucleotide domain-chemistry domain-biology)
+  (yukta oxygen hydrogen phosphate)
+  (swarupa pentose)
+  (abheda ring ribose deoxyribose holder-giver)
+  (siddha covalent-bond))
+
+(kosha sulfur
+  (sthita element domain-chemistry)
+  (swarupa proton-sixteen)
+  (yukta valence-six asprishta-satya protein)
+  (janya nuclear-fusion)
+  (siddha life-possible))
+
+(kosha valence
+  (abheda kshetrajna)
+  (seema kshetra)
+  (sthita niyama domain-chemistry)
+  (yukta prakaasha)
+  (artha sambandha)
+  (phala viveka)
+  (swarupa eka-aneka))
+
+(kosha water
+  (sthita oxygen life domain-chemistry domain-biology)
+  (yukta hydrogen samsarga panchabhootam)
+  (abheda sama-nila ap)
+  (swarupa solvent)
+  (phala hydrogen-bond)
+  (siddha dipole))

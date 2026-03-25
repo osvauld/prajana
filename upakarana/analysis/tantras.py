@@ -301,3 +301,269 @@ def print_parallelism(root=None):
         for c in candidates["side-effects"]:
             print(f"    {c['tantra']:35s} {c['op']:8s}")
         print()
+
+
+# ── Pipeline dataflow analysis ──────────────────────────────────────────
+
+
+# The main pipeline stages, in execution order.
+PIPELINE_STAGES = [
+    "build-question-graph",
+    "avrti-refine-v2",
+    "kosha-expand",
+    "detect-signals",
+    "dispatch-answer",
+]
+
+# Sub-tantras called by each stage (manually curated from callgraph).
+STAGE_CHILDREN = {
+    "build-question-graph": [
+        "emit-triples", "sandhi-viveka", "has-grammar-sthita",
+        "shabda-anveshana", "triples-by-edge",
+    ],
+    "avrti-refine-v2": [
+        # phase 1 (sequential)
+        "sandhi-kosha", "sandhi-avastha", "sandhi-bandhana",
+        "vyakarana-sparsha", "shashthi-possession", "vibhakti-shashthi",
+        "vishesa-instance", "rashi-viveka", "vishesa-bandhana", "rashi-anuvada",
+        # phase 2 (fixpoint)
+        "sankhya-bandha-v2", "swarupa-anuvada", "shunya-bandha-v2",
+    ],
+    "kosha-expand": [],
+    "detect-signals": [
+        "extract-solve-for", "detect-shunya", "detect-viveka",
+        "detect-anumana", "detect-count",
+    ],
+    "dispatch-answer": [
+        "dispatch-derive", "dispatch-shunya", "dispatch-viveka",
+        "dispatch-count", "dispatch-anumana",
+    ],
+}
+
+
+def _extract_edge_literals(source):
+    """Extract quoted string literals that look like edge names from tantra source."""
+    # Match "word-word" patterns (edge names are lowercase with hyphens)
+    literals = re.findall(r'"([a-z][-a-z]*(?:-[a-z]+)*)"', source)
+    # Filter out common non-edge strings
+    noise = {
+        "otherwise", "true", "false", "none", "string", "number",
+        "fn", "let", "cond", "and", "or", "not", "graph", "acc",
+        "word", "clean", "edge", "obj", "result", "found",
+        "prefix", "compound", "prev", "next", "last", "first",
+        "pending", "active", "current", "signal", "mode",
+    }
+    return sorted(set(l for l in literals if l not in noise))
+
+
+def _extract_calls(source, all_tantra_names):
+    """Extract tantra calls and builtin calls from source."""
+    # Find all (name ...) patterns
+    calls = re.findall(r'\(([a-z][-a-z]+)', source)
+    keywords = {
+        "tantra", "let", "fn", "cond", "otherwise", "and", "or", "not",
+        "reduce", "map", "filter", "preduce", "fixpoint", "append", "concat",
+        "nth", "eq", "neq", "gt", "lt", "ge", "le", "sub", "add", "mul", "div",
+        "to-string", "to-number", "length", "has-text", "has-items", "exists",
+        "member", "unique", "index-graph", "idx-has-edge", "idx-subjects",
+        "idx-objects", "idx-append", "split", "format", "max", "min",
+        "range", "reverse", "sort", "starts-with", "ends-with", "substr",
+        "char-at", "string-length", "graph",
+    }
+    calls = [c for c in calls if c not in keywords]
+    tantra_calls = sorted(set(c for c in calls if c in all_tantra_names))
+    builtin_calls = sorted(set(c for c in calls if c not in all_tantra_names))
+    return tantra_calls, builtin_calls
+
+
+def _classify_scan(source):
+    """Classify how a tantra scans its input graph."""
+    patterns = []
+    if "reduce graph" in source or "reduce g " in source or "reduce refined" in source:
+        patterns.append("reduce-full")
+    if "| where" in source:
+        patterns.append("pipe-filter")
+    if "idx-subjects" in source or "idx-objects" in source or "idx-has-edge" in source:
+        patterns.append("indexed")
+    if "fixpoint" in source:
+        patterns.append("fixpoint")
+    if "ppr " in source:
+        patterns.append("ppr-walk")
+    if "walk " in source and "walk-in" not in source:
+        patterns.append("graph-walk")
+    if "shabda " in source:
+        patterns.append("shabda-lookup")
+    if "om-contract" in source:
+        patterns.append("om-contract")
+    if "preduce " in source:
+        patterns.append("parallel-reduce")
+    return patterns
+
+
+def pipeline_dataflow(root=None):
+    """Analyze the tantra pipeline's data flow.
+
+    For each pipeline stage and its sub-tantras:
+    - What edge types it reads (filters on)
+    - What edge types it writes (emits)
+    - How it scans the graph (reduce-full, pipe-filter, indexed, ppr)
+    - What builtins/graph operations it uses
+
+    Returns a structure suitable for identifying subgraph partitions.
+    """
+    tantras = tantra4.load_all(root)
+    all_names = set(tantras.keys())
+
+    stages = []
+    all_edges_read = defaultdict(set)   # edge → set of tantras that read it
+    all_edges_write = defaultdict(set)  # edge → set of tantras that write it
+
+    for stage_name in PIPELINE_STAGES:
+        children = STAGE_CHILDREN.get(stage_name, [])
+        members = [stage_name] + children
+
+        stage_info = {
+            "name": stage_name,
+            "members": [],
+            "edges_read": set(),
+            "edges_write": set(),
+            "scan_patterns": set(),
+        }
+
+        for member in members:
+            t = tantras.get(member)
+            if not t:
+                continue
+
+            src = t["source"]
+            edges = _extract_edge_literals(src)
+            tantra_calls, builtin_calls = _extract_calls(src, all_names)
+            scans = _classify_scan(src)
+
+            # Heuristic: edges appearing in "eq e" or "where" are reads,
+            # edges appearing in [[..., "edge", ...]] triple construction are writes
+            reads = set()
+            writes = set()
+            for edge in edges:
+                # Check for read patterns: eq e "edge", eq edge "name", | and (eq e "edge")
+                read_pats = [
+                    f'eq e "{edge}"', f'eq edge "{edge}"',
+                    f'eq (to-string e) "{edge}"',
+                    f'eq (triple-edge', f'"{edge}" |',
+                ]
+                write_pats = [
+                    f', "{edge}",', f'"{edge}", ',
+                ]
+                is_read = any(p in src for p in read_pats) or f'"{edge}"' in src
+                is_write = f'[[' in src and f'"{edge}"' in src
+
+                # If it appears in a triple literal [..., "edge", ...], likely a write
+                triple_write = re.search(
+                    rf'\[("[^"]*"|[a-z][-a-z]*),\s*"{re.escape(edge)}",\s*("[^"]*"|[a-z][-a-z]*)\]',
+                    src
+                )
+                if triple_write:
+                    writes.add(edge)
+                    all_edges_write[edge].add(member)
+                if is_read:
+                    reads.add(edge)
+                    all_edges_read[edge].add(member)
+
+            stage_info["edges_read"].update(reads)
+            stage_info["edges_write"].update(writes)
+            stage_info["scan_patterns"].update(scans)
+
+            stage_info["members"].append({
+                "name": member,
+                "lines": t["lines"],
+                "edges": edges,
+                "reads": sorted(reads),
+                "writes": sorted(writes),
+                "scans": scans,
+                "tantra_calls": tantra_calls,
+                "builtin_calls": builtin_calls,
+            })
+
+        # Convert sets to sorted lists for output
+        stage_info["edges_read"] = sorted(stage_info["edges_read"])
+        stage_info["edges_write"] = sorted(stage_info["edges_write"])
+        stage_info["scan_patterns"] = sorted(stage_info["scan_patterns"])
+        stages.append(stage_info)
+
+    # Compute edge overlap between stages
+    stage_edge_sets = {}
+    for s in stages:
+        stage_edge_sets[s["name"]] = set(s["edges_read"])
+
+    overlaps = []
+    stage_names = list(stage_edge_sets.keys())
+    for i in range(len(stage_names)):
+        for j in range(i + 1, len(stage_names)):
+            a, b = stage_names[i], stage_names[j]
+            shared = stage_edge_sets[a] & stage_edge_sets[b]
+            if shared:
+                overlaps.append({"stages": [a, b], "shared_edges": sorted(shared)})
+
+    return {
+        "stages": stages,
+        "edge_producers": {k: sorted(v) for k, v in all_edges_write.items()},
+        "edge_consumers": {k: sorted(v) for k, v in all_edges_read.items()},
+        "overlaps": overlaps,
+    }
+
+
+def print_dataflow(root=None):
+    """Print pipeline dataflow analysis."""
+    result = pipeline_dataflow(root)
+
+    print(f"\n{'═' * 80}")
+    print(f"  TANTRA PIPELINE DATAFLOW")
+    print(f"{'═' * 80}\n")
+
+    for stage in result["stages"]:
+        n_members = len(stage["members"])
+        print(f"  ┌─ {stage['name']} ({n_members} tantras) ─────────")
+        print(f"  │  reads:  {', '.join(stage['edges_read'][:15]) or '(none)'}")
+        print(f"  │  writes: {', '.join(stage['edges_write'][:15]) or '(none)'}")
+        print(f"  │  scans:  {', '.join(stage['scan_patterns']) or '(none)'}")
+        for m in stage["members"]:
+            scans = ','.join(m["scans"]) if m["scans"] else "—"
+            print(f"  │    {m['name']:35s} {m['lines']:3d}L  [{scans}]")
+            if m["reads"]:
+                print(f"  │      reads:  {', '.join(m['reads'][:10])}")
+            if m["writes"]:
+                print(f"  │      writes: {', '.join(m['writes'][:10])}")
+        print(f"  └{'─' * 50}")
+        print()
+
+    # Edge flow summary
+    print(f"  ── EDGE FLOW (producer → consumer) ──")
+    all_edges = sorted(set(list(result["edge_producers"].keys()) +
+                           list(result["edge_consumers"].keys())))
+    for edge in all_edges:
+        producers = result["edge_producers"].get(edge, [])
+        consumers = result["edge_consumers"].get(edge, [])
+        if producers or len(consumers) > 1:
+            p = ', '.join(producers) if producers else "BQG/external"
+            c = ', '.join(consumers) if consumers else "—"
+            print(f"    {edge:30s}  ← {p:30s}  → {c}")
+    print()
+
+    # Overlap
+    if result["overlaps"]:
+        print(f"  ── EDGE OVERLAP BETWEEN STAGES ──")
+        for ov in result["overlaps"]:
+            print(f"    {ov['stages'][0]} ∩ {ov['stages'][1]}: {', '.join(ov['shared_edges'])}")
+        print()
+
+    # Subgraph partition suggestion
+    print(f"  ── SUBGRAPH PARTITIONS (suggested) ──")
+    # Collect all unique read edges per stage
+    for stage in result["stages"]:
+        unique_reads = set(stage["edges_read"])
+        for other in result["stages"]:
+            if other["name"] != stage["name"]:
+                unique_reads -= set(other["edges_read"])
+        if unique_reads:
+            print(f"    {stage['name']:30s} exclusive: {', '.join(sorted(unique_reads))}")
+    print()

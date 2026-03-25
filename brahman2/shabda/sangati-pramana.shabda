@@ -1,0 +1,36 @@
+# sangati/pramana — shabda extracted from .om files
+# 8 entries
+
+shabda dipaka
+  (alias the-lamp)
+  (desc illumination-that-connects)
+done
+
+shabda ghana-pramana
+  (alias dense-proof)
+  (desc verification-that-compresses-to-truth)
+done
+
+shabda jnana-siddha-pramana
+  (alias knowledge-proven)
+  (desc verification-through-knowing)
+done
+
+shabda pramana
+  (desc ground-of-verification)
+done
+
+shabda pratyaksha
+  (alias direct-perception)
+  (desc what-is-seen-without-mediation)
+done
+
+shabda sarva-pramana
+  (alias all-verification)
+  (desc proof-that-holds-across-all-domains)
+done
+
+shabda shuddhi-pramana
+  (alias purity-proof)
+  (desc verification-through-refinement)
+done

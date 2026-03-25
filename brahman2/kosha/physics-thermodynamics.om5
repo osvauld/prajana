@@ -1,0 +1,113 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-thermodynamics — 16 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha first-law
+  (vishesa thermodynamics-varga)
+  (abheda purna)
+  (sthita niyama kshetra energy)
+  (rahita vivartana))
+
+(kosha second-law
+  (vishesa thermodynamics-varga)
+  (abheda kshaya)
+  (sthita krama kshetra niyama)
+  (phala samskaara)
+  (yukta vivartana))
+
+(kosha third-law
+  (vishesa thermodynamics-varga)
+  (rahita kaala thaalam)
+  (sthita kshetra niyama purna)
+  (antya kshaya))
+
+(kosha zeroth-law
+  (vishesa thermodynamics-varga)
+  (abheda niyama)
+  (phala viveka)
+  (yukta kshetra)
+  (sama kshetrajna)
+  (sthita purna))
+
+(kosha alpha-cooling
+  (vishesa thermodynamics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (abheda annealing)
+  (yukta thermodynamics decay force-directed simulation velocity-decay)
+  (sthita heat-parameter)
+  (kriya alpha geometric-decay)
+  (phala convergence equilibrium))
+
+(kosha heat-transfer
+  (vishesa thermodynamics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala temperature)
+  (yukta energy))
+
+(kosha phase-change-boil
+  (vishesa thermodynamics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala temperature)
+  (yukta latent-heat))
+
+(kosha phase-change-freeze
+  (vishesa thermodynamics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala temperature)
+  (yukta latent-heat))
+
+(kosha absolute-zero
+  (vishesa thermodynamics-varga)
+  (abheda shunya))
+
+(kosha entropy
+  (domain kosha/physics/thermodynamics/quantities)
+  (vishesa thermodynamics-varga)
+  (swarupa subanta irreversibility kaala-rahita)
+  (abheda disorder)
+  (sthita kshaya)
+  (siddha second-law)
+  (janya vrnda-sankhya)
+  (pratipaksha sankshepa)
+  (kramanusara ushna-apeksha))
+
+(kosha gas
+  (vishesa thermodynamics-varga)
+  (swarupa subanta no-fixed-shape no-fixed-volume compressible ideal-gas)
+  (yukta diffusion kinetic-theory pressure temperature volume-shader domain-3d)
+  (ahara phase-change-boil))
+
+(kosha liquid
+  (vishesa thermodynamics-varga)
+  (swarupa subanta definite-volume no-fixed-shape incompressible)
+  (yukta viscosity surface-tension navier-stokes pressure fluid-shader transparency domain-3d)
+  (phala phase-change-boil)
+  (ahara phase-change-freeze))
+
+(kosha plasma
+  (vishesa thermodynamics-varga)
+  (swarupa subanta ionised electron-free conductor)
+  (yukta electromagnetic electromagnetism nuclear-fusion temperature emission-shader domain-3d)
+  (sthita star)
+  (drishthanta lightning))
+
+(kosha solid
+  (vishesa thermodynamics-varga)
+  (swarupa subanta definite-shape definite-volume vibration)
+  (drishthanta crystalline amorphous)
+  (yukta normal-force coefficient-of-restitution mesh domain-3d)
+  (phala phase-change-freeze)
+  (ahara phase-change-boil))
+
+(kosha temperature
+  (vishesa thermodynamics-varga)
+  (swarupa subanta matra float scalar)
+  (abheda energy spanda)
+  (yukta entropy)
+  (sthita absolute-zero))
+
+(kosha thermodynamics-varga
+  (vishesa physics-varga energy-varga)
+  (swarupa subanta spanda)
+  (matra kelvin joule)
+  (yukta niyama avastha kaala))

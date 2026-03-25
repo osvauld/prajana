@@ -6,16 +6,16 @@
       "method": "answer",
       "input": "a rectangle has length 8 and width 5. find area",
       "output": "no match",
-      "elapsed_ms": 132,
+      "elapsed_ms": 53,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.139,
+  "duration": 0.057,
   "xfail": {
-    "reason": "area = length * width not in pipeline",
+    "reason": "rectangle area mantra not in pipeline",
     "strict": true,
-    "gate": "arithmetic: plain count not in pipeline",
+    "gate": "other:test_xfail",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
     "line": 296
   }

@@ -6,17 +6,17 @@
       "method": "answer",
       "input": "a shop has 10 apples and 8 oranges. 3 apples were sold. how many of each are left",
       "output": "no match",
-      "elapsed_ms": 332,
+      "elapsed_ms": 119,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.342,
+  "duration": 0.124,
   "xfail": {
     "reason": "entity_scope: per-entity count after subtraction",
     "strict": true,
     "gate": "entity_scope: per-entity scoped count",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 335
+    "line": 336
   }
 }

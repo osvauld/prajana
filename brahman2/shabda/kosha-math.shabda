@@ -1,0 +1,1163 @@
+# kosha/math — shabda extracted from .om files
+# 241 entries
+
+shabda O-notation
+  (alias O-notation, big-O)
+  (desc asymptotic-upper-bound-on-resource-usage-as-input-grows)
+done
+
+shabda abs
+  (eval abs)
+  (arity 1)
+  (degree 1)
+  (per-element yes)
+  (invertible no)
+done
+
+shabda acyclicity
+  (alias acyclicity)
+  (desc property-of-a-graph-containing-no-cycles)
+done
+
+shabda addition
+  (word plus)
+  (eval add)
+  (arity 2)
+  (degree 1)
+  (per-element no)
+  (invertible yes)
+  (inverse subtraction)
+done
+
+shabda adjacency-matrix
+  (alias adjacency-matrix)
+  (desc matrix-encoding-which-vertices-are-adjacent)
+done
+
+shabda algebra-varga
+  (alias algebra-varga)
+  (desc cluster-for-algebraic-structures-group-ring-field-ideal-kernel)
+done
+
+shabda algebraic-projection
+  (alias algebraic-projection, pi, project)
+  (desc relational-algebra-projection-extract-columns-from-a-relation)
+done
+
+shabda amplitude
+  (alias amplitude)
+  (desc the-maximum-displacement-of-a-wave-from-equilibrium-how-far-spanda-reaches)
+done
+
+shabda antiderivative
+  (degree integral)
+  (per-element yes)
+  (invertible yes)
+  (inverse derivative)
+  (alias antiderivative)
+  (desc the-gathering-of-all-tat-kshana-into-wholeness-sama-the-holding-whole-shakti-in-the-shiva-shakti-pair-the-act-of-integration)
+done
+
+shabda arccosine
+  (word arccosine)
+  (eval acos)
+  (arity 1)
+  (degree 1)
+  (per-element yes)
+  (invertible yes)
+  (inverse cosine)
+done
+
+shabda arcsine
+  (word arcsine)
+  (eval asin)
+  (arity 1)
+  (degree 1)
+  (per-element yes)
+  (invertible yes)
+  (inverse sine)
+done
+
+shabda arctangent
+  (word arctangent)
+  (eval atan2)
+  (arity 2)
+  (degree 1)
+  (per-element yes)
+  (invertible yes)
+  (inverse tangent)
+done
+
+shabda associativity
+  (desc "group, equals, sandhi")
+done
+
+shabda asymptote
+  (alias asymptote)
+  (desc the-approach-that-never-arrives)
+done
+
+shabda ativakra
+  (alias hyperbola)
+  (desc the-beyond-curve-locus-of-points-whose-difference-of-distances-to-two-foci-is-constant-opposite-of-dirgha-vrtta-the-shape-of-gravitational-slingshot-paths)
+done
+
+shabda axiom
+  (alias axiom)
+  (desc self-evident-foundational-statement-requiring-no-proof)
+done
+
+shabda basis
+  (alias basis)
+  (desc the-minimum-set-of-independent-vectors-that-span-the-entire-vector-space-the-mula-of-all-coordinates)
+done
+
+shabda bayes
+  (alias bayes)
+  (desc rule-for-updating-probability-given-new-evidence)
+done
+
+shabda bijection
+  (alias bijection)
+  (desc a-one-to-one-onto-mapping-between-two-sets-same-cardinality-isomorphism-of-sets)
+done
+
+shabda breadth-first
+  (alias breadth-first, BFS)
+  (desc graph-walk-that-explores-all-neighbors-before-going-deeper)
+done
+
+shabda calculus-varga
+  (alias calculus-varga)
+  (desc cluster-for-calculus-derivative-integral-limit-partial-gradient)
+done
+
+shabda cardinality
+  (alias cardinality)
+  (desc the-size-of-a-set-how-many-elements-it-contains-finite-or-infinite)
+done
+
+shabda category
+  (desc "category, category-theory")
+done
+
+shabda ceil
+  (eval ceil)
+  (arity 1)
+  (degree 1)
+  (per-element yes)
+  (invertible no)
+done
+
+shabda coefficient
+  (alias coefficient)
+  (desc the-scalar-that-multiplies-a-power-term-in-a-polynomial-the-weight-of-each-term)
+done
+
+shabda collatz
+  (alias collatz)
+  (desc the-sequence-that-always-returns-to-one-by-halving-evens-and-tripling-odds-plus-one)
+done
+
+shabda collatz-parity
+  (alias collatz-parity)
+  (desc the-even-odd-parity-alternation-within-the-collatz-sequence)
+done
+
+shabda commutativity
+  (alias commutativity, commutative, abelian)
+  (desc the-property-that-the-order-of-operands-does-not-change-the-result)
+done
+
+shabda completeness
+  (alias completeness)
+  (desc property-of-a-system-where-every-truth-is-provable)
+done
+
+shabda complex
+  (alias complex)
+  (desc a-plus-bi-real-and-imaginary-together-rotation-in-the-plane-euler-e-to-ix-equals-cos-plus-i-sin)
+done
+
+shabda complex-magnitude
+  (degree 1)
+  (krama-input complex)
+  (krama-output scalar)
+  (alias complex-magnitude)
+  (desc modulus-of-complex-number-sqrt-a-squared-plus-b-squared)
+done
+
+shabda complex-mul
+  (degree 1)
+  (krama-input complex-a complex-b)
+  (krama-output complex)
+  (alias complex-mul)
+  (desc complex-multiplication-ac-minus-bd-and-ad-plus-bc)
+done
+
+shabda complex-phase
+  (degree 1)
+  (krama-input complex)
+  (krama-output angle)
+  (alias complex-phase)
+  (desc argument-of-complex-number-atan2-b-over-a-angle-in-complex-plane)
+done
+
+shabda complexity-class
+  (alias complexity-class)
+  (desc set-of-problems-solvable-within-given-resource-bounds)
+done
+
+shabda complexity-varga
+  (alias complexity-varga)
+  (desc cluster-for-computational-complexity-nodes)
+done
+
+shabda connectivity
+  (alias connectivity)
+  (desc property-that-every-vertex-can-reach-every-other)
+done
+
+shabda consistency
+  (alias consistency)
+  (desc property-of-a-system-containing-no-contradictions)
+done
+
+shabda contradiction
+  (alias contradiction)
+  (desc statement-that-is-simultaneously-true-and-false)
+done
+
+shabda convergence
+  (alias convergence)
+  (desc the-property-of-approaching-a-limit-seema-the-infinite-process-reaching-a-definite-value)
+done
+
+shabda coordinate
+  (alias coordinate)
+  (desc the-scalar-value-along-one-basis-direction-locates-a-bindu-in-vector-space)
+done
+
+shabda count
+  (word count number many how-many quantity)
+  (desc how-many-of-a-thing-after-all-events)
+done
+
+shabda cross-product
+  (alias cross-product)
+  (desc the-operation-that-finds-the-perpendicular-from-two-vectors)
+done
+
+shabda curl
+  (alias curl)
+  (desc the-vector-measure-of-rotation-in-a-vector-field-at-a-point)
+done
+
+shabda cycle
+  (alias cycle)
+  (desc path-that-returns-to-its-starting-vertex)
+done
+
+shabda decision-problem
+  (alias decision-problem)
+  (desc computational-problem-with-a-yes-or-no-answer)
+done
+
+shabda depth-first
+  (alias depth-first, DFS)
+  (desc graph-walk-that-recurses-as-deep-as-possible-before-backtracking)
+done
+
+shabda derivative
+  (degree "d/dx")
+  (per-element yes)
+  (invertible yes)
+  (inverse antiderivative)
+  (alias derivative)
+  (desc the-rate-of-change-at-a-single-instant-vishama-the-sharp-local-instant-shiva-in-the-shiva-shakti-pair-d-by-dx)
+done
+
+shabda directed-graph
+  (alias directed-graph, digraph)
+  (desc graph-where-edges-have-direction)
+done
+
+shabda dirgha-vrtta
+  (alias ellipse)
+  (desc the-elongated-circle-locus-of-points-whose-sum-of-distances-to-two-foci-is-constant-vrtta-is-the-special-case-where-both-foci-coincide)
+done
+
+shabda disjunction
+  (word or either)
+  (eval or)
+  (arity 2)
+  (name logical-or)
+  (desc logical-OR-true-when-at-least-one-operand-is-true)
+done
+
+shabda distribution
+  (alias distribution)
+  (desc function-assigning-probabilities-to-outcomes-of-a-random-variable)
+done
+
+shabda divergence
+  (alias divergence)
+  (desc the-scalar-measure-of-outward-flux-from-a-vector-field-at-a-point)
+done
+
+shabda division
+  (word over)
+  (eval div)
+  (arity 2)
+  (degree 1)
+  (per-element no)
+  (invertible yes)
+  (inverse multiplication)
+done
+
+shabda domain-math
+  (desc "math, mathematics")
+done
+
+shabda double
+  (word double)
+  (eval double)
+  (arity 1)
+  (per-element yes)
+  (invertible yes)
+  (inverse half)
+done
+
+shabda e
+  (desc "vriddhi, ananta, convergence, fixed-point, avrti, logarithm")
+done
+
+shabda edge-graph
+  (alias edge)
+  (desc connection-between-two-vertices-in-a-graph)
+done
+
+shabda empty-set
+  (desc "set, shunya, set-union")
+done
+
+shabda endomorphism
+  (alias endomorphism, self-map)
+  (desc a-morphism-from-a-structure-to-itself-every-pipeline-tantra-is-an-endomorphism-on-the-question-graph)
+done
+
+shabda equals
+  (alias equals)
+  (desc the-assertion-that-two-expressions-share-the-same-value-sama-at-the-mathematical-level)
+done
+
+shabda equivalence-relation
+  (desc "equivalence-relation, equivalence, reflexive-symmetric-transitive")
+done
+
+shabda event
+  (alias event)
+  (desc subset-of-the-sample-space-to-which-a-probability-is-assigned)
+done
+
+shabda expected-value
+  (alias expected-value)
+  (desc probability-weighted-average-of-all-possible-values)
+done
+
+shabda exponential
+  (eval exp)
+  (arity 1)
+  (degree exp)
+  (per-element yes)
+  (invertible yes)
+  (inverse logarithm)
+done
+
+shabda factorial
+  (eval factorial)
+  (arity 1)
+  (degree n!)
+  (per-element no)
+  (invertible no)
+done
+
+shabda field
+  (alias field)
+  (desc a-value-assigned-to-every-point-in-vector-space-scalar-or-vector-the-medium-through-which-forces-act)
+done
+
+shabda filtration
+  (alias filtration, ascending-chain)
+  (desc an-ascending-chain-of-substructures-each-contained-in-the-next-imposing-a-depth-grading-on-the-whole-structure)
+done
+
+shabda fourier-transform
+  (degree F)
+  (per-element yes)
+  (invertible yes)
+  (inverse fourier-transform)
+done
+
+shabda function
+  (desc "function, total-map")
+done
+
+shabda ganana-setu
+  (add addition)
+  (sub subtraction)
+  (mul multiplication)
+  (div division)
+  (power power)
+  (sqrt square)
+  (sin sine)
+  (cos cosine)
+  (tan tangent)
+  (log logarithm)
+  (abs abs)
+  (neg negation)
+  (floor floor)
+  (ceil ceil)
+  (min min)
+  (max max)
+  (mod modulo)
+  (factorial factorial)
+  (asin sine)
+  (acos cosine)
+  (atan tangent)
+  (exp power)
+done
+
+shabda geometry-varga
+  (alias geometry-varga)
+  (desc cluster-for-geometric-structures-vector-matrix-manifold-coordinate)
+done
+
+shabda graded-ring
+  (grade-boundary viraam)
+  (intra-grade-boundary dvandva)
+  (fold-identity 0)
+  (alias graded-ring, grading)
+done
+
+shabda gradient
+  (alias gradient)
+  (desc the-vector-pointing-in-the-direction-of-steepest-increase-of-a-scalar-field)
+done
+
+shabda graph
+  (alias graph)
+  (desc set-of-vertices-connected-by-edges)
+done
+
+shabda graph-varga
+  (alias graph-varga)
+  (desc cluster-for-graph-theory-nodes)
+done
+
+shabda graph-walk
+  (alias graph-walk)
+  (desc traversal-of-a-graph-following-edges-from-a-starting-vertex)
+done
+
+shabda group
+  (desc "set, closure, associativity, identity-element, inverse-element, subgroup, homomorphism, group-witness, commutativity")
+done
+
+shabda half
+  (word half)
+  (eval half)
+  (arity 1)
+  (per-element yes)
+  (invertible yes)
+  (inverse double)
+done
+
+shabda homogeneous-transform
+  (degree SE3-element)
+  (per-element no)
+  (invertible yes)
+  (inverse homogeneous-transform)
+  (alias homogeneous-transform)
+  (desc the-matrix-encoding-rotation-and-translation-together-enabling-chain-composition-for-kinematic-chains)
+done
+
+shabda homomorphism
+  (desc "group, setu, subgroup, set-intersection")
+done
+
+shabda ideal
+  (alias ideal)
+  (desc a-subset-of-a-ring-closed-under-addition-and-absorbing-multiplication-from-either-side)
+done
+
+shabda identity-element
+  (alias identity-element, identity, neutral-element)
+  (desc the-element-that-leaves-every-other-element-unchanged-under-the-operation-zero-for-addition-one-for-multiplication)
+done
+
+shabda imaginary
+  (alias imaginary)
+  (desc the-sakshi-matra-axis-of-number-sqrt-of-minus-one-rotation-in-the-complex-plane-i)
+done
+
+shabda implication
+  (word if implies therefore)
+  (name logical-implication)
+  (desc logical-connective-if-A-then-B)
+done
+
+shabda independence
+  (alias independence)
+  (desc property-of-events-whose-probability-is-unaffected-by-each-other)
+done
+
+shabda induction
+  (alias induction)
+  (desc proof-technique-establishing-a-property-for-all-natural-numbers)
+done
+
+shabda inference
+  (alias inference)
+  (desc deriving-a-conclusion-from-premises-by-logical-rules)
+done
+
+shabda infinitesimal
+  (alias infinitesimal)
+  (desc the-smallest-step-that-still-is-below-this-reality-cannot-be-divided-the-true-dx)
+done
+
+shabda interpolation-varga
+  (alias interpolation-varga)
+  (desc estimating-intermediate-values-between-known-points-lerp-slerp-spline)
+done
+
+shabda intractable
+  (alias intractable)
+  (desc property-of-a-problem-with-no-known-polynomial-time-solution)
+done
+
+shabda invariant
+  (alias invariant)
+  (desc property-that-remains-true-throughout-a-computation-or-transformation)
+done
+
+shabda inverse-element
+  (alias inverse-element)
+  (desc the-element-that-combines-with-a-given-element-to-produce-the-identity-negation-for-addition-reciprocal-for-multiplication)
+done
+
+shabda inverse-square-law
+  (alias inverse-square-law)
+  (desc the-mathematical-law-where-a-quantity-diminishes-proportional-to-the-square-of-distance-from-its-source-gravity-light-electrostatics-all-obey-this)
+done
+
+shabda inversion
+  (word solving-for inverting finding)
+  (name inversion)
+done
+
+shabda irrational
+  (alias irrational)
+  (desc a-real-number-that-cannot-be-expressed-as-ratio-pi-and-e-and-sqrt-2-live-here-infinite-non-repeating)
+done
+
+shabda isomorphism
+  (desc "isomorphism, bijection, invertible-map")
+done
+
+shabda kernel
+  (alias kernel)
+  (desc the-set-of-elements-mapped-to-the-identity-by-a-homomorphism-measuring-how-far-the-map-is-from-injective)
+done
+
+shabda laplacian
+  (alias laplacian)
+  (desc the-divergence-of-the-gradient-measuring-how-a-value-differs-from-its-surroundings)
+done
+
+shabda lattice
+  (alias lattice)
+  (desc a-partially-ordered-set-where-every-pair-of-elements-has-a-unique-join-and-meet-the-skeleton-of-inclusion-and-intersection)
+done
+
+shabda limit
+  (alias limit)
+  (desc the-value-a-function-approaches-as-input-approaches-a-point-never-touching-only-converging)
+done
+
+shabda logarithm
+  (eval log)
+  (arity 1)
+  (degree log)
+  (per-element yes)
+  (invertible yes)
+  (inverse power)
+done
+
+shabda logic-varga
+  (alias logic-varga)
+  (desc cluster-for-mathematical-logic-nodes)
+done
+
+shabda manifold
+  (alias manifold)
+  (desc a-space-that-is-locally-flat-but-globally-curved-akasham-with-topology-sphere-and-ellipse-are-manifolds)
+done
+
+shabda marginalisation
+  (alias marginalisation)
+  (desc summing-a-joint-distribution-over-variables-to-get-a-marginal)
+done
+
+shabda mat-add
+  (degree 1)
+  (krama-input mat-a mat-b)
+  (krama-output matrix)
+  (per-element yes)
+  (alias mat-add)
+  (desc element-wise-matrix-addition-same-dimensions-required)
+done
+
+shabda mat-scale
+  (degree 1)
+  (krama-input scalar matrix)
+  (krama-output matrix)
+  (per-element yes)
+  (alias mat-scale)
+  (desc multiply-every-element-of-matrix-by-scalar)
+done
+
+shabda mat-transpose
+  (degree 1)
+  (krama-input matrix)
+  (krama-output matrix)
+  (invertible yes)
+  (inverse mat-transpose)
+  (alias mat-transpose)
+  (desc flip-rows-and-columns-self-inverse-used-in-jacobian-and-rotation-matrix)
+done
+
+shabda math-varga
+  (alias math-varga)
+  (desc root-cluster-for-all-mathematics-domain-nodes)
+done
+
+shabda matra
+  (alias measure)
+  (desc the-unit-that-holds-quantity)
+done
+
+shabda max
+  (eval max)
+  (arity 2)
+done
+
+shabda min
+  (eval min)
+  (arity 2)
+done
+
+shabda modus-ponens
+  (word therefore follows implies)
+  (name modus-ponens)
+done
+
+shabda monotone-map
+  (alias monotone, order-preserving)
+  (desc a-function-that-preserves-order-every-pipeline-tantra-only-adds-triples-never-removes-guaranteeing-fixpoint-via-Knaster-Tarski)
+done
+
+shabda morphism
+  (desc "morphism, map, mapping, transformation, arrow")
+done
+
+shabda multiplication
+  (word times)
+  (eval mul)
+  (arity 2)
+  (degree 1)
+  (per-element no)
+  (invertible yes)
+  (inverse division)
+done
+
+shabda neg
+  (eval neg)
+  (arity 1)
+  (degree 1)
+  (per-element yes)
+  (invertible yes)
+  (inverse neg)
+done
+
+shabda norm
+  (alias norm)
+  (desc the-length-of-a-vector-square-root-of-dot-product-with-itself-magnitude-in-space)
+done
+
+shabda normal
+  (alias normal)
+  (desc the-unit-vector-perpendicular-to-a-surface)
+done
+
+shabda normalisation
+  (alias normalisation)
+  (desc scaling-a-distribution-so-probabilities-sum-to-one)
+done
+
+shabda number-theory-varga
+  (alias number-theory-varga)
+  (desc branch-of-math-studying-integers-divisibility-primes-gcd-lcm)
+done
+
+shabda number-varga
+  (alias number-varga)
+  (desc cluster-for-number-types-int-float-real-rational-complex-prime)
+done
+
+shabda orthogonal
+  (alias orthogonal)
+  (desc perpendicular-vectors-whose-dot-product-is-zero-kona-of-ninety-degrees-the-clean-basis)
+done
+
+shabda partial-derivative
+  (alias partial-derivative)
+  (desc d-f-by-d-x-j-kramanusara-of-f-wrt-one-variable-others-held-constant-viveka-singles-out-one-apeksha-from-many)
+done
+
+shabda partial-order
+  (alias partial-order, poset)
+  (desc a-relation-on-a-set-that-is-reflexive-antisymmetric-and-transitive-imposing-a-hierarchy-without-requiring-every-pair-to-be-comparable)
+done
+
+shabda path
+  (alias path)
+  (desc sequence-of-vertices-connected-by-edges)
+done
+
+shabda permutation
+  (alias permutation)
+  (desc ordered-arrangement-of-r-items-from-n-order-matters-n-factorial-over-n-minus-r-factorial)
+done
+
+shabda pi
+  (constants-key pi)
+  (alias pi)
+  (desc the-ratio-of-circumference-to-diameter-3-14159-irrational-transcendental-lives-in-every-circle-and-wave)
+done
+
+shabda planarity
+  (alias planarity)
+  (desc property-of-a-graph-embeddable-in-a-plane-without-edge-crossings)
+done
+
+shabda polynomial
+  (alias polynomial)
+  (desc a-sum-of-power-terms-each-coefficient-times-variable-to-a-power-the-expression-cas-operates-on)
+done
+
+shabda power
+  (word to-the-power)
+  (eval power)
+  (arity 2)
+  (degree exp)
+  (per-element no)
+  (invertible yes)
+  (inverse logarithm)
+done
+
+shabda ppr-mantra
+  (word pagerank)
+  (eval ppr)
+  (arity 3)
+  (name personalized-pagerank)
+done
+
+shabda prime
+  (alias prime)
+  (desc a-number-divisible-only-by-one-and-itself-the-mula-of-all-integers-irreducible-atom-of-arithmetic)
+done
+
+shabda probability
+  (alias probability)
+  (desc measure-of-likelihood-of-an-event-valued-between-0-and-1)
+done
+
+shabda probability-varga
+  (alias probability-varga)
+  (desc cluster-for-probability-and-statistics-nodes)
+done
+
+shabda product
+  (eval mul)
+  (arity -1)
+  (fold product)
+  (degree 1)
+  (per-element no)
+  (invertible no)
+done
+
+shabda proposition
+  (alias proposition)
+  (desc statement-that-is-either-true-or-false)
+done
+
+shabda quantifier
+  (word all every some any)
+  (name logical-quantifier)
+  (desc logical-operator-expressing-for-all-or-there-exists)
+done
+
+shabda quat-conjugate
+  (degree 1)
+  (krama-input quaternion)
+  (krama-output quaternion)
+  (alias quat-conjugate)
+  (desc negate-vector-part-of-quaternion-w-minus-x-minus-y-minus-z)
+done
+
+shabda quat-mul
+  (degree 1)
+  (krama-input quat-a quat-b)
+  (krama-output quaternion)
+  (alias quat-mul)
+  (desc hamilton-product-of-two-quaternions-rotation-composition)
+done
+
+shabda quat-norm
+  (degree 1)
+  (krama-input quaternion)
+  (krama-output scalar)
+  (alias quat-norm)
+  (desc euclidean-norm-of-quaternion-sqrt-w2-plus-x2-plus-y2-plus-z2)
+done
+
+shabda quat-to-rotation
+  (degree 1)
+  (krama-input quaternion)
+  (krama-output rotation-matrix)
+  (alias quat-to-rotation)
+  (desc unit-quaternion-to-3x3-rotation-matrix)
+done
+
+shabda quaternion
+  (alias quaternion)
+  (desc the-four-component-number-that-encodes-3d-rotation)
+done
+
+shabda quotient
+  (alias quotient, quotient-ring, quotient-group)
+  (desc the-structure-obtained-by-collapsing-an-ideal-or-normal-subgroup-into-a-single-identity-partitioning-elements-into-equivalence-classes)
+done
+
+shabda radian
+  (word rad radian)
+  (concepts-for-unit joint-angle angle)
+done
+
+shabda random-variable
+  (alias random-variable)
+  (desc variable-whose-value-is-determined-by-a-random-outcome)
+done
+
+shabda rational
+  (alias rational)
+  (desc a-number-expressible-as-ratio-of-two-integers-p-over-q-exact-and-bounded-subset-of-real)
+done
+
+shabda real
+  (alias real)
+  (desc the-complete-number-line-rational-and-irrational-together-the-continuum-calculus-lives-here)
+done
+
+shabda reciprocal
+  (word reciprocal)
+  (eval reciprocal)
+  (arity 1)
+  (degree 1)
+  (per-element yes)
+  (invertible yes)
+  (inverse reciprocal)
+done
+
+shabda recursion-complexity
+  (alias recursion-complexity)
+  (desc recursive-computation-viewed-through-its-complexity-cost)
+done
+
+shabda reduction
+  (alias reduction)
+  (desc transformation-of-one-problem-into-another-to-compare-their-difficulty)
+done
+
+shabda rotation-matrix
+  (degree SO3-element)
+  (per-element no)
+  (invertible yes)
+  (inverse rotation-matrix)
+  (alias rotation-matrix)
+  (desc the-matrix-that-rotates-a-vector-by-an-angle-in-a-chosen-plane-orthogonal-and-det-1)
+done
+
+shabda sama-dura-vakra
+  (alias parabola)
+  (desc the-curve-where-every-point-is-equidistant-from-one-focus-bindu-and-one-directrix-rekha-the-path-of-projectiles-the-shape-of-reflectors)
+done
+
+shabda sample-space
+  (alias sample-space)
+  (desc set-of-all-possible-outcomes-of-a-random-experiment)
+done
+
+shabda selection
+  (alias selection, filter, sigma)
+  (desc relational-algebra-selection-filter-rows-of-a-relation-by-predicate)
+done
+
+shabda series
+  (alias series)
+  (desc the-infinite-sum-that-converges-to-a-value-madhava-knew-sine-and-pi-live-here)
+done
+
+shabda set
+  (desc "empty-set, subset, set-union, set-intersection, set-complement, set-difference, group, list")
+done
+
+shabda set-complement
+  (desc "set, purna-neti, asparsha, set-union, empty-set")
+done
+
+shabda set-difference
+  (desc "set, kshaya, set-complement, set-intersection")
+done
+
+shabda set-intersection
+  (desc "set, sparsha, abheda, subset, set-union")
+done
+
+shabda set-product
+  (desc "set-product, cartesian-product, product-set")
+done
+
+shabda set-union
+  (desc "set, holder-giver, empty-set, set-intersection")
+done
+
+shabda set-varga
+  (alias set-varga)
+  (desc cluster-for-set-theoretic-structures-set-subset-union-intersection)
+done
+
+shabda shortest-path
+  (alias shortest-path)
+  (desc path-between-two-vertices-minimising-total-edge-weight)
+done
+
+shabda soundness
+  (alias soundness)
+  (desc property-of-a-system-where-every-provable-statement-is-true)
+done
+
+shabda space-complexity
+  (alias space-complexity)
+  (desc amount-of-memory-used-as-a-function-of-input-size)
+done
+
+shabda spanning-tree
+  (alias spanning-tree)
+  (desc tree-that-includes-all-vertices-of-a-graph)
+done
+
+shabda square
+  (word squared)
+  (eval square)
+  (arity 1)
+  (degree 2)
+  (per-element yes)
+  (invertible yes)
+  (inverse sqrt)
+done
+
+shabda square-root
+  (word root-of)
+  (eval sqrt)
+  (arity 1)
+  (degree 0.5)
+  (per-element yes)
+  (invertible yes)
+  (inverse square)
+done
+
+shabda statistics-varga
+  (alias statistics-varga)
+  (desc branch-of-math-studying-data-analysis-mean-variance-distributions)
+done
+
+shabda subgroup
+  (desc "group, subset, closure, homomorphism")
+done
+
+shabda subset
+  (desc "set, set-intersection, subgroup")
+done
+
+shabda subspace
+  (alias subspace)
+  (desc a-vector-space-within-a-vector-space-closed-under-addition-and-scaling-kshetra-within-kshetra)
+done
+
+shabda substitution
+  (word substituting plugging)
+  (name substitution)
+done
+
+shabda subtraction
+  (word minus)
+  (eval sub)
+  (arity 2)
+  (degree 1)
+  (per-element no)
+  (invertible yes)
+  (inverse addition)
+done
+
+shabda sum
+  (eval add)
+  (arity -1)
+  (fold sum)
+  (degree 1)
+  (per-element no)
+  (invertible no)
+done
+
+shabda tensor
+  (alias tensor)
+  (desc a-multilinear-object-that-assigns-a-scalar-to-each-combination-of-basis-directions-generalising-vectors-and-matrices-to-arbitrary-rank)
+done
+
+shabda tensor-product
+  (alias tensor-product)
+  (desc the-bilinear-operation-that-combines-two-vector-spaces-into-a-higher-rank-tensor-space)
+done
+
+shabda theorem
+  (alias theorem)
+  (desc statement-established-as-true-by-logical-proof)
+done
+
+shabda time-complexity
+  (alias time-complexity)
+  (desc number-of-computation-steps-as-a-function-of-input-size)
+done
+
+shabda tractable
+  (alias tractable)
+  (desc property-of-a-problem-solvable-in-polynomial-time)
+done
+
+shabda transcendental-varga
+  (alias transcendental-varga)
+  (desc numbers-and-functions-beyond-polynomial-roots-exp-log-sin-cos-pi-e)
+done
+
+shabda tree
+  (alias tree)
+  (desc connected-acyclic-graph)
+done
+
+shabda trigonometry-varga
+  (alias trigonometry-varga)
+  (desc branch-of-math-relating-angles-to-side-ratios-via-sine-cosine-tangent)
+done
+
+shabda trikona
+  (alias triangle)
+  (desc three-bindus-three-rekhas-minimum-enclosure-of-area-in-tala-rigid-under-force-atom-of-rasterization)
+done
+
+shabda undecidable
+  (alias undecidable)
+  (desc statement-that-can-neither-be-proved-nor-disproved-within-a-system)
+done
+
+shabda undecidable-complexity
+  (alias undecidable-complexity)
+  (desc property-of-a-problem-with-no-algorithm-that-always-halts)
+done
+
+shabda vec-add
+  (degree 1)
+  (krama-input vec-a vec-b)
+  (krama-output vector)
+  (per-element yes)
+  (alias vec-add)
+  (desc component-wise-vector-addition-for-n-dimensional-vectors)
+done
+
+shabda vec-cross
+  (degree 1)
+  (krama-input vec-a vec-b)
+  (krama-output vector)
+  (alias vec-cross)
+  (desc cross-product-of-two-3d-vectors-perpendicular-to-both)
+done
+
+shabda vec-dot
+  (degree 1)
+  (krama-input vec-a vec-b)
+  (krama-output scalar)
+  (per-element yes)
+  (fold sum)
+  (alias vec-dot)
+  (desc dot-product-of-n-dimensional-vectors-scalar-projection)
+done
+
+shabda vec-norm
+  (degree 1)
+  (krama-input vector)
+  (krama-output scalar)
+  (per-element yes)
+  (fold sum)
+  (alias vec-norm)
+  (desc euclidean-length-of-an-n-dimensional-vector-sqrt-of-dot-product-with-itself)
+done
+
+shabda vec-scale
+  (degree 1)
+  (krama-input scalar vector)
+  (krama-output vector)
+  (per-element yes)
+  (alias vec-scale)
+  (desc scalar-multiplication-of-an-n-dimensional-vector)
+done
+
+shabda vector-space
+  (alias vector-space)
+  (desc n-dimensional-space-akasham-made-precise-vectors-add-and-scale-basis-spans-the-whole-space)
+done
+
+shabda viveka-max
+  (word heavier faster bigger taller stronger greater more higher longer wider deeper larger denser brighter louder warmer hotter colder older newer richer heaviest fastest biggest tallest strongest greatest most highest longest widest largest densest brightest loudest warmest hottest coldest oldest newest richest)
+  (desc comparative-selecting-the-greater-value)
+done
+
+shabda viveka-min
+  (word lighter slower smaller shorter weaker lesser less lower narrower thinner softer quieter cooler dimmer younger poorer lightest slowest smallest shortest weakest least lowest narrowest thinnest softest quietest coolest dimmest youngest poorest)
+  (desc comparative-selecting-the-lesser-value)
+done
+
+shabda volume
+  (word volume)
+  (alias volumes cubic)
+done
+
+shabda vrtta-stambha
+  (alias cylinder)
+  (desc vrtta-swept-along-rekha-every-cross-section-is-a-circle-of-equal-radius)
+done
+
+shabda weighted-graph
+  (alias weighted-graph)
+  (desc graph-where-each-edge-carries-a-numeric-weight)
+done

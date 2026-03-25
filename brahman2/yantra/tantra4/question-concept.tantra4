@@ -1,0 +1,10 @@
+-- finds the query concept: first non-system satya in the question grade.
+(tantra question-concept (grades)
+  (reduce grades "" (fn acc grade ->
+    cond (not (is-question-grade grade)) acc
+    otherwise (reduce grade acc (fn a t ->
+      let e = triple-edge t
+      let s = triple-subj t
+      cond (has-text a) a
+      (and (eq e "satya") (not (is-system-concept s))) s
+      otherwise a)))))

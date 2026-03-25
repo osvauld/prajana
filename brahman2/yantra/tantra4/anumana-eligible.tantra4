@@ -1,0 +1,7 @@
+-- true if graph is eligible for categorical inference (not numeric, not viveka).
+(tantra anumana-eligible (graph)
+  (is-numeric (has-items (nth (bound-state graph) 0)))
+  (viveka-present (has-items (filter (graph | where [vs, ve, vo]
+    | and (eq ve "satya") | collect (to-string vs))
+    (fn w -> (or (eq w "viveka-max") (eq w "viveka-min"))))))
+  (and (not is-numeric) (not viveka-present)))

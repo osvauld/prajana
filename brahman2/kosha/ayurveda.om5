@@ -1,0 +1,74 @@
+; ═══════════════════════════════════════════════════════════════════
+; ayurveda — 8 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha domain-ayurveda
+  (sthita panchabhootam)
+  (kriya spanda)
+  (phala shuddhi)
+  (yukta dhatu rasa rasayana-bandha prana dosha ojas vata pitta kapha)
+  (siddha sambandha samsarga)
+  (abheda kaizen)
+  (swarupa svabhava)
+  (drishthanta shiva-mooli))
+
+(kosha dosha
+  (swarupa spanda)
+  (abheda polarity vata pitta kapha)
+  (yukta svabhava)
+  (phala shuddhi)
+  (drishthanta kshaya)
+  (sthita domain-ayurveda)
+  (janya panchabhootam)
+  (siddha sambandha))
+
+(kosha kapha
+  (abheda jala prithvi)
+  (swarupa dharana)
+  (kriya sambandha)
+  (yukta ojas)
+  (sthita dosha domain-ayurveda)
+  (siddha svabhava))
+
+(kosha ojas
+  (phala rasayana-bandha dhatu)
+  (siddha shuddhi)
+  (yukta prana)
+  (sthita ananta domain-ayurveda)
+  (abheda ghana-pramana)
+  (swarupa svabhava))
+
+(kosha pitta
+  (abheda agni tejas)
+  (swarupa transformation)
+  (kriya shuddhi)
+  (yukta rasa)
+  (sthita dosha domain-ayurveda)
+  (siddha svabhava))
+
+(kosha prana
+  (swarupa spanda)
+  (abheda jiva vayu)
+  (kriya rasa)
+  (sthita dhatu domain-ayurveda ananta)
+  (siddha sambandha)
+  (yukta svabhava)
+  (pratipaksha jada))
+
+(kosha rasayana
+  (swarupa rasayana-bandha svabhava)
+  (phala ojas)
+  (kriya dhatu)
+  (sthita rasa ananta domain-ayurveda)
+  (yukta prana)
+  (siddha shuddhi)
+  (drishthanta shiva-mooli)
+  (abheda kaizen))
+
+(kosha vata
+  (abheda vayu akasha)
+  (swarupa spanda)
+  (kriya gati)
+  (yukta prana)
+  (sthita dosha domain-ayurveda)
+  (siddha svabhava))

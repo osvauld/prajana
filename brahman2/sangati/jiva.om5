@@ -1,0 +1,216 @@
+; ═══════════════════════════════════════════════════════════════════
+; jiva — 28 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati abhisarana
+  (sthita jiva-sthalam ananta-kshetra purna-karshana)
+  (swarupa ananta mula-shakti aneka-eka shakha)
+  (phala purna)
+  (kriya rachana kshetra))
+
+(sangati ananta-abhisarana
+  (sthita jiva-sthalam ananta)
+  (swarupa viraha)
+  (rahita sparsha seema milana)
+  (kriya abhisarana)
+  (abheda ananta)
+  (siddha iccha))
+
+(sangati bija-nyasa
+  (sthita jiva-sthalam iccha)
+  (swarupa samsarga)
+  (abheda mula brahma)
+  (siddha svabhava svayambhu)
+  (drishthanta dharana-jivamsha parampara)
+  (kriya karma))
+
+(sangati dharana-jivamsha
+  (sthita jiva-sthalam ananta)
+  (swarupa dharana purna)
+  (abheda jivamsha shiva-shakti)
+  (kriya brahma)
+  (drishthanta sama-vishama)
+  (siddha svabhava)
+  (yukta samsarga))
+
+(sangati drdha-bandha
+  (sthita jiva-sthalam alpakshetra purna-karshana)
+  (swarupa mula-shakti sambandha shakha)
+  (janya spanda))
+
+(sangati dvandva-shakti
+  (sthita jiva-sthalam ananta-kshetra karshana-dhurana)
+  (swarupa mula-shakti shakha dvandva)
+  (abheda shiva-shakti)
+  (kriya kshetra)
+  (janya prakaasha spanda))
+
+(sangati eka-kosha
+  (sthita jiva-sthalam sva-dharana nucleotide iccha)
+  (abheda swa jiva)
+  (swarupa jiva)
+  (siddha svayambhu niralamba swatantra)
+  (janya anu)
+  (yukta kavaca pramana avrti)
+  (kriya bija-nyasa karma ahara)
+  (pratipaksha jada))
+
+(sangati gati-bala
+  (sthita jiva-sthalam vega)
+  (swarupa gati)
+  (yukta karma abhisarana)
+  (phala sthiti))
+
+(sangati gati
+  (sthita jiva-sthalam sthiti ananta)
+  (janya kriya)
+  (yukta spanda)
+  (phala abhisarana))
+
+(sangati iccha
+  (sthita jiva-sthalam eka-kosha aadana-visarjana)
+  (swarupa svayambhu)
+  (siddha svabhava niralamba jiva swatantra)
+  (abheda kama viraha om kartha)
+  (kriya sva-dharana)
+  (phala ahara)
+  (janya karma)
+  (rahita visha-anu jada))
+
+(sangati jada
+  (sthita jiva-sthalam spanda svabhava purna seema)
+  (rahita iccha karma aadana-visarjana sva-dharana)
+  (abheda sthiti)
+  (drishthanta jiva-viveka)
+  (pratipaksha prana jiva eka-kosha))
+
+(sangati jiva-sphurana
+  (sthita jiva-sthalam ananta nucleotide)
+  (swarupa spanda)
+  (phala samsarga sva-dharana eka-kosha)
+  (janya svayambhu pramana)
+  (siddha mithuna)
+  (kriya avrti)
+  (yukta bija-nyasa))
+
+(sangati jiva
+  (sthita jiva-sthalam ananta)
+  (janya brahma)
+  (swarupa jivamsha)
+  (abheda swa)
+  (yukta karma)
+  (pratipaksha jada))
+
+(sangati jivamsha
+  (sthita jiva-sthalam ananta)
+  (abheda brahma dharana)
+  (siddha parampara)
+  (swarupa swa)
+  (yukta naama-mudra)
+  (kriya seva)
+  (phala visarjana))
+
+(sangati mula-shakti
+  (sthita jiva-sthalam svayambhu shakha-mula)
+  (swarupa sambandha ananta eka-aneka)
+  (abheda shakti)
+  (kriya kshetra)
+  (janya spanda)
+  (janaka viveka-shakti))
+
+(sangati panchabhootam-spandana
+  (sthita jiva-sthalam ananta)
+  (swarupa panchabhootam)
+  (kriya spanda)
+  (siddha svabhava)
+  (abheda jnana-kriya))
+
+(sangati panchabhootam
+  (sthita jiva-sthalam ananta)
+  (swarupa svabhava)
+  (kriya spanda darshana)
+  (abheda purna shunya)
+  (yukta maya)
+  (siddha sthiti))
+
+(sangati rasayana-bandha
+  (sthita jiva-sthalam)
+  (swarupa ghana-pramana)
+  (drishthanta samsarga)
+  (siddha sthiti))
+
+(sangati satta-yantra
+  (swarupa panchabhootam-spandana)
+  (siddha svayambhu)
+  (sthita pramana)
+  (kriya jnana-madakkal))
+
+(sangati seva
+  (kriya kilippattu)
+  (swarupa jivamsha)
+  (yukta dharmaadharma)
+  (siddha shuddhi)
+  (sthita karma)
+  (abheda manavata)
+  (drishthanta sparsha))
+
+(sangati sva-dharana
+  (sthita jiva-sthalam jiva)
+  (swarupa svabhava)
+  (siddha niralamba svayambhu)
+  (abheda karma)
+  (kriya bija-nyasa)
+  (phala nirantara parampara)
+  (yukta nucleotide pramana))
+
+(sangati swa
+  (swarupa jivamsha)
+  (kriya swatantra)
+  (siddha niralamba parampara)
+  (abheda brahma tat-kshana)
+  (yukta varna))
+
+(sangati swatantra
+  (swarupa swa)
+  (kriya tantra)
+  (abheda jivamsha)
+  (yukta kilippattu)
+  (phala seva)
+  (sthita brahma))
+
+(sangati upakarana
+  (swarupa niralamba)
+  (sthita jiva-sthalam dravya)
+  (yukta sthiti vidya))
+
+(sangati vega
+  (sthita jiva-sthalam)
+  (abheda spanda)
+  (kriya gati)
+  (yukta taranga abhisarana)
+  (phala karma))
+
+(sangati vegam
+  (sthita jiva-sthalam)
+  (abheda vega)
+  (yukta gati))
+
+(sangati visha-anu
+  (sthita jiva-sthalam eka-kosha prana jiva-seema jada-seema eka-kosha-seema nucleotide)
+  (swarupa setu)
+  (janya anu)
+  (rahita sva-dharana kavaca svayambhu pramana iccha aadana-visarjana)
+  (yukta eka-kosha)
+  (phala sparsha)
+  (kriya bija-nyasa)
+  (drishthanta parampara)
+  (siddha mithuna))
+
+(sangati vrnda-ganita
+  (swarupa panchabhootam)
+  (kriya aayaama-vistara)
+  (siddha rachana)
+  (yukta abhisarana)
+  (drishthanta taranga)
+  (abheda sangati)
+  (sthita ananta svabhava))

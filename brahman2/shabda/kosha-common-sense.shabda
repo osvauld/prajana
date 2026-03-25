@@ -1,0 +1,244 @@
+# kosha/common-sense — shabda extracted from .om files
+# 46 entries
+
+shabda air
+  (word air atmosphere)
+  (desc "N2-O2-gas-mixture-transparent-insulator-sound-medium")
+done
+
+shabda animal
+  (word animal animals)
+  (name animal)
+  (desc "a-living-creature-that-moves-and-senses")
+done
+
+shabda animal-varga
+  (alias animal-varga)
+  (desc "cluster-for-animals-living-things-that-move-and-sense")
+done
+
+shabda bird-varga
+  (alias bird-varga)
+  (desc "cluster-for-feathered-egg-laying-animals")
+done
+
+shabda breathing
+  (word breathe breathes breathing breath)
+  (name breathing)
+  (desc "the-act-of-exchanging-air")
+done
+
+shabda car-motion
+  (word car vehicle drives driving brakes braking)
+  (desc "combustion-mechanical-KE-via-tyre-friction")
+done
+
+shabda cat
+  (word cat cats)
+  (name cat)
+  (desc "a-small-domesticated-feline")
+done
+
+shabda ceiling
+  (word ceiling)
+  (desc "horizontal-overhead-surface-upper-bound-abheda-math-ceil")
+done
+
+shabda clay
+  (word clay)
+  (desc "aluminosilicate-plastic-when-wet-inelastic-e-zero-fires-to-ceramic")
+done
+
+shabda common-sense-varga
+  (alias common-sense-varga)
+  (desc "root-cluster-for-everyday-structural-patterns-location-containment-support-orientation")
+done
+
+shabda container
+  (word container pot cup bottle box vessel bowl)
+  (desc "enclosed-volume-holds-liquid-gas-or-solid")
+done
+
+shabda dog
+  (word dog dogs)
+  (name dog)
+  (desc "a-domesticated-canine")
+done
+
+shabda domain-common-sense
+  (alias common-sense)
+  (desc "the-ground-of-everyday-knowing-before-formal-domains-the-pointing-that-precedes-the-formula")
+done
+
+shabda elasticity
+  (word elastic elasticity bouncy bounces)
+  (desc "property-of-returning-to-shape-coefficient-of-restitution")
+done
+
+shabda falling
+  (word falling falls dropped drop)
+  (desc "gravity-height-to-velocity-KE-collision")
+done
+
+shabda floor
+  (eval floor)
+  (arity 1)
+  (degree 1)
+  (per-element yes)
+  (invertible no)
+done
+
+shabda glass
+  (word glass)
+  (desc "amorphous-silica-transparent-hard-brittle-refraction-1.5")
+done
+
+shabda ground
+  (word ground earth-surface)
+  (desc "ultimate-resting-place-normal-force-potential-energy-zero-reference")
+done
+
+shabda hardness
+  (word hard soft hardness)
+  (desc "resistance-to-permanent-deformation-mohs-scale")
+done
+
+shabda heart
+  (word heart hearts)
+  (name heart)
+  (desc "the-organ-that-pumps-blood")
+done
+
+shabda heating
+  (word heating heated boiling boils melts melting evaporates freezes condenses)
+  (desc "Q-to-deltaT-to-phase-change")
+done
+
+shabda human
+  (word human humans person people)
+  (name human)
+  (desc "a-human-being")
+done
+
+shabda ice
+  (word ice frozen)
+  (desc "H2O-solid-below-0C-hexagonal-crystal-floats-low-friction")
+done
+
+shabda living
+  (word living alive)
+  (name living)
+  (desc "the-property-of-being-alive")
+done
+
+shabda living-varga
+  (alias living-varga)
+  (desc "cluster-for-all-living-things-that-breathe-and-grow")
+done
+
+shabda location-varga
+  (alias location-varga)
+  (desc "where-things-are-spatial-grammar-of-everyday-pointing-displacement-from-a-named-reference")
+done
+
+shabda mammal
+  (word mammal mammals)
+  (name mammal)
+  (desc "a-warm-blooded-vertebrate-that-nurses-its-young")
+done
+
+shabda mammal-varga
+  (alias mammal-varga)
+  (desc "cluster-for-warm-blooded-animals-with-hearts")
+done
+
+shabda materials-varga
+  (alias materials-varga)
+  (desc "cluster-for-everyday-material-properties-phase-elasticity-hardness-thermal")
+done
+
+shabda metal
+  (word metal metallic)
+  (desc "solid-conductor-lustrous-malleable-free-electron-sea")
+done
+
+shabda opacity
+  (word transparent opaque translucent opacity)
+  (desc "alpha-refraction-PBR")
+done
+
+shabda phase
+  (alias phase)
+  (desc "the-offset-of-a-wave-at-a-given-instant-where-in-its-cycle-the-wave-is-at-tat-kshana")
+done
+
+shabda plastic
+  (word plastic polymer)
+  (desc "synthetic-polymer-thermoplastic-thermoset-insulator-lightweight")
+done
+
+shabda pole
+  (word pole rod column pillar post)
+  (desc "rigid-elongated-structural-element-lever-pendulum-torque")
+done
+
+shabda room
+  (word room hall chamber)
+  (desc "enclosed-space-walls-floor-ceiling-indoor-physics")
+done
+
+shabda rubber
+  (word rubber)
+  (desc "polyisoprene-elastic-polymer-vulcanised-e-0.8")
+done
+
+shabda shelf
+  (word shelf ledge)
+  (desc "elevated-horizontal-surface-potential-energy-height")
+done
+
+shabda sparrow
+  (word sparrow sparrows)
+  (name sparrow)
+  (desc "a-small-common-bird")
+done
+
+shabda stone
+  (word stone rock granite marble limestone)
+  (desc "hard-brittle-mineral-aggregate-high-compressive-strength")
+done
+
+shabda structures-varga
+  (alias structures-varga)
+  (desc "the-boundary-conditions-of-everyday-physics-floor-wall-ground-ceiling")
+done
+
+shabda surface
+  (word surface)
+  (desc "interface-where-contact-happens-normal-force-friction")
+done
+
+shabda taxonomy-varga
+  (alias taxonomy-varga)
+  (desc "root-cluster-for-the-IS-A-classification-system-the-grammar-of-kinds")
+done
+
+shabda thermal-conductivity
+  (word thermal-conductivity conducts-heat insulates)
+  (desc "rate-of-heat-flow-metals-conduct-polymers-insulate")
+done
+
+shabda wall
+  (word wall barrier)
+  (desc "vertical-surface-collision-normal-force-constraint")
+done
+
+shabda water-material
+  (word water)
+  (desc "H2O-liquid-transparent-universal-solvent-high-heat-capacity")
+done
+
+shabda wood
+  (word wood wooden timber)
+  (desc "cellulose-lignin-composite-anisotropic-insulator-flammable")
+done

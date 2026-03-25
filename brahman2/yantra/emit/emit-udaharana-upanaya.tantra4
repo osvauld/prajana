@@ -1,0 +1,4 @@
+-- the evidence is the viveka evidence or the physics evidence.
+(tantra emit-udaharana-upanaya (graph is-viveka)
+  (cond is-viveka (udaharana-viveka graph)
+    otherwise (udaharana-physics graph)))

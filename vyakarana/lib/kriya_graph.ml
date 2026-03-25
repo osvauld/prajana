@@ -635,7 +635,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
       ) words
     ) slokas in
     let n : nigamana = {
-      name; layer; slokas; edges;
+      name; layer; domain = ""; slokas; edges;
       satya = 0.0; shabda; krama = "";
     } in
     ignore (join k n);
@@ -652,7 +652,8 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
      | Some rel ->
        let edge : typed_edge = { source; target; relation = rel } in
        let n : nigamana = {
-         name = source; layer = "kosha"; slokas = []; edges = [edge];
+         name = source; layer = "kosha"; domain = "";
+         slokas = []; edges = [edge];
          satya = 0.0; shabda = ""; krama = "";
        } in
        ignore (join k n);

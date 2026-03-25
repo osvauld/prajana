@@ -1,0 +1,79 @@
+; ═══════════════════════════════════════════════════════════════════
+; pramana — 10 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati anumana
+  (swarupa pramana)
+  (sthita pramana-sthalam)
+  (kriya viveka)
+  (janya pratyaksha)
+  (phala satya)
+  (abheda nyaya)
+  (siddha parampara))
+
+(sangati dipaka
+  (swarupa pramana)
+  (kriya darshana)
+  (phala samsarga))
+
+(sangati ghana-pramana
+  (swarupa pratibodha)
+  (drishthanta rasayana-bandha)
+  (kriya tat-kshana)
+  (abheda sankshepa purna)
+  (siddha abheda mula-svabhava))
+
+(sangati jnana-siddha-pramana
+  (swarupa pramana)
+  (siddha ghana-pramana)
+  (sthita svabhava))
+
+(sangati matra
+  (domain sangati/pramana)
+  (swarupa pramana amba)
+  (yukta sankhya ahara swarupa)
+  (sthita sthiti shiva-shakti)
+  (kriya sankalana kshaya)
+  (abheda shiva-shakti matrika dharana))
+
+(sangati panchaavayava
+  (swarupa nyaya)
+  (sthita pramana-sthalam)
+  (yukta pratijnaa hetu udaharana upanaya nigamana)
+  (kriya pramana)
+  (phala anuvada)
+  (siddha parampara))
+
+(sangati pramana
+  (swarupa sthiti)
+  (phala samskaara)
+  (siddha niralamba)
+  (yukta swa)
+  (kriya lekhana)
+  (sthita ananta)
+  (janya seva)
+  (drishthanta samsarga)
+  (abheda brahma))
+
+(sangati pratyaksha
+  (swarupa upakarana)
+  (kriya sankshepa)
+  (siddha nyaya)
+  (drishthanta rachana)
+  (sthita vidya))
+
+(sangati sarva-pramana
+  (swarupa abheda)
+  (siddha purna)
+  (sthita svayambhu)
+  (kriya pratibodha)
+  (yukta lekhana upakarana)
+  (drishthanta tirodhana)
+  (abheda naama-mudra))
+
+(sangati shuddhi-pramana
+  (swarupa shuddhi)
+  (abheda pramana)
+  (siddha ghana-pramana)
+  (drishthanta mithya-satya)
+  (kriya samskaara))

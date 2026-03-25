@@ -1,0 +1,43 @@
+-- vyakarana-sparsha: extract grammatical signals from word forms.
+-- reads copula and verb form nodes, emits tense (kaala) and number (vachana)
+-- edges onto the preceding subject.
+-- "mass IS 5" → [mass, kaala, vartamana-kaala] + [mass, vachana, eka-vachana]
+-- "masses WERE heavy" → [masses, kaala, bhuta-kaala] + [masses, vachana, bahu-vachana]
+-- "ball HAD mass 5" → [ball, kaala, bhuta-kaala]
+(tantra vyakarana-sparsha (graph)
+  (new-triples (reduce graph [] (fn acc tri ->
+    let word = to-string (nth tri 0)
+    let edge = to-string (nth tri 1)
+    -- copula: resolve word form to node, read sthita edges for kaala/vachana
+    let is-copula = eq edge "copula"
+    let is-possession = and (eq edge "mithya") (eq (to-string (shabda (shabda-anveshana word) "role")) "possession")
+    let form-node = cond is-copula (shabda-anveshana word)
+      is-possession (shabda-anveshana word)
+      otherwise ""
+    -- find subject: last satya or mithya before this triple
+    let subj = reduce graph "" (fn found t ->
+      let te = to-string (nth t 1)
+      cond (eq (to-string (nth t 0)) word) found
+      (or (eq te "satya") (eq te "mithya")) (to-string (nth t 0))
+      otherwise found)
+    -- extract kaala and vachana from form node's sthita edges
+    let kaala-edges = cond (has-text form-node) (walk form-node "sthita") otherwise []
+    let kaala = reduce kaala-edges "" (fn found e ->
+      cond (has-text found) found
+      (member (to-string e) ["vartamana-kaala", "bhuta-kaala", "bhavishya-kaala", "vidhi-kaala", "sambhavana-kaala"])
+        (to-string e)
+      otherwise found)
+    let vachana = reduce kaala-edges "" (fn found e ->
+      cond (has-text found) found
+      (member (to-string e) ["eka-vachana", "bahu-vachana", "dvi-vachana"])
+        (to-string e)
+      otherwise found)
+    let new = cond (and (has-text subj) (has-text kaala) (has-text vachana))
+      [[subj, "kaala", kaala], [subj, "vachana", vachana]]
+      (and (has-text subj) (has-text kaala))
+        [[subj, "kaala", kaala]]
+      (and (has-text subj) (has-text vachana))
+        [[subj, "vachana", vachana]]
+      otherwise []
+    (append acc new))))
+  (append-triples graph new-triples))

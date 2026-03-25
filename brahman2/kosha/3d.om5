@@ -1,0 +1,245 @@
+; ═══════════════════════════════════════════════════════════════════
+; 3d — 35 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha armature
+  (sthita domain-3d weight-paint)
+  (yukta bone mesh)
+  (kriya transform)
+  (swarupa yantra))
+
+(kosha bone
+  (sthita domain-3d armature)
+  (swarupa transform sambandha)
+  (yukta quaternion parent child mass moment-of-inertia kona angular-velocity scene-graph)
+  (ahara weight-paint)
+  (phala vertex)
+  (abheda rekha)
+  (siddha fk))
+
+(kosha curve
+  (sthita domain-3d domain-math)
+  (swarupa vector parametric)
+  (yukta interpolation bezier spline)
+  (janya vertex)
+  (phala mesh))
+
+(kosha edge
+  (sthita domain-3d mesh)
+  (yukta vertex face)
+  (swarupa sambandha))
+
+(kosha face
+  (sthita domain-3d mesh)
+  (yukta vertex edge normal winding)
+  (swarupa polygon))
+
+(kosha geometry-nodes
+  (swarupa node-graph procedural)
+  (sthita domain-3d)
+  (ahara mesh)
+  (phala mesh)
+  (yukta modifier)
+  (abheda prayoga)
+  (kriya avrti))
+
+(kosha hdri
+  (sthita domain-3d domain-physics energy)
+  (swarupa light)
+  (yukta texture environment)
+  (abheda photon)
+  (kriya projection))
+
+(kosha interpolation
+  (sthita domain-3d domain-math keyframe)
+  (yukta bezier linear)
+  (swarupa curve)
+  (kriya avrti))
+
+(kosha keyframe
+  (sthita domain-3d timeline)
+  (yukta transform value)
+  (kriya interpolation)
+  (abheda samskaara))
+
+(kosha light
+  (sthita domain-3d domain-physics energy)
+  (abheda photon)
+  (yukta position direction intensity color point directional spot area)
+  (phala shadow)
+  (ahara shader))
+
+(kosha material
+  (sthita domain-3d pbr)
+  (swarupa shader)
+  (yukta mesh texture color roughness metallic))
+
+(kosha mesh
+  (domain kosha/3d/blender)
+  (sthita domain-3d vrnda-ganita transform world-space)
+  (yukta vertex face edge normal uv topology)
+  (siddha manifold))
+
+(kosha modifier
+  (sthita domain-3d)
+  (ahara mesh)
+  (phala mesh)
+  (swarupa stack kriya)
+  (yukta subdivision boolean-operation geometry-nodes)
+  (siddha non-destructive))
+
+(kosha node-graph
+  (abheda proof-graph prayoga)
+  (sthita domain-3d)
+  (swarupa nigamana)
+  (yukta sambandha shader geometry-nodes input output)
+  (kriya avrti)
+  (siddha dag))
+
+(kosha particle
+  (sthita domain-3d domain-physics)
+  (yukta force-directed velocity position spring-force drag-force)
+  (janya mesh)
+  (swarupa vrnda))
+
+(kosha pbr
+  (sthita domain-3d domain-physics shader)
+  (swarupa material)
+  (yukta roughness metallic albedo normal-map)
+  (siddha energy)
+  (abheda photon)
+  (ahara light)
+  (phala color))
+
+(kosha scene-graph
+  (abheda proof-graph)
+  (sthita domain-3d)
+  (swarupa nigamana parampara eka-aneka)
+  (yukta object transform parent child shakha)
+  (phala world-space)
+  (siddha dag))
+
+(kosha shader
+  (sthita domain-3d node-graph)
+  (yukta material light normal pbr)
+  (ahara vertex)
+  (phala fragment)
+  (kriya gpu))
+
+(kosha shadow
+  (sthita domain-3d mesh)
+  (janya light)
+  (swarupa occlusion)
+  (yukta depth normal)
+  (abheda maya))
+
+(kosha subdivision
+  (swarupa avrti)
+  (sthita domain-3d)
+  (ahara mesh)
+  (phala mesh smoothness)
+  (janya vertex face edge)
+  (kriya convergence))
+
+(kosha texture
+  (sthita domain-3d)
+  (ahara uv)
+  (phala color)
+  (swarupa image)
+  (yukta material shader normal-map displacement-map))
+
+(kosha uv
+  (swarupa projection)
+  (sthita domain-3d mesh domain-math)
+  (yukta vertex float)
+  (ahara texture)
+  (abheda vector))
+
+(kosha vertex
+  (domain kosha/3d/blender)
+  (swarupa vector)
+  (sthita domain-3d domain-math mesh)
+  (yukta position normal edge face float))
+
+(kosha camera-3d
+  (swarupa darshana)
+  (sthita domain-3d domain-raylib bindu world-space akasham)
+  (yukta rekha position target fovy)
+  (kriya projection)
+  (phala viewport))
+
+(kosha color
+  (abheda taranga)
+  (yukta photon fragment float)
+  (phala pbr drishti)
+  (swarupa rgba)
+  (sthita domain-3d))
+
+(kosha domain-3d
+  (sthita domain-math domain-physics domain-raylib akasham)
+  (yukta gola rekha trikona vector matrix projection camera viewport transform rasterization mesh vertex)
+  (siddha upakarana)
+  (abheda yantra))
+
+(kosha force-directed
+  (swarupa layout)
+  (sthita domain-3d domain-physics akasham)
+  (yukta bindu spring-force repulsion velocity position alpha-cooling velocity-decay)
+  (kriya displacement avrti)
+  (phala convergence graph)
+  (drishthanta gola)
+  (ahara sangati))
+
+(kosha fragment
+  (swarupa bindu)
+  (sthita tala matra domain-3d)
+  (janya trikona rasterization))
+
+(kosha kinematic-chain
+  (sthita domain-3d domain-physics domain-robotics aayaama-dvaya)
+  (swarupa armature)
+  (yukta bone scene-graph mass moment-of-inertia kona angular-velocity torque kramanusara apeksha move-time)
+  (phala world-space bindu)
+  (siddha fk ik)
+  (abheda keyframe interpolation))
+
+(kosha mesh
+  (domain kosha/3d)
+  (swarupa trikona)
+  (sthita akasham domain-3d)
+  (abheda gola vrtta-stambha)
+  (yukta rasterization vertex))
+
+(kosha rasterization
+  (swarupa kriya)
+  (sthita tala domain-3d)
+  (ahara trikona)
+  (phala fragment)
+  (janya bindu)
+  (abheda prasarana))
+
+(kosha ray-picking
+  (swarupa darshana rekha)
+  (sthita domain-3d domain-raylib camera-3d viewport akasham)
+  (yukta bindu mouse)
+  (phala collision)
+  (abheda sparsha))
+
+(kosha vertex
+  (domain kosha/3d)
+  (swarupa bindu)
+  (sthita akasham mesh domain-3d)
+  (yukta normal))
+
+(kosha viewport
+  (swarupa tala)
+  (sthita kshetra domain-3d domain-raylib)
+  (janya camera-3d)
+  (phala projection)
+  (yukta trikona rasterization fragment))
+
+(kosha world-space
+  (swarupa akasham)
+  (sthita domain-3d domain-physics transform)
+  (yukta camera bindu rekha position)
+  (abheda akasham))

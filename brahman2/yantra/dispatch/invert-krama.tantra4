@@ -1,0 +1,43 @@
+-- invert a mantra via its krama s-expression.
+-- walks the krama tree from root to solve-for,
+-- undoing each op from outermost inward.
+-- commutativity is read from the graph (commutativity → drishthanta).
+-- krama-path returns [op, arg-idx, sibling-value] with sibling already evaluated.
+(tantra invert-krama (mantra bindings solve-for)
+
+  -- get the op-chain: list of [op, arg-idx, sibling-value] triples
+  (ops (krama-path mantra solve-for bindings))
+
+  -- phala concept (what the mantra computes)
+  (phala (nth (walk mantra "phala") 0))
+  (swarupa (nth (walk mantra "swarupa") 0))
+  (phala-concept (cond (has-text phala) phala otherwise swarupa))
+
+  -- phala value from bindings (the known result)
+  (phala-val (reduce bindings "" (fn a kv ->
+    cond (eq (nth kv 0) phala-concept) (nth kv 1) otherwise a)))
+
+  -- commutative ops from graph
+  (comm-ops (walk "commutativity" "drishthanta"))
+
+  -- reduce root-to-leaf: undo outermost op first, work inward
+  (reduce ops phala-val (fn acc step ->
+    let op-name  = nth step 0
+    let arg-idx  = nth step 1
+    let sib-val  = nth step 2
+    let arity    = shabda op-name "arity"
+    let inv-name = shabda op-name "inverse"
+    let inv-eval = shabda inv-name "eval"
+    let op-eval  = shabda op-name "eval"
+    -- unary: apply inverse
+    cond (eq arity "1")
+      (apply-op inv-eval [acc])
+    otherwise
+      -- binary: use evaluated sibling value directly
+      let is-comm = member op-name comm-ops
+      -- arg[0] or commutative: inverse [acc, sibling]
+      -- arg[1] non-commutative: same op [sibling, acc]
+      cond (or (eq arg-idx "0") is-comm)
+        (apply-op inv-eval [acc, sib-val])
+      otherwise
+        (apply-op op-eval [sib-val, acc]))))

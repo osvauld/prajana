@@ -12,7 +12,7 @@ import sys
 import time
 from pathlib import Path
 
-from upakarana.paths import ROOT, BRAHMAN
+from upakarana.paths import ROOT, BRAHMAN, BRAHMAN2
 
 DEFAULT_SOCKET = os.environ.get("VYAKARANA_SOCKET", "/tmp/vy.sock")
 DEFAULT_BINARY = str(ROOT / "vyakarana" / "_build" / "default" / "bin" / "vyakarana.exe")
@@ -74,7 +74,7 @@ def start(socket_path=DEFAULT_SOCKET, brahman_dir=None, binary=None,
     cmd = [binary, "--socket", socket_path]
     if quiet:
         cmd.append("--quiet-startup")
-    cmd.append(str(brahman_dir or BRAHMAN))
+    cmd.append(str(brahman_dir or BRAHMAN2))
 
     stderr_target = subprocess.DEVNULL if quiet else None
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=stderr_target)

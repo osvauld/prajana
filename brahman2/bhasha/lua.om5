@@ -1,0 +1,61 @@
+; ═══════════════════════════════════════════════════════════════════
+; lua — 9 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(bhasha domain-lua
+  (yukta lua table variable assignment field-access function function-call method-call return loop iteration recursion closure module-system metatable state-update runtime nil boolean number string coroutine upakarana)
+  (sthita domain-language)
+  (siddha yantra))
+
+(bhasha domain-raylib
+  (yukta raylib render input window camera draw update audio upakarana)
+  (sthita domain-lua domain-language)
+  (siddha yantra))
+
+(bhasha english-to-lua
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita english domain-lua domain-language)
+  (phala lua)
+  (yukta lua-setu correctness-check))
+
+(bhasha lua-scope
+  (swarupa scope)
+  (sthita domain-lua)
+  (yukta lua lua-setu block-emission-order)
+  (kriya local-declaration)
+  (siddha declaration-before-use no-hoisting definer-precedes-caller)
+  (phala sequential-file-scope))
+
+(bhasha lua-setu
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita domain-lua domain-language krama viveka-krama abhava vivartana aadana-yugma thaalam)
+  (yukta table variable assignment field-access function function-call method-call return loop iteration state-update module-system metatable closure runtime nil raylib-setu english-to-lua lua-to-lua karma))
+
+(bhasha lua-to-lua
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita lua domain-lua domain-language)
+  (phala lua)
+  (yukta table function module-system metatable state-update closure coroutine lua-setu)
+  (siddha correctness-check))
+
+(bhasha lua
+  (abheda language vrnda aadana-visarjana)
+  (sthita domain-lua domain-language krama karma-krama niyama viveka-krama vivartana abhava thaalam)
+  (swarupa table)
+  (yukta function module-system runtime state-update loop recursion closure variable assignment field-access iteration metatable coroutine nil karma))
+
+(bhasha raylib-setu
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita domain-raylib domain-lua domain-language)
+  (yukta raylib lua-setu lua-to-lua render input window camera draw update resonance shabda visheshanam))
+
+(bhasha raylib
+  (swarupa upakarana)
+  (abheda yantra)
+  (sthita domain-raylib domain-lua lua-setu)
+  (kriya render input)
+  (yukta window camera draw update audio lua-to-lua))

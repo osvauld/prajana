@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "particle-A has mass 5.972e24. particle-B has mass 7.34e22. find gravitational force given radius 3.84e8",
       "output": "we have: particle-A (mass=5.972e+24); particle-B (mass=5.972e+24); and radius=384000000..we seek: gravitational-force.no match",
-      "elapsed_ms": 715,
+      "elapsed_ms": 173,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.717
+  "duration": 0.174
 }

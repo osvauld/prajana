@@ -1,0 +1,51 @@
+-- detect-shunya: does the refined graph contain a shunya-signal node
+-- whose signal-concept is being asked about?
+-- pattern: initial-rest (signal=shunya, signal-concept=velocity) + question about velocity
+-- returns signals: shunya-source, shunya-concept, shunya-query
+(tantra detect-shunya (expanded)
+
+  (satya-nodes (expanded | where [s, e, o] | and (eq e "satya") | collect (to-string s)))
+
+  -- find shunya-signal nodes and what they signal (parallel: shabda lookups are independent)
+  (shunya-info (preduce satya-nodes [] (fn acc nd ->
+    let sig     = shabda nd "signal"
+    let concept = shabda nd "signal-concept"
+    cond (and (eq sig "shunya") (has-text concept))
+      (append acc [[nd, concept]])
+    otherwise acc)))
+
+  (has-shunya (has-items shunya-info))
+
+  -- is there a question about the signaled concept (or a concept that depends on it)?
+  (shunya-source  (cond has-shunya (nth (nth shunya-info 0) 0) otherwise ""))
+  (shunya-concept (cond has-shunya (nth (nth shunya-info 0) 1) otherwise ""))
+
+  -- direct match: the shunya-concept itself appears as satya
+  (direct-match (member shunya-concept satya-nodes))
+
+  -- other satya nodes (not the source or concept itself)
+  (other-concepts (filter satya-nodes (fn nd ->
+    (and (neq nd shunya-source) (neq nd shunya-concept)))))
+
+  -- inherited match: a concept depends on shunya-concept via mantra janya (parallel per concept)
+  (dependent-concepts (preduce other-concepts [] (fn acc qc ->
+    let mantras-for = mantra-select qc
+    let needs-shunya = reduce mantras-for false (fn found m ->
+      let ms = to-string m
+      let contract = om-contract ms
+      let janya = nth contract 0
+      (or found (member shunya-concept janya)))
+    cond needs-shunya (append acc [qc]) otherwise acc)))
+
+  (all-query-targets (cond direct-match
+    (append [shunya-concept] dependent-concepts)
+    otherwise dependent-concepts))
+
+  (has-query (has-items all-query-targets))
+  (query-target (cond has-query (nth all-query-targets 0) otherwise ""))
+
+  (cond (and has-shunya has-query)
+    [["shunya-source", shunya-source],
+     ["shunya-concept", shunya-concept],
+     ["shunya-query", query-target]]
+    otherwise []))

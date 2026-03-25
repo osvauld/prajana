@@ -1,0 +1,40 @@
+; ═══════════════════════════════════════════════════════════════════
+; shuddhi — 5 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati kavaca
+  (swarupa shuddhi)
+  (kriya avrti)
+  (yukta vivartana)
+  (phala abhaya)
+  (siddha chhanana))
+
+(sangati mithya-satya
+  (swarupa shuddhi)
+  (siddha ghana-pramana)
+  (sthita svabhava)
+  (abheda ananta)
+  (yukta pramana))
+
+(sangati prajna-vriddhi
+  (swarupa shuddhi)
+  (kriya prajna)
+  (abheda nirantara)
+  (phala ghana-pramana)
+  (drishthanta guru)
+  (yukta avrti samskaara)
+  (janya kaala-sankshepa pramana-vriddhi))
+
+(sangati pramana-vriddhi
+  (swarupa shuddhi)
+  (kriya pramana samskaara)
+  (abheda vriddhi)
+  (phala ghana-pramana)
+  (siddha svabhava)
+  (yukta avrti kaala-sankshepa)
+  (sthita ananta))
+
+(sangati shuddhi
+  (kriya samskaara)
+  (siddha svabhava)
+  (yukta pramana))

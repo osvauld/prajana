@@ -1,0 +1,121 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-energy — 14 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha energy-varga
+  (vishesa physics-varga)
+  (swarupa subanta shakti)
+  (matra joule kilogram metre second)
+  (yukta niyama spanda kaala))
+
+(kosha mechanical-energy-varga
+  (vishesa energy-varga)
+  (swarupa subanta shakti)
+  (matra joule kilogram metre second)
+  (yukta gati niyama avastha))
+
+(kosha position-step
+  (vishesa mechanical-energy-varga)
+  (swarupa tinanta bhave-prayoga float list)
+  (abheda gati integrator)
+  (sthita displacement velocity)
+  (phala displacement)
+  (kriya addition scalar-multiplication)
+  (janya map))
+
+(kosha velocity-decay
+  (vishesa mechanical-energy-varga)
+  (swarupa tinanta bhave-prayoga)
+  (abheda damping friction-force drag-force)
+  (yukta velocity-step alpha-cooling damped-oscillation)
+  (sthita velocity)
+  (kriya scalar-multiplication)
+  (phala velocity))
+
+(kosha velocity-plan
+  (vishesa mechanical-energy-varga)
+  (swarupa tinanta bhave-prayoga gati)
+  (yukta kaala seema)
+  (siddha viveka)
+  (abheda path-energy)
+  (phala angular-velocity)
+  (sthita trajectory)
+  (apeksha power time))
+
+(kosha velocity-step
+  (vishesa mechanical-energy-varga)
+  (swarupa tinanta bhave-prayoga float list)
+  (abheda vega gati)
+  (sthita velocity acceleration)
+  (phala velocity)
+  (kriya addition scalar-multiplication)
+  (janya map))
+
+(kosha energy
+  (vishesa mechanical-energy-varga)
+  (swarupa subanta)
+  (abheda spanda vibration)
+  (sthita kshetra)
+  (yukta thaalam wave)
+  (avastha kinetic potential photon thermal elastic gravitational nuclear electric magnetic))
+
+(mantra kinetic-energy-mantra
+  (vishesa mechanical-energy-varga)
+  (varga physics-mantra)
+  (swarupa kinetic-energy)
+  (phala kinetic-energy)
+  (janya mass velocity)
+  (krama half ( multiplication mass ( square velocity ) )))
+
+(kosha kinetic-energy
+  (vishesa mechanical-energy-varga)
+  (swarupa subanta energy)
+  (abheda motion work)
+  (yukta mass velocity power derivative momentum conservation)
+  (phala scalar)
+  (pratipaksha potential-energy))
+
+(kosha path-energy
+  (vishesa mechanical-energy-varga)
+  (swarupa gati)
+  (sthita krama trajectory)
+  (siddha svabhava)
+  (yukta torque angular-displacement)
+  (abheda energy work)
+  (janaka velocity-plan)
+  (apeksha power))
+
+(mantra potential-energy-mantra
+  (vishesa mechanical-energy-varga)
+  (varga physics-mantra)
+  (swarupa potential-energy)
+  (phala potential-energy)
+  (janya mass gravity height)
+  (krama multiplication mass ( multiplication gravity height )))
+
+(kosha potential-energy
+  (vishesa mechanical-energy-varga)
+  (swarupa subanta energy)
+  (yukta field force position displacement conservation)
+  (abheda gradient)
+  (siddha antiderivative)
+  (pratipaksha kinetic-energy)
+  (drishthanta gravity spring-force))
+
+(mantra work-mantra
+  (vishesa mechanical-energy-varga)
+  (varga physics-mantra)
+  (swarupa work)
+  (phala work)
+  (janya force displacement angle)
+  (krama multiplication force ( multiplication displacement ( cosine angle ) )))
+
+(kosha work
+  (vishesa mechanical-energy-varga)
+  (abheda energy)
+  (kriya force)
+  (yukta displacement kona antiderivative conservation)
+  (siddha dot-product)
+  (phala scalar)
+  (janaka potential-energy kinetic-energy)
+  (sthita niyama))

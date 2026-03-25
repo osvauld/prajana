@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "momentum is 50 and velocity is 10. find mass",
       "output": "we have: momentum=50. and velocity=10..we seek: mass.we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=10..we find: mass = mass = 5",
-      "elapsed_ms": 550,
+      "elapsed_ms": 150,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.552
+  "duration": 0.15
 }

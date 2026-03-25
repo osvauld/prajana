@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "the electron has mass 9.109e-31 kg. it is moving at 1e6 m/s. find kinetic energy",
       "output": "we have: mass=9.109e-31 and pronoun-it=1000000..we seek: kinetic-energy.no match",
-      "elapsed_ms": 669,
+      "elapsed_ms": 195,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.678,
+  "duration": 0.2,
   "xfail": {
     "reason": "'moving at' not recognised as velocity signal",
     "strict": true,

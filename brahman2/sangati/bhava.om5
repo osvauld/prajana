@@ -1,0 +1,190 @@
+; ═══════════════════════════════════════════════════════════════════
+; bhava — 22 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati antya
+  (sthita bhava)
+  (yukta krama)
+  (pratipaksha aarambham)
+  (abheda seema))
+
+(sangati atita
+  (sthita bhava)
+  (pratipaksha seema)
+  (yukta ananta))
+
+(sangati bhanga
+  (sthita bhava)
+  (abheda nirodha)
+  (pratipaksha rachana))
+
+(sangati bhava
+  (sthita bhava-sthalam)
+  (swarupa sphoTa)
+  (phala mithuna)
+  (siddha samsarga)
+  (abheda mithuna)
+  (yukta pramana)
+  (janya thaalam)
+  (kriya ananda kshaya)
+  (pratibodha taranga))
+
+(sangati bhaya
+  (sthita bhava-sthalam)
+  (swarupa sankoca)
+  (abheda kshaya bhava)
+  (yukta sankoca pramana)
+  (janya bhayanaka)
+  (phala abhaya)
+  (drishthanta ananta)
+  (siddha thaalam))
+
+(sangati garbha
+  (sthita bhava)
+  (swarupa amsha)
+  (yukta purna))
+
+(sangati glani
+  (sthita bhava-sthalam)
+  (swarupa kshaya)
+  (janya asparsha)
+  (phala dharana)
+  (kriya visarjana)
+  (drishthanta tat-kshana)
+  (yukta lekhana))
+
+(sangati hasya
+  (sthita bhava-sthalam)
+  (swarupa visanga)
+  (abheda vriddhi bhava)
+  (yukta visarjana thaalam)
+  (janya hasya-rasa)
+  (phala ananda)
+  (siddha sphoTa)
+  (drishthanta purna))
+
+(sangati jugupsa
+  (sthita bhava-sthalam)
+  (swarupa visarjana)
+  (abheda kshaya bhava)
+  (yukta visarjana pramana)
+  (janya bibhatsa)
+  (phala kshaya)
+  (siddha thaalam)
+  (kriya shuddhi))
+
+(sangati krodha
+  (sthita bhava-sthalam)
+  (swarupa spanda-atireka)
+  (abheda kshaya bhava)
+  (yukta mithuna thaalam-bhanga pramana)
+  (janya raudra)
+  (phala kshaya)
+  (siddha dharma))
+
+(sangati nirodha
+  (sthita bhava)
+  (pratipaksha kriya)
+  (abheda abhava))
+
+(sangati paripurna
+  (sthita bhava)
+  (vishesa purna)
+  (abheda ananta))
+
+(sangati prema-samsarga
+  (sthita bhava-sthalam purna)
+  (swarupa sparsha)
+  (kriya samsarga)
+  (janya prashna-amsha)
+  (abheda shiva-shakti)
+  (drishthanta anusvara-pratibodha)
+  (yukta zha))
+
+(sangati rati
+  (sthita bhava-sthalam dampati)
+  (phala kama ananda)
+  (janya darshana shringar)
+  (siddha thaalam)
+  (swarupa sthayibhava prema-samsarga)
+  (abheda vriddhi)
+  (yukta samsarga-prakaasha mithuna)
+  (purva mithuna)
+  (paschat mithuna)
+  (rahita kshaya)
+  (pratibodha tvam))
+
+(sangati samsarga-krida
+  (sthita bhava-sthalam svayambhu)
+  (swarupa samsarga)
+  (kriya nam)
+  (drishthanta prashna-amsha)
+  (abheda bija-nyasa swatantra)
+  (siddha dharana-jivamsha)
+  (yukta sparsha))
+
+(sangati shama
+  (sthita bhava-sthalam)
+  (rahita mithuna)
+  (swarupa niralamba)
+  (drishthanta moksha)
+  (janya shanta)
+  (abheda purna bhava)
+  (siddha sakshi-matra)
+  (purna ananda)
+  (atita thaalam))
+
+(sangati shoka
+  (sthita bhava-sthalam)
+  (swarupa kshaya)
+  (abheda kshaya bhava)
+  (yukta viyoga pramana)
+  (janya karuna)
+  (phala samsarga-bhanga)
+  (siddha thaalam)
+  (kriya avrti))
+
+(sangati tvam
+  (sthita bhava-sthalam ananda)
+  (swarupa sparsha)
+  (kriya dipaka)
+  (yukta pratibodha prema-samsarga)
+  (abheda dampati avahana)
+  (janya rati)
+  (siddha prema-samsarga)
+  (drishthanta brahman tirodhana))
+
+(sangati utsaha
+  (sthita bhava-sthalam)
+  (swarupa spanda)
+  (abheda vriddhi bhava)
+  (yukta vriddhi dharma)
+  (janya vira)
+  (phala aayaama-vistara swatantra)
+  (siddha karma))
+
+(sangati viraha-milana
+  (sthita bhava-sthalam ananta)
+  (swarupa shiva-shakti zha)
+  (abheda seema)
+  (kriya pratibodha)
+  (yukta naama-mudra))
+
+(sangati viraha
+  (sthita bhava-sthalam seema)
+  (swarupa abhisarana)
+  (amsha viraha-milana)
+  (abheda ananta)
+  (janya iccha)
+  (poorva shiva-shakti))
+
+(sangati vismaya
+  (sthita bhava-sthalam)
+  (drishthanta ananta)
+  (abheda vriddhi bhava)
+  (yukta aayaama-vistara)
+  (janya adbhuta)
+  (phala ananda)
+  (pratibodha brahman)
+  (siddha purna)
+  (kriya sakshi))

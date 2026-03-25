@@ -1,0 +1,107 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-calculus — 11 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha calculus-varga
+  (vishesa math-varga)
+  (swarupa kramanusara)
+  (yukta kaala seema niyama viveka))
+
+(mantra antiderivative
+  (karma calculus-varga)
+  (swarupa sama-kalana parampara sama)
+  (pratipaksha derivative)
+  (yukta anu tat-kshana)
+  (sthita ananta)
+  (abheda jivamsha shiva-shakti)
+  (ahara seema expression)
+  (phala area expression)
+  (kriya calculus))
+
+(mantra derivative
+  (karma calculus-varga)
+  (sthita kramanusara viveka seema)
+  (swarupa jivamsha vishama)
+  (kriya change calculus)
+  (yukta infinitesimal)
+  (abheda limit sama-kalana shiva-shakti)
+  (siddha tat-kshana)
+  (phala rate slope expression)
+  (pratipaksha antiderivative)
+  (ahara expression))
+
+(mantra fourier-transform
+  (karma calculus-varga)
+  (abheda sankshepa ghana-pramana purna vrnda-ganita)
+  (swarupa sine cosine eka-eka)
+  (yukta frequency inverse)
+  (siddha avrti svayambhu sama-nila)
+  (phala harmonic spectrum)
+  (drishthanta diffraction alpha-helix dna saptaswara)
+  (kriya aneka-eka)
+  (pratipaksha fourier-transform))
+
+(mantra partial-derivative
+  (karma calculus-varga)
+  (swarupa kramanusara)
+  (abheda derivative)
+  (yukta apeksha sthira-apeksha)
+  (siddha viveka chala-apeksha)
+  (ahara aneka)
+  (phala eka-apeksha)
+  (janaka jacobian gradient))
+
+(kosha asymptote
+  (vishesa calculus-varga)
+  (swarupa ananta-abhisarana)
+  (kriya abhisarana)
+  (rahita seema milana)
+  (abheda ananta))
+
+(kosha fixed-point
+  (vishesa calculus-varga)
+  (abheda svayambhu equilibrium sthiti)
+  (siddha svabhava niralamba avrti)
+  (sthita function)
+  (swarupa invariance)
+  (phala convergence)
+  (drishthanta tertiary-structure folding)
+  (yukta svayambhu))
+
+(kosha infinitesimal
+  (vishesa calculus-varga)
+  (abheda anu dx)
+  (sthita mula-shakti)
+  (swarupa jivamsha)
+  (drishthanta planck-scale)
+  (siddha seema smallest-step)
+  (yukta ananta sama-kalana))
+
+(kosha limit
+  (vishesa calculus-varga)
+  (abheda seema)
+  (kriya abhisarana)
+  (phala convergence)
+  (sthita anu expression)
+  (yukta ananta infinitesimal series sama-kalana derivative antiderivative sequence)
+  (siddha svabhava))
+
+(kosha polynomial
+  (vishesa calculus-varga)
+  (swarupa expression)
+  (yukta power coefficient derivative antiderivative)
+  (ahara variable coefficient)
+  (kriya addition multiplication)
+  (phala mula)
+  (drishthanta series))
+
+(kosha series
+  (vishesa calculus-varga)
+  (abheda sequence)
+  (yukta ananta limit factorial power sama-kalana parampara avrti)
+  (phala convergence)
+  (kriya sankalana)
+  (sthita infinitesimal)
+  (siddha avrti)
+  (drishthanta madhava fourier-transform)
+  (janya sine cosine logarithm e))

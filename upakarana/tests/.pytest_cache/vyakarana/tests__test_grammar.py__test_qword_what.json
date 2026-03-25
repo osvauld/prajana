@@ -32,10 +32,10 @@
           "eka-vachana"
         ]
       ],
-      "elapsed_ms": 61,
+      "elapsed_ms": 48,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.063
+  "duration": 0.049
 }
