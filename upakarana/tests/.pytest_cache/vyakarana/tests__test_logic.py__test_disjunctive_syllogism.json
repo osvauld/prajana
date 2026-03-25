@@ -5,13 +5,13 @@
     {
       "method": "answer",
       "input": "the ball is red or blue. the ball is not red. what color is the ball",
-      "output": "we ask: does color inherit disjunction?. we see: disjunction reachable from color. no \u2014 color does not have disjunction",
-      "elapsed_ms": 111,
+      "output": "we ask: does negation inherit disjunction?. we see: disjunction reachable from negation. no \u2014 negation does not have disjunction",
+      "elapsed_ms": 105,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.115,
+  "duration": 0.108,
   "xfail": {
     "reason": "disjunctive: disjunctive syllogism not built",
     "strict": true,

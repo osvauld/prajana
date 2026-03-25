@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "ball-A is heavier than ball-B. ball-B is heavier than ball-C. which is the heaviest",
       "output": "we seek: viveka-max.no match",
-      "elapsed_ms": 95,
+      "elapsed_ms": 101,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.098,
+  "duration": 0.104,
   "xfail": {
     "reason": "transitivity: entity ranking via comparison chain",
     "strict": true,

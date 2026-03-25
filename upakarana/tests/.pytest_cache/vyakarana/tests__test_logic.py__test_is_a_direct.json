@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "a sparrow is a bird. birds have wings. does a sparrow have wings",
       "output": "we assert: sparrow IS-A bird. we ask: does wings inherit bird?. we see: chain reaches bird via IS-A. no \u2014 wings does not have bird",
-      "elapsed_ms": 79,
+      "elapsed_ms": 85,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.08
+  "duration": 0.086
 }

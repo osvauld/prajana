@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "the ball is at rest. does the ball have kinetic energy",
       "output": "we have: initial-rest (signal: velocity is shunya). we ask: does velocity exist?. we know: initial-rest declares velocity = shunya (absent). we see: velocity is absent due to initial-rest. no \u2014 velocity is absent because velocity is shunya",
-      "elapsed_ms": 101,
+      "elapsed_ms": 103,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.102
+  "duration": 0.104
 }

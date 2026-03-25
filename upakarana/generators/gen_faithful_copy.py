@@ -22,7 +22,7 @@ import shutil
 import sys
 from collections import defaultdict
 
-from upakarana.paths import BRAHMAN, BRAHMAN2, ROOT
+from upakarana.paths import BRAHMAN, BRAHMAN3, ROOT
 from upakarana.parsers.om5 import load_all, edges_by_relation
 
 # Domains that get sub-split into separate files
@@ -132,7 +132,7 @@ def generate(dry_run=False):
     # Clean brahman2/ om5 files (not shabda, not yantra)
     om5_dirs = ["kosha", "sangati", "bhasha"]
     for d in om5_dirs:
-        target = os.path.join(str(BRAHMAN2), d)
+        target = os.path.join(str(BRAHMAN3), d)
         if os.path.isdir(target):
             for f in os.listdir(target):
                 if f.endswith(".om5"):
@@ -144,14 +144,14 @@ def generate(dry_run=False):
 
     # Remove root-level om5 files
     for f in ("engine.om5", "personal.om5", "orphan.om5"):
-        fp = os.path.join(str(BRAHMAN2), f)
+        fp = os.path.join(str(BRAHMAN3), f)
         if os.path.exists(fp):
             os.remove(fp)
 
     # Write consolidated files
     written = 0
     for key in sorted(groups):
-        out_path = os.path.join(str(BRAHMAN2), key)
+        out_path = os.path.join(str(BRAHMAN3), key)
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
         node_list = groups[key]
@@ -176,7 +176,7 @@ def generate(dry_run=False):
 
     # Copy shabda (already shared, but ensure brahman2 has them)
     src_shabda = os.path.join(str(BRAHMAN), "shabda")
-    dst_shabda = os.path.join(str(BRAHMAN2), "shabda")
+    dst_shabda = os.path.join(str(BRAHMAN3), "shabda")
     if os.path.isdir(src_shabda):
         if os.path.isdir(dst_shabda):
             shutil.rmtree(dst_shabda)
@@ -186,7 +186,7 @@ def generate(dry_run=False):
 
     # Copy yantra (tantra files)
     src_yantra = os.path.join(str(BRAHMAN), "yantra")
-    dst_yantra = os.path.join(str(BRAHMAN2), "yantra")
+    dst_yantra = os.path.join(str(BRAHMAN3), "yantra")
     if os.path.isdir(src_yantra):
         if os.path.isdir(dst_yantra):
             shutil.rmtree(dst_yantra)
@@ -215,7 +215,7 @@ def verify(groups):
         return by_name
 
     b1_raw = collect_raw(BRAHMAN)
-    b2_raw = collect_raw(BRAHMAN2)
+    b2_raw = collect_raw(BRAHMAN3)
 
     b1_total = sum(len(v) for v in b1_raw.values())
     b2_total = sum(len(v) for v in b2_raw.values())

@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "if temperature rises then ice melts. if ice melts then water appears. temperature rose. is water present",
       "output": "we ask: does temperature inherit implication?. we see: implication reachable from temperature. no \u2014 temperature does not have implication",
-      "elapsed_ms": 178,
+      "elapsed_ms": 158,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.181,
+  "duration": 0.161,
   "xfail": {
     "reason": "conditional chain: chained implications not built",
     "strict": true,

@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "10 birds sat on a tree. 3 flew away. 2 more came. how many birds are there",
       "output": "we have: 10 bird sat tree.we know: 3 minus (10 \u2192 7) 2 plus (7 \u2192 9).we find: 9 bird there",
-      "elapsed_ms": 150,
+      "elapsed_ms": 135,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.151
+  "duration": 0.136
 }

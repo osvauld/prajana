@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "a car of mass 1200 accelerates from rest at 3 m/s2. find force",
       "output": "we have: mass=1200.; mass=3.; and velocity=0..we seek: force.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=0., mass=3..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=0., mass=3..no match",
-      "elapsed_ms": 203,
+      "elapsed_ms": 200,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.207,
+  "duration": 0.204,
   "xfail": {
     "reason": "'from rest' confusion: 'rest' maps to count-remaining",
     "strict": true,

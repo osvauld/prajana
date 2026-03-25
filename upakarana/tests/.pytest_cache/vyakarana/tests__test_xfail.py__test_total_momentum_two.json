@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5. find total momentum",
       "output": "we have: ball-A (mass=3., velocity=4.) and ball-B (mass=3., velocity=4.).we seek: total-momentum.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=5., mass=2..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=5., mass=2..no match",
-      "elapsed_ms": 223,
+      "elapsed_ms": 235,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.228,
+  "duration": 0.239,
   "xfail": {
     "reason": "dvandva: total-momentum requires iterating over entity-owned momenta and summing",
     "strict": true,

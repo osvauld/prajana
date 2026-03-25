@@ -74,7 +74,7 @@ def start(socket_path=DEFAULT_SOCKET, brahman_dir=None, binary=None,
     cmd = [binary, "--socket", socket_path]
     if quiet:
         cmd.append("--quiet-startup")
-    cmd.append(str(brahman_dir or BRAHMAN2))
+    cmd.append(str(brahman_dir or BRAHMAN))
 
     stderr_target = subprocess.DEVNULL if quiet else None
     proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=stderr_target)

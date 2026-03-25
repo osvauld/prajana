@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "a is greater than b. b is greater than c. is a greater than c",
       "output": "no match",
-      "elapsed_ms": 93,
+      "elapsed_ms": 98,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.096,
+  "duration": 0.101,
   "xfail": {
     "reason": "transitivity: comparison chain walk not built",
     "strict": true,

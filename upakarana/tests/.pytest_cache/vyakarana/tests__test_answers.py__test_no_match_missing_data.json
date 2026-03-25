@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "mass is 5. find kinetic energy",
       "output": "we have: mass=5..we seek: kinetic-energy.no match",
-      "elapsed_ms": 98,
+      "elapsed_ms": 104,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.099
+  "duration": 0.105
 }

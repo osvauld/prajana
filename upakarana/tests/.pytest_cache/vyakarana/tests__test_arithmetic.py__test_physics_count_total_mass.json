@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "there are 3 balls. each ball has mass 5. what is the total mass",
       "output": "we have: ball (mass=5.) and balls=3..we seek: mass.no match",
-      "elapsed_ms": 162,
+      "elapsed_ms": 176,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.164,
+  "duration": 0.179,
   "xfail": {
     "reason": "multiplication: 'each' + physics total",
     "strict": true,

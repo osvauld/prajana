@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "if it rains the ground is wet. it rained. is the ground wet",
       "output": "we ask: does pronoun-it inherit implication?. we see: implication reachable from pronoun-it. no \u2014 pronoun-it does not have implication",
-      "elapsed_ms": 96,
+      "elapsed_ms": 97,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.1,
+  "duration": 0.101,
   "xfail": {
     "reason": "syllogism: modus ponens implication not built",
     "strict": true,

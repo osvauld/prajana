@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "Maria had 10 apples. she gave 4 to Tom. how many apples does Maria have",
       "output": "we have: Maria had 10 apples.we know: 4 minus (10 \u2192 6).we find: 6 apples does Maria have",
-      "elapsed_ms": 126,
+      "elapsed_ms": 128,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.127
+  "duration": 0.129
 }

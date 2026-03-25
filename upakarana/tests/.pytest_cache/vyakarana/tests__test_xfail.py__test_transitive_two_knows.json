@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "a is greater than b. b is greater than c. is a greater than c.",
       "output": "no match",
-      "elapsed_ms": 103,
+      "elapsed_ms": 111,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.107,
+  "duration": 0.116,
   "xfail": {
     "reason": "transitivity emission: two we-know strands",
     "strict": true,

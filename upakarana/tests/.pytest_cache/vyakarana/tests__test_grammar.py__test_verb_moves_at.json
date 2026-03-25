@@ -37,7 +37,7 @@
     }
   ],
   "failure": null,
-  "duration": 0.036,
+  "duration": 0.035,
   "xfail": {
     "reason": "'moves at' not recognised as velocity signal",
     "strict": true,

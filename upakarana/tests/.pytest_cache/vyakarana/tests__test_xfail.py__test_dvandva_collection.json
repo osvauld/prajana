@@ -32,12 +32,12 @@
           "5."
         ]
       ],
-      "elapsed_ms": 25,
+      "elapsed_ms": 31,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.029,
+  "duration": 0.037,
   "xfail": {
     "reason": "dvandva collection: consecutive asprista-sankhya under a satya concept should form a dvandva group",
     "strict": true,

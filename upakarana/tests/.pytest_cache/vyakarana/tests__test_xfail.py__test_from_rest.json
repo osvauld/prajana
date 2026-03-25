@@ -52,7 +52,7 @@
     }
   ],
   "failure": null,
-  "duration": 0.046,
+  "duration": 0.045,
   "xfail": {
     "reason": "'from rest' should mean initial-velocity=0",
     "strict": true,

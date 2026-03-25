@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "ball-A has mass 5. ball-B has mass 3. ball-C has mass 7. which is lightest",
       "output": "we have: ball-A (=5.); ball-B (=3.); and ball-C (=7.).we seek: which is viveka-min.we know: lesser  means viveka-min.we see: 3. < 5. (ball-B  < ball-A ).we find: ball-B is the viveka-min",
-      "elapsed_ms": 183,
+      "elapsed_ms": 198,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.184
+  "duration": 0.199
 }

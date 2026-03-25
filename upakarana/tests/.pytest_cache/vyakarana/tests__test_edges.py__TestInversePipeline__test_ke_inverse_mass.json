@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "kinetic energy is 200 and velocity is 10. find mass",
       "output": "we have: kinetic-energy=200. and velocity=10..we seek: mass.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=10..we find: mass = mass = 4",
-      "elapsed_ms": 152,
+      "elapsed_ms": 158,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.153
+  "duration": 0.159
 }

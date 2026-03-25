@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "a shop has 10 apples and 8 oranges. 3 apples were sold. how many of each are left",
       "output": "no match",
-      "elapsed_ms": 119,
+      "elapsed_ms": 136,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.124,
+  "duration": 0.14,
   "xfail": {
     "reason": "entity_scope: per-entity count after subtraction",
     "strict": true,

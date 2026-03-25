@@ -22,12 +22,12 @@
           "power"
         ]
       ],
-      "elapsed_ms": 16,
+      "elapsed_ms": 18,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.02,
+  "duration": 0.022,
   "xfail": {
     "reason": "compound word: 'electric' has no word: mapping for sandhi fusion",
     "strict": true,

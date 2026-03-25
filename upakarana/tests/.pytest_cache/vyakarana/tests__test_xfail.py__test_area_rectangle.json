@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "a rectangle has length 8 and width 5. find area",
       "output": "no match",
-      "elapsed_ms": 53,
+      "elapsed_ms": 58,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.057,
+  "duration": 0.062,
   "xfail": {
     "reason": "rectangle area mantra not in pipeline",
     "strict": true,

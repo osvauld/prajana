@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "there are 4 tables. each table has 4 legs. how many legs are there in total",
       "output": "we have: there 4 table.we know: 4 plus (4 \u2192 8).we find: 8 legs there total",
-      "elapsed_ms": 135,
+      "elapsed_ms": 119,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.138,
+  "duration": 0.121,
   "xfail": {
     "reason": "multiplication: 'each' should trigger multiply",
     "strict": true,

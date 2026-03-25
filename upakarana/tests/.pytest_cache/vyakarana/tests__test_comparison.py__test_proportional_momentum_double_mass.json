@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "ball-A has mass 3 and velocity 10. ball-B has mass 6 and velocity 10. find momentum of ball-A. find momentum of ball-B",
       "output": "we have: ball-A (mass=3., velocity=10.) and ball-B (mass=3., velocity=10.).we seek: momentum of ball-B.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=10., mass=6..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=10., mass=6..we find: momentum = 30",
-      "elapsed_ms": 302,
+      "elapsed_ms": 268,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.305,
+  "duration": 0.271,
   "xfail": {
     "reason": "proportional: multi-entity compute needs per-entity solve",
     "strict": true,

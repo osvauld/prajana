@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "electric power is 1100 and voltage is 220. find current",
       "output": "we have: voltage=1100. and voltage=220..we seek: current.no match",
-      "elapsed_ms": 143,
+      "elapsed_ms": 132,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.147,
+  "duration": 0.135,
   "xfail": {
     "reason": "compound word: 'electric power' unfused \u2014 'electric' has no word: mapping",
     "strict": true,
