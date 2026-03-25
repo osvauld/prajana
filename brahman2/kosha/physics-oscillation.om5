@@ -1,0 +1,90 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-oscillation — 12 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha oscillation-varga
+  (vishesa physics-varga math-varga)
+  (swarupa subanta spanda)
+  (matra hertz second)
+  (yukta taranga spanda-matra kaala avrti))
+
+(kosha constructive
+  (vishesa oscillation-varga)
+  (sthita spanda interference)
+  (swarupa wave)
+  (abheda superposition vriddhi)
+  (yukta amplitude sine cosine))
+
+(kosha damped-oscillation
+  (vishesa oscillation-varga)
+  (sthita spanda ananta)
+  (swarupa wave)
+  (yukta sine cosine drag-force)
+  (phala convergence)
+  (kriya avrti))
+
+(kosha destructive
+  (vishesa oscillation-varga)
+  (sthita spanda interference)
+  (swarupa wave)
+  (abheda superposition kshaya)
+  (yukta amplitude sine cosine))
+
+(mantra frequency-mantra
+  (vishesa oscillation-varga)
+  (varga physics-mantra)
+  (swarupa frequency)
+  (phala frequency)
+  (janya period)
+  (krama reciprocal period))
+
+(kosha frequency
+  (vishesa oscillation-varga)
+  (swarupa subanta)
+  (abheda thaalam avrti angular-velocity swara)
+  (sthita spanda niyama)
+  (yukta prakaasha energy jerk)
+  (pratipaksha period)
+  (matra hertz))
+
+(kosha harmonic
+  (vishesa oscillation-varga)
+  (sthita spanda)
+  (swarupa wave float)
+  (abheda avrti)
+  (yukta frequency amplitude sine cosine damped-oscillation)
+  (drishthanta alpha-helix dna))
+
+(mantra period-mantra
+  (vishesa oscillation-varga)
+  (varga physics-mantra)
+  (swarupa period)
+  (phala period)
+  (janya angular-velocity)
+  (krama division ( multiplication 2 pi ) angular-velocity))
+
+(kosha period
+  (vishesa oscillation-varga)
+  (swarupa kaala)
+  (abheda avrti)
+  (pratipaksha frequency)
+  (yukta pi angular-velocity sine cosine oscillation wave))
+
+(kosha sound
+  (vishesa oscillation-varga)
+  (abheda naada)
+  (yukta vibration wave frequency amplitude harmonic constructive destructive)
+  (sthita spanda kramanusara))
+
+(kosha vibration
+  (vishesa oscillation-varga)
+  (abheda spanda oscillation pulse jerk)
+  (yukta quantum wave frequency amplitude harmonic constructive destructive)
+  (siddha planck-relation)
+  (sthita kramanusara))
+
+(kosha wave
+  (domain kosha/physics/oscillation/quantities)
+  (vishesa oscillation-varga)
+  (abheda taranga superposition harmonic)
+  (yukta vibration interference frequency amplitude diffraction constructive destructive))

@@ -1,0 +1,7 @@
+# kosha/cross-domain — shabda extracted from .om files
+# 1 entries
+
+shabda connection
+  (alias connected, attached, tied, linked-by-string, joined-by-rope)
+  (desc "constraint-motion-over-pulley")
+done

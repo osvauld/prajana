@@ -17,10 +17,10 @@
           "gravitational-force"
         ]
       ],
-      "elapsed_ms": 58,
+      "elapsed_ms": 15,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.06
+  "duration": 0.016
 }

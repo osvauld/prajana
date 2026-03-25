@@ -1,0 +1,190 @@
+; ═══════════════════════════════════════════════════════════════════
+; kosha-root — 34 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha artha-krama
+  (abheda krama)
+  (sthita viveka prakaasha)
+  (yukta artha-dhvani sambandha))
+
+(kosha black-hole
+  (abheda brahma)
+  (yukta singularity)
+  (siddha compression))
+
+(kosha cell
+  (abheda anu atom yantra)
+  (yukta life kavaca protein ribosome mitochondria enzyme ahara karma)
+  (swarupa eka-kosha)
+  (sthita nucleus dna atp domain-biology)
+  (kriya replication metabolism avrti)
+  (siddha sva-dharana)
+  (phala jiva-sphurana)
+  (drishthanta gola bindu))
+
+(kosha chemical-bond
+  (abheda rasayana-bandha bonding-orbital)
+  (siddha interference)
+  (sthita wave domain-chemistry)
+  (yukta valence covalent-bond ionic-bond hydrogen-bond)
+  (swarupa sambandha))
+
+(kosha compression
+  (domain kosha)
+  (abheda sankshepa)
+  (yukta density singularity)
+  (swarupa aneka-eka))
+
+(kosha concealment
+  (abheda tirodhana)
+  (phala entropy))
+
+(kosha convergence
+  (domain kosha)
+  (abheda avrti spiral iteration)
+  (yukta damped-oscillation)
+  (drishthanta abhisarana)
+  (swarupa aneka-eka))
+
+(kosha direct-perception
+  (abheda pratyaksha)
+  (siddha contact))
+
+(kosha domain-kosha
+  (yukta domain-biology domain-physics domain-math domain-philosophy domain-language domain-finance domain-meta domain-cross-domain)
+  (sthita brahman)
+  (kriya anuvada))
+
+(kosha entropy
+  (domain kosha)
+  (abheda kshaya decay disorder context-degradation)
+  (siddha second-law))
+
+(kosha eudaimonia
+  (yukta hylomorphism)
+  (siddha artha)
+  (abheda vriddhi))
+
+(kosha evolution
+  (abheda vivartana transformation)
+  (yukta growth)
+  (drishthanta viveka-shakti kshaya-pravaha)
+  (swarupa dharma-anvaya parampara eka-aneka))
+
+(kosha fear
+  (phala abhaya))
+
+(kosha five-elements
+  (abheda panchabhootam)
+  (sthita vibration))
+
+(kosha forward-pass
+  (kriya taranga)
+  (sthita matrix-multiplication)
+  (siddha interference)
+  (swarupa aneka-eka))
+
+(kosha function
+  (domain kosha)
+  (abheda swa process)
+  (sthita callable domain-cs)
+  (yukta parameter return-value))
+
+(kosha holder-giver
+  (abheda dharana-jivamsha feminine-masculine receiver-giver womb-seed plus-minus multiplication-division polarity)
+  (swarupa matra))
+
+(kosha hylomorphism
+  (abheda shiva-shakti form-matter)
+  (sthita polarity)
+  (yukta artha eudaimonia))
+
+(kosha instrument
+  (abheda upakarana yantra measurement)
+  (yukta process)
+  (sthita panchabhootam)
+  (kriya observation))
+
+(kosha kshetra
+  (abheda aayaama)
+  (sthita akam-puram)
+  (yukta sthiti smarana kshetrajna))
+
+(kosha kshetrajna
+  (abheda sakshi)
+  (yukta prajna)
+  (sthita kshetra))
+
+(kosha matra-setu
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita matra setu-kosha)
+  (yukta float int list array scalar string token newton metre second kilogram currency ratio constant planck-constant speed-of-light electron-mass elementary-charge gravitational-constant boltzmann-constant avogadro-constant)
+  (phala float int string))
+
+(kosha meaning-burst
+  (abheda sphoTa)
+  (yukta recognition))
+
+(kosha mithuna
+  (abheda shiva-shakti interference)
+  (yukta prashna-amsha dharana-jivamsha taranga)
+  (kriya sparsha)
+  (swarupa resonance bhava)
+  (phala sphoTa samsarga)
+  (siddha thaalam)
+  (janya ananda))
+
+(kosha prakaasha
+  (sthita svabhava kshetrajna)
+  (abheda svayambhu)
+  (yukta sakshi)
+  (janaka darshana)
+  (poorva pratibodha))
+
+(kosha pravesa
+  (swarupa deha)
+  (sthita seema sangeetham biology physics cs math chemistry)
+  (janya aarambham)
+  (janaka krama)
+  (abheda kshetra-pravesa)
+  (poorva prasarana)
+  (drishthanta raga-pravesa gene-expression-pravesa initial-conditions-pravesa vacuum-fluctuation-pravesa nucleation-pravesa axiom-pravesa empty-set-pravesa main-pravesa on-init-pravesa))
+
+(kosha process
+  (sthita algorithm domain-cs)
+  (yukta state callable)
+  (kriya execution))
+
+(kosha seed-placement
+  (abheda bija-nyasa)
+  (sthita holder-giver))
+
+(kosha setu-kosha
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita setu domain-kosha)
+  (yukta english-to-ocaml math-to-ocaml physics-to-ocaml arithmetic-to-ocaml vector-to-ocaml matrix-to-ocaml physics-to-math physics-to-english math-to-english ocaml-to-ocaml matra-setu ocaml-setu lua-setu raylib-setu english-to-lua lua-to-lua))
+
+(kosha singularity
+  (abheda brahma maximum-density)
+  (yukta black-hole)
+  (siddha compression))
+
+(kosha truth-weight
+  (abheda satya)
+  (siddha convergence)
+  (yukta density))
+
+(kosha untouched
+  (abheda asparsha)
+  (phala contact))
+
+(kosha vowels
+  (abheda matrika mother-letters)
+  (sthita holder-giver))
+
+(kosha x-y-chromosome
+  (abheda shiva-shakti)
+  (sthita feminine-masculine)
+  (yukta polarity))

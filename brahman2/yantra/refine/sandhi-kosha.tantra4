@@ -1,0 +1,41 @@
+-- compound word resolution via kosha lookup.
+(tantra sandhi-kosha (graph)
+  (entities (graph | where [s, e, o] | and (eq e "prathama-vibhakti") | collect s))
+  (pass (reduce graph [[], [], "", false] (fn acc tri ->
+    let word       = nth tri 0
+    let edge       = nth tri 1
+    let obj        = nth tri 2
+    let pend       = nth acc 0
+    let out        = nth acc 1
+    let last-satya = nth acc 2
+    let is-subject = nth acc 3
+    let n-pend     = length pend
+    let last-pend   = (cond (gt n-pend 0) (nth pend (sub n-pend 1)) otherwise "")
+    let prefix-list = map (range (max 0 (sub n-pend 1))) (fn i -> nth pend i)
+    let prefix-out  = flush-pending-mithya prefix-list out
+    let full-flush  = flush-pending-mithya pend out
+    let is-subject-now = cond (and (eq edge "shashthi-vibhakti") (eq (to-string obj) "shashthi-vibhakti")) true otherwise is-subject
+    let cw1    = (cond (and (has-text last-pend) (eq edge "satya"))
+      (concat last-pend "-" word) otherwise "")
+    let cn1    = (cond (has-text cw1) (lookup cw1) otherwise _none)
+    let prev-is-subject = (or is-subject-now (member last-satya entities))
+    let cw2    = (cond (and (eq n-pend 0) (and (not prev-is-subject) (and (has-text last-satya) (eq edge "satya"))))
+      (concat last-satya "-" word) otherwise "")
+    let cn2    = (cond (has-text cw2) (lookup cw2) otherwise _none)
+    let drop-last = map (range (max 0 (sub (length out) 1))) (fn i -> nth out i)
+    let next-is-subject = cond (eq edge "satya") false otherwise is-subject-now
+    (cond (exists cn1)
+      [[], (append prefix-out [[(to-string cn1), "satya", (to-string cn1)],
+                                [(to-string cn1), "sandhi-rename", word]]), "", false]
+    otherwise (cond (exists cn2)
+      [[], (append drop-last [[(to-string cn2), "satya", (to-string cn2)],
+                               [(to-string cn2), "sandhi-rename", word]]), "", false]
+    otherwise (cond (eq edge "mithya")
+      [(append pend [word]), out, "", next-is-subject]
+    otherwise (cond (gt n-pend 0)
+      [[], (append full-flush [[word, edge, obj]]), word, next-is-subject]
+    otherwise
+      [[], (append out [[word, edge, obj]]), word, next-is-subject])))))))
+  (pending-list (nth pass 0))
+  (rough (nth pass 1))
+  (flush-pending-mithya pending-list rough))

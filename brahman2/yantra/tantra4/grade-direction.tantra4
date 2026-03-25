@@ -1,0 +1,6 @@
+-- resolves arithmetic direction of a grade (bigrams first, then single words).
+(tantra grade-direction (grade)
+  (mw (grade-mithya grade))
+  (bigrams (word-bigrams mw))
+  (dir-bi (detect-direction bigrams))
+  (cond (has-text dir-bi) dir-bi otherwise (detect-direction mw)))

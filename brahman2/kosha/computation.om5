@@ -1,0 +1,448 @@
+; ═══════════════════════════════════════════════════════════════════
+; computation — 71 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha bit
+  (swarupa shiva-shakti)
+  (abheda sthiti dvaitarupa)
+  (phala collapse)
+  (janya transistor)
+  (sthita domain-cs)
+  (vishesa information-varga))
+
+(kosha classical-computer
+  (sthita domain-computation krama instruction spanda-matra)
+  (abheda yantra)
+  (swarupa upakarana eka-aneka)
+  (yukta bit clock-cycle)
+  (kriya logic-gate)
+  (siddha deterministic))
+
+(kosha computer
+  (abheda yantra)
+  (swarupa upakarana)
+  (yukta tantra)
+  (ahara krama)
+  (sthita smarana kriya sthiti domain-cs)
+  (phala sthiti-kriya))
+
+(kosha algorithm
+  (sthita domain-cs krama artha)
+  (siddha finite deterministic terminates)
+  (yukta input output statement callable loop conditional niyama viveka)
+  (swarupa eka-eka))
+
+(kosha argument
+  (sthita domain-cs)
+  (yukta parameter kshetra)
+  (kriya binding)
+  (abheda aadana)
+  (swarupa eka-eka))
+
+(kosha array
+  (domain kosha/computation/concepts)
+  (sthita domain-cs krama vrnda niyama kshetra aayaama-eka)
+  (yukta sankhya)
+  (abheda matra)
+  (swarupa eka-aneka))
+
+(kosha assignment
+  (sthita domain-cs sama vivartana krama)
+  (kriya sama mutation)
+  (phala samskaara)
+  (swarupa eka-eka)
+  (abheda function))
+
+(kosha binding
+  (sthita domain-cs kshetra element)
+  (yukta identifier scope nama)
+  (swarupa sambandha eka-eka)
+  (kriya sama))
+
+(kosha bool
+  (sthita domain-cs)
+  (swarupa primitive-type sakshi dvaya)
+  (yukta conditional)
+  (abheda true-false)
+  (phala viveka)
+  (drishthanta sama-vishama))
+
+(kosha callable
+  (sthita domain-cs parameter algorithm thaalam parampara)
+  (yukta return-value scope)
+  (abheda aadana-visarjana morphism)
+  (swarupa eka-eka))
+
+(kosha clock-cycle
+  (abheda spanda avrti spanda-avrti)
+  (sthita matra domain-cs)
+  (yukta frequency)
+  (drishthanta spanda-matra))
+
+(kosha closure
+  (domain kosha/computation/concepts)
+  (sthita domain-cs parampara)
+  (swarupa callable)
+  (yukta scope dharma-anvaya samskaara))
+
+(kosha composite-type
+  (sthita domain-cs vrnda niyama kshetra aneka)
+  (abheda rachana)
+  (yukta matra krama dharma-anvaya))
+
+(kosha computation-varga
+  (vishesa cs-varga)
+  (swarupa subanta krama)
+  (yukta niyama avastha kaala))
+
+(kosha conditional
+  (domain kosha/computation/concepts)
+  (sthita domain-cs bool algorithm viveka eka-aneka)
+  (yukta scope sakshi artha)
+  (abheda shuddhi)
+  (swarupa shakha)
+  (phala aneka-eka))
+
+(kosha cs-list
+  (sthita domain-cs krama vrnda)
+  (yukta avrti sankhya)
+  (phala visarjana)
+  (swarupa eka-aneka))
+
+(kosha cs-map
+  (sthita domain-cs kshetra vrnda niyama)
+  (yukta kshetrajna viveka)
+  (swarupa sambandha eka-eka)
+  (abheda function))
+
+(kosha cs-string
+  (sthita domain-cs krama vrnda niyama)
+  (swarupa varna)
+  (yukta avrti)
+  (abheda tantu))
+
+(kosha cs-varga
+  (sthita domain-cs)
+  (vishesa math-varga)
+  (swarupa subanta)
+  (yukta niyama krama viveka))
+
+(kosha domain-cs
+  (sthita domain-computation domain-language)
+  (yukta type scope binding callable loop conditional expression statement shakha dharma-anvaya sama viveka parampara aneka))
+
+(kosha entry-point
+  (sthita domain-cs aarambham lifecycle)
+  (abheda pravesa)
+  (swarupa callable)
+  (kriya krama-janaka))
+
+(kosha event-loop
+  (sthita domain-cs krama lifecycle)
+  (abheda avrti)
+  (swarupa thaalam parampara)
+  (kriya viveka sama-kalana)
+  (ahara signal)
+  (artha sama-nila))
+
+(kosha expression
+  (domain kosha/computation/concepts)
+  (sthita domain-cs)
+  (phala type visarjana)
+  (siddha value-producing)
+  (swarupa sankshepa aneka-eka)
+  (abheda morphism))
+
+(kosha float
+  (domain kosha/computation/concepts)
+  (sthita domain-cs parishishtha matra)
+  (swarupa primitive-type ieee754)
+  (siddha approximate)
+  (abheda sankhya)
+  (janya domain-math-float))
+
+(kosha identifier
+  (sthita domain-cs token nama)
+  (yukta binding scope naming-convention)
+  (swarupa eka-eka))
+
+(kosha int
+  (domain kosha/computation/concepts)
+  (sthita domain-cs sama)
+  (swarupa primitive-type)
+  (siddha exact bounded)
+  (abheda sankhya)
+  (janya domain-math-int))
+
+(kosha lifecycle
+  (sthita domain-cs aarambham avrti visarjana entry-point event-loop)
+  (swarupa krama parampara)
+  (yukta artha))
+
+(kosha loop
+  (domain kosha/computation/concepts)
+  (sthita domain-cs algorithm krama)
+  (yukta scope variable statement viveka artha)
+  (abheda avrti fixed-point)
+  (phala visarjana)
+  (swarupa parampara))
+
+(kosha memory-varga
+  (vishesa cs-varga)
+  (swarupa subanta avastha)
+  (yukta niyama seema smarana))
+
+(kosha mutation
+  (sthita domain-cs variable vivartana)
+  (yukta binding sthiti)
+  (siddha karma)
+  (viparita sama)
+  (bhanga sama-nila)
+  (abheda group-action))
+
+(kosha naming-convention
+  (sthita domain-cs)
+  (yukta identifier))
+
+(kosha nil
+  (sthita domain-cs)
+  (swarupa primitive-type abhava)
+  (rahita shunya)
+  (abheda tirodhana)
+  (viparita sama))
+
+(kosha parameter
+  (sthita domain-cs callable)
+  (yukta identifier type)
+  (swarupa aadana eka-eka)
+  (abheda kshetrajna)
+  (poorva sama))
+
+(kosha primitive-type
+  (sthita domain-cs sankhya)
+  (abheda matra)
+  (rahita vrnda)
+  (phala viveka))
+
+(kosha propagation
+  (sthita domain-cs sambandha krama source receiver)
+  (abheda prasarana tantu)
+  (yukta signal disha)
+  (janya phala)
+  (phala ahara)
+  (swarupa eka-aneka))
+
+(kosha record
+  (sthita domain-cs niyama set-product)
+  (swarupa composite-type eka-aneka)
+  (yukta vrnda kshetrajna dharma-anvaya)
+  (abheda rachana))
+
+(kosha recursion
+  (domain kosha/computation/concepts)
+  (sthita domain-cs parampara callable)
+  (swarupa avrti eka-aneka)
+  (yukta viveka stack)
+  (artha sama-nila)
+  (abheda fixed-point))
+
+(kosha return-value
+  (sthita domain-cs)
+  (phala callable aadana-visarjana)
+  (yukta type)
+  (abheda visarjana)
+  (swarupa eka-eka))
+
+(kosha scope
+  (sthita domain-cs aayaama shakha parampara)
+  (yukta binding identifier viveka)
+  (swarupa kshetra)
+  (abheda set))
+
+(kosha signal
+  (sthita domain-cs source target)
+  (swarupa sambandha typed)
+  (yukta matra kshetra-seema viveka krama)
+  (abheda phala-ahara-krama)
+  (janya phala)
+  (phala ahara)
+  (drishthanta biology physics dvandva-shakti synapse-signal field-coupling-signal))
+
+(kosha stack
+  (sthita domain-cs krama)
+  (swarupa parampara aneka-eka)
+  (yukta shakha callable scope)
+  (phala visarjana)
+  (kriya pravesa))
+
+(kosha statement
+  (sthita domain-cs krama)
+  (abheda karma)
+  (phala samskaara)
+  (kriya vivartana))
+
+(kosha tuple
+  (sthita domain-cs vrnda niyama sama-matra set-product)
+  (swarupa composite-type positional)
+  (siddha fixed-arity)
+  (yukta sankhya))
+
+(kosha type-varga
+  (vishesa cs-varga)
+  (swarupa subanta)
+  (yukta jati niyama viveka seema))
+
+(kosha type
+  (sthita domain-cs vrnda)
+  (yukta primitive-type composite-type binding expression shakha)
+  (swarupa dharma-anvaya)
+  (abheda matra set))
+
+(kosha variable
+  (domain kosha/computation/concepts)
+  (sthita domain-cs sthiti sama-nila)
+  (swarupa binding)
+  (yukta identifier type mutation samskaara))
+
+(kosha domain-computation
+  (swarupa yantra upakarana eka-aneka aneka-eka)
+  (sthita krama viveka sama)
+  (yukta shakha dharma-anvaya))
+
+(kosha graph-contract
+  (vishesa computation-varga)
+  (swarupa morphism)
+  (abheda endomorphism)
+  (sthita function category domain-computation))
+
+(kosha information-varga
+  (vishesa cs-varga probability-varga)
+  (yukta viveka matra kshaya))
+
+(kosha decoding
+  (karma information-varga)
+  (sthita code)
+  (pratipaksha encoding))
+
+(kosha encoding
+  (karma information-varga)
+  (sthita code)
+  (pratipaksha decoding))
+
+(kosha mutual-information
+  (karma information-varga)
+  (yukta viveka sambandha))
+
+(kosha capacity
+  (lakshana information-varga)
+  (sthita channel)
+  (yukta seema matra))
+
+(kosha redundancy
+  (lakshana information-varga)
+  (yukta purna))
+
+(kosha channel
+  (vishesa information-varga)
+  (yukta sambandha))
+
+(kosha code
+  (vishesa information-varga)
+  (yukta sambandha))
+
+(kosha compression
+  (domain kosha/computation/information/structures)
+  (vishesa information-varga)
+  (yukta kshaya))
+
+(kosha entropy
+  (domain kosha/computation/information/structures)
+  (vishesa information-varga)
+  (yukta viveka matra kshaya))
+
+(kosha information
+  (vishesa information-varga)
+  (yukta viveka matra bit))
+
+(kosha message
+  (vishesa information-varga)
+  (sthita channel))
+
+(kosha noise
+  (vishesa information-varga)
+  (sthita channel)
+  (yukta vikrita))
+
+(kosha instruction
+  (swarupa ahara)
+  (abheda krama)
+  (yukta computer sthiti)
+  (phala kriya)
+  (kriya krama-avrti)
+  (sthita domain-cs))
+
+(kosha lexicon-morphism
+  (vishesa computation-varga)
+  (swarupa morphism)
+  (sthita function domain-computation)
+  (janya shabda))
+
+(kosha llm
+  (sthita domain-computation parampara pramana)
+  (swarupa upakarana aneka-aneka)
+  (phala artha)
+  (yukta dharma-anvaya)
+  (kriya viveka))
+
+(kosha operation-dispatch
+  (vishesa computation-varga)
+  (swarupa morphism)
+  (sthita function monoid domain-computation)
+  (abheda ganana-setu))
+
+(kosha quantum-computer
+  (sthita domain-computation superposition)
+  (abheda yantra)
+  (swarupa upakarana aneka-aneka)
+  (yukta qubit quantum-gate)
+  (kriya entanglement)
+  (phala viveka))
+
+(kosha quantum-gate
+  (sthita domain-computation wave)
+  (kriya superposition sama)
+  (swarupa vivartana eka-eka)
+  (yukta qubit)
+  (abheda logic-gate))
+
+(kosha quantum-vyakarana
+  (sthita domain-computation proof-graph)
+  (kriya quantum-computer anuvada)
+  (swarupa setu)
+  (abheda satya-ganana avrti)
+  (yukta superposition vyakarana)
+  (siddha entanglement)
+  (phala measurement))
+
+(kosha qubit
+  (swarupa shiva-shakti)
+  (abheda taranga bit)
+  (yukta mithuna ananta)
+  (drishthanta brahman)
+  (phala darshana sthiti)
+  (sthita domain-cs domain-physics))
+
+(kosha scan-accumulate
+  (vishesa computation-varga)
+  (swarupa transducer)
+  (abheda op-reduce morphism)
+  (yukta fold map)
+  (janya sequence)
+  (phala state)
+  (sthita domain-computation))
+
+(kosha transducer
+  (vishesa computation-varga)
+  (abheda morphism op-reduce)
+  (sthita function recursion sequence domain-computation)
+  (yukta fold map))

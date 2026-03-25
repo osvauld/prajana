@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "ball-A has velocity 10. ball-B has velocity 3. find relative velocity of ball-A with respect to ball-B",
       "output": "no match",
-      "elapsed_ms": 446,
+      "elapsed_ms": 132,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.451,
+  "duration": 0.135,
   "xfail": {
     "reason": "relative-velocity concept not wired in pipeline",
     "strict": true,

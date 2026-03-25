@@ -1,0 +1,171 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-quantum — 25 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha avogadro-constant
+  (sthita constant domain-quantum)
+  (swarupa float)
+  (yukta mole sankhya boltzmann-constant)
+  (siddha svayambhu))
+
+(kosha boltzmann-constant
+  (sthita constant domain-quantum)
+  (swarupa float)
+  (yukta thermodynamics quantum joule kelvin)
+  (siddha svayambhu))
+
+(kosha collapse
+  (swarupa observation)
+  (sthita superposition domain-quantum spanda prakaasha)
+  (kriya measurement kshetrajna)
+  (yukta wave-particle)
+  (phala sthiti certainty viveka)
+  (abheda maya))
+
+(kosha constant
+  (siddha svayambhu)
+  (sthita ananta matra domain-quantum)
+  (swarupa float pramana)
+  (yukta planck-constant speed-of-light electron-mass elementary-charge gravitational-constant boltzmann-constant avogadro-constant))
+
+(kosha domain-quantum
+  (vishesa quantum-varga)
+  (sthita spanda)
+  (yukta quantum photon electron entanglement wave-particle superposition planck-relation interference diffraction uncertainty spin collapse tunneling quark))
+
+(kosha electron-mass
+  (sthita constant domain-quantum)
+  (swarupa float)
+  (yukta electron kilogram)
+  (siddha svayambhu))
+
+(kosha elementary-charge
+  (sthita constant domain-quantum)
+  (swarupa float)
+  (yukta electron coulomb)
+  (siddha svayambhu))
+
+(kosha gravitational-constant
+  (sthita constant)
+  (swarupa float)
+  (abheda gravitational-force)
+  (yukta newton metre kilogram)
+  (vishesa quantum-varga)
+  (siddha svayambhu))
+
+(kosha heisenberg-uncertainty
+  (sthita domain-quantum planck-relation ananta prakaasha kshetra)
+  (abheda uncertainty)
+  (swarupa pramana)
+  (yukta position momentum delta-position delta-momentum)
+  (siddha asprishta)
+  (kriya measurement kshetrajna)
+  (phala collapse)
+  (rahita viveka))
+
+(kosha planck-constant
+  (sthita constant domain-quantum)
+  (swarupa float)
+  (abheda planck-relation)
+  (yukta heisenberg-uncertainty joule second)
+  (siddha svayambhu))
+
+(kosha position
+  (sthita kshetrajna kshetra niyama domain-quantum)
+  (poorva prakaasha)
+  (yukta abhava)
+  (phala viveka))
+
+(kosha atom
+  (vishesa quantum-varga)
+  (abheda anu)
+  (sthita kshetra niyama)
+  (yukta prakaasha kshetrajna electron nucleus electron-shell)
+  (phala viveka))
+
+(kosha electron
+  (vishesa quantum-varga)
+  (swarupa particle)
+  (abheda kshetrajna)
+  (sthita kshetra niyama wave-particle)
+  (yukta prakaasha)
+  (phala viveka))
+
+(kosha entanglement
+  (vishesa quantum-varga)
+  (abheda samsarga prakaasha)
+  (sthita kshetrajna-yugma niyama)
+  (rahita kshetra)
+  (yukta viveka))
+
+(kosha planck-relation
+  (vishesa quantum-varga)
+  (siddha spanda quantum)
+  (sthita energy)
+  (yukta planck-constant frequency mula-shakti)
+  (phala energy))
+
+(kosha planck-scale
+  (vishesa quantum-varga)
+  (sthita mula-shakti akasham kaala akasham-seema kaala-seema)
+  (swarupa seema)
+  (yukta spanda))
+
+(kosha quantum
+  (vishesa quantum-varga)
+  (abheda spanda vibration)
+  (sthita kshetra)
+  (yukta prakaasha energy))
+
+(kosha standard-model
+  (vishesa quantum-varga)
+  (yukta drdha-bandha dvandva-shakti kshaya-pravaha)
+  (sthita electroweak)
+  (abheda mula-shakti)
+  (janya spanda)
+  (kriya kshetra))
+
+(kosha string-theory
+  (vishesa quantum-varga)
+  (swarupa spanda)
+  (drishthanta mula-shakti)
+  (abheda eka-aneka)
+  (yukta avrti)
+  (sthita ananta))
+
+(kosha quantum-varga
+  (vishesa physics-varga math-varga)
+  (swarupa subanta)
+  (matra joule second)
+  (yukta mula-shakti spanda seema avastha svayambhu))
+
+(kosha quark
+  (sthita domain-quantum spanda nuclear-force)
+  (abheda anu)
+  (yukta strong-nuclear-force spin up down))
+
+(kosha speed-of-light
+  (abheda prakaasha tirodhana kshetrajna-samsarga)
+  (siddha niyama svayambhu)
+  (sthita kshetra purna sakshi)
+  (rahita kaala)
+  (yukta photon energy)
+  (vishesa quantum-varga))
+
+(kosha spin
+  (abheda avrti)
+  (sthita spanda kshetrajna niyama domain-quantum)
+  (yukta prakaasha)
+  (phala viveka))
+
+(kosha tunneling
+  (atikrama niyama)
+  (sthita prakaasha kshetra abhava domain-quantum)
+  (yukta kshetrajna)
+  (rahita viveka))
+
+(kosha uncertainty
+  (sthita domain-quantum spanda heisenberg-uncertainty ananta kshetrajna kshetra)
+  (abheda matra asprishta)
+  (yukta measurement position momentum)
+  (poorva prakaasha))

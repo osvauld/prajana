@@ -42,12 +42,12 @@
           "0.1"
         ]
       ],
-      "elapsed_ms": 57,
+      "elapsed_ms": 40,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.066,
+  "duration": 0.044,
   "xfail": {
     "reason": "sandhi-kosha only handles bigrams; electric-field-strength is a trigram",
     "strict": true,

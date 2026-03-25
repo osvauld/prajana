@@ -16,10 +16,10 @@
       "method": "eval",
       "input": "walk-in \"time\" \"phala\"",
       "output": [],
-      "elapsed_ms": 5,
+      "elapsed_ms": 0,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.007
+  "duration": 0.001
 }

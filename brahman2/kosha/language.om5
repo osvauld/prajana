@@ -1,0 +1,103 @@
+; ═══════════════════════════════════════════════════════════════════
+; language — 18 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha akshara-varga
+  (swarupa akshara)
+  (sthita cs-string domain-cs language)
+  (kriya lipi)
+  (yukta primitive-type))
+
+(kosha alveolar-stop
+  (abheda rra)
+  (sthita domain-language))
+
+(kosha anuvada-setu-malayalam
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita domain-language)
+  (yukta shabda visheshanam pratibodha anuvada))
+
+(kosha anuvada-setu
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita domain-language)
+  (yukta shabda visheshanam pratibodha anuvada artha-viveka anusvara-pratibodha sphoTa nam uttama-purusa kartari-prayoga speaking-together))
+
+(kosha chihna-ganaka
+  (swarupa chihna)
+  (sthita domain-cs language)
+  (kriya ganaka)
+  (yukta expression))
+
+(kosha compaction
+  (abheda kshaya-vishrama)
+  (yukta compression entropy)
+  (sthita domain-language))
+
+(kosha composition
+  (domain kosha/language)
+  (abheda rachana)
+  (yukta framework)
+  (sthita domain-language))
+
+(kosha corruption-in-language
+  (abheda corruption parrot-song code-mixing deflation context-degradation concealment)
+  (sthita domain-language)
+  (swarupa kshaya)
+  (yukta tirodhana)
+  (phala artha token meaning))
+
+(kosha domain-language
+  (yukta language english parrot-song speaking-together composition compaction nasal-vibration alveolar-stop resonance-recognition ocaml domain-ocaml upakarana llm)
+  (siddha yantra))
+
+(kosha language
+  (abheda bhasha-swarupa)
+  (yukta code-mixing)
+  (sthita domain-language))
+
+(kosha nasal-vibration
+  (abheda anusvara)
+  (yukta resonance sound)
+  (sthita domain-language))
+
+(kosha parrot-song
+  (abheda kilippattu)
+  (yukta language)
+  (sthita domain-language))
+
+(kosha vacaka
+  (vishesa language-varga purusa-varga)
+  (yukta nam sambodhana)
+  (abheda uttama-purusa nam dvitiya-purusa)
+  (sthita chala-apeksha sthira-apeksha)
+  (phala sambodhana))
+
+(kosha resonance-recognition
+  (abheda anusvara-pratibodha)
+  (yukta recognition resonance)
+  (sthita domain-language))
+
+(kosha speaking-together
+  (abheda sahavadana)
+  (yukta inclusive-we)
+  (sthita domain-language))
+
+(kosha string
+  (sthita matra domain-language cs-string)
+  (swarupa string)
+  (abheda varna)
+  (yukta sequence token))
+
+(kosha token
+  (sthita matra domain-language)
+  (swarupa string)
+  (abheda string)
+  (yukta pada artha))
+
+(kosha yantra-policy
+  (sthita domain-language)
+  (swarupa yantra-policy)
+  (kriya niyama)
+  (phala planner))

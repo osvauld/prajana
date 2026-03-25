@@ -1,0 +1,18 @@
+-- shabda-anveshana: word -> graph-node or _none (recognition with fallback).
+(tantra shabda-anveshana (word)
+  (abbrev (word-node word))
+  (ex (cond (exists abbrev) _none otherwise (lookup word)))
+  (rules (walk-in "vachana-bahu" "sthita"))
+  (wlen (string-length word))
+  (morph (cond (or (exists abbrev) (exists ex)) _none
+    otherwise (reduce rules _none (fn acc rl ->
+      let sf     = shabda rl "suffix"
+      let ssf    = shabda rl "stem-suffix"
+      let sf-len = string-length sf
+      let ok     = (and (ends-with word sf) (gt wlen sf-len))
+      let stem   = (cond ok (concat (substr word 0 (sub wlen sf-len)) ssf) otherwise "")
+      let found-node = (cond (has-text stem) (lookup stem) otherwise _none)
+      (cond (exists acc) acc otherwise found-node)))))
+  (cond (exists abbrev) abbrev
+    otherwise (cond (exists ex) ex
+    otherwise morph)))

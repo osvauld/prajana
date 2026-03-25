@@ -8,13 +8,14 @@
       "output": [
         "sequence",
         "sequence",
+        "algebra-varga",
         "dharma-anvaya",
         "set"
       ],
-      "elapsed_ms": 1,
+      "elapsed_ms": 0,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.002
+  "duration": 0.001
 }

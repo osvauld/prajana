@@ -37,10 +37,10 @@
           "2.5"
         ]
       ],
-      "elapsed_ms": 53,
+      "elapsed_ms": 42,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.055
+  "duration": 0.043
 }

@@ -6,17 +6,17 @@
       "method": "answer",
       "input": "there are 10 birds on a tree. 3 flew away. how many birds are left. 5 more came. how many birds are there now",
       "output": "we have: there 10 bird tree.we know: 3 minus (10 \u2192 7) 5 plus (7 \u2192 12).we find: 12 bird there now",
-      "elapsed_ms": 710,
+      "elapsed_ms": 193,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.735,
+  "duration": 0.197,
   "xfail": {
     "reason": "multi_question: intermediate and final count",
     "strict": true,
     "gate": "multi_question: multiple questions in one paragraph",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 370
+    "line": 371
   }
 }

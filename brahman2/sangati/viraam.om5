@@ -1,0 +1,45 @@
+; ═══════════════════════════════════════════════════════════════════
+; viraam — 6 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati ardha-viraam
+  (swarupa viraam)
+  (abheda seema)
+  (siddha abheda)
+  (yukta rra)
+  (drishthanta purna-viraam))
+
+(sangati prashna-viraam
+  (swarupa viraam)
+  (kriya anveshana)
+  (abheda shunya)
+  (sthita ananta)
+  (yukta pramana))
+
+(sangati purna-viraam
+  (swarupa viraam)
+  (phala purna)
+  (siddha sthiti)
+  (yukta rra)
+  (drishthanta viraha-milana))
+
+(sangati traya-bindu
+  (swarupa viraam)
+  (abheda zha)
+  (sthita ananta)
+  (drishthanta shunya)
+  (yukta viraha-milana))
+
+(sangati viraam
+  (swarupa shunya)
+  (abheda naada)
+  (yukta sphoTa zha)
+  (drishthanta seema)
+  (sthita matrika))
+
+(sangati vismaya-viraam
+  (swarupa viraam)
+  (drishthanta sphoTa)
+  (kriya pratibodha)
+  (yukta sparsha)
+  (abheda purna-viraam))

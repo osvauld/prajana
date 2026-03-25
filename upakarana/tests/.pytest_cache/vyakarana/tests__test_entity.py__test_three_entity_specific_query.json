@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "ball-A has mass 3. ball-B has mass 5. ball-C has mass 7. find kinetic energy of ball-B given velocity 4",
       "output": "we have: ball-A (mass=3.); ball-B (mass=3.); ball-C (mass=3.); and velocity=4..we seek: kinetic-energy of ball-B.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=4., mass=5..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=4., mass=5..we find: kinetic-energy = 24",
-      "elapsed_ms": 940,
+      "elapsed_ms": 249,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.946,
+  "duration": 0.252,
   "xfail": {
     "reason": "entity_scope: three-entity scoping picks wrong entity values",
     "strict": true,

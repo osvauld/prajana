@@ -7,23 +7,24 @@
       "input": "kinetic-energy \"janya\"",
       "output": [
         "falling",
-        "falling",
-        "kinetic-energy-mantra",
         "kinetic-energy-mantra"
       ],
-      "elapsed_ms": 5,
+      "elapsed_ms": 0,
       "error": null
     },
     {
       "method": "walk",
       "input": "mass \"matra\"",
       "output": [
+        "second",
+        "newton",
+        "metre",
         "kilogram"
       ],
-      "elapsed_ms": 2,
+      "elapsed_ms": 0,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.01
+  "duration": 0.001
 }

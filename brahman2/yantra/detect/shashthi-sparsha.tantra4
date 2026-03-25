@@ -1,0 +1,6 @@
+-- shashthi-sparsha: ownership pairs or owned concepts for an entity.
+(tantra shashthi-sparsha (graph entity)
+  (has-entity (exists entity))
+  (cond has-entity
+    (graph | where [s, e, o] | and (eq e "shashthi-vibhakti") | and (eq (to-string o) (to-string entity)) | collect s)
+    otherwise (graph | where [s, e, o] | and (eq e "shashthi-vibhakti") | and (neq (to-string o) "shashthi-vibhakti") | collect [s, o])))

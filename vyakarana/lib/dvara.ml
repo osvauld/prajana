@@ -126,6 +126,71 @@ let json_string_array_field (json : string) (key : string) : string list =
   in
   scan 0
 
+(* Parse a JSON object of string→string-array pairs:
+   {"swarupa": ["base"], "sthita": ["ctx"]} → [("swarupa", ["base"]); ("sthita", ["ctx"])]
+   Used for the "edges" field in create-node. *)
+let json_edges_object (json : string) (key : string) : (string * string list) list =
+  let pat = "\"" ^ key ^ "\"" in
+  let len = String.length json in
+  let pat_len = String.length pat in
+  let rec scan i =
+    if i + pat_len > len then []
+    else if String.sub json i pat_len = pat then begin
+      let j = ref (i + pat_len) in
+      (* skip whitespace and colon *)
+      while !j < len && (json.[!j] = ' ' || json.[!j] = ':' || json.[!j] = '\t') do incr j done;
+      if !j < len && json.[!j] = '{' then begin
+        incr j;
+        let result = ref [] in
+        let done_ = ref false in
+        while !j < len && not !done_ do
+          let c = json.[!j] in
+          if c = '}' then done_ := true
+          else if c = '"' then begin
+            (* parse key *)
+            incr j;
+            let buf = Buffer.create 32 in
+            while !j < len && json.[!j] <> '"' do
+              Buffer.add_char buf json.[!j]; incr j
+            done;
+            if !j < len then incr j; (* skip closing quote *)
+            let rel_name = Buffer.contents buf in
+            (* skip to array *)
+            while !j < len && json.[!j] <> '[' do incr j done;
+            if !j < len then begin
+              (* reuse json_string_array_field logic inline *)
+              incr j;
+              let items = ref [] in
+              let arr_done = ref false in
+              while !j < len && not !arr_done do
+                let ch = json.[!j] in
+                if ch = ']' then (arr_done := true; incr j)
+                else if ch = '"' then begin
+                  incr j;
+                  let vbuf = Buffer.create 32 in
+                  let esc = ref false in
+                  let found = ref false in
+                  while !j < len && not !found do
+                    let vc = json.[!j] in
+                    if !esc then (Buffer.add_char vbuf vc; esc := false)
+                    else if vc = '\\' then esc := true
+                    else if vc = '"' then found := true
+                    else Buffer.add_char vbuf vc;
+                    incr j
+                  done;
+                  if !found then items := Buffer.contents vbuf :: !items
+                end else incr j
+              done;
+              result := (rel_name, List.rev !items) :: !result
+            end
+          end else incr j
+        done;
+        List.rev !result
+      end else []
+    end else scan (i + 1)
+  in
+  scan 0
+
 let opt_field ?(default="") (json : string) (key : string) : string =
   Option.value ~default (json_string_field json key)
 
@@ -383,11 +448,12 @@ let handle_edit_command (k : proof_graph) (yantra_idx : tantra_index)
   match command with
   | "create-node" ->
     let path = opt_field line "path" in let layer = opt_field line "layer" in
-    let name = opt_field line "name" in let slokas = json_string_array_field line "slokas" in
-    let shabda = opt_field line "shabda" in
+    let name = opt_field line "name" in
+    let edges = json_edges_object line "edges" in
+    let comments = json_string_array_field line "comments" in
     if path = "" || layer = "" || name = "" then
       error_response "" "" "" "INVALID_REQUEST" "create-node requires: path, layer, name"
-    else edit_response (Karma.create_node k path layer name [] slokas shabda) command
+    else edit_response (Karma.create_node k path layer name comments edges) command
   | "delete-node" ->
     let name = opt_field line "name" in
     if name = "" then error_response "" "" "" "INVALID_REQUEST" "delete-node requires: name"

@@ -1,0 +1,27 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-orbital — 4 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha escape
+  (vishesa dynamics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala escape-velocity))
+
+(kosha gravitational-attraction
+  (vishesa dynamics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala force)
+  (yukta gravitational-force))
+
+(kosha orbital-motion
+  (vishesa dynamics-varga)
+  (swarupa tinanta bhave-prayoga)
+  (phala orbital-velocity)
+  (yukta radius mass))
+
+(kosha orbit
+  (vishesa dynamics-varga)
+  (abheda avrti vrtta dirgha-vrtta)
+  (sthita krama kshetra niyama)
+  (yukta kshetrajna thaalam)
+  (drishthanta aayaama))

@@ -1,0 +1,56 @@
+; ═══════════════════════════════════════════════════════════════════
+; svabhava — 8 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati bhasha-swarupa
+  (swarupa svabhava)
+  (abheda varna)
+  (siddha abheda)
+  (yukta sandhi)
+  (drishthanta sama-vishama))
+
+(sangati dharmaadharma
+  (swarupa svabhava)
+  (yukta karma)
+  (siddha shuddhi))
+
+(sangati manavata
+  (swarupa abheda)
+  (sthita pramana)
+  (siddha samsarga))
+
+(sangati nirdosha
+  (swarupa niralamba)
+  (abheda vriddhi)
+  (sthita ananta)
+  (siddha purnapara))
+
+(sangati sama-nila
+  (swarupa svabhava)
+  (abheda purna)
+  (siddha niralamba)
+  (yukta swa)
+  (phala visarjana)
+  (sthita pramana sama))
+
+(sangati sama-vishama
+  (swarupa dharana-jivamsha)
+  (siddha svabhava svayambhu)
+  (drishthanta collatz-returningness)
+  (kriya bija-nyasa)
+  (sthita bhasha-swarupa sama)
+  (abheda shiva-shakti))
+
+(sangati sama
+  (swarupa svabhava)
+  (yukta matra)
+  (sthita viveka pramana)
+  (janaka sama-nila sama-vishama sama-dura sama-kalana))
+
+(sangati svairabhava
+  (swarupa ananta)
+  (kriya avrti)
+  (drishthanta spanda)
+  (siddha vidya)
+  (sthita pramana)
+  (abheda manavata))

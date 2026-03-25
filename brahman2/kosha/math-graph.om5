@@ -1,0 +1,102 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-graph — 19 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha graph-varga
+  (vishesa math-varga)
+  (yukta shakha sambandha krama))
+
+(kosha breadth-first
+  (karma graph-varga)
+  (swarupa graph-walk)
+  (yukta seema krama))
+
+(kosha depth-first
+  (karma graph-varga)
+  (swarupa graph-walk)
+  (yukta avrti krama))
+
+(kosha graph-walk
+  (karma graph-varga)
+  (yukta krama sambandha)
+  (phala path))
+
+(mantra ppr-mantra
+  (swarupa graph-walk breadth-first))
+
+(kosha shortest-path
+  (karma graph-varga)
+  (swarupa graph-walk)
+  (sthita weighted-graph)
+  (yukta seema))
+
+(kosha spanning-tree
+  (karma graph-varga)
+  (phala tree)
+  (sthita graph)
+  (yukta purna))
+
+(kosha acyclicity
+  (lakshana graph-varga)
+  (pratipaksha cycle)
+  (yukta krama))
+
+(kosha connectivity
+  (lakshana graph-varga)
+  (yukta sambandha purna))
+
+(kosha planarity
+  (lakshana graph-varga)
+  (yukta rachana))
+
+(kosha adjacency-matrix
+  (vishesa graph-varga)
+  (sthita graph)
+  (abheda matrix)
+  (yukta sambandha))
+
+(kosha cycle
+  (vishesa graph-varga)
+  (sthita graph)
+  (swarupa path)
+  (yukta avrti)
+  (pratipaksha acyclicity tree))
+
+(kosha directed-graph
+  (vishesa graph-varga)
+  (swarupa graph)
+  (yukta krama))
+
+(kosha edge-graph
+  (vishesa graph-varga)
+  (sthita graph)
+  (swarupa sambandha)
+  (yukta vertex))
+
+(kosha graph
+  (vishesa graph-varga)
+  (yukta vertex sambandha)
+  (swarupa shakha))
+
+(kosha path
+  (vishesa graph-varga)
+  (sthita graph)
+  (yukta krama sambandha)
+  (swarupa vertex-parampara))
+
+(kosha tree
+  (vishesa graph-varga)
+  (sthita graph)
+  (yukta shakha)
+  (pratipaksha cycle))
+
+(kosha vertex
+  (domain kosha/math/graph/structures)
+  (vishesa graph-varga)
+  (sthita graph)
+  (yukta eka))
+
+(kosha weighted-graph
+  (vishesa graph-varga)
+  (swarupa graph)
+  (yukta matra))

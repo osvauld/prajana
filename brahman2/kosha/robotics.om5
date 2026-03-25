@@ -1,0 +1,86 @@
+; ═══════════════════════════════════════════════════════════════════
+; robotics — 12 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha domain-robotics
+  (yukta domain-3d domain-physics domain-math akasham bindu rekha armature bone scene-graph kona angular-velocity time velocity displacement kramanusara apeksha kinematic-chain world-space)
+  (sthita aayaama-dvaya tala)
+  (siddha yantra upakarana))
+
+(kosha joint-angle
+  (swarupa subanta)
+  (sthita domain-robotics chala-apeksha avastha)
+  (yukta kinematic-chain joint)
+  (abheda kona)
+  (matra radian)
+  (phala angular-velocity-kramanusara)
+  (apeksha physics-time)
+  (drishthanta purva-avastha uttara-avastha))
+
+(kosha joint-speed-max
+  (swarupa subanta)
+  (sthita domain-robotics seema chala-apeksha)
+  (yukta kinematic-chain joint)
+  (abheda angular-velocity)
+  (matra radian-per-second))
+
+(kosha joint
+  (sthita domain-robotics bone chala-apeksha parampara)
+  (yukta kinematic-chain scene-graph joint-type joint-axis joint-angle angular-velocity joint-speed-max rated-torque krama-janya sambandha link)
+  (abheda kona)
+  (phala chala-apeksha))
+
+(kosha link-length
+  (swarupa subanta)
+  (sthita domain-robotics bone)
+  (yukta kinematic-chain moment-of-inertia torque)
+  (abheda rekha)
+  (matra metre))
+
+(kosha link-mass
+  (swarupa subanta)
+  (sthita domain-robotics)
+  (yukta kinematic-chain link moment-of-inertia torque)
+  (abheda mass)
+  (matra kilogram))
+
+(kosha link
+  (sthita domain-robotics chala-apeksha parampara krama)
+  (yukta kinematic-chain mass link-length moment-of-inertia inertia-tensor krama-janya)
+  (abheda bone rekha)
+  (phala world-space))
+
+(kosha rated-power
+  (swarupa subanta)
+  (sthita domain-robotics seema chala-apeksha)
+  (yukta kinematic-chain joint)
+  (abheda shakti)
+  (matra watt))
+
+(kosha rated-torque
+  (swarupa subanta)
+  (sthita domain-robotics seema chala-apeksha)
+  (yukta kinematic-chain joint)
+  (abheda torque)
+  (matra newton-metre))
+
+(kosha robotics-varga
+  (sthita domain-robotics)
+  (vishesa physics-varga cs-varga)
+  (swarupa subanta)
+  (yukta gati kona seema niyama kaala mula-shakti))
+
+(kosha target-orientation
+  (swarupa subanta)
+  (sthita domain-robotics bindu world-space sthira-apeksha aayaama-traya)
+  (yukta kinematic-chain kona target-position)
+  (drishthanta quaternion))
+
+(kosha target-position
+  (swarupa subanta bindu)
+  (sthita domain-robotics world-space sthira-apeksha)
+  (yukta kinematic-chain aayaama)
+  (drishthanta aayaama-dvaya aayaama-traya)
+  (ahara ik)
+  (pratipaksha fk-phala)
+  (matra metre))

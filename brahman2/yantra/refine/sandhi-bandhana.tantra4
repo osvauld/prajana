@@ -1,0 +1,12 @@
+-- reattribute sankhya/matra from base to compound names, remove rename markers.
+(tantra sandhi-bandhana (graph)
+  (renames (graph | where [compound, e, base] | and (eq e "sandhi-rename") | collect [base, compound]))
+  (cond (not (has-items renames)) graph
+    otherwise (reduce graph [] (fn acc tri ->
+      let edge = to-string (nth tri 1)
+      cond (eq edge "sandhi-rename") acc
+      otherwise (let subj = to-string (nth tri 0)
+        let match = renames | where [f, t] | and (eq (to-string f) subj) | collect t
+        cond (has-items match)
+          (append acc [[(nth match 0), (nth tri 1), (nth tri 2)]])
+        otherwise (append acc [tri]))))))

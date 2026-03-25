@@ -1,0 +1,229 @@
+; ═══════════════════════════════════════════════════════════════════
+; ocaml — 34 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(bhasha algebraic-data-type
+  (abheda varna)
+  (sthita type-system domain-ocaml domain-language)
+  (yukta pattern-matching)
+  (siddha type-checking))
+
+(bhasha arithmetic-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita expression arithmetic domain-ocaml domain-language)
+  (yukta plus minus times division execution)
+  (phala ocaml)
+  (siddha correctness-check))
+
+(bhasha compiler
+  (kriya tantra)
+  (siddha type-checking)
+  (yukta correctness-check)
+  (phala runtime)
+  (sthita domain-ocaml domain-language))
+
+(bhasha correctness-check
+  (abheda pramana)
+  (siddha type-checking)
+  (sthita type-system domain-ocaml domain-language)
+  (yukta type-inference))
+
+(bhasha domain-ocaml
+  (yukta ocaml english-to-ocaml ocaml-to-ocaml physics-to-ocaml math-to-ocaml ocaml-syntax type-signature type-system type-inference pattern-matching module-system functor algebraic-data-type loop recursion fold map list compiler runtime execution vector state-update integrator type-checking correctness-check upakarana tantra)
+  (sthita domain-language computer)
+  (siddha yantra))
+
+(bhasha english-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita english domain-ocaml domain-language)
+  (phala ocaml)
+  (siddha root)
+  (yukta correctness-check))
+
+(bhasha execution
+  (abheda karma krama)
+  (sthita runtime ahara domain-ocaml domain-language thaalam)
+  (siddha compiler)
+  (yukta loop recursion)
+  (phala ahara visarjana))
+
+(bhasha fold
+  (domain bhasha/ocaml)
+  (abheda jnana-madakkal)
+  (sthita recursion domain-ocaml domain-language)
+  (yukta map type-system))
+
+(bhasha functor
+  (kriya tantra)
+  (sthita module-system domain-ocaml domain-language)
+  (siddha composition)
+  (yukta type-system))
+
+(bhasha integrator
+  (abheda avrti)
+  (kriya state-update)
+  (phala displacement)
+  (yukta velocity acceleration)
+  (siddha execution)
+  (sthita domain-ocaml domain-language))
+
+(bhasha loop
+  (domain bhasha/ocaml)
+  (abheda avrti)
+  (yukta recursion fold krama viveka)
+  (phala execution visarjana)
+  (sthita domain-ocaml domain-language krama))
+
+(bhasha math-to-english
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita expression arithmetic vector domain-language)
+  (phala english explanation)
+  (siddha correctness-check))
+
+(bhasha math-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita expression arithmetic domain-ocaml domain-language)
+  (yukta arithmetic-to-ocaml vector-to-ocaml matrix-to-ocaml ocaml-syntax type-signature)
+  (siddha correctness-check))
+
+(bhasha matrix-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita matrix domain-ocaml domain-language)
+  (yukta matrix-multiplication execution)
+  (phala matrix ocaml)
+  (siddha correctness-check))
+
+(bhasha module-system
+  (abheda tantra)
+  (yukta composition functor type-system)
+  (sthita domain-ocaml domain-language))
+
+(bhasha ocaml-list
+  (abheda vrnda)
+  (yukta pattern-matching fold map)
+  (sthita domain-ocaml domain-language cs-list))
+
+(bhasha ocaml-map
+  (abheda taranga)
+  (yukta ocaml-list fold)
+  (sthita function domain-ocaml domain-language cs-map))
+
+(bhasha ocaml-setu
+  (swarupa setu)
+  (abheda anuvada viveka)
+  (sthita domain-ocaml domain-language sankshepa sambandha artha-krama aadana-krama krama)
+  (yukta loop recursion fold map pattern-matching state-update execution function module-system runtime shabda visheshanam prakaasha krama)
+  (siddha abhava niyama pramana))
+
+(bhasha ocaml-syntax
+  (abheda rachana)
+  (yukta type-signature algebraic-data-type pattern-matching)
+  (siddha compiler)
+  (sthita domain-ocaml domain-language))
+
+(bhasha ocaml-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita ocaml domain-ocaml domain-language)
+  (phala ocaml)
+  (yukta ocaml-syntax type-signature)
+  (siddha correctness-check))
+
+(bhasha ocaml
+  (abheda language viveka kshetra)
+  (yukta english-to-ocaml ocaml-to-ocaml physics-to-ocaml math-to-ocaml ocaml-syntax type-signature type-system type-inference pattern-matching module-system functor algebraic-data-type loop recursion fold map list compiler runtime execution vector state-update integrator correctness-check prakaasha krama)
+  (siddha root type-checking abhava niyama pramana)
+  (sthita domain-ocaml domain-language sankshepa sambandha sambandha-krama artha-krama aadana-krama thaalam visarjana krama))
+
+(bhasha pattern-matching
+  (abheda sandhi viveka)
+  (sthita type-system algebraic-data-type domain-ocaml domain-language niyama)
+  (siddha type-checking)
+  (phala sankshepa))
+
+(bhasha physics-to-english
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita force velocity momentum energy domain-language)
+  (phala english explanation)
+  (siddha correctness-check))
+
+(bhasha physics-to-math
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita force velocity momentum energy domain-math domain-language)
+  (phala equation expression vector)
+  (yukta matrix-multiplication dot-product)
+  (siddha correctness-check))
+
+(bhasha physics-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita force velocity domain-ocaml domain-language)
+  (yukta force-apply velocity-step position-step execution ocaml-syntax type-signature)
+  (phala displacement ocaml)
+  (siddha correctness-check))
+
+(bhasha recursion
+  (domain bhasha/ocaml)
+  (abheda avrti avrti-krama)
+  (yukta loop fold)
+  (siddha type-checking)
+  (sthita domain-ocaml domain-language krama)
+  (phala visarjana))
+
+(bhasha runtime
+  (abheda swa)
+  (sthita execution domain-ocaml domain-language thaalam)
+  (yukta process visarjana)
+  (janya compiler)
+  (phala krama))
+
+(bhasha state-update
+  (kriya karma)
+  (sthita execution runtime domain-ocaml domain-language vivartana krama)
+  (yukta loop recursion integrator)
+  (phala samskaara))
+
+(bhasha type-checking
+  (siddha pramana type-inference niyama viveka)
+  (sthita type-system domain-ocaml domain-language)
+  (yukta pattern-matching)
+  (phala correctness-check krama-pramana))
+
+(bhasha type-inference
+  (abheda anveshana)
+  (sthita type-system domain-ocaml domain-language)
+  (siddha type-checking)
+  (yukta ocaml))
+
+(bhasha type-signature
+  (abheda pramana)
+  (sthita type-system domain-ocaml domain-language)
+  (siddha type-checking)
+  (yukta ocaml-syntax correctness-check))
+
+(bhasha type-system
+  (abheda pramana niyama)
+  (sthita language domain-ocaml domain-language pramana)
+  (kriya type-checking)
+  (yukta ocaml viveka))
+
+(bhasha vector-to-ocaml
+  (swarupa setu)
+  (abheda anuvada)
+  (sthita vector domain-ocaml domain-language)
+  (yukta dot-product execution)
+  (phala scalar ocaml)
+  (siddha correctness-check))
+
+(bhasha vector
+  (domain bhasha/ocaml)
+  (abheda taranga)
+  (sthita space domain-ocaml domain-language)
+  (yukta direction velocity type-signature))

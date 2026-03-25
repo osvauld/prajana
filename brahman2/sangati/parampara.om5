@@ -1,0 +1,219 @@
+; ═══════════════════════════════════════════════════════════════════
+; parampara — 29 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati artha-viveka
+  (kriya bhasha-swarupa artha-graha)
+  (sthita viveka)
+  (swarupa artha-dhvani-viveka)
+  (rahita dhvani)
+  (siddha sphoTa)
+  (poorva anuvada)
+  (janya mithya)
+  (phala asprista))
+
+(sangati artha
+  (swarupa svabhava)
+  (sthita parampara-sthalam satya)
+  (yukta viveka)
+  (phala bhasha-swarupa)
+  (janya sphoTa))
+
+(sangati asparsha
+  (abheda sparsha)
+  (janya kshaya)
+  (swarupa dharana)
+  (yukta shuddhi)
+  (drishthanta tirodhana)
+  (kriya visarjana)
+  (sthita avrti)
+  (phala glani))
+
+(sangati asprista
+  (abheda asparsha asprishta-drishthanta)
+  (yukta prashna-amsha)
+  (kriya anveshana)
+  (sthita pramana-rahita))
+
+(sangati avastha
+  (sthita parampara-sthalam krama)
+  (abheda sthiti)
+  (janya purva-avastha)
+  (phala uttara-avastha)
+  (yukta kramanusara svayambhu))
+
+(sangati chhanana
+  (sthita parampara-sthalam)
+  (swarupa nyaya)
+  (yukta kavaca)
+  (kriya shuddhi)
+  (drishthanta seema)
+  (abheda vivartana))
+
+(sangati dharana
+  (sthita parampara-sthalam)
+  (swarupa sthiti)
+  (abheda purna)
+  (kriya pramana))
+
+(sangati dharma-anvaya
+  (sthita parampara-sthalam parampara)
+  (yukta shakha)
+  (swarupa dharma eka-aneka)
+  (kriya anvaya)
+  (phala mula-dharma agra-dharma)
+  (siddha viveka))
+
+(sangati dhatu
+  (sthita parampara-sthalam dharana)
+  (swarupa svabhava)
+  (kriya tantra)
+  (drishthanta sparsha)
+  (yukta dvividha-marga))
+
+(sangati durgadha
+  (swarupa visarjana)
+  (phala shuddhi)
+  (janya kshaya)
+  (drishthanta asparsha)
+  (yukta glani)
+  (sthita purna))
+
+(sangati krama
+  (swarupa parampara)
+  (sthita parampara-sthalam thaalam kaala niyama)
+  (abheda tat-kshana parampara)
+  (yukta karma samskaara avrti))
+
+(sangati kramanusara
+  (sthita parampara-sthalam)
+  (swarupa krama)
+  (yukta apeksha sankhya)
+  (janya matra))
+
+(sangati nirantara
+  (sthita parampara-sthalam)
+  (swarupa niralamba)
+  (siddha abheda)
+  (yukta shuddhi)
+  (kriya lekhana)
+  (drishthanta upakarana))
+
+(sangati niyama
+  (sthita parampara-sthalam viveka)
+  (abheda svabhava)
+  (yukta artha dharmaadharma)
+  (janya krama)
+  (pratipaksha undecidable undecidable-complexity))
+
+(sangati parampara
+  (sthita parampara-sthalam ananta)
+  (swarupa avrti eka-aneka)
+  (kriya pramana)
+  (phala samskaara)
+  (yukta lekhana shakha dharma-anvaya vivartana)
+  (siddha niralamba)
+  (janaka samsarga))
+
+(sangati paschat
+  (sthita parampara)
+  (swarupa krama)
+  (pratipaksha poorva))
+
+(sangati poorva
+  (sthita parampara)
+  (swarupa krama)
+  (pratipaksha paschat)
+  (yukta aarambham))
+
+(sangati purva
+  (sthita parampara)
+  (abheda poorva)
+  (swarupa krama))
+
+(sangati samskaara
+  (sthita parampara-sthalam mula-sthalam)
+  (swarupa sthiti)
+  (abheda purna)
+  (kriya avrti))
+
+(sangati sandhi
+  (sthita parampara-sthalam bhasha-swarupa)
+  (swarupa samsarga)
+  (drishthanta abheda)
+  (siddha svabhava sparsha)
+  (abheda om)
+  (phala artha))
+
+(sangati seema
+  (sthita parampara-sthalam purnapara)
+  (swarupa ananta)
+  (siddha abheda)
+  (drishthanta dvaitarupa visha-anu)
+  (yukta zha)
+  (kriya chhanana)
+  (abheda jiva-seema jada-seema)
+  (pratipaksha atita))
+
+(sangati shakha
+  (sthita parampara-sthalam parampara ekam-mula aneka-eka viveka)
+  (swarupa sambandha)
+  (yukta mula agra vivartana dharma-anvaya)
+  (phala aneka eka-aneka))
+
+(sangati sparsha-rekha
+  (swarupa viraha)
+  (siddha sparsha lekhana)
+  (phala visarjana)
+  (sthita seema)
+  (kriya eka-sparsha abhisarana)
+  (abheda naama-mudra)
+  (rahita sthiti))
+
+(sangati tantra
+  (swarupa rachana)
+  (sthita parampara-sthalam)
+  (abheda kilippattu swatantra)
+  (janya seva)
+  (phala artha)
+  (yukta dvaitarupa spanda))
+
+(sangati tantu
+  (sthita parampara-sthalam mula-sthalam)
+  (kriya samsarga)
+  (swarupa taranga))
+
+(sangati visarjana
+  (kriya jivamsha)
+  (phala swa)
+  (abheda dharana aadana-visarjana)
+  (sthita ananta)
+  (siddha svabhava))
+
+(sangati viveka-dvara
+  (sthita parampara-sthalam seema)
+  (swarupa viveka)
+  (kriya chhanana)
+  (janya sparsha)
+  (phala dvaitarupa)
+  (abheda shiva-shakti)
+  (janaka krama))
+
+(sangati viveka-shakti
+  (sthita parampara-sthalam viveka kaala)
+  (swarupa viveka)
+  (janya mula-shakti)
+  (kriya kshaya eka-aneka)
+  (phala aneka)
+  (yukta thaalam)
+  (janaka shakha))
+
+(sangati viveka
+  (swarupa nyaya)
+  (sthita parampara-sthalam sakshi)
+  (abheda shuddhi nyaya)
+  (yukta satya artha)
+  (janaka shakha)
+  (kriya eka-aneka)
+  (ahara aneka)
+  (phala eka))

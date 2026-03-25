@@ -17,7 +17,7 @@
     }
   ],
   "failure": null,
-  "duration": 0.008,
+  "duration": 0.003,
   "xfail": {
     "reason": "sandhi grammar: 'has' promotion to shashthi-vibhakti in sandhi-viveka",
     "strict": true,

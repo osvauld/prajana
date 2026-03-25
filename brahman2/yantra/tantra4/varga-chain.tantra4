@@ -1,0 +1,6 @@
+-- walks the varga (category) chain two levels deep.
+(tantra varga-chain (entity)
+  (depth1 (map (walk entity "varga") (fn x -> to-string x)))
+  (depth2 (reduce depth1 [] (fn acc v ->
+    append acc (map (walk v "varga") (fn x -> to-string x)))))
+  (filter (append depth1 depth2) (fn v -> has-text v)))

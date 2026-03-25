@@ -1,0 +1,4 @@
+-- the conclusion is the viveka conclusion or the physics conclusion.
+(tantra emit-nigamana (graph is-viveka)
+  (cond is-viveka (nigamana-viveka graph)
+    otherwise (nigamana-physics graph)))

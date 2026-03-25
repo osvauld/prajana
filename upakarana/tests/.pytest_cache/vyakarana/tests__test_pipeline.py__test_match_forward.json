@@ -52,7 +52,7 @@
           "10."
         ]
       ],
-      "elapsed_ms": 107,
+      "elapsed_ms": 67,
       "error": null
     },
     {
@@ -72,10 +72,10 @@
         ],
         "forward"
       ],
-      "elapsed_ms": 9,
+      "elapsed_ms": 3,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.118
+  "duration": 0.071
 }

@@ -52,10 +52,10 @@
           "5."
         ]
       ],
-      "elapsed_ms": 99,
+      "elapsed_ms": 52,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.101
+  "duration": 0.053
 }

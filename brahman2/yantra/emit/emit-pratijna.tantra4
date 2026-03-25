@@ -1,0 +1,8 @@
+-- the given is the viveka given or the physics given.
+(tantra emit-pratijna (graph is-viveka)
+  (say-given (shabda "anuvada-setu" "speech-given"))
+  (all-given (cond is-viveka (pratijna-viveka graph)
+    otherwise (pratijna-physics graph)))
+  (cond (has-items all-given)
+    (concat say-given ": " (list-join all-given))
+    otherwise ""))

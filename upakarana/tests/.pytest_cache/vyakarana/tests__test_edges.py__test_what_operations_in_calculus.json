@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "what operations belong to calculus",
       "output": "we seek: calculus.no match",
-      "elapsed_ms": 107,
+      "elapsed_ms": 44,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.118,
+  "duration": 0.05,
   "xfail": {
     "reason": "karma_query: no tantra walks karma yet",
     "strict": true,

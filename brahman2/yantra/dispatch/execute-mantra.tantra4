@@ -1,0 +1,28 @@
+-- execute-mantra: fire a matched mantra via krama or kriya path.
+(tantra execute-mantra (mantra bindings mode solve-for)
+
+  (is-inv (eq mode "inverse"))
+  (has-krama (has-text (node-krama mantra)))
+
+  -- forward: krama path
+  (forward-krama (cond (and has-krama (not is-inv))
+    (eval-krama mantra bindings)
+    otherwise _none))
+
+  -- forward: kriya/equation path (for mantras without krama)
+  (args (resolve-janya-args mantra bindings))
+  (kriya-nodes (om-kriya mantra))
+  (forward-kriya (cond (and (not is-inv) (not has-krama) (has-items kriya-nodes))
+    (call-tantra (nth kriya-nodes 0) args)
+    otherwise _none))
+
+  -- inverse: krama path
+  (inverse-krama (cond (and is-inv has-krama)
+    (invert-krama mantra bindings solve-for)
+    otherwise _none))
+
+  -- dispatch
+  (cond (and has-krama is-inv) inverse-krama
+    otherwise (cond has-krama forward-krama
+    otherwise (cond (exists forward-kriya) forward-kriya
+    otherwise _none))))

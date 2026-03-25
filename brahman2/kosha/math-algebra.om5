@@ -1,0 +1,203 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-algebra — 27 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha algebra-varga
+  (vishesa math-varga)
+  (yukta niyama sandhi viveka dvandva))
+
+(kosha algebraic-projection
+  (karma algebra-varga)
+  (swarupa morphism)
+  (sthita function)
+  (janya relation)
+  (phala set))
+
+(kosha composition
+  (domain kosha/math/algebra/operations)
+  (karma algebra-varga)
+  (sthita category)
+  (yukta morphism)
+  (swarupa kriya parampara)
+  (phala anukrama))
+
+(kosha endomorphism
+  (karma algebra-varga)
+  (swarupa morphism)
+  (abheda homomorphism)
+  (sthita function category)
+  (kriya composition avrti)
+  (phala fixed-point convergence)
+  (siddha closure associativity)
+  (pratipaksha isomorphism))
+
+(kosha function
+  (domain kosha/math/algebra/operations)
+  (karma algebra-varga)
+  (abheda morphism)
+  (sthita set aadana)
+  (swarupa eka-eka)
+  (phala visarjana))
+
+(kosha homomorphism
+  (karma algebra-varga)
+  (swarupa setu eka-eka)
+  (yukta group)
+  (phala structure))
+
+(kosha isomorphism
+  (karma algebra-varga)
+  (abheda morphism)
+  (yukta pratipaksha)
+  (pratipaksha endomorphism)
+  (swarupa bijection eka-eka aneka-eka))
+
+(kosha monotone-map
+  (karma algebra-varga)
+  (swarupa morphism order-preserving)
+  (abheda endomorphism)
+  (sthita partial-order lattice)
+  (yukta structure)
+  (siddha fixed-point))
+
+(kosha morphism
+  (karma algebra-varga set-varga)
+  (sthita category)
+  (yukta structure sambandha rachana)
+  (swarupa aadana-visarjana eka-eka)
+  (abheda homomorphism function))
+
+(kosha selection
+  (karma algebra-varga)
+  (swarupa morphism)
+  (sthita function partial-order set)
+  (janya predicate relation)
+  (phala subset))
+
+(kosha associativity
+  (lakshana algebra-varga number-varga)
+  (abheda equals)
+  (sthita group)
+  (siddha sandhi)
+  (yukta sama))
+
+(kosha commutativity
+  (lakshana algebra-varga set-varga number-varga)
+  (abheda equals)
+  (yukta associativity sama)
+  (drishthanta addition multiplication))
+
+(kosha distributivity
+  (lakshana algebra-varga)
+  (kriya multiplication addition))
+
+(kosha filtration
+  (lakshana algebra-varga set-varga)
+  (sthita ring partial-order)
+  (yukta ideal subspace)
+  (swarupa subset parampara)
+  (janya graded-ring)
+  (siddha closure)
+  (abheda chhanana))
+
+(kosha category
+  (vishesa algebra-varga)
+  (yukta object morphism)
+  (kriya composition)
+  (swarupa structure))
+
+(kosha field
+  (domain kosha/math/algebra/structures)
+  (vishesa algebra-varga)
+  (sthita ring)
+  (yukta pratipaksha inverse-element)
+  (siddha division commutativity)
+  (drishthanta rational real))
+
+(kosha graded-ring
+  (vishesa algebra-varga)
+  (sthita ring)
+  (yukta filtration partial-order grade depth)
+  (kriya addition multiplication)
+  (swarupa direct-sum)
+  (janya monoid))
+
+(kosha group
+  (vishesa algebra-varga)
+  (swarupa set dharma-anvaya)
+  (yukta closure identity-element inverse-element associativity shakha commutativity)
+  (janya quotient kernel))
+
+(kosha ideal
+  (vishesa algebra-varga)
+  (sthita ring subgroup)
+  (siddha closure absorption)
+  (swarupa subset)
+  (janya kernel quotient)
+  (kriya multiplication))
+
+(kosha kernel
+  (vishesa algebra-varga)
+  (sthita homomorphism)
+  (janya ideal)
+  (swarupa subset)
+  (phala identity-element)
+  (siddha closure)
+  (yukta morphism))
+
+(kosha lattice
+  (vishesa algebra-varga)
+  (sthita partial-order)
+  (yukta set-union set-intersection)
+  (kriya join meet)
+  (siddha closure associativity commutativity)
+  (drishthanta subset))
+
+(kosha monoid
+  (vishesa algebra-varga)
+  (sthita group)
+  (yukta associativity identity-element)
+  (drishthanta addition multiplication)
+  (abheda op-class-monoid))
+
+(kosha quotient
+  (vishesa algebra-varga)
+  (sthita ring group)
+  (yukta ideal equivalence-relation)
+  (swarupa coset)
+  (janya homomorphism)
+  (siddha closure))
+
+(kosha ring
+  (vishesa algebra-varga)
+  (sthita group)
+  (yukta monoid identity-element commutativity)
+  (kriya addition multiplication)
+  (siddha distributivity)
+  (janya ideal graded-ring quotient)
+  (drishthanta int polynomial))
+
+(kosha subgroup
+  (vishesa algebra-varga)
+  (sthita group)
+  (swarupa subset)
+  (yukta closure))
+
+(kosha tensor
+  (vishesa algebra-varga)
+  (sthita vector-space)
+  (yukta aayaama scalar basis)
+  (swarupa multilinear eka-aneka)
+  (janya matrix projection)
+  (kriya tensor-product))
+
+(kosha vector-space
+  (vishesa algebra-varga)
+  (swarupa akasham eka-aneka)
+  (yukta aayaama vector scalar basis)
+  (sthita nirantara)
+  (kriya addition multiplication)
+  (abheda aayaama-vistara)
+  (janaka subspace orthogonal)
+  (janya tensor tensor-product)
+  (drishthanta matrix fourier-transform))

@@ -1,0 +1,9 @@
+-- derives traversable varga edges from swarupa IS-A edges.
+(tantra varga-inheritance (_)
+  (nodes (graph-all-nodes))
+  (reduce nodes "ok" (fn acc nd ->
+    let _ = reduce (walk nd "swarupa") acc (fn a2 parent ->
+      (cond (exists (lookup (concat (to-string parent) "-varga")))
+        (let _ = emit-edge (to-string nd) "varga" (concat (to-string parent) "-varga") in a2)
+        otherwise a2))
+    in acc)))

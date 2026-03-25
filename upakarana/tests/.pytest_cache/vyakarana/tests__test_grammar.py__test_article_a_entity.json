@@ -42,10 +42,10 @@
           "1.67e-27"
         ]
       ],
-      "elapsed_ms": 141,
+      "elapsed_ms": 59,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.142
+  "duration": 0.06
 }

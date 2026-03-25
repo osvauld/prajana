@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "it is not true that the ball is not moving. is the ball moving",
       "output": "we assert: pronoun-it IS-A negation. we ask: does true inherit negation?. we see: chain reaches negation via IS-A. no \u2014 true does not have negation",
-      "elapsed_ms": 516,
+      "elapsed_ms": 94,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.521,
+  "duration": 0.098,
   "xfail": {
     "reason": "negation: double negation cancellation not built",
     "strict": true,

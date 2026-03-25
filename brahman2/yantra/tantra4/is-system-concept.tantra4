@@ -1,0 +1,3 @@
+-- true if a concept name is internal (not a user entity).
+(tantra is-system-concept (w)
+  (member w ["count", "count-total", "count-remaining", "viveka-max", "viveka-min"]))

@@ -1,0 +1,94 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-foundation — 17 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha arithmetic
+  (abheda vrnda-ganita number)
+  (sthita even-odd domain-math))
+
+(kosha array
+  (domain kosha/math)
+  (sthita krama vrnda niyama kshetra)
+  (yukta sankhya)
+  (abheda matra))
+
+(kosha corruption-in-math
+  (abheda corruption asprishta singular asprishta-drishthanta false-true)
+  (sthita domain-math)
+  (swarupa kshaya)
+  (yukta determinant precision undecidable boundary)
+  (phala proof truth structure))
+
+(kosha density-proof
+  (abheda ghana-pramana)
+  (yukta density proof)
+  (sthita domain-math))
+
+(kosha domain-math
+  (yukta kramanusara apeksha))
+
+(kosha equation
+  (abheda samikarana)
+  (yukta matra arithmetic)
+  (kriya equals)
+  (siddha proof)
+  (sthita domain-math))
+
+(kosha expression
+  (domain kosha/math)
+  (yukta samikarana number plus minus times division)
+  (sthita arithmetic domain-math))
+
+(kosha ganana-setu
+  (swarupa setu)
+  (kriya ganaka)
+  (sthita domain-math))
+
+(kosha group-witness
+  (abheda vrnda-sakshi)
+  (yukta witness group)
+  (sthita domain-math))
+
+(kosha inverse-square-law
+  (swarupa niyama)
+  (sthita domain-math distance magnitude)
+  (kriya inverse-square)
+  (phala force field)
+  (drishthanta gravitational-force coulomb radiation-intensity))
+
+(kosha logic-gate
+  (abheda tarka-dvaara)
+  (yukta logic discrimination)
+  (sthita domain-math))
+
+(kosha math-varga
+  (sthita domain-math)
+  (yukta matra niyama viveka))
+
+(kosha matra
+  (domain kosha/math)
+  (abheda matra measure quantity)
+  (sthita arithmetic domain-math)
+  (yukta equation))
+
+(kosha number
+  (abheda vrnda-ganita)
+  (yukta even-odd collatz)
+  (sthita domain-math))
+
+(kosha quantity
+  (domain kosha/math)
+  (abheda matra)
+  (sthita number domain-math)
+  (yukta arithmetic))
+
+(kosha quaternion
+  (sthita domain-math)
+  (swarupa float rotation)
+  (yukta vector matrix cross-product)
+  (abheda avrti))
+
+(kosha truth-math
+  (abheda satya-ganita)
+  (yukta truth number)
+  (sthita domain-math))

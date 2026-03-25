@@ -1,0 +1,67 @@
+# sangati — shabda extracted from .om files
+# 13 entries
+
+shabda bhava-sthalam
+  (alias experiential-space)
+  (desc "where-the-felt-states-of-living-things-gather")
+done
+
+shabda brahman-sthalam
+  (alias ground-space)
+  (desc "where-all-root-philosophical-claims-gather")
+done
+
+shabda chetan-sthalam
+  (alias consciousness-space)
+  (desc "where-knowing-and-witnessing-gather")
+done
+
+shabda darshana-sthalam
+  (alias seeing-space)
+  (desc "where-inquiry-and-vision-gather")
+done
+
+shabda jiva-sthalam
+  (alias life-space)
+  (desc "where-the-nature-of-living-things-gathers")
+done
+
+shabda mula-sthalam
+  (alias root-space)
+  (desc "where-all-foundations-gather")
+done
+
+shabda parampara-sthalam
+  (alias inheritance-space)
+  (desc "where-all-structure-and-spiral-gathers")
+done
+
+shabda pramana-sthalam
+  (alias verification-space)
+  (desc "where-proof-and-logic-gather")
+done
+
+shabda sangati-sthalam
+  (alias connection-space)
+  (desc "where-all-relations-gather")
+done
+
+shabda spanda-sthalam
+  (alias pulse-space)
+  (desc "where-all-vibration-and-spiral-gathers")
+done
+
+shabda vak-sthalam
+  (alias language-space)
+  (desc "where-sound-becomes-meaning-gathers")
+done
+
+shabda vidya-sthalam
+  (alias knowledge-space)
+  (desc "where-all-knowing-gathers")
+done
+
+shabda visheshanam
+  (alias relation-type, visheshanam-ring)
+  (desc "the-10-typed-edges-forming-a-non-commutative-ring-with-yukta-as-addition-kriya-as-multiplication-shunya-as-additive-identity-swarupa-as-multiplicative-identity-and-pratipaksha-as-group-inverse")
+done

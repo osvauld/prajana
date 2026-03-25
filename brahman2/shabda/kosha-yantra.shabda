@@ -1,0 +1,515 @@
+# kosha/yantra — shabda extracted from .om files
+# 111 entries
+
+shabda op-abheda-of
+  (name abheda-of)
+done
+
+shabda op-abs
+  (name abs)
+done
+
+shabda op-acos
+  (name acos)
+done
+
+shabda op-add
+  (name add)
+  (parse-arity 2)
+done
+
+shabda op-and
+  (name and)
+done
+
+shabda op-append
+  (name append)
+done
+
+shabda op-asin
+  (name asin)
+done
+
+shabda op-atan2
+  (name atan2)
+done
+
+shabda op-avrti
+  (name avrti)
+done
+
+shabda op-bind
+  (name bind)
+done
+
+shabda op-ceil
+  (name ceil)
+done
+
+shabda op-char-at
+  (name char-at)
+done
+
+shabda op-class-binary
+  (parse-arity 2)
+  (invariant asymmetric)
+  (args fixed-2)
+done
+
+shabda op-class-constructor
+  (parse-arity -1)
+  (invariant builds-value)
+done
+
+shabda op-class-higher-order
+  (parse-arity 2)
+  (arg0 data)
+  (arg1 function)
+done
+
+shabda op-class-keyed
+  (parse-arity 2)
+  (arg0 container)
+  (arg1 key)
+done
+
+shabda op-class-monoid
+  (parse-arity -1)
+  (invariant associative)
+  (fold all-args)
+done
+
+shabda op-class-pipeline
+  (parse-arity 2)
+  (invariant effectful)
+  (ordered yes)
+done
+
+shabda op-class-projection
+  (parse-arity 1)
+  (invariant pure)
+  (side-effects none)
+done
+
+shabda op-class-relation
+  (parse-arity 2)
+  (invariant predicate)
+  (returns bool)
+done
+
+shabda op-classify
+  (name classify)
+done
+
+shabda op-concat
+  (name concat)
+done
+
+shabda op-context-score
+  (name context-score)
+done
+
+shabda op-cos
+  (name cos)
+done
+
+shabda op-div
+  (name div)
+done
+
+shabda op-domain-of
+  (name domain-of)
+done
+
+shabda op-edge-weight
+  (name edge-weight)
+done
+
+shabda op-edges
+  (name edges)
+done
+
+shabda op-ends-with
+  (name ends-with)
+  (parse-arity 2)
+  (arg0 string)
+  (arg1 suffix)
+done
+
+shabda op-eq
+  (name eq)
+done
+
+shabda op-execute-plan
+  (name execute-plan)
+done
+
+shabda op-exists
+  (name exists)
+done
+
+shabda op-factorial
+  (name factorial)
+done
+
+shabda op-filter
+  (name filter)
+done
+
+shabda op-first-match
+  (name first-match)
+done
+
+shabda op-fixpoint
+  (name fixpoint)
+  (parse-arity 2)
+  (arg0 state)
+  (arg1 fn)
+done
+
+shabda op-flatten
+  (name flatten)
+done
+
+shabda op-floor
+  (name floor)
+done
+
+shabda op-ge
+  (name ge)
+done
+
+shabda op-gt
+  (name gt)
+done
+
+shabda op-has
+  (name has)
+done
+
+shabda op-iccha-status
+  (name iccha-status)
+done
+
+shabda op-incoming-to
+  (name incoming-to)
+done
+
+shabda op-is-tantra
+  (name is-tantra)
+done
+
+shabda op-iterate
+  (name iterate)
+  (parse-arity 3)
+  (arg0 n)
+  (arg1 state)
+  (arg2 fn)
+done
+
+shabda op-join
+  (name join)
+done
+
+shabda op-kind
+  (name kind)
+done
+
+shabda op-le
+  (name le)
+done
+
+shabda op-length
+  (name length)
+done
+
+shabda op-log
+  (name log)
+done
+
+shabda op-lookup
+  (name lookup)
+done
+
+shabda op-lower
+  (name lower)
+done
+
+shabda op-lt
+  (name lt)
+done
+
+shabda op-map
+  (name map)
+done
+
+shabda op-max
+  (name max)
+done
+
+shabda op-member
+  (name member)
+  (parse-arity 2)
+  (arg0 value)
+  (arg1 list)
+done
+
+shabda op-min
+  (name min)
+done
+
+shabda op-mod
+  (name mod)
+done
+
+shabda op-mul
+  (name mul)
+  (parse-arity 2)
+done
+
+shabda op-name
+  (name name)
+done
+
+shabda op-neg
+  (name neg)
+done
+
+shabda op-neighbors
+  (name neighbors)
+  (parse-arity 1)
+  (arg0 node)
+done
+
+shabda op-neq
+  (name neq)
+done
+
+shabda op-node
+  (name node)
+done
+
+shabda op-node-satya
+  (name node-satya)
+done
+
+shabda op-not
+  (name not)
+done
+
+shabda op-nth
+  (name nth)
+done
+
+shabda op-op-to-tantra
+  (name op-to-tantra)
+done
+
+shabda op-or
+  (name or)
+done
+
+shabda op-pair
+  (name pair)
+done
+
+shabda op-power
+  (name power)
+done
+
+shabda op-print
+  (name print)
+done
+
+shabda op-reduce
+  (name reduce)
+  (parse-arity 3)
+  (arg0 list)
+  (arg1 init)
+  (arg2 fn)
+done
+
+shabda op-remember-bindings
+  (name remember-bindings)
+done
+
+shabda op-render-node
+  (name render-node)
+done
+
+shabda op-resolve-chain
+  (name resolve-chain)
+  (parse-arity 3)
+done
+
+shabda op-resolve-direct
+  (name resolve-direct)
+done
+
+shabda op-resolve-inverse
+  (name resolve-inverse)
+done
+
+shabda op-resolve-reason
+  (name resolve-reason)
+done
+
+shabda op-role
+  (name role)
+done
+
+shabda op-session-bindings
+  (name session-bindings)
+done
+
+shabda op-shabda
+  (name shabda)
+done
+
+shabda op-sin
+  (name sin)
+done
+
+shabda op-split
+  (name split)
+  (parse-arity 2)
+done
+
+shabda op-sqrt
+  (name sqrt)
+done
+
+shabda op-starts-with
+  (name starts-with)
+  (parse-arity 2)
+  (arg0 string)
+  (arg1 prefix)
+done
+
+shabda op-string-length
+  (name string-length)
+done
+
+shabda op-sub
+  (name sub)
+done
+
+shabda op-tan
+  (name tan)
+done
+
+shabda op-to-english
+  (name to-english)
+done
+
+shabda op-to-english-relation
+  (name to-english-relation)
+done
+
+shabda op-to-number
+  (name to-number)
+done
+
+shabda op-to-string
+  (name to-string)
+done
+
+shabda op-tokenise
+  (name tokenise)
+done
+
+shabda op-unique
+  (name unique)
+done
+
+shabda op-upper
+  (name upper)
+done
+
+shabda op-value
+  (name value)
+done
+
+shabda op-walk
+  (name walk)
+done
+
+shabda op-walk-in
+  (name walk-in)
+done
+
+shabda visheshanam-abheda
+  (symmetric yes)
+  (transitive yes)
+  (congruence yes)
+  (composable yes)
+  (desc "the-equivalence-relation-that-identifies-nodes-at-some-level-symmetric-and-transitive-forming-quotient-classes-in-the-graph")
+done
+
+shabda visheshanam-drishthanta
+  (antisymmetric yes)
+  (desc "the-witness-edge-A-drishthanta-B-means-B-is-a-concrete-example-of-A-antisymmetric-and-grounding-abstract-structure-to-observable-instance")
+done
+
+shabda visheshanam-janya
+  (antisymmetric yes)
+  (dual phala)
+  (desc "the-generator-edge-dual-to-phala-where-A-janya-B-means-A-arises-from-B-reversed-by-axiom-expansion-into-B-phala-A")
+done
+
+shabda visheshanam-kriya
+  (antisymmetric yes)
+  (composable yes)
+  (ring-op mul)
+  (desc "the-multiplicative-operation-of-the-visheshanam-ring-composing-relations-sequentially-non-commutative-with-swarupa-as-its-identity-element")
+done
+
+shabda visheshanam-phala
+  (antisymmetric yes)
+  (dual janya)
+  (desc "the-result-edge-dual-to-janya-where-A-phala-B-means-B-is-the-output-of-A-and-A-janya-B-means-A-arises-from-B")
+done
+
+shabda visheshanam-pratipaksha
+  (symmetric yes)
+  (involutive yes)
+  (desc "the-group-inverse-of-the-visheshanam-ring-applying-pratipaksha-twice-returns-to-the-original-A-pratipaksha-B-means-B-negates-or-undoes-A")
+done
+
+shabda visheshanam-ring
+  (alias dimension-registry)
+  (desc "the-ring-of-all-edge-dimensions-core-and-dynamic")
+done
+
+shabda visheshanam-siddha
+  (antisymmetric yes)
+  (desc "the-entailment-edge-A-siddha-B-means-A-is-proven-or-certified-through-B-antisymmetric-and-not-composable")
+done
+
+shabda visheshanam-sthita
+  (antisymmetric yes)
+  (transitive yes)
+  (composable yes)
+  (desc "the-dependency-edge-that-forms-a-partial-order-on-nodes-its-chains-encode-the-depth-filtration-from-sangati-foundations-to-kosha-derived-concepts")
+done
+
+shabda visheshanam-swarupa
+  (symmetric yes)
+  (transitive yes)
+  (reflexive yes)
+  (congruence yes)
+  (composable yes)
+  (ring-op mul-identity)
+  (desc "the-multiplicative-identity-of-the-visheshanam-ring-composing-any-relation-with-swarupa-returns-that-relation-unchanged")
+done
+
+shabda visheshanam-yukta
+  (symmetric yes)
+  (ring-op add)
+  (desc "the-additive-operation-of-the-visheshanam-ring-combining-two-relation-bundles-additively-with-shunya-as-its-identity-element")
+done
+
+shabda yantra-varga
+  (alias yantra-varga)
+  (desc "root-cluster-for-all-operator-and-machine-domain-nodes")
+done

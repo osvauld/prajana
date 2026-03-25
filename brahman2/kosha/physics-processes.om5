@@ -1,0 +1,73 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-processes — 10 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha collision
+  (swarupa tinanta bhave-prayoga sandhi)
+  (vishesa physics-varga)
+  (yukta dvaya asprishta-sanghat sprishta-sanghat kaala)
+  (janya samvega tvarana))
+
+(kosha coefficient-of-restitution
+  (vishesa collision-varga)
+  (swarupa subanta scalar)
+  (siddha dimensionless)
+  (yukta velocity material)
+  (abheda ratio sparsha)
+  (drishthanta elastic-collision inelastic-collision))
+
+(kosha collision-varga
+  (vishesa physics-varga dynamics-varga)
+  (yukta momentum conservation dvaya kinetic-energy coefficient-of-restitution)
+  (sthita samvega niyama particle-a particle-b)
+  (swarupa aneka-eka)
+  (abheda mithuna)
+  (kriya sparsha)
+  (janya samvega)
+  (phala vivartana))
+
+(kosha elastic-collision
+  (vishesa collision-varga)
+  (swarupa tinanta bhave-prayoga)
+  (yukta momentum conservation kinetic-energy)
+  (sthita particle-a particle-b coefficient-of-restitution)
+  (janya mass1 mass2 velocity1 velocity2)
+  (phala velocity1 velocity2))
+
+(kosha compression
+  (domain kosha/physics/processes)
+  (swarupa tinanta bhave-prayoga sandhi)
+  (vishesa physics-varga)
+  (yukta spanda ucchalan spanda-urja spanda-avdhi)
+  (sthita sthithi))
+
+(kosha connection
+  (domain kosha/physics/processes)
+  (swarupa tinanta bhave-prayoga sandhi)
+  (vishesa physics-varga)
+  (yukta dvaya rajju atwood-yantra tvarana)
+  (sthita bandha))
+
+(kosha oscillation
+  (swarupa tinanta bhave-prayoga sandhi)
+  (vishesa physics-varga)
+  (yukta spanda kaala spanda-avdhi spanda-param-vega lola-avdhi avrti)
+  (avastha damped))
+
+(kosha rolling
+  (swarupa tinanta bhave-prayoga sandhi)
+  (vishesa physics-varga)
+  (yukta gati ghurnan ghana-jada-swarupa ghurnan-vega)
+  (sthita asprishana))
+
+(kosha sliding
+  (swarupa tinanta bhave-prayoga sandhi)
+  (vishesa physics-varga)
+  (yukta gati ghasana avanati-tvarana lambika-bala)
+  (sthita tala))
+
+(kosha suspension
+  (swarupa tinanta bhave-prayoga sandhi)
+  (vishesa physics-varga)
+  (yukta lambika lambika-bala)
+  (sthita sthiram bala-samya upari))

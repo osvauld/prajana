@@ -5,11 +5,11 @@
     {
       "method": "answer",
       "input": "if it rains the ground is wet. the ground is not wet. did it rain",
-      "output": "we assert: ground IS-A negation. we ask: does negation inherit negation?. we see: chain reaches negation via IS-A. no \u2014 negation does not have negation",
-      "elapsed_ms": 831,
+      "output": "we assert: ground IS-A negation. we ask: does ground inherit negation?. we know: ground IS-A negation. we see: chain reaches negation via IS-A. yes \u2014 ground has negation",
+      "elapsed_ms": 417,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.832
+  "duration": 0.418
 }

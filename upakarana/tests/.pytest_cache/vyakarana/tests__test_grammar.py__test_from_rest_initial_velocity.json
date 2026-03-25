@@ -47,12 +47,12 @@
           "0."
         ]
       ],
-      "elapsed_ms": 61,
+      "elapsed_ms": 41,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.072,
+  "duration": 0.046,
   "xfail": {
     "reason": "from rest: 'rest' maps to count-remaining, not initial-velocity=0",
     "strict": true,

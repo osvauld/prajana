@@ -1,0 +1,114 @@
+; ═══════════════════════════════════════════════════════════════════
+; engine — 13 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha bridge
+  (domain engine)
+  (swarupa socket)
+  (abheda rust)
+  (yukta vyakarana session)
+  (kriya query reload dynamic-reload)
+  (phala resonance-ir music-ir graph-delta)
+  (janya session-om))
+
+(kosha kosha
+  (swarupa om)
+  (sthita proof-graph domain vyakarana filtration graded-ring)
+  (ahara nigamana)
+  (kriya om-parser anuvada)
+  (yukta sangati shabda visheshanam)
+  (phala satya-ganana))
+
+(kosha music-ir
+  (domain engine)
+  (swarupa voice)
+  (yukta event visheshanam timbre pitch gain duration)
+  (phala nigamana anuvada bridge)
+  (abheda spanda morphism)
+  (kriya avrti))
+
+(kosha nigamana
+  (swarupa sangati)
+  (abheda pramana)
+  (yukta slokas visheshanam satya shabda layer)
+  (sthita proof-graph graded-ring)
+  (janya om-parser)
+  (siddha satya-ganana)
+  (phala avrti))
+
+(kosha om-parser
+  (janya nigamana visheshanam)
+  (kriya proof-graph axiom-expansion)
+  (swarupa dvi-krama)
+  (ahara sangati)
+  (yukta shabda slokas layer)
+  (sthita kosha)
+  (phala satya-ganana))
+
+(kosha prayoga
+  (domain engine)
+  (swarupa code-generation)
+  (kriya setu)
+  (abheda morphism anuvada)
+  (sthita proof-graph)
+  (ahara shabda)
+  (janya lua ocaml)
+  (phala kriya)
+  (yukta visheshanam nigamana))
+
+(kosha proof-graph
+  (swarupa nigamana tensor csr)
+  (sthita satya graded-ring filtration partial-order)
+  (kriya avrti ppr beam-search satya-ganana spmv)
+  (yukta sangati visheshanam setu sparse-adjacency)
+  (janya anuvada prayoga om-parser)
+  (siddha sparse axiom-expansion))
+
+(kosha resonance-ir
+  (domain engine)
+  (swarupa graph-delta)
+  (abheda spanda morphism tensor)
+  (yukta node-energy edge-flow focus camera vibration)
+  (phala anuvada bridge)
+  (kriya pratibimba))
+
+(kosha session
+  (yukta turn question-chain binding proof-graph)
+  (sthita bridge)
+  (kriya socket anuvada)
+  (janya om nigamana)
+  (phala reload graph-delta)
+  (swarupa context)
+  (siddha accumulation parampara))
+
+(kosha shabda
+  (swarupa artha key-value)
+  (abheda nama morphism)
+  (yukta setu nigamana kosha tmpl)
+  (kriya prayoga anuvada)
+  (sthita proof-graph)
+  (janya om-parser))
+
+(kosha socket
+  (swarupa uds)
+  (abheda wire-protocol)
+  (kriya anuvada reload)
+  (sthita proof-graph)
+  (yukta json session turn vyakarana bridge)
+  (phala graph-delta))
+
+(kosha sparse-adjacency
+  (sthita proof-graph startup)
+  (abheda matrix-multiplication)
+  (swarupa csr array float)
+  (janya map fold)
+  (kriya dot-product materialize spmv)
+  (yukta ppr visheshanam))
+
+(kosha vyakarana
+  (swarupa proof-graph tensor ocaml)
+  (kriya satya-ganana anuvada prayoga avrti beam-search ppr direct-solve inverse-solve chain-solve)
+  (yukta om-parser setu socket session visheshanam shabda)
+  (janya nigamana)
+  (sthita ring graded-ring kosha domain-computation)
+  (siddha avrti))

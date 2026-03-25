@@ -1,0 +1,20 @@
+-- Oxford-comma list join: "A", "A and B", "A; B; and C"
+(tantra list-join (items)
+  (sep-items (shabda "anuvada-setu" "speech-separator"))
+  (say-and (shabda "anuvada-setu" "speech-and"))
+  (n (length items))
+  (cond (eq n 0) ""
+    otherwise (cond (eq n 1)
+      (nth items 0)
+      otherwise (cond (eq n 2)
+        (concat (nth items 0) " " say-and " " (nth items 1))
+        otherwise
+          (let all-but-last = reduce items [] (fn acc s ->
+             cond (lt (length acc) (sub n 1))
+               (append acc [s])
+             otherwise acc)
+           let last-item = nth items (sub n 1)
+           let prefix = reduce all-but-last "" (fn acc s ->
+             cond (not (has-text acc)) s
+             otherwise (concat acc sep-items " " s))
+           concat prefix sep-items " " say-and " " last-item)))))

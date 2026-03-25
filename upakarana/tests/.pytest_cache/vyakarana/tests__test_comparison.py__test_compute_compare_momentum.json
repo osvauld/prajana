@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "ball-A has mass 3 and velocity 2. ball-B has mass 4 and velocity 5. which has more momentum",
       "output": "we have: ball-A (=3.) and ball-B (=4.).we seek: which is viveka-max.we know: greater  means viveka-max.we see: 4. > 3. (ball-B  > ball-A ).we find: ball-B is viveka-max than ball-A",
-      "elapsed_ms": 874,
+      "elapsed_ms": 235,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.876
+  "duration": 0.236
 }

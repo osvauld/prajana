@@ -1,0 +1,35 @@
+-- match-mantra: thin orchestrator to find the best matching mantra for a question graph.
+(tantra match-mantra (graph)
+
+  -- extract intent and scope
+  (sf-result (extract-solve-for graph))
+  (has-intent (nth sf-result 0))
+  (solve-for (nth sf-result 1))
+  (scope-entity (nth sf-result 2))
+
+  -- build val-pairs
+  (svps (scope-vps graph scope-entity))
+  (eff-vps (nth svps 0))
+  (eff-bcs (nth svps 1))
+
+  -- relative-velocity special path
+  (rel-vps (relative-vps graph scope-entity))
+
+  (final-vps (cond (has-items rel-vps) rel-vps otherwise eff-vps))
+  (final-bcs (cond (has-items rel-vps) (rel-vps | collect (nth _it 0)) otherwise eff-bcs))
+
+  -- candidate selection (om-driven)
+  (candidates (cond (has-text solve-for)
+    (mantra-select solve-for)
+    otherwise (mantra-select "")))
+
+  -- forward match
+  (fwd (forward-match candidates final-vps final-bcs solve-for))
+
+  -- inverse match (only if has-intent and no forward)
+  (inv-candidates (cond has-intent candidates otherwise []))
+
+  (inv (cond (has-items fwd) fwd
+    otherwise (inverse-match inv-candidates final-vps final-bcs solve-for)))
+
+  (cond (has-items fwd) fwd otherwise inv))

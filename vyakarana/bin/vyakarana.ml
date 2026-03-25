@@ -164,15 +164,17 @@ let load_dirs ?(emit_meta=true) (dirs : string list) (k : Prakriti.proof_graph)
   (* pass 2: set search_dirs and kosha_root *)
   k.search_dirs := dirs;
   (match dirs with d :: _ -> k.kosha_root := d | [] -> ());
-  (* pass 3: load all .om5 files *)
+  (* pass 3: load all .om5 files (multi-node aware) *)
   let loaded = ref 0 in
   let skipped = ref 0 in
   List.iter (fun dir ->
     let files = Karma.om5_files_recursive dir in
     List.iter (fun path ->
-      match Karma.parse_file path with
-      | Some n -> ignore (Prakriti.join k n); incr loaded
-      | None -> incr skipped
+      let nodes = Karma.parse_file_multi path in
+      if nodes = [] then incr skipped
+      else List.iter (fun n ->
+        ignore (Prakriti.join k n); incr loaded
+      ) nodes
     ) files
   ) dirs;
   (k, !loaded, !skipped)
@@ -209,6 +211,33 @@ let () =
   let avastha_generated = Jnana.expand_avastha k0 in
   if avastha_generated > 0 && not quiet_startup then
     Printf.printf "avastha: generated %d child nodes\n%!" avastha_generated;
+  let reciprocals = Jnana.generate_reciprocals k0 in
+  if reciprocals > 0 && not quiet_startup then
+    Printf.printf "reciprocals: generated %d mirror edges (abheda, pratipaksha, janya↔phala)\n%!" reciprocals;
+  let varga_edges = Jnana.generate_varga_membership k0 in
+  if varga_edges > 0 && not quiet_startup then
+    Printf.printf "varga: generated %d membership edges\n%!" varga_edges;
+  let swarupa_rev = Jnana.generate_swarupa_reverse k0 in
+  if swarupa_rev > 0 && not quiet_startup then
+    Printf.printf "swarupa-reverse: generated %d parent→child edges\n%!" swarupa_rev;
+  let sthita_rev = Jnana.generate_sthita_reverse k0 in
+  if sthita_rev > 0 && not quiet_startup then
+    Printf.printf "sthita-reverse: generated %d context→member edges\n%!" sthita_rev;
+  let matra_inh = Jnana.generate_matra_inheritance k0 in
+  if matra_inh > 0 && not quiet_startup then
+    Printf.printf "matra-inherit: generated %d unit inheritance edges\n%!" matra_inh;
+  let awareness = Jnana.generate_awareness_reverse k0 in
+  if awareness > 0 && not quiet_startup then
+    Printf.printf "awareness: generated %d reverse edges (siddha, kriya, drishthanta)\n%!" awareness;
+  let yukta_sl = Jnana.generate_yukta_same_layer k0 in
+  if yukta_sl > 0 && not quiet_startup then
+    Printf.printf "yukta-same-layer: generated %d reciprocal edges\n%!" yukta_sl;
+  let edge_inh = Jnana.generate_edge_inheritance k0 in
+  if edge_inh > 0 && not quiet_startup then
+    Printf.printf "edge-inherit: generated %d inherited edges from parents\n%!" edge_inh;
+  let varga_pat = Jnana.generate_varga_patterns k0 in
+  if varga_pat > 0 && not quiet_startup then
+    Printf.printf "varga-patterns: generated %d consensus-replicated edges\n%!" varga_pat;
   let naama_edges = Vidya.emit_shabda_edges k0 in
   if naama_edges > 0 && not quiet_startup then
     Printf.printf "naama: %d word edges emitted into graph\n%!" naama_edges;

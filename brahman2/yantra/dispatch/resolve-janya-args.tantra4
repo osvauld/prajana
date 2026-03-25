@@ -1,0 +1,13 @@
+-- resolve a mantra's janya concepts to numeric values from bindings or constants.
+(tantra resolve-janya-args (mantra bindings)
+
+  (janya (walk mantra "janya"))
+
+  (reduce janya [] (fn acc concept ->
+    let ck = shabda concept "constants-key"
+    let v  = cond (has-text ck)
+      (nth (split-numeric (shabda "physics-constants" ck)) 0)
+      otherwise
+        (reduce bindings "" (fn a2 kv ->
+          cond (eq (nth kv 0) concept) (nth kv 1) otherwise a2))
+    append acc [v])))

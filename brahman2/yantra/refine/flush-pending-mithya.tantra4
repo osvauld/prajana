@@ -1,0 +1,3 @@
+-- emit all words in pending as [w, mithya, w] triples, appended to out.
+(tantra flush-pending-mithya (pending out)
+  (reduce pending out (fn acc w -> (append acc [[w, "mithya", w]]))))

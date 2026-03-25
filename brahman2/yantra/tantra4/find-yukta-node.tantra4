@@ -1,0 +1,6 @@
+-- finds which varga node declares a predicate as yukta.
+(tantra find-yukta-node (chain predicate)
+  (reduce chain "" (fn acc v ->
+    let ys = map (om-yukta v) (fn y -> to-string y)
+    cond (and (not (has-text acc)) (member predicate ys)) v
+    otherwise acc)))

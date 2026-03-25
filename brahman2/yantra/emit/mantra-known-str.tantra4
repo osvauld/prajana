@@ -1,0 +1,15 @@
+-- udaharana strand: "we know: mantra-name (janya1, janya2 → phala)"
+(tantra mantra-known-str (mm)
+  (say-known (shabda "anuvada-setu" "speech-known"))
+  (arrow (shabda "anuvada-setu" "speech-janya-phala-arrow"))
+  (mantra (nth mm 0))
+  (janya (walk mantra "janya"))
+  (phala (nth (walk mantra "phala") 0))
+  (janya-str (reduce janya "" (fn acc j ->
+    cond (not (has-text acc)) (to-string j)
+    otherwise (concat acc ", " (to-string j)))))
+  (phala-str (cond (exists phala)
+    (concat " " arrow " " (to-string phala))
+    otherwise ""))
+  (inner (concat janya-str phala-str))
+  (concat say-known ": " (to-string mantra) " (" inner ")"))

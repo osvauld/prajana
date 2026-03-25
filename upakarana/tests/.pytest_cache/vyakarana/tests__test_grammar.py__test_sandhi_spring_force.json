@@ -17,10 +17,10 @@
           "spring-force"
         ]
       ],
-      "elapsed_ms": 20,
+      "elapsed_ms": 15,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.022
+  "duration": 0.016
 }

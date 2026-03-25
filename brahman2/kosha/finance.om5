@@ -1,0 +1,189 @@
+; ═══════════════════════════════════════════════════════════════════
+; finance — 34 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha asset
+  (abheda ahara grahana)
+  (sthita credit domain-finance)
+  (phala return)
+  (yukta liquidity financial-bond))
+
+(kosha bond-yield
+  (abheda phala)
+  (sthita financial-bond domain-finance)
+  (yukta interest-rate))
+
+(kosha business-cycle
+  (abheda avrti)
+  (yukta growth decline interest-rate)
+  (sthita domain-finance))
+
+(kosha contagion
+  (abheda samsarga taranga)
+  (janya market-crash)
+  (sthita entanglement domain-finance)
+  (phala default-risk liquidity-kshaya systemic-risk)
+  (kriya decay thread)
+  (swarupa aneka-aneka))
+
+(kosha credit
+  (abheda pramana)
+  (yukta financial-bond)
+  (sthita domain-finance))
+
+(kosha currency
+  (sthita matra domain-finance)
+  (swarupa float)
+  (abheda float)
+  (yukta artha exchange))
+
+(kosha debt
+  (abheda sthiti)
+  (yukta financial-bond)
+  (sthita domain-finance))
+
+(kosha default-risk
+  (abheda tirodhana)
+  (sthita debt domain-finance)
+  (yukta credit financial-bond))
+
+(kosha deflation
+  (abheda sankshepa compaction)
+  (yukta inflation)
+  (sthita domain-finance))
+
+(kosha domain-finance
+  (yukta financial-bond credit debt interest-rate bond-yield inflation deflation liquidity money-supply business-cycle default-risk yield-curve mutual-fund expense-ratio fee return domain-cross-domain domain-kosha asset income expense profit equity liability systemic-risk market-crash contagion recovery))
+
+(kosha equity
+  (abheda purna shuddha)
+  (janya profit)
+  (sthita liquidity debt domain-finance)
+  (siddha asset conservation))
+
+(kosha expense-ratio
+  (abheda kshaya)
+  (yukta fee)
+  (sthita return mutual-fund domain-finance))
+
+(kosha expense
+  (abheda kshaya visarjana)
+  (sthita fee expense-ratio inflation domain-finance)
+  (phala release)
+  (janya asset))
+
+(kosha fee
+  (abheda kshaya)
+  (yukta expense-ratio)
+  (sthita domain-finance))
+
+(kosha finance-varga
+  (sthita domain-finance)
+  (vishesa math-varga)
+  (swarupa subanta)
+  (yukta matra kaala kramanusara seema avastha))
+
+(kosha financial-bond
+  (sthita credit domain-finance)
+  (yukta debt interest-rate)
+  (phala bond-yield))
+
+(kosha income
+  (abheda vriddhi return)
+  (janya asset)
+  (sthita bond-yield domain-finance)
+  (phala growth impression))
+
+(kosha inflation
+  (abheda kshaya)
+  (yukta glani money-supply interest-rate)
+  (sthita domain-finance))
+
+(kosha interest-rate
+  (abheda avrti)
+  (yukta vriddhi kshaya)
+  (sthita domain-finance))
+
+(kosha liability
+  (abheda phala rna)
+  (sthita debt financial-bond domain-finance)
+  (phala expense)
+  (janya credit))
+
+(kosha liquidity
+  (abheda samsarga)
+  (yukta taranga credit financial-bond)
+  (sthita domain-finance))
+
+(kosha macro-varga
+  (vishesa finance-varga)
+  (swarupa subanta)
+  (yukta kramanusara kaala spanda avastha niyama))
+
+(kosha market-crash
+  (abheda kshaya visarjana)
+  (sthita systemic-risk liquidity domain-finance)
+  (phala deflation decline equity-kshaya)
+  (janya contagion)
+  (yukta recovery))
+
+(kosha market-varga
+  (vishesa finance-varga)
+  (swarupa subanta)
+  (yukta matra kaala sandhi avastha))
+
+(kosha money-supply
+  (abheda spanda)
+  (yukta growth decline liquidity)
+  (sthita domain-finance))
+
+(kosha mutual-fund
+  (abheda vrnda)
+  (sthita liquidity domain-finance)
+  (phala growth)
+  (yukta decline))
+
+(kosha mutual-funds
+  (abheda mutual-fund)
+  (sthita domain-finance))
+
+(kosha profit
+  (abheda shuddha impression)
+  (sthita income expense domain-finance)
+  (siddha conservation kaizen)
+  (phala asset equity))
+
+(kosha ratio
+  (sthita matra ananta domain-finance)
+  (swarupa float)
+  (abheda float)
+  (yukta proportion))
+
+(kosha recovery
+  (abheda vriddhi purification)
+  (janya market-crash)
+  (sthita kaizen domain-finance)
+  (phala liquidity credit growth)
+  (siddha business-cycle conservation))
+
+(kosha return
+  (abheda vriddhi)
+  (yukta growth bond-yield)
+  (sthita domain-finance))
+
+(kosha risk-varga
+  (vishesa finance-varga)
+  (swarupa subanta)
+  (yukta seema avastha sandhi kaala niyama))
+
+(kosha systemic-risk
+  (abheda tirodhana samsarga)
+  (sthita default-risk liquidity entanglement domain-finance)
+  (phala contagion)
+  (yukta market-crash concealment decay)
+  (swarupa aneka-aneka))
+
+(kosha yield-curve
+  (abheda orbit)
+  (yukta bond-yield interest-rate epoch)
+  (sthita domain-finance))

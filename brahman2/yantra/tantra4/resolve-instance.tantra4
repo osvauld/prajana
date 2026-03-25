@@ -1,0 +1,7 @@
+-- resolves a rashi instance to its concept via vishesa edge.
+(tantra resolve-instance (graph inst)
+  (nth (graph | where [i, e, c]
+    | and (eq (to-string i) (to-string inst))
+    | and (eq e "vishesa")
+    | and (neq (to-string c) "rashi")
+    | collect c) 0))

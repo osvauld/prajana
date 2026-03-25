@@ -1,0 +1,235 @@
+# sangati/grammar — shabda extracted from .om files
+# 55 entries
+
+shabda aamantrana
+  (word greetings)
+  (alias formal-invocation)
+  (desc respectful-address-the-speaker-honours-the-addressee)
+done
+
+shabda abhisambodhana
+  (word hey yo)
+  (alias emphatic-address)
+  (desc intimate-or-forceful-calling-the-speaker-reaches-toward-the-addressee)
+done
+
+shabda adhikarana
+  (alias locus)
+  (desc the-substratum-where-action-rests-place-time-or-condition)
+done
+
+shabda apadana
+  (alias source)
+  (desc the-fixed-point-from-which-separation-occurs)
+done
+
+shabda avyaya
+  (alias indeclinable)
+  (desc words-that-never-change-form)
+done
+
+shabda bahu-vachana
+  (alias plural)
+  (desc many-referents)
+done
+
+shabda bahuvrihi
+  (alias possessive-compound)
+  (desc referring-to-something-with-that-property)
+done
+
+shabda chaturthi-vibhakti
+  (alias dative)
+  (desc for-to-recipient-or-purpose)
+done
+
+shabda dvandva
+  (alias copulative-compound)
+  (desc both-elements-equally-present)
+done
+
+shabda dvi-vachana
+  (alias dual)
+  (desc exactly-two-referents)
+done
+
+shabda dvitiya-vibhakti
+  (alias accusative)
+  (desc the-direct-object)
+done
+
+shabda eka-vachana
+  (alias singular)
+  (desc one-referent)
+done
+
+shabda grammatical-gender
+  (alias english-gender)
+  (desc he-she-it-pronoun-agreement)
+done
+
+shabda kaala
+  (alias time)
+  (desc the-pulse-that-becomes-sequence-grammatical-tense-is-how-language-places-action-in-this-pulse)
+done
+
+shabda karaka
+  (alias participant-role)
+  (desc the-six-semantic-roles-of-action-participants-agent-object-instrument-recipient-source-locus)
+done
+
+shabda karana
+  (alias instrument)
+  (desc the-most-effective-means-by-which-the-agent-accomplishes-action)
+done
+
+shabda karma-karaka
+  (alias object)
+  (desc what-the-agent-most-seeks-to-affect-through-action)
+done
+
+shabda karmadharaya
+  (alias descriptive-compound)
+  (desc adjective-plus-noun-unified)
+done
+
+shabda karta
+  (alias agent)
+  (desc the-doer-whose-independence-makes-the-action-possible)
+done
+
+shabda kta-pratyaya
+  (alias past-participle)
+  (desc the-ed-form)
+done
+
+shabda linga
+  (alias grammatical-gender)
+  (desc masculine-feminine-neuter)
+done
+
+shabda madhyama-purusa
+  (alias second-person)
+  (desc the-one-addressed)
+done
+
+shabda nipata
+  (alias particle)
+  (desc untranslatable-connective)
+done
+
+shabda pada
+  (alias word-class)
+  (desc nominal-verbal-or-indeclinable)
+done
+
+shabda panchami-vibhakti
+  (alias ablative)
+  (desc from-source-or-cause)
+done
+
+shabda prathama-purusa
+  (alias third-person)
+  (desc the-one-spoken-about)
+done
+
+shabda prathama-vibhakti
+  (alias nominative)
+  (desc the-subject)
+done
+
+shabda pratyaya
+  (alias suffix)
+  (desc the-morphological-unit-that-encodes-grammar)
+done
+
+shabda purusa
+  (alias grammatical-person)
+  (desc third-second-first)
+done
+
+shabda rupa
+  (alias surface-form)
+  (desc the-inflected-or-derived-form-of-a-stem)
+done
+
+shabda samasa
+  (alias compound-formation)
+  (desc how-words-join)
+done
+
+shabda sambodhana
+  (word hello hi)
+  (alias vocative)
+  (desc direct-address)
+done
+
+shabda sampradana
+  (alias recipient)
+  (desc the-one-to-whom-the-agent-directs-the-fruit-of-action)
+done
+
+shabda saptami-vibhakti
+  (alias locative)
+  (desc in-at-on-location-or-condition)
+done
+
+shabda shashthi-vibhakti
+  (alias genitive)
+  (desc of-possession-or-domain)
+done
+
+shabda shatr-pratyaya
+  (alias present-participle)
+  (desc the-ing-form)
+done
+
+shabda subanta
+  (alias nominal-form)
+  (desc declined-for-case-gender-number)
+done
+
+shabda tatpurusha
+  (alias determinative-compound)
+  (desc second-element-qualified-by-first)
+done
+
+shabda tinanta
+  (alias verbal-form)
+  (desc conjugated-for-tense-voice-number-person)
+done
+
+shabda trtiya-vibhakti
+  (alias instrumental)
+  (desc by-with-means-or-agent)
+done
+
+shabda tumun-pratyaya
+  (alias infinitive)
+  (desc the-to-form)
+done
+
+shabda tvaa-pratyaya
+  (alias gerund)
+  (desc having-done-form)
+done
+
+shabda upasarga
+  (alias verbal-prefix)
+  (desc particle-prefixed-to-root-that-modifies-meaning)
+done
+
+shabda uttama-purusa
+  (alias first-person)
+  (desc the-one-speaking)
+done
+
+shabda vachana
+  (alias grammatical-number)
+  (desc singular-dual-plural)
+done
+
+shabda vibhakti
+  (alias grammatical-case)
+  (desc the-relation-a-word-bears-to-its-sentence-eight-cases-in-Sanskrit)
+done

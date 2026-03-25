@@ -6,7 +6,7 @@
       "method": "eval",
       "input": "to-number \"42\"",
       "output": 42,
-      "elapsed_ms": 3,
+      "elapsed_ms": 0,
       "error": null
     },
     {
@@ -18,5 +18,5 @@
     }
   ],
   "failure": null,
-  "duration": 0.004
+  "duration": 0.0
 }

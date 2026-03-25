@@ -558,8 +558,17 @@ def build_parser():
         "compose-inherit", "compose-validity", "compose-words",
         "compose-rules", "compose-gen", "compose-curated",
         "compose-logic", "compose-lift", "compose-inverse",
+        "compose-karma", "compose-lakshana", "compose-declension",
+        "compose-conjugation", "compose-samasa", "compose-collisions",
+        "compose-deriv-avastha", "compose-grammar", "compose-summary",
+        "hubs-compose", "derivative-chain", "compose-potential",
+        "generator-product",
+        "sangati-levels", "sangati-at", "sangati-tree", "sangati-generates",
+        "gen-expected", "gen-validate", "gen-candidates", "gen-gaps", "gen-validate-all",
+        "dataflow",
     ])
     s.add_argument("name", nargs="?")
+    s.add_argument("name2", nargs="?")
     s.add_argument("--layer", "-l")
 
     # live analysis
@@ -571,6 +580,17 @@ def build_parser():
     s.add_argument("name", nargs="?")
     s.add_argument("--sentence", "-s")
     s.add_argument("--relation", "-r")
+
+    # generation / authoring
+    s = sub.add_parser("gen", help="Node generation and authoring")
+    s.add_argument("action", choices=[
+        "preview", "create", "validate", "batch", "status",
+    ])
+    s.add_argument("name", nargs="?")
+    s.add_argument("name2", nargs="?")
+    s.add_argument("--to", default=None, help="Output directory (default: brahman2)")
+    s.add_argument("--domain", "-d", default=None)
+    s.add_argument("--dry-run", action="store_true")
 
     # usage
     s = sub.add_parser("usage", help="Command usage tracking")
@@ -758,6 +778,10 @@ def cmd_analyze(args):
     elif args.action == "parallel":
         from upakarana.analysis.tantras import print_parallelism
         print_parallelism()
+
+    elif args.action == "dataflow":
+        from upakarana.analysis.tantras import print_dataflow
+        print_dataflow()
 
     elif args.action == "compose":
         from upakarana.analysis.compose import full_analysis
@@ -994,6 +1018,458 @@ def cmd_analyze(args):
             for m in pa["missing_inverses"][:15]:
                 print(f"  {m['name']:30s} ({m['domain']})")
 
+    elif args.action == "compose-karma":
+        from upakarana.analysis.compose import karma_varga_cross
+        kv = karma_varga_cross()
+        print(f"── Math: op × structure cross-product ──")
+        print(f"  Total valid pairs:   {kv['total_valid']}")
+        print(f"  Already exist:       {kv['total_existing']}")
+        print(f"  Missing:             {kv['total_missing']}")
+        for varga, info in sorted(kv["vargas"].items(), key=lambda x: -x[1]["cross"]):
+            print(f"\n  {varga}: {info['op_count']} ops × {info['struct_count']} structures = {info['cross']}")
+            print(f"    ops: {info['ops'][:5]}{'...' if len(info['ops']) > 5 else ''}")
+            print(f"    structures: {info['structures'][:5]}{'...' if len(info['structures']) > 5 else ''}")
+
+    elif args.action == "compose-lakshana":
+        from upakarana.analysis.compose import lakshana_validity
+        lv = lakshana_validity()
+        print(f"── Math: property × structure truth table ──")
+        print(f"  Total exceptions: {lv['total_exceptions']}")
+        for varga, info in sorted(lv["vargas"].items(), key=lambda x: -x[1]["total_cells"]):
+            print(f"\n  {varga}: {len(info['properties'])} props × {len(info['structures'])} structs = {info['total_cells']} cells ({info['exceptions']} exceptions)")
+            for prop, row in info["matrix"].items():
+                falses = [s for s, v in row.items() if not v]
+                if falses:
+                    print(f"    {prop:30s} NOT valid for: {falses}")
+
+    elif args.action == "compose-declension":
+        from upakarana.analysis.compose import declension_matrix
+        dm = declension_matrix()
+        print(f"── Grammar: noun declension matrix ──")
+        print(f"  Noun bases (subanta): {dm['subanta_count']}")
+        print(f"  Cases (vibhakti):     {dm['vibhakti']}")
+        print(f"  Numbers (vachana):    {dm['vachana']}")
+        print(f"  Total forms:          {dm['total_forms']}")
+        print(f"\n  Sample nouns: {dm['subanta'][:15]}")
+
+    elif args.action == "compose-conjugation":
+        from upakarana.analysis.compose import conjugation_matrix
+        cm = conjugation_matrix()
+        print(f"── Grammar: verb conjugation matrix ──")
+        print(f"  Verb bases (tinanta): {cm['tinanta_count']}")
+        print(f"  Tenses (kaala):       {cm['kaala']}")
+        print(f"  Numbers (vachana):    {cm['vachana']}")
+        print(f"  Persons (purusa):     {cm['purusa']}")
+        print(f"  Total forms:          {cm['total_forms']}")
+        print(f"\n  Sample verbs: {cm['tinanta'][:15]}")
+
+    elif args.action == "compose-samasa":
+        from upakarana.analysis.compose import samasa_classifier
+        sc = samasa_classifier()
+        print(f"── Samasa classification ──")
+        for stype, names in sorted(sc["counts"].items(), key=lambda x: -x[1]):
+            print(f"  {stype:20s} {sc['counts'][stype]:3d}")
+            for n in sc["by_type"][stype][:5]:
+                print(f"    {n}")
+            if len(sc["by_type"][stype]) > 5:
+                print(f"    ... +{len(sc['by_type'][stype])-5} more")
+
+    elif args.action == "compose-collisions":
+        from upakarana.analysis.compose import collision_analysis
+        ca = collision_analysis()
+        print(f"── Name collisions: {ca['total']} ──")
+        print(f"   (each must appear in brahman2 with ALL edges from every source)\n")
+        for name, info in sorted(ca["collisions"].items()):
+            print(f"  {name} ({info['count']} instances):")
+            for inst in info.get("instances", []):
+                edge_summary = defaultdict(list)
+                for e in inst["edges"]:
+                    edge_summary[e["relation"]].append(e["target"])
+                edges_str = "  ".join(f"{r}={','.join(ts[:3])}" for r, ts in edge_summary.items())
+                print(f"    [{inst['domain']:45s}] {edges_str[:80]}")
+
+    elif args.action == "compose-deriv-avastha":
+        from upakarana.analysis.compose import derivative_avastha_cross
+        da = derivative_avastha_cross()
+        print(f"── Derivative × avastha cross ──")
+        print(f"  Total:          {da['total']}")
+        print(f"  Existing:       {da['existing']}")
+        print(f"  Missing:        {da['missing']}")
+        print(f"  Chain coherent: {da['chain_coherent']}")
+        print(f"  Chain broken:   {da['chain_broken']}")
+        for r in da["cross"]:
+            tag = "✓" if r["exists"] else "·"
+            chain = ""
+            if r["chain_companion"]:
+                ctag = "✓" if r["companion_exists"] else "✗"
+                chain = f" chain:{r['chain_companion']}[{ctag}]"
+            print(f"  {tag} {r['compound']:35s} (d/dt of {r['derives_from'] or '—'}){chain}")
+
+    elif args.action == "compose-grammar":
+        from upakarana.analysis.compose import grammar_shabda_generator
+        gs = grammar_shabda_generator()
+        print(f"── Grammar shabda generation ──")
+        print(f"  Verbs:          {gs['verb_count']}")
+        print(f"  Nouns:          {gs['noun_count']}")
+        print(f"  Total forms:    {gs['total_forms']}")
+        print(f"  Reverse index:  {gs['reverse_count']} inflected words")
+
+        print(f"\n── Verb inflections ──")
+        for v in gs["verbs"][:10]:
+            forms_str = "  ".join(f"{k}={','.join(ws)}" for k, ws in v["forms"].items())
+            print(f"  {v['name']:25s} ({v['base_word']:15s})  {forms_str}")
+        if gs["verb_count"] > 10:
+            print(f"  ... +{gs['verb_count']-10} more")
+
+        print(f"\n── Noun inflections ──")
+        for n in gs["nouns"][:10]:
+            forms_str = "  ".join(f"{k}={','.join(ws)}" for k, ws in n["forms"].items())
+            print(f"  {n['name']:25s} ({n['base_word']:15s})  {forms_str}")
+        if gs["noun_count"] > 10:
+            print(f"  ... +{gs['noun_count']-10} more")
+
+        print(f"\n── Reverse lookup sample ──")
+        for word in ["moved", "forces", "accelerating", "was", "energies", "collided"]:
+            lookups = gs["reverse"].get(word, [])
+            if lookups:
+                for base, tag in lookups:
+                    print(f"  \"{word}\" → {base} + {tag}")
+            else:
+                print(f"  \"{word}\" → (not found)")
+
+    elif args.action == "compose-summary":
+        from upakarana.analysis.compose import generation_summary
+        gs = generation_summary()
+        print(f"═══════════════════════════════════════════════════════")
+        print(f" GENERATION SUMMARY")
+        print(f"═══════════════════════════════════════════════════════")
+        print(f"  Current nodes:                {gs['current_nodes']:,}")
+        print(f"  Physics avastha missing:      +{gs['physics_avastha_missing']}")
+        print(f"  Math op×structure missing:    +{gs['math_op_structure_missing']:,}  (of {gs['math_op_structure_total']:,})")
+        print(f"  Math lakshana cells:          {gs['math_lakshana_total']:,}  (property×structure)")
+        print(f"  Grammar noun forms:           +{gs['grammar_noun_forms']:,}")
+        print(f"  Grammar verb forms:           +{gs['grammar_verb_forms']:,}")
+        print(f"  Space lifts missing:          +{gs['space_lifts_missing']}")
+        print(f"  Logic missing:                +{gs['logic_missing']}")
+        print(f"  Pratipaksha missing:          {gs['pratipaksha_missing']}")
+        print(f"  Derivative×avastha missing:   +{gs['derivative_avastha_missing']}")
+        print(f"  Name collisions:              {gs['collisions']}")
+        print(f"  ─────────────────────────────────────────────────────")
+        print(f"  PROJECTED TOTAL:              ~{gs['projected_total']:,}")
+
+    elif args.action == "hubs-compose":
+        from upakarana.analysis.inheritance import hub_compose
+        hubs = hub_compose(top_n=40, layer=args.layer)
+        print(f"── Composition hubs (score = connectivity × generators × references) ──\n")
+        print(f"  {'name':30s} {'layer':>8s} {'score':>7s} {'out':>4s} {'in':>4s} {'gen':>4s} {'ref':>4s} {'inh':>4s}")
+        print(f"  {'─'*30} {'─'*8} {'─'*7} {'─'*4} {'─'*4} {'─'*4} {'─'*4} {'─'*4}")
+        for h in hubs:
+            print(f"  {h['name']:30s} {h['layer']:>8s} {h['score']:7d} {h['out']:4d} {h['in']:4d} "
+                  f"{h['generators']:4d} {h['references']:4d} {h['inheritable']:4d}")
+            detail = f"    gen({h['gen_type']}:{h['generators']})"
+            detail += f"  ref({h['ref_type']}:{h['references']})"
+            if h['gen_detail']:
+                detail += f"  [{', '.join(h['gen_detail'][:6])}]"
+            print(detail)
+
+    elif args.action == "derivative-chain":
+        from upakarana.analysis.inheritance import derivative_chain
+        dc = derivative_chain()
+        print(f"── Derivative chains (kramanusara: d/dt relationships) ──")
+        print(f"  {dc['total_nodes']} nodes in derivative graph\n")
+
+        print(f"── Chains (derivative → ... → base quantity) ──")
+        for chain in dc["chains"]:
+            labels = []
+            for c in chain:
+                info = dc["node_info"].get(c, {})
+                avs = len(info.get("avastha", []))
+                mnt = len(info.get("phala_mantras", []))
+                matra = info.get("matra", [])
+                unit = f" [{matra[0]}]" if matra else ""
+                tag = f" (avs:{avs})" if avs else ""
+                tag += f" (mnt:{mnt})" if mnt else ""
+                labels.append(f"{c}{unit}{tag}")
+            arrow = " ← d/dt ← "
+            print(f"  {arrow.join(labels)}")
+
+        print(f"\n── Roots (base quantities — no derivative of anything) ──")
+        for r in dc["roots"]:
+            derivs = dc["reverse"].get(r, [])
+            print(f"  {r:30s} ← derivatives: {', '.join(derivs)}")
+
+        print(f"\n── Leaves (highest derivatives — nothing derives from them) ──")
+        for leaf in dc["leaves"]:
+            bases = dc["forward"].get(leaf, [])
+            print(f"  {leaf:30s} → base: {', '.join(bases)}")
+
+    elif args.action == "compose-potential":
+        from upakarana.analysis.inheritance import compose_potential
+        if not args.name or " " not in args.name:
+            print("usage: upakarana a compose-potential 'nodeA nodeB'", file=sys.stderr)
+            return
+        parts = args.name.split()
+        a, b = parts[0], parts[1]
+        cp = compose_potential(a, b)
+
+        status = "EXISTS" if cp["exists"] else "NOT YET"
+        print(f"── Composition potential: {a} × {b} → {cp['compound']} [{status}] ──\n")
+
+        print(f"  [{a}] brings (as qualifier):")
+        print(f"    swarupa chain: {a} → {' → '.join(cp['a_ancestors'][:5])}")
+        for rel, targets in sorted(cp["a_context"].items()):
+            print(f"    {rel:16s} → {', '.join(targets[:6])}")
+
+        print(f"\n  [{b}] provides (as base):")
+        print(f"    swarupa chain: {b} → {' → '.join(cp['b_ancestors'][:5])}")
+        if cp["b_structural"]:
+            print(f"    structural:")
+            for rel, targets in sorted(cp["b_structural"].items()):
+                print(f"      {rel:14s} → {', '.join(targets[:6])}")
+        if cp["b_inheritable"]:
+            print(f"    inheritable:")
+            for rel, targets in sorted(cp["b_inheritable"].items()):
+                print(f"      {rel:14s} → {', '.join(targets[:6])}")
+
+        print(f"\n  [{cp['compound']}] would inherit:")
+        for rel, targets in sorted(cp["predicted"].items()):
+            print(f"    {rel:16s} → {', '.join(targets[:6])}")
+
+        if cp["exists"]:
+            print(f"\n  [{cp['compound']}] actually has:")
+            for rel, targets in sorted(cp["actual"].items()):
+                print(f"    {rel:16s} → {', '.join(targets[:6])}")
+
+        if cp["similar_compounds"]:
+            print(f"\n  Similar compounds (same base {b}):")
+            for sim in cp["similar_compounds"][:10]:
+                print(f"    {sim}")
+
+        if cp["override_patterns"]:
+            print(f"\n  Override patterns from similar compounds:")
+            for rel, patterns in sorted(cp["override_patterns"].items()):
+                for p in patterns[:3]:
+                    print(f"    {p['compound']:25s} {rel}: {', '.join(p['has'][:4])}")
+
+    elif args.action == "generator-product":
+        from upakarana.analysis.inheritance import generator_product
+        gp = generator_product(layer_filter=args.layer)
+        print(f"── Generator product: sangati generators × kosha nodes ──")
+        print(f"  {gp['total_analyzed']} nodes with 2+ sangati generators\n")
+
+        print(f"── Distribution ──")
+        for count, num_nodes in sorted(gp["by_count"].items(), reverse=True):
+            bar = "█" * min(num_nodes, 40)
+            print(f"  {count:2d} generators: {num_nodes:4d} nodes  {bar}")
+
+        print(f"\n── Top sangati generators (most referenced) ──")
+        for gen_name, freq in gp["top_generators"][:20]:
+            roles = gp["generator_roles"].get(gen_name, {})
+            role_str = ", ".join(f"{r}:{c}" for r, c in sorted(roles.items(), key=lambda x: -x[1]))
+            print(f"  {gen_name:25s} {freq:4d} nodes  ({role_str})")
+
+        # Show top nodes by generator count
+        top_nodes = sorted(gp["nodes"].values(), key=lambda n: -n["generator_count"])
+        print(f"\n── Richest nodes (most generators) ──")
+        for ng in top_nodes[:25]:
+            avs = f"  avs:{len(ng['avastha'])}" if ng['avastha'] else ""
+            print(f"  {ng['name']:30s} [{ng['layer']:8s}] {ng['generator_count']:2d} generators{avs}")
+            for g in ng["generators"]:
+                roles = ", ".join(sorted(g["roles"]))
+                print(f"    {g['name']:25s} ({roles})")
+
+        # Show shared signatures
+        if gp["shared_signatures"]:
+            print(f"\n── Shared generator signatures (same generators = same 'type') ──")
+            shown = 0
+            for sig, names in gp["shared_signatures"].items():
+                if shown >= 10:
+                    break
+                if len(names) >= 2:
+                    print(f"  generators: {sig}")
+                    print(f"    nodes: {', '.join(sorted(names)[:8])}")
+                    shown += 1
+
+
+    elif args.action == "sangati-levels":
+        from upakarana.analysis.sangati_levels import level_summary
+        ls = level_summary()
+        print("── Sangati tower: swarupa hierarchy levels ──\n")
+        for lvl in sorted(ls.keys()):
+            info = ls[lvl]
+            label = "cycles" if lvl == -1 else f"level {lvl}"
+            print(f"  {label:10s}  {info['count']:3d} nodes")
+            for name, refs in info["top"][:5]:
+                print(f"    {name:30s} {refs:4d} non-sangati refs")
+        total = sum(v["count"] for v in ls.values())
+        print(f"\n  total: {total} sangati nodes")
+
+    elif args.action == "sangati-at":
+        from upakarana.analysis.sangati_levels import compute_levels
+        levels = compute_levels()
+        target = int(args.name) if args.name else 0
+        nodes_at = sorted(n for n, info in levels.items() if info["level"] == target)
+        label = "cycles" if target == -1 else f"level {target}"
+        print(f"── Sangati {label}: {len(nodes_at)} nodes ──\n")
+        for n in nodes_at:
+            info = levels[n]
+            parents = info["parents"]
+            children = info["children"]
+            p_str = f" ← {parents}" if parents else ""
+            c_str = f" → {len(children)} children" if children else ""
+            print(f"  {n:35s}{p_str}{c_str}")
+
+    elif args.action == "sangati-tree":
+        from upakarana.analysis.sangati_levels import level_tree
+        lt = level_tree()
+        print("── Sangati swarupa spine (top nodes per level) ──\n")
+        for entry in lt["spine"]:
+            lvl = entry["level"]
+            label = "cycles" if lvl == -1 else f"level {lvl}"
+            ct = lt["level_count"].get(lvl, 0)
+            top_str = ", ".join(f"{n}({r})" for n, r in entry["nodes"])
+            print(f"  {label:10s} [{ct:3d}]  {top_str}")
+        print(f"\n── Main trunk (highest-ref per level) ──")
+        for lvl, name, refs, parents in lt["trunk"]:
+            p_str = f" ← {', '.join(parents)}" if parents else " (root)"
+            print(f"  L{lvl}: {name:25s} ({refs:4d} refs){p_str}")
+
+    elif args.action == "sangati-generates":
+        from upakarana.analysis.sangati_levels import level_generates
+        lg = level_generates()
+        print("── Sangati levels → kosha domains shaped ──\n")
+        for lvl in sorted(lg.keys()):
+            info = lg[lvl]
+            label = "cycles" if lvl == -1 else f"level {lvl}"
+            print(f"  {label:10s}  {info['total_kosha']:4d} kosha nodes")
+            for domain, count in list(info["domains"].items())[:8]:
+                short = domain.replace("kosha/", "").replace("sangati/", "s/")
+                print(f"    {short:40s} {count:3d}")
+            if len(info["domains"]) > 8:
+                print(f"    ... +{len(info['domains']) - 8} more domains")
+            print()
+
+    elif args.action == "gen-expected":
+        from upakarana.analysis.generation import expected_node
+        if not args.name or not args.name2:
+            print("Usage: a gen-expected QUALIFIER BASE", file=sys.stderr)
+            return
+        exp = expected_node(args.name, args.name2)
+        if "error" in exp:
+            print(f"Error: {exp['error']}", file=sys.stderr)
+            return
+        print(f"── Expected: {exp['name']} ({exp['category']}) ──\n")
+        print(f"  layer:   {exp['layer']}")
+        print(f"  domain:  {exp['domain']}")
+        print(f"  context: {exp['context']}")
+        print(f"  om5:     {'exists' if exp['exists_om5'] else 'not found (avastha-generated)'}")
+        print(f"  shabda:  {'exists' if exp['exists_shabda'] else 'none'}")
+        print(f"\n── Static edges (what om5 should declare) ──")
+        for rel, targets in exp["static_edges"].items():
+            print(f"  ({rel} {' '.join(targets)})")
+        if exp["overrides"]:
+            print(f"\n── Shabda overrides applied ──")
+            for rel, targets in exp["overrides"].items():
+                print(f"  override-{rel}: {', '.join(targets)}")
+        if exp["live_extras"]:
+            print(f"\n── Engine-added (predicted) ──")
+            for key, vals in exp["live_extras"].items():
+                print(f"  {key}: {', '.join(vals)}")
+        # Show om5 preview
+        from upakarana.parsers.om5 import serialize_node
+        print(f"\n── Om5 preview ──")
+        print(serialize_node(exp["name"], exp["layer"], exp["static_edges"],
+                             [f"generated: {exp['qualifier']} + {exp['base']}"]))
+
+    elif args.action == "gen-validate":
+        from upakarana.analysis.generation import validate_node
+        if not args.name:
+            print("Usage: a gen-validate NODE_NAME", file=sys.stderr)
+            return
+        # Try live validation if server is running
+        client = None
+        try:
+            from upakarana.analysis.live import connect
+            client = connect()
+        except Exception:
+            pass
+        result = validate_node(args.name, client=client)
+        status_sym = {"ok": "✓", "warn": "⚠", "fail": "✗", "info": "·", "skip": "—"}
+        print(f"── Validate: {result['name']} [{result['status'].upper()}] ──\n")
+        for c in result["checks"]:
+            sym = status_sym.get(c["status"], "?")
+            print(f"  {sym} {c['check']:20s} {c['detail']}")
+        if "expected" in result and "actual" in result:
+            exp = result.get("expected", {})
+            act = result.get("actual", {})
+            all_rels = sorted(set(list(exp.keys()) + list(act.keys())))
+            print(f"\n── Edge comparison ──")
+            for rel in all_rels:
+                e = set(exp.get(rel, []))
+                a = set(act.get(rel, []))
+                if e == a:
+                    print(f"  {rel:15s} = {sorted(a)}")
+                else:
+                    if e - a:
+                        print(f"  {rel:15s} missing: {sorted(e - a)}")
+                    if a - e:
+                        print(f"  {rel:15s} extra:   {sorted(a - e)}")
+                    if e & a:
+                        print(f"  {rel:15s} match:   {sorted(e & a)}")
+
+    elif args.action == "gen-candidates":
+        from upakarana.analysis.generation import gen_candidates
+        if not args.name:
+            print("Usage: a gen-candidates BASE_NAME", file=sys.stderr)
+            return
+        gc = gen_candidates(args.name)
+        if "error" in gc:
+            print(f"Error: {gc['error']}", file=sys.stderr)
+            return
+        print(f"── Candidates for {gc['base']} ({gc['domain']}) ──")
+        print(f"  {gc['total_qualifiers']} qualifiers, {gc['existing']} in om5, {gc['avastha_generated']} avastha-only\n")
+        for c in gc["candidates"]:
+            flags = []
+            if c["exists_om5"]:
+                flags.append("om5")
+            if c["exists_avastha"]:
+                flags.append("avastha")
+            if c["in_validity"]:
+                flags.append("valid")
+            flag_str = ", ".join(flags) if flags else "missing"
+            print(f"  {c['name']:35s} [{flag_str:15s}] ctx={c['context']}")
+
+    elif args.action == "gen-gaps":
+        from upakarana.analysis.generation import gen_gaps
+        gg = gen_gaps(domain_filter=args.name)
+        print(f"── Generation gaps: {gg['total_gaps']} missing compounds ──\n")
+        for domain, gaps in gg["by_domain"].items():
+            short = domain.replace("kosha/", "")
+            avastha_only = [g for g in gaps if g["type"] == "avastha_only"]
+            validity_only = [g for g in gaps if g["type"] == "validity_only"]
+            print(f"  {short:40s} {len(gaps):3d} gaps ({len(avastha_only)} avastha, {len(validity_only)} validity)")
+            for g in gaps[:5]:
+                print(f"    {g['name']:35s} ← {g['qualifier']}+{g['base']} [{g['type']}]")
+            if len(gaps) > 5:
+                print(f"    ... +{len(gaps) - 5} more")
+
+    elif args.action == "gen-validate-all":
+        from upakarana.analysis.generation import validate_all
+        client = None
+        try:
+            from upakarana.analysis.live import connect
+            client = connect()
+        except Exception:
+            pass
+        va = validate_all(client=client)
+        print(f"── Validate all compounds: {va['total']} nodes ──")
+        print(f"  ok: {va['ok']}  warn: {va['warn']}  fail: {va['fail']}\n")
+        for r in va["results"]:
+            if r["status"] != "ok":
+                sym = "⚠" if r["status"] == "warn" else "✗"
+                issues = [c["detail"] for c in r["checks"] if c["status"] in ("warn", "fail")]
+                print(f"  {sym} {r['name']:35s} {'; '.join(issues[:2])}")
+
 
 def cmd_live(args):
     from upakarana.analysis.live import connect
@@ -1124,6 +1600,179 @@ def cmd_live(args):
         client.close()
 
 
+def cmd_gen(args):
+    import os
+    from upakarana.paths import BRAHMAN2
+    from upakarana.analysis.generation import expected_node, validate_node, gen_candidates, gen_gaps
+    from upakarana.parsers import om5, shabda as shabda_mod
+
+    out_root = args.to or str(BRAHMAN2)
+
+    if args.action == "preview":
+        if not args.name or not args.name2:
+            print("Usage: gen preview QUALIFIER BASE", file=sys.stderr)
+            return
+        exp = expected_node(args.name, args.name2)
+        if "error" in exp:
+            print(f"Error: {exp['error']}", file=sys.stderr)
+            return
+        # Show om5 preview
+        text = om5.serialize_node(exp["name"], exp["layer"], exp["static_edges"],
+                                  [f"generated: {exp['qualifier']} + {exp['base']}"])
+        print(text)
+        # Show shabda preview
+        word_forms = f"{exp['name'].replace('-', ' ')},{exp['name']}"
+        shabda_text = shabda_mod.serialize_shabda(exp["name"], {
+            "word": word_forms,
+            "name": exp["name"].replace("-", " "),
+        })
+        print(shabda_text)
+        # Show where it would be written
+        domain = exp["domain"]
+        om5_path = os.path.join(out_root, domain, f"{exp['name']}.om5")
+        shabda_path = os.path.join(out_root, "shabda", f"{domain.split('/')[0]}.shabda")
+        print(f"om5 → {om5_path}")
+        print(f"shabda → {shabda_path}")
+
+    elif args.action == "create":
+        if not args.name or not args.name2:
+            print("Usage: gen create QUALIFIER BASE", file=sys.stderr)
+            return
+        exp = expected_node(args.name, args.name2)
+        if "error" in exp:
+            print(f"Error: {exp['error']}", file=sys.stderr)
+            return
+        if exp["exists_om5"]:
+            print(f"Node {exp['name']} already exists as om5 file", file=sys.stderr)
+            return
+
+        domain = exp["domain"]
+        om5_path = os.path.join(out_root, domain, f"{exp['name']}.om5")
+        shabda_domain = domain.split("/")[0] if "/" in domain else domain
+        shabda_path = os.path.join(out_root, "shabda", f"{shabda_domain}.shabda")
+
+        # Write om5
+        om5.write_node(om5_path, exp["name"], exp["layer"], exp["static_edges"],
+                       [f"generated: {exp['qualifier']} + {exp['base']}"])
+        print(f"wrote {om5_path}")
+
+        # Write shabda
+        word_forms = f"{exp['name'].replace('-', ' ')},{exp['name']}"
+        shabda_mod.append_shabda(shabda_path, exp["name"], {
+            "word": word_forms,
+            "name": exp["name"].replace("-", " "),
+        })
+        print(f"wrote {shabda_path}")
+
+        # Show what was created
+        print(f"\nCreated {exp['name']} ({exp['category']}):")
+        for rel, targets in exp["static_edges"].items():
+            print(f"  ({rel} {' '.join(targets)})")
+
+    elif args.action == "validate":
+        if not args.name:
+            print("Usage: gen validate NODE_NAME", file=sys.stderr)
+            return
+        client = None
+        try:
+            from upakarana.analysis.live import connect
+            client = connect()
+        except Exception:
+            pass
+        result = validate_node(args.name, client=client)
+        status_sym = {"ok": "✓", "warn": "⚠", "fail": "✗", "info": "·", "skip": "—"}
+        print(f"── Validate: {result['name']} [{result['status'].upper()}] ──\n")
+        for c in result["checks"]:
+            sym = status_sym.get(c["status"], "?")
+            print(f"  {sym} {c['check']:20s} {c['detail']}")
+        if "expected" in result and "actual" in result:
+            exp_e = result.get("expected", {})
+            act_e = result.get("actual", {})
+            all_rels = sorted(set(list(exp_e.keys()) + list(act_e.keys())))
+            print(f"\n── Edge comparison ──")
+            for rel in all_rels:
+                e = set(exp_e.get(rel, []))
+                a = set(act_e.get(rel, []))
+                if e == a:
+                    print(f"  {rel:15s} = {sorted(a)}")
+                else:
+                    if e - a:
+                        print(f"  {rel:15s} missing: {sorted(e - a)}")
+                    if a - e:
+                        print(f"  {rel:15s} extra:   {sorted(a - e)}")
+                    if e & a:
+                        print(f"  {rel:15s} match:   {sorted(e & a)}")
+
+    elif args.action == "batch":
+        domain = args.domain or args.name
+        gg = gen_gaps(domain_filter=domain)
+        total = gg["total_gaps"]
+        if total == 0:
+            print("No generation gaps found.")
+            return
+
+        created = 0
+        for domain_path, gaps in gg["by_domain"].items():
+            for g in gaps:
+                if g["type"] != "avastha_only":
+                    continue  # only auto-generate avastha compounds
+                exp = expected_node(g["qualifier"], g["base"])
+                if "error" in exp or exp["exists_om5"]:
+                    continue
+                om5_path = os.path.join(out_root, domain_path, f"{exp['name']}.om5")
+                shabda_domain = domain_path.split("/")[0] if "/" in domain_path else domain_path
+                shabda_path = os.path.join(out_root, "shabda", f"{shabda_domain}.shabda")
+
+                if args.dry_run:
+                    print(f"  [dry-run] {exp['name']:35s} → {om5_path}")
+                else:
+                    om5.write_node(om5_path, exp["name"], exp["layer"], exp["static_edges"],
+                                   [f"generated: {exp['qualifier']} + {exp['base']}"])
+                    word_forms = f"{exp['name'].replace('-', ' ')},{exp['name']}"
+                    shabda_mod.append_shabda(shabda_path, exp["name"], {
+                        "word": word_forms,
+                        "name": exp["name"].replace("-", " "),
+                    })
+                    print(f"  {exp['name']:35s} → {om5_path}")
+                created += 1
+
+        action = "would create" if args.dry_run else "created"
+        print(f"\n{action} {created} nodes")
+
+    elif args.action == "status":
+        # Count what's in brahman2
+        b2_files = []
+        for dirpath, _, filenames in os.walk(out_root):
+            for f in filenames:
+                if f.endswith(".om5"):
+                    b2_files.append(os.path.join(dirpath, f))
+        shabda_files = []
+        shabda_dir = os.path.join(out_root, "shabda")
+        if os.path.isdir(shabda_dir):
+            for f in os.listdir(shabda_dir):
+                if f.endswith(".shabda"):
+                    shabda_files.append(f)
+
+        print(f"── brahman2/ status ──")
+        print(f"  om5 files:    {len(b2_files)}")
+        print(f"  shabda files: {len(shabda_files)}")
+
+        if b2_files:
+            print(f"\n── Nodes ──")
+            for path in sorted(b2_files):
+                parsed = om5.parse(path)
+                if parsed:
+                    rel = os.path.relpath(path, out_root)
+                    print(f"  {parsed['name']:35s} {rel}")
+
+        # Show generation gaps
+        gg = gen_gaps()
+        print(f"\n── Gaps remaining: {gg['total_gaps']} ──")
+        for domain, gaps in list(gg["by_domain"].items())[:5]:
+            short = domain.replace("kosha/", "")
+            print(f"  {short:40s} {len(gaps)} gaps")
+
+
 def cmd_usage(args):
     from upakarana.usage import report, never_used
 
@@ -1192,6 +1841,7 @@ DISPATCH = {
     "q": cmd_query,
     "a": cmd_analyze,
     "live": cmd_live,
+    "gen": cmd_gen,
     "usage": cmd_usage,
 }
 

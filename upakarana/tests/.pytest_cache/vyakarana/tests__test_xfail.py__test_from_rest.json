@@ -47,12 +47,12 @@
           "0."
         ]
       ],
-      "elapsed_ms": 59,
+      "elapsed_ms": 41,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.069,
+  "duration": 0.046,
   "xfail": {
     "reason": "'from rest' should mean initial-velocity=0",
     "strict": true,

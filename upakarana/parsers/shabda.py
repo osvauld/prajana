@@ -14,12 +14,12 @@ import os
 import re
 from collections import defaultdict, OrderedDict
 
-from upakarana.paths import BRAHMAN
+from upakarana.paths import BRAHMAN2
 
 
 def find_all(root=None):
     """Find all .shabda files."""
-    r = str(root or BRAHMAN)
+    r = str(root or BRAHMAN2)
     return sorted(glob.glob(os.path.join(r, "**", "*.shabda"), recursive=True))
 
 
@@ -124,7 +124,7 @@ def load_all(root=None):
         for node in parse(path):
             node["path"] = path
             node["domain"] = os.path.dirname(
-                os.path.relpath(path, str(root or BRAHMAN))
+                os.path.relpath(path, str(root or BRAHMAN2))
             )
             all_nodes[node["name"]] = node
     return all_nodes
@@ -184,6 +184,53 @@ def with_field(nodes, key, value=None):
         elif str(v) == value:
             results.append(node)
     return results
+
+
+# --- Serialization ---
+
+
+def _quote_if_needed(s):
+    """Quote a shabda value if it contains spaces."""
+    if " " in str(s):
+        return f'"{s}"'
+    return str(s)
+
+
+def serialize_shabda(name, fields):
+    """Produce shabda entry text for one node.
+
+    fields: dict of {key: value} where value is str, list[str], or True (flag).
+    Values containing spaces are automatically quoted.
+
+    Returns: string of shabda source text (one entry).
+    """
+    lines = [f"shabda {name}"]
+    for key, val in fields.items():
+        if val is True:
+            lines.append(f"  ({key})")
+        elif isinstance(val, list):
+            quoted = " ".join(_quote_if_needed(v) for v in val)
+            lines.append(f"  ({key} {quoted})")
+        else:
+            lines.append(f"  ({key} {_quote_if_needed(val)})")
+    lines.append("done")
+    return "\n".join(lines) + "\n"
+
+
+def append_shabda(path, name, fields):
+    """Append a shabda entry to an existing or new .shabda file.
+
+    Creates the file if it doesn't exist.
+    """
+    dirpath = os.path.dirname(path)
+    if dirpath:
+        os.makedirs(dirpath, exist_ok=True)
+    entry = serialize_shabda(name, fields)
+    mode = "a" if os.path.exists(path) else "w"
+    with open(path, mode) as f:
+        if mode == "a":
+            f.write("\n")
+        f.write(entry)
 
 
 def summary(nodes):

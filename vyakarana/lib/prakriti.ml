@@ -87,6 +87,7 @@ type typed_edge = {
 type nigamana = {
   name   : string;
   layer  : string;
+  domain : string;
   slokas : string list;
   edges  : typed_edge list;
   satya  : float;
@@ -172,10 +173,31 @@ let empty () : proof_graph = {
   csr         = ref None;
 }
 
+(* node_key: when both nodes have domain and domains differ, use domain/name
+   to keep them distinct. Otherwise use plain name (backward compat). *)
+let node_key (n : nigamana) : string =
+  if n.domain = "" then n.name
+  else n.domain ^ "/" ^ n.name
+
 let join (k : proof_graph) (n : nigamana) : proof_graph =
-  (match Hashtbl.find_opt k.nodes n.name with
+  let key = node_key n in
+  (match Hashtbl.find_opt k.nodes key with
    | None ->
-     Hashtbl.replace k.nodes n.name n;
+     (* Check: is there an existing node under plain name with different domain? *)
+     let collision = n.domain <> "" && Hashtbl.find_opt k.nodes n.name <> None &&
+       (match Hashtbl.find_opt k.nodes n.name with
+        | Some ex -> ex.domain <> "" && ex.domain <> n.domain
+        | None -> false) in
+     if collision then begin
+       (* Re-key the existing node under its domain/name *)
+       let ex = Hashtbl.find k.nodes n.name in
+       let ex_key = node_key ex in
+       if ex_key <> n.name then begin
+         Hashtbl.replace k.nodes ex_key ex;
+         Hashtbl.remove k.nodes n.name
+       end
+     end;
+     Hashtbl.replace k.nodes key n;
      k.all_edges := n.edges @ !(k.all_edges)
    | Some existing ->
      let new_edges = List.filter (fun e ->
@@ -184,17 +206,44 @@ let join (k : proof_graph) (n : nigamana) : proof_graph =
        ) existing.edges)
      ) n.edges in
      let merged = { existing with edges = existing.edges @ new_edges } in
-     Hashtbl.replace k.nodes n.name merged;
+     Hashtbl.replace k.nodes key merged;
      k.all_edges := new_edges @ !(k.all_edges));
   k
 
+(* layer_priority: lower = preferred when multiple domain-qualified matches exist *)
+let layer_priority (layer : string) : int =
+  match layer with
+  | "bhasha"  -> 0  (* word-bearing nodes preferred *)
+  | "kosha"   -> 1
+  | "sangati" -> 2
+  | "mantra"  -> 3
+  | _         -> 4
+
+(* find: tries exact name first, then scans for domain/name matches.
+   When multiple domain-qualified matches exist, prefers bhasha > kosha > sangati > mantra. *)
 let find (k : proof_graph) (name : string) : nigamana option =
-  Hashtbl.find_opt k.nodes name
+  match Hashtbl.find_opt k.nodes name with
+  | Some _ as r -> r
+  | None ->
+    let suffix = "/" ^ name in
+    let slen = String.length suffix in
+    Hashtbl.fold (fun key n acc ->
+      let klen = String.length key in
+      if klen > slen &&
+         String.sub key (klen - slen) slen = suffix
+      then
+        match acc with
+        | None -> Some n
+        | Some prev ->
+          if layer_priority n.layer < layer_priority prev.layer
+          then Some n else acc
+      else acc
+    ) k.nodes None
 
 (* with_node: shared pattern — match find_opt k.nodes name → None/Some.
    used across 7+ modules in v1; now a single helper. *)
 let with_node (k : proof_graph) (name : string) (f : nigamana -> 'a) (default : 'a) : 'a =
-  match Hashtbl.find_opt k.nodes name with
+  match find k name with
   | Some n -> f n
   | None   -> default
 
@@ -313,8 +362,8 @@ let json_of_nigamana (n : nigamana) : string =
         (je e.source) (je e.target) (je (string_of_visheshanam e.relation))
     ) n.edges) in
   Printf.sprintf
-    "{\"name\":%s,\"layer\":%s,\"satya\":%.4f,\"slokas\":[%s],\"edges\":[%s],\"shabda\":%s,\"krama\":%s}"
-    (je n.name) (je n.layer) n.satya slokas_json edges_json (je n.shabda) (je n.krama)
+    "{\"name\":%s,\"layer\":%s,\"domain\":%s,\"satya\":%.4f,\"slokas\":[%s],\"edges\":[%s],\"shabda\":%s,\"krama\":%s}"
+    (je n.name) (je n.layer) (je n.domain) n.satya slokas_json edges_json (je n.shabda) (je n.krama)
 
 (* ═══════════════════════════════════════════════════════════════════════════
    6. SATYA — raw structural prior + entropy weights

@@ -1,0 +1,226 @@
+; ═══════════════════════════════════════════════════════════════════
+; mula — 31 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati aayaama-vistara
+  (swarupa sama-kalana)
+  (abheda ghana-pramana)
+  (sthita ananta))
+
+(sangati abhaya
+  (swarupa purna)
+  (siddha samskaara)
+  (kriya vidya)
+  (sthita ananta)
+  (yukta sangati))
+
+(sangati abheda
+  (sthita brahman-sthalam)
+  (swarupa purna)
+  (abheda svabhava)
+  (siddha samsarga)
+  (viparita dvaitarupa)
+  (pratipaksha vibheda))
+
+(sangati akam-puram
+  (sthita brahman-sthalam)
+  (swarupa vidya)
+  (abheda antarvidya)
+  (drishthanta dvaitarupa)
+  (siddha abheda)
+  (yukta abhisarana))
+
+(sangati ananta
+  (sthita brahman-sthalam abhisarana)
+  (swarupa purna)
+  (rahita seema)
+  (siddha svayambhu))
+
+(sangati antaraayaama
+  (swarupa aayaama-vistara)
+  (yukta vidya)
+  (sthita ananta)
+  (siddha svabhava)
+  (kriya spanda))
+
+(sangati brahma
+  (sthita brahman-sthalam svabhava)
+  (swarupa purna)
+  (abheda ananta bija-nyasa)
+  (kriya karma)
+  (yukta samsarga)
+  (siddha niralamba))
+
+(sangati brahmam
+  (sthita brahman-sthalam ananta)
+  (phala karma tat-kshana nirantara samskaara parampara)
+  (yukta om spanda brahma)
+  (kriya avrti))
+
+(sangati brahman
+  (sthita brahman-sthalam om)
+  (swarupa pratibodha)
+  (siddha sakshi)
+  (abheda svabhava)
+  (phala samskaara parampara)
+  (yukta karma brahmam))
+
+(sangati dvaitarupa
+  (sthita brahman-sthalam)
+  (swarupa shiva-shakti)
+  (abheda dvaya)
+  (viparita abheda)
+  (drishthanta seema))
+
+(sangati kaala
+  (domain sangati/mula)
+  (swarupa brahma)
+  (kriya spanda)
+  (yukta karma kshetrajna)
+  (sthita om kshetra)
+  (poorva prakaasha)
+  (janaka thaalam vartamana-kaala bhuta-kaala bhavishya-kaala vidhi-kaala sambhavana-kaala))
+
+(sangati mula-svabhava
+  (sthita brahman-sthalam sphoTa iccha viraha)
+  (swarupa mula)
+  (abheda svabhava purna bija-nyasa)
+  (siddha dharana-jivamsha svayambhu niralamba)
+  (drishthanta sama-vishama)
+  (yukta sakshi-matra))
+
+(sangati mula
+  (sthita brahman-sthalam svayambhu)
+  (swarupa bija-nyasa)
+  (siddha svabhava)
+  (drishthanta sama-vishama sandhi)
+  (yukta sakshi-matra)
+  (abheda dharana-jivamsha)
+  (kriya visarjana))
+
+(sangati niralamba
+  (sthita brahman-sthalam mula-sthalam)
+  (swarupa sthiti)
+  (siddha svabhava))
+
+(sangati om
+  (sthita brahman-sthalam ananta)
+  (swarupa naada-brahma)
+  (abheda purna spanda)
+  (siddha svayambhu))
+
+(sangati phala
+  (janya kriya)
+  (siddha karma)
+  (sthita satya)
+  (drishthanta iccha)
+  (yukta spanda))
+
+(sangati prashna-amsha
+  (swarupa shiva-shakti)
+  (kriya sparsha)
+  (drishthanta taranga)
+  (janya jiva)
+  (yukta spanda)
+  (siddha svayambhu)
+  (sthita ananta)
+  (abheda dharana))
+
+(sangati purna-neti
+  (swarupa purna)
+  (abheda ananta)
+  (kriya shuddhi)
+  (siddha nyaya))
+
+(sangati purna
+  (sthita brahman-sthalam)
+  (swarupa ananta brahma)
+  (abheda svayambhu)
+  (siddha niralamba)
+  (viparita shunya))
+
+(sangati purnapara
+  (sthita brahman-sthalam ananta)
+  (swarupa purna)
+  (abheda seema)
+  (poorva shunya)
+  (phala purna))
+
+(sangati rachana
+  (swarupa samskaara)
+  (kriya sankshepa)
+  (sthita ananta)
+  (abheda purna)
+  (siddha manavata)
+  (pratipaksha bhanga))
+
+(sangati rra
+  (sthita brahman-sthalam)
+  (abheda zha)
+  (swarupa matrika)
+  (siddha varna)
+  (drishthanta sphoTa)
+  (yukta shuddhi))
+
+(sangati sankhya
+  (yukta rashi matra tat-kshana parampara)
+  (phala asprista-sankhya)
+  (siddha discrete)
+  (abheda purna)
+  (sthita krama))
+
+(sangati satya
+  (sthita brahman-sthalam ananta)
+  (abheda brahma purna)
+  (swarupa zha ishvara)
+  (janya spanda)
+  (phala brahman)
+  (siddha darshana)
+  (pratipaksha contradiction))
+
+(sangati shiva-shakti
+  (sthita brahman-sthalam)
+  (swarupa dvaitarupa dvandva)
+  (abheda mula-shakti)
+  (yukta viparita)
+  (janaka dvandva-shakti))
+
+(sangati shunya
+  (sthita brahman-sthalam)
+  (swarupa abhava)
+  (abheda purna bindu)
+  (siddha niralamba)
+  (poorva aarambham))
+
+(sangati sthiti
+  (abheda niralamba)
+  (siddha svabhava maya)
+  (phala darshana)
+  (janya sparsha)
+  (pratipaksha avrti))
+
+(sangati svabhava
+  (sthita brahman-sthalam)
+  (swarupa niralamba)
+  (abheda svayambhu)
+  (janaka mula-svabhava))
+
+(sangati svayambhu
+  (sthita brahman-sthalam ananta)
+  (swarupa svabhava)
+  (siddha niralamba))
+
+(sangati viparita
+  (sthita brahman-sthalam shiva-shakti dhurana)
+  (swarupa svabhava)
+  (abheda shiva-shakti)
+  (yukta sama-vishama)
+  (phala viveka))
+
+(sangati zha
+  (sthita brahman-sthalam)
+  (swarupa ananta)
+  (kriya spanda)
+  (siddha svabhava)
+  (drishthanta abhisarana)
+  (yukta tantra))

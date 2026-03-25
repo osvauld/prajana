@@ -32,12 +32,12 @@
           "2000000."
         ]
       ],
-      "elapsed_ms": 40,
+      "elapsed_ms": 30,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.051,
+  "duration": 0.035,
   "xfail": {
     "reason": "'moves at' not recognised as velocity signal",
     "strict": true,

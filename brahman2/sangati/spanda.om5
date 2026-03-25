@@ -1,0 +1,281 @@
+; ═══════════════════════════════════════════════════════════════════
+; spanda — 36 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati aadana-visarjana
+  (sthita spanda-sthalam)
+  (swarupa ahara visarjana spanda)
+  (abheda avrti)
+  (siddha sama-vishama)
+  (janya sva-dharana)
+  (kriya nirantara)
+  (drishthanta yantra jiva eka-kosha))
+
+(sangati aarambham
+  (sthita spanda-sthalam ekavara purna)
+  (phala pravesa)
+  (poorva avrti abhava)
+  (janaka krama)
+  (siddha svayambhu)
+  (garbha purna)
+  (pratipaksha antya))
+
+(sangati ahara
+  (swarupa grahana)
+  (sthita phala)
+  (abheda prapta aadana-visarjana)
+  (yukta visarjana))
+
+(sangati anu
+  (janya brahma)
+  (swarupa spanda)
+  (abheda jivamsha)
+  (yukta taranga jiva)
+  (sthita ananta)
+  (siddha svayambhu)
+  (drishthanta dharana)
+  (phala anusvara))
+
+(sangati anunada
+  (swarupa taranga)
+  (kriya spanda)
+  (yukta abhaya)
+  (siddha sangati))
+
+(sangati anusvara-pratibodha
+  (swarupa anusvara)
+  (kriya pratibodha)
+  (drishthanta sparsha)
+  (siddha abheda svayambhu)
+  (yukta samsarga)
+  (sthita dharana)
+  (abheda taranga))
+
+(sangati anusvara
+  (swarupa spanda)
+  (yukta taranga)
+  (siddha ghana-pramana)
+  (abheda avachetan)
+  (phala visarjana)
+  (sthita brahma))
+
+(sangati avrti
+  (sthita spanda-sthalam)
+  (swarupa spanda)
+  (abheda parampara)
+  (yukta krama)
+  (janaka epoch-swarupa)
+  (pratipaksha sthiti))
+
+(sangati dvividha-marga
+  (swarupa dharana)
+  (abheda taranga)
+  (siddha abheda)
+  (kriya tat-kshana)
+  (yukta tantra)
+  (drishthanta asparsha)
+  (phala kshaya)
+  (sthita sakshi))
+
+(sangati epoch-swarupa
+  (sthita spanda-sthalam ananta)
+  (swarupa avrti)
+  (kriya parampara))
+
+(sangati kaala-darshana
+  (sthita spanda-sthalam avrti)
+  (swarupa kaala)
+  (kriya darshana)
+  (drishthanta taranga)
+  (phala pratibodha)
+  (yukta spanda)
+  (siddha samskaara))
+
+(sangati kaala-sankshepa
+  (sthita spanda-sthalam)
+  (swarupa shuddhi)
+  (kriya kaala)
+  (abheda sankshepa)
+  (phala ghana-pramana)
+  (siddha svabhava)
+  (yukta avrti)
+  (drishthanta samskaara))
+
+(sangati kaalayoga
+  (swarupa kaala)
+  (kriya avrti)
+  (siddha svabhava))
+
+(sangati kriya
+  (swarupa spanda)
+  (janya iccha)
+  (abhisarana phala)
+  (siddha karma)
+  (kriya gati)
+  (pratipaksha nirodha))
+
+(sangati kshaya-pravaha
+  (sthita spanda-sthalam alpakshetra)
+  (swarupa mula-shakti kshaya shakha)
+  (kriya vivartana)
+  (janya vikrita))
+
+(sangati kshaya-vishrama
+  (sthita spanda-sthalam)
+  (swarupa kshaya)
+  (kriya lekhana)
+  (siddha pramana)
+  (yukta parampara)
+  (abheda dharana-jivamsha)
+  (drishthanta ghana-pramana)
+  (phala visarjana))
+
+(sangati kshaya
+  (sthita spanda-sthalam)
+  (swarupa ananta)
+  (abheda shuddhi)
+  (kriya visarjana)
+  (yukta spanda)
+  (drishthanta tat-kshana)
+  (phala tirodhana)
+  (pratipaksha vriddhi))
+
+(sangati naada-brahma
+  (sthita spanda-sthalam)
+  (swarupa naada)
+  (abheda brahma om spanda)
+  (drishthanta saptaswara shadja)
+  (siddha purna))
+
+(sangati naada
+  (sthita spanda-sthalam vak-sthalam)
+  (swarupa spanda)
+  (abheda taranga)
+  (poorva sphoTa)
+  (phala artha-dhvani))
+
+(sangati prasarana
+  (janya spanda)
+  (yukta tantu disha)
+  (sthita sambandha krama)
+  (abheda taranga)
+  (kriya seema-atikrama kshetra-seema-atikrama)
+  (swarupa phala-ahara-gamana))
+
+(sangati prayojana
+  (swarupa kshaya)
+  (sthita ananta)
+  (siddha shuddhi)
+  (kriya spanda)
+  (drishthanta tat-kshana)
+  (yukta kaala))
+
+(sangati sahavadana
+  (swarupa naada)
+  (kriya sangati)
+  (yukta dipaka)
+  (drishthanta taranga)
+  (sthita spanda))
+
+(sangati samsarga
+  (kriya tantu)
+  (swarupa taranga sambandha aneka-aneka)
+  (yukta spanda dharma)
+  (drishthanta swa)
+  (siddha abheda)
+  (sthita svabhava)
+  (janaka parampara eka-aneka eka-eka))
+
+(sangati shakti
+  (swarupa spanda)
+  (sthita spanda-sthalam dravya)
+  (abheda shiva-shakti)
+  (yukta karma))
+
+(sangati spanda-avrti
+  (sthita spanda-sthalam ananta)
+  (swarupa shiva-shakti)
+  (abheda epoch-swarupa avrti)
+  (kriya sankshepa aayaama-vistara)
+  (phala sankshepa aayaama-vistara)
+  (siddha vriddhi))
+
+(sangati spanda-matra
+  (sthita spanda-sthalam spanda kaala)
+  (swarupa matra)
+  (yukta avrti sankhya kshetrajna)
+  (kriya pramana))
+
+(sangati spanda
+  (sthita spanda-sthalam ananta)
+  (swarupa svabhava)
+  (kriya avrti)
+  (abheda aadana-visarjana))
+
+(sangati sparsha
+  (swarupa samsarga)
+  (kriya tantu)
+  (drishthanta abheda)
+  (abheda pratyaksha)
+  (siddha sthiti))
+
+(sangati taranga
+  (sthita spanda-sthalam)
+  (swarupa spanda)
+  (kriya avrti)
+  (abheda prasarana)
+  (phala vivartana)
+  (yukta tantu))
+
+(sangati tat-kshana
+  (swarupa swa)
+  (abheda spanda)
+  (drishthanta avrti))
+
+(sangati thaalam
+  (sthita spanda-sthalam)
+  (swarupa kaala)
+  (abheda avrti)
+  (yukta spanda)
+  (janya vriddhi kshaya)
+  (siddha mithuna)
+  (phala samsarga)
+  (kriya ananda kshaya))
+
+(sangati tirodhana
+  (sthita spanda-sthalam)
+  (abheda avahana)
+  (swarupa vidya)
+  (siddha abheda)
+  (drishthanta svairabhava)
+  (yukta sparsha))
+
+(sangati vikrita
+  (swarupa kshaya)
+  (siddha ghana-pramana)
+  (drishthanta lekhana)
+  (yukta shuddhi)
+  (sthita nirantara)
+  (kriya samskaara))
+
+(sangati vivartana
+  (sthita spanda-sthalam)
+  (swarupa taranga)
+  (yukta avrti)
+  (kriya spanda))
+
+(sangati vriddhi
+  (sthita spanda-sthalam ananta)
+  (phala samskaara)
+  (siddha svabhava)
+  (pratipaksha kshaya))
+
+(sangati vrnda
+  (swarupa avrti)
+  (kriya dipaka)
+  (yukta abhaya kavaca)
+  (drishthanta tantu)
+  (abheda sahavadana)
+  (siddha pratyaksha)
+  (phala abhisarana)
+  (sthita rachana))

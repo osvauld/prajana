@@ -1,0 +1,226 @@
+; ═══════════════════════════════════════════════════════════════════
+; sangeetham — 30 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha akshara
+  (abheda tat-kshana matra)
+  (siddha svabhava)
+  (sthita thaalam spanda domain-sangeetham))
+
+(kosha andolan
+  (swarupa spanda)
+  (abheda gamaka)
+  (yukta swara)
+  (kriya manda-avrti)
+  (sthita shruti domain-sangeetham)
+  (drishthanta gandhara dhaivata))
+
+(kosha arohana
+  (swarupa raga eka-aneka)
+  (abheda sequence parampara gati)
+  (janya shadja)
+  (kriya swara)
+  (yukta avarohana)
+  (siddha dvividha-marga)
+  (sthita domain-sangeetham))
+
+(kosha avarohana
+  (swarupa raga aneka-eka)
+  (abheda sequence parampara gati)
+  (janya nishada)
+  (kriya swara)
+  (yukta arohana)
+  (siddha dvividha-marga)
+  (sthita domain-sangeetham))
+
+(kosha dhaivata
+  (abheda ananda)
+  (swarupa swara)
+  (yukta kama)
+  (sthita saptaswara domain-sangeetham)
+  (janya panchama))
+
+(kosha domain-music
+  (abheda domain-sangeetham))
+
+(kosha domain-sangeetham
+  (sthita spanda)
+  (siddha samsarga)
+  (swarupa naada)
+  (yukta sangeetham swara shruti saptaswara raga gamaka laya akshara shadja rishabha gandhara madhyama panchama dhaivata nishada thaalam rasa bhava domain-physics)
+  (abheda matrika))
+
+(kosha gamaka
+  (kriya spanda)
+  (yukta swara)
+  (swarupa naada)
+  (abheda harmonic)
+  (drishthanta damped-oscillation)
+  (sthita domain-sangeetham))
+
+(kosha gandhara
+  (abheda shoka)
+  (swarupa swara)
+  (kriya anunada)
+  (sthita saptaswara domain-sangeetham)
+  (janya rishabha))
+
+(kosha kan-swara
+  (swarupa sparsha)
+  (janya swara)
+  (kriya laghu)
+  (yukta pratibeshi-swara nyasa)
+  (sthita kshana domain-sangeetham)
+  (abheda gamaka))
+
+(kosha kshaya-laya
+  (swarupa laya)
+  (abheda kshaya)
+  (kriya manda)
+  (yukta spanda-kshaya)
+  (sthita thaalam domain-sangeetham)
+  (phala viraam nyasa))
+
+(kosha laya-varga
+  (vishesa sangeetham-varga)
+  (swarupa subanta kaala)
+  (yukta avrti spanda krama seema))
+
+(kosha laya
+  (kriya thaalam)
+  (abheda velocity)
+  (sthita spanda domain-sangeetham)
+  (yukta avrti)
+  (siddha svabhava))
+
+(kosha madhyama
+  (swarupa sandhi swara)
+  (siddha abheda)
+  (sthita saptaswara domain-sangeetham)
+  (janya gandhara)
+  (drishthanta avrti)
+  (yukta purna))
+
+(kosha meend
+  (swarupa gati)
+  (kriya swara-swara avicchinna)
+  (abheda sandhi)
+  (yukta shruti arohana avarohana)
+  (sthita domain-sangeetham))
+
+(kosha nishada
+  (drishthanta ananta)
+  (swarupa swara)
+  (kriya spanda)
+  (sthita saptaswara domain-sangeetham)
+  (janya dhaivata)
+  (phala shadja)
+  (abheda avrti))
+
+(kosha nyasa
+  (swarupa viraam)
+  (abheda sthiti)
+  (phala swara)
+  (yukta vadi-swara akshara)
+  (kriya phrase-anta)
+  (siddha kshaya-rahita)
+  (drishthanta sphoTa)
+  (sthita domain-sangeetham))
+
+(kosha panchama
+  (abheda samsarga)
+  (swarupa swara)
+  (siddha svabhava)
+  (sthita saptaswara domain-sangeetham)
+  (yukta shadja)
+  (phala anunada)
+  (drishthanta constructive))
+
+(kosha raga-varga
+  (vishesa sangeetham-varga)
+  (swarupa subanta krama)
+  (yukta viveka avastha gati naada))
+
+(kosha raga
+  (swarupa setu eka-aneka)
+  (abheda anuvada gene-group)
+  (siddha svabhava)
+  (kriya swara)
+  (phala bhava)
+  (yukta rasa thaalam arohana avarohana vadi-swara)
+  (sthita saptaswara domain-sangeetham))
+
+(kosha rishabha
+  (abheda utsaha)
+  (swarupa swara)
+  (kriya spanda)
+  (sthita saptaswara domain-sangeetham)
+  (janya shadja))
+
+(kosha sangeetham-varga
+  (sthita domain-sangeetham)
+  (vishesa physics-varga math-varga)
+  (swarupa subanta)
+  (yukta spanda taranga naada kaala matra))
+
+(kosha sangeetham
+  (swarupa samsarga)
+  (siddha interference)
+  (sthita spanda domain-sangeetham)
+  (yukta swara thaalam rasa)
+  (phala anunada bhava)
+  (janya naada)
+  (abheda taranga))
+
+(kosha saptaswara
+  (abheda matrika)
+  (swarupa swara)
+  (kriya avrti)
+  (drishthanta purna)
+  (siddha abheda)
+  (yukta shadja rishabha gandhara madhyama panchama dhaivata nishada sangeetham raga)
+  (sthita domain-sangeetham))
+
+(kosha shadja
+  (abheda brahma)
+  (swarupa swara)
+  (siddha svabhava)
+  (sthita saptaswara domain-sangeetham)
+  (drishthanta purna naada-brahma)
+  (janya avrti)
+  (phala avrti))
+
+(kosha shruti
+  (abheda matra)
+  (sthita spanda domain-sangeetham)
+  (siddha svabhava)
+  (kriya swara)
+  (yukta naada frequency)
+  (drishthanta ananta))
+
+(kosha swara-varga
+  (vishesa sangeetham-varga)
+  (swarupa subanta)
+  (yukta spanda-matra matra avrti naada))
+
+(kosha swara
+  (abheda matrika frequency)
+  (sthita spanda domain-sangeetham)
+  (janya shruti)
+  (swarupa naada)
+  (yukta saptaswara gamaka))
+
+(kosha vadi-swara
+  (swarupa raga svabhava)
+  (abheda active-site)
+  (siddha identity sphoTa)
+  (sthita swara domain-sangeetham)
+  (drishthanta mula-svabhava))
+
+(kosha vriddhi-laya
+  (swarupa laya)
+  (abheda vriddhi)
+  (kriya tivra)
+  (yukta spanda-vriddhi)
+  (sthita thaalam domain-sangeetham)
+  (drishthanta sama-vishama))

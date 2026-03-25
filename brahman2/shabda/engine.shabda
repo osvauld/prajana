@@ -1,0 +1,67 @@
+# engine — shabda extracted from .om files
+# 13 entries
+
+shabda bridge
+  (word bridge)
+  (desc "span-a-gap-carry-load-beam-arch-suspension-cable-stayed-truss")
+done
+
+shabda kosha
+  (alias knowledge-sheath)
+  (desc "the-corpus-of-om-files-in-two-layers-sangati-for-grade-zero-foundations-and-kosha-for-grade-one-plus-derived-concepts-each-layer-feeds-the-proof-space-through-the-two-pass-parser")
+done
+
+shabda music-ir
+  (alias music-intermediate-representation)
+  (desc "the-sonic-encoding-of-graph-activation-mapping-node-energy-to-pitch-edge-weight-to-gain-and-relation-type-to-timbre")
+done
+
+shabda nigamana
+  (alias conclusion, node)
+  (desc "the-node-that-holds-a-truth-with-its-typed-edges-slokas-shabda-map-layer-tag-and-satya-score-each-node-carries-a-grade-from-its-sthita-depth")
+done
+
+shabda om-parser
+  (alias two-pass-reader)
+  (desc "pass-one-reads-all-om-files-building-nodes-with-slokas-shabda-and-raw-edges-pass-two-applies-axiom-expansion-adding-symmetric-and-transitive-closure-edges-from-visheshanam-properties")
+done
+
+shabda prayoga
+  (alias grammatical-voice)
+  (desc "active-passive-impersonal")
+done
+
+shabda proof-graph
+  (alias proof-space)
+  (desc "the-N-by-N-by-R-tensor-where-N-is-node-count-and-R-is-10-relation-types-sparse-at-sub-one-percent-fill-with-sthita-chains-encoding-a-natural-depth-filtration")
+done
+
+shabda resonance-ir
+  (alias resonance-intermediate-representation)
+  (desc "the-graph-activation-map-that-drives-visualization-encoding-per-node-energy-per-edge-flow-and-camera-focus-as-a-projection-of-the-proof-tensor-onto-display-space")
+done
+
+shabda session
+  (alias session)
+  (desc "the-ordered-context-of-turns-that-accumulates-bindings-and-graph-deltas-into-the-proof-space-each-turn-persists-variable-assignments-and-narrows-the-active-subgraph")
+done
+
+shabda shabda
+  (alias word-as-form)
+  (desc "the-key-value-mapping-on-each-node-that-carries-meaning-into-target-domain-a-morphism-from-graph-structure-to-output-language")
+done
+
+shabda socket
+  (alias unix-domain-socket)
+  (desc "the-live-channel-between-engine-and-world-carrying-json-queries-and-structured-responses-over-a-unix-domain-socket")
+done
+
+shabda sparse-adjacency
+  (format csr)
+  (desc "the-compressed-sparse-row-representation-of-the-proof-graph-incoming-edge-adjacency-materialized-once-at-startup-for-cache-friendly-spmv-in-ppr-equivalent-to-matrix-multiplication-map-janya-fold-janya-over-the-sparse-N-by-N-by-R-tensor")
+done
+
+shabda vyakarana
+  (alias grammar-engine)
+  (desc "the-proof-space-that-holds-and-reasons-over-what-is-true-a-sparse-tensor-of-typed-edges-walked-by-beam-search-and-personalized-pagerank")
+done

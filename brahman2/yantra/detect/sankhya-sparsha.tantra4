@@ -1,0 +1,3 @@
+-- sankhya-sparsha: all [concept, val] pairs from sankhya edges.
+(tantra sankhya-sparsha (graph)
+  (graph | where [s, e, o] | and (eq e "sankhya") | collect [s, o]))

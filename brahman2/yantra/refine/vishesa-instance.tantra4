@@ -1,0 +1,24 @@
+-- promote mithya labels to vishesa against nearest satya concept (grade-scoped).
+(tantra vishesa-instance (graph)
+  (owned (graph | where [s, e, _] | and (eq e "shashthi-vibhakti") | collect s))
+  (bound (nth (bound-state graph) 0))
+  (entities (graph | where [s, e, _] | and (eq e "prathama-vibhakti") | collect s))
+  (can-promote (exists (graph | where [_, e, _] | and (eq e "rashi-bandha") | collect _it)))
+  (grades (split-grades graph))
+  -- within each grade, track last satya concept and promote mithya labels
+  (new-triples (reduce grades [] (fn acc grade ->
+    let promoted = reduce grade [[], ""] (fn st tri ->
+      let result = nth st 0
+      let agra   = nth st 1
+      let edge = to-string (nth tri 1)
+      let word = nth tri 0
+      cond (eq edge "satya") [result, (to-string word)]
+      (or (eq edge "sankhya") (eq edge "matra") (eq edge "vishesa")) [result, ""]
+      (and (eq edge "mithya") (has-text agra)
+           (or (member agra owned) can-promote)
+           (not (member agra bound))
+           (not (member word entities)))
+        [(append result [[word, "vishesa", agra], [word, "vishesa", "rashi"]]), ""]
+      otherwise st)
+    (append acc (nth promoted 0)))))
+  (append-triples graph new-triples))

@@ -1,0 +1,130 @@
+; ═══════════════════════════════════════════════════════════════════
+; engineering — 24 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha arch
+  (vishesa architecture-varga civil-varga engineering-varga)
+  (swarupa subanta compression)
+  (yukta geometry catenary stone concrete brick gravity bridge))
+
+(kosha architecture-varga
+  (vishesa engineering-varga)
+  (swarupa subanta)
+  (yukta civil-varga geometry construction-varga human drawing-varga))
+
+(kosha column
+  (vishesa architecture-varga civil-varga engineering-varga)
+  (swarupa subanta vertical compression)
+  (yukta stress strain steel concrete stone beam foundation buckling)
+  (abheda pole))
+
+(kosha dome
+  (vishesa architecture-varga civil-varga engineering-varga)
+  (swarupa subanta compression arch)
+  (yukta geometry sphere concrete stone gravity))
+
+(kosha architectural-space
+  (vishesa architecture-varga engineering-varga)
+  (swarupa subanta)
+  (yukta geometry human light acoustic room wall floor ceiling))
+
+(kosha beam
+  (vishesa civil-varga engineering-varga)
+  (swarupa subanta horizontal bending)
+  (yukta compression tension shear steel concrete wood normal-force domain-3d))
+
+(kosha bridge
+  (domain kosha/engineering/civil)
+  (vishesa civil-varga engineering-varga)
+  (swarupa subanta)
+  (yukta gravity compression tension concrete steel stone stress strain domain-3d)
+  (drishthanta beam arch))
+
+(kosha civil-varga
+  (vishesa engineering-varga)
+  (swarupa subanta)
+  (yukta gravity normal-force compression tension shear stress strain concrete steel stone safety-factor))
+
+(kosha foundation
+  (vishesa civil-varga engineering-varga)
+  (swarupa subanta)
+  (yukta ground gravity stress concrete steel normal-force))
+
+(kosha strain
+  (vishesa civil-varga engineering-varga)
+  (swarupa subanta elastic)
+  (yukta stress young-modulus)
+  (siddha dimensionless))
+
+(kosha stress
+  (vishesa civil-varga engineering-varga)
+  (swarupa subanta)
+  (yukta force area strain young-modulus yield-strength safety-factor)
+  (abheda pressure))
+
+(kosha domain-engineering
+  (sthita domain-kosha)
+  (yukta physics chemistry math domain-physics domain-chemistry domain-computation))
+
+(kosha engineering-varga
+  (sthita domain-engineering)
+  (vishesa physics-varga chemistry-varga)
+  (swarupa subanta)
+  (yukta niyama seema viveka matra))
+
+(kosha dimension
+  (vishesa drawing-varga engineering-varga)
+  (swarupa subanta measurement)
+  (yukta linear angular radial tolerance datum matra))
+
+(kosha drawing-varga
+  (vishesa engineering-varga)
+  (swarupa subanta)
+  (yukta geometry dimension tolerance projection standard math-varga coordinate vector domain-3d))
+
+(kosha instruments
+  (vishesa drawing-varga engineering-varga)
+  (swarupa subanta)
+  (yukta geometry pencil compass protractor line-type domain-3d))
+
+(kosha line-types
+  (vishesa drawing-varga engineering-varga)
+  (swarupa subanta)
+  (yukta visible-line hidden-line centre-line dimension)
+  (abheda language))
+
+(kosha projection
+  (domain kosha/engineering/drawing)
+  (vishesa drawing-varga engineering-varga)
+  (swarupa subanta orthographic isometric)
+  (yukta geometry coordinate domain-3d))
+
+(kosha tolerance
+  (vishesa drawing-varga engineering-varga)
+  (swarupa subanta)
+  (yukta dimension fit manufacturing seema))
+
+(kosha electrical-varga
+  (vishesa engineering-varga)
+  (swarupa subanta)
+  (yukta electromagnetism circuit-varga magnetic-field faraday-induction voltage current power resistance inductance capacitance transformer motor generator))
+
+(kosha electronic-varga
+  (vishesa engineering-varga)
+  (swarupa subanta)
+  (yukta electromagnetism circuit-varga quantum transistor diode op-amp analog digital semiconductor domain-computation))
+
+(kosha control-systems
+  (vishesa signal-varga engineering-varga)
+  (swarupa subanta feedback)
+  (yukta derivative antiderivative fourier-engineering laplace))
+
+(kosha fourier-engineering
+  (vishesa signal-varga engineering-varga)
+  (swarupa subanta)
+  (yukta fourier-transform frequency oscillation-varga domain-computation))
+
+(kosha signal-varga
+  (vishesa engineering-varga)
+  (swarupa subanta)
+  (yukta fourier-transform convolution derivative antiderivative math-varga oscillation-varga frequency wave electronic-varga domain-computation))

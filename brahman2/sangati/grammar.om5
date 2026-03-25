@@ -1,0 +1,236 @@
+; ═══════════════════════════════════════════════════════════════════
+; grammar — 55 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati bhavishya-kaala
+  (domain sangati/grammar/kaala)
+  (amsha kaala)
+  (sthita uttara-avastha)
+  (yukta iccha))
+
+(sangati bhuta-kaala
+  (domain sangati/grammar/kaala)
+  (amsha kaala)
+  (sthita purva-avastha)
+  (yukta samskaara))
+
+(sangati kaala
+  (domain sangati/grammar/kaala)
+  (swarupa brahma)
+  (kriya spanda)
+  (yukta karma kshetrajna)
+  (sthita om kshetra)
+  (poorva prakaasha)
+  (janaka thaalam))
+
+(sangati sambhavana-kaala
+  (domain sangati/grammar/kaala)
+  (amsha kaala)
+  (yukta seema shakti))
+
+(sangati vartamana-kaala
+  (domain sangati/grammar/kaala)
+  (amsha kaala)
+  (sthita avastha)
+  (yukta tat-kshana))
+
+(sangati vidhi-kaala
+  (domain sangati/grammar/kaala)
+  (amsha kaala)
+  (yukta madhyama-purusa niyama))
+
+(sangati adhikarana
+  (amsha karaka)
+  (yukta saptami-vibhakti)
+  (swarupa sthiti kshetra))
+
+(sangati apadana
+  (amsha karaka)
+  (yukta panchami-vibhakti)
+  (swarupa kshaya))
+
+(sangati karaka)
+
+(sangati karana
+  (amsha karaka)
+  (yukta trtiya-vibhakti)
+  (swarupa yukta))
+
+(sangati karma-karaka
+  (amsha karaka)
+  (yukta dvitiya-vibhakti)
+  (swarupa phala))
+
+(sangati karta
+  (amsha karaka)
+  (yukta prathama-vibhakti)
+  (swarupa kriya))
+
+(sangati sampradana
+  (amsha karaka)
+  (yukta chaturthi-vibhakti phala))
+
+(sangati grammatical-gender
+  (amsha linga))
+
+(sangati linga
+  (sthita bhasha-swarupa))
+
+(sangati avyaya
+  (amsha pada)
+  (swarupa bhasha)
+  (rahita vibhakti linga vachana)
+  (pratipaksha subanta tinanta))
+
+(sangati nipata
+  (amsha pada)
+  (swarupa avyaya)
+  (yukta artha-dhvani))
+
+(sangati pada
+  (sthita bhasha-swarupa)
+  (yukta varna))
+
+(sangati subanta
+  (amsha pada)
+  (swarupa bhasha)
+  (yukta vibhakti linga vachana)
+  (pratipaksha avyaya))
+
+(sangati tinanta
+  (amsha pada)
+  (yukta kala prayoga vachana purusa)
+  (swarupa kriya)
+  (pratipaksha avyaya))
+
+(sangati upasarga
+  (amsha pada)
+  (swarupa avyaya)
+  (yukta dhatu)
+  (janya viparita))
+
+(sangati kta-pratyaya
+  (amsha pratyaya))
+
+(sangati pratyaya
+  (sthita bhasha-swarupa)
+  (yukta varna))
+
+(sangati shatr-pratyaya
+  (amsha pratyaya))
+
+(sangati tumun-pratyaya
+  (amsha pratyaya))
+
+(sangati tvaa-pratyaya
+  (amsha pratyaya))
+
+(sangati bhave-prayoga
+  (domain sangati/grammar/prayoga)
+  (amsha prayoga)
+  (swarupa bhasha)
+  (pratipaksha kartari-prayoga karmani-prayoga))
+
+(sangati karmani-prayoga
+  (domain sangati/grammar/prayoga)
+  (amsha prayoga)
+  (swarupa bhasha)
+  (pratipaksha kartari-prayoga bhave-prayoga))
+
+(sangati kartari-prayoga
+  (domain sangati/grammar/prayoga)
+  (amsha prayoga)
+  (swarupa bhasha)
+  (pratipaksha karmani-prayoga bhave-prayoga))
+
+(sangati prayoga
+  (domain sangati/grammar/prayoga)
+  (sthita bhasha-swarupa)
+  (yukta sambandha))
+
+(sangati madhyama-purusa
+  (amsha purusa)
+  (yukta vidhi-kaala))
+
+(sangati prathama-purusa
+  (amsha purusa))
+
+(sangati purusa
+  (sthita bhasha-swarupa)
+  (yukta sambandha))
+
+(sangati uttama-purusa
+  (amsha purusa))
+
+(sangati rupa
+  (sthita bhasha-swarupa)
+  (yukta dhatu)
+  (janya vachana))
+
+(sangati bahuvrihi
+  (amsha samasa))
+
+(sangati dvandva
+  (amsha samasa)
+  (abheda dvandva-shakti))
+
+(sangati karmadharaya
+  (amsha samasa))
+
+(sangati samasa
+  (sthita bhasha-swarupa)
+  (yukta sandhi))
+
+(sangati tatpurusha
+  (amsha samasa))
+
+(sangati bahu-vachana
+  (amsha vachana)
+  (swarupa aneka))
+
+(sangati dvi-vachana
+  (amsha vachana)
+  (swarupa dvaya))
+
+(sangati eka-vachana
+  (amsha vachana)
+  (swarupa eka))
+
+(sangati vachana
+  (sthita bhasha-swarupa)
+  (yukta matra))
+
+(sangati aamantrana
+  (amsha sambodhana))
+
+(sangati abhisambodhana
+  (amsha sambodhana))
+
+(sangati chaturthi-vibhakti
+  (amsha vibhakti))
+
+(sangati dvitiya-vibhakti
+  (amsha vibhakti))
+
+(sangati panchami-vibhakti
+  (amsha vibhakti))
+
+(sangati prathama-vibhakti
+  (amsha vibhakti))
+
+(sangati sambodhana
+  (amsha vibhakti)
+  (yukta apeksha))
+
+(sangati saptami-vibhakti
+  (amsha vibhakti))
+
+(sangati shashthi-vibhakti
+  (amsha vibhakti))
+
+(sangati trtiya-vibhakti
+  (amsha vibhakti))
+
+(sangati vibhakti
+  (sthita bhasha-swarupa)
+  (swarupa sambandha))

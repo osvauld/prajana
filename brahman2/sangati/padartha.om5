@@ -1,0 +1,74 @@
+; ═══════════════════════════════════════════════════════════════════
+; padartha — 11 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(sangati abhava
+  (amsha padartha)
+  (sthita brahman-sthalam)
+  (abheda sthiti pratishedha)
+  (rahita shunya)
+  (yukta tirodhana viraam))
+
+(sangati amsha
+  (amsha padartha)
+  (yukta samavaya)
+  (siddha pratyaksha))
+
+(sangati dravya
+  (amsha padartha)
+  (yukta guna karma samavaya)
+  (siddha pratyaksha))
+
+(sangati guna
+  (amsha padartha)
+  (sthita dravya)
+  (yukta samavaya)
+  (siddha pratyaksha)
+  (pratipaksha karma))
+
+(sangati karma
+  (amsha padartha)
+  (swarupa spanda)
+  (sthita parampara-sthalam mula-sthalam ananta dravya)
+  (yukta om brahma jiva)
+  (phala brahmam lekhana)
+  (kriya avrti)
+  (siddha svayambhu)
+  (pratipaksha guna))
+
+(sangati lekhana
+  (kriya pramana)
+  (swarupa sthiti)
+  (siddha niralamba)
+  (phala karma)
+  (yukta parampara))
+
+(sangati padartha
+  (swarupa pramana)
+  (janya brahma)
+  (siddha pratyaksha)
+  (sthita ananta)
+  (yukta sambandha))
+
+(sangati rashi
+  (swarupa pramana)
+  (sthita vishesa prashna)
+  (yukta sankhya matra sambandha)
+  (kriya viveka))
+
+(sangati samanya
+  (amsha padartha)
+  (pratipaksha vishesa)
+  (sthita ananta)
+  (siddha pratyaksha))
+
+(sangati samavaya
+  (amsha padartha)
+  (swarupa sambandha)
+  (sthita ananta)
+  (siddha svayambhu))
+
+(sangati vishesa
+  (amsha padartha)
+  (pratipaksha samanya)
+  (siddha pratyaksha))

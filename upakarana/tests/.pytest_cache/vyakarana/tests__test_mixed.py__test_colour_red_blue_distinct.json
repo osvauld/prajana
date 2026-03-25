@@ -77,10 +77,10 @@
           "3."
         ]
       ],
-      "elapsed_ms": 97,
+      "elapsed_ms": 73,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.098
+  "duration": 0.074
 }

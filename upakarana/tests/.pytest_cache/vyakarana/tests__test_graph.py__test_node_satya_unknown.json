@@ -11,7 +11,7 @@
     }
   ],
   "failure": null,
-  "duration": 0.004,
+  "duration": 0.001,
   "xfail": {
     "reason": "graph primitive: node-satya returns string not number",
     "strict": true,

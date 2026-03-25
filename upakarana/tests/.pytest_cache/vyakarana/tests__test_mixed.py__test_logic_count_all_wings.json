@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "all birds have wings. birds have 2 wings each. there are 3 sparrows. how many wings",
       "output": "we have: all bird have wings.we know: 2 plus (0 \u2192 2).we find: 2 wings",
-      "elapsed_ms": 656,
+      "elapsed_ms": 138,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.661,
+  "duration": 0.141,
   "xfail": {
     "reason": "multiplication: logic + count \u2014 'each' multiply with syllogism",
     "strict": true,

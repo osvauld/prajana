@@ -6,8 +6,8 @@
       "method": "eval",
       "input": "walk-in \"mass\" \"janya\"",
       "output": [
-        "newton-second-law-motion",
         "momentum-mantra",
+        "newton-second-law-motion",
         "mass-density-mantra",
         "potential-energy-mantra",
         "kinetic-energy-mantra",

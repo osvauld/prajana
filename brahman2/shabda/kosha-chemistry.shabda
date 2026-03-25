@@ -1,0 +1,240 @@
+# kosha/chemistry — shabda extracted from .om files
+# 52 entries
+
+shabda acid-base
+  (word acid base acidic basic pH neutralisation)
+  (desc proton-transfer-pH-scale-buffer-amino-acid-zwitterion)
+done
+
+shabda alcohol
+  (word alcohol hydroxyl)
+  (desc R-OH-hydrophilic-hydrogen-bonds-oxidises-to-aldehyde-or-ketone)
+done
+
+shabda alkane
+  (word alkane saturated-hydrocarbon)
+  (desc CnH2n+2-single-bonds-only-non-polar-combustion-fuel)
+done
+
+shabda alkene
+  (word alkene alkene unsaturated-hydrocarbon)
+  (desc CnH2n-double-bond-reactive-addition-polymerisation)
+done
+
+shabda alloy
+  (word alloy)
+  (desc metal-mixed-at-atomic-level-steel-brass-bronze-duralumin)
+done
+
+shabda aluminium
+  (word Al aluminium aluminum)
+done
+
+shabda amine
+  (word amine amino)
+  (desc R-NH2-basic-lone-pair-peptide-bond-amino-acid-neurotransmitter)
+done
+
+shabda argon
+  (word Ar argon)
+done
+
+shabda aromatic
+  (word aromatic benzene aromatic-ring)
+  (desc delocalized-pi-electrons-huckel-4n-plus-2-EAS-stable)
+done
+
+shabda atomic-varga
+  (alias atomic-varga)
+  (desc cluster-for-atomic-structure-atom-nucleus-proton-neutron-electron-shell)
+done
+
+shabda calcite
+  (word calcite limestone marble chalk CaCO3)
+done
+
+shabda calcium
+  (word Ca calcium)
+done
+
+shabda carbonyl
+  (word carbonyl aldehyde ketone)
+  (desc C=O-electrophilic-nucleophilic-addition-aldehyde-ketone)
+done
+
+shabda carboxylic-acid
+  (word carboxylic-acid carboxyl)
+  (desc R-COOH-weak-acid-pKa-4-to-5-esterification-peptide-bond)
+done
+
+shabda cement-chemistry
+  (word cement Portland-cement cement-chemistry)
+  (desc C3S-C2S-hydration-CSH-gel-calcination-clinker)
+done
+
+shabda chemistry-varga
+  (alias chemistry-varga)
+  (desc root-cluster-for-all-chemistry-domain-nodes)
+done
+
+shabda chirality
+  (word chirality chiral enantiomer)
+  (desc non-superimposable-mirror-image-L-D-R-S-biological-specificity)
+done
+
+shabda chlorine
+  (word Cl chlorine chloride)
+done
+
+shabda clay-mineral
+  (word clay kaolinite clay-mineral)
+done
+
+shabda combustion
+  (word combustion burns burning ignites)
+  (desc fuel-plus-O2-to-CO2-plus-H2O-plus-heat-exothermic)
+done
+
+shabda composites-varga
+  (alias composites-varga)
+  (desc matrix-plus-reinforcement-properties-exceed-either-alone-alloy-concrete-bone-wood)
+done
+
+shabda concrete
+  (word concrete cement)
+  (desc calcium-silicate-hydrate-strong-in-compression-weak-in-tension-reinforced-with-steel)
+done
+
+shabda construction-varga
+  (alias construction-varga)
+  (desc chemistry-of-building-materials-concrete-steel-glass-lime-wood)
+done
+
+shabda copper
+  (word Cu copper)
+done
+
+shabda dissolution
+  (word dissolves dissolving dissolution soluble)
+  (desc solute-in-solvent-like-dissolves-like-ionic-polar-NaCl-in-water)
+done
+
+shabda domain-chemistry
+  (desc chemistry)
+done
+
+shabda ester
+  (word ester)
+  (desc R-COO-R-from-acid-plus-alcohol-fats-oils-polyester-fragrance)
+done
+
+shabda functional-group
+  (alias functional-group)
+  (desc the-reactive-site-of-an-organic-molecule-determines-chemical-class-and-reactivity)
+done
+
+shabda glass-chemistry
+  (word glass-chemistry)
+  (desc SiO2-network-amorphous-soda-lime-borosilicate-tempered)
+done
+
+shabda gold
+  (word Au gold)
+done
+
+shabda iron
+  (word Fe iron)
+done
+
+shabda lead
+  (word Pb lead)
+done
+
+shabda lime-chemistry
+  (word lime quicklime slaked-lime lime-plaster mortar)
+  (desc CaCO3-CaO-Ca-OH-2-carbonation-cycle)
+done
+
+shabda magnesium
+  (word Mg magnesium)
+done
+
+shabda metals-varga
+  (alias metals-varga)
+  (desc cluster-for-metallic-elements-electron-sea-conducts-lustrous-malleable-ductile)
+done
+
+shabda minerals-varga
+  (alias minerals-varga)
+  (desc cluster-for-inorganic-crystalline-solids-silicates-carbonates-oxides-salts)
+done
+
+shabda molecular-varga
+  (alias molecular-varga)
+  (desc cluster-for-molecular-structure-molecule-bond-covalent-ionic)
+done
+
+shabda neon
+  (word Ne neon)
+done
+
+shabda organic-varga
+  (alias organic-varga)
+  (desc cluster-for-organic-chemistry-carbon-hydrocarbon-polymer-amino-acid)
+done
+
+shabda organic-varga-extended
+  (alias organic-varga-extended)
+  (desc undergraduate-organic-backbone-functional-group-stereochemistry-aromatic)
+done
+
+shabda oxidation-reduction
+  (word oxidation reduction redox rusts rusting corrodes)
+  (desc electron-transfer-OIL-RIG-Fe-to-Fe2O3-C-to-CO2)
+done
+
+shabda potassium
+  (word K potassium)
+done
+
+shabda reaction
+  (word reaction reacts react)
+  (desc bond-breaking-and-forming-atoms-conserved-energy-exchanged)
+done
+
+shabda silica
+  (word silica quartz SiO2 sand)
+done
+
+shabda silver
+  (word Ag silver)
+done
+
+shabda sodium
+  (word Na sodium salt)
+  (concepts-for-unit sodium)
+done
+
+shabda steel
+  (word steel stainless-steel stainless)
+  (desc Fe-plus-C-alloy-structural-material-hardened-corrosion-resistant)
+done
+
+shabda steel-chemistry
+  (word steel-chemistry rebar reinforcement)
+  (desc iron-carbon-alloy-corrosion-rust-electrochemical-protection)
+done
+
+shabda timber-chemistry
+  (word timber lumber timber-chemistry)
+  (desc cellulose-lignin-hemicellulose-moisture-combustion-biodegradation)
+done
+
+shabda transition-metals-varga
+  (alias transition-metals-varga)
+  (desc d-block-elements-variable-valence-coloured-catalytic-magnetic)
+done
+
+shabda zinc
+  (word Zn zinc)
+done

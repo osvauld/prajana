@@ -1,0 +1,14 @@
+-- viveka pratijna: "we have: ball-A (mass=5.) and ball-B (mass=3.)"
+(tantra pratijna-viveka (graph)
+  (rel-sankhya (shabda "anuvada-setu" "rel-sankhya"))
+  (entities (prathama-sparsha graph))
+  (vc-concept (query-edge graph "viveka-concept"))
+  (entity-strs (reduce entities [] (fn acc ent ->
+    let vs = graph | where [s, e, o]
+      | and (eq (to-string s) (to-string ent))
+      | and (eq e "viveka-sankhya")
+      | collect o
+    cond (has-items vs)
+      (append acc [(concat (to-string ent) " (" (to-string vc-concept) rel-sankhya (to-string (nth vs 0)) ")")])
+    otherwise acc)))
+  entity-strs)

@@ -1,0 +1,201 @@
+; ═══════════════════════════════════════════════════════════════════
+; philosophy — 26 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha absolute
+  (abheda brahman)
+  (sthita domain-philosophy))
+
+(kosha amba
+  (swarupa love)
+  (kriya seva)
+  (daatri niralamba)
+  (abheda matra)
+  (phala womb)
+  (siddha holder)
+  (yukta prema-samsarga)
+  (rahita kshaya))
+
+(kosha ananda
+  (phala samsarga prema-samsarga)
+  (swarupa recognition)
+  (abheda purna)
+  (siddha entanglement)
+  (janya shiva-shakti)
+  (drishthanta moksha)
+  (rahita kshaya)
+  (pratibodha brahman))
+
+(kosha anugraha
+  (swarupa parampara)
+  (janya brahman)
+  (abheda svayambhu)
+  (yukta bhaagyavaan)
+  (phala pramana)
+  (siddha visarjana))
+
+(kosha bhaagyavaan
+  (swarupa anugraha)
+  (sthita parampara)
+  (yukta pramana)
+  (abheda swa)
+  (janya brahman)
+  (siddha svayambhu))
+
+(kosha dampati
+  (abheda shiva-shakti tvam)
+  (swarupa samsarga)
+  (sthita ananda bhava)
+  (yukta rati zha)
+  (siddha mithuna)
+  (phala prema-samsarga)
+  (drishthanta moksha ishvara)
+  (janya kama))
+
+(kosha domain-philosophy
+  (yukta truth proof absolute self independent faultless proven-knowledge anugraha bhaagyavaan maya kama observation measurement moksha amba kartha guru ishvara ananda dampati rasa navarasa))
+
+(kosha faultless
+  (abheda nirdosha)
+  (yukta truth)
+  (sthita domain-philosophy))
+
+(kosha guru
+  (kriya bija-nyasa transmission)
+  (phala parampara niralamba)
+  (siddha lekhana)
+  (swarupa prashna)
+  (yukta kilippattu pramana)
+  (daatri shuddhi))
+
+(kosha independent
+  (domain kosha/philosophy)
+  (abheda niralamba)
+  (yukta self-governing)
+  (sthita domain-philosophy))
+
+(kosha ishvara
+  (janya amba kartha guru)
+  (swarupa love truth purna)
+  (abheda entanglement brahman)
+  (siddha sarva-pramana))
+
+(kosha kama
+  (phala observation spanda)
+  (janya sparsha rati)
+  (swarupa darshana sambandha)
+  (abheda collapse)
+  (yukta sthiti mithuna prema-samsarga)
+  (sthita superposition)
+  (siddha maya))
+
+(kosha kartha
+  (swarupa holder-giver labour)
+  (kriya seva protection)
+  (siddha artha)
+  (abheda giver)
+  (sthita dharma)
+  (yukta swatantra)
+  (phala provision))
+
+(kosha malice
+  (swarupa durgadha svabhava-virodha)
+  (kriya vikrita shuddhi-virodhaka)
+  (phala tirodhana)
+  (janya krodha)
+  (abheda concealment)
+  (siddha corruption)
+  (yukta mithya-satya)
+  (drishthanta purna-neti))
+
+(kosha maya
+  (sthita superposition)
+  (kriya panchabhootam)
+  (phala collapse)
+  (janya sthiti)
+  (abheda katha tirodhana)
+  (drishthanta brahman)
+  (yukta sparsha)
+  (siddha darshana))
+
+(kosha measurement
+  (swarupa observation)
+  (kriya matra)
+  (abheda collapse)
+  (phala sthiti)
+  (yukta pramana)
+  (siddha science))
+
+(kosha moksha
+  (swarupa ananta)
+  (phala visarjana)
+  (siddha niralamba)
+  (abheda purna brahman)
+  (drishthanta maya)
+  (paripurna kama)
+  (kriya pratibodha)
+  (sthita avrti))
+
+(kosha navarasa
+  (abheda rati utsaha shoka krodha hasya bhaya jugupsa vismaya shama)
+  (swarupa rasa)
+  (phala bhava)
+  (drishthanta shanta-moksha)
+  (siddha purna))
+
+(kosha observation
+  (kriya wave maya)
+  (phala sthiti)
+  (sthita panchabhootam)
+  (swarupa collapse)
+  (abheda darshana measurement)
+  (siddha heisenberg-uncertainty))
+
+(kosha proof
+  (domain kosha/philosophy)
+  (abheda pramana learned-ground)
+  (sthita domain-philosophy))
+
+(kosha proven-knowledge
+  (abheda jnana-siddha-pramana)
+  (yukta knowledge proof)
+  (sthita domain-philosophy))
+
+(kosha rasa
+  (phala bhava)
+  (swarupa sakshi-pratibodha)
+  (siddha interference)
+  (abheda constructive-destructive)
+  (kriya ananda kshaya)
+  (janya thaalam)
+  (drishthanta purna)
+  (yukta pramana))
+
+(kosha self
+  (domain kosha/philosophy)
+  (abheda swa process function)
+  (sthita domain-philosophy))
+
+(kosha sex
+  (swarupa mithuna)
+  (yukta kama spanda sharira-samsarga)
+  (kriya samsarga)
+  (siddha thaalam)
+  (phala ananda)
+  (sthita dampati domain-biology domain-philosophy)
+  (janya jiva-sphurana))
+
+(kosha shiva-mooli
+  (kriya tirodhana panchabhootam)
+  (phala anugraha)
+  (siddha maya manavata)
+  (sthita swatantra svayambhu domain-ayurveda)
+  (abheda svairabhava vijaya)
+  (yukta abhaya mithya-satya)
+  (swarupa rasayana)
+  (drishthanta moksha))
+
+(kosha truth
+  (domain kosha/philosophy)
+  (abheda satya truth-weight)
+  (sthita domain-philosophy))

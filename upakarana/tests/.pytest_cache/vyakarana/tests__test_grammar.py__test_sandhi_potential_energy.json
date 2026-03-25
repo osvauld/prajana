@@ -17,10 +17,10 @@
           "potential-energy"
         ]
       ],
-      "elapsed_ms": 21,
+      "elapsed_ms": 14,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.023
+  "duration": 0.015
 }

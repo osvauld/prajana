@@ -1,0 +1,32 @@
+-- viveka-ganana: comparison — find which entity has the greater/lesser value.
+-- relational: joins entities with values through ownership, no positional scan.
+(tantra viveka-ganana (graph concept cw direction)
+  (op-eval (shabda direction "eval"))
+  (opp-eval (shabda (walk direction "pratipaksha") "eval"))
+
+  -- relational: for each entity, find its value through entity-scoped vps
+  (entities (prathama-sparsha graph))
+  (ev-pairs (reduce entities [] (fn acc ent ->
+    let svps = scope-vps graph (to-string ent)
+    let vps  = nth svps 0
+    let val  = reduce vps "" (fn found kv ->
+      cond (has-text found) found
+      otherwise (to-string (nth kv 1)))
+    cond (has-text val) (append acc [[(to-string ent), val]])
+    otherwise acc)))
+
+  (best-pr (select-extremum ev-pairs op-eval))
+  (worst-pr (select-extremum ev-pairs opp-eval))
+
+  (winner (cond (has-items best-pr) (to-string (nth best-pr 0)) otherwise ""))
+  (winner-val (cond (has-items best-pr) (to-string (nth best-pr 1)) otherwise ""))
+  (loser (cond (has-items worst-pr) (to-string (nth worst-pr 0)) otherwise ""))
+  (loser-val (cond (has-items worst-pr) (to-string (nth worst-pr 1)) otherwise ""))
+
+  (gt-triples (cond (and (has-text winner) (has-text loser))
+    [[winner, "greater-than", loser],
+     [winner, "viveka-concept", concept],
+     [winner, "viveka-direction", direction]]
+    otherwise []))
+
+  [winner, loser, winner-val, loser-val, ev-pairs, gt-triples])

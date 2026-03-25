@@ -1,0 +1,39 @@
+-- panchaavayava nyaya for categorical inference (anumana).
+(tantra emit-anumana (graph query-entity assert-entity mode answer)
+  (sep (shabda "anuvada-setu" "speech-strand-separator"))
+  (swarupa-pairs (triples-by-edge graph "swarupa"))
+  (pratijna-parts (map swarupa-pairs (fn tri ->
+    concat (to-string (nth tri 0)) " IS-A " (to-string (nth tri 2)))))
+  (pratijna (cond (has-items pratijna-parts)
+    (concat "we assert: " (list-join pratijna-parts))
+    otherwise ""))
+  (hetu (concat "we ask: does " query-entity " inherit " assert-entity "?"))
+  (varga-chain-strs (varga-chain query-entity))
+  (graph-chain (map (filter swarupa-pairs (fn tri ->
+    eq (to-string (nth tri 0)) query-entity)) (fn tri ->
+      concat query-entity " IS-A " (to-string (nth tri 2)))))
+  (udaharana-kosha (cond (has-items varga-chain-strs)
+    (concat "we know: " query-entity " → " (list-join varga-chain-strs))
+    otherwise ""))
+  (udaharana-graph (cond (has-items graph-chain)
+    (concat "we know: " (list-join graph-chain))
+    otherwise ""))
+  (udaharana (cond (has-text udaharana-kosha)
+    (cond (has-text udaharana-graph)
+      (concat udaharana-graph sep " " udaharana-kosha)
+      otherwise udaharana-kosha)
+    otherwise udaharana-graph))
+  (yukta-at (find-yukta-node varga-chain-strs assert-entity))
+  (upanaya (cond (has-text yukta-at)
+    (concat "we see: " assert-entity " is declared at " yukta-at)
+    otherwise (cond (eq mode "swarupa")
+      (concat "we see: chain reaches " assert-entity " via IS-A")
+      otherwise (concat "we see: " assert-entity " reachable from " query-entity))))
+  (nigamana (cond (eq answer "yes")
+    (concat "yes — " query-entity " has " assert-entity)
+    otherwise (concat "no — " query-entity " does not have " assert-entity)))
+  (all-strands (filter [pratijna, hetu, udaharana, upanaya, nigamana]
+    (fn s -> has-text s)))
+  (reduce all-strands "" (fn acc strand ->
+    cond (not (has-text acc)) strand
+    otherwise (concat acc sep " " strand))))

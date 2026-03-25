@@ -1,0 +1,4 @@
+-- true if a triple is a scope boundary (viraam or dvandva).
+(tantra is-boundary (triple)
+  (e (triple-edge triple))
+  (or (eq e "viraam") (eq e "dvandva")))

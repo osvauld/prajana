@@ -36,16 +36,26 @@ let parse_edge_group (source : string) (tokens : string list)
       ) targets in
       (edges, remaining)
 
-let parse_om5_tokens (tokens : string list) : nigamana option =
+let is_layer_keyword s =
+  s = "sangati" || s = "kosha" || s = "bhasha" || s = "mantra"
+
+(* Parse one (layer name ...) block from tokens. Returns (node, remaining_tokens).
+   Handles inline (mantra name ...) by extracting as separate nodes. *)
+let parse_one_node (tokens : string list) : (nigamana list * string list) =
   match tokens with
-  | "(" :: layer_str :: name :: rest
-    when layer_str = "sangati" || layer_str = "kosha"
-      || layer_str = "bhasha" || layer_str = "mantra" ->
+  | "(" :: layer_str :: name :: rest when is_layer_keyword layer_str ->
     let all_edges = ref [] in
     let krama_expr = ref "" in
+    let domain_str = ref "" in
+    let inline_nodes = ref [] in
+    let remaining_after = ref [] in
     let rec parse_body toks =
       match toks with
-      | [] | ")" :: _ -> ()
+      | [] -> ()
+      | ")" :: rest -> remaining_after := rest
+      | "(" :: "domain" :: dpath :: ")" :: rest ->
+        domain_str := dpath;
+        parse_body rest
       | "(" :: "krama" :: rest ->
         let depth = ref 1 in
         let expr_toks = ref [] in
@@ -61,6 +71,60 @@ let parse_om5_tokens (tokens : string list) : nigamana option =
         done;
         krama_expr := String.concat " " (List.rev !expr_toks);
         parse_body !remaining
+      | "(" :: "mantra" :: mantra_name :: mantra_rest ->
+        (* Inline mantra: extract as separate mantra-layer node *)
+        let mantra_edges = ref [] in
+        let mantra_krama = ref "" in
+        let rec parse_mantra_body mtoks =
+          match mtoks with
+          | [] -> ()
+          | ")" :: mrest -> remaining_after := mrest;
+              (* continue parsing parent body *)
+              parse_body mrest
+          | "(" :: "krama" :: krest ->
+            let depth = ref 1 in
+            let expr_toks = ref [] in
+            let rem = ref krest in
+            while !depth > 0 && !rem <> [] do
+              match !rem with
+              | "(" :: tl -> incr depth; expr_toks := "(" :: !expr_toks; rem := tl
+              | ")" :: tl -> decr depth;
+                if !depth > 0 then expr_toks := ")" :: !expr_toks;
+                rem := tl
+              | t :: tl -> expr_toks := t :: !expr_toks; rem := tl
+              | [] -> ()
+            done;
+            mantra_krama := String.concat " " (List.rev !expr_toks);
+            parse_mantra_body !rem
+          | "(" :: mrest ->
+            let (edges, mrem) = parse_edge_group mantra_name mrest in
+            mantra_edges := edges @ !mantra_edges;
+            parse_mantra_body mrem
+          | _ :: mrest -> parse_mantra_body mrest
+        in
+        parse_mantra_body mantra_rest;
+        (* Auto-add swarupa→parent and phala→parent edges if not present *)
+        let swarupa_dim = match visheshanam_of_string "swarupa" with
+          | Some d -> d | None -> register_dimension "swarupa" in
+        let phala_dim = match visheshanam_of_string "phala" with
+          | Some d -> d | None -> register_dimension "phala" in
+        let has_swarupa = List.exists (fun e ->
+          e.relation = swarupa_dim) !mantra_edges in
+        let has_phala = List.exists (fun e ->
+          e.relation = phala_dim) !mantra_edges in
+        if not has_swarupa then
+          mantra_edges := { source = mantra_name; target = name;
+                           relation = swarupa_dim } :: !mantra_edges;
+        if not has_phala then
+          mantra_edges := { source = mantra_name; target = name;
+                           relation = phala_dim } :: !mantra_edges;
+        let mantra_node = {
+          name = mantra_name; layer = "mantra"; domain = !domain_str;
+          slokas = [];
+          edges = List.rev !mantra_edges;
+          satya = 0.0; shabda = ""; krama = !mantra_krama;
+        } in
+        inline_nodes := mantra_node :: !inline_nodes
       | "(" :: rest ->
         let (edges, remaining) = parse_edge_group name rest in
         all_edges := edges @ !all_edges;
@@ -69,14 +133,39 @@ let parse_om5_tokens (tokens : string list) : nigamana option =
         parse_body rest
     in
     parse_body rest;
-    Some {
-      name; layer = layer_str; slokas = [];
+    let main_node = {
+      name; layer = layer_str; domain = !domain_str;
+      slokas = [];
       edges = List.rev !all_edges;
       satya = 0.0; shabda = ""; krama = !krama_expr;
-    }
-  | _ -> None
+    } in
+    (main_node :: List.rev !inline_nodes, !remaining_after)
+  | _ -> ([], tokens)
 
-let parse_file (path : string) : nigamana option =
+(* Parse all (layer name ...) blocks from a token stream. *)
+let parse_om5_tokens_multi (tokens : string list) : nigamana list =
+  let results = ref [] in
+  let remaining = ref tokens in
+  let safety = ref 0 in
+  while !remaining <> [] && !safety < 1000 do
+    incr safety;
+    match !remaining with
+    | "(" :: layer :: _ :: _ when is_layer_keyword layer ->
+      let (nodes, rest) = parse_one_node !remaining in
+      results := !results @ nodes;
+      remaining := rest
+    | _ :: rest -> remaining := rest
+    | [] -> ()
+  done;
+  !results
+
+(* Backward compat: parse first node only *)
+let parse_om5_tokens (tokens : string list) : nigamana option =
+  match parse_om5_tokens_multi tokens with
+  | n :: _ -> Some n
+  | [] -> None
+
+let parse_file_multi (path : string) : nigamana list =
   try
     let ic = open_in path in
     let buf = Buffer.create 1024 in
@@ -86,8 +175,13 @@ let parse_file (path : string) : nigamana option =
     done with End_of_file -> ());
     close_in ic;
     let tokens = tokenize (Buffer.contents buf) in
-    parse_om5_tokens tokens
-  with _ -> None
+    parse_om5_tokens_multi tokens
+  with _ -> []
+
+let parse_file (path : string) : nigamana option =
+  match parse_file_multi path with
+  | n :: _ -> Some n
+  | [] -> None
 
 let om5_files_recursive (root : string) : string list =
   dir_walk root ".om5"
@@ -96,21 +190,22 @@ let collect_dynamic_dims_from_ring (dirs : string list) (_known_names : string l
   let dims = ref [] in
   List.iter (fun dir ->
     List.iter (fun path ->
-      match parse_file path with
-      | Some n when n.name = "visheshanam-ring" ->
-        let yukta_idx = visheshanam_of_string "yukta" in
-        List.iter (fun e ->
-          if e.source = "visheshanam-ring" then
-            match yukta_idx with
-            | Some yi when e.relation = yi ->
-              let target = e.target in
-              if not (String.length target > 13
-                      && String.sub target 0 13 = "visheshanam-")
-                 && visheshanam_of_string target = None then
-                dims := target :: !dims
-            | _ -> ()
-        ) n.edges
-      | _ -> ()
+      List.iter (fun n ->
+        if n.name = "visheshanam-ring" then begin
+          let yukta_idx = visheshanam_of_string "yukta" in
+          List.iter (fun e ->
+            if e.source = "visheshanam-ring" then
+              match yukta_idx with
+              | Some yi when e.relation = yi ->
+                let target = e.target in
+                if not (String.length target > 13
+                        && String.sub target 0 13 = "visheshanam-")
+                   && visheshanam_of_string target = None then
+                  dims := target :: !dims
+              | _ -> ()
+          ) n.edges
+        end
+      ) (parse_file_multi path)
     ) (om5_files_recursive dir)
   ) dirs;
   !dims
@@ -175,22 +270,22 @@ let parse_comment_line (line : string) : (string option * string) option =
     (match found with Some r -> Some r | None -> Some (None, rest))
   else None
 
-let create_om (path : string) (layer : string) (name : string)
-    (comments : (string option * string) list)
-    (slokas : string list) (shabda : string) : unit =
+let create_om5 (path : string) (layer : string) (name : string)
+    (comments : string list)
+    (edges : (string * string list) list) : unit =
   let lines = ref [] in
-  lines := [Printf.sprintf "%s %s" layer name; ""];
-  List.iter (fun (prefix, text) ->
-    let line = match prefix with
-      | Some p -> Printf.sprintf "  -- %s: %s" p text
-      | None   -> Printf.sprintf "  -- %s" text
-    in
-    lines := line :: !lines
-  ) comments;
+  (* comments as ; lines before the node *)
+  List.iter (fun c -> lines := (Printf.sprintf "; %s" c) :: !lines) comments;
   if comments <> [] then lines := "" :: !lines;
-  List.iter (fun s -> lines := (Printf.sprintf "  \"%s\"" s) :: !lines) slokas;
-  if shabda <> "" then lines := (Printf.sprintf "shabda %s" shabda) :: !lines;
-  lines := "done" :: !lines;
+  (* opening: (layer name *)
+  lines := (Printf.sprintf "(%s %s" layer name) :: !lines;
+  (* edge groups: (relation target1 target2 ...) *)
+  List.iter (fun (rel, targets) ->
+    if targets <> [] then
+      lines := (Printf.sprintf "  (%s %s)" rel (String.concat " " targets)) :: !lines
+  ) edges;
+  (* closing paren *)
+  lines := ")" :: !lines;
   write_lines path (List.rev !lines)
 
 let add_sloka (path : string) (sloka : string) : unit =
@@ -347,14 +442,14 @@ let path_of_node (k : proof_graph) (name : string) : string option =
   find_in_dirs dirs
 
 let create_node (k : proof_graph) (path : string) (layer : string) (name : string)
-    (comments : (string option * string) list)
-    (slokas : string list) (shabda : string) : edit_result =
+    (comments : string list)
+    (edges : (string * string list) list) : edit_result =
   if Sys.file_exists path then
     Err (Printf.sprintf "file already exists: %s" path)
   else if Hashtbl.mem k.nodes name then
     Err (Printf.sprintf "node already exists in graph: %s" name)
   else begin
-    create_om path layer name comments slokas shabda;
+    create_om5 path layer name comments edges;
     reparse_and_replace k path
   end
 

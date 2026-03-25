@@ -17,10 +17,10 @@
           "centripetal-force"
         ]
       ],
-      "elapsed_ms": 24,
+      "elapsed_ms": 15,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.025
+  "duration": 0.016
 }
