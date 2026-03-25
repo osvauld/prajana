@@ -1,17 +1,10 @@
 {
   "total": 490,
-  "passed": 408,
-  "failed": 1,
+  "passed": 409,
+  "failed": 0,
   "xfailed": 81,
   "xpassed": 0,
   "skipped": 0,
-  "failed_tests": [
-    {
-      "test": "tests/test_grammar.py::test_negation_not_emits_satya",
-      "failure": {},
-      "calls": 1,
-      "duration": 0.033
-    }
-  ],
+  "failed_tests": [],
   "slow_tests": []
 }

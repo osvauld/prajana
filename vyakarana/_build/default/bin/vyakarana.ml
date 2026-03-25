@@ -47,10 +47,10 @@ let parse_argv () : string option * bool * bool * string list =
 
 let find_default_corpus () : string list =
   let try_prefix prefix =
-    let sangati = prefix ^ "brahman/sangati" in
-    let kosha   = prefix ^ "brahman/kosha" in
-    let bhasha  = prefix ^ "brahman/bhasha" in
-    let engine  = prefix ^ "brahman/engine" in
+    let sangati = prefix ^ "brahman2/sangati" in
+    let kosha   = prefix ^ "brahman2/kosha" in
+    let bhasha  = prefix ^ "brahman2/bhasha" in
+    let engine  = prefix ^ "brahman2/engine" in
     if Sys.file_exists sangati then
       let dirs = [sangati] in
       let dirs = if Sys.file_exists kosha  then dirs @ [kosha]  else dirs in

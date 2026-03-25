@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "a bag has 3 apples, 4 oranges and 5 bananas. how many fruits are there",
       "output": "we have: bag has 3 apples.we know: 4 plus (3 \u2192 7) 5 plus (7 \u2192 12).we find: 12 fruits there",
-      "elapsed_ms": 132,
+      "elapsed_ms": 115,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.132
+  "duration": 0.116
 }

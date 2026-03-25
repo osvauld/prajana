@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "kinetic energy is 200. mass is 4. find velocity. acceleration is 5. time is 4. find initial velocity",
       "output": "we have: kinetic-energy=200.; mass=4.; acceleration=5.; and time=4..we seek: initial-velocity.we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=5., mass=4..no match",
-      "elapsed_ms": 222,
+      "elapsed_ms": 208,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.225,
+  "duration": 0.21,
   "xfail": {
     "reason": "chain inverse: multi-step inverse with two seeks in one paragraph",
     "strict": true,

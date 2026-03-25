@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "all birds can fly. penguins are birds. penguins cannot fly. can sparrows fly",
       "output": "we ask: does bird inherit quantifier?. we see: quantifier reachable from bird. no \u2014 bird does not have quantifier",
-      "elapsed_ms": 97,
+      "elapsed_ms": 95,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.1,
+  "duration": 0.098,
   "xfail": {
     "reason": "quantifier: universal with exception override not built",
     "strict": true,

@@ -17,10 +17,10 @@
           "kinetic-energy"
         ]
       ],
-      "elapsed_ms": 13,
+      "elapsed_ms": 16,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.014
+  "duration": 0.016
 }

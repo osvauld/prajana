@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "moment of inertia is 2 and angular acceleration is 5. find torque",
       "output": "we have: angular-acceleration=2. and angular-acceleration=5..we seek: torque.no match",
-      "elapsed_ms": 117,
+      "elapsed_ms": 118,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.123,
+  "duration": 0.124,
   "xfail": {
     "reason": "robotics: no 3DOF arm tantra yet",
     "strict": true,

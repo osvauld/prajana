@@ -1,6 +1,6 @@
 {
   "test": "tests/test_grammar.py::test_negation_not_emits_satya",
-  "outcome": "failed",
+  "outcome": "passed",
   "calls": [
     {
       "method": "bqg",
@@ -17,25 +17,25 @@
           "is"
         ],
         [
-          "not",
-          "mithya",
-          "not"
+          "negation",
+          "satya",
+          "negation"
         ],
         [
-          "not",
+          "negation",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "not",
+          "negation",
           "vachana",
           "eka-vachana"
         ]
       ],
-      "elapsed_ms": 28,
+      "elapsed_ms": 29,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.033
+  "duration": 0.03
 }

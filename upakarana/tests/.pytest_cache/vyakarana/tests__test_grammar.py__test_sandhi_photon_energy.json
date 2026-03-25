@@ -17,10 +17,10 @@
           "photon-energy"
         ]
       ],
-      "elapsed_ms": 17,
+      "elapsed_ms": 20,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.018
+  "duration": 0.021
 }

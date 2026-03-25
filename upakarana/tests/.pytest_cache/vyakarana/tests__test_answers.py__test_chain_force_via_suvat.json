@@ -5,11 +5,11 @@
     {
       "method": "answer",
       "input": "find force given initial velocity 0 final velocity 20 time 4 mass 10",
-      "output": "we have: initial-velocity=0.; final-velocity=20.; time=4.; and mass=10..we seek: force.we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=5, mass=10..we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=20, mass=10..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=20, mass=10..we know: velocity-mantra (time, acceleration, initial-velocity \u2192 velocity).we see: time=4., acceleration=5, initial-velocity=0..we know: acceleration-mantra (time, initial-velocity, final-velocity \u2192 acceleration).we see: time=4., initial-velocity=0., final-velocity=20..we find: force = 50",
-      "elapsed_ms": 185,
+      "output": "we have: initial-velocity=0.; final-velocity=20.; time=4.; and mass=10..we seek: force.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=20, mass=10..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=20, mass=10..we know: velocity-mantra (time, acceleration, initial-velocity \u2192 velocity).we see: time=4., acceleration=5, initial-velocity=0..we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=5, mass=10..we know: acceleration-mantra (time, initial-velocity, final-velocity \u2192 acceleration).we see: time=4., initial-velocity=0., final-velocity=20..we find: force = 50",
+      "elapsed_ms": 208,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.186
+  "duration": 0.209
 }

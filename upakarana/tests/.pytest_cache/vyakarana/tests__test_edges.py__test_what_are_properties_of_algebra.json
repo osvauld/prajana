@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "what are the properties of algebra",
       "output": "no match",
-      "elapsed_ms": 123,
+      "elapsed_ms": 117,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.129,
+  "duration": 0.123,
   "xfail": {
     "reason": "lakshana_query: no tantra walks lakshana yet",
     "strict": true,

@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "ball-A has mass 5. ball-B has mass 5. which is heavier",
       "output": "we have: ball-A (=5.) and ball-B (=5.).we seek: which is viveka-max.we know: greater  means viveka-max.we see: 5. > 5. (ball-B  > ball-A ).we find: ball-B is viveka-max than ball-A",
-      "elapsed_ms": 130,
+      "elapsed_ms": 147,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.131
+  "duration": 0.148
 }

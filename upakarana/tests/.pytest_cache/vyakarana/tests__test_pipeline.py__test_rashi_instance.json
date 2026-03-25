@@ -27,7 +27,7 @@
     }
   ],
   "failure": null,
-  "duration": 0.06,
+  "duration": 0.059,
   "xfail": {
     "reason": "rashi: symbolic variable names not parsed",
     "strict": true,

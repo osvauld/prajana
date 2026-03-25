@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "car-A has velocity 80. car-B has velocity 60. which is slower",
       "output": "we have: car-A (=80.) and car-B (=60.).we seek: which is viveka-min.we know: lesser  means viveka-min.we see: 60. < 80. (car-B  < car-A ).we find: car-B is viveka-min than car-A",
-      "elapsed_ms": 135,
+      "elapsed_ms": 146,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.136
+  "duration": 0.147
 }

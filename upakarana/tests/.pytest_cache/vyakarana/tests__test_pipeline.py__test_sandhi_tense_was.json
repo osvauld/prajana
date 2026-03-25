@@ -17,7 +17,7 @@
     }
   ],
   "failure": null,
-  "duration": 0.004,
+  "duration": 0.003,
   "xfail": {
     "reason": "tense: 'was' promotion to bhuta-kaala in sandhi-viveka",
     "strict": true,

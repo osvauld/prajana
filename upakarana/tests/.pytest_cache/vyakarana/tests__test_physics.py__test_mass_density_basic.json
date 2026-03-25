@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "mass is 500 and volume is 2. find mass density",
       "output": "we have: mass=500. and volume=2..we seek: mass-density.we know: mass-density-mantra (volume, mass \u2192 mass-density).we see: volume=2., mass=500..we find: mass-density = 250",
-      "elapsed_ms": 130,
+      "elapsed_ms": 178,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.131
+  "duration": 0.179
 }

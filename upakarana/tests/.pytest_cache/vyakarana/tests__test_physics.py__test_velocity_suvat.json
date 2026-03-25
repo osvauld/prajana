@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "initial velocity is 0. acceleration is 4. time is 5. find velocity",
       "output": "we have: initial-velocity=0.; acceleration=4.; and time=5..we seek: velocity.we know: velocity-mantra (time, acceleration, initial-velocity \u2192 velocity).we see: time=5., acceleration=4., initial-velocity=0..we find: velocity = 20",
-      "elapsed_ms": 151,
+      "elapsed_ms": 162,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.151
+  "duration": 0.163
 }

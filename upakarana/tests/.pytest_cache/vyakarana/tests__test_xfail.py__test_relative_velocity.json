@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "ball-A has velocity 10. ball-B has velocity 3. find relative velocity of ball-A with respect to ball-B",
       "output": "no match",
-      "elapsed_ms": 135,
+      "elapsed_ms": 141,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.14,
+  "duration": 0.145,
   "xfail": {
     "reason": "relative-velocity concept not in kosha",
     "strict": true,
