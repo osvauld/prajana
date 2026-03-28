@@ -82,12 +82,22 @@
           "5."
         ],
         [
-          "velocity",
+          "ball-A",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "velocity",
+          "ball-A",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball-B",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "ball-B",
           "vachana",
           "eka-vachana"
         ],
@@ -142,10 +152,10 @@
           "5."
         ]
       ],
-      "elapsed_ms": 157,
+      "elapsed_us": 319924,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.158
+  "duration": 0.447
 }

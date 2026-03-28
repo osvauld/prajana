@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_gen_logic.py::TestVectorOps::test_vec_neg",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "(call-tantra \"eval-typed\" [\"vec-neg\", [3, -4], []])",
+      "output": [
+        -3,
+        4
+      ],
+      "elapsed_us": 69,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.004
+}

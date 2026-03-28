@@ -6,6 +6,11 @@
       "method": "eval",
       "input": "walk-in \"geometry-varga\" \"karma\"",
       "output": [
+        "vec-multiplication",
+        "vec-addition",
+        "vec-subtraction",
+        "vec-neg",
+        "vec-abs",
         "vec-scale",
         "vec-norm",
         "vec-dot",
@@ -15,6 +20,8 @@
         "tensor-product",
         "slerp",
         "rotation-matrix",
+        "quat-slerp",
+        "quat-inverse",
         "quat-to-rotation",
         "quat-norm",
         "quat-mul",
@@ -22,6 +29,11 @@
         "projection",
         "normal",
         "matrix-multiplication",
+        "mat-trace",
+        "mat-norm",
+        "mat-multiplication",
+        "mat-inverse",
+        "mat-determinant",
         "mat-transpose",
         "mat-scale",
         "mat-add",
@@ -39,7 +51,7 @@
         "curl",
         "cross-product"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 686,
       "error": null
     }
   ],

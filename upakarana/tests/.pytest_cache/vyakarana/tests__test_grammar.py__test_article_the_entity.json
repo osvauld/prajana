@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "the electron has mass 9.109e-31. the electron has velocity 1e6. find kinetic energy",
       "output": "we have: mass=9.109e-31 and velocity=1000000..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=1000000., mass=9.109e-31.we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=1000000., mass=9.109e-31.we find: kinetic-energy = 4.5545e-19",
-      "elapsed_ms": 245,
+      "elapsed_us": 463162,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.246
+  "duration": 0.962
 }

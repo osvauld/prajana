@@ -82,12 +82,22 @@
           "5."
         ],
         [
-          "velocity",
+          "ball-A",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "velocity",
+          "ball-A",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball-B",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "ball-B",
           "vachana",
           "eka-vachana"
         ],
@@ -142,12 +152,12 @@
           "5."
         ]
       ],
-      "elapsed_ms": 157,
+      "elapsed_us": 320875,
       "error": null
     },
     {
       "method": "eval",
-      "input": "scope-vps [[\"ball-A\", \"mithya\", \"ball-A\"], [\"has\", \"mithya\", \"has\"], [\"mass\", \"satya\", \"mass\"], [\"3\", \"asprista-sankhya\", \"3.\"], [\"and\", \"dvandva\", \"dvandva\"], [\"velocity\", \"satya\", \"velocity\"], [\"4\", \"asprista-sankhya\", \"4.\"], [\".\", \"viraam\", \".\"], [\"ball-B\", \"mithya\", \"ball-B\"], [\"has\", \"mithya\", \"has\"], [\"mass\", \"satya\", \"mass\"], [\"2\", \"asprista-sankhya\", \"2.\"], [\"and\", \"dvandva\", \"dvandva\"], [\"velocity\", \"satya\", \"velocity\"], [\"5\", \"asprista-sankhya\", \"5.\"], [\"velocity\", \"kaala\", \"vartamana-kaala\"], [\"velocity\", \"vachana\", \"eka-vachana\"], [\"ball-A\", \"prathama-vibhakti\", \"object\"], [\"mass\", \"shashthi-vibhakti\", \"ball-A\"], [\"velocity\", \"shashthi-vibhakti\", \"ball-A\"], [\"ball-B\", \"prathama-vibhakti\", \"object\"], [\"mass\", \"shashthi-vibhakti\", \"ball-B\"], [\"velocity\", \"shashthi-vibhakti\", \"ball-B\"], [\"mass\", \"sankhya\", \"3.\"], [\"velocity\", \"sankhya\", \"4.\"], [\"mass\", \"sankhya\", \"2.\"], [\"velocity\", \"sankhya\", \"5.\"]] \"ball-A\"",
+      "input": "scope-vps [[\"ball-A\", \"mithya\", \"ball-A\"], [\"has\", \"mithya\", \"has\"], [\"mass\", \"satya\", \"mass\"], [\"3\", \"asprista-sankhya\", \"3.\"], [\"and\", \"dvandva\", \"dvandva\"], [\"velocity\", \"satya\", \"velocity\"], [\"4\", \"asprista-sankhya\", \"4.\"], [\".\", \"viraam\", \".\"], [\"ball-B\", \"mithya\", \"ball-B\"], [\"has\", \"mithya\", \"has\"], [\"mass\", \"satya\", \"mass\"], [\"2\", \"asprista-sankhya\", \"2.\"], [\"and\", \"dvandva\", \"dvandva\"], [\"velocity\", \"satya\", \"velocity\"], [\"5\", \"asprista-sankhya\", \"5.\"], [\"ball-A\", \"kaala\", \"vartamana-kaala\"], [\"ball-A\", \"vachana\", \"eka-vachana\"], [\"ball-B\", \"kaala\", \"vartamana-kaala\"], [\"ball-B\", \"vachana\", \"eka-vachana\"], [\"ball-A\", \"prathama-vibhakti\", \"object\"], [\"mass\", \"shashthi-vibhakti\", \"ball-A\"], [\"velocity\", \"shashthi-vibhakti\", \"ball-A\"], [\"ball-B\", \"prathama-vibhakti\", \"object\"], [\"mass\", \"shashthi-vibhakti\", \"ball-B\"], [\"velocity\", \"shashthi-vibhakti\", \"ball-B\"], [\"mass\", \"sankhya\", \"3.\"], [\"velocity\", \"sankhya\", \"4.\"], [\"mass\", \"sankhya\", \"2.\"], [\"velocity\", \"sankhya\", \"5.\"]] \"ball-A\"",
       "output": [
         [
           [
@@ -164,10 +174,10 @@
           "velocity"
         ]
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 319,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.158
+  "duration": 0.428
 }

@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_gen_logic.py::test_vec_sub_add_pratipaksha",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"vec-subtraction\" \"pratipaksha\"",
+      "output": [
+        "vec-add"
+      ],
+      "elapsed_us": 760,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

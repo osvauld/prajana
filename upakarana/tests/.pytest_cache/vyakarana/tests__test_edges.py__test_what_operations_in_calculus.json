@@ -5,13 +5,13 @@
     {
       "method": "answer",
       "input": "what operations belong to calculus",
-      "output": "we seek: calculus.no match",
-      "elapsed_ms": 47,
+      "output": "we seek: set-membership.no match",
+      "elapsed_us": 134584,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.053,
+  "duration": 0.264,
   "xfail": {
     "reason": "karma_query: no tantra walks karma yet",
     "strict": true,

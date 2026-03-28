@@ -117,12 +117,32 @@
           "4."
         ],
         [
-          "velocity",
+          "ball-A",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "velocity",
+          "ball-A",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball-B",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "ball-B",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball-C",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "ball-C",
           "vachana",
           "eka-vachana"
         ],
@@ -177,10 +197,10 @@
           "4."
         ]
       ],
-      "elapsed_ms": 205,
+      "elapsed_us": 445149,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.206
+  "duration": 0.655
 }

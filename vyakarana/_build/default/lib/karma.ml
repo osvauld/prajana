@@ -184,7 +184,10 @@ let parse_file (path : string) : nigamana option =
   | [] -> None
 
 let om5_files_recursive (root : string) : string list =
-  dir_walk root ".om5"
+  if not (Sys.is_directory root) then
+    (if Filename.check_suffix root ".om5" then [root] else [])
+  else
+    dir_walk root ".om5"
 
 let collect_dynamic_dims_from_ring (dirs : string list) (_known_names : string list) : string list =
   let dims = ref [] in

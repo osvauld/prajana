@@ -8,14 +8,14 @@
       "output": [
         "number-varga"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 729,
       "error": null
     },
     {
       "method": "eval",
       "input": "walk \"addition\" \"lakshana\"",
       "output": [],
-      "elapsed_ms": 0,
+      "elapsed_us": 744,
       "error": null
     },
     {
@@ -26,17 +26,17 @@
         "set-varga",
         "algebra-varga"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 699,
       "error": null
     },
     {
       "method": "eval",
       "input": "walk \"commutativity\" \"karma\"",
       "output": [],
-      "elapsed_ms": 0,
+      "elapsed_us": 872,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.002
+  "duration": 0.01
 }

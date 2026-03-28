@@ -8,10 +8,10 @@
       "output": [
         "vrnda"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 812,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.002
 }

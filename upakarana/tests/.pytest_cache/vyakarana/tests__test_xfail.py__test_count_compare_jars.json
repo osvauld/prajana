@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "jar-A has 8 marbles. jar-B has 12 marbles. which jar has more marbles",
       "output": "we have: jar-A (=8.); jar-B (=12.); and jar (=8.).we seek: which is viveka-max.we know: greater  means viveka-max.we see: 12. > 8. (jar-B  > jar-A ).we find: jar-B is the viveka-max",
-      "elapsed_ms": 133,
+      "elapsed_us": 436996,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.134
+  "duration": 0.757
 }

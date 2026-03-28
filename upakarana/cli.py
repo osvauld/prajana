@@ -255,8 +255,10 @@ def cmd_test(args):
         _print_json(summary(load_all()))
     elif args.action == "run":
         from upakarana.testing.run import run
+        par = None if args.parallel == "off" else args.parallel
         result = run(layer=args.layer, gate=args.gate, pattern=args.pattern,
-                     last_failed=args.last_failed, verbose=args.verbose)
+                     last_failed=args.last_failed, verbose=args.verbose,
+                     parallel=par)
         print(f"passed={result['passed']} failed={result['failed']} "
               f"xfailed={result.get('xfailed',0)} {result.get('duration','')}")
     elif args.action == "failed":
@@ -288,18 +290,27 @@ def cmd_cache(args):
         for gate, es in sorted(gates.items()):
             print(f"  {gate}: {len(es)}")
     elif args.action == "slow":
+        def fmt_time(us):
+            """Auto-scale: us / ms / s depending on magnitude."""
+            if us < 1000:
+                return f"{us:6.0f}us"
+            elif us < 1_000_000:
+                return f"{us / 1000:6.1f}ms"
+            else:
+                return f"{us / 1_000_000:6.2f}s "
+
         print("── Slowest tests (wall-clock) ──")
         for t in slowest_tests(entries):
-            print(f"  {t['duration_s']:6.3f}s  {t['calls']} calls  ({t['call_ms']:4d}ms)  [{t['outcome']:>7s}]  {t['test']}")
+            print(f"  {t['duration_s']:6.3f}s  {t['calls']} calls  ({fmt_time(t['call_us'])})  [{t['outcome']:>7s}]  {t['test']}")
         print()
         print("── Slowest calls ──")
         for c in slowest_calls(entries):
-            print(f"  {c['elapsed_ms']:6d}ms {c['test']:55s} {c['method']}")
+            print(f"  {fmt_time(c['elapsed_us'])} {c['test']:55s} {c['method']}")
         print()
         print("── Timing by layer ──")
         layers = timing_by_layer(entries)
         for layer, d in layers.items():
-            print(f"  {d['duration_s']:6.1f}s  {d['count']:3d} tests  ({d['call_ms']:5d}ms calls)  {layer}")
+            print(f"  {d['duration_s']:6.1f}s  {d['count']:3d} tests  ({fmt_time(d['call_us'])})  {layer}")
 
 
 # --- Lint commands ---
@@ -515,6 +526,8 @@ def build_parser():
     s.add_argument("--pattern", "-p")
     s.add_argument("--last-failed", action="store_true")
     s.add_argument("--verbose", "-v", action="store_true")
+    s.add_argument("--parallel", "-n", default="auto",
+                   help="xdist workers: 'auto', a number, or 'off' (default: auto)")
 
     # cache
     s = sub.add_parser("cache", help="Cache analysis")
@@ -588,7 +601,7 @@ def build_parser():
     ])
     s.add_argument("name", nargs="?")
     s.add_argument("name2", nargs="?")
-    s.add_argument("--to", default=None, help="Output directory (default: brahman2)")
+    s.add_argument("--to", default=None, help="Output directory (default: brahman)")
     s.add_argument("--domain", "-d", default=None)
     s.add_argument("--dry-run", action="store_true")
 
@@ -1078,7 +1091,7 @@ def cmd_analyze(args):
         from upakarana.analysis.compose import collision_analysis
         ca = collision_analysis()
         print(f"── Name collisions: {ca['total']} ──")
-        print(f"   (each must appear in brahman2 with ALL edges from every source)\n")
+        print(f"   (each must appear in brahman with ALL edges from every source)\n")
         for name, info in sorted(ca["collisions"].items()):
             print(f"  {name} ({info['count']} instances):")
             for inst in info.get("instances", []):
@@ -1602,11 +1615,11 @@ def cmd_live(args):
 
 def cmd_gen(args):
     import os
-    from upakarana.paths import BRAHMAN2
+    from upakarana.paths import BRAHMAN
     from upakarana.analysis.generation import expected_node, validate_node, gen_candidates, gen_gaps
     from upakarana.parsers import om5, shabda as shabda_mod
 
-    out_root = args.to or str(BRAHMAN2)
+    out_root = args.to or str(BRAHMAN)
 
     if args.action == "preview":
         if not args.name or not args.name2:
@@ -1740,7 +1753,7 @@ def cmd_gen(args):
         print(f"\n{action} {created} nodes")
 
     elif args.action == "status":
-        # Count what's in brahman2
+        # Count what's in brahman
         b2_files = []
         for dirpath, _, filenames in os.walk(out_root):
             for f in filenames:
@@ -1753,7 +1766,7 @@ def cmd_gen(args):
                 if f.endswith(".shabda"):
                     shabda_files.append(f)
 
-        print(f"── brahman2/ status ──")
+        print(f"── brahman/ status ──")
         print(f"  om5 files:    {len(b2_files)}")
         print(f"  shabda files: {len(shabda_files)}")
 

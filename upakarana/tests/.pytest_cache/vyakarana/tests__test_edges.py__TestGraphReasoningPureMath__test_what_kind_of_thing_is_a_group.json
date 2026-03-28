@@ -7,11 +7,12 @@
       "input": "walk \"group\" \"swarupa\"",
       "output": [
         "sequence",
+        "sequence",
         "algebra-varga",
         "dharma-anvaya",
         "set"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 526,
       "error": null
     }
   ],

@@ -1,0 +1,9 @@
+-- detect-signals phase 4: count check.
+-- called only when shunya, anumana, and viveka did not match.
+(tantra detect-signals-4 (expanded base-signals)
+  (count-signals (detect-count expanded))
+  (cond (has-items count-signals)
+    (write-signals expanded (append [["dispatch-mode", "count"]]
+      (append base-signals count-signals)))
+    otherwise
+    (detect-signals-5 expanded base-signals)))

@@ -1,7 +1,0 @@
--- scans words for first kshaya/vriddhi direction.
-(tantra detect-direction (words)
-  (reduce words "" (fn acc w ->
-    let wn = word-resolve w
-    cond (has-text acc) acc
-    (or (eq wn "kshaya") (eq wn "vriddhi")) wn
-    otherwise acc)))

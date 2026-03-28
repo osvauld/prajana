@@ -27,20 +27,20 @@
           "animal"
         ],
         [
-          "animal",
+          "cat",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "animal",
+          "cat",
           "vachana",
           "bahu-vachana"
         ]
       ],
-      "elapsed_ms": 27,
+      "elapsed_us": 40142,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.028
+  "duration": 0.063
 }

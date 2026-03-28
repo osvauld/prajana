@@ -6,19 +6,19 @@
       "method": "eval",
       "input": "register-dimension \"satya\"",
       "output": "register-dimension",
-      "elapsed_ms": 0,
+      "elapsed_us": 11,
       "error": null
     },
     {
       "method": "eval",
       "input": "register-dimension \"satya\"",
       "output": "register-dimension",
-      "elapsed_ms": 0,
+      "elapsed_us": 12,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001,
+  "duration": 0.018,
   "xfail": {
     "reason": "graph primitive: register-dimension return value mismatch",
     "strict": true,

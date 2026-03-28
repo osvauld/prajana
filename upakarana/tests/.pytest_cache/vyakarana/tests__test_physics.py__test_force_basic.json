@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "mass is 10 and acceleration is 5. find force",
       "output": "we have: mass=10. and acceleration=5..we seek: force.we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=5., mass=10..we find: force = 50",
-      "elapsed_ms": 153,
+      "elapsed_us": 364855,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.154
+  "duration": 0.82
 }

@@ -1,4 +1,4 @@
-"""gen_faithful_copy.py — Regenerate brahman2/ from brahman/ (faithful consolidation).
+"""gen_faithful_copy.py — Regenerate brahman/ (faithful consolidation).
 
 Reads every node from brahman/, groups them into consolidated .om5 files,
 copies shabda and yantra directories as-is.
@@ -22,7 +22,7 @@ import shutil
 import sys
 from collections import defaultdict
 
-from upakarana.paths import BRAHMAN, BRAHMAN3, ROOT
+from upakarana.paths import BRAHMAN, ROOT
 from upakarana.parsers.om5 import load_all, edges_by_relation
 
 # Domains that get sub-split into separate files
@@ -30,7 +30,7 @@ SPLIT_DOMAINS = {"physics", "math"}
 
 
 def grouping_key(node):
-    """Compute the output file path (relative to brahman2/) for a node."""
+    """Compute the output file path (relative to brahman/) for a node."""
     domain = node["domain"]
     parts = domain.split("/") if domain else []
 
@@ -98,7 +98,7 @@ def _find_collision_names(all_nodes):
 
 
 def generate(dry_run=False):
-    """Main generation: read brahman/, write brahman2/ om5 files."""
+    """Main generation: read brahman/, write consolidated om5 files."""
     from upakarana.parsers.om5 import find_all, parse_multi
 
     print("Loading all nodes from brahman/...")
@@ -129,10 +129,10 @@ def generate(dry_run=False):
         print(f"\n  TOTAL: {total} nodes in {len(groups)} files")
         return groups
 
-    # Clean brahman2/ om5 files (not shabda, not yantra)
+    # Clean brahman/ om5 files (not shabda, not yantra)
     om5_dirs = ["kosha", "sangati", "bhasha"]
     for d in om5_dirs:
-        target = os.path.join(str(BRAHMAN3), d)
+        target = os.path.join(str(BRAHMAN), d)
         if os.path.isdir(target):
             for f in os.listdir(target):
                 if f.endswith(".om5"):
@@ -144,14 +144,14 @@ def generate(dry_run=False):
 
     # Remove root-level om5 files
     for f in ("engine.om5", "personal.om5", "orphan.om5"):
-        fp = os.path.join(str(BRAHMAN3), f)
+        fp = os.path.join(str(BRAHMAN), f)
         if os.path.exists(fp):
             os.remove(fp)
 
     # Write consolidated files
     written = 0
     for key in sorted(groups):
-        out_path = os.path.join(str(BRAHMAN3), key)
+        out_path = os.path.join(str(BRAHMAN), key)
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
         node_list = groups[key]
@@ -172,11 +172,11 @@ def generate(dry_run=False):
 
         written += 1
 
-    print(f"  {written} files written to brahman2/")
+    print(f"  {written} files written to brahman/")
 
-    # Copy shabda (already shared, but ensure brahman2 has them)
+    # Copy shabda
     src_shabda = os.path.join(str(BRAHMAN), "shabda")
-    dst_shabda = os.path.join(str(BRAHMAN3), "shabda")
+    dst_shabda = os.path.join(str(BRAHMAN), "shabda")
     if os.path.isdir(src_shabda):
         if os.path.isdir(dst_shabda):
             shutil.rmtree(dst_shabda)
@@ -186,7 +186,7 @@ def generate(dry_run=False):
 
     # Copy yantra (tantra files)
     src_yantra = os.path.join(str(BRAHMAN), "yantra")
-    dst_yantra = os.path.join(str(BRAHMAN3), "yantra")
+    dst_yantra = os.path.join(str(BRAHMAN), "yantra")
     if os.path.isdir(src_yantra):
         if os.path.isdir(dst_yantra):
             shutil.rmtree(dst_yantra)
@@ -198,12 +198,12 @@ def generate(dry_run=False):
 
 
 def verify(groups):
-    """Verify brahman2/ round-trips correctly.
+    """Verify brahman/ round-trips correctly.
 
     Compares by raw node name (not collision-renamed dict keys).
     Collision nodes (same name, different domains) are counted separately.
     """
-    print("\nVerifying brahman2/...")
+    print("\nVerifying brahman/...")
     from upakarana.parsers.om5 import find_all, parse_multi
 
     # Collect all raw nodes from each source (name → list of nodes)
@@ -215,12 +215,12 @@ def verify(groups):
         return by_name
 
     b1_raw = collect_raw(BRAHMAN)
-    b2_raw = collect_raw(BRAHMAN3)
+    b2_raw = collect_raw(BRAHMAN)
 
     b1_total = sum(len(v) for v in b1_raw.values())
     b2_total = sum(len(v) for v in b2_raw.values())
     print(f"  brahman:  {b1_total} node instances ({len(b1_raw)} unique names)")
-    print(f"  brahman2: {b2_total} node instances ({len(b2_raw)} unique names)")
+    print(f"  brahman (out): {b2_total} node instances ({len(b2_raw)} unique names)")
 
     missing_names = set(b1_raw) - set(b2_raw)
     extra_names = set(b2_raw) - set(b1_raw)

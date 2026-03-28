@@ -22,22 +22,22 @@
           "2000000."
         ],
         [
-          "m/s",
-          "mithya",
-          "m/s"
-        ],
-        [
           "proton",
           "sankhya",
           "2000000."
+        ],
+        [
+          "proton",
+          "matra",
+          "metre-per-second"
         ]
       ],
-      "elapsed_ms": 34,
+      "elapsed_us": 25345,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.038,
+  "duration": 0.04,
   "xfail": {
     "reason": "'moves at' not recognised as velocity signal",
     "strict": true,

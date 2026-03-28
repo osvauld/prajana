@@ -1,0 +1,4 @@
+-- reads a named signal from the graph's _signal edges.
+-- preserves value types (lists stay lists, strings stay strings).
+(tantra read-signal (graph signal-name)
+  (nth (graph | where [s, e, o] | and (eq (to-string s) "_signal") | and (eq e signal-name) | collect o) 0))

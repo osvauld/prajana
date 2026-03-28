@@ -16,6 +16,9 @@
 open Prakriti
 open Kriya_types
 
+(* per-thread CPU time in microseconds — excludes Domain contention *)
+external thread_cpu_us : unit -> float = "caml_thread_cpu_us"
+
 (* ═══════════════════════════════════════════════════════════════════════════
    1. HELPERS
    ═══════════════════════════════════════════════════════════════════════════ *)
@@ -996,17 +999,22 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   (* ── profiling primitives ──────────────────────────────────────────── *)
 
+  | "clock-us" ->
+    (* Returns per-thread CPU time in microseconds (no contention). *)
+    Some (VFloat (thread_cpu_us ()))
+
   | "clock-ms" ->
-    (* Returns current monotonic clock in milliseconds (float). *)
+    (* Backwards compat — returns milliseconds (wall clock). *)
     Some (VFloat (Unix.gettimeofday () *. 1000.0))
 
   | "profile-step" ->
-    (* Evaluate an expression and return [result, elapsed-ms, label].
+    (* Evaluate an expression and return [result, elapsed-us, label].
+       Uses per-thread CPU time — accurate under concurrency.
        Usage: (profile-step "label" <expr>) *)
     let label = eval_str 0 in
-    let t0 = Unix.gettimeofday () in
+    let t0 = thread_cpu_us () in
     let result = e_eval k e (List.nth args 1) in
-    let elapsed = (Unix.gettimeofday () -. t0) *. 1000.0 in
+    let elapsed = thread_cpu_us () -. t0 in
     Some (VList [result; VFloat elapsed; VString label])
 
   | _ -> None
@@ -1146,6 +1154,7 @@ let register_primitive_arities () =
   r "idx-value"            3;
   r "idx-append"           2;
   r "mantra-select"        1;
+  r "clock-us"             0;
   r "clock-ms"             0;
   r "profile-step"         2;
   r "session-emit"         3;

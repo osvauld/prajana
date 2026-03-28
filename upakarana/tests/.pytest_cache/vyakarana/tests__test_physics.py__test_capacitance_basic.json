@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "charge is 5 and voltage is 10. find capacitance",
       "output": "we have: charge=5. and voltage=10..we seek: capacitance.we know: capacitance-mantra (voltage, charge \u2192 capacitance).we see: voltage=10., charge=5..we find: capacitance = 0.5",
-      "elapsed_ms": 109,
+      "elapsed_us": 257851,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.11
+  "duration": 0.579
 }

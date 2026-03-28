@@ -17,10 +17,10 @@
           "angular-momentum"
         ]
       ],
-      "elapsed_ms": 16,
+      "elapsed_us": 19907,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.016
+  "duration": 0.027
 }

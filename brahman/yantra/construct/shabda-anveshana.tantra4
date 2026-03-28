@@ -1,0 +1,9 @@
+-- shabda-anveshana: word -> graph-node or _none (recognition with fallback).
+-- FAST PATH: word-node or lookup hit → return immediately (no rule walks).
+-- SLOW PATH: delegates to shabda-anveshana-rules for morphology.
+(tantra shabda-anveshana (word)
+  (abbrev (word-node word))
+  (ex (cond (exists abbrev) _none otherwise (lookup word)))
+  (cond (exists abbrev) abbrev
+    (exists ex) ex
+    otherwise (shabda-anveshana-rules word)))

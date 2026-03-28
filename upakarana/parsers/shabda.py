@@ -14,12 +14,12 @@ import os
 import re
 from collections import defaultdict, OrderedDict
 
-from upakarana.paths import BRAHMAN2
+from upakarana.paths import BRAHMAN
 
 
 def find_all(root=None):
     """Find all .shabda files."""
-    r = str(root or BRAHMAN2)
+    r = str(root or BRAHMAN)
     return sorted(glob.glob(os.path.join(r, "**", "*.shabda"), recursive=True))
 
 
@@ -124,7 +124,7 @@ def load_all(root=None):
         for node in parse(path):
             node["path"] = path
             node["domain"] = os.path.dirname(
-                os.path.relpath(path, str(root or BRAHMAN2))
+                os.path.relpath(path, str(root or BRAHMAN))
             )
             all_nodes[node["name"]] = node
     return all_nodes

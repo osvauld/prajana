@@ -1,0 +1,42 @@
+-- anuvada-ganana: indexed graph pipeline.
+-- BQG → refine-v2 → grade-split → count-chain → detect → dispatch.
+-- Single input: sentence string. Session logic lives in session-anuvada.
+-- detect-typed checked early (before count-chain) to avoid count interference.
+-- fast path via typed-varga shabda marker keeps cost ~8ms for non-typed.
+(tantra anuvada-ganana (sentence)
+  (raw-graph (build-question-graph sentence))
+  (asserted (assertion-bandha raw-graph))
+  (refined (avrti-refine-v2 asserted))
+  -- typed dispatch: check first (cheap with typed-varga fast path)
+  (typed-raw (detect-typed raw-graph))
+  (is-typed (nth typed-raw 0))
+  (typed-result (cond is-typed
+    (call-tantra "eval-typed" [(nth typed-raw 1), (nth typed-raw 2), (nth typed-raw 3)])
+    otherwise _none))
+  (typed-label (cond is-typed (shabda (nth typed-raw 1) "krama-output") otherwise ""))
+  (typed-answer (cond (not is-typed) _none
+    (eq typed-label "satya") (cond typed-result "yes" otherwise "no")
+    otherwise (concat (nth typed-raw 1) " = " (to-string typed-result))))
+  -- grade-split + count-chain (skipped if typed)
+  (boundary-edge (shabda "graded-ring" "grade-boundary"))
+  (intra-boundary (shabda "graded-ring" "intra-grade-boundary"))
+  (grade-state (cond is-typed [[], []] otherwise (reduce refined [[], []] (fn state triple ->
+    let completed = nth state 0
+    let current   = nth state 1
+    let e = nth triple 1
+    cond (or (eq (to-string e) boundary-edge) (eq (to-string e) intra-boundary))
+      [(append completed [(append current [triple])]), []]
+    otherwise
+      [completed, (append current [triple])]))))
+  (completed-grades (nth grade-state 0))
+  (final-grade (nth grade-state 1))
+  (all-grades (append completed-grades [final-grade]))
+  -- viveka check on raw graph (avrti-refine-v2 strips question-grade triples)
+  (raw-has-viveka (has-items (filter (triples-by-edge raw-graph "satya")
+    (fn t -> or (eq (triple-subj t) "viveka-max") (eq (triple-subj t) "viveka-min")))))
+  (after-grades (cond is-typed [] raw-has-viveka refined otherwise (count-chain refined all-grades)))
+  -- expand + detect + dispatch (skipped if typed)
+  (expanded (cond is-typed [] otherwise (kosha-expand after-grades)))
+  (signaled (cond is-typed [] otherwise (detect-signals expanded)))
+  (cond is-typed typed-answer
+    otherwise (dispatch-answer signaled refined)))

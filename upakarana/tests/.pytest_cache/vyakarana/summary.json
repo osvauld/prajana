@@ -1,10 +1,116 @@
 {
-  "total": 490,
-  "passed": 409,
-  "failed": 0,
-  "xfailed": 81,
+  "total": 417,
+  "passed": 338,
+  "failed": 4,
+  "xfailed": 75,
   "xpassed": 0,
   "skipped": 0,
-  "failed_tests": [],
-  "slow_tests": []
+  "failed_tests": [
+    {
+      "test": "tests/test_edges.py::TestGraphReasoningRobotics::test_angular_chain",
+      "failure": {},
+      "calls": 2,
+      "duration": 0.022
+    },
+    {
+      "test": "tests/test_grammar.py::test_negation_not_emits_satya",
+      "failure": {},
+      "calls": 1,
+      "duration": 0.095
+    },
+    {
+      "test": "tests/test_mixed.py::test_colour_red_blue_distinct",
+      "failure": {},
+      "calls": 1,
+      "duration": 0.38
+    },
+    {
+      "test": "tests/test_xfail.py::test_red_blue_distinct",
+      "failure": {},
+      "calls": 1,
+      "duration": 0.403
+    }
+  ],
+  "slow_tests": [
+    {
+      "test": "tests/test_xfail.py::test_total_momentum_three",
+      "duration": 1.9
+    },
+    {
+      "test": "tests/test_arithmetic.py::test_multi_question_two_answers",
+      "duration": 1.793
+    },
+    {
+      "test": "tests/test_logic.py::test_modus_tollens",
+      "duration": 1.779
+    },
+    {
+      "test": "tests/test_gen_logic.py::test_modus_tollens_ground_not_wet",
+      "duration": 1.761
+    },
+    {
+      "test": "tests/test_mixed.py::test_from_rest_ke",
+      "duration": 1.661
+    },
+    {
+      "test": "tests/test_entity.py::test_three_entity_specific_query",
+      "duration": 1.652
+    },
+    {
+      "test": "tests/test_xfail.py::test_multi_question_tom_mary",
+      "duration": 1.615
+    },
+    {
+      "test": "tests/test_comparison.py::test_proportional_ke_double_velocity",
+      "duration": 1.602
+    },
+    {
+      "test": "tests/test_entity.py::test_two_entity_scope_first",
+      "duration": 1.554
+    },
+    {
+      "test": "tests/test_edges.py::test_what_does_vector_space_generate",
+      "duration": 1.547
+    },
+    {
+      "test": "tests/test_comparison.py::test_proportional_momentum_double_mass",
+      "duration": 1.543
+    },
+    {
+      "test": "tests/test_gen_logic.py::test_hypothetical_chain",
+      "duration": 1.539
+    },
+    {
+      "test": "tests/test_mixed.py::test_physics_count_total_ke",
+      "duration": 1.527
+    },
+    {
+      "test": "tests/test_answers.py::test_two_entity_ke_second",
+      "duration": 1.497
+    },
+    {
+      "test": "tests/test_xfail.py::test_total_momentum_two",
+      "duration": 1.463
+    },
+    {
+      "test": "tests/test_logic.py::test_conditional_chain",
+      "duration": 1.443
+    },
+    {
+      "test": "tests/test_arithmetic.py::test_distribution_per",
+      "duration": 1.427
+    },
+    {
+      "test": "tests/test_answers.py::test_two_entity_ke_first",
+      "duration": 1.407
+    },
+    {
+      "test": "tests/test_xfail.py::test_entity_scope_transfer",
+      "duration": 1.4
+    },
+    {
+      "test": "tests/test_entity.py::test_two_entity_scope_second",
+      "duration": 1.387
+    }
+  ]
 }

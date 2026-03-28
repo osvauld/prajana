@@ -8,7 +8,7 @@
       "output": [
         "double"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 885,
       "error": null
     },
     {
@@ -17,7 +17,7 @@
       "output": [
         "division"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 687,
       "error": null
     },
     {
@@ -26,10 +26,10 @@
       "output": [
         "square-root"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 646,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.002
+  "duration": 0.004
 }

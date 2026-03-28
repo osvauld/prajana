@@ -17,7 +17,7 @@
           "5."
         ]
       ],
-      "elapsed_ms": 6,
+      "elapsed_us": 12240,
       "error": null
     },
     {
@@ -40,10 +40,10 @@
           "5."
         ]
       ],
-      "elapsed_ms": 21,
+      "elapsed_us": 31186,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.028
+  "duration": 0.056
 }

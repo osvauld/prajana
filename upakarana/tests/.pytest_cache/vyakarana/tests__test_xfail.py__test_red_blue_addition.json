@@ -5,11 +5,11 @@
     {
       "method": "answer",
       "input": "a box has 5 red balls and 3 blue balls. how many balls",
-      "output": "we have: container has 5 red balls 3 blue balls.we know: 3 plus (5 \u2192 8).we find: 8 balls",
-      "elapsed_ms": 133,
+      "output": "we have: box has 5 red balls 3 blue balls.we know: 3 plus (5 \u2192 8).we find: 8 balls",
+      "elapsed_us": 617038,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.134
+  "duration": 0.947
 }

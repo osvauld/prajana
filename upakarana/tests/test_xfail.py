@@ -153,7 +153,6 @@ def test_from_rest(vy):
     assert sankhya.get("initial-velocity") in ("0", "0.")
 
 
-@xfail(strict=True, reason="'from rest' confusion: 'rest' maps to count-remaining")
 def test_car_from_rest_force(vy):
     r = vy.answer("a car of mass 1200 accelerates from rest at 3 m/s2. find force")
     assert "force =" in r and "no match" not in r
@@ -383,7 +382,6 @@ def test_multi_question_intermediate(vy):
 # "each" triggers multiplication, not addition
 
 
-@xfail(strict=True, reason="multiplication: 'each' should trigger multiply")
 def test_multiplication_tables_legs(vy):
     """4 tables × 4 legs = 16."""
     r = vy.answer(
@@ -392,7 +390,6 @@ def test_multiplication_tables_legs(vy):
     assert "16" in r
 
 
-@xfail(strict=True, reason="multiplication: bags with items")
 def test_multiplication_bags(vy):
     """3 bags × 5 apples = 15."""
     r = vy.answer(
@@ -401,7 +398,6 @@ def test_multiplication_bags(vy):
     assert "15" in r
 
 
-@xfail(strict=True, reason="multiplication: people with coins")
 def test_multiplication_people(vy):
     """6 children × 4 coins = 24."""
     r = vy.answer(

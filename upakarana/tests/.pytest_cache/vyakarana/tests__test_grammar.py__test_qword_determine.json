@@ -17,10 +17,10 @@
           "velocity"
         ]
       ],
-      "elapsed_ms": 19,
+      "elapsed_us": 22148,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.02
+  "duration": 0.037
 }

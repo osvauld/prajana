@@ -27,10 +27,10 @@
           "kilogram"
         ]
       ],
-      "elapsed_ms": 10,
+      "elapsed_us": 18555,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.011
+  "duration": 0.032
 }

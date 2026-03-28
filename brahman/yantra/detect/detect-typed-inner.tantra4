@@ -1,0 +1,74 @@
+-- detect-typed-inner: called only when a type word exists.
+-- does the expensive varga-ops scan, number collection, op matching.
+(tantra detect-typed-inner (graph edges words n type-idx)
+
+  (vals (map graph (fn t -> to-string (nth t 2))))
+  (type-word (nth words type-idx))
+  (type-varga (nth (walk type-word "vishesa") 0))
+
+  -- collect all number indices
+  (num-indices (filter (range n) (fn i -> eq (nth edges i) "asprista-sankhya")))
+
+  -- find dvandva index
+  (dvandva-idx (reduce (range n) -1 (fn acc i ->
+    cond (neq acc -1) acc
+    (eq (nth edges i) "dvandva") i
+    otherwise acc)))
+  (has-dvandva (neq dvandva-idx -1))
+
+  -- numbers after type word, split at dvandva
+  (post-type-nums (filter num-indices (fn i -> gt i type-idx)))
+  (nums-a (cond has-dvandva
+    (map (filter post-type-nums (fn i -> lt i dvandva-idx))
+      (fn i -> to-number (nth vals i)))
+    otherwise
+    (map post-type-nums (fn i -> to-number (nth vals i)))))
+  (nums-b (cond has-dvandva
+    (map (filter num-indices (fn i -> gt i dvandva-idx))
+      (fn i -> to-number (nth vals i)))
+    otherwise []))
+
+  -- numbers before type word (for membership: "does 3 belong to set ...")
+  (pre-type-nums (map (filter num-indices (fn i -> lt i type-idx))
+    (fn i -> to-number (nth vals i))))
+
+  -- all ops in the varga
+  (varga-ops (walk-in type-varga "karma"))
+
+  -- find operation: check satya words against varga ops (direct or via abheda)
+  (satya-indices (filter (range n) (fn i -> eq (nth edges i) "satya")))
+  (op-from-satya (reduce satya-indices "" (fn acc i ->
+    cond (has-text acc) acc
+    (member (nth words i) varga-ops) (nth words i)
+    otherwise (reduce varga-ops acc (fn a2 cand ->
+      cond (has-text a2) a2
+      (member (nth words i) (walk cand "abheda")) cand
+      otherwise a2)))))
+
+  -- fallback: check mithya words via shabda-anveshana then abheda match
+  (mithya-indices (filter (range n) (fn i -> eq (nth edges i) "mithya")))
+  (op-from-mithya (cond (has-text op-from-satya) ""
+    otherwise (reduce mithya-indices "" (fn acc i ->
+      cond (has-text acc) acc
+      otherwise (reduce varga-ops acc (fn a2 cand ->
+        cond (has-text a2) a2
+        (member (nth words i) (walk cand "abheda")) cand
+        (member (to-string (shabda-anveshana (nth words i))) (walk cand "abheda")) cand
+        (eq (shabda cand "eval") (nth words i)) cand
+        otherwise a2))))))
+
+  (matched-op (cond (has-text op-from-satya) op-from-satya
+    otherwise op-from-mithya))
+
+  -- membership pattern: single number before "set" type word
+  (is-membership (and (eq (length pre-type-nums) 1) (eq type-word "set")))
+
+  (final-op (cond is-membership "set-membership" otherwise matched-op))
+  (final-a (cond is-membership (nth pre-type-nums 0) otherwise nums-a))
+  (final-b (cond is-membership nums-a
+    has-dvandva nums-b
+    otherwise []))
+
+  (is-typed (and (has-text final-op) (has-items (filter (range n) (fn i -> eq (nth edges i) "asprista-sankhya")))))
+
+  [is-typed, final-op, final-a, final-b])

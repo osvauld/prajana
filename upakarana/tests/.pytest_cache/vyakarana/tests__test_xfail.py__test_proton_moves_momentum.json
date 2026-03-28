@@ -5,13 +5,13 @@
     {
       "method": "answer",
       "input": "a proton moves at 2e6 m/s. it has mass 1.67e-27 kg. find momentum",
-      "output": "we have: mass=1.67e-27 and proton=2000000..we seek: momentum.no match",
-      "elapsed_ms": 151,
+      "output": "we have: proton=2000000. and mass=1.67e-27.we seek: momentum.no match",
+      "elapsed_us": 328197,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.155,
+  "duration": 0.67,
   "xfail": {
     "reason": "motion verb 'moves' not in sandhi-viveka",
     "strict": true,

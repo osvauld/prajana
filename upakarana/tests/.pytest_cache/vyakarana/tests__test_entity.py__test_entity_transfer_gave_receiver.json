@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "Mary had 4 apples. she gave 3 to Tom. how many apples does Mary have",
       "output": "we have: Mary had 4 apples.we know: 3 minus (4 \u2192 1).we find: 1 apples does Mary have",
-      "elapsed_ms": 119,
+      "elapsed_us": 669369,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.12
+  "duration": 1.074
 }

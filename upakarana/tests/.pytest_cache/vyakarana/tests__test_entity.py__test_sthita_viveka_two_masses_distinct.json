@@ -52,12 +52,22 @@
           "7.34e+22"
         ],
         [
-          "mass",
+          "particle-A",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "mass",
+          "particle-A",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "particle-B",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "particle-B",
           "vachana",
           "eka-vachana"
         ],
@@ -92,10 +102,10 @@
           "7.34e+22"
         ]
       ],
-      "elapsed_ms": 97,
+      "elapsed_us": 195061,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.098
+  "duration": 0.258
 }

@@ -20,22 +20,12 @@
           "force",
           "satya",
           "force"
-        ],
-        [
-          "force",
-          "kaala",
-          "vartamana-kaala"
-        ],
-        [
-          "force",
-          "vachana",
-          "eka-vachana"
         ]
       ],
-      "elapsed_ms": 51,
+      "elapsed_us": 26038,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.052
+  "duration": 0.041
 }

@@ -27,12 +27,12 @@
           "1.67e-27"
         ],
         [
-          "mass",
+          "proton",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "mass",
+          "proton",
           "vachana",
           "eka-vachana"
         ],
@@ -42,10 +42,10 @@
           "1.67e-27"
         ]
       ],
-      "elapsed_ms": 56,
+      "elapsed_us": 67811,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.057
+  "duration": 0.099
 }

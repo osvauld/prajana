@@ -37,10 +37,10 @@
           "1.6e-19"
         ]
       ],
-      "elapsed_ms": 18,
+      "elapsed_us": 24439,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.019
+  "duration": 0.031
 }

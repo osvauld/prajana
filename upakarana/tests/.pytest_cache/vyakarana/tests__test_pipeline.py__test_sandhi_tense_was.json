@@ -12,12 +12,12 @@
           "was"
         ]
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 46,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.003,
+  "duration": 0.016,
   "xfail": {
     "reason": "tense: 'was' promotion to bhuta-kaala in sandhi-viveka",
     "strict": true,

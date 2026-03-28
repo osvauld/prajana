@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "neither the ball is red nor is it blue. is the ball red",
       "output": "no match",
-      "elapsed_ms": 82,
+      "elapsed_us": 643788,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.083
+  "duration": 0.929
 }

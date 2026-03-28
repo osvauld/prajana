@@ -56,10 +56,10 @@
         "linear-force-varga",
         "dynamics-varga"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 763,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.002
 }

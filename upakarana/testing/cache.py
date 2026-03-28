@@ -79,9 +79,9 @@ def slowest_calls(entries, top_n=10):
                 "test": e.get("test", "?"),
                 "method": call.get("method", "?"),
                 "input": call.get("input", "")[:80],
-                "elapsed_ms": call.get("elapsed_ms", 0),
+                "elapsed_us": call.get("elapsed_us", call.get("elapsed_ms", 0) * 1000),
             })
-    all_calls.sort(key=lambda c: -c["elapsed_ms"])
+    all_calls.sort(key=lambda c: -c["elapsed_us"])
     return all_calls[:top_n]
 
 
@@ -90,11 +90,11 @@ def slowest_tests(entries, top_n=20):
     timed = []
     for e in entries:
         dur = e.get("duration", 0)
-        call_ms = sum(c.get("elapsed_ms", 0) for c in e.get("calls", []))
+        call_us = sum(c.get("elapsed_us", c.get("elapsed_ms", 0) * 1000) for c in e.get("calls", []))
         timed.append({
             "test": e.get("test", "?"),
             "duration_s": round(dur, 3),
-            "call_ms": call_ms,
+            "call_us": call_us,
             "calls": len(e.get("calls", [])),
             "outcome": e.get("outcome", "?"),
         })
@@ -105,13 +105,13 @@ def slowest_tests(entries, top_n=20):
 def timing_by_layer(entries):
     """Aggregate timing by test layer (file)."""
     from collections import defaultdict
-    layers = defaultdict(lambda: {"duration_s": 0, "count": 0, "call_ms": 0})
+    layers = defaultdict(lambda: {"duration_s": 0, "count": 0, "call_us": 0})
     for e in entries:
         test_path = e.get("test", "").split("::")[0].split("/")[-1]
         layer = test_path.replace("test_", "").replace(".py", "") if test_path else "unknown"
         layers[layer]["duration_s"] += e.get("duration", 0)
         layers[layer]["count"] += 1
-        layers[layer]["call_ms"] += sum(c.get("elapsed_ms", 0) for c in e.get("calls", []))
+        layers[layer]["call_us"] += sum(c.get("elapsed_us", c.get("elapsed_ms", 0) * 1000) for c in e.get("calls", []))
     return {k: {**v, "duration_s": round(v["duration_s"], 1)}
             for k, v in sorted(layers.items(), key=lambda x: -x[1]["duration_s"])}
 

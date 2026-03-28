@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "poodles are dogs. dogs are mammals. mammals are animals. is a poodle an animal",
       "output": "we assert: dog IS-A mammal and mammal IS-A animal. we ask: does animal inherit animal?. we see: chain reaches animal via IS-A. yes \u2014 animal has animal",
-      "elapsed_ms": 117,
+      "elapsed_us": 304339,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.118
+  "duration": 0.808
 }

@@ -57,12 +57,22 @@
           "kinetic-energy"
         ],
         [
-          "kinetic-energy",
+          "mass",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "kinetic-energy",
+          "mass",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "velocity",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "velocity",
           "vachana",
           "eka-vachana"
         ],
@@ -77,10 +87,10 @@
           "10."
         ]
       ],
-      "elapsed_ms": 108,
+      "elapsed_us": 163133,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.109
+  "duration": 0.215
 }

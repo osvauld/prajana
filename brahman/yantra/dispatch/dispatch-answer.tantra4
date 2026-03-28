@@ -1,0 +1,10 @@
+-- the answer is the typed answer, anumana answer, viveka answer, count answer, or derived answer.
+(tantra dispatch-answer (expanded refined)
+  (mode (read-signal expanded "dispatch-mode"))
+  (cond (eq mode "typed")   (dispatch-typed expanded refined)
+        (eq mode "shunya")  (dispatch-shunya expanded refined)
+        (eq mode "anumana") (dispatch-anumana expanded refined)
+        (eq mode "viveka")  (dispatch-viveka expanded refined)
+        (eq mode "count")   (dispatch-count expanded refined)
+        (eq mode "derive")  (dispatch-derive expanded refined)
+        otherwise "no match"))

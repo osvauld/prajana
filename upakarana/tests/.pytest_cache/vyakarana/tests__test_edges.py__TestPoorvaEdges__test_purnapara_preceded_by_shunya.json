@@ -8,10 +8,10 @@
       "output": [
         "shunya"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 613,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.003
 }

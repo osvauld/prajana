@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_gen_logic.py::test_momentum_forward",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "mass is 3 and velocity is 4. find momentum",
+      "output": "we have: mass=3. and velocity=4..we seek: momentum.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=4., mass=3..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=4., mass=3..we find: momentum = 12",
+      "elapsed_us": 378696,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.795
+}

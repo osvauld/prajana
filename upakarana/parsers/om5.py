@@ -14,7 +14,7 @@ import os
 import re
 from collections import defaultdict, OrderedDict
 
-from upakarana.paths import BRAHMAN, BRAHMAN2
+from upakarana.paths import BRAHMAN
 
 LAYERS = ("sangati", "kosha", "bhasha", "mantra")
 
@@ -24,19 +24,15 @@ _HEADER_RE = re.compile(
 
 
 def find_all(root=None):
-    """Find all .om5 files under brahman2/ (default corpus)."""
-    r = str(root or BRAHMAN2)
+    """Find all .om5 files under the default corpus."""
+    r = str(root or BRAHMAN)
     files = glob.glob(os.path.join(r, "**", "*.om5"), recursive=True)
     return sorted(files)
 
 
 def domain_of(path, root=None):
     """Extract domain (directory path) relative to brahman root."""
-    r = str(root or BRAHMAN2)
-    # Handle brahman2/ paths
-    r2 = str(BRAHMAN2)
-    if path.startswith(r2):
-        return os.path.dirname(os.path.relpath(path, r2))
+    r = str(root or BRAHMAN)
     return os.path.dirname(os.path.relpath(path, r))
 
 

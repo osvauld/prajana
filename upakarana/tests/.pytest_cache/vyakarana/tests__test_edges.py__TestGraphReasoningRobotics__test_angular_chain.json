@@ -1,6 +1,6 @@
 {
   "test": "tests/test_edges.py::TestGraphReasoningRobotics::test_angular_chain",
-  "outcome": "passed",
+  "outcome": "failed",
   "calls": [
     {
       "method": "eval",
@@ -8,20 +8,17 @@
       "output": [
         "torque-mantra"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 478,
       "error": null
     },
     {
       "method": "eval",
       "input": "walk \"angular-acceleration\" \"kramanusara\"",
-      "output": [
-        "angular-velocity",
-        "angular-velocity"
-      ],
-      "elapsed_ms": 0,
+      "output": [],
+      "elapsed_us": 478,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.022
 }

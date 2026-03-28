@@ -94,7 +94,6 @@ def test_named_gave_away(vy):
 # ── multiplication via 'each' ─────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="multiplication: 'each' should trigger multiply")
 def test_multiplication_tables_legs(vy):
     """4 tables × 4 legs = 16"""
     r = vy.answer(
@@ -103,14 +102,12 @@ def test_multiplication_tables_legs(vy):
     assert "16" in r
 
 
-@xfail(strict=True, reason="multiplication: bags with items")
 def test_multiplication_bags_apples(vy):
     """3 bags × 5 apples = 15"""
     r = vy.answer("there are 3 bags. each bag has 5 apples. how many apples are there in total")
     assert "15" in r
 
 
-@xfail(strict=True, reason="multiplication: people with coins")
 def test_multiplication_children_coins(vy):
     """6 children × 4 coins = 24"""
     r = vy.answer("6 children each have 4 coins. how many coins are there in total")
@@ -137,11 +134,11 @@ def test_physics_count_total_mass(vy):
 # ── per-entity scoped count ───────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="entity_scope: per-entity count after subtraction")
+@xfail(strict=True, reason="entity_scope: avrti-refine-v2 strips question grade, sankhya bindings leak into final grade")
 def test_entity_scope_apples_sold(vy):
-    """10 apples, 3 sold → 7 apples left"""
+    """10 apples, 3 sold → 7 apples left (not 17)"""
     r = vy.answer("a shop has 10 apples. 3 apples were sold. how many apples are left")
-    assert "7" in r
+    assert " 7 " in r or r.endswith("7") or "= 7" in r
 
 
 @xfail(strict=True, reason="entity_scope: per-entity scoped count two fruits")

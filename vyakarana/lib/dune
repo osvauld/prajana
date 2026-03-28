@@ -1,4 +1,5 @@
 (library
  (name vyakarana_lib)
  (libraries unix str)
+ (foreign_stubs (language c) (names thread_clock))
  (modules prakriti kriya_types vidya vakya kriya_ops vak kriya_graph karma jnana kriya_eval kriya dvara))

@@ -42,6 +42,16 @@
           "10."
         ],
         [
+          "mass",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "mass",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
           "velocity",
           "kaala",
           "vartamana-kaala"
@@ -62,10 +72,10 @@
           "10."
         ]
       ],
-      "elapsed_ms": 73,
+      "elapsed_us": 122029,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.074
+  "duration": 0.164
 }

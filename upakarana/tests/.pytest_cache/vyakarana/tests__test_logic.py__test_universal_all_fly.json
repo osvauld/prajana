@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "all birds can fly. a sparrow is a bird. can a sparrow fly",
       "output": "we assert: sparrow IS-A bird. we ask: does sparrow inherit bird?. we know: sparrow IS-A bird. we see: chain reaches bird via IS-A. yes \u2014 sparrow has bird",
-      "elapsed_ms": 104,
+      "elapsed_us": 368453,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.105
+  "duration": 0.757
 }

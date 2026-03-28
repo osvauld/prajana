@@ -1,22 +1,15 @@
 {
   "test": "tests/test_xfail.py::test_car_from_rest_force",
-  "outcome": "xfailed",
+  "outcome": "passed",
   "calls": [
     {
       "method": "answer",
       "input": "a car of mass 1200 accelerates from rest at 3 m/s2. find force",
-      "output": "we have: mass=1200.; mass=3.; and velocity=0..we seek: force.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=0., mass=3..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=0., mass=3..no match",
-      "elapsed_ms": 200,
+      "output": "we have: mass=1200.; acceleration=3.; and velocity=0..we seek: force.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=0., mass=1200..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=0., mass=1200..we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=3., mass=1200..we find: force = 3600",
+      "elapsed_us": 643562,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.204,
-  "xfail": {
-    "reason": "'from rest' confusion: 'rest' maps to count-remaining",
-    "strict": true,
-    "gate": "parsing: natural phrasing not handled",
-    "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 156
-  }
+  "duration": 1.228
 }

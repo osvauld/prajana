@@ -22,12 +22,12 @@
           "radius"
         ]
       ],
-      "elapsed_ms": 20,
+      "elapsed_us": 18866,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.024,
+  "duration": 0.04,
   "xfail": {
     "reason": "trigram: orbital-radius not in kosha",
     "strict": true,

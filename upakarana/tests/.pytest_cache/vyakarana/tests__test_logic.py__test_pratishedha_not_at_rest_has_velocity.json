@@ -5,18 +5,18 @@
     {
       "method": "answer",
       "input": "the ball is not at rest. does the ball have velocity",
-      "output": "we have: initial-rest (signal: velocity is shunya). we ask: does velocity exist?. we know: initial-rest declares velocity = shunya (absent). we see: velocity is absent due to initial-rest. no \u2014 velocity is absent because velocity is shunya",
-      "elapsed_ms": 105,
+      "output": "we have: at-rest (signal: velocity is shunya). we ask: does velocity exist?. we know: at-rest declares velocity = shunya (absent). we see: velocity is absent due to at-rest. no \u2014 velocity is absent because velocity is shunya",
+      "elapsed_us": 300881,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.108,
+  "duration": 0.612,
   "xfail": {
     "reason": "negation: pratishedha flip of shunya not built",
     "strict": true,
     "gate": "negation: pratishedha / double-negation logic",
     "file": "/home/abe/agent_x/upakarana/tests/test_logic.py",
-    "line": 234
+    "line": 233
   }
 }

@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "period is 0.5. find frequency",
       "output": "we have: period=0.5.we seek: frequency.we know: photon-energy-mantra (frequency, planck-constant \u2192 photon-energy).we see: frequency=2.we know: frequency-mantra (period \u2192 frequency).we see: period=0.5.we find: frequency = 2",
-      "elapsed_ms": 113,
+      "elapsed_us": 259255,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.114
+  "duration": 0.491
 }

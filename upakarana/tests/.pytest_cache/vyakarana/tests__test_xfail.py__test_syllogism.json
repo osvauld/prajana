@@ -5,18 +5,18 @@
     {
       "method": "answer",
       "input": "all cats are animals. all animals breathe. do cats breathe.",
-      "output": "we assert: cat IS-A animal and animal IS-A breathing. we ask: does breathing inherit breathing?. we see: chain reaches breathing via IS-A. no \u2014 breathing does not have breathing",
-      "elapsed_ms": 76,
+      "output": "we assert: cat IS-A animal. we ask: does animal inherit animal?. we see: chain reaches animal via IS-A. yes \u2014 animal has animal",
+      "elapsed_us": 328332,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.08,
+  "duration": 0.607,
   "xfail": {
     "reason": "syllogism not implemented: needs assertion-bandha + chain walk",
     "strict": true,
     "gate": "logic_nyaya: P8d anumana not built",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 257
+    "line": 256
   }
 }

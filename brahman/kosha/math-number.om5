@@ -1,0 +1,678 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-number — 89 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha count
+  (vishesa number-varga math-varga)
+  (yukta common-sense-varga vrnda arithmetic)
+  (swarupa sankhya)
+  (abheda vrnda-ganita))
+
+(kosha number-theory-varga
+  (vishesa number-varga)
+  (swarupa integer)
+  (abheda divisibility)
+  (yukta prime gcd lcm))
+
+(kosha number-varga
+  (vishesa math-varga)
+  (yukta matra niyama eka shunya))
+
+(mantra abs
+  (karma number-varga)
+  (swarupa matra)
+  (kriya viveka)
+  (phala scalar)
+  (abheda sama-vishama)
+  (siddha sign-rahita)
+  (yukta viparita norm max min)
+  (sthita real))
+
+(mantra addition
+  (karma number-varga)
+  (abheda sankalana plus)
+  (kriya matra arithmetic vriddhi)
+  (yukta equation)
+  (pratipaksha subtraction))
+
+(mantra arccosine
+  (karma number-varga)
+  (vishesa trigonometry-varga)
+  (pratipaksha cosine))
+
+(mantra arcsine
+  (karma number-varga)
+  (vishesa trigonometry-varga)
+  (pratipaksha sine))
+
+(mantra arctangent
+  (karma number-varga)
+  (vishesa trigonometry-varga)
+  (pratipaksha tangent))
+
+(mantra ceil
+  (karma number-varga)
+  (swarupa seema)
+  (kriya viveka)
+  (phala int)
+  (abheda sama-vishama)
+  (siddha vriddhi)
+  (yukta float int)
+  (pratipaksha floor))
+
+(mantra complex-magnitude
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda vec-norm)
+  (swarupa modulus)
+  (krama square addition square-root))
+
+(mantra complex-mul
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda multiplication)
+  (swarupa bilinear)
+  (krama multiplication subtraction addition))
+
+(mantra complex-phase
+  (karma number-varga)
+  (vishesa complex-varga)
+  (swarupa kona)
+  (abheda argument)
+  (krama arctangent))
+
+; ── complex lifts (generated) ────────────────────────────────────────────────
+
+(mantra complex-abs
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda abs)
+  (phala scalar)
+  (krama square addition square-root))
+
+(mantra complex-add
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda addition)
+  (krama addition))
+
+(mantra complex-conjugate
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda conjugate)
+  (pratipaksha complex-conjugate)
+  (krama neg))
+
+(mantra complex-exponential
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda exponential)
+  (yukta cosine sine)
+  (krama exponential multiplication))
+
+(mantra complex-logarithm
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda logarithm)
+  (pratipaksha complex-exponential)
+  (krama logarithm arctangent))
+
+(mantra complex-neg
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda negation)
+  (krama neg))
+
+(mantra complex-square
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda square)
+  (krama multiplication subtraction addition))
+
+(mantra complex-square-root
+  (karma number-varga)
+  (vishesa complex-varga)
+  (abheda square-root)
+  (pratipaksha complex-square)
+  (krama complex-magnitude complex-phase division addition square-root))
+
+(mantra cosine
+  (domain kosha/math/number/operations)
+  (karma number-varga)
+  (vishesa trigonometry-varga)
+  (yukta kona oscillation)
+  (abheda wave)
+  (pratipaksha arccosine))
+
+(mantra division
+  (karma number-varga)
+  (abheda sama-vibhaga polarity)
+  (kriya arithmetic kshaya matra)
+  (yukta equation)
+  (phala dharana)
+  (pratipaksha multiplication))
+
+(mantra double
+  (karma number-varga)
+  (swarupa multiplication)
+  (kriya multiplication vriddhi)
+  (pratipaksha half))
+
+(mantra equals
+  (karma number-varga)
+  (swarupa sama eka-eka)
+  (kriya sama equation)
+  (abheda abheda))
+
+(mantra exponential
+  (karma number-varga)
+  (vishesa transcendental-varga)
+  (pratipaksha logarithm)
+  (kriya vriddhi)
+  (yukta power euler))
+
+(mantra factorial
+  (karma number-varga)
+  (swarupa avrti)
+  (kriya guna)
+  (sthita mula)
+  (ahara int)
+  (phala int)
+  (abheda eka-aneka)
+  (siddha parampara)
+  (yukta combination permutation series avrti))
+
+(mantra floor
+  (domain kosha/math/number/operations)
+  (karma number-varga)
+  (swarupa seema)
+  (kriya viveka)
+  (phala int)
+  (abheda sama-vishama)
+  (siddha kshaya)
+  (yukta float int abs)
+  (pratipaksha ceil)
+  (sthita real))
+
+(mantra gcd
+  (karma number-varga)
+  (vishesa number-theory-varga)
+  (yukta lcm)
+  (swarupa divisor)
+  (krama modulo))
+
+(kosha gcd
+  (vishesa number-theory-varga)
+  (swarupa divisor)
+  (yukta integer lcm fraction-reduction)
+  (abheda prime-factorization)
+  (drishthanta coprime))
+
+(mantra half
+  (karma number-varga)
+  (swarupa division)
+  (kriya division kshaya)
+  (pratipaksha double))
+
+(mantra lcm
+  (karma number-varga)
+  (vishesa number-theory-varga)
+  (yukta gcd)
+  (swarupa multiple)
+  (krama multiplication gcd division))
+
+(kosha lcm
+  (vishesa number-theory-varga)
+  (swarupa multiple)
+  (yukta integer gcd fraction-addition scheduling)
+  (abheda prime-factorization))
+
+(mantra logarithm
+  (karma number-varga)
+  (swarupa vibhajana)
+  (yukta e samikarana number expression O-nlogn)
+  (kriya vriddhi-kshaya)
+  (phala ghana-rahita)
+  (drishthanta avrti vibhajana)
+  (siddha sort)
+  (pratipaksha power))
+
+(mantra max
+  (karma number-varga)
+  (swarupa viveka)
+  (kriya sama-vishama)
+  (phala scalar seema number)
+  (abheda viveka)
+  (ahara number)
+  (sthita real)
+  (yukta abs)
+  (pratipaksha min))
+
+(mantra mean
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (yukta sum count)
+  (swarupa central-tendency)
+  (krama addition division))
+
+(kosha mean
+  (vishesa statistics-varga)
+  (swarupa central-tendency)
+  (yukta data)
+  (janaka variance std-dev)
+  (abheda distribution expected-value))
+
+(mantra min
+  (karma number-varga)
+  (swarupa viveka)
+  (kriya sama-vishama)
+  (phala scalar seema number)
+  (abheda viveka)
+  (ahara number)
+  (sthita real)
+  (yukta abs)
+  (pratipaksha max))
+
+(mantra minus
+  (karma number-varga)
+  (abheda subtraction masculine visarjana)
+  (kriya arithmetic kshaya)
+  (yukta equation))
+
+(mantra multiplication
+  (karma number-varga)
+  (kriya taranga matra arithmetic vriddhi)
+  (abheda times feminine)
+  (yukta matrix-multiplication equation prashna-amsha)
+  (phala womb)
+  (pratipaksha division))
+
+(mantra neg
+  (karma number-varga)
+  (abheda negation)
+  (swarupa additive-inverse)
+  (pratipaksha neg))
+
+(mantra plus
+  (karma number-varga)
+  (abheda addition feminine ahara)
+  (kriya arithmetic womb)
+  (yukta equation))
+
+(mantra power
+  (karma number-varga)
+  (abheda ghana-pramana)
+  (kriya guna vriddhi)
+  (sthita mula-shakti)
+  (swarupa eka-aneka)
+  (siddha avrti)
+  (yukta multiplication exponent series e polynomial derivative avrti)
+  (drishthanta square cube)
+  (pratipaksha logarithm))
+
+(mantra product
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (abheda multiplication)
+  (swarupa fold)
+  (krama multiplication))
+
+(mantra reciprocal
+  (karma number-varga)
+  (kriya arithmetic)
+  (pratipaksha division))
+
+(mantra sine
+  (domain kosha/math/number/operations)
+  (karma number-varga)
+  (vishesa trigonometry-varga)
+  (yukta kona oscillation)
+  (abheda wave)
+  (pratipaksha arcsine))
+
+(mantra square-root
+  (karma number-varga)
+  (abheda sqrt)
+  (pratipaksha square)
+  (kriya yantra kshaya))
+
+(mantra square
+  (karma number-varga)
+  (swarupa multiplication)
+  (yukta svayam samikarana number expression)
+  (kriya vivartana vriddhi power multiplication)
+  (abheda kshetra)
+  (phala dviguna)
+  (pratipaksha square-root))
+
+(mantra std-dev
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (yukta variance)
+  (swarupa spread)
+  (krama variance square-root))
+
+(kosha std-dev
+  (vishesa statistics-varga)
+  (swarupa spread)
+  (yukta data variance normal-distribution)
+  (abheda square-root))
+
+(mantra subtraction
+  (karma number-varga)
+  (kriya kshaya matra arithmetic)
+  (abheda minus)
+  (yukta equation)
+  (pratipaksha addition))
+
+(mantra sum
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (abheda addition)
+  (swarupa fold)
+  (krama addition))
+
+(mantra tangent
+  (domain kosha/math/number/operations)
+  (karma number-varga)
+  (vishesa trigonometry-varga)
+  (yukta sine cosine kona)
+  (pratipaksha arctangent)
+  (krama sine cosine division))
+
+(mantra times
+  (karma number-varga)
+  (abheda multiplication)
+  (kriya arithmetic)
+  (yukta equation))
+
+(mantra variance
+  (domain kosha/math/number/operations)
+  (karma number-varga)
+  (vishesa statistics-varga)
+  (janaka std-dev)
+  (swarupa spread)
+  (krama mean subtraction square))
+
+(kosha variance
+  (domain kosha/math/number/operations)
+  (vishesa statistics-varga)
+  (swarupa spread)
+  (yukta data mean square)
+  (janaka std-dev)
+  (abheda deviation))
+
+(kosha bijection
+  (lakshana number-varga set-varga)
+  (abheda morphism)
+  (swarupa eka-eka aneka-eka)
+  (yukta isomorphism sama eka-eka)
+  (siddha cardinality))
+
+(kosha cardinality
+  (lakshana number-varga set-varga)
+  (swarupa matra)
+  (yukta vrnda bijection matra)
+  (phala int)
+  (siddha finite infinite))
+
+(kosha coefficient
+  (lakshana number-varga)
+  (swarupa scalar float)
+  (kriya multiplication)
+  (yukta polynomial variable power)
+  (sthita real))
+
+(kosha combination
+  (domain kosha/math/number/properties)
+  (lakshana number-varga)
+  (swarupa set)
+  (abheda aneka-eka)
+  (yukta vrnda permutation binomial)
+  (kriya factorial)
+  (ahara set int)
+  (siddha order-rahita)
+  (phala selection int))
+
+(kosha permutation
+  (lakshana number-varga)
+  (swarupa parampara)
+  (abheda eka-aneka)
+  (yukta krama combination)
+  (kriya factorial)
+  (ahara set int)
+  (siddha order)
+  (phala arrangement int))
+
+(kosha prime
+  (lakshana number-varga)
+  (abheda mula)
+  (siddha niralamba vibhajana-rahita)
+  (sthita svayambhu)
+  (pratipaksha eka-aneka)
+  (swarupa int)
+  (yukta number factorial)
+  (drishthanta encryption))
+
+(kosha statistics-varga
+  (vishesa number-varga)
+  (yukta data)
+  (abheda distribution)
+  (swarupa central-tendency spread))
+
+(kosha amplitude
+  (vishesa number-varga)
+  (swarupa spanda float)
+  (abheda matra)
+  (yukta scalar sine cosine wave)
+  (phala maximum)
+  (sthita domain-physics))
+
+(kosha collatz-parity
+  (vishesa number-varga)
+  (abheda collatz-returningness)
+  (sthita even-odd)
+  (siddha feminine-masculine)
+  (yukta avrti sama-vishama))
+
+(kosha collatz
+  (vishesa number-varga)
+  (abheda collatz-returningness)
+  (sthita even-odd)
+  (yukta convergence avrti sama-vishama))
+
+(kosha complex
+  (vishesa number-varga)
+  (swarupa dvaitarupa rotation)
+  (yukta sakshi-matra pi e fourier-transform eigenvalue)
+  (abheda real imaginary)
+  (drishthanta euler))
+
+(kosha convergence
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (swarupa abhisarana)
+  (siddha seema)
+  (phala limit seema)
+  (yukta series sequence ananta seema abhisarana))
+
+(kosha cosine
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (swarupa taranga)
+  (siddha avrti phase-shift)
+  (ahara kona radian)
+  (yukta pi sine fourier-transform avrti taranga)
+  (phala float)
+  (pratipaksha sine))
+
+(kosha e
+  (vishesa number-varga)
+  (swarupa fixed-point)
+  (abheda vriddhi convergence irrational)
+  (siddha svayambhu avrti transcendental)
+  (yukta logarithm-mula number logarithm avrti spanda)
+  (kriya exponential)
+  (phala ananta series)
+  (rahita square)
+  (drishthanta e population-vriddhi compound-vriddhi halflife cooling spanda))
+
+(kosha float
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (abheda sankhya)
+  (yukta continuous addition subtraction multiplication division derivative antiderivative series)
+  (sthita matra)
+  (swarupa real)
+  (siddha approximation))
+
+(kosha imaginary
+  (vishesa number-varga)
+  (swarupa sakshi-matra rotation)
+  (abheda viparita sqrt-negative-one)
+  (siddha real-viparita)
+  (yukta dvaya complex fourier-transform eigenvalue))
+
+(kosha int
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (abheda sankhya)
+  (yukta discrete addition subtraction multiplication division factorial prime)
+  (sthita matra mula)
+  (swarupa sama-vishama))
+
+(kosha irrational
+  (vishesa number-varga)
+  (swarupa ananta)
+  (abheda viparita)
+  (sthita real)
+  (siddha ratio-rahita convergence)
+  (drishthanta mula pi e)
+  (phala series))
+
+(kosha list
+  (vishesa number-varga)
+  (sthita matra)
+  (swarupa list)
+  (abheda vrnda)
+  (yukta sequence float vrnda))
+
+(kosha one
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (abheda brahma)
+  (sthita matra number)
+  (yukta arithmetic equation eka))
+
+(kosha phase
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (swarupa tat-kshana radian)
+  (yukta taranga sine cosine pi fourier-transform)
+  (abheda angle)
+  (siddha offset)
+  (kriya shift))
+
+(kosha pi
+  (vishesa number-varga)
+  (swarupa vrtta ratio)
+  (siddha svayambhu)
+  (abheda irrational)
+  (yukta circumference diameter ananta sine cosine fourier-transform avrti)
+  (drishthanta madhava)
+  (phala series))
+
+(kosha radian
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (swarupa kona ratio float)
+  (yukta vrtta pi)
+  (abheda matra)
+  (ahara sine cosine))
+
+(kosha rational
+  (vishesa number-varga)
+  (swarupa ratio)
+  (yukta int)
+  (siddha vibhajana exact bounded)
+  (sthita real)
+  (abheda number))
+
+(kosha real
+  (vishesa number-varga)
+  (swarupa float)
+  (sthita ananta)
+  (abheda matra number)
+  (yukta rational irrational derivative antiderivative)
+  (siddha continuous))
+
+(kosha scalar
+  (vishesa number-varga)
+  (sthita matra)
+  (swarupa float)
+  (abheda eka)
+  (yukta magnitude matra))
+
+(kosha sequence
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (swarupa krama eka-aneka)
+  (sthita parampara)
+  (yukta index limit convergence series krama parampara))
+
+(kosha sine
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (swarupa taranga)
+  (siddha avrti)
+  (ahara kona radian)
+  (yukta pi cosine fourier-transform avrti taranga)
+  (phala float))
+
+(kosha tangent
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (swarupa sparsha-rekha)
+  (kriya abhisarana)
+  (phala visarjana)
+  (sthita seema)
+  (siddha eka-sparsha)
+  (yukta sine cosine viveka kona)
+  (ahara kona)
+  (abheda viparita)
+  (drishthanta derivative))
+
+(kosha two
+  (vishesa number-varga)
+  (abheda dvaitarupa)
+  (sthita matra number)
+  (phala addition)
+  (yukta equation dvandva))
+
+(kosha variable
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (swarupa apeksha)
+  (sthita chala)
+  (yukta polynomial expression partial-derivative chala-apeksha))
+
+(kosha zero
+  (domain kosha/math/number/structures)
+  (vishesa number-varga)
+  (abheda shunya number)
+  (siddha niralamba)
+  (swarupa additive-identity)
+  (sthita int)
+  (yukta shunya))
+
+(kosha transcendental-varga
+  (vishesa number-varga)
+  (viparita algebraic)
+  (drishthanta exponential logarithm)
+  (yukta pi euler))
+
+(kosha trigonometry-varga
+  (vishesa number-varga geometry-varga)
+  (yukta kona)
+  (abheda ratio wave)
+  (swarupa unit-circle))

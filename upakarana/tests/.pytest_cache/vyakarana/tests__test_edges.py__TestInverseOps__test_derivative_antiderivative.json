@@ -8,10 +8,10 @@
       "output": [
         "antiderivative"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 637,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.002
 }

@@ -12,10 +12,10 @@
           "xyzfoobar"
         ]
       ],
-      "elapsed_ms": 2,
+      "elapsed_us": 24881,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.003
+  "duration": 0.059
 }

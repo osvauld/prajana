@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_gen_logic.py::TestNLSetOps::test_belong_yes",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "does 3 belong to set 1 2 3",
+      "output": "yes",
+      "elapsed_us": 143108,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.18
+}

@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_gen_logic.py::test_existential_universal_pratipaksha",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"existential-quantifier\" \"pratipaksha\"",
+      "output": [
+        "universal-quantifier"
+      ],
+      "elapsed_us": 552,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.002
+}

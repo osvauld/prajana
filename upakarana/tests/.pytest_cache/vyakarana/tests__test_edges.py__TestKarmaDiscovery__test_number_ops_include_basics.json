@@ -36,6 +36,14 @@
         "double",
         "division",
         "cosine",
+        "complex-square-root",
+        "complex-square",
+        "complex-neg",
+        "complex-logarithm",
+        "complex-exponential",
+        "complex-conjugate",
+        "complex-add",
+        "complex-abs",
         "complex-phase",
         "complex-mul",
         "complex-magnitude",
@@ -46,10 +54,10 @@
         "addition",
         "abs"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 684,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.002
 }

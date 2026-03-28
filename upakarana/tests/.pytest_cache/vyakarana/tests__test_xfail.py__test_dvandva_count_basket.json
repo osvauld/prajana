@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "a basket has 8 apples and 6 oranges. how many fruits are there in total",
       "output": "we have: basket has 8 apples 6 oranges.we know: 6 plus (8 \u2192 14).we find: 14 fruits there total",
-      "elapsed_ms": 128,
+      "elapsed_us": 620726,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.129
+  "duration": 1.05
 }

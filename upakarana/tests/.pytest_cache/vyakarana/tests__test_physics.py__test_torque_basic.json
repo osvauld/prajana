@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "moment of inertia is 4 and angular acceleration is 3. find torque",
       "output": "we have: angular-acceleration=4. and angular-acceleration=3..we seek: torque.no match",
-      "elapsed_ms": 134,
+      "elapsed_us": 425199,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.138,
+  "duration": 0.805,
   "xfail": {
     "reason": "compound trigram: 'moment of inertia' is a three-word compound",
     "strict": true,

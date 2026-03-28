@@ -5,18 +5,18 @@
     {
       "method": "answer",
       "input": "a shop has 10 apples and 8 oranges. 3 apples were sold. how many of each are left",
-      "output": "no match",
-      "elapsed_ms": 124,
+      "output": "we have: shop has 10 apples 8 oranges.we know: 8 plus (10 \u2192 18) 3 minus (18 \u2192 15) 10 plus (15 \u2192 25).we find: 25 ",
+      "elapsed_us": 411044,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.127,
+  "duration": 0.827,
   "xfail": {
     "reason": "entity_scope: per-entity scoped count two fruits",
     "strict": true,
     "gate": "entity_scope: per-entity scoped count",
     "file": "/home/abe/agent_x/upakarana/tests/test_arithmetic.py",
-    "line": 147
+    "line": 144
   }
 }

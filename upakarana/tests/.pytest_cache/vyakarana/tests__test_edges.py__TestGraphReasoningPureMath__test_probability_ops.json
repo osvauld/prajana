@@ -10,10 +10,10 @@
         "marginalisation",
         "bayes"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 450,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.0
+  "duration": 0.001
 }
