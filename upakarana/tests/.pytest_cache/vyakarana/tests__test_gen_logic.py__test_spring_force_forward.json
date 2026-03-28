@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_gen_logic.py::test_spring_force_forward",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "spring constant is 100 and displacement is 0.5. find spring force",
+      "output": "we have: spring-constant=100. and displacement=0.5.we seek: spring-force.we know: spring-force-mantra (displacement, spring-constant \u2192 spring-force).we see: displacement=0.5, spring-constant=100..we find: spring-force = 50",
+      "elapsed_us": 312252,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.689
+}

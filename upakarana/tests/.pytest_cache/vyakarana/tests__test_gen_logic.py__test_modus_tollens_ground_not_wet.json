@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_gen_logic.py::test_modus_tollens_ground_not_wet",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "answer",
+      "input": "if it rains the ground is wet. the ground is not wet. did it rain",
+      "output": "we assert: ground IS-A negation. we ask: does ground inherit negation?. we know: ground IS-A negation. we see: chain reaches negation via IS-A. yes \u2014 ground has negation",
+      "elapsed_us": 1086964,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 1.761
+}

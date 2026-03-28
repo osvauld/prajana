@@ -37,10 +37,10 @@
           "5."
         ]
       ],
-      "elapsed_ms": 46,
+      "elapsed_us": 59541,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.047
+  "duration": 0.066
 }

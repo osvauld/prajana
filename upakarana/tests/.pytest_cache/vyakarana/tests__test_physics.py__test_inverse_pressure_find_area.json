@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "pressure is 20 and force is 100. find area",
       "output": "we have: pressure=20. and force=100..we seek: area.we know: pressure-mantra (area, force \u2192 pressure).we see: force=100..we find: area = area = 5",
-      "elapsed_ms": 141,
+      "elapsed_us": 328919,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.142
+  "duration": 0.591
 }

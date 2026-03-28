@@ -8,10 +8,10 @@
       "output": [
         "torque-mantra"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 677,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.002
 }

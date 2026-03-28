@@ -6,10 +6,10 @@
       "method": "walk",
       "input": "unknown-node-xyz-abc \"satya\"",
       "output": [],
-      "elapsed_ms": 0,
+      "elapsed_us": 499,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.004
 }

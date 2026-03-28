@@ -5,18 +5,18 @@
     {
       "method": "answer",
       "input": "a rectangle has length 8 and width 5. find area",
-      "output": "no match",
-      "elapsed_ms": 58,
+      "output": "we have: rectangle has length 8 width 5.we know: 5 plus (8 \u2192 13) 8 plus (13 \u2192 21).we find: 21 ",
+      "elapsed_us": 345290,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.062,
+  "duration": 0.468,
   "xfail": {
     "reason": "rectangle area mantra not in pipeline",
     "strict": true,
     "gate": "other:test_xfail",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 296
+    "line": 295
   }
 }

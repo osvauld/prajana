@@ -42,12 +42,12 @@
           "0.1"
         ]
       ],
-      "elapsed_ms": 44,
+      "elapsed_us": 75099,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.05,
+  "duration": 0.127,
   "xfail": {
     "reason": "compound trigram: 'electric field strength' is a three-word compound",
     "strict": true,

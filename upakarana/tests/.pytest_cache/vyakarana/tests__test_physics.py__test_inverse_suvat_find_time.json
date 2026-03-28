@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "final velocity is 20. initial velocity is 0. acceleration is 5. find time",
       "output": "we have: final-velocity=20.; initial-velocity=0.; and acceleration=5..we seek: time.we know: acceleration-mantra (time, initial-velocity, final-velocity \u2192 acceleration).we see: initial-velocity=0., final-velocity=20..we find: time = time = 4",
-      "elapsed_ms": 162,
+      "elapsed_us": 434155,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.163
+  "duration": 0.817
 }

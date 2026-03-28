@@ -22,10 +22,10 @@
           "energy"
         ]
       ],
-      "elapsed_ms": 24,
+      "elapsed_us": 55701,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.025
+  "duration": 0.077
 }

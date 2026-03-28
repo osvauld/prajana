@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "ball has mass 5. it has velocity 10. find kinetic energy",
       "output": "we have: ball (mass=5.) and velocity=10..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=10., mass=5..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=10., mass=5..we find: kinetic-energy = 250",
-      "elapsed_ms": 202,
+      "elapsed_us": 479183,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.203
+  "duration": 0.929
 }

@@ -7,7 +7,7 @@
       "input": "mass is 5",
       "session_id": "test-entity-accumulate-v2",
       "output": "no match",
-      "elapsed_ms": 45,
+      "elapsed_us": 126381,
       "error": null
     },
     {
@@ -15,18 +15,18 @@
       "input": "velocity is 10",
       "session_id": "test-entity-accumulate-v2",
       "output": "no match",
-      "elapsed_ms": 46,
+      "elapsed_us": 114216,
       "error": null
     },
     {
       "method": "ask",
       "input": "find kinetic energy",
       "session_id": "test-entity-accumulate-v2",
-      "output": "we have: mass=5. and velocity=10..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=10., mass=5..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=10., mass=5..we find: kinetic-energy = 250",
-      "elapsed_ms": 80,
+      "output": "we have: velocity=10. and mass=5..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=10., mass=5..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=10., mass=5..we find: kinetic-energy = 250",
+      "elapsed_us": 200838,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.173
+  "duration": 0.619
 }

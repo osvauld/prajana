@@ -1,0 +1,38 @@
+-- vyakarana-sparsha: extract grammatical signals from word forms.
+-- reads copula and verb form nodes, emits tense (kaala) and number (vachana)
+-- edges onto the preceding subject.
+-- O(n) single pass: tracks last subject incrementally, no nested reduce.
+(tantra vyakarana-sparsha (graph)
+  (state (reduce graph [[], ""] (fn st tri ->
+    let result = nth st 0
+    let subj   = nth st 1
+    let word = to-string (nth tri 0)
+    let edge = to-string (nth tri 1)
+    -- track last subject: any satya or mithya word
+    let new-subj = cond (or (eq edge "satya") (eq edge "mithya")) word otherwise subj
+    -- only process copula and possession verbs
+    let is-copula = eq edge "copula"
+    let resolved = cond (or is-copula (eq edge "mithya")) (shabda-anveshana word) otherwise _none
+    let is-possession = and (not is-copula) (eq edge "mithya") (eq (to-string (shabda resolved "role")) "possession")
+    let form-node = cond is-copula resolved is-possession resolved otherwise ""
+    -- extract kaala and vachana from form node's sthita edges
+    let kaala-edges = cond (has-text form-node) (walk form-node "sthita") otherwise []
+    let kaala = reduce kaala-edges "" (fn found e ->
+      cond (has-text found) found
+      (member (to-string e) ["vartamana-kaala", "bhuta-kaala", "bhavishya-kaala", "vidhi-kaala", "sambhavana-kaala"])
+        (to-string e)
+      otherwise found)
+    let vachana = reduce kaala-edges "" (fn found e ->
+      cond (has-text found) found
+      (member (to-string e) ["eka-vachana", "bahu-vachana", "dvi-vachana"])
+        (to-string e)
+      otherwise found)
+    let new = cond (and (has-text subj) (has-text kaala) (has-text vachana))
+      [[subj, "kaala", kaala], [subj, "vachana", vachana]]
+      (and (has-text subj) (has-text kaala))
+        [[subj, "kaala", kaala]]
+      (and (has-text subj) (has-text vachana))
+        [[subj, "vachana", vachana]]
+      otherwise []
+    [(append result new), new-subj])))
+  (append-triples graph (nth state 0)))

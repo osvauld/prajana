@@ -27,12 +27,12 @@
           "5."
         ],
         [
-          "mass",
+          "ball",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "mass",
+          "ball",
           "vachana",
           "eka-vachana"
         ],
@@ -52,10 +52,10 @@
           "5."
         ]
       ],
-      "elapsed_ms": 55,
+      "elapsed_us": 109520,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.056
+  "duration": 0.126
 }

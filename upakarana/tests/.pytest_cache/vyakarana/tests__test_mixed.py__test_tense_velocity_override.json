@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "velocity was 5. velocity is now 10. mass is 2. find kinetic energy",
       "output": "we have: velocity=5.; velocity=10.; and mass=2..we seek: kinetic-energy.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=10., mass=2..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=10., mass=2..we find: kinetic-energy = 25",
-      "elapsed_ms": 217,
+      "elapsed_us": 574018,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.22,
+  "duration": 1.093,
   "xfail": {
     "reason": "tense: 'now' override of past value not built",
     "strict": true,

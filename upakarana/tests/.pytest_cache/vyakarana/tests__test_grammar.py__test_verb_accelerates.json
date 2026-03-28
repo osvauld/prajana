@@ -7,14 +7,14 @@
       "input": "a car accelerates at 3 m/s2",
       "output": [
         [
-          "car-motion",
-          "satya",
-          "car-motion"
+          "car",
+          "mithya",
+          "car"
         ],
         [
-          "accelerates",
-          "mithya",
-          "accelerates"
+          "acceleration",
+          "satya",
+          "acceleration"
         ],
         [
           "at",
@@ -32,15 +32,15 @@
           "m/s2"
         ],
         [
-          "car-motion",
+          "acceleration",
           "sankhya",
           "3."
         ]
       ],
-      "elapsed_ms": 42,
+      "elapsed_us": 128891,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.042
+  "duration": 0.161
 }

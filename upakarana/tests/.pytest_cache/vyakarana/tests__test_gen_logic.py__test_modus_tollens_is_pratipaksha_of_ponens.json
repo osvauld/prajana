@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_gen_logic.py::test_modus_tollens_is_pratipaksha_of_ponens",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"modus-tollens\" \"pratipaksha\"",
+      "output": [
+        "modus-ponens"
+      ],
+      "elapsed_us": 790,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.004
+}

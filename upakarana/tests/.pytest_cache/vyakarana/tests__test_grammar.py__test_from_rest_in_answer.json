@@ -5,11 +5,11 @@
     {
       "method": "answer",
       "input": "a car of mass 1200 accelerates from rest at 3 m/s2. find force",
-      "output": "we have: mass=1200.; mass=3.; and velocity=0..we seek: force.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=0., mass=3..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=0., mass=3..no match",
-      "elapsed_ms": 199,
+      "output": "we have: mass=1200.; acceleration=3.; and velocity=0..we seek: force.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=0., mass=1200..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=0., mass=1200..we know: newton-second-law-motion (acceleration, mass \u2192 force).we see: acceleration=3., mass=1200..we find: force = 3600",
+      "elapsed_us": 623137,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.2
+  "duration": 1.059
 }

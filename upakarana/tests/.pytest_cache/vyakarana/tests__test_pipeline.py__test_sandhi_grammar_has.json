@@ -12,12 +12,12 @@
           "has"
         ]
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 37,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.003,
+  "duration": 0.009,
   "xfail": {
     "reason": "sandhi grammar: 'has' promotion to shashthi-vibhakti in sandhi-viveka",
     "strict": true,

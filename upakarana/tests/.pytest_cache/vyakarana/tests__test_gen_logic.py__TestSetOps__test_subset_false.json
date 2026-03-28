@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_gen_logic.py::TestSetOps::test_subset_false",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "(call-tantra \"eval-typed\" [\"set-subset\", [1, 5], [1, 2, 3, 4]])",
+      "output": false,
+      "elapsed_us": 3239,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.008
+}

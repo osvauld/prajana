@@ -1,22 +1,15 @@
 {
   "test": "tests/test_physics.py::test_momentum_with_units",
-  "outcome": "xfailed",
+  "outcome": "passed",
   "calls": [
     {
       "method": "answer",
       "input": "mass is 2 kg and velocity is 5 m/s. find momentum",
-      "output": "we have: mass=2.; velocity=2.; and velocity=5..we seek: momentum.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=5., mass=2..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=5., mass=2..we find: momentum = 4",
-      "elapsed_ms": 176,
+      "output": "we have: mass=2. and velocity=5..we seek: momentum.we know: kinetic-energy-mantra (velocity, mass \u2192 kinetic-energy).we see: velocity=5., mass=2..we know: momentum-mantra (velocity, mass \u2192 momentum).we see: velocity=5., mass=2..we find: momentum = 10",
+      "elapsed_us": 385998,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.179,
-  "xfail": {
-    "reason": "unit parse: 'm/s' compound unit not handled in NL",
-    "strict": true,
-    "gate": "unit_parse: unit words in natural language",
-    "file": "/home/abe/agent_x/upakarana/tests/test_physics.py",
-    "line": 142
-  }
+  "duration": 0.816
 }

@@ -16,6 +16,15 @@
 open Prakriti
 open Kriya_types
 
+(* per-thread CPU time in microseconds — excludes Domain contention *)
+external thread_cpu_us : unit -> float = "caml_thread_cpu_us"
+
+(* auto-scale: us / ms / s *)
+let fmt_elapsed us =
+  if us < 1000 then Printf.sprintf "%dus" us
+  else if us < 1_000_000 then Printf.sprintf "%.1fms" (float_of_int us /. 1000.0)
+  else Printf.sprintf "%.2fs" (float_of_int us /. 1_000_000.0)
+
 (* ═══════════════════════════════════════════════════════════════════════════
    1. JSON HELPERS
    ═══════════════════════════════════════════════════════════════════════════ *)
@@ -225,10 +234,10 @@ let get_or_create_session (sid : string) : session_entry =
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let ok_response (req_id : string) (ses_id : string) (trn_id : string)
-    (answer_text : string) : string =
+    (answer_text : string) (elapsed_us : int) : string =
   Printf.sprintf
-    "{\"status\":\"ok\",\"request_id\":%s,\"session_id\":%s,\"turn_id\":%s,\"answer_text\":%s}"
-    (je req_id) (je ses_id) (je trn_id) (je answer_text)
+    "{\"status\":\"ok\",\"request_id\":%s,\"session_id\":%s,\"turn_id\":%s,\"answer_text\":%s,\"elapsed_us\":%d}"
+    (je req_id) (je ses_id) (je trn_id) (je answer_text) elapsed_us
 
 let error_response (req_id : string) (ses_id : string) (trn_id : string)
     (code : string) (msg : string) : string =
@@ -261,11 +270,11 @@ let graph_response (k : proof_graph) : string =
   Buffer.add_string buf "]}";
   Buffer.contents buf
 
-let eval_response (expr_str : string) (result_str : string) (elapsed_ms : int) : string =
+let eval_response (expr_str : string) (result_str : string) (elapsed_us : int) : string =
   let passed = result_str = "true" || (result_str <> "" && result_str <> "false" && result_str <> "none") in
   Printf.sprintf
-    "{\"status\":\"ok\",\"command\":\"eval\",\"expr\":%s,\"result\":%s,\"passed\":%s,\"elapsed_ms\":%d}"
-    (je expr_str) (je result_str) (if passed then "true" else "false") elapsed_ms
+    "{\"status\":\"ok\",\"command\":\"eval\",\"expr\":%s,\"result\":%s,\"passed\":%s,\"elapsed_us\":%d}"
+    (je expr_str) (je result_str) (if passed then "true" else "false") elapsed_us
 
 let inspect_node_response (k : proof_graph) (name : string) : string =
   match Hashtbl.find_opt k.nodes name with
@@ -552,7 +561,7 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
             if String.trim expr_str = "" then
               error_response "" "" "" "INVALID_REQUEST" "missing required field: expr"
             else
-              let t0 = Unix.gettimeofday () in
+              let t0 = thread_cpu_us () in
               let expr_ast =
                 (try Some (Kriya.parse_expr_string expr_str)
                  with _ -> None) in
@@ -564,17 +573,16 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                  let result =
                    Kriya_eval.with_eval_ctx yantra_idx yantra_session
                      (fun () -> Kriya.eval k env expr_ast) ~default:VNone in
-                 let t1 = Unix.gettimeofday () in
-                 let elapsed_ms = int_of_float ((t1 -. t0) *. 1000.0) in
+                 let elapsed_us = int_of_float (thread_cpu_us () -. t0) in
                  let result_str = as_string result in
                  let result_json = val_to_json result in
                  if String.length result_str <= 200 then
-                   Printf.printf "[eval] %s → %s (%dms)\n%!" expr_str result_str elapsed_ms;
+                   Printf.printf "[eval] %s → %s (%s)\n%!" expr_str result_str (fmt_elapsed elapsed_us);
                  if as_json then
                    Printf.sprintf
-                     "{\"status\":\"ok\",\"command\":\"eval-json\",\"expr\":%s,\"result\":%s,\"elapsed_ms\":%d}"
-                     (je expr_str) result_json elapsed_ms
-                 else eval_response expr_str result_str elapsed_ms)
+                     "{\"status\":\"ok\",\"command\":\"eval-json\",\"expr\":%s,\"result\":%s,\"elapsed_us\":%d}"
+                     (je expr_str) result_json elapsed_us
+                 else eval_response expr_str result_str elapsed_us)
           | Some "inspect-node" ->
             (match json_string_field line "name" with
              | None -> error_response "" "" "" "INVALID_REQUEST" "missing required field: name"
@@ -682,17 +690,19 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
               | Some q ->
                 (try
                   ignore max_passes;
+                  let t0 = thread_cpu_us () in
                   let run_result =
                     if _has_session then
                       Kriya_eval.run_session_anuvada k yantra_idx _active_session _prior_graph q
                     else
                       Kriya_eval.run_anuvada_ganana k yantra_idx _active_session q
                   in
+                  let elapsed_us = int_of_float (thread_cpu_us () -. t0) in
                   (match run_result with
                    | Some r ->
                      if String.length r.yr_raw_output > 0 then
-                       Printf.printf "[socket] %s\n  %s\n%!" q r.yr_raw_output;
-                     ok_response req_id ses_id trn_id r.yr_raw_output
+                       Printf.printf "[socket] %s\n  %s (%s)\n%!" q r.yr_raw_output (fmt_elapsed elapsed_us);
+                     ok_response req_id ses_id trn_id r.yr_raw_output elapsed_us
                    | None ->
                      error_response req_id ses_id trn_id
                        "ENGINE_ERROR" "session-anuvada or anuvada-ganana tantra not loaded")

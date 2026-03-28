@@ -6,12 +6,12 @@
       "method": "eval",
       "input": "node-satya \"xyzfoobar-unknown\"",
       "output": null,
-      "elapsed_ms": 0,
+      "elapsed_us": 14,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001,
+  "duration": 0.004,
   "xfail": {
     "reason": "graph primitive: node-satya returns string not number",
     "strict": true,

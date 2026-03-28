@@ -9,10 +9,10 @@
         "angular-velocity-mantra",
         "velocity-plan"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 628,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.002
 }

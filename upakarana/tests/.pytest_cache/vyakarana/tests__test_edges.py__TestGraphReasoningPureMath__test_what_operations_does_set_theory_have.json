@@ -6,6 +6,8 @@
       "method": "eval",
       "input": "walk-in \"set-varga\" \"karma\"",
       "output": [
+        "set-subset",
+        "set-membership",
         "set-union",
         "set-product",
         "set-intersection",
@@ -13,7 +15,7 @@
         "set-complement",
         "morphism"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 539,
       "error": null
     }
   ],

@@ -6,17 +6,17 @@
       "method": "answer",
       "input": "electric power is 1100 and voltage is 220. find current",
       "output": "we have: voltage=1100. and voltage=220..we seek: current.no match",
-      "elapsed_ms": 132,
+      "elapsed_us": 341294,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.135,
+  "duration": 0.677,
   "xfail": {
     "reason": "compound word: 'electric power' unfused \u2014 'electric' has no word: mapping",
     "strict": true,
     "gate": "compound_word: multi-word concept missing word: mapping",
     "file": "/home/abe/agent_x/upakarana/tests/test_physics.py",
-    "line": 228
+    "line": 226
   }
 }

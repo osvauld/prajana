@@ -9,7 +9,7 @@
         "velocity",
         "mass"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 462,
       "error": null
     },
     {
@@ -18,10 +18,10 @@
       "output": [
         "kinetic-energy"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 460,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.002
 }

@@ -10,35 +10,35 @@
         "b",
         "c"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 13,
       "error": null
     },
     {
       "method": "eval",
       "input": "sum [1, 2, 3, 4]",
       "output": 10,
-      "elapsed_ms": 0,
+      "elapsed_us": 8,
       "error": null
     },
     {
       "method": "eval",
       "input": "length [\"a\", \"b\", \"c\"]",
       "output": 3,
-      "elapsed_ms": 0,
+      "elapsed_us": 6,
       "error": null
     },
     {
       "method": "eval",
       "input": "nth [\"x\", \"y\"] 0",
       "output": "x",
-      "elapsed_ms": 0,
+      "elapsed_us": 6,
       "error": null
     },
     {
       "method": "eval",
       "input": "nth [\"a\", \"b\"] 99",
       "output": null,
-      "elapsed_ms": 0,
+      "elapsed_us": 6,
       "error": null
     },
     {
@@ -49,10 +49,10 @@
         "b",
         "c"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 7,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.0
+  "duration": 0.001
 }

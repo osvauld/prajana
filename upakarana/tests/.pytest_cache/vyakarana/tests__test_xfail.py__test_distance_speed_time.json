@@ -5,18 +5,18 @@
     {
       "method": "answer",
       "input": "a train travels at 60 km per hour for 2 hours. how far does it go",
-      "output": "we have: km=60. and km=2..we seek: pronoun-it.no match",
-      "elapsed_ms": 120,
+      "output": "we have: train travels 60 km hour 2 hours.we find: 60 far does pronoun-it go",
+      "elapsed_us": 803828,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.123,
+  "duration": 1.238,
   "xfail": {
     "reason": "distance = speed * time not in pipeline",
     "strict": true,
     "gate": "arithmetic: plain count not in pipeline",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 290
+    "line": 289
   }
 }

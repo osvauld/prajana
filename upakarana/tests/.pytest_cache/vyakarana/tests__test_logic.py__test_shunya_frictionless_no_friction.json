@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "the surface is frictionless. is there friction",
       "output": "we have: zero-friction-surface (signal: ghasana is shunya). we ask: does ghasana exist?. we know: zero-friction-surface declares ghasana = shunya (absent). we see: ghasana is absent due to zero-friction-surface. no \u2014 ghasana is absent because ghasana is shunya",
-      "elapsed_ms": 68,
+      "elapsed_us": 172601,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.069
+  "duration": 0.377
 }

@@ -6,8 +6,8 @@
       "method": "eval",
       "input": "walk-in \"mass\" \"janya\"",
       "output": [
-        "newton-second-law-motion",
         "momentum-mantra",
+        "newton-second-law-motion",
         "mass-density-mantra",
         "potential-energy-mantra",
         "kinetic-energy-mantra",
@@ -15,7 +15,7 @@
         "heating",
         "falling"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 900,
       "error": null
     },
     {
@@ -29,10 +29,10 @@
         "kinetic-energy-mantra",
         "centripetal-force-mantra"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 703,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001
+  "duration": 0.003
 }

@@ -1,0 +1,486 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-geometry — 66 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha geometry-varga
+  (vishesa math-varga)
+  (yukta kshetra kona rekha bindu aayaama))
+
+(kosha interpolation-varga
+  (vishesa geometry-varga number-varga)
+  (yukta seema)
+  (abheda krama)
+  (drishthanta lerp slerp))
+
+(mantra cross-product
+  (karma geometry-varga)
+  (swarupa vector)
+  (abheda dot-product)
+  (phala direction normal)
+  (yukta float list))
+
+(mantra curl
+  (karma geometry-varga)
+  (swarupa vector rotation)
+  (ahara vector)
+  (phala vector)
+  (abheda cross-product)
+  (yukta gradient))
+
+(mantra determinant
+  (karma geometry-varga)
+  (drishthanta kshaya nirantara)
+  (yukta matra rank inverse)
+  (sthita matrix-multiplication))
+
+(mantra divergence
+  (karma geometry-varga)
+  (swarupa scalar flux)
+  (ahara vector)
+  (phala scalar)
+  (yukta gradient))
+
+(mantra dot-product
+  (karma geometry-varga)
+  (abheda sparsha contact inner-product)
+  (kriya multiplication addition)
+  (sthita vector)
+  (phala scalar)
+  (yukta matra)
+  (janya map fold)
+  (swarupa float list))
+
+(mantra eigenvalue
+  (karma geometry-varga)
+  (abheda svabhava)
+  (sthita matrix-multiplication)
+  (yukta eigenvector)
+  (drishthanta folding tertiary-structure))
+
+(mantra eigenvector
+  (karma geometry-varga)
+  (yukta svabhava eigenvalue direction)
+  (sthita matrix-multiplication))
+
+(mantra gradient
+  (karma geometry-varga)
+  (swarupa vector)
+  (ahara scalar)
+  (phala vector direction magnitude)
+  (abheda artha))
+
+(mantra homogeneous-transform
+  (karma geometry-varga)
+  (swarupa matrix transform)
+  (yukta rotation-matrix displacement aayaama)
+  (pratipaksha homogeneous-transform))
+
+(mantra identity-matrix
+  (karma geometry-varga)
+  (abheda shunya)
+  (yukta zero))
+
+(mantra inverse
+  (domain kosha/math/geometry/operations)
+  (karma geometry-varga)
+  (phala identity-matrix)
+  (sthita matrix-multiplication)
+  (siddha determinant eka-eka)
+  (pratipaksha inverse))
+
+(mantra laplacian
+  (karma geometry-varga)
+  (swarupa scalar)
+  (kriya divergence)
+  (ahara gradient)
+  (abheda diffusion))
+
+(mantra lerp
+  (karma geometry-varga)
+  (vishesa interpolation-varga)
+  (drishthanta slerp)
+  (swarupa linear)
+  (krama subtraction multiplication addition))
+
+(kosha lerp
+  (vishesa interpolation-varga geometry-varga)
+  (swarupa linear)
+  (yukta seema krama animation)
+  (drishthanta slerp))
+
+(mantra mat-add
+  (karma geometry-varga)
+  (swarupa matrix)
+  (yukta mat-scale)
+  (krama addition))
+
+(mantra mat-scale
+  (karma geometry-varga)
+  (swarupa matrix)
+  (yukta mat-add)
+  (krama multiplication))
+
+(mantra mat-transpose
+  (karma geometry-varga)
+  (swarupa matrix)
+  (pratipaksha mat-transpose)
+  (krama index-swap))
+
+; ── matrix lifts (generated) ─────────────────────────────────────────────────
+
+(mantra mat-determinant
+  (karma geometry-varga)
+  (swarupa matrix)
+  (abheda determinant)
+  (phala scalar)
+  (krama multiplication subtraction))
+
+(mantra mat-inverse
+  (karma geometry-varga)
+  (swarupa matrix)
+  (abheda inverse)
+  (yukta mat-determinant)
+  (pratipaksha mat-inverse)
+  (krama determinant division))
+
+(mantra mat-multiplication
+  (karma geometry-varga)
+  (swarupa matrix)
+  (abheda matrix-multiplication)
+  (krama multiplication addition))
+
+(mantra mat-norm
+  (karma geometry-varga)
+  (swarupa matrix)
+  (abheda norm)
+  (phala scalar)
+  (krama abs max))
+
+(mantra mat-trace
+  (karma geometry-varga)
+  (swarupa matrix)
+  (phala scalar)
+  (krama addition))
+
+(mantra matrix-multiplication
+  (karma geometry-varga)
+  (kriya taranga dot-product)
+  (sthita vrnda-ganita vector)
+  (phala matrix)
+  (yukta forward-pass determinant eigenvalue)
+  (janya map fold)
+  (swarupa float array))
+
+(mantra normal
+  (karma geometry-varga)
+  (swarupa vector)
+  (janya cross-product)
+  (abheda direction)
+  (yukta dot-product))
+
+(mantra projection
+  (domain kosha/math/geometry/operations)
+  (karma geometry-varga)
+  (swarupa matrix aneka-eka)
+  (yukta transform)
+  (kriya matrix-multiplication)
+  (ahara vector)
+  (phala scalar)
+  (abheda dot-product))
+
+(mantra quat-conjugate
+  (karma geometry-varga)
+  (vishesa quaternion-varga)
+  (pratipaksha quat-mul)
+  (swarupa rotation-inverse)
+  (krama neg))
+
+(mantra quat-mul
+  (karma geometry-varga)
+  (vishesa quaternion-varga)
+  (abheda rotation)
+  (swarupa composition non-commutative)
+  (yukta quat-conjugate)
+  (krama multiplication subtraction addition)
+  (pratipaksha quat-conjugate))
+
+(mantra quat-norm
+  (karma geometry-varga)
+  (vishesa quaternion-varga)
+  (abheda vec-norm)
+  (yukta aayaama-chatur)
+  (krama square addition square-root))
+
+(mantra quat-to-rotation
+  (karma geometry-varga)
+  (vishesa quaternion-varga)
+  (abheda rotation-matrix)
+  (krama square multiplication subtraction addition))
+
+; ── quaternion lifts (generated) ─────────────────────────────────────────────
+
+(mantra quat-inverse
+  (karma geometry-varga)
+  (vishesa quaternion-varga)
+  (abheda inverse)
+  (yukta quat-norm quat-conjugate)
+  (krama conjugate division))
+
+(mantra quat-slerp
+  (karma geometry-varga)
+  (vishesa quaternion-varga interpolation-varga)
+  (abheda slerp)
+  (krama quat-conjugate quat-mul))
+
+(mantra rotation-matrix
+  (karma geometry-varga)
+  (swarupa matrix transform orthogonal)
+  (yukta kona aayaama)
+  (kriya vector)
+  (phala direction)
+  (pratipaksha rotation-matrix))
+
+(mantra slerp
+  (karma geometry-varga)
+  (vishesa interpolation-varga quaternion-varga)
+  (abheda lerp)
+  (swarupa spherical)
+  (krama quat-conjugate quat-multiplication arctangent sine))
+
+(kosha slerp
+  (vishesa interpolation-varga geometry-varga quaternion-varga)
+  (swarupa spherical)
+  (abheda great-circle lerp)
+  (yukta quaternion rotation animation))
+
+(mantra tensor-product
+  (karma geometry-varga)
+  (sthita tensor)
+  (yukta vector-space basis aayaama)
+  (swarupa bilinear)
+  (abheda composition)
+  (kriya multiplication))
+
+(mantra transform
+  (domain kosha/math/geometry/operations)
+  (karma geometry-varga)
+  (swarupa matrix)
+  (kriya matrix-multiplication)
+  (yukta quaternion)
+  (ahara vector)
+  (phala vector))
+
+(mantra vec-add
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda addition)
+  (yukta aayaama)
+  (krama addition))
+
+(mantra vec-cross
+  (karma geometry-varga)
+  (kriya vector)
+  (phala vector)
+  (abheda cross-product)
+  (yukta aayaama-traya)
+  (pratipaksha vec-dot)
+  (krama multiplication subtraction))
+
+(mantra vec-dot
+  (karma geometry-varga)
+  (kriya vector)
+  (phala scalar)
+  (abheda dot-product)
+  (yukta aayaama)
+  (krama multiplication addition)
+  (pratipaksha vec-cross))
+
+(mantra vec-norm
+  (karma geometry-varga)
+  (kriya vector)
+  (phala scalar)
+  (abheda norm)
+  (yukta mula-ganana aayaama)
+  (krama square addition square-root))
+
+(mantra vec-scale
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda scalar-multiplication)
+  (yukta aayaama)
+  (krama multiplication))
+
+; ── vector lifts (generated) ─────────────────────────────────────────────────
+
+(mantra vec-abs
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda abs)
+  (phala vector)
+  (krama abs))
+
+(mantra vec-neg
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda negation)
+  (phala vector)
+  (krama neg))
+
+(mantra vec-subtraction
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda subtraction)
+  (yukta aayaama)
+  (pratipaksha vec-add)
+  (krama subtraction))
+
+(mantra vec-addition
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda addition)
+  (yukta aayaama)
+  (krama addition))
+
+(mantra vec-multiplication
+  (karma geometry-varga)
+  (kriya vector)
+  (abheda multiplication)
+  (phala vector)
+  (krama multiplication))
+
+(kosha differential-geometry
+  (lakshana geometry-varga)
+  (abheda avrti)
+  (swarupa curvature)
+  (yukta torsion topology calculus)
+  (sthita taranga)
+  (siddha spanda sama-vishama)
+  (drishthanta alpha-helix double-helix))
+
+(kosha norm
+  (lakshana geometry-varga)
+  (swarupa matra float)
+  (kriya vector)
+  (phala scalar magnitude)
+  (abheda abs)
+  (yukta dot-product power)
+  (sthita real)
+  (siddha distance))
+
+(kosha orthogonal
+  (lakshana geometry-varga)
+  (swarupa kona)
+  (abheda viparita normal)
+  (siddha dot-product)
+  (yukta vector basis)
+  (drishthanta sama-vishama shiva-shakti)
+  (sthita vector-space))
+
+(kosha rank
+  (lakshana geometry-varga)
+  (abheda dimension)
+  (sthita matrix-multiplication)
+  (yukta determinant))
+
+(kosha singular
+  (lakshana geometry-varga)
+  (abheda kshaya zero)
+  (sthita determinant)
+  (phala inverse)
+  (yukta matrix))
+
+(kosha topology
+  (lakshana geometry-varga)
+  (abheda vivartana)
+  (swarupa sambandha)
+  (yukta continuity connectivity invariance group sambandha)
+  (drishthanta folding alpha-helix)
+  (siddha transformation)
+  (sthita set))
+
+(kosha volume
+  (vishesa geometry-varga)
+  (swarupa scalar)
+  (abheda float))
+
+(kosha ativakra
+  (vishesa geometry-varga)
+  (swarupa vakra)
+  (sthita tala bindu-dvaya viparita)
+  (yukta dura))
+
+(kosha basis
+  (vishesa geometry-varga)
+  (swarupa mula eka-aneka)
+  (abheda independent)
+  (yukta vector aayaama)
+  (sthita vector-space)
+  (siddha span)
+  (drishthanta orthogonal)
+  (janaka coordinate))
+
+(kosha coordinate
+  (vishesa geometry-varga)
+  (swarupa aayaama float eka-aneka)
+  (yukta scalar projection)
+  (sthita basis vector-space)
+  (abheda bindu))
+
+(kosha dirgha-vrtta
+  (vishesa geometry-varga)
+  (swarupa vrtta)
+  (sthita tala bindu-dvaya)
+  (yukta dura)
+  (janya sama-dura))
+
+(kosha manifold
+  (vishesa geometry-varga)
+  (swarupa akasham)
+  (sthita tala nirantara)
+  (abheda topology)
+  (yukta aayaama differential-geometry curvature derivative rachana)
+  (drishthanta gola dirgha-vrtta))
+
+(kosha matrix
+  (vishesa geometry-varga)
+  (sthita vrnda-ganita)
+  (yukta matrix-multiplication determinant eigenvalue)
+  (swarupa float matrix))
+
+(kosha sama-dura-vakra
+  (vishesa geometry-varga)
+  (swarupa vakra)
+  (sthita tala sama-dura)
+  (yukta bindu rekha))
+
+(kosha subspace
+  (vishesa geometry-varga)
+  (swarupa kshetra)
+  (sthita vector-space)
+  (yukta aayaama basis)
+  (abheda subset)
+  (siddha closure)
+  (drishthanta eigenvalue))
+
+(kosha trikona
+  (vishesa geometry-varga)
+  (swarupa kshetra)
+  (sthita tala traya)
+  (yukta bindu rekha)
+  (siddha sama-nila))
+
+(kosha vector
+  (domain kosha/math/geometry/structures)
+  (vishesa geometry-varga)
+  (abheda taranga rekha)
+  (sthita vrnda-ganita)
+  (kriya addition scalar-multiplication)
+  (yukta dot-product direction magnitude)
+  (swarupa float list)
+  (drishthanta aayaama))
+
+(kosha vrtta-stambha
+  (vishesa geometry-varga)
+  (swarupa kshetra)
+  (sthita akasham rekha sama-dura)
+  (janya vrtta))

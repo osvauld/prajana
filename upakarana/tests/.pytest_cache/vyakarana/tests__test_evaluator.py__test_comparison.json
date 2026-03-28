@@ -6,59 +6,59 @@
       "method": "eval",
       "input": "eq 5 5",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 160,
       "error": null
     },
     {
       "method": "eval",
       "input": "neq 5 6",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 8,
       "error": null
     },
     {
       "method": "eval",
       "input": "gt 5 3",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 3,
       "error": null
     },
     {
       "method": "eval",
       "input": "lt 3 5",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 5,
       "error": null
     },
     {
       "method": "eval",
       "input": "and true true",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 5,
       "error": null
     },
     {
       "method": "eval",
       "input": "and true false",
       "output": false,
-      "elapsed_ms": 0,
+      "elapsed_us": 4,
       "error": null
     },
     {
       "method": "eval",
       "input": "or false true",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 4,
       "error": null
     },
     {
       "method": "eval",
       "input": "not false",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 10,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.0
+  "duration": 0.007
 }

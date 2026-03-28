@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "all objects with mass have momentum. electron has mass 9.109e-31. does the electron have momentum",
       "output": "no match",
-      "elapsed_ms": 199,
+      "elapsed_us": 444352,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.202,
+  "duration": 1.217,
   "xfail": {
     "reason": "syllogism: universal assertion chain not built",
     "strict": true,

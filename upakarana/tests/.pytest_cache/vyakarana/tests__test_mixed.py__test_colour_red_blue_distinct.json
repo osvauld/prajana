@@ -1,15 +1,15 @@
 {
   "test": "tests/test_mixed.py::test_colour_red_blue_distinct",
-  "outcome": "passed",
+  "outcome": "failed",
   "calls": [
     {
       "method": "bqg",
       "input": "a box has 5 red balls and 3 blue balls",
       "output": [
         [
-          "container",
-          "satya",
-          "container"
+          "box",
+          "mithya",
+          "box"
         ],
         [
           "has",
@@ -52,24 +52,14 @@
           "balls"
         ],
         [
-          "balls",
+          "box",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "balls",
+          "box",
           "vachana",
           "eka-vachana"
-        ],
-        [
-          "container",
-          "sankhya",
-          "5."
-        ],
-        [
-          "container",
-          "sankhya",
-          "3."
         ],
         [
           "blue",
@@ -77,10 +67,10 @@
           "3."
         ]
       ],
-      "elapsed_ms": 92,
+      "elapsed_us": 238133,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.093
+  "duration": 0.38
 }

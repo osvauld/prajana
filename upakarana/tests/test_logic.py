@@ -45,7 +45,6 @@ def test_transitive_is_a_three_hop(vy):
 # ── syllogism / classical modus ponens (assertion chain) ─────────────────────
 
 
-@xfail(strict=True, reason="syllogism: assertion-bandha + chain walk not built")
 def test_syllogism_breathe(vy):
     """all cats are animals. all animals breathe. do cats breathe"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")

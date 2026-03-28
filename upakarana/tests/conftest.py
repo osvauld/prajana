@@ -49,8 +49,11 @@ class RecordingClient:
         self._client = client
         self._calls: list[dict] = []
 
+    def _server_us(self) -> int:
+        """Server-side elapsed_us from last call (excludes queue wait)."""
+        return getattr(self._client, "_last_elapsed_us", 0)
+
     def eval(self, expr: str) -> Any:
-        t0 = time.monotonic()
         error = None
         result = None
         try:
@@ -61,12 +64,11 @@ class RecordingClient:
         finally:
             self._calls.append({
                 "method": "eval", "input": expr, "output": result,
-                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+                "elapsed_us": self._server_us(), "error": error,
             })
         return result
 
     def ask(self, question: str, session_id: str = "test") -> str:
-        t0 = time.monotonic()
         error = None
         result = None
         try:
@@ -77,13 +79,12 @@ class RecordingClient:
         finally:
             self._calls.append({
                 "method": "ask", "input": question, "session_id": session_id,
-                "output": result, "elapsed_ms": int((time.monotonic() - t0) * 1000),
+                "output": result, "elapsed_us": self._server_us(),
                 "error": error,
             })
         return result
 
     def walk(self, node: str, relation: str) -> list:
-        t0 = time.monotonic()
         error = None
         result = None
         try:
@@ -94,12 +95,11 @@ class RecordingClient:
         finally:
             self._calls.append({
                 "method": "walk", "input": f'{node} "{relation}"', "output": result,
-                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+                "elapsed_us": self._server_us(), "error": error,
             })
         return result
 
     def walk_in(self, node: str, relation: str) -> list:
-        t0 = time.monotonic()
         error = None
         result = None
         try:
@@ -110,12 +110,11 @@ class RecordingClient:
         finally:
             self._calls.append({
                 "method": "walk_in", "input": f'{node} "{relation}"', "output": result,
-                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+                "elapsed_us": self._server_us(), "error": error,
             })
         return result
 
     def answer(self, sentence: str) -> str:
-        t0 = time.monotonic()
         error = None
         result = None
         try:
@@ -126,12 +125,11 @@ class RecordingClient:
         finally:
             self._calls.append({
                 "method": "answer", "input": sentence, "output": result,
-                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+                "elapsed_us": self._server_us(), "error": error,
             })
         return result
 
     def bqg(self, sentence: str) -> Any:
-        t0 = time.monotonic()
         error = None
         result = None
         try:
@@ -142,12 +140,11 @@ class RecordingClient:
         finally:
             self._calls.append({
                 "method": "bqg", "input": sentence, "output": result,
-                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+                "elapsed_us": self._server_us(), "error": error,
             })
         return result
 
     def raw_bqg(self, sentence: str) -> Any:
-        t0 = time.monotonic()
         error = None
         result = None
         try:
@@ -158,25 +155,28 @@ class RecordingClient:
         finally:
             self._calls.append({
                 "method": "raw_bqg", "input": sentence, "output": result,
-                "elapsed_ms": int((time.monotonic() - t0) * 1000), "error": error,
+                "elapsed_us": self._server_us(), "error": error,
             })
         return result
 
-    def elapsed_ms(self, expr: str) -> tuple[Any, int]:
-        t0 = time.monotonic()
+    def elapsed_us(self, expr: str) -> tuple[Any, int]:
         error = None
-        result, ms = None, 0
+        result, us = None, 0
         try:
-            result, ms = self._client.elapsed_ms(expr)
+            result, us = self._client.elapsed_us(expr)
         except Exception as e:
             error = str(e)
             raise
         finally:
             self._calls.append({
-                "method": "elapsed_ms", "input": expr, "output": result,
-                "elapsed_ms": ms, "error": error,
+                "method": "elapsed_us", "input": expr, "output": result,
+                "elapsed_us": us, "error": error,
             })
-        return result, ms
+        return result, us
+
+    def elapsed_ms(self, expr: str) -> tuple[Any, int]:
+        result, us = self.elapsed_us(expr)
+        return result, us // 1000
 
     def __getattr__(self, name):
         return getattr(self._client, name)
@@ -316,6 +316,16 @@ def _extract_failure(rep) -> dict:
 
 
 # ── session summary ────────────────────────────────────────────────────────────
+
+
+def pytest_sessionstart(session):
+    """Wipe stale cache entries so only current-run results remain."""
+    try:
+        if _CACHE_DIR.exists():
+            for f in _CACHE_DIR.glob("*.json"):
+                f.unlink()
+    except Exception:
+        pass
 
 
 def pytest_sessionfinish(session, exitstatus):

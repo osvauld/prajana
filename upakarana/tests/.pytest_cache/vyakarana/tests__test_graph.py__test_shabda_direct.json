@@ -6,7 +6,7 @@
       "method": "eval",
       "input": "shabda-anveshana \"mass\"",
       "output": "mass",
-      "elapsed_ms": 0,
+      "elapsed_us": 18,
       "error": null
     }
   ],

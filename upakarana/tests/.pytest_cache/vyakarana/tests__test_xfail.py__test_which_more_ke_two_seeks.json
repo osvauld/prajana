@@ -6,17 +6,17 @@
       "method": "answer",
       "input": "ball-A has mass 2 and velocity 3. ball-B has mass 2 and velocity 5. which has more kinetic energy.",
       "output": "we have: ball-A (=2.) and ball-B (=2.).we seek: which is viveka-max.we know: greater  means viveka-max.we see: 2. > 2. (ball-B  > ball-A ).we find: ball-B is viveka-max than ball-A",
-      "elapsed_ms": 248,
+      "elapsed_us": 652316,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.252,
+  "duration": 1.314,
   "xfail": {
     "reason": "compute-then-compare: two seeks needed",
     "strict": true,
     "gate": "viveka: compute-then-compare not built",
     "file": "/home/abe/agent_x/upakarana/tests/test_xfail.py",
-    "line": 231
+    "line": 230
   }
 }

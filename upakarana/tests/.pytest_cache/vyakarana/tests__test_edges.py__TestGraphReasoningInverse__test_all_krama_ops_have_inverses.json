@@ -8,7 +8,7 @@
       "output": [
         "double"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 633,
       "error": null
     },
     {
@@ -17,7 +17,7 @@
       "output": [
         "half"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 821,
       "error": null
     },
     {
@@ -26,7 +26,7 @@
       "output": [
         "square-root"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 614,
       "error": null
     },
     {
@@ -35,7 +35,7 @@
       "output": [
         "square"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 657,
       "error": null
     },
     {
@@ -44,7 +44,7 @@
       "output": [
         "division"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 688,
       "error": null
     },
     {
@@ -54,7 +54,7 @@
         "reciprocal",
         "multiplication"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 641,
       "error": null
     },
     {
@@ -63,7 +63,7 @@
       "output": [
         "subtraction"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 720,
       "error": null
     },
     {
@@ -72,10 +72,10 @@
       "output": [
         "addition"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 715,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.004
+  "duration": 0.008
 }

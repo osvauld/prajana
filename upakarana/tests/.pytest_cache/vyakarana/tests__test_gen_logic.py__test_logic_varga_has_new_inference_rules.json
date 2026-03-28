@@ -1,0 +1,27 @@
+{
+  "test": "tests/test_gen_logic.py::test_logic_varga_has_new_inference_rules",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk-in \"inference\" \"swarupa\"",
+      "output": [
+        "logic-varga",
+        "double-negation",
+        "de-morgan-or",
+        "de-morgan-and",
+        "contrapositive",
+        "hypothetical-syllogism",
+        "disjunctive-syllogism",
+        "modus-tollens",
+        "substitution",
+        "modus-ponens",
+        "inversion"
+      ],
+      "elapsed_us": 546,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

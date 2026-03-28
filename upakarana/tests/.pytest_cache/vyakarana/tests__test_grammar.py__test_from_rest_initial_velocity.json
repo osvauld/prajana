@@ -7,19 +7,14 @@
       "input": "accelerates from rest at 3 m/s2",
       "output": [
         [
-          "accelerates",
-          "mithya",
-          "accelerates"
-        ],
-        [
-          "from",
-          "apadana",
-          "from"
-        ],
-        [
-          "initial-rest",
+          "acceleration",
           "satya",
-          "initial-rest"
+          "acceleration"
+        ],
+        [
+          "from-rest",
+          "satya",
+          "from-rest"
         ],
         [
           "at",
@@ -37,6 +32,11 @@
           "m/s2"
         ],
         [
+          "acceleration",
+          "sankhya",
+          "3."
+        ],
+        [
           "velocity",
           "satya",
           "velocity"
@@ -47,12 +47,12 @@
           "0."
         ]
       ],
-      "elapsed_ms": 41,
+      "elapsed_us": 120567,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.046,
+  "duration": 0.171,
   "xfail": {
     "reason": "from rest: 'rest' maps to count-remaining, not initial-velocity=0",
     "strict": true,

@@ -17,10 +17,10 @@
           "force"
         ]
       ],
-      "elapsed_ms": 7,
+      "elapsed_us": 10353,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.008
+  "duration": 0.018
 }

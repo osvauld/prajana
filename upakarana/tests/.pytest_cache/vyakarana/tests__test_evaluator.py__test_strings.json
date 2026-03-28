@@ -10,38 +10,38 @@
         "b",
         "c"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 13,
       "error": null
     },
     {
       "method": "eval",
       "input": "substr \"kilogram\" 0 4",
       "output": "kilo",
-      "elapsed_ms": 0,
+      "elapsed_us": 8,
       "error": null
     },
     {
       "method": "eval",
       "input": "starts-with \"kilogram\" \"kilo\"",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 6,
       "error": null
     },
     {
       "method": "eval",
       "input": "ends-with \"velocities\" \"ies\"",
       "output": true,
-      "elapsed_ms": 0,
+      "elapsed_us": 5,
       "error": null
     },
     {
       "method": "eval",
       "input": "string-length \"mass\"",
       "output": 4,
-      "elapsed_ms": 0,
+      "elapsed_us": 5,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.0
+  "duration": 0.002
 }

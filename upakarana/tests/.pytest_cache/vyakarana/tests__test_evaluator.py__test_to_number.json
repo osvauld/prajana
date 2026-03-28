@@ -6,17 +6,17 @@
       "method": "eval",
       "input": "to-number \"42\"",
       "output": 42,
-      "elapsed_ms": 0,
+      "elapsed_us": 11,
       "error": null
     },
     {
       "method": "eval",
       "input": "to-number \"hello\"",
       "output": null,
-      "elapsed_ms": 0,
+      "elapsed_us": 6,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.0
+  "duration": 0.001
 }

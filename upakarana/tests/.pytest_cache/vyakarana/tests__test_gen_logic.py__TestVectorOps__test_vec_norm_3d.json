@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_gen_logic.py::TestVectorOps::test_vec_norm_3d",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "(call-tantra \"eval-typed\" [\"vec-norm\", [1, 2, 2], []])",
+      "output": 3,
+      "elapsed_us": 1563,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.003
+}

@@ -1,0 +1,23 @@
+-- detect-typed: find typed-collection operations in BQG triples.
+-- uses the graph to resolve types and operations — no hardcoded ops.
+-- FAST PATH: returns [false, "", [], []] immediately if no typed-varga word found.
+-- Only triggers for vargas with shabda typed-varga:true (set-varga, geometry-varga).
+-- returns: [is-typed, op-name, args-a, args-b]
+(tantra detect-typed (graph)
+
+  (edges (map graph (fn t -> to-string (nth t 1))))
+  (words (map graph (fn t -> to-string (nth t 0))))
+  (n     (length graph))
+
+  -- fast scan: is there a satya word with vishesa → a TYPED varga?
+  (type-idx (reduce (range n) -1 (fn acc i ->
+    cond (neq acc -1) acc
+    (and (eq (nth edges i) "satya")
+         (has-items (filter (walk (nth words i) "vishesa")
+           (fn v -> eq (shabda (to-string v) "typed-varga") "true")))) i
+    otherwise acc)))
+  (has-type (neq type-idx -1))
+
+  -- FAST PATH: no typed-varga word → not a typed operation
+  (cond (not has-type) [false, "", [], []]
+    otherwise (detect-typed-inner graph edges words n type-idx)))

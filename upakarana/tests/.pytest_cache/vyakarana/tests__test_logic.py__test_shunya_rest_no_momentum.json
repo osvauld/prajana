@@ -5,11 +5,11 @@
     {
       "method": "answer",
       "input": "the ball is at rest. does the ball have momentum",
-      "output": "we have: initial-rest (signal: velocity is shunya). we ask: does velocity exist?. we know: initial-rest declares velocity = shunya (absent). we see: velocity is absent due to initial-rest. no \u2014 velocity is absent because velocity is shunya",
-      "elapsed_ms": 96,
+      "output": "we have: at-rest (signal: velocity is shunya). we ask: does velocity exist?. we know: at-rest declares velocity = shunya (absent). we see: velocity is absent due to at-rest. no \u2014 velocity is absent because velocity is shunya",
+      "elapsed_us": 278709,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.097
+  "duration": 0.54
 }

@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "3 birds sat on a tree. 2 flew away. how many birds are left",
       "output": "we have: 3 bird sat tree.we know: 2 minus (3 \u2192 1).we find: 1 bird left",
-      "elapsed_ms": 116,
+      "elapsed_us": 310626,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.117
+  "duration": 0.641
 }

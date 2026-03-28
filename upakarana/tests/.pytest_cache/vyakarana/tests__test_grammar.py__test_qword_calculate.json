@@ -17,10 +17,10 @@
           "momentum"
         ]
       ],
-      "elapsed_ms": 18,
+      "elapsed_us": 22262,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.019
+  "duration": 0.05
 }

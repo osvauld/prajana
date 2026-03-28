@@ -47,15 +47,17 @@ let parse_argv () : string option * bool * bool * string list =
 
 let find_default_corpus () : string list =
   let try_prefix prefix =
-    let sangati = prefix ^ "brahman2/sangati" in
-    let kosha   = prefix ^ "brahman2/kosha" in
-    let bhasha  = prefix ^ "brahman2/bhasha" in
-    let engine  = prefix ^ "brahman2/engine" in
+    let sangati = prefix ^ "brahman/sangati" in
+    let kosha   = prefix ^ "brahman/kosha" in
+    let bhasha  = prefix ^ "brahman/bhasha" in
+    let engine  = prefix ^ "brahman/engine.om5" in
+    let personal = prefix ^ "brahman/personal.om5" in
     if Sys.file_exists sangati then
       let dirs = [sangati] in
-      let dirs = if Sys.file_exists kosha  then dirs @ [kosha]  else dirs in
-      let dirs = if Sys.file_exists bhasha then dirs @ [bhasha] else dirs in
-      let dirs = if Sys.file_exists engine then dirs @ [engine] else dirs in
+      let dirs = if Sys.file_exists kosha    then dirs @ [kosha]    else dirs in
+      let dirs = if Sys.file_exists bhasha   then dirs @ [bhasha]   else dirs in
+      let dirs = if Sys.file_exists engine   then dirs @ [engine]   else dirs in
+      let dirs = if Sys.file_exists personal then dirs @ [personal] else dirs in
       dirs
     else []
   in
@@ -242,6 +244,7 @@ let () =
   if naama_edges > 0 && not quiet_startup then
     Printf.printf "naama: %d word edges emitted into graph\n%!" naama_edges;
   let yantra_idx = Kriya.build_index ~graph:k0 dirs in
+  Vidya.set_word_index yantra_idx.word_index;
   Prakriti.materialize_csr k0;
   Prakriti.compute_visheshanam_entropy_weights k0;
   let yantra_session = Kriya.new_session () in

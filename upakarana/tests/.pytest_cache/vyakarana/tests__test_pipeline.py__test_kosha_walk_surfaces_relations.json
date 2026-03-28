@@ -9,7 +9,7 @@
         "falling",
         "kinetic-energy-mantra"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 749,
       "error": null
     },
     {
@@ -21,10 +21,10 @@
         "metre",
         "kilogram"
       ],
-      "elapsed_ms": 0,
+      "elapsed_us": 721,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.002
+  "duration": 0.003
 }

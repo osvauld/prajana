@@ -1,0 +1,17 @@
+{
+  "test": "tests/test_gen_logic.py::test_complex_log_exp_pratipaksha",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "walk \"complex-logarithm\" \"pratipaksha\"",
+      "output": [
+        "complex-exponential"
+      ],
+      "elapsed_us": 476,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

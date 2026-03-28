@@ -1,0 +1,50 @@
+-- emit triples for a single word based on its role and context.
+-- nd (resolved node) comes pre-resolved from BQG via info — never re-resolve here.
+(tantra emit-triples (word info subgraphs)
+  (nd (word-info info "node"))
+  (rl (word-info info "role"))
+  (ly (word-info info "layer"))
+  (nv (word-info info "num-val"))
+  (un (word-info info "unit"))
+  (cur-grade (nth subgraphs 0))
+  (ac (last-concept cur-grade))
+  (last-tri (last-of cur-grade))
+  (pn (cond (and (has-items last-tri) (eq (triple-edge last-tri) "asprista-sankhya")) (nth last-tri 2) otherwise ""))
+  (prev-edge (cond (has-items last-tri) (triple-edge last-tri) otherwise ""))
+  (has-num (has-text nv))
+  (has-unit (exists un))
+  (has-act (exists ac))
+  (has-pend (neq pn ""))
+  (nd-str (to-string nd))
+  (is-concept (and (exists nd)
+    (neq rl "grammar") (neq rl "intent") (neq rl "boundary")
+    (neq rl "possession") (neq rl "rashi-bandha") (neq ly "mantra")))
+  -- is-rashi-label was dead code: old second check (neq (word-resolve word) nd-str)
+  -- was always false since both resolve the same word. Kept false to match old behavior.
+  (is-rashi-label false)
+  (is-direction-word (or (eq nd-str "kshaya") (eq nd-str "vriddhi")))
+  (is-verb-form (or is-direction-word (ends-with word "ed") (ends-with word "ing")))
+  -- "2 more" = vriddhi, not viveka comparison. Suppress viveka when preceded by number.
+  (is-viveka-after-num (and has-pend is-concept (or (eq nd-str "viveka-max") (eq nd-str "viveka-min"))))
+  (after-loc (eq prev-edge "adhikarana"))
+  (active-can-claim (and has-act (neq prev-edge "shashthi-vibhakti") (concept-in-grade ac cur-grade)))
+  (is-dravya (and (not (exists nd)) has-pend (not is-verb-form) (not after-loc) (not active-can-claim)))
+  (is-sambodhana (or (eq nd-str "sambodhana") (eq nd-str "abhisambodhana") (eq nd-str "aamantrana")))
+  (is-copula (and (eq rl "grammar") (starts-with nd-str "copula")))
+  (cond (eq rl "intent") [[word, "vidhi-kaala", "solve-for"]]
+    is-sambodhana [[word, nd-str, word]]
+    is-copula [[word, "copula", word]]
+    (eq rl "grammar") []
+    (and has-num has-unit has-act)
+      [[(to-string ac), "sankhya", nv], [(to-string ac), "matra", (to-string un)]]
+    (and has-num has-unit)
+      [["_", "sankhya", nv], ["_", "matra", (to-string un)]]
+    has-num [[word, "asprista-sankhya", nv]]
+    (and has-pend is-concept has-act (exists (shabda nd-str "concepts-for-unit")))
+      [[(to-string ac), "sankhya", pn], [(to-string ac), "matra", nd-str]]
+    is-viveka-after-num [[word, "mithya", word]]
+    is-rashi-label [[word, "mithya", word]]
+    is-verb-form [[word, "mithya", word]]
+    is-concept [[nd-str, "satya", nd-str]]
+    is-dravya [[word, "satya", word]]
+    otherwise [[word, "mithya", word]]))

@@ -70,16 +70,25 @@ class Client:
     def eval(self, expr: str) -> Any:
         """Evaluate a tantra expression, return result as Python value."""
         resp = self._check(self._call({"command": "eval-json", "expr": expr}))
+        self._last_elapsed_us = resp.get("elapsed_us", 0)
         return resp["result"]
 
-    def elapsed_ms(self, expr: str) -> tuple[Any, int]:
-        """Like eval() but also returns server-side elapsed_ms."""
+    def elapsed_us(self, expr: str) -> tuple[Any, int]:
+        """Like eval() but also returns server-side elapsed_us."""
         resp = self._check(self._call({"command": "eval-json", "expr": expr}))
-        return resp["result"], resp.get("elapsed_ms", 0)
+        return resp["result"], resp.get("elapsed_us", 0)
 
-    def ask(self, question: str, session_id: str = "test") -> str:
+    def elapsed_ms(self, expr: str) -> tuple[Any, int]:
+        """Like eval() but returns milliseconds (compat wrapper)."""
+        result, us = self.elapsed_us(expr)
+        return result, us // 1000
+
+    def ask(self, question: str, session_id: str | None = None) -> str:
         """Send a question, return answer text."""
-        resp = self._check(self._call({"question": question, "session_id": session_id}))
+        import uuid
+        sid = session_id or f"q-{uuid.uuid4().hex[:8]}"
+        resp = self._check(self._call({"question": question, "session_id": sid}))
+        self._last_elapsed_us = resp.get("elapsed_us", 0)
         return resp.get("answer_text", "")
 
     def close(self):

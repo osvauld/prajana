@@ -12,7 +12,7 @@ import sys
 import time
 from pathlib import Path
 
-from upakarana.paths import ROOT, BRAHMAN, BRAHMAN2
+from upakarana.paths import ROOT, BRAHMAN
 
 DEFAULT_SOCKET = os.environ.get("VYAKARANA_SOCKET", "/tmp/vy.sock")
 DEFAULT_BINARY = str(ROOT / "vyakarana" / "_build" / "default" / "bin" / "vyakarana.exe")

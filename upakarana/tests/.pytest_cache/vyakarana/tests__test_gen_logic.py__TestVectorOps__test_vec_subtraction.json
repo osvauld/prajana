@@ -1,0 +1,18 @@
+{
+  "test": "tests/test_gen_logic.py::TestVectorOps::test_vec_subtraction",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "(call-tantra \"eval-typed\" [\"vec-subtraction\", [10, 20], [3, 5]])",
+      "output": [
+        7,
+        15
+      ],
+      "elapsed_us": 99,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.001
+}

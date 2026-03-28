@@ -5,18 +5,18 @@
     {
       "method": "answer",
       "input": "a shop has 10 apples. 3 apples were sold. how many apples are left",
-      "output": "no match",
-      "elapsed_ms": 100,
+      "output": "we have: shop has 10 apples.we know: 3 minus (10 \u2192 7) 10 plus (7 \u2192 17).we find: 17 ",
+      "elapsed_us": 348431,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.102,
+  "duration": 0.612,
   "xfail": {
-    "reason": "entity_scope: per-entity count after subtraction",
+    "reason": "entity_scope: avrti-refine-v2 strips question grade, sankhya bindings leak into final grade",
     "strict": true,
     "gate": "entity_scope: per-entity scoped count",
     "file": "/home/abe/agent_x/upakarana/tests/test_arithmetic.py",
-    "line": 140
+    "line": 137
   }
 }

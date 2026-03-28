@@ -42,12 +42,12 @@
           "force"
         ],
         [
-          "force",
+          "mass",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "force",
+          "mass",
           "vachana",
           "eka-vachana"
         ],
@@ -62,10 +62,10 @@
           "5."
         ]
       ],
-      "elapsed_ms": 104,
+      "elapsed_us": 199903,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.105
+  "duration": 0.236
 }

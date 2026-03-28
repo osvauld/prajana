@@ -1,0 +1,16 @@
+-- detect-signals: cascading intent detection.
+-- checks detectors one at a time (cheapest first), returns on first match.
+-- detect-typed is NOT here — callers handle typed before calling detect-signals.
+(tantra detect-signals (expanded)
+  (sf-raw (extract-solve-for expanded))
+  (has-intent (solve-for-result sf-raw "has-intent"))
+  (base-signals (cond has-intent
+    [["solve-for", (solve-for-result sf-raw "solve-for")],
+     ["scope-entity", (solve-for-result sf-raw "scope-entity")]]
+    otherwise []))
+  -- phase 1: shunya (cheapest — ~0ms)
+  (shunya-signals (detect-shunya expanded))
+  (cond (and (has-items shunya-signals) (not has-intent))
+    (write-signals expanded (append [["dispatch-mode", "shunya"]] shunya-signals))
+    otherwise
+    (detect-signals-2 expanded base-signals)))

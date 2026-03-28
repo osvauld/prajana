@@ -5,13 +5,13 @@
     {
       "method": "answer",
       "input": "what does a vector space generate",
-      "output": "we seek: vector.no match",
-      "elapsed_ms": 72,
+      "output": "we seek: vector-space.no match",
+      "elapsed_us": 1159165,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.077,
+  "duration": 1.547,
   "xfail": {
     "reason": "janaka_query: no tantra walks janaka yet",
     "strict": true,

@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "force is 50. displacement is 10. angle is 0. find work",
       "output": "we have: force=50.; displacement=10.; and angle=0..we seek: work.we know: work-mantra (angle, displacement, force \u2192 work).we see: angle=0., displacement=10., force=50..we find: work = 500",
-      "elapsed_ms": 185,
+      "elapsed_us": 445551,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.186
+  "duration": 0.934
 }

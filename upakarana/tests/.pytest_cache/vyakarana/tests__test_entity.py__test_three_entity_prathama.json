@@ -77,12 +77,32 @@
           "7."
         ],
         [
-          "mass",
+          "ball-A",
           "kaala",
           "vartamana-kaala"
         ],
         [
-          "mass",
+          "ball-A",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball-B",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "ball-B",
+          "vachana",
+          "eka-vachana"
+        ],
+        [
+          "ball-C",
+          "kaala",
+          "vartamana-kaala"
+        ],
+        [
+          "ball-C",
           "vachana",
           "eka-vachana"
         ],
@@ -132,10 +152,10 @@
           "7."
         ]
       ],
-      "elapsed_ms": 141,
+      "elapsed_us": 289138,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.142
+  "duration": 0.368
 }

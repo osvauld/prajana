@@ -1,0 +1,387 @@
+[
+  {
+    "id": "cal_problem_00069",
+    "has_image": false,
+    "difficulty": "medium",
+    "question": "A basketball with a mass of $m = 0.60\\mathrm{kg}$ is released from rest at a height of $h_1 = 1.8\\mathrm{m}$ above the ground, and it rebounds to a height of $h_2 = 1.2\\mathrm{m}$. If the basketball is released from rest at a height of $h_3 = 1.5\\mathrm{m}$ and simultaneously struck downwards by the",
+    "sub_questions": [],
+    "answers": [
+      "4.5J",
+      "9N"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00224",
+    "has_image": false,
+    "difficulty": "easy",
+    "question": "Hot isostatic pressing (HIP) equipment is used for material processing. During operation, an inert gas is first compressed into a pre-evacuated furnace chamber at room temperature. The furnace chamber is then heated to utilize the high-temperature and high-pressure environment to process the materia",
+    "sub_questions": [],
+    "answers": [
+      "$3.2 \u00d7 10^7 Pa$",
+      "$1.6 \u00d7 10^8 Pa$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00252",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "To determine the acceleration of a glider on an air track, a shading plate with a width of $L\\!=\\!2.0\\mathrm{cm}$ is mounted on the glider. The glider accelerates uniformly through two photogates. A digital millisecond timer records the time the shading plate takes to pass through the first photogat",
+    "sub_questions": [],
+    "answers": [
+      "0.10m/s, 0.20m/s",
+      "0.025m/s\u00b2",
+      "0.60m"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00272",
+    "has_image": false,
+    "difficulty": "easy",
+    "question": "A small ball is released from rest at a certain distance above the ground. The ball falls freely under the influence of gravity. The displacement during the final 1 second is $\\frac{9}{25}$ of the total displacement. Air resistance is negligible, and the acceleration due to gravity is $\\mathbf{g}=10",
+    "sub_questions": [],
+    "answers": [
+      "5s",
+      "80m"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00273",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "An object is released from rest at a height of $45\\mathrm{m}$ above the ground, undergoing free fall motion, with the acceleration due to gravity taken as $\\mathrm{g}\\!=\\!10\\mathrm{m}/\\mathrm{s}^{2}$.",
+    "sub_questions": [],
+    "answers": [
+      "3s",
+      "30m/s",
+      "25m"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00340",
+    "has_image": false,
+    "difficulty": "medium",
+    "question": "A point charge with a charge of \\( q = -3 \\times 10^{-6} \\, \\mathrm{C} \\) is moved from point A to point B in an electric field. During this movement, the charge overcomes the electric field force, performing work of \\( 6 \\times 10^{-4} \\, \\mathrm{J} \\). Subsequently, when the charge is moved from p",
+    "sub_questions": [],
+    "answers": [
+      "200 V, 300 V, 500 V",
+      "200 V, -300 V, -6\u00d710^-4 J, -9\u00d710^-4 J"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00346",
+    "has_image": false,
+    "difficulty": "medium",
+    "question": "A thin string of length L is fixed at its upper end, and a small ball of mass m and charge q is attached to the lower end. The ball is placed in a uniform electric field pointing horizontally to the right. Initially, the string and the ball are held horizontally, and then released. The ball swings d",
+    "sub_questions": [],
+    "answers": [
+      "$\\frac{\\sqrt{3}mg}{q}$",
+      "$-\\frac{\\sqrt{3}mgL}{2q}$",
+      "$\\frac{\\sqrt{3}mgL}{2}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00365",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "A square coil with side length $L$ is placed in a uniform magnetic field with magnetic induction $B$, where the plane of the coil is perpendicular to the direction of the magnetic field.",
+    "sub_questions": [],
+    "answers": [
+      "BL^2",
+      "$\\frac{4BL^2}{\\pi}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00418",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "Testing the performance of a new car on a flat road. It is known that the car starts from rest and accelerates in a straight line, reaching a speed of $v = 30\\mathrm{m}/\\mathrm{s}$ after $t = 15\\mathrm{s}$. At this point, the brakes are immediately applied until the car comes to a complete stop. The",
+    "sub_questions": [],
+    "answers": [
+      "$2\\mathrm{m}/\\mathrm{s}^{2}$ ",
+      "$5\\mathrm{m}/\\mathrm{s}^{2}$ "
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00419",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "A particle starts from rest and undergoes uniformly accelerated linear motion. The displacement of the particle in the first second is $3\\mathrm{m}$.",
+    "sub_questions": [],
+    "answers": [
+      "$6\\mathrm{m}/\\mathrm{s}^{2}$",
+      "27m",
+      "12m/s"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00432",
+    "has_image": false,
+    "difficulty": "easy",
+    "question": "A light spring is fixed at one end. When a force of magnitude $F_1 = 10\\mathrm{N}$ is applied to compress the other end, the equilibrium length is $l_1 = 9\\mathrm{cm}$. When a force of magnitude $F_2 = 20\\mathrm{N}$ is applied to stretch the spring, the equilibrium length becomes $l_2 = 12\\mathrm{cm",
+    "sub_questions": [],
+    "answers": [
+      "10 cm",
+      "1000 N/m"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00575",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "The power output of a power plant is $200\\mathrm{kW}$, and the output voltage is $11\\mathrm{kV}$. If high-voltage transmission at $220\\mathrm{kV}$ is used, the energy loss of the transformer is not considered.",
+    "sub_questions": [],
+    "answers": [
+      "1:20",
+      "0.90A"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00577",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "The step-down transformer in a residential community has a primary to secondary coil turns ratio of $n_1$: $n_2$ = 3:1. This transformer is used to power 100 light bulbs (connected in parallel) with specifications of \"220V 60W,\" and all the bulbs are operating normally.",
+    "sub_questions": [],
+    "answers": [
+      "$806.7 \\Omega$",
+      "660V",
+      "9.1A"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00665",
+    "has_image": false,
+    "difficulty": "medium",
+    "question": "An electron outside the nucleus of a hydrogen atom moves in a uniform circular motion with radius $r$. The mass of the electron is $m$, its charge is $e$, and the electrostatic force constant is $k$. Relativistic effects are not considered.",
+    "sub_questions": [],
+    "answers": [
+      "$\\frac{k e^2}{2r}$",
+      "$-\\frac{k e^2}{2r}$",
+      "$\\frac{e^2}{2 \\pi r}\\sqrt{\\frac{k}{mr}}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00701",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "A spring oscillator starts vibrating for the first time after the spring is compressed by $x$, and for the second time after the spring is compressed by $2x$.",
+    "sub_questions": [],
+    "answers": [
+      "1/2"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00736",
+    "has_image": false,
+    "difficulty": "easy",
+    "question": "The rotor of a sinusoidal AC generator is a square coil with $n=100$ turns and side length $L=20\\mathrm{cm}$. It is placed in a uniform magnetic field with magnetic induction $B=0.5\\mathrm{T}$. Under the action of an external force, it rotates uniformly around an axis perpendicular to the direction ",
+    "sub_questions": [],
+    "answers": [
+      "i = 6.28 sin(100\u03c0t) (A)",
+      "198\u03c0\u00b2 W",
+      "200\u03c0\u00b2 W"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00840",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "China's first lunar exploration satellite, \"Chang'e-1,\" was launched in 2007 from the Xichang Satellite Launch Center by the \"Long March 3A\" carrier rocket. Assuming the satellite's orbit is circular and its altitude above the lunar surface is equal to the Moon's radius, it is known that the satelli",
+    "sub_questions": [],
+    "answers": [
+      "$\\frac{32\\pi^{2}R^{3}}{G T^{2}}$",
+      "$\\frac{24\\pi}{G T^{2}}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00906",
+    "has_image": false,
+    "difficulty": "easy",
+    "question": "The turns ratio of the primary to secondary coils of an ideal transformer is $4:1$. If an AC voltage of $u=400^{\\sqrt{2}}\\mathrm{sin}\\ 100\\pi t\\ \\mathrm{v}$ is applied to the primary coil.",
+    "sub_questions": [],
+    "answers": [
+      "100V"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00915",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "After a plane crash, in order to analyze the cause of the accident, it is necessary to locate the black box. The black box can automatically emit signals at a frequency of $37.5\\mathrm{kHz}$ for 30 days, allowing people to use detectors to find the electromagnetic wave signals emitted by the black b",
+    "sub_questions": [],
+    "answers": [
+      "8000m",
+      "$4.5\\times10^{-9}F$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_00945",
+    "has_image": false,
+    "difficulty": "easy",
+    "question": "The AC generator at the power plant outputs a constant voltage of $200\\mathrm{V}$ and a power of $100\\mathrm{kW}$. The electricity needs to be transmitted to a distant factory. The designed power loss on the transmission line is $10\\%$, and the total resistance of the transmission line is $100\\Omega",
+    "sub_questions": [],
+    "answers": [
+      "$10A$",
+      "1:50"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01098",
+    "has_image": false,
+    "difficulty": "difficult",
+    "question": "Two drones, A and B, are conducting flight performance tests, flying along the same straight line in the same direction. At time $t=0$, the velocity of A is $v_{1}=16\\mathbf{m}/\\mathbf{s}$, and it is undergoing a uniformly decelerated linear motion with an acceleration of magnitude $a_{1}=2\\mathrm{m",
+    "sub_questions": [],
+    "answers": [
+      "$39\\mathrm{m}$",
+      "$27\\mathrm{m}$",
+      "$a_{0}\\geq 6\\mathrm{m}/\\mathrm{s}^{2}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01115",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "An object placed on a horizontal ground has a mass of 5 kg, and the kinetic friction coefficient between the object and the ground is 0.2. After being subjected to a horizontal pulling force of 15 N, it starts moving from rest ($g=10\\mathrm{m}/\\mathrm{s}^{2}$).",
+    "sub_questions": [],
+    "answers": [
+      "$1\\mathrm{m}/\\mathrm{s}^{2}$",
+      "$12.5\\mathrm{m}$",
+      "$6.25\\mathrm{m}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01184",
+    "has_image": false,
+    "difficulty": "medium",
+    "question": "During the Spring Festival holiday, national highways are toll-free, and cars can pass through toll stations without stopping. However, cars are required to maintain a speed no greater than $v_{0} = 6 \\, \\mathrm{m/s}$ when passing through the $x_{0} = 9 \\, \\mathbf{m}$ interval in front of the toll s",
+    "sub_questions": [],
+    "answers": [
+      "$100\\mathrm{m}$",
+      "$66\\mathrm{m}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01211",
+    "has_image": false,
+    "difficulty": "easy",
+    "question": "Cars A and B are $600\\mathrm{m}$ apart and are traveling towards each other on a straight road at speeds of $10\\mathrm{m/s}$ and $20\\mathrm{m/s}$, respectively. A bird flies back and forth between the two cars at a speed of $20\\mathrm{m/s}$. The bird starts from the front of Car A, flies towards Car",
+    "sub_questions": [],
+    "answers": [
+      "$400\\mathrm{m}$",
+      "$10\\mathrm{m/s}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01276",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "To build a civilized city, it is advocated that motor vehicles yield to pedestrians. A driver was driving at a speed of $8\\mathrm{m/s}$ near an intersection when he noticed a pedestrian preparing to cross the zebra crossing. He immediately applied the brakes to yield to the pedestrian. The car under",
+    "sub_questions": [],
+    "answers": [
+      "$4m/s$",
+      "$16m$",
+      "$15m$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01375",
+    "has_image": false,
+    "difficulty": "easy",
+    "question": "A small boat is crossing a river with a width of $d = 180 \\, \\mathsf{m}$. The speed of the river current is $v_{1} = 2.5 \\, \\mathrm{m}/\\mathrm{s}$. If the speed of the boat in still water is $v_{2} = 5 \\, \\mathsf{m}/\\mathsf{s}$, find:",
+    "sub_questions": [],
+    "answers": [
+      "The bow should face the direction perpendicular to the riverbank, $36s$, $90\\sqrt{5}\\mathrm{m}$.",
+      "The bow should be deflected $30^{\\circ}$ upstream, $24\\sqrt{3}\\mathrm{s}$, $180\\mathrm{m}$."
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01390",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "A small ball with a mass of 1 kg is thrown horizontally from a certain height with an initial velocity of $3 \\, \\text{m/s}$. It is measured that the horizontal distance from the landing point to the throwing point is $1.2 \\, \\text{m}$. The air resistance acting on the ball during its motion is negli",
+    "sub_questions": [],
+    "answers": [
+      "$0.4s$",
+      "$5m/s$, the angle between the velocity and the horizontal direction is $53^{\\circ}$",
+      "$40W$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01469",
+    "has_image": false,
+    "difficulty": "medium",
+    "question": "Student A starts from point $A$ at the center of the playground and walks $40\\mathrm{m}$ north to reach point $B$, taking 5 seconds. Then, they walk $30\\mathrm{m}$ west to reach point $C$, also taking 5 seconds. Find:",
+    "sub_questions": [],
+    "answers": [
+      "$5\\mathrm{m/s}$, direction is $37^{\\circ}$ west of north.",
+      "$7\\mathrm{m/s}$",
+      "$8\\mathrm{m/s}$, direction north",
+      "$6\\mathrm{m/s}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "cal_problem_01515",
+    "has_image": false,
+    "difficulty": "knowledge",
+    "question": "At 09:43 on June 23, 2020, at the Xichang Satellite Launch Center, the Long March 3B carrier rocket soared into the sky, successfully delivering the \"final star\" of the BeiDou-3 global system into its predetermined orbit. This marked the successful completion of the BeiDou global satellite navigatio",
+    "sub_questions": [],
+    "answers": [
+      "$M={\\frac{g R^{2}}{G}}$",
+      "$a=\\frac{R^{2}g}{\\left(R+h\\right)^{2}}$",
+      "$v=R\\sqrt{\\frac{g}{R+h}}$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "comp_problem_4",
+    "has_image": false,
+    "difficulty": "medium",
+    "question": "A thin concavo-convex lens made of glass with a refractive index of $1.5$ has a convex surface with a radius of curvature of $20 cm$ and a concave surface with a radius of curvature of $60 cm$. The convex side of the lens is silvered, creating a concave mirror, and is placed on a horizontal surface.",
+    "sub_questions": [],
+    "answers": [
+      "$15 cm$",
+      "$1.16 cm$"
+    ],
+    "theorems": []
+  },
+  {
+    "id": "comp_problem_95",
+    "has_image": false,
+    "difficulty": "difficult",
+    "question": "A proton with mass $m_p$ and energy $E_p$ collides head-on with a photon of energy $E_b$. The collision results in the formation of a new particle with mass $m_\\Delta$. This is a one-dimensional collision that conserves both relativistic energy and relativistic momentum. You may use the following co",
+    "sub_questions": [],
+    "answers": [
+      "$\\frac{m_{\\Delta}^{2}-m_{p}^{2}}{4 E_{b}}$",
+      "$\\approx 1.17 \\times 10^{-3} \\mathrm{eV}$",
+      "$E_{p} \\approx 1.4 \\times 10^{20} \\mathrm{eV}$"
+    ],
+    "theorems": []
+  }
+]

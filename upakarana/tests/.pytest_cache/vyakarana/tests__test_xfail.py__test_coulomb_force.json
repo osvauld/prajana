@@ -6,12 +6,12 @@
       "method": "answer",
       "input": "particle-A has charge 1.6e-19. particle-B has charge 1.6e-19. find coulomb force given radius 1e-10",
       "output": "we have: particle-A (charge=1.6e-19); particle-B (charge=1.6e-19); and radius=1e-10.we seek: coulomb.no match",
-      "elapsed_ms": 159,
+      "elapsed_us": 491310,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.163,
+  "duration": 0.952,
   "xfail": {
     "reason": "sthita-viveka: same slot assignment gap for charge1/charge2",
     "strict": true,

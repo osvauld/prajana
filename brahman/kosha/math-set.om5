@@ -1,0 +1,130 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-set — 19 nodes
+; ═══════════════════════════════════════════════════════════════════
+
+(kosha set-complement
+  (karma set-varga)
+  (abheda purna-neti)
+  (yukta set)
+  (siddha asparsha))
+
+(kosha set-difference
+  (karma set-varga)
+  (abheda kshaya)
+  (yukta set)
+  (sthita set-complement))
+
+(kosha set-intersection
+  (karma set-varga)
+  (phala sparsha)
+  (yukta set)
+  (siddha abheda))
+
+(kosha set-product
+  (karma set-varga)
+  (yukta set)
+  (swarupa anekadha))
+
+(kosha set-union
+  (karma set-varga)
+  (abheda holder-giver)
+  (yukta set)
+  (phala set))
+
+(kosha additive-identity
+  (swarupa identity-element)
+  (abheda shunya zero)
+  (drishthanta addition)
+  (sthita ring monoid)
+  (yukta visheshanam-yukta))
+
+(kosha closure
+  (domain kosha/math/set/properties)
+  (lakshana set-varga algebra-varga)
+  (abheda purna)
+  (sthita set)
+  (siddha group)
+  (yukta purna))
+
+(kosha identity-element
+  (lakshana set-varga algebra-varga)
+  (sthita group monoid ring)
+  (siddha closure)
+  (yukta inverse-element sama)
+  (swarupa additive-identity multiplicative-identity)
+  (janya identity-matrix)
+  (drishthanta addition multiplication))
+
+(kosha inverse-element
+  (lakshana set-varga algebra-varga)
+  (sthita group ring)
+  (phala identity-element)
+  (abheda pratipaksha)
+  (janya inverse)
+  (drishthanta subtraction division)
+  (yukta viparita))
+
+(kosha multiplicative-identity
+  (swarupa identity-element)
+  (abheda eka)
+  (drishthanta multiplication)
+  (sthita ring monoid)
+  (yukta visheshanam-swarupa))
+
+(kosha set-varga
+  (vishesa math-varga)
+  (yukta vrnda niyama viveka dvandva))
+
+(kosha element
+  (domain kosha/math/set/structures)
+  (vishesa set-varga)
+  (sthita set kshetra)
+  (swarupa sthita ansha))
+
+(kosha empty-set
+  (vishesa set-varga)
+  (abheda shunya)
+  (swarupa set)
+  (yukta shunya))
+
+(kosha equivalence-relation
+  (vishesa set-varga)
+  (swarupa svayambhu)
+  (yukta pratipaksha parampara sama sambandha)
+  (sthita abheda)
+  (abheda partial-order)
+  (janya quotient))
+
+(kosha partial-order
+  (vishesa set-varga)
+  (sthita set)
+  (siddha reflexive antisymmetric transitive)
+  (abheda equivalence-relation)
+  (janya lattice)
+  (drishthanta subset)
+  (yukta sambandha krama))
+
+(kosha set
+  (vishesa set-varga)
+  (swarupa vrnda)
+  (yukta purna-neti))
+
+(kosha subset
+  (vishesa set-varga)
+  (sthita set)
+  (swarupa containment)
+  (phala set-intersection))
+
+; ── set lifts (generated) ────────────────────────────────────────────────────
+
+(kosha set-membership
+  (karma set-varga)
+  (yukta element set)
+  (phala satya)
+  (swarupa viveka))
+
+(kosha set-subset
+  (karma set-varga)
+  (swarupa subset)
+  (yukta set-intersection)
+  (phala satya))

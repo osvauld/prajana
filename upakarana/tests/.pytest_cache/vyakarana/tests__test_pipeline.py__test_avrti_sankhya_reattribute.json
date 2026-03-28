@@ -17,10 +17,10 @@
           "20."
         ]
       ],
-      "elapsed_ms": 20,
+      "elapsed_us": 31272,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.021
+  "duration": 0.045
 }

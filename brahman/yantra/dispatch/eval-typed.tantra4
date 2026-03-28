@@ -1,0 +1,68 @@
+-- eval-typed: graph-native typed evaluation.
+-- reads shabda metadata to decide how to compute:
+--   krama-input  → input type (vector, complex, matrix, set, element)
+--   krama-output → output type (scalar, vector, satya)
+--   per-element  → map over elements
+--   fold         → reduce after map (sum, max-abs)
+--   eval         → primitive op name (only used when no krama)
+--   krama        → operation sequence from graph edges
+--
+-- the graph defines the algebra. this tantra just executes it.
+(tantra eval-typed (op-name a b)
+  (meta-input   (shabda op-name "krama-input"))
+  (meta-output  (shabda op-name "krama-output"))
+  (meta-elem    (shabda op-name "per-element"))
+  (meta-fold    (shabda op-name "fold"))
+  (raw-eval     (shabda op-name "eval"))
+  (krama-ops    (node-krama op-name))
+
+  (is-per-elem  (eq meta-elem "yes"))
+  (is-two-input (gt (length (split meta-input ",")) 1))
+  (has-krama    (has-text krama-ops))
+  (krama-parts  (split krama-ops " "))
+  (first-krama  (nth krama-parts 0))
+  (last-krama   (nth krama-parts (sub (length krama-parts) 1)))
+  -- only use eval: when there's no krama chain (avoid inherited eval overriding krama)
+  (meta-eval    (cond has-krama "" otherwise raw-eval))
+
+  -- step 1: map phase
+  (mapped (cond
+    -- single input + eval (no krama): map(eval, a)
+    (and is-per-elem (not is-two-input) (has-text meta-eval))
+      (map a (fn x -> apply-op meta-eval x))
+    -- single input + krama: map(first-krama-op, a)
+    (and is-per-elem (not is-two-input) has-krama)
+      (map a (fn x -> apply-op first-krama x))
+    -- two input + eval (no krama): zipWith(eval, a, b)
+    (and is-per-elem is-two-input (has-text meta-eval))
+      (map (range (length a)) (fn i -> apply-op meta-eval [(nth a i), (nth b i)]))
+    -- two input + krama: zipWith(first-krama, a, b)
+    (and is-per-elem is-two-input has-krama)
+      (map (range (length a)) (fn i -> apply-op first-krama [(nth a i), (nth b i)]))
+    otherwise a))
+
+  -- step 2: fold phase
+  (folded (cond
+    (eq meta-fold "sum")
+      (reduce mapped 0 (fn acc x -> add acc x))
+    (eq meta-fold "max-abs")
+      (reduce mapped 0 (fn acc x -> cond (gt (abs x) acc) (abs x) otherwise acc))
+    otherwise mapped))
+
+  -- step 3: post-fold (remaining krama ops after first)
+  (result (cond
+    -- krama chain with fold: apply last op to folded scalar (e.g. sqrt after sum)
+    (and has-krama (has-text meta-fold) (neq first-krama last-krama))
+      (apply-op last-krama folded)
+    -- set membership: member(element, set)
+    (eq raw-eval "member")
+      (member a b)
+    -- subset: every element of a in b
+    (and (eq meta-output "satya") is-two-input)
+      (reduce a True (fn acc x -> and acc (member x b)))
+    -- single eval, not per-element, no krama
+    (and (has-text meta-eval) (not is-per-elem) (not is-two-input))
+      (apply-op meta-eval a)
+    otherwise folded))
+
+  result)

@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "3 birds sat on a tree. 2 more came. how many birds are there in total",
       "output": "we have: 3 bird sat tree.we know: 2 plus (3 \u2192 5).we find: 5 bird there total",
-      "elapsed_ms": 137,
+      "elapsed_us": 494941,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.138
+  "duration": 0.904
 }

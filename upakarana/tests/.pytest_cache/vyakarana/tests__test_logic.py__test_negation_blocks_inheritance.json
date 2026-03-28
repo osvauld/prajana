@@ -5,11 +5,11 @@
     {
       "method": "answer",
       "input": "a cat is not a fish. fish live in water. does a cat live in water",
-      "output": "we assert: cat IS-A negation. we ask: does water-material inherit negation?. we see: chain reaches negation via IS-A. no \u2014 water-material does not have negation",
-      "elapsed_ms": 440,
+      "output": "we assert: cat IS-A negation. we ask: does water inherit negation?. we see: chain reaches negation via IS-A. no \u2014 water does not have negation",
+      "elapsed_us": 481912,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.441
+  "duration": 1.11
 }

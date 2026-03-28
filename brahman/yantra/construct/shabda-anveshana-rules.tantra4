@@ -1,0 +1,16 @@
+-- shabda-anveshana-rules: morphology rule walk for unknown words.
+-- walks plural + verb suffix rules from graph to strip suffixes and find root.
+(tantra shabda-anveshana-rules (word)
+  (plural-rules (walk-in "vachana-bahu" "sthita"))
+  (verb-rules (filter (walk-in "pratyaya" "swarupa")
+    (fn rl -> member "english" (walk rl "sthita"))))
+  (rules (append plural-rules verb-rules))
+  (wlen (string-length word))
+  (reduce rules _none (fn acc rl ->
+    let sf     = shabda rl "suffix"
+    let ssf    = shabda rl "stem-suffix"
+    let sf-len = string-length sf
+    let ok     = (and (ends-with word sf) (gt wlen sf-len))
+    let stem   = (cond ok (concat (substr word 0 (sub wlen sf-len)) ssf) otherwise "")
+    let found-node = (cond (has-text stem) (lookup stem) otherwise _none)
+    (cond (exists acc) acc otherwise found-node))))

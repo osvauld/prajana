@@ -6,10 +6,10 @@
       "method": "answer",
       "input": "ball-A has mass 5. ball-B has mass 3. which is lighter",
       "output": "we have: ball-A (=5.) and ball-B (=3.).we seek: which is viveka-min.we know: lesser  means viveka-min.we see: 3. < 5. (ball-B  < ball-A ).we find: ball-B is viveka-min than ball-A",
-      "elapsed_ms": 130,
+      "elapsed_us": 403308,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.131
+  "duration": 0.815
 }

@@ -1,0 +1,11 @@
+-- dispatch-typed: execute a typed operation detected by detect-typed.
+-- reads signals: typed-op, typed-a, typed-b → calls eval-typed.
+(tantra dispatch-typed (expanded refined)
+  (op-name (read-signal expanded "typed-op"))
+  (args-a  (read-signal expanded "typed-a"))
+  (args-b  (read-signal expanded "typed-b"))
+  (result  (call-tantra "eval-typed" [op-name, args-a, args-b]))
+  (label   (shabda op-name "krama-output"))
+  (cond (eq label "satya")
+    (cond result "yes" otherwise "no")
+    otherwise (concat op-name " = " (to-string result))))

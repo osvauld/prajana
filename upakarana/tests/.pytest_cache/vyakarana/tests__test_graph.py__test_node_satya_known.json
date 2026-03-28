@@ -6,12 +6,12 @@
       "method": "eval",
       "input": "node-satya \"mass\"",
       "output": null,
-      "elapsed_ms": 0,
+      "elapsed_us": 24,
       "error": null
     }
   ],
   "failure": null,
-  "duration": 0.001,
+  "duration": 0.015,
   "xfail": {
     "reason": "graph primitive: node-satya returns string not number",
     "strict": true,

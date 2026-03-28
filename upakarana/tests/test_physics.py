@@ -123,7 +123,6 @@ def test_period_from_angular_velocity(vy):
     assert "1" in r
 
 
-@xfail(strict=True, reason="compound word: 'planck constant' and 'photon energy' missing word: mappings")
 def test_photon_energy_basic(vy):
     """E = hf: h=6.626e-34, f=5e14 → ~3.313e-19"""
     r = vy.answer("planck constant is 6.626e-34. frequency is 5e14. find photon energy")
@@ -139,7 +138,6 @@ def test_ke_scientific_notation(vy):
     assert "4.5" in r
 
 
-@xfail(strict=True, reason="unit parse: 'm/s' compound unit not handled in NL")
 def test_momentum_with_units(vy):
     """p = mv with explicit unit words"""
     r = vy.answer("mass is 2 kg and velocity is 5 m/s. find momentum")

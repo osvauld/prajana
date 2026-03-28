@@ -1,0 +1,15 @@
+{
+  "test": "tests/test_gen_logic.py::TestSetOps::test_membership_zero",
+  "outcome": "passed",
+  "calls": [
+    {
+      "method": "eval",
+      "input": "(call-tantra \"eval-typed\" [\"set-membership\", 0, [0, 1, 2]])",
+      "output": true,
+      "elapsed_us": 2695,
+      "error": null
+    }
+  ],
+  "failure": null,
+  "duration": 0.009
+}

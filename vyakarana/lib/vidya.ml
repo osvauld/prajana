@@ -123,10 +123,21 @@ let inject_shabda (node_name : string) (pairs : (string * string) list) : unit =
   let new_pairs = List.filter (fun (k, _) -> not (Hashtbl.mem seen k)) pairs in
   Hashtbl.replace _shabda_store node_name (existing @ new_pairs)
 
+(* reverse word index: word → node_name.
+   populated by jnana.build_word_index from naama edges.
+   shared ref so classify_token can use the same index as the tantra engine. *)
+let _word_to_node : (string, string) Hashtbl.t ref = ref (Hashtbl.create 0)
+
+let set_word_index (idx : (string, string) Hashtbl.t) : unit =
+  _word_to_node := idx
+
+let word_to_node (word : string) : string option =
+  Hashtbl.find_opt !_word_to_node (String.lowercase_ascii word)
+
 (* emit_shabda_edges: project key shabda fields as graph edges.
    Called after shabda + graph are both loaded. Creates:
    - naama edges: word key → one edge per word (node --naama--> word)
-   - signal edges: signal-concept + signal → graph-native shunya composition
+   - reverse word index: word → node_name (O(1) lookup)
    This makes word lookup graph-walkable instead of hashtable-only. *)
 let emit_shabda_edges (k : proof_graph) : int =
   let naama_dim = register_dimension "naama" in
@@ -293,27 +304,19 @@ let classify_token (k : proof_graph) word =
         match Hashtbl.find_opt k.nodes w with
         | Some _ -> Content w
         | None ->
-          let shabda_match = Hashtbl.fold (fun name _n acc ->
-            (match acc with
-            | Some _ -> acc
-            | None ->
-              let pairs = match Hashtbl.find_opt _shabda_store name with
-                | Some p -> p | None -> [] in
-              if pairs = [] then None
-              else
-                let word_match = match List.assoc_opt "word" pairs with
-                  | Some wv ->
-                    let words = String.split_on_char ',' wv
-                      |> List.map (fun s -> String.lowercase_ascii (String.trim s))
-                      |> List.filter (fun s -> String.length s > 0) in
-                    List.mem w words
-                  | None -> false in
-                let name_match = match List.assoc_opt "name" pairs with
-                  | Some n -> String.lowercase_ascii (String.trim n) = w
-                  | None -> false in
-                if word_match || name_match then Some name else None)
-          ) k.nodes None in
-          (match shabda_match with
+          (* reverse naama walk: find node whose naama edge targets this word *)
+          let naama_match =
+            let naama_dim = match visheshanam_of_string "naama" with
+              | Some d -> d | None -> -1 in
+            if naama_dim < 0 then None
+            else Hashtbl.fold (fun _key n acc ->
+              match acc with Some _ -> acc | None ->
+                if List.exists (fun e ->
+                  e.relation = naama_dim && String.lowercase_ascii e.target = w
+                ) n.edges then Some n.name else None
+            ) k.nodes None
+          in
+          match naama_match with
           | Some name -> Content name
           | None ->
             let partial_matches = Hashtbl.fold (fun name _ acc ->
@@ -329,7 +332,7 @@ let classify_token (k : proof_graph) word =
               if List.mem domain_name partial_matches then Content domain_name
               else if List.mem w partial_matches then Content w
               else Content (List.hd (List.sort String.compare partial_matches))
-            | [] -> Unknown w)
+            | [] -> Unknown w
   end
 
 (* ═══════════════════════════════════════════════════════════════════════════
