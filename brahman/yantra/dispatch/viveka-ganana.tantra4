@@ -1,8 +1,8 @@
 -- viveka-ganana: comparison — find which entity has the greater/lesser value.
 -- relational: joins entities with values through ownership, no positional scan.
 (tantra viveka-ganana (graph concept cw direction)
-  (op-eval (shabda direction "eval"))
-  (opp-eval (shabda (walk direction "pratipaksha") "eval"))
+  (op-eval (nth (walk direction "ganana") 0))
+  (opp-eval (nth (walk (nth (walk direction "pratipaksha") 0) "ganana") 0))
 
   -- relational: for each entity, find its value through entity-scoped vps
   (entities (prathama-sparsha graph))

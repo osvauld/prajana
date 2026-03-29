@@ -843,14 +843,23 @@ let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
       if e.source = node_name && e.relation = naama_dim then
         Hashtbl.replace idx.word_index e.target node_name
     ) n.edges;
-    (* eval index: still from shabda store — eval is internal, not a word *)
-    let pairs = Vidya.raw_shabda_for_node k node_name in
-    (match List.assoc_opt "eval" pairs with
-    | None -> ()
-    | Some eval_name ->
-      let ev = String.trim eval_name in
-      if String.length ev > 0 then
-        Hashtbl.replace idx.eval_index ev node_name)
+    (* eval index: from ganana graph edges (first target = primitive name) *)
+    let ganana_dim = match visheshanam_of_string "ganana" with
+      | Some d -> d | None -> register_dimension "ganana" in
+    List.iter (fun e ->
+      if e.source = node_name && e.relation = ganana_dim then
+        Hashtbl.replace idx.eval_index e.target node_name
+    ) n.edges;
+    (* fallback: shabda eval key for nodes not yet migrated *)
+    if not (List.exists (fun e -> e.source = node_name && e.relation = ganana_dim) n.edges) then begin
+      let pairs = Vidya.raw_shabda_for_node k node_name in
+      (match List.assoc_opt "eval" pairs with
+      | None -> ()
+      | Some eval_name ->
+        let ev = String.trim eval_name in
+        if String.length ev > 0 then
+          Hashtbl.replace idx.eval_index ev node_name)
+    end
   ) k.nodes;
   (* compound word index: reverse of expand_avastha.
      for each base with (avastha q1 q2 ...), register "q1 base" → q1-base.

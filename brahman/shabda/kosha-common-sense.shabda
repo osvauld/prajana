@@ -81,11 +81,8 @@ shabda falling
 done
 
 shabda floor
-  (eval floor)
-  (arity 1)
   (degree 1)
   (per-element yes)
-  (invertible no)
 done
 
 shabda glass

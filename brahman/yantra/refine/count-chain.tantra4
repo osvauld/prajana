@@ -32,7 +32,7 @@
     let n1-raw = cond (gt (length nums) 1) (nth nums 1) otherwise "1"
     let is-mul-grade = (and (eq eff-dir "multiplication") (gt (length nums) 1))
     let nv = cond is-mul-grade (apply-op "mul" [n0, (to-number n1-raw)]) otherwise n0
-    let op-eval = cond (eq eff-dir "kshaya") (shabda "subtraction" "eval") (eq eff-dir "multiplication") (shabda "multiplication" "eval") otherwise (shabda "addition" "eval")
+    let op-eval = cond (eq eff-dir "kshaya") (nth (walk "subtraction" "ganana") 0) (eq eff-dir "multiplication") (nth (walk "multiplication" "ganana") 0) otherwise (nth (walk "addition" "ganana") 0)
     let new-acc = apply-op (to-string op-eval) [acc, nv]
     let step = (concat eff-dir " " (to-string nv) ": " (to-string acc) " -> " (to-string new-acc))
     cond (or is-q (not has-num)) state

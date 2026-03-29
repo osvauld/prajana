@@ -40,7 +40,7 @@
     (and has-num has-unit)
       [["_", "sankhya", nv], ["_", "matra", (to-string un)]]
     has-num [[word, "asprista-sankhya", nv]]
-    (and has-pend is-concept has-act (exists (shabda nd-str "concepts-for-unit")))
+    (and has-pend is-concept has-act (member "matra" (walk nd-str "sthita")))
       [[(to-string ac), "sankhya", pn], [(to-string ac), "matra", nd-str]]
     is-viveka-after-num [[word, "mithya", word]]
     is-rashi-label [[word, "mithya", word]]

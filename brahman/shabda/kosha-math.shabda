@@ -7,11 +7,8 @@ shabda O-notation
 done
 
 shabda abs
-  (eval abs)
-  (arity 1)
   (degree 1)
   (per-element yes)
-  (invertible no)
 done
 
 shabda acyclicity
@@ -21,12 +18,8 @@ done
 
 shabda addition
   (word plus)
-  (eval add)
-  (arity 2)
   (degree 1)
   (per-element no)
-  (invertible yes)
-  (inverse subtraction)
 done
 
 shabda adjacency-matrix
@@ -52,40 +45,26 @@ done
 shabda antiderivative
   (degree integral)
   (per-element yes)
-  (invertible yes)
-  (inverse derivative)
   (alias antiderivative)
   (desc the-gathering-of-all-tat-kshana-into-wholeness-sama-the-holding-whole-shakti-in-the-shiva-shakti-pair-the-act-of-integration)
 done
 
 shabda arccosine
   (word arccosine)
-  (eval acos)
-  (arity 1)
   (degree 1)
   (per-element yes)
-  (invertible yes)
-  (inverse cosine)
 done
 
 shabda arcsine
   (word arcsine)
-  (eval asin)
-  (arity 1)
   (degree 1)
   (per-element yes)
-  (invertible yes)
-  (inverse sine)
 done
 
 shabda arctangent
   (word arctangent)
-  (eval atan2)
-  (arity 2)
   (degree 1)
   (per-element yes)
-  (invertible yes)
-  (inverse tangent)
 done
 
 shabda associativity
@@ -142,11 +121,8 @@ shabda category
 done
 
 shabda ceil
-  (eval ceil)
-  (arity 1)
   (degree 1)
   (per-element yes)
-  (invertible no)
 done
 
 shabda coefficient
@@ -271,8 +247,6 @@ done
 shabda derivative
   (degree "d/dx")
   (per-element yes)
-  (invertible yes)
-  (inverse antiderivative)
   (alias derivative)
   (desc the-rate-of-change-at-a-single-instant-vishama-the-sharp-local-instant-shiva-in-the-shiva-shakti-pair-d-by-dx)
 done
@@ -289,8 +263,6 @@ done
 
 shabda disjunction
   (word or either)
-  (eval or)
-  (arity 2)
   (name logical-or)
   (desc logical-OR-true-when-at-least-one-operand-is-true)
 done
@@ -307,12 +279,8 @@ done
 
 shabda division
   (word over)
-  (eval div)
-  (arity 2)
   (degree 1)
   (per-element no)
-  (invertible yes)
-  (inverse multiplication)
 done
 
 shabda domain-math
@@ -321,11 +289,7 @@ done
 
 shabda double
   (word double)
-  (eval double)
-  (arity 1)
   (per-element yes)
-  (invertible yes)
-  (inverse half)
 done
 
 shabda e
@@ -366,20 +330,13 @@ shabda expected-value
 done
 
 shabda exponential
-  (eval exp)
-  (arity 1)
   (degree exp)
   (per-element yes)
-  (invertible yes)
-  (inverse logarithm)
 done
 
 shabda factorial
-  (eval factorial)
-  (arity 1)
   (degree n!)
   (per-element no)
-  (invertible no)
 done
 
 shabda field
@@ -395,8 +352,6 @@ done
 shabda fourier-transform
   (degree F)
   (per-element yes)
-  (invertible yes)
-  (inverse fourier-transform)
 done
 
 shabda function
@@ -467,18 +422,12 @@ done
 
 shabda half
   (word half)
-  (eval half)
-  (arity 1)
   (per-element yes)
-  (invertible yes)
-  (inverse double)
 done
 
 shabda homogeneous-transform
   (degree SE3-element)
   (per-element no)
-  (invertible yes)
-  (inverse homogeneous-transform)
   (alias homogeneous-transform)
   (desc the-matrix-encoding-rotation-and-translation-together-enabling-chain-composition-for-kinematic-chains)
 done
@@ -588,12 +537,8 @@ shabda limit
 done
 
 shabda logarithm
-  (eval log)
-  (arity 1)
   (degree log)
   (per-element yes)
-  (invertible yes)
-  (inverse power)
 done
 
 shabda logic-varga
@@ -633,8 +578,6 @@ shabda mat-transpose
   (degree 1)
   (krama-input matrix)
   (krama-output matrix)
-  (invertible yes)
-  (inverse mat-transpose)
   (alias mat-transpose)
   (desc flip-rows-and-columns-self-inverse-used-in-jacobian-and-rotation-matrix)
 done
@@ -650,13 +593,9 @@ shabda matra
 done
 
 shabda max
-  (eval max)
-  (arity 2)
 done
 
 shabda min
-  (eval min)
-  (arity 2)
 done
 
 shabda modus-ponens
@@ -675,21 +614,13 @@ done
 
 shabda multiplication
   (word times each)
-  (eval mul)
-  (arity 2)
   (degree 1)
   (per-element no)
-  (invertible yes)
-  (inverse division)
 done
 
 shabda neg
-  (eval neg)
-  (arity 1)
   (degree 1)
   (per-element yes)
-  (invertible yes)
-  (inverse neg)
 done
 
 shabda norm
@@ -760,18 +691,12 @@ done
 
 shabda power
   (word to-the-power)
-  (eval power)
-  (arity 2)
   (degree exp)
   (per-element no)
-  (invertible yes)
-  (inverse logarithm)
 done
 
 shabda ppr-mantra
   (word pagerank)
-  (eval ppr)
-  (arity 3)
   (name personalized-pagerank)
 done
 
@@ -791,12 +716,9 @@ shabda probability-varga
 done
 
 shabda product
-  (eval mul)
-  (arity -1)
   (fold product)
   (degree 1)
   (per-element no)
-  (invertible no)
 done
 
 shabda proposition
@@ -854,7 +776,6 @@ done
 
 shabda radian
   (word rad radian)
-  (concepts-for-unit joint-angle angle)
 done
 
 shabda random-variable
@@ -874,12 +795,8 @@ done
 
 shabda reciprocal
   (word reciprocal)
-  (eval reciprocal)
-  (arity 1)
   (degree 1)
   (per-element yes)
-  (invertible yes)
-  (inverse reciprocal)
 done
 
 shabda recursion-complexity
@@ -895,8 +812,6 @@ done
 shabda rotation-matrix
   (degree SO3-element)
   (per-element no)
-  (invertible yes)
-  (inverse rotation-matrix)
   (alias rotation-matrix)
   (desc the-matrix-that-rotates-a-vector-by-an-angle-in-a-chosen-plane-orthogonal-and-det-1)
 done
@@ -973,22 +888,14 @@ done
 
 shabda square
   (word squared)
-  (eval square)
-  (arity 1)
   (degree 2)
   (per-element yes)
-  (invertible yes)
-  (inverse sqrt)
 done
 
 shabda square-root
   (word root-of)
-  (eval sqrt)
-  (arity 1)
   (degree 0.5)
   (per-element yes)
-  (invertible yes)
-  (inverse square)
 done
 
 shabda statistics-varga
@@ -1016,21 +923,14 @@ done
 
 shabda subtraction
   (word minus)
-  (eval sub)
-  (arity 2)
   (degree 1)
   (per-element no)
-  (invertible yes)
-  (inverse addition)
 done
 
 shabda sum
-  (eval add)
-  (arity -1)
   (fold sum)
   (degree 1)
   (per-element no)
-  (invertible no)
 done
 
 shabda tensor
@@ -1170,35 +1070,30 @@ shabda vec-abs
   (krama-input vector)
   (krama-output vector)
   (per-element yes)
-  (eval abs)
 done
 
 shabda vec-neg
   (krama-input vector)
   (krama-output vector)
   (per-element yes)
-  (eval neg)
 done
 
 shabda vec-subtraction
   (krama-input vec-a, vec-b)
   (krama-output vector)
   (per-element yes)
-  (eval sub)
 done
 
 shabda vec-addition
   (krama-input vec-a, vec-b)
   (krama-output vector)
   (per-element yes)
-  (eval add)
 done
 
 shabda vec-multiplication
   (krama-input vec-a, vec-b)
   (krama-output vector)
   (per-element yes)
-  (eval mul)
 done
 
 # ── generated: matrix lifts ──────────────────────────────────────────────────
@@ -1264,7 +1159,6 @@ shabda complex-add
   (krama-input complex-a, complex-b)
   (krama-output complex)
   (per-element yes)
-  (eval add)
 done
 
 shabda complex-conjugate
@@ -1291,7 +1185,6 @@ shabda complex-neg
   (krama-input complex)
   (krama-output complex)
   (per-element yes)
-  (eval neg)
 done
 
 shabda complex-square
@@ -1312,7 +1205,6 @@ shabda set-membership
   (word belong)
   (krama-input element, set)
   (krama-output satya)
-  (eval member)
   (desc is-element-in-set)
 done
 

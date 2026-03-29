@@ -121,7 +121,8 @@
   (karma set-varga)
   (yukta element set)
   (phala satya)
-  (swarupa viveka))
+  (swarupa viveka)
+  (ganana member))
 
 (kosha set-subset
   (karma set-varga)

@@ -97,8 +97,6 @@ done
 
 shabda conjunction
   (word and both)
-  (eval and)
-  (arity 2)
   (name logical-and)
   (desc "logical-AND-true-only-when-both-operands-are-true")
 done
@@ -239,8 +237,6 @@ done
 shabda inverse
   (degree -1)
   (per-element no)
-  (invertible yes)
-  (inverse inverse)
 done
 
 shabda iteration
@@ -275,8 +271,6 @@ done
 
 shabda negation
   (word not without absent)
-  (eval not)
-  (arity 1)
   (name logical-not)
   (desc "logical-operation-that-inverts-the-truth-value-of-a-proposition")
 done
