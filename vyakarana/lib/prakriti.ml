@@ -52,17 +52,23 @@ let () =
     ("inverse", 9);
   ]
 
+let _dim_mu = Mutex.create ()
+
 let register_dimension (name : string) : int =
   let name = String.lowercase_ascii name in
-  match Hashtbl.find_opt _dim_name_to_idx name with
-  | Some idx -> idx
-  | None ->
-    let idx = !_dim_next_idx in
-    incr _dim_next_idx;
-    Hashtbl.replace _dim_name_to_idx name idx;
-    if not (Hashtbl.mem _dim_idx_to_name idx) then
-      Hashtbl.replace _dim_idx_to_name idx name;
-    idx
+  Mutex.lock _dim_mu;
+  let result = match Hashtbl.find_opt _dim_name_to_idx name with
+    | Some idx -> idx
+    | None ->
+      let idx = !_dim_next_idx in
+      incr _dim_next_idx;
+      Hashtbl.replace _dim_name_to_idx name idx;
+      if not (Hashtbl.mem _dim_idx_to_name idx) then
+        Hashtbl.replace _dim_idx_to_name idx name;
+      idx
+  in
+  Mutex.unlock _dim_mu;
+  result
 
 let dimension_count () : int = !_dim_next_idx
 
@@ -73,6 +79,9 @@ let string_of_visheshanam (v : visheshanam) : string =
   match Hashtbl.find_opt _dim_idx_to_name v with
   | Some name -> name
   | None -> Printf.sprintf "dim-%d" v
+
+let ensure_dim (name : string) : visheshanam =
+  match visheshanam_of_string name with Some d -> d | None -> register_dimension name
 
 (* ═══════════════════════════════════════════════════════════════════════════
    2. TYPES
@@ -320,6 +329,9 @@ let json_escape s =
   Buffer.contents buf
 
 let je s = "\"" ^ json_escape s ^ "\""
+
+(* per-thread CPU time in microseconds — excludes Domain contention *)
+external thread_cpu_us : unit -> float = "caml_thread_cpu_us"
 
 (* dir_walk: recursive directory walk collecting files by extension.
    replaces 3 duplicated copies (om_parser, om5_parser, yantra_index). *)

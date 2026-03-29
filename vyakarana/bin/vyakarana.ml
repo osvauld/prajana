@@ -166,19 +166,42 @@ let load_dirs ?(emit_meta=true) (dirs : string list) (k : Prakriti.proof_graph)
   (* pass 2: set search_dirs and kosha_root *)
   k.search_dirs := dirs;
   (match dirs with d :: _ -> k.kosha_root := d | [] -> ());
-  (* pass 3: load all .om5 files (multi-node aware) *)
+  (* pass 3: parse all .om5 files in parallel, join sequentially *)
+  let all_files = List.concat_map (fun dir ->
+    Karma.om5_files_recursive dir
+  ) dirs in
+  let n_workers = max 1 (Domain.recommended_domain_count () - 1) in
+  let parsed =
+    if n_workers <= 1 || List.length all_files <= 4 then
+      (* sequential fallback for single-core or tiny corpus *)
+      List.map (fun path -> Karma.parse_file_multi path) all_files
+    else begin
+      (* parallel parse: each Domain parses a chunk of files *)
+      let arr = Array.of_list all_files in
+      let n = Array.length arr in
+      let chunk = max 1 ((n + n_workers - 1) / n_workers) in
+      let domains = List.init (min n_workers ((n + chunk - 1) / chunk)) (fun i ->
+        let lo = i * chunk in
+        let hi = min n (lo + chunk) in
+        Domain.spawn (fun () ->
+          let results = ref [] in
+          for j = lo to hi - 1 do
+            results := (Karma.parse_file_multi arr.(j)) :: !results
+          done;
+          List.rev !results
+        )
+      ) in
+      List.concat_map Domain.join domains
+    end
+  in
   let loaded = ref 0 in
   let skipped = ref 0 in
-  List.iter (fun dir ->
-    let files = Karma.om5_files_recursive dir in
-    List.iter (fun path ->
-      let nodes = Karma.parse_file_multi path in
-      if nodes = [] then incr skipped
-      else List.iter (fun n ->
-        ignore (Prakriti.join k n); incr loaded
-      ) nodes
-    ) files
-  ) dirs;
+  List.iter (fun nodes ->
+    if nodes = [] then incr skipped
+    else List.iter (fun n ->
+      ignore (Prakriti.join k n); incr loaded
+    ) nodes
+  ) parsed;
   (k, !loaded, !skipped)
 
 let () =

@@ -32,7 +32,8 @@
   (domain kosha/math/logic/operations)
   (karma logic-varga)
   (yukta viparita)
-  (ganana not))
+  (ganana not)
+  (naama not without absent))
 
 (mantra quantifier
   (karma logic-varga)

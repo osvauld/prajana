@@ -69,9 +69,6 @@ let rec eval (k : proof_graph) (e : env) (expr : expr) : value =
   | From (list_expr, pat_names, guards, collect_expr) ->
     eval_from k e list_expr pat_names guards collect_expr
 
-  | Scan _ ->
-    failwith "eval: scan construct removed — all tantras use reduce now"
-
 and eval_from (k : proof_graph) (e : env) (list_expr : expr)
     (pat_names : string list) (guards : expr list) (collect_expr : expr) : value =
   let items = as_list (eval k e list_expr) in

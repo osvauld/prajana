@@ -2095,7 +2095,9 @@ shabda work
 done
 
 shabda zero-friction-surface
-  (word frictionlesses smooths)
+  (word frictionless smooth)
+  (signal-concept ghasana)
+  (signal shunya)
 done
 
 shabda zinc
