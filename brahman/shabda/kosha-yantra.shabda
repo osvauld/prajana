@@ -321,6 +321,11 @@ shabda op-print
   (name print)
 done
 
+shabda op-preduce
+  (name preduce)
+  (parse-arity 3)
+done
+
 shabda op-reduce
   (name reduce)
   (parse-arity 3)
@@ -394,6 +399,11 @@ shabda op-sub
   (name sub)
 done
 
+shabda op-substr
+  (name substr)
+  (parse-arity 3)
+done
+
 shabda op-tan
   (name tan)
 done
@@ -439,40 +449,26 @@ shabda op-walk-in
 done
 
 shabda visheshanam-abheda
-  (symmetric yes)
-  (transitive yes)
-  (congruence yes)
-  (composable yes)
   (desc "the-equivalence-relation-that-identifies-nodes-at-some-level-symmetric-and-transitive-forming-quotient-classes-in-the-graph")
 done
 
 shabda visheshanam-drishthanta
-  (antisymmetric yes)
   (desc "the-witness-edge-A-drishthanta-B-means-B-is-a-concrete-example-of-A-antisymmetric-and-grounding-abstract-structure-to-observable-instance")
 done
 
 shabda visheshanam-janya
-  (antisymmetric yes)
-  (dual phala)
   (desc "the-generator-edge-dual-to-phala-where-A-janya-B-means-A-arises-from-B-reversed-by-axiom-expansion-into-B-phala-A")
 done
 
 shabda visheshanam-kriya
-  (antisymmetric yes)
-  (composable yes)
-  (ring-op mul)
   (desc "the-multiplicative-operation-of-the-visheshanam-ring-composing-relations-sequentially-non-commutative-with-swarupa-as-its-identity-element")
 done
 
 shabda visheshanam-phala
-  (antisymmetric yes)
-  (dual janya)
   (desc "the-result-edge-dual-to-janya-where-A-phala-B-means-B-is-the-output-of-A-and-A-janya-B-means-A-arises-from-B")
 done
 
 shabda visheshanam-pratipaksha
-  (symmetric yes)
-  (involutive yes)
   (desc "the-group-inverse-of-the-visheshanam-ring-applying-pratipaksha-twice-returns-to-the-original-A-pratipaksha-B-means-B-negates-or-undoes-A")
 done
 
@@ -482,30 +478,18 @@ shabda visheshanam-ring
 done
 
 shabda visheshanam-siddha
-  (antisymmetric yes)
   (desc "the-entailment-edge-A-siddha-B-means-A-is-proven-or-certified-through-B-antisymmetric-and-not-composable")
 done
 
 shabda visheshanam-sthita
-  (antisymmetric yes)
-  (transitive yes)
-  (composable yes)
   (desc "the-dependency-edge-that-forms-a-partial-order-on-nodes-its-chains-encode-the-depth-filtration-from-sangati-foundations-to-kosha-derived-concepts")
 done
 
 shabda visheshanam-swarupa
-  (symmetric yes)
-  (transitive yes)
-  (reflexive yes)
-  (congruence yes)
-  (composable yes)
-  (ring-op mul-identity)
   (desc "the-multiplicative-identity-of-the-visheshanam-ring-composing-any-relation-with-swarupa-returns-that-relation-unchanged")
 done
 
 shabda visheshanam-yukta
-  (symmetric yes)
-  (ring-op add)
   (desc "the-additive-operation-of-the-visheshanam-ring-combining-two-relation-bundles-additively-with-shunya-as-its-identity-element")
 done
 

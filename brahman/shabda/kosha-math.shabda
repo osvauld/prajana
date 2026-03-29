@@ -7,7 +7,6 @@ shabda O-notation
 done
 
 shabda abs
-  (degree 1)
   (per-element yes)
 done
 
@@ -18,8 +17,8 @@ done
 
 shabda addition
   (word plus)
-  (degree 1)
   (per-element no)
+  (matra-ghata same)
 done
 
 shabda adjacency-matrix
@@ -43,7 +42,6 @@ shabda amplitude
 done
 
 shabda antiderivative
-  (degree integral)
   (per-element yes)
   (alias antiderivative)
   (desc the-gathering-of-all-tat-kshana-into-wholeness-sama-the-holding-whole-shakti-in-the-shiva-shakti-pair-the-act-of-integration)
@@ -51,19 +49,16 @@ done
 
 shabda arccosine
   (word arccosine)
-  (degree 1)
   (per-element yes)
 done
 
 shabda arcsine
   (word arcsine)
-  (degree 1)
   (per-element yes)
 done
 
 shabda arctangent
   (word arctangent)
-  (degree 1)
   (per-element yes)
 done
 
@@ -121,7 +116,6 @@ shabda category
 done
 
 shabda ceil
-  (degree 1)
   (per-element yes)
 done
 
@@ -156,7 +150,6 @@ shabda complex
 done
 
 shabda complex-magnitude
-  (degree 1)
   (krama-input complex)
   (krama-output scalar)
   (alias complex-magnitude)
@@ -164,7 +157,6 @@ shabda complex-magnitude
 done
 
 shabda complex-mul
-  (degree 1)
   (krama-input complex-a complex-b)
   (krama-output complex)
   (alias complex-mul)
@@ -172,7 +164,6 @@ shabda complex-mul
 done
 
 shabda complex-phase
-  (degree 1)
   (krama-input complex)
   (krama-output angle)
   (alias complex-phase)
@@ -234,6 +225,11 @@ shabda cycle
   (desc path-that-returns-to-its-starting-vertex)
 done
 
+shabda cosine
+  (per-element yes)
+  (matra-ghata identity)
+done
+
 shabda decision-problem
   (alias decision-problem)
   (desc computational-problem-with-a-yes-or-no-answer)
@@ -245,7 +241,6 @@ shabda depth-first
 done
 
 shabda derivative
-  (degree "d/dx")
   (per-element yes)
   (alias derivative)
   (desc the-rate-of-change-at-a-single-instant-vishama-the-sharp-local-instant-shiva-in-the-shiva-shakti-pair-d-by-dx)
@@ -279,8 +274,8 @@ done
 
 shabda division
   (word over)
-  (degree 1)
   (per-element no)
+  (matra-ghata sub)
 done
 
 shabda domain-math
@@ -290,6 +285,7 @@ done
 shabda double
   (word double)
   (per-element yes)
+  (matra-ghata identity)
 done
 
 shabda e
@@ -330,12 +326,10 @@ shabda expected-value
 done
 
 shabda exponential
-  (degree exp)
   (per-element yes)
 done
 
 shabda factorial
-  (degree n!)
   (per-element no)
 done
 
@@ -350,7 +344,6 @@ shabda filtration
 done
 
 shabda fourier-transform
-  (degree F)
   (per-element yes)
 done
 
@@ -423,10 +416,10 @@ done
 shabda half
   (word half)
   (per-element yes)
+  (matra-ghata identity)
 done
 
 shabda homogeneous-transform
-  (degree SE3-element)
   (per-element no)
   (alias homogeneous-transform)
   (desc the-matrix-encoding-rotation-and-translation-together-enabling-chain-composition-for-kinematic-chains)
@@ -537,7 +530,6 @@ shabda limit
 done
 
 shabda logarithm
-  (degree log)
   (per-element yes)
 done
 
@@ -557,7 +549,6 @@ shabda marginalisation
 done
 
 shabda mat-add
-  (degree 1)
   (krama-input mat-a mat-b)
   (krama-output matrix)
   (per-element yes)
@@ -566,7 +557,6 @@ shabda mat-add
 done
 
 shabda mat-scale
-  (degree 1)
   (krama-input scalar matrix)
   (krama-output matrix)
   (per-element yes)
@@ -575,7 +565,6 @@ shabda mat-scale
 done
 
 shabda mat-transpose
-  (degree 1)
   (krama-input matrix)
   (krama-output matrix)
   (alias mat-transpose)
@@ -614,12 +603,11 @@ done
 
 shabda multiplication
   (word times each)
-  (degree 1)
   (per-element no)
+  (matra-ghata add)
 done
 
 shabda neg
-  (degree 1)
   (per-element yes)
 done
 
@@ -691,7 +679,6 @@ done
 
 shabda power
   (word to-the-power)
-  (degree exp)
   (per-element no)
 done
 
@@ -717,7 +704,6 @@ done
 
 shabda product
   (fold product)
-  (degree 1)
   (per-element no)
 done
 
@@ -733,7 +719,6 @@ shabda quantifier
 done
 
 shabda quat-conjugate
-  (degree 1)
   (krama-input quaternion)
   (krama-output quaternion)
   (alias quat-conjugate)
@@ -741,7 +726,6 @@ shabda quat-conjugate
 done
 
 shabda quat-mul
-  (degree 1)
   (krama-input quat-a quat-b)
   (krama-output quaternion)
   (alias quat-mul)
@@ -749,7 +733,6 @@ shabda quat-mul
 done
 
 shabda quat-norm
-  (degree 1)
   (krama-input quaternion)
   (krama-output scalar)
   (alias quat-norm)
@@ -757,7 +740,6 @@ shabda quat-norm
 done
 
 shabda quat-to-rotation
-  (degree 1)
   (krama-input quaternion)
   (krama-output rotation-matrix)
   (alias quat-to-rotation)
@@ -795,8 +777,8 @@ done
 
 shabda reciprocal
   (word reciprocal)
-  (degree 1)
   (per-element yes)
+  (matra-ghata negate)
 done
 
 shabda recursion-complexity
@@ -810,7 +792,6 @@ shabda reduction
 done
 
 shabda rotation-matrix
-  (degree SO3-element)
   (per-element no)
   (alias rotation-matrix)
   (desc the-matrix-that-rotates-a-vector-by-an-angle-in-a-chosen-plane-orthogonal-and-det-1)
@@ -871,6 +852,11 @@ shabda shortest-path
   (desc path-between-two-vertices-minimising-total-edge-weight)
 done
 
+shabda sine
+  (per-element yes)
+  (matra-ghata identity)
+done
+
 shabda soundness
   (alias soundness)
   (desc property-of-a-system-where-every-provable-statement-is-true)
@@ -888,14 +874,14 @@ done
 
 shabda square
   (word squared)
-  (degree 2)
   (per-element yes)
+  (matra-ghata double)
 done
 
 shabda square-root
   (word root-of)
-  (degree 0.5)
   (per-element yes)
+  (matra-ghata halve)
 done
 
 shabda statistics-varga
@@ -923,13 +909,12 @@ done
 
 shabda subtraction
   (word minus)
-  (degree 1)
   (per-element no)
+  (matra-ghata same)
 done
 
 shabda sum
   (fold sum)
-  (degree 1)
   (per-element no)
 done
 
@@ -989,7 +974,6 @@ shabda undecidable-complexity
 done
 
 shabda vec-add
-  (degree 1)
   (krama-input vec-a vec-b)
   (krama-output vector)
   (per-element yes)
@@ -998,7 +982,6 @@ shabda vec-add
 done
 
 shabda vec-cross
-  (degree 1)
   (krama-input vec-a vec-b)
   (krama-output vector)
   (alias vec-cross)
@@ -1006,7 +989,6 @@ shabda vec-cross
 done
 
 shabda vec-dot
-  (degree 1)
   (krama-input vec-a vec-b)
   (krama-output scalar)
   (per-element yes)
@@ -1016,7 +998,6 @@ shabda vec-dot
 done
 
 shabda vec-norm
-  (degree 1)
   (krama-input vector)
   (krama-output scalar)
   (per-element yes)
@@ -1026,7 +1007,6 @@ shabda vec-norm
 done
 
 shabda vec-scale
-  (degree 1)
   (krama-input scalar vector)
   (krama-output vector)
   (per-element yes)

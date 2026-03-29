@@ -81,7 +81,6 @@ shabda falling
 done
 
 shabda floor
-  (degree 1)
   (per-element yes)
 done
 

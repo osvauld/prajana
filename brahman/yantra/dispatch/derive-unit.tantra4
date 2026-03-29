@@ -1,0 +1,47 @@
+-- derive-unit: generative unit algebra via mantra krama chains.
+-- discovers SI base units from graph (matra-beeja nodes),
+-- seeds them as dimension vectors, then walks mantras in fixpoint
+-- to derive all concept dimensions from krama chains.
+-- returns: [[concept, [exponents]], ...] for all resolvable concepts.
+(tantra derive-unit ()
+
+  -- step 1: discover SI base units from graph
+  -- exclude radian: dimensionless in SI (supplementary unit, not base)
+  (beeja-nodes (filter (walk-in "matra-beeja" "sthita") (fn n ->
+    and (has-items (walk (to-string n) "naama-mudra"))
+        (neq (to-string n) "radian"))))
+  (beeja-names (map beeja-nodes (fn n -> to-string n)))
+  (dim-len (length beeja-names))
+
+  -- step 2: build unit vectors — beeja-names[i] gets 1 at position i
+  (beeja-dims (map (range dim-len) (fn i ->
+    let name = nth beeja-names i
+    let vec = map (range dim-len) (fn j -> cond (eq i j) 1 otherwise 0)
+    [name, vec])))
+
+  -- step 3: fixpoint — walk mantras, derive phala dimensions from janya
+  (all-mantras (append (walk-in "physics-mantra" "varga") (walk-in "unit-mantra" "varga")))
+
+  -- helper: check if a concept is resolvable (known directly or via swarupa)
+  -- (defined inline since tantras are flat)
+
+  (final-bindings (fixpoint beeja-dims (fn binds ->
+    let known = map binds (fn b -> nth b 0)
+    -- collect new derivations this round, using only PREVIOUS round's bindings
+    let new-entries = reduce all-mantras [] (fn acc mantra ->
+      let ms = to-string mantra
+      let contract = om-contract ms
+      let janya-list = nth contract 0
+      let phala-list = nth contract 1
+      let phala = cond (has-items phala-list) (to-string (nth phala-list 0)) otherwise (shabda ms "name")
+      cond (member phala known) acc
+      otherwise
+        (let all-ok = reduce janya-list true (fn ok j ->
+          and ok (member (to-string j) known))
+        cond (not all-ok) acc
+        otherwise
+          (let result = eval-krama-dim ms binds
+          cond (exists result) (append acc [[phala, result]]) otherwise acc)))
+    append binds new-entries)))
+
+  final-bindings)

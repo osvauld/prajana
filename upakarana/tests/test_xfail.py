@@ -449,3 +449,100 @@ def test_proportional_ke_doubled(vy):
         "find kinetic energy of ball-A. find kinetic energy of ball-B"
     )
     assert "100" in r and "200" in r  # TODO: should be 250 and 1000
+
+
+# ── gate: graded_ring ────────────────────────────────────────────────────────
+# graded ring pipeline completion: entity scoping, fold boundaries,
+# cross-grade ⊗, transfer verbs, post-derive aggregation.
+# these test compositions of multiple ring operations.
+
+
+@xfail(strict=True, reason="graded_ring: three-entity derive + sum")
+def test_total_ke_three_entities(vy):
+    """3 entities, compute KE for each, sum all.
+    A: 0.5*2*3²=9, B: 0.5*4*5²=50, C: 0.5*1*10²=50. total=109."""
+    r = vy.answer(
+        "ball-A has mass 2 and velocity 3. "
+        "ball-B has mass 4 and velocity 5. "
+        "ball-C has mass 1 and velocity 10. "
+        "find total kinetic energy"
+    )
+    assert "109" in r
+
+
+@xfail(strict=True, reason="graded_ring: chained transfer A→B→C")
+def test_chain_transfer(vy):
+    """Tom gives to Mary, Mary gives to Bob — two transfers.
+    Mary: 3 + 4 - 2 = 5."""
+    r = vy.answer(
+        "Tom has 10 apples. Tom gave 4 to Mary. "
+        "Mary had 3 apples. Mary gave 2 to Bob. "
+        "how many apples does Mary have"
+    )
+    found = vy.strand(r, "we find")
+    assert "5" in found
+
+
+@xfail(strict=True, reason="graded_ring: aggregation + comparison across groups")
+def test_compare_total_per_group(vy):
+    """Two boxes, sum within each, compare totals.
+    box-A: 3+5=8, box-B: 4+2=6. box-A has more."""
+    r = vy.answer(
+        "box-A has 3 red balls and 5 blue balls. "
+        "box-B has 4 red balls and 2 blue balls. "
+        "which box has more balls in total"
+    )
+    assert "box-A" in r or "box-a" in r.lower() or "8" in r
+
+
+@xfail(strict=True, reason="graded_ring: per-entity compute then rank by derived value")
+def test_rank_three_by_ke(vy):
+    """Three entities, compute KE, find maximum.
+    car: 0.5*1000*20²=200000, bike: 0.5*100*30²=45000, truck: 0.5*5000*10²=250000.
+    Must compute KE (not compare raw masses) and identify truck as max."""
+    r = vy.answer(
+        "car has mass 1000 and velocity 20. "
+        "bike has mass 100 and velocity 30. "
+        "truck has mass 5000 and velocity 10. "
+        "which has the most kinetic energy"
+    )
+    # must have computed at least one KE value, not just compared masses
+    assert "250000" in r or "200000" in r or "45000" in r
+
+
+@xfail(strict=True, reason="graded_ring: mixed ⊕ and ⊗ with subtraction")
+def test_mixed_multiply_subtract(vy):
+    """Multiplication then subtraction in different grades.
+    4 bags × 6 apples = 24, then -5 eaten = 19."""
+    r = vy.answer(
+        "there are 4 bags. each bag has 6 apples. "
+        "5 apples were eaten. how many apples are left"
+    )
+    found = vy.strand(r, "we find")
+    assert "19" in found
+
+
+@xfail(strict=True, reason="graded_ring: ratio projection between two derived quantities")
+def test_proportional_ratio(vy):
+    """Doubling velocity → 4x KE. Ratio query.
+    A: KE=25, B: KE=100. B has 4 times more."""
+    r = vy.answer(
+        "ball-A has mass 2 and velocity 5. "
+        "ball-B has mass 2 and velocity 10. "
+        "how many times more kinetic energy does ball-B have"
+    )
+    assert "4" in r
+
+
+@xfail(strict=True, reason="graded_ring: intermediate question + continuation")
+def test_intermediate_then_continue(vy):
+    """Answer first question, then continue accumulating.
+    12-4=8 (first), 8-3=5 (second)."""
+    r = vy.answer(
+        "Alice has 12 cookies. she gives 4 to Bob. "
+        "how many does Alice have. "
+        "she then gives 3 to Carol. "
+        "how many does Alice have now"
+    )
+    found = vy.strand(r, "we find")
+    assert "5" in found or "8" in found

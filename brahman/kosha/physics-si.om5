@@ -1,0 +1,206 @@
+; ═══════════════════════════════════════════════════════════════════
+; physics-si — SI system: base units (beeja) + prefixes (upasarga)
+; ═══════════════════════════════════════════════════════════════════
+;
+; Architecture:
+;   base unit  = (sthita matra matra-beeja)  + (naama name) + (naama-mudra symbol)
+;   prefix     = (sthita upasarga)           + (sankhya exponent) + (naama-mudra symbol)
+;   composed   = (janya prefix base-unit)    + (naama-mudra composed-symbol)
+;
+; Composition: kilogram = kilo + gram → (janya kilo gram)
+; Conversion:  kilo has (sankhya 3) → 10^3 → 1 kg = 1000 g
+; ═══════════════════════════════════════════════════════════════════
+
+; ── SI base units (beeja) ─────────────────────────────────────────
+; The 7 SI base units. Each has (sthita matra matra-beeja).
+; metre, second, radian already defined in physics-foundation.om5
+; kilogram already defined — will gain (janya kilo gram) separately
+; newton is derived (kg·m/s²), not a base unit
+
+(kosha gram
+  (sthita matra matra-beeja)
+  (swarupa float)
+  (yukta mass)
+  (naama gram)
+  (naama-mudra g)
+  (vishesa physics-varga))
+
+(kosha ampere
+  (sthita matra matra-beeja)
+  (swarupa float)
+  (yukta current electric-current)
+  (naama ampere)
+  (naama-mudra A)
+  (vishesa physics-varga))
+
+(kosha kelvin
+  (sthita matra matra-beeja)
+  (swarupa float)
+  (yukta temperature thermodynamics)
+  (naama kelvin)
+  (naama-mudra K)
+  (vishesa physics-varga))
+
+(kosha mole
+  (sthita matra matra-beeja)
+  (swarupa float)
+  (yukta amount-of-substance avogadro-constant)
+  (naama mole)
+  (naama-mudra mol)
+  (vishesa physics-varga))
+
+(kosha candela
+  (sthita matra matra-beeja)
+  (swarupa float)
+  (yukta luminous-intensity)
+  (naama candela)
+  (naama-mudra cd)
+  (vishesa physics-varga))
+
+; ── SI prefixes (upasarga) ────────────────────────────────────────
+; Each prefix has (sthita upasarga) and (sankhya N) where N is the
+; exponent: the scale factor is 10^N.
+; naama carries the full name. naama-mudra carries the SI symbol.
+; Single-letter symbols live in naama-mudra (case-sensitive), NOT naama,
+; to avoid collisions with natural language words.
+; Composed symbol resolution uses prefix decomposition (step-108).
+
+(kosha yocto
+  (sthita upasarga)
+  (sankhya -24)
+  (naama yocto)
+  (naama-mudra y)
+  (vishesa physics-varga))
+
+(kosha zepto
+  (sthita upasarga)
+  (sankhya -21)
+  (naama zepto)
+  (naama-mudra z)
+  (vishesa physics-varga))
+
+(kosha atto
+  (sthita upasarga)
+  (sankhya -18)
+  (naama atto)
+  (naama-mudra a)
+  (vishesa physics-varga))
+
+(kosha femto
+  (sthita upasarga)
+  (sankhya -15)
+  (naama femto)
+  (naama-mudra f)
+  (vishesa physics-varga))
+
+(kosha pico
+  (sthita upasarga)
+  (sankhya -12)
+  (naama pico)
+  (naama-mudra p)
+  (vishesa physics-varga))
+
+(kosha nano
+  (sthita upasarga)
+  (sankhya -9)
+  (naama nano)
+  (naama-mudra n)
+  (vishesa physics-varga))
+
+(kosha micro
+  (sthita upasarga)
+  (sankhya -6)
+  (naama micro)
+  (naama-mudra u)
+  (vishesa physics-varga))
+
+(kosha milli
+  (sthita upasarga)
+  (sankhya -3)
+  (naama milli)
+  (naama-mudra m)
+  (vishesa physics-varga))
+
+(kosha centi
+  (sthita upasarga)
+  (sankhya -2)
+  (naama centi)
+  (naama-mudra c)
+  (vishesa physics-varga))
+
+(kosha deci
+  (sthita upasarga)
+  (sankhya -1)
+  (naama deci)
+  (naama-mudra d)
+  (vishesa physics-varga))
+
+(kosha deca
+  (sthita upasarga)
+  (sankhya 1)
+  (naama deca)
+  (naama-mudra da)
+  (vishesa physics-varga))
+
+(kosha hecto
+  (sthita upasarga)
+  (sankhya 2)
+  (naama hecto)
+  (naama-mudra h)
+  (vishesa physics-varga))
+
+(kosha kilo
+  (sthita upasarga)
+  (sankhya 3)
+  (naama kilo)
+  (naama-mudra k)
+  (vishesa physics-varga))
+
+(kosha mega
+  (sthita upasarga)
+  (sankhya 6)
+  (naama mega)
+  (naama-mudra M)
+  (vishesa physics-varga))
+
+(kosha giga
+  (sthita upasarga)
+  (sankhya 9)
+  (naama giga)
+  (naama-mudra G)
+  (vishesa physics-varga))
+
+(kosha tera
+  (sthita upasarga)
+  (sankhya 12)
+  (naama tera)
+  (naama-mudra T)
+  (vishesa physics-varga))
+
+(kosha peta
+  (sthita upasarga)
+  (sankhya 15)
+  (naama peta)
+  (naama-mudra P)
+  (vishesa physics-varga))
+
+(kosha exa
+  (sthita upasarga)
+  (sankhya 18)
+  (naama exa)
+  (naama-mudra E)
+  (vishesa physics-varga))
+
+(kosha zetta
+  (sthita upasarga)
+  (sankhya 21)
+  (naama zetta)
+  (naama-mudra Z)
+  (vishesa physics-varga))
+
+(kosha yotta
+  (sthita upasarga)
+  (sankhya 24)
+  (naama yotta)
+  (naama-mudra Y)
+  (vishesa physics-varga))

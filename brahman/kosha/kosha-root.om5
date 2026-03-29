@@ -164,7 +164,7 @@
   (swarupa setu)
   (abheda anuvada)
   (sthita setu domain-kosha)
-  (yukta english-to-ocaml math-to-ocaml physics-to-ocaml arithmetic-to-ocaml vector-to-ocaml matrix-to-ocaml physics-to-math physics-to-english math-to-english ocaml-to-ocaml matra-setu ocaml-setu lua-setu raylib-setu english-to-lua lua-to-lua))
+  (yukta physics-to-math physics-to-english math-to-english matra-setu))
 
 (kosha singularity
   (abheda brahma maximum-density)

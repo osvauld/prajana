@@ -100,10 +100,18 @@ let walk_in_raw (k : proof_graph) (node_name : string) (rel_name : string) : str
   match visheshanam_of_string rel_name with
   | None -> []
   | Some vish ->
-    List.filter_map (fun edge ->
-      if edge.relation = vish && edge.target = node_name then Some edge.source
-      else None
-    ) !(k.all_edges)
+    (* prefer CSR O(degree) lookup; fall back to linear scan if CSR not ready *)
+    match csr_walk_in_by_rel k node_name vish with
+    | _ :: _ as results -> results
+    | [] ->
+      (* CSR may return [] because node not indexed OR truly no edges.
+         If CSR is materialized, trust the empty result. Otherwise scan. *)
+      if !(k.csr) <> None then []
+      else
+        List.filter_map (fun edge ->
+          if edge.relation = vish && edge.target = node_name then Some edge.source
+          else None
+        ) !(k.all_edges)
 
 let build_mantra_select_index (k : proof_graph) : (string, value list) Hashtbl.t =
   let all_mantras =
@@ -161,6 +169,22 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   let (eval_arg, eval_str, eval_flt, eval_lst, eval_int) =
     make_eval_arg e_eval k e args in
   ignore (eval_arg, eval_flt, eval_lst, eval_int);
+  (* derive arity from graph: op-{name} → kriya → class.
+     projection = unary (1), everything else = binary (2). *)
+  let arity_of_op eval_name =
+    let op_node_name = "op-" ^ eval_name in
+    let kriya_dim = match visheshanam_of_string "kriya" with
+      | Some d -> d | None -> -1 in
+    if kriya_dim < 0 then 2
+    else match find k op_node_name with
+    | None -> 2
+    | Some op_node ->
+      let class_name = List.fold_left (fun acc e ->
+        if e.source = op_node_name && e.relation = kriya_dim then e.target
+        else acc
+      ) "" op_node.edges in
+      if class_name = "op-class-projection" then 1 else 2
+  in
   match op with
 
   | "lookup" ->
@@ -185,11 +209,16 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     Some (match visheshanam_of_string rel_name with
      | None -> VList []
      | Some vish ->
-       let edges = edges_of k node_name in
-       VList (List.filter_map (fun edge ->
-         if edge.relation = vish && edge.target = node_name then Some (VNode edge.source)
-         else None
-       ) edges))
+       (* CSR gives true incoming from all sources; edges_of only has local edges *)
+       let sources = csr_walk_in_by_rel k node_name vish in
+       if sources <> [] then VList (List.map (fun s -> VNode s) sources)
+       else
+         (* fallback to local edges if CSR not ready *)
+         let edges = edges_of k node_name in
+         VList (List.filter_map (fun edge ->
+           if edge.relation = vish && edge.target = node_name then Some (VNode edge.source)
+           else None
+         ) edges))
 
   | "om-janya" | "om-phala" | "om-kriya" | "om-yukta"
   | "om-sthita" | "om-swarupa" | "om-abheda" ->
@@ -379,16 +408,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
               | Some f -> VFloat f, rest
               | None ->
                 let eval_name = resolve_op tok in
-                let arity =
-                  let sh = Vidya.read_shabda k tok in
-                  match List.assoc_opt "arity" sh with
-                  | Some a -> (try int_of_string (String.trim a) with _ -> 2)
-                  | None ->
-                    if List.mem eval_name ["half";"double";"square";"sqrt";
-                       "neg";"reciprocal";"abs";"floor";"ceil";
-                       "sin";"cos";"tan";"asin";"acos";"atan";
-                       "log";"exp"] then 1 else 2
-                in
+                let arity = arity_of_op eval_name in
                 let args = ref [] in
                 let remaining = ref rest in
                 for _ = 1 to arity do
@@ -411,6 +431,119 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
         in
         let (result, _) = eval_krama toks in
         result
+    ) VNone)
+
+  | "eval-krama-dim" ->
+    (* Walk a mantra's krama s-expression with dimension vectors.
+       Pure computation: takes bindings [[concept, [exponents]], ...],
+       walks the krama tree applying matra-ghata algebra rules from shabda.
+       The caller (tantra) is responsible for resolving concept→dimension.
+       Returns: VList of VFloat exponents, or VNone. *)
+    let mantra_name = eval_str 0 in
+    let bindings_v = eval_lst 1 in
+    Some (with_node k mantra_name (fun n ->
+      let krama = n.krama in
+      if krama = "" then VNone
+      else
+        (* Infer dimension length from first binding, default 7 *)
+        let dim_len = match bindings_v with
+          | VList [_; VList dims] :: _ -> max 1 (List.length dims)
+          | _ -> 7
+        in
+        let zero_dim = Array.make dim_len 0.0 in
+        let dim_to_vlist arr =
+          VList (Array.to_list (Array.map (fun f -> VFloat f) arr))
+        in
+        (* Load bindings from caller *)
+        let binds : (string, float array) Hashtbl.t = Hashtbl.create 16 in
+        List.iter (fun pair ->
+          match pair with
+          | VList [VString concept; VList dims] ->
+            let arr = Array.make dim_len 0.0 in
+            List.iteri (fun i v ->
+              if i < dim_len then arr.(i) <- as_float v
+            ) dims;
+            Hashtbl.replace binds concept arr
+          | _ -> ()
+        ) bindings_v;
+        (* No implicit resolution — caller provides all bindings.
+           Unbound janya evaluate to zero-dim (dimensionless). *)
+        (* Dimension algebra operations *)
+        let dim_add a b =
+          Array.init dim_len (fun i -> a.(i) +. b.(i)) in
+        let dim_sub a b =
+          Array.init dim_len (fun i -> a.(i) -. b.(i)) in
+        let dim_double a =
+          Array.init dim_len (fun i -> a.(i) *. 2.0) in
+        let dim_halve a =
+          Array.init dim_len (fun i -> a.(i) /. 2.0) in
+        let dim_negate a =
+          Array.init dim_len (fun i -> -. a.(i)) in
+        (* Resolve op's matra-ghata rule from shabda *)
+        let resolve_ghata tok =
+          let sh = Vidya.read_shabda k tok in
+          match List.assoc_opt "matra-ghata" sh with
+          | Some rule -> String.trim rule
+          | None -> "identity"
+        in
+        (* Tokenize krama *)
+        let toks = String.split_on_char ' ' krama
+          |> List.filter (fun s -> s <> "") in
+        (* Recursive evaluator — same tree walk as eval-krama, different algebra *)
+        let rec walk_dim toks =
+          match toks with
+          | [] -> Array.copy zero_dim, []
+          | "(" :: rest ->
+            let (v, rest2) = walk_dim rest in
+            let rest3 = match rest2 with ")" :: r -> r | r -> r in
+            v, rest3
+          | ")" :: rest -> Array.copy zero_dim, rest
+          | tok :: rest ->
+            if Hashtbl.mem binds tok then
+              Hashtbl.find binds tok, rest
+            else
+              match float_of_string_opt tok with
+              | Some _ -> Array.copy zero_dim, rest  (* numeric literal = dimensionless *)
+              | None ->
+                (* check if this is a known op (has matra-ghata or is in eval_index) *)
+                let ghata = resolve_ghata tok in
+                let eval_name = match Domain.DLS.get _eval_ctx with
+                  | Some ctx ->
+                    (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
+                     | Some _ -> tok | None -> resolve_eval_name k tok)
+                  | None -> tok in
+                let is_op = ghata <> "identity" ||
+                  (match Domain.DLS.get _eval_ctx with
+                   | Some ctx -> Hashtbl.mem ctx.ctx_index.eval_index eval_name
+                   | None -> false) in
+                if not is_op then
+                  (* unknown token = dimensionless constant (pi, e, etc.) *)
+                  Array.copy zero_dim, rest
+                else
+                let arity = arity_of_op eval_name in
+                let args = ref [] in
+                let remaining = ref rest in
+                for _ = 1 to arity do
+                  let (v, r) = walk_dim !remaining in
+                  args := v :: !args;
+                  remaining := r
+                done;
+                let arg_vals = List.rev !args in
+                let result = match ghata, arg_vals with
+                  | "add", [a; b] -> dim_add a b
+                  | "sub", [a; b] -> dim_sub a b
+                  | "same", a :: _ -> a
+                  | "double", [a] -> dim_double a
+                  | "halve", [a] -> dim_halve a
+                  | "negate", [a] -> dim_negate a
+                  | "identity", [a] -> a
+                  | _, a :: _ -> a   (* unknown rule: pass through first arg *)
+                  | _, [] -> Array.copy zero_dim
+                in
+                result, !remaining
+        in
+        let (result, _) = walk_dim toks in
+        dim_to_vlist result
     ) VNone)
 
   | "krama-path" ->
@@ -479,16 +612,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
               | Some f -> VFloat f, rest
               | None ->
                 let eval_name = resolve_op tok in
-                let arity =
-                  let sh = Vidya.read_shabda k tok in
-                  match List.assoc_opt "arity" sh with
-                  | Some a -> (try int_of_string (String.trim a) with _ -> 2)
-                  | None ->
-                    if List.mem eval_name ["half";"double";"square";"sqrt";
-                       "neg";"reciprocal";"abs";"floor";"ceil";
-                       "sin";"cos";"tan";"asin";"acos";"atan";
-                       "log";"exp"] then 1 else 2
-                in
+                let arity = arity_of_op eval_name in
                 let args = ref [] in
                 let remaining = ref rest in
                 for _ = 1 to arity do
@@ -519,15 +643,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
             rest3
           | tok :: rest ->
             if is_op tok then
-              let sh = Vidya.read_shabda k tok in
-              let arity = match List.assoc_opt "arity" sh with
-                | Some a -> (try int_of_string (String.trim a) with _ -> 2)
-                | None -> let en = resolve_op tok in
-                  if List.mem en ["half";"double";"square";"sqrt";
-                     "neg";"reciprocal";"abs";"floor";"ceil";
-                     "sin";"cos";"tan";"asin";"acos";"atan";
-                     "log";"exp"] then 1 else 2
-              in
+              let arity = arity_of_op (resolve_op tok) in
               let remaining = ref rest in
               for _ = 1 to arity do
                 remaining := _skip_expr !remaining
@@ -558,15 +674,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
           | tok :: rest ->
             if tok = target then Some [], rest
             else if is_op tok then
-              let sh = Vidya.read_shabda k tok in
-              let arity = match List.assoc_opt "arity" sh with
-                | Some a -> (try int_of_string (String.trim a) with _ -> 2)
-                | None -> let en = resolve_op tok in
-                  if List.mem en ["half";"double";"square";"sqrt";
-                     "neg";"reciprocal";"abs";"floor";"ceil";
-                     "sin";"cos";"tan";"asin";"acos";"atan";
-                     "log";"exp"] then 1 else 2
-              in
+              let arity = arity_of_op (resolve_op tok) in
               if arity = 1 then begin
                 let (found, rest2) = parse_expr rest in
                 match found with
@@ -684,19 +792,147 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
 
   | "word-node" ->
     let word = eval_str 0 in
-    Some (match Domain.DLS.get _eval_ctx with
-     | Some ctx ->
-       (match Hashtbl.find_opt ctx.ctx_index.word_index word with
-        | Some node_name -> VString node_name
-        | None ->
-          (* casing fallback: try lowercase if word has uppercase chars *)
+    let naama_dim = match visheshanam_of_string "naama" with
+      | Some d -> d | None -> -1 in
+    let mudra_dim = match visheshanam_of_string "naama-mudra" with
+      | Some d -> d | None -> -1 in
+    if naama_dim < 0 then Some VNone
+    else begin
+      (* step 1: CSR walk-in via naama (full word forms, case-insensitive) *)
+      let candidates = csr_walk_in_by_rel k word naama_dim in
+      let candidates = if candidates = [] then
+        let lower = String.lowercase_ascii word in
+        if lower <> word then csr_walk_in_by_rel k lower naama_dim
+        else []
+      else candidates in
+      (* step 2: CSR walk-in via naama-mudra (symbols, case-sensitive) *)
+      let candidates = if candidates = [] && mudra_dim >= 0 then
+        let mudra = csr_walk_in_by_rel k word mudra_dim in
+        if mudra = [] then
+          let lower = String.lowercase_ascii word in
+          if lower <> word then csr_walk_in_by_rel k lower mudra_dim
+          else []
+        else mudra
+      else candidates in
+      let candidates = List.sort_uniq String.compare candidates in
+      Some (match candidates with
+       | [single] -> VString single
+       | _ :: _ ->
+         (* multiple candidates: PPR disambiguation *)
+         (match Domain.DLS.get _eval_ctx with
+          | Some ctx ->
+            let best = List.fold_left (fun (best_name, best_score) name ->
+              let ppr_score = match Hashtbl.find_opt ctx.ctx_ppr name with
+                | Some s -> s | None -> 0.0 in
+              if ppr_score > best_score then (name, ppr_score)
+              else (best_name, best_score)
+            ) ("", -1.0) candidates in
+            VString (fst best)
+          | None -> VString (List.hd candidates))
+       | [] ->
+         (* step 3: direct node name match — fallback when no naama edges *)
+         match Prakriti.find k word with
+         | Some _ -> VString word
+         | None ->
+           let lower = String.lowercase_ascii word in
+           if lower <> word then
+             match Prakriti.find k lower with
+             | Some _ -> VString lower | None -> VNone
+           else VNone)
+    end
+
+  | "word-node-candidates" ->
+    (* return ALL candidate nodes for a word — naama first, then naama-mudra,
+       then direct name as fallback *)
+    let word = eval_str 0 in
+    let naama_dim = match visheshanam_of_string "naama" with
+      | Some d -> d | None -> -1 in
+    let mudra_dim = match visheshanam_of_string "naama-mudra" with
+      | Some d -> d | None -> -1 in
+    if naama_dim < 0 then Some (VList [])
+    else begin
+      let candidates = csr_walk_in_by_rel k word naama_dim in
+      let candidates = if candidates = [] then
+        let lower = String.lowercase_ascii word in
+        if lower <> word then csr_walk_in_by_rel k lower naama_dim
+        else []
+      else candidates in
+      let candidates = if candidates = [] && mudra_dim >= 0 then
+        let mudra = csr_walk_in_by_rel k word mudra_dim in
+        if mudra = [] then
+          let lower = String.lowercase_ascii word in
+          if lower <> word then csr_walk_in_by_rel k lower mudra_dim
+          else []
+        else mudra
+      else candidates in
+      (* fallback: direct name match when no naama/mudra edges found *)
+      let candidates = if candidates = [] then
+        match find k word with Some _ -> [word] | None ->
           let lower = String.lowercase_ascii word in
           if lower <> word then
-            match Hashtbl.find_opt ctx.ctx_index.word_index lower with
-            | Some node_name -> VString node_name
-            | None -> VNone
-          else VNone)
-     | None -> VNone)
+            match find k lower with Some _ -> [lower] | None -> []
+          else []
+      else candidates in
+      let deduped = List.sort_uniq String.compare candidates in
+      Some (VList (List.map (fun s -> VString s) deduped))
+    end
+
+  | "decompose-unit" ->
+    (* step-108: decompose a symbol like "km","kPa","MHz" into prefix+base.
+       (1) full string via naama-mudra → if single match, not a compound, return VNone.
+       (2) for each split i=1..len-1: left via naama-mudra check sthita:upasarga,
+           right via naama-mudra check sthita:matra or matra-beeja.
+       (3) return VList [VString prefix; VString base; VString exponent] or VNone. *)
+    let sym = eval_str 0 in
+    let mudra_dim = match visheshanam_of_string "naama-mudra" with
+      | Some d -> d | None -> -1 in
+    let sthita_dim = match visheshanam_of_string "sthita" with
+      | Some d -> d | None -> -1 in
+    let sankhya_dim = match visheshanam_of_string "sankhya" with
+      | Some d -> d | None -> -1 in
+    if mudra_dim < 0 || sthita_dim < 0 then Some VNone
+    else begin
+      let len = String.length sym in
+      if len < 2 then Some VNone
+      else begin
+        (* helper: check if node has sthita edge to a given target *)
+        let has_sthita node target =
+          let edges = edges_of k node in
+          List.exists (fun e ->
+            e.relation = sthita_dim && e.source = node && e.target = target
+          ) edges
+        in
+        (* helper: get sankhya value from a node *)
+        let get_sankhya node =
+          let edges = edges_of k node in
+          List.fold_left (fun acc e ->
+            if e.relation = sankhya_dim && e.source = node then e.target
+            else acc
+          ) "" edges
+        in
+        (* try each split point *)
+        let result = ref VNone in
+        for i = 1 to len - 1 do
+          if !result = VNone then begin
+            let left = String.sub sym 0 i in
+            let right = String.sub sym i (len - i) in
+            let prefix_candidates = csr_walk_in_by_rel k left mudra_dim in
+            let base_candidates = csr_walk_in_by_rel k right mudra_dim in
+            (* find a prefix (sthita:upasarga) and base (sthita:matra or matra-beeja) *)
+            let prefix_node = List.find_opt (fun n -> has_sthita n "upasarga") prefix_candidates in
+            let base_node = List.find_opt (fun n ->
+              has_sthita n "matra" || has_sthita n "matra-beeja"
+            ) base_candidates in
+            match prefix_node, base_node with
+            | Some pn, Some bn ->
+              let exp = if sankhya_dim >= 0 then get_sankhya pn else "" in
+              result := VList [VString pn; VString bn; VString exp]
+            | _ -> ()
+          end
+        done;
+        Some !result
+      end
+    end
 
   | "word-node-compound" ->
     (* reverse of expand_avastha: check if two words form a known compound.
@@ -753,8 +989,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
         vps := VList [VString s; VString v] :: !vps
       | VList [VString s; VString "sankhya"; VFloat f] ->
         Hashtbl.replace bound_concepts s true;
-        let vs = if Float.is_integer f && Float.is_finite f
-          then Printf.sprintf "%g" f else Printf.sprintf "%g" f in
+        let vs = Printf.sprintf "%g" f in
         vps := VList [VString s; VString vs] :: !vps
       | _ -> ()
     ) graph_v;
@@ -771,12 +1006,18 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     let rec propagate concept =
       (* find mantras that have this concept as janya *)
       let edges = !(k.all_edges) in
+      let varga_dim = match visheshanam_of_string "varga" with
+        | Some d -> d | None -> -1 in
       let affected = List.filter_map (fun e ->
         if e.relation = janya_dim && e.target = concept then Some e.source
         else None
       ) edges in
       List.iter (fun mantra_name ->
         if Hashtbl.mem fired_mantras mantra_name then ()
+        (* skip unit-mantra varga — definition mantras are for dimensional analysis only *)
+        else if varga_dim >= 0 && List.exists (fun e ->
+          e.source = mantra_name && e.relation = varga_dim && e.target = "unit-mantra"
+        ) (edges_of k mantra_name) then ()
         else begin
           (* get this mantra's janya and phala *)
           let m_edges = edges_of k mantra_name in
@@ -1189,64 +1430,16 @@ let register_primitive_arities () =
   r "node-slokas"         1;
   r "node-krama"          1;
   r "eval-krama"          2;
+  r "eval-krama-dim"      2;
   r "krama-path"          3;
   r "word-node"           1;
+  r "word-node-candidates" 1;
   r "word-node-compound"  2;
+  r "decompose-unit"      1;
   r "eval-node"           1;
-  r "lookup-word"         1;
   r "apply-op"            2;
   r "call-tantra"         2;
   r "split-numeric"       1;
-  r "find-context"        1;
-  r "scene-extract"       1;
-  r "scene-narrate"       1;
-  r "dim-vector"          1;
-  r "square"              1;
-  r "half"                1;
-  r "double"              1;
-  r "reciprocal"          1;
-  r "abs"                 1;
-  r "sqrt"                1;
-  r "floor"               1;
-  r "ceil"                1;
-  r "sum"                 1;
-  r "not"                 1;
-  r "exists"              1;
-  r "eq"                  2;
-  r "neq"                 2;
-  r "lt"                  2;
-  r "gt"                  2;
-  r "and"                (-1);
-  r "or"                 (-1);
-  r "string-length"       1;
-  r "to-string"           1;
-  r "to-number"           1;
-  r "concat"             (-1);
-  r "substr"              3;
-  r "starts-with"         2;
-  r "ends-with"           2;
-  r "split"               2;
-  r "join"                2;
-  r "char-at"             2;
-  r "nth"                 2;
-  r "length"              1;
-  r "append"              2;
-  r "flatten"             1;
-  r "unique"              1;
-  r "member"              2;
-  r "range"               1;
-  r "map"                 2;
-  r "filter"              2;
-  r "pmap"                2;
-  r "pfilter"             2;
-  r "reduce"              3;
-  r "preduce"             3;
-  r "fixpoint"            2;
-  r "iterate"             3;
-  r "add"                (-1);
-  r "mul"                (-1);
-  r "sub"                 2;
-  r "div"                 2;
-  r "max"                 2;
-  r "min"                 2;
-  r "power"               2
+  r "dim-vector"          1
+  (* math/eval ops omitted — registered by scan_graph_op_arities
+     from op-* nodes in yantra.om5 via kriya → class → parse-arity *)

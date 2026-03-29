@@ -446,15 +446,15 @@ shabda copula
 done
 
 shabda copula-are
-  (word areses)
+  (role grammar)
 done
 
 shabda copula-was
-  (word wases)
+  (role grammar)
 done
 
 shabda copula-were
-  (word weres)
+  (role grammar)
 done
 
 shabda corruption
@@ -1305,10 +1305,6 @@ shabda observation
   (word observate observates observations)
 done
 
-shabda ocaml
-  (word ocamls)
-done
-
 shabda ojas
   (word ojases)
 done
@@ -1447,6 +1443,7 @@ done
 
 shabda prashna
   (word prashnas)
+  (role intent)
 done
 
 shabda pratibimba
@@ -1490,11 +1487,11 @@ shabda promoter
 done
 
 shabda pronoun-its
-  (word itses)
+  (role pronoun)
 done
 
 shabda pronoun-their
-  (word theirs)
+  (role pronoun)
 done
 
 shabda propagation
@@ -1587,10 +1584,6 @@ done
 
 shabda rational
   (word rationals)
-done
-
-shabda raylib
-  (word raylibs)
 done
 
 shabda reaction
@@ -1795,6 +1788,7 @@ done
 
 shabda something
   (word somethings)
+  (role grammar)
 done
 
 shabda sound
@@ -1853,9 +1847,6 @@ shabda string
   (word strings)
 done
 
-shabda strudel
-  (word strudels)
-done
 
 shabda subdivision
   (word subdivisions)
@@ -1923,6 +1914,7 @@ done
 
 shabda thing
   (word things)
+  (role grammar)
 done
 
 shabda thymine
@@ -2047,6 +2039,7 @@ done
 
 shabda vidhi-kaala
   (word calculates computes determines finds solves)
+  (role intent)
 done
 
 shabda viewport

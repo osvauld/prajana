@@ -194,3 +194,118 @@
   (vishesa linear-motion-varga)
   (abheda initial-rest)
   (sthita shunya))
+
+; ── dimensional definitions ────────────────────────────────────
+; bridge from SI base units to concept dimensions.
+; base concepts: identity (mass IS gram-dimension).
+; derived concepts: krama chain from base units.
+; these let eval-krama-dim derive all unit dimensions generatively.
+
+(mantra mass-definition
+  (varga unit-mantra)
+  (phala mass)
+  (janya gram)
+  (krama gram))
+
+(mantra displacement-definition
+  (varga unit-mantra)
+  (phala displacement)
+  (janya metre)
+  (krama metre))
+
+(mantra time-definition
+  (varga unit-mantra)
+  (phala time)
+  (janya second)
+  (krama second))
+
+(mantra current-definition
+  (varga unit-mantra)
+  (phala current)
+  (janya ampere)
+  (krama ampere))
+
+; variant bridges: qualified concepts inherit base concept's dimension
+(mantra initial-velocity-definition
+  (varga unit-mantra)
+  (phala initial-velocity)
+  (janya velocity)
+  (krama velocity))
+
+(mantra final-velocity-definition
+  (varga unit-mantra)
+  (phala final-velocity)
+  (janya velocity)
+  (krama velocity))
+
+(mantra observer-velocity-definition
+  (varga unit-mantra)
+  (phala observer-velocity)
+  (janya velocity)
+  (krama velocity))
+
+(mantra observed-velocity-definition
+  (varga unit-mantra)
+  (phala observed-velocity)
+  (janya velocity)
+  (krama velocity))
+
+(mantra normal-force-definition
+  (varga unit-mantra)
+  (phala normal-force)
+  (janya force)
+  (krama force))
+
+(mantra height-definition
+  (varga unit-mantra)
+  (phala height)
+  (janya displacement)
+  (krama displacement))
+
+(mantra radius-definition
+  (varga unit-mantra)
+  (phala radius)
+  (janya displacement)
+  (krama displacement))
+
+(mantra gravity-definition
+  (varga unit-mantra)
+  (phala gravity)
+  (janya acceleration)
+  (krama acceleration))
+
+(mantra velocity-definition
+  (vishesa linear-motion-varga)
+  (varga unit-mantra)
+  (swarupa velocity)
+  (phala velocity)
+  (janya metre second)
+  (krama division metre second))
+
+(mantra area-definition
+  (varga unit-mantra)
+  (swarupa area)
+  (phala area)
+  (janya metre metre)
+  (krama square metre))
+
+(mantra volume-definition
+  (varga unit-mantra)
+  (swarupa volume)
+  (phala volume)
+  (janya area metre)
+  (krama multiplication area metre))
+
+(mantra moment-of-inertia-definition
+  (varga unit-mantra)
+  (swarupa moment-of-inertia)
+  (phala moment-of-inertia)
+  (janya gram area)
+  (krama multiplication gram area))
+
+(mantra charge-definition
+  (varga unit-mantra)
+  (swarupa charge)
+  (phala charge)
+  (janya ampere second)
+  (krama multiplication ampere second))

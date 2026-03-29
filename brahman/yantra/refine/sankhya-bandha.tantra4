@@ -1,9 +1,11 @@
--- bind numbers to concepts within each grade (grade-scoped, idempotent).
-(tantra sankhya-bandha (graph)
+-- sankhya-bandha: indexed graph version.
+-- existing-sankhya scan → O(1) idx lookup.
+-- split-grades + inner reduce stay sequential (order-dependent).
+(tantra sankhya-bandha (g)
+  (graph (cond (exists g) g otherwise []))
   (already-bound (nth (bound-state graph) 0))
-  (existing-sankhya (graph | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)))
+  (existing-sankhya (idx-subjects g "sankhya"))
   (grades (split-grades graph))
-  -- within each grade, pair concepts with numbers sequentially
   (new-bindings (reduce grades [] (fn acc grade ->
     let paired = reduce grade [[], "", ""] (fn st tri ->
       let pairs   = nth st 0
@@ -24,4 +26,4 @@
           otherwise [pairs, active, val])
       otherwise st)
     (append acc (nth paired 0)))))
-  (append-triples graph new-bindings))
+  (idx-append g new-bindings))

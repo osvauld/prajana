@@ -408,7 +408,7 @@ let attach_file (k : proof_graph) (_yantra_idx : tantra_index) (path : string) :
      | None -> error_response "" "" "" "ATTACH_ERROR"
          (Printf.sprintf "could not parse om5 file: %s" path)
      | Some n ->
-       ignore (join k n); init_satya k; materialize_csr k;
+       ignore (join k n); rebuild_indices k;
        Printf.printf "[attach] om5: %s\n%!" n.name;
        Printf.sprintf "{\"status\":\"ok\",\"command\":\"attach\",\"kind\":\"om5\",\
 \"name\":%s,\"path\":%s}" (je n.name) (je path))
@@ -422,7 +422,6 @@ let reload_tantras (k : proof_graph) (yantra_idx : tantra_index) (dirs : string 
   Hashtbl.clear yantra_idx.by_input;
   Hashtbl.clear yantra_idx.constants;
   Hashtbl.clear yantra_idx.conversions;
-  Hashtbl.clear yantra_idx.word_index;
   Hashtbl.clear yantra_idx.eval_index;
   yantra_idx.all_tantras := [];
   let tantra_dirs = Jnana.collect_tantra_dirs dirs in
@@ -435,7 +434,7 @@ let reload_tantras (k : proof_graph) (yantra_idx : tantra_index) (dirs : string 
      ignore (Kriya_eval.eval_tantra ~idx:yantra_idx ~session
                 k t [("_", VString "reload")])
    | None -> ());
-  materialize_csr k;
+  rebuild_indices k;
   let n = List.length !(yantra_idx.all_tantras) in
   Printf.printf "[reload-all] %d tantras loaded from %d dirs\n%!" n (List.length tantra_dirs);
   Printf.sprintf "{\"status\":\"ok\",\"command\":\"reload-all\",\"tantras_loaded\":%d}" n

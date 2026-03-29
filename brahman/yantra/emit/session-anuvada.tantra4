@@ -10,7 +10,7 @@
   (merged (cond (and (exists prior-graph) (has-items prior-graph))
     (append asserted prior-graph) otherwise asserted))
   -- refine (with internal fixpoint for binding steps)
-  (refined (avrti-refine-v2 merged))
+  (refined (avrti-refine merged))
   -- store new bindings for next turn
   (bindings (sankhya-sparsha refined))
   (_stored (remember-bindings (map bindings (fn p -> bind (nth p 0) (nth p 1)))))

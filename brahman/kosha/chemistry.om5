@@ -6,16 +6,9 @@
   (kriya element)
   (phala int electron-shell valence mass)
   (swarupa setu)
-  (yukta proton-count neutron-count domain-ocaml)
+  (yukta proton-count neutron-count)
   (siddha isotope)
   (sthita nuclear-fusion domain-chemistry))
-
-(kosha atom-ocaml
-  (sthita chemistry-to-ocaml domain-ocaml)
-  (swarupa atom-function sambandha)
-  (siddha ocaml-syntax)
-  (yukta proton neutron type-signature)
-  (phala electron-shell valence))
 
 (kosha atomic-varga
   (vishesa chemistry-varga)
@@ -42,12 +35,6 @@
 (kosha chemistry-constants
   (vishesa chemistry-varga)
   (sthita matra niyama))
-
-(kosha chemistry-to-ocaml
-  (swarupa setu)
-  (yukta domain-chemistry domain-ocaml element type-signature)
-  (kriya atom-function)
-  (siddha ocaml-syntax correctness-check))
 
 (kosha chemistry-varga
   (sthita domain-chemistry)
@@ -113,7 +100,7 @@
 
 (kosha domain-chemistry
   (sthita domain-physics)
-  (yukta upakarana nucleus proton neutron nuclear-fusion radioactivity isotope isomer element carbon hydrogen oxygen nitrogen silicon sulfur boron electron-shell orbital valence covalent-bond ionic-bond hydrogen-bond molecule monomer polymer hydrocarbon atom-function chemistry-to-ocaml)
+  (yukta upakarana nucleus proton neutron nuclear-fusion radioactivity isotope isomer element carbon hydrogen oxygen nitrogen silicon sulfur boron electron-shell orbital valence covalent-bond ionic-bond hydrogen-bond molecule monomer polymer hydrocarbon atom-function)
   (siddha yantra))
 
 (kosha electron-shell

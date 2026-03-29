@@ -31,7 +31,8 @@
   (is-dravya (and (not (exists nd)) has-pend (not is-verb-form) (not after-loc) (not active-can-claim)))
   (is-sambodhana (or (eq nd-str "sambodhana") (eq nd-str "abhisambodhana") (eq nd-str "aamantrana")))
   (is-copula (and (eq rl "grammar") (starts-with nd-str "copula")))
-  (cond (eq rl "intent") [[word, "vidhi-kaala", "solve-for"]]
+  (candidates (word-info info "candidates"))
+  (main-triples (cond (eq rl "intent") [[word, "vidhi-kaala", "solve-for"]]
     is-sambodhana [[word, nd-str, word]]
     is-copula [[word, "copula", word]]
     (eq rl "grammar") []
@@ -48,3 +49,8 @@
     is-concept [[nd-str, "satya", nd-str]]
     is-dravya [[word, "satya", word]]
     otherwise [[word, "mithya", word]]))
+  -- when multiple candidates, emit candidate edges for downstream disambiguation
+  (candidate-triples (cond (gt (length candidates) 1)
+    (map candidates (fn c -> [word, "candidate", (to-string c)]))
+    otherwise []))
+  (append main-triples candidate-triples))

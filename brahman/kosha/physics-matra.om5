@@ -1,7 +1,7 @@
 -- derived and compound units.
 -- every unit has (sthita matra) so graph walks can identify them.
 -- janya edges trace composition from SI base units.
--- naama edges carry universal symbols (language-independent).
+-- naama-mudra edges carry universal symbols (language-independent).
 
 -- SI derived named units
 
@@ -10,7 +10,8 @@
   (swarupa float)
   (janya kilogram metre second)
   (yukta energy work heat)
-  (naama J joule)
+  (naama joule)
+  (naama-mudra J)
   (vishesa physics-varga))
 
 (kosha watt
@@ -18,7 +19,8 @@
   (swarupa float)
   (janya joule second)
   (yukta power)
-  (naama W watt)
+  (naama watt)
+  (naama-mudra W)
   (vishesa physics-varga))
 
 (kosha pascal
@@ -26,7 +28,8 @@
   (swarupa float)
   (janya newton metre)
   (yukta pressure stress)
-  (naama Pa pascal)
+  (naama pascal)
+  (naama-mudra Pa)
   (vishesa physics-varga))
 
 (kosha hertz
@@ -34,7 +37,8 @@
   (swarupa float)
   (janya second)
   (yukta frequency)
-  (naama Hz hertz)
+  (naama hertz)
+  (naama-mudra Hz)
   (vishesa physics-varga))
 
 (kosha volt
@@ -42,7 +46,8 @@
   (swarupa float)
   (janya watt ampere)
   (yukta voltage electric-potential)
-  (naama V volt)
+  (naama volt)
+  (naama-mudra V)
   (vishesa physics-varga))
 
 (kosha farad
@@ -50,7 +55,8 @@
   (swarupa float)
   (janya coulomb volt)
   (yukta capacitance)
-  (naama F farad)
+  (naama farad)
+  (naama-mudra F)
   (vishesa physics-varga))
 
 -- compound units
@@ -60,7 +66,7 @@
   (swarupa float)
   (janya metre second)
   (yukta velocity speed)
-  (naama m/s)
+  (naama-mudra m/s)
   (vishesa physics-varga))
 
 (kosha metre-per-second-squared
@@ -68,7 +74,7 @@
   (swarupa float)
   (janya metre second)
   (yukta acceleration)
-  (naama m/s^2 m/s2)
+  (naama-mudra m/s^2 m/s2)
   (vishesa physics-varga))
 
 (kosha kilogram-metre-per-second
@@ -76,7 +82,7 @@
   (swarupa float)
   (janya kilogram metre second)
   (yukta momentum impulse)
-  (naama kg*m/s)
+  (naama-mudra kg*m/s)
   (vishesa physics-varga))
 
 (kosha kilogram-metre-squared-per-second
@@ -84,7 +90,7 @@
   (swarupa float)
   (janya kilogram metre second)
   (yukta angular-momentum)
-  (naama kg*m^2/s)
+  (naama-mudra kg*m^2/s)
   (vishesa physics-varga))
 
 (kosha kilogram-per-cubic-metre
@@ -92,7 +98,7 @@
   (swarupa float)
   (janya kilogram metre)
   (yukta density)
-  (naama kg/m^3 kg/m3)
+  (naama-mudra kg/m^3 kg/m3)
   (vishesa physics-varga))
 
 (kosha radian-per-second
@@ -100,7 +106,7 @@
   (swarupa float)
   (janya radian second)
   (yukta angular-velocity)
-  (naama rad/s)
+  (naama-mudra rad/s)
   (vishesa physics-varga))
 
 (kosha newton-metre
@@ -108,5 +114,5 @@
   (swarupa float)
   (janya newton metre)
   (yukta torque moment)
-  (naama N*m Nm)
+  (naama-mudra N*m Nm)
   (vishesa physics-varga))

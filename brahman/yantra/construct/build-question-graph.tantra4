@@ -28,7 +28,8 @@
     let has-punct = member last-ch sent-punct
     let clean     = (cond has-punct (substr word 0 (sub wlen 1)) otherwise word)
     let punct     = (cond has-punct last-ch otherwise "")
-    let nd        = (cond (has-text clean) (shabda-anveshana clean) otherwise _none)
+    let candidates = (cond (has-text clean) (word-node-candidates clean) otherwise [])
+    let nd        = (cond (gt (length candidates) 0) (nth candidates 0) otherwise (cond (has-text clean) (shabda-anveshana clean) otherwise _none))
     let rl        = (cond (exists nd) (shabda nd "role") otherwise "")
     let ly        = (cond (exists nd) (node-layer nd) otherwise "")
     let parts     = split-numeric clean
@@ -46,7 +47,7 @@
     let bind-ledger = filter g (fn t -> (or (eq (nth t 1) "sankhya") (eq (nth t 1) "matra")))
     let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "apadana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala")))
     let subgraphs = [current-grade, entity-reg, bind-ledger, grammar-trail]
-    let info      = [(to-string nd), rl, ly, nv, (to-string un)]
+    let info      = [(to-string nd), rl, ly, nv, (to-string un), candidates]
     let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]] is-vibhakti [[clean, vibhakti-edge, clean]] otherwise (emit-triples clean info subgraphs)
     let with-word = (append g triples)
     (cond (has-text punct) (append with-word [[punct, "viraam", punct]]) otherwise with-word))))

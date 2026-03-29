@@ -439,6 +439,33 @@ let compute_visheshanam_entropy_weights (k : proof_graph) : unit =
   ) raw_pairs
 
 (* ═══════════════════════════════════════════════════════════════════════════
+   6b. Ensure edge targets exist as nodes — required for CSR completeness.
+   Naama/naama-mudra/sankhya edge targets are often just strings ("K", "J",
+   "3") that have no nigamana entry. We create lightweight stub nodes for
+   them so CSR can index incoming edges and csr_walk_in_by_rel works.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let ensure_edge_targets_are_nodes (k : proof_graph) : int =
+  let count = ref 0 in
+  List.iter (fun (e : typed_edge) ->
+    if not (Hashtbl.mem k.nodes e.target) then begin
+      let stub : nigamana = {
+        name   = e.target;
+        layer  = "stub";
+        domain = "";
+        slokas = [];
+        edges  = [];
+        satya  = 0.0;
+        shabda = "";
+        krama  = "";
+      } in
+      Hashtbl.replace k.nodes e.target stub;
+      incr count
+    end
+  ) !(k.all_edges);
+  !count
+
+(* ═══════════════════════════════════════════════════════════════════════════
    7. CSR — materialization
    ═══════════════════════════════════════════════════════════════════════════ *)
 
@@ -526,6 +553,44 @@ let materialize_csr (k : proof_graph) : unit =
   else 0.0 in
   Printf.printf "csr: materialized %d nodes, %d edges (of %d total), density %.4f%%\n%!"
     n actual_nnz nnz density
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   7b. CSR walk-in — O(degree) incoming edge lookup
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let csr_walk_in_by_rel (k : proof_graph) (target : string) (rel : int)
+    : string list =
+  match !(k.csr) with
+  | None -> []
+  | Some csr ->
+    match Hashtbl.find_opt csr.csr_node_to_idx target with
+    | None -> []
+    | Some idx ->
+      let row_start = csr.csr_in_row_ptr.(idx) in
+      let row_end   = csr.csr_in_row_ptr.(idx + 1) in
+      let acc = ref [] in
+      for pos = row_start to row_end - 1 do
+        if csr.csr_in_rel_idx.(pos) = rel then
+          acc := csr.csr_idx_to_node.(csr.csr_in_col_idx.(pos)) :: !acc
+      done;
+      !acc
+
+let csr_walk_in_all (k : proof_graph) (target : string)
+    : (string * int) list =
+  match !(k.csr) with
+  | None -> []
+  | Some csr ->
+    match Hashtbl.find_opt csr.csr_node_to_idx target with
+    | None -> []
+    | Some idx ->
+      let row_start = csr.csr_in_row_ptr.(idx) in
+      let row_end   = csr.csr_in_row_ptr.(idx + 1) in
+      let acc = ref [] in
+      for pos = row_start to row_end - 1 do
+        acc := (csr.csr_idx_to_node.(csr.csr_in_col_idx.(pos)),
+                csr.csr_in_rel_idx.(pos)) :: !acc
+      done;
+      !acc
 
 (* ═══════════════════════════════════════════════════════════════════════════
    8. PPR — personalized pagerank + depth affinity
@@ -697,3 +762,16 @@ let walk_inheritance (k : proof_graph) (node_name : string) : string list =
     frontier := !next_frontier
   done;
   List.rev !result
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   10. REBUILD_INDICES — single entry point after any graph mutation.
+   Ensures edge targets are nodes → satya scores → CSR → entropy weights.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let rebuild_indices (k : proof_graph) : unit =
+  let stubs = ensure_edge_targets_are_nodes k in
+  if stubs > 0 then
+    Printf.printf "indices: created %d stub nodes for edge targets\n%!" stubs;
+  init_satya k;
+  materialize_csr k;
+  compute_visheshanam_entropy_weights k

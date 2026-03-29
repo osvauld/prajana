@@ -7,7 +7,7 @@
      3. arity scanning — pre_scan_arities, scan_graph_op_arities
      4. visheshanam properties — scan_visheshanam_properties
      5. graph enrichment — add_edge_to_graph, apply_relation_axioms
-     6. word index — build_word_index
+     6. eval + compound index — build_word_index
      7. build_index — full build orchestrator *)
 
 open Prakriti
@@ -27,7 +27,6 @@ let empty_index () : tantra_index = {
   constants   = Hashtbl.create 16;
   conversions = Hashtbl.create 16;
   all_tantras = ref [];
-  word_index  = Hashtbl.create 256;
   eval_index  = Hashtbl.create 256;
   compound_word_index = Hashtbl.create 128;
 }
@@ -200,17 +199,26 @@ let scan_graph_op_arities (k : proof_graph) : unit =
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let scan_visheshanam_properties (k : proof_graph) : unit =
-  let parse_bool pairs key =
-    match List.assoc_opt key pairs with
-    | Some "yes" -> true | _ -> false
+  (* walk siddha edges on the visheshanam node to get algebraic properties *)
+  let siddha_targets (n : nigamana) : string list =
+    List.filter_map (fun e ->
+      if e.source = n.name && e.relation = siddha then Some e.target
+      else None
+    ) n.edges
   in
-  let parse_ring_op pairs =
-    match List.assoc_opt "ring-op" pairs with
-    | Some "add" -> `Add | Some "mul" -> `Mul | _ -> `None
+  (* walk pratipaksha edges to derive dual *)
+  let pratipaksha_targets (n : nigamana) : string list =
+    List.filter_map (fun e ->
+      if e.source = n.name && e.relation = pratipaksha then Some e.target
+      else None
+    ) n.edges
   in
-  let parse_dual pairs =
-    match List.assoc_opt "dual" pairs with
-    | Some s -> visheshanam_of_string s | None -> None
+  (* walk abheda edges to derive ring-op *)
+  let abheda_targets (n : nigamana) : string list =
+    List.filter_map (fun e ->
+      if e.source = n.name && e.relation = abheda then Some e.target
+      else None
+    ) n.edges
   in
   let ndims = dimension_count () in
   let vish_names = List.init ndims (fun idx ->
@@ -220,18 +228,36 @@ let scan_visheshanam_properties (k : proof_graph) : unit =
   List.iter (fun (node_name, vish) ->
     match find k node_name with
     | None -> ()
-    | Some _n ->
-      let pairs = Vidya.raw_shabda_for_node k node_name in
+    | Some n ->
+      let axioms = siddha_targets n in
+      let has prop = List.mem prop axioms in
+      (* dual: strip "visheshanam-" prefix from pratipaksha target *)
+      let dual = match pratipaksha_targets n with
+        | t :: _ ->
+          let prefix = "visheshanam-" in
+          let plen = String.length prefix in
+          if String.length t > plen && String.sub t 0 plen = prefix then
+            visheshanam_of_string (String.sub t plen (String.length t - plen))
+          else None
+        | [] -> None
+      in
+      (* ring-op: derived from abheda targets *)
+      let ring_op =
+        let abh = abheda_targets n in
+        if List.mem "addition" abh then `Add
+        else if List.mem "multiplication" abh then `Mul
+        else `None
+      in
       let props : vish_props = {
-        vp_symmetric     = parse_bool  pairs "symmetric";
-        vp_antisymmetric = parse_bool  pairs "antisymmetric";
-        vp_transitive    = parse_bool  pairs "transitive";
-        vp_reflexive     = parse_bool  pairs "reflexive";
-        vp_involutive    = parse_bool  pairs "involutive";
-        vp_congruence    = parse_bool  pairs "congruence";
-        vp_composable    = parse_bool  pairs "composable";
-        vp_dual          = parse_dual  pairs;
-        vp_ring_op       = parse_ring_op pairs;
+        vp_symmetric     = has "symmetric";
+        vp_antisymmetric = has "antisymmetric";
+        vp_transitive    = has "transitive";
+        vp_reflexive     = has "reflexive";
+        vp_involutive    = has "involutive";
+        vp_congruence    = has "congruence";
+        vp_composable    = has "composable";
+        vp_dual          = dual;
+        vp_ring_op       = ring_op;
         vp_satya_weight  = default_vish_props.vp_satya_weight;
       } in
       register_vish_props vish props
@@ -299,31 +325,6 @@ let apply_relation_axioms (k : proof_graph) : int * (string * int * int) list =
    5.5 AVASTHA GENERATOR — expand (avastha q1 q2 ...) edges into child nodes
    ═══════════════════════════════════════════════════════════════════════════ *)
 
-(* qualifier → sangati context mapping.
-   Mirrors upakarana/analysis/compose.py QUALIFIER_CONTEXT.
-   Each qualifier generates: qualifier-base node with sthita→context. *)
-let _qualifier_context : (string, string) Hashtbl.t =
-  let tbl = Hashtbl.create 64 in
-  List.iter (fun (q, ctx) -> Hashtbl.replace tbl q ctx) [
-    (* temporal *)
-    "initial", "aarambham"; "final", "antya"; "average", "madhya";
-    (* spatial *)
-    "angular", "kona"; "linear", "rekha"; "centripetal", "kendra";
-    "radial", "kendra"; "tangential", "sparsha"; "normal", "lamba";
-    "net", "samanya"; "total", "dvandva"; "relative", "apeksha";
-    (* domain — force/energy source *)
-    "kinetic", "gati"; "potential", "sthiti"; "elastic", "sthiti";
-    "electric", "vidyut"; "gravitational", "gurutva"; "magnetic", "ayaskanta";
-    "thermal", "ushna"; "nuclear", "paramanu"; "photon", "prakasha";
-    "spring", "sthiti"; "friction", "ghasana"; "drag", "ghasana";
-    "tension", "tana"; "applied", "prayoga";
-    (* intensity *)
-    "strong", "vriddhi"; "weak", "kshaya"; "damped", "kshaya"; "rated", "matra";
-    (* chemistry *)
-    "covalent", "sahabhaga"; "ionic", "vidyut"; "hydrogen", "setu";
-  ];
-  tbl
-
 let expand_avastha (k : proof_graph) : int =
   let avastha_dim = match visheshanam_of_string "avastha" with
     | Some d -> d | None -> register_dimension "avastha" in
@@ -357,8 +358,8 @@ let expand_avastha (k : proof_graph) : int =
       match find k child_name with
       | Some _ -> ()
       | None ->
-        let context = match Hashtbl.find_opt _qualifier_context qualifier with
-          | Some ctx -> ctx | None -> qualifier in
+        (* qualifier IS the context — no translation needed *)
+        let context = qualifier in
         (* build edges: swarupa→base, sthita→context, inherit vishesa *)
         let edges = ref [
           { source = child_name; target = base_name; relation = swarupa_dim };
@@ -834,15 +835,8 @@ let generate_varga_patterns (k : proof_graph) : int =
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
-  let naama_dim = match visheshanam_of_string "naama" with
-    | Some d -> d | None -> register_dimension "naama" in
   Hashtbl.iter (fun _key n ->
     let node_name = n.name in
-    (* word index: walk naama edges (graph-native, emitted by emit_shabda_edges) *)
-    List.iter (fun e ->
-      if e.source = node_name && e.relation = naama_dim then
-        Hashtbl.replace idx.word_index e.target node_name
-    ) n.edges;
     (* eval index: from ganana graph edges (first target = primitive name) *)
     let ganana_dim = match visheshanam_of_string "ganana" with
       | Some d -> d | None -> register_dimension "ganana" in

@@ -107,7 +107,6 @@ shabda contact
 done
 
 shabda copula
-  (word are is be was were)
   (alias is, are, was, were, equals, equaled, gives)
   (desc "linking-verb-connecting-subject-to-predicate")
 done

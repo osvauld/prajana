@@ -163,7 +163,7 @@
 
 (kosha camera-3d
   (swarupa darshana)
-  (sthita domain-3d domain-raylib bindu world-space akasham)
+  (sthita domain-3d bindu world-space akasham)
   (yukta rekha position target fovy)
   (kriya projection)
   (phala viewport))
@@ -176,7 +176,7 @@
   (sthita domain-3d))
 
 (kosha domain-3d
-  (sthita domain-math domain-physics domain-raylib akasham)
+  (sthita domain-math domain-physics akasham)
   (yukta gola rekha trikona vector matrix projection camera viewport transform rasterization mesh vertex)
   (siddha upakarana)
   (abheda yantra))
@@ -220,7 +220,7 @@
 
 (kosha ray-picking
   (swarupa darshana rekha)
-  (sthita domain-3d domain-raylib camera-3d viewport akasham)
+  (sthita domain-3d camera-3d viewport akasham)
   (yukta bindu mouse)
   (phala collision)
   (abheda sparsha))
@@ -233,7 +233,7 @@
 
 (kosha viewport
   (swarupa tala)
-  (sthita kshetra domain-3d domain-raylib)
+  (sthita kshetra domain-3d)
   (janya camera-3d)
   (phala projection)
   (yukta trikona rasterization fragment))

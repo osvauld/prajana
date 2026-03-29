@@ -2,7 +2,7 @@
 (tantra profile-detect (sentence)
   (raw-graph (build-question-graph sentence))
   (asserted (assertion-bandha raw-graph))
-  (refined (fixpoint asserted (fn g -> avrti-refine-v2 g)))
+  (refined (fixpoint asserted (fn g -> avrti-refine g)))
   (expanded (kosha-expand refined))
 
   -- profile each detector

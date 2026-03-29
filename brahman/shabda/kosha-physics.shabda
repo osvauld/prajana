@@ -253,14 +253,15 @@ shabda hard-constraint
   (pos modal)
 done
 
-shabda heat-transfer
-  (pos verb)
-done
-
 shabda height
   (word height)
   (alias height altitude elevation)
 done
+
+shabda heat-transfer
+  (pos verb)
+done
+
 
 shabda horizontal-motion
   (word horizontal horizontally)
@@ -296,7 +297,6 @@ done
 
 shabda jacobian-mantra
   (name jacobian)
-  (degree 1)
   (krama-lhs jacobian)
   (krama-rhs fk angles epsilon)
 done
@@ -312,7 +312,7 @@ shabda joint-space
 done
 
 shabda kilogram
-  (word kg kilogram)
+  (word kilogram)
 done
 
 shabda kinematics-varga
@@ -371,7 +371,7 @@ shabda mechanical-energy-varga
 done
 
 shabda metre
-  (word m metre meter)
+  (word metre meter)
 done
 
 shabda metre-per-second
@@ -403,7 +403,7 @@ shabda navier-stokes
 done
 
 shabda newton
-  (word N newton)
+  (word newton)
 done
 
 shabda newton-second-law-motion
@@ -595,7 +595,7 @@ shabda rotational-motion-varga
 done
 
 shabda second
-  (word s sec second)
+  (word sec second)
 done
 
 shabda sliding
