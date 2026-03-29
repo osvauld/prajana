@@ -1,0 +1,112 @@
+-- derived and compound units.
+-- every unit has (sthita matra) so graph walks can identify them.
+-- janya edges trace composition from SI base units.
+-- naama edges carry universal symbols (language-independent).
+
+-- SI derived named units
+
+(kosha joule
+  (sthita matra)
+  (swarupa float)
+  (janya kilogram metre second)
+  (yukta energy work heat)
+  (naama J joule)
+  (vishesa physics-varga))
+
+(kosha watt
+  (sthita matra)
+  (swarupa float)
+  (janya joule second)
+  (yukta power)
+  (naama W watt)
+  (vishesa physics-varga))
+
+(kosha pascal
+  (sthita matra)
+  (swarupa float)
+  (janya newton metre)
+  (yukta pressure stress)
+  (naama Pa pascal)
+  (vishesa physics-varga))
+
+(kosha hertz
+  (sthita matra)
+  (swarupa float)
+  (janya second)
+  (yukta frequency)
+  (naama Hz hertz)
+  (vishesa physics-varga))
+
+(kosha volt
+  (sthita matra)
+  (swarupa float)
+  (janya watt ampere)
+  (yukta voltage electric-potential)
+  (naama V volt)
+  (vishesa physics-varga))
+
+(kosha farad
+  (sthita matra)
+  (swarupa float)
+  (janya coulomb volt)
+  (yukta capacitance)
+  (naama F farad)
+  (vishesa physics-varga))
+
+-- compound units
+
+(kosha metre-per-second
+  (sthita matra)
+  (swarupa float)
+  (janya metre second)
+  (yukta velocity speed)
+  (naama m/s)
+  (vishesa physics-varga))
+
+(kosha metre-per-second-squared
+  (sthita matra)
+  (swarupa float)
+  (janya metre second)
+  (yukta acceleration)
+  (naama m/s^2 m/s2)
+  (vishesa physics-varga))
+
+(kosha kilogram-metre-per-second
+  (sthita matra)
+  (swarupa float)
+  (janya kilogram metre second)
+  (yukta momentum impulse)
+  (naama kg*m/s)
+  (vishesa physics-varga))
+
+(kosha kilogram-metre-squared-per-second
+  (sthita matra)
+  (swarupa float)
+  (janya kilogram metre second)
+  (yukta angular-momentum)
+  (naama kg*m^2/s)
+  (vishesa physics-varga))
+
+(kosha kilogram-per-cubic-metre
+  (sthita matra)
+  (swarupa float)
+  (janya kilogram metre)
+  (yukta density)
+  (naama kg/m^3 kg/m3)
+  (vishesa physics-varga))
+
+(kosha radian-per-second
+  (sthita matra)
+  (swarupa float)
+  (janya radian second)
+  (yukta angular-velocity)
+  (naama rad/s)
+  (vishesa physics-varga))
+
+(kosha newton-metre
+  (sthita matra)
+  (swarupa float)
+  (janya newton metre)
+  (yukta torque moment)
+  (naama N*m Nm)
+  (vishesa physics-varga))

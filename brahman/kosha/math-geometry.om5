@@ -317,14 +317,16 @@
   (kriya vector)
   (abheda abs)
   (phala vector)
-  (krama abs))
+  (krama abs)
+  (ganana abs))
 
 (mantra vec-neg
   (karma geometry-varga)
   (kriya vector)
   (abheda negation)
   (phala vector)
-  (krama neg))
+  (krama neg)
+  (ganana neg))
 
 (mantra vec-subtraction
   (karma geometry-varga)
@@ -332,21 +334,24 @@
   (abheda subtraction)
   (yukta aayaama)
   (pratipaksha vec-add)
-  (krama subtraction))
+  (krama subtraction)
+  (ganana sub))
 
 (mantra vec-addition
   (karma geometry-varga)
   (kriya vector)
   (abheda addition)
   (yukta aayaama)
-  (krama addition))
+  (krama addition)
+  (ganana add))
 
 (mantra vec-multiplication
   (karma geometry-varga)
   (kriya vector)
   (abheda multiplication)
   (phala vector)
-  (krama multiplication))
+  (krama multiplication)
+  (ganana mul))
 
 (kosha differential-geometry
   (lakshana geometry-varga)

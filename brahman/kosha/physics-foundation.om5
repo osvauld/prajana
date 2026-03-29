@@ -58,6 +58,7 @@
   (swarupa float)
   (abheda float)
   (yukta mass ghana)
+  (naama kg kilogram)
   (vishesa physics-varga))
 
 (kosha kinematics

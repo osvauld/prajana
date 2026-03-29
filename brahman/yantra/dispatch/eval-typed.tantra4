@@ -13,7 +13,7 @@
   (meta-output  (shabda op-name "krama-output"))
   (meta-elem    (shabda op-name "per-element"))
   (meta-fold    (shabda op-name "fold"))
-  (raw-eval     (shabda op-name "eval"))
+  (raw-eval     (nth (walk op-name "ganana") 0))
   (krama-ops    (node-krama op-name))
 
   (is-per-elem  (eq meta-elem "yes"))

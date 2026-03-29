@@ -19,6 +19,22 @@ open Kriya_types
 (* per-thread CPU time in microseconds — excludes Domain contention *)
 external thread_cpu_us : unit -> float = "caml_thread_cpu_us"
 
+(* ganana dimension — computation binding (concept → primitive) *)
+let ganana_dim = Prakriti.register_dimension "ganana"
+
+(* resolve eval name: walk ganana edge, fallback to shabda "eval" *)
+let resolve_eval_name (k : proof_graph) (tok : string) : string =
+  match Prakriti.find k tok with
+  | Some n ->
+    (match List.find_opt (fun e -> e.source = tok && e.relation = ganana_dim) n.edges with
+     | Some e -> e.target
+     | None ->
+       let sh = Vidya.read_shabda k tok in
+       (match List.assoc_opt "eval" sh with
+        | Some ev -> String.trim ev
+        | None -> tok))
+  | None -> tok
+
 (* ═══════════════════════════════════════════════════════════════════════════
    1. HELPERS
    ═══════════════════════════════════════════════════════════════════════════ *)
@@ -334,17 +350,13 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
             | None -> ()
           end
         ) janya_names;
-        (* Resolve op name → eval name using eval_index *)
+        (* Resolve op name → eval name using eval_index + ganana graph walk *)
         let resolve_op tok =
           match Domain.DLS.get _eval_ctx with
           | Some ctx ->
             (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
              | Some _node_name -> tok
-             | None ->
-               let sh = Vidya.read_shabda k tok in
-               (match List.assoc_opt "eval" sh with
-                | Some ev -> String.trim ev
-                | None -> tok))
+             | None -> resolve_eval_name k tok)
           | None -> tok
         in
         (* Tokenize krama *)
@@ -448,11 +460,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
           | Some ctx ->
             (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
              | Some _ -> tok
-             | None ->
-               let sh = Vidya.read_shabda k tok in
-               (match List.assoc_opt "eval" sh with
-                | Some ev -> String.trim ev
-                | None -> tok))
+             | None -> resolve_eval_name k tok)
           | None -> tok
         in
         let rec eval_sub toks =
@@ -679,7 +687,15 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     Some (match Domain.DLS.get _eval_ctx with
      | Some ctx ->
        (match Hashtbl.find_opt ctx.ctx_index.word_index word with
-        | Some node_name -> VString node_name | None -> VNone)
+        | Some node_name -> VString node_name
+        | None ->
+          (* casing fallback: try lowercase if word has uppercase chars *)
+          let lower = String.lowercase_ascii word in
+          if lower <> word then
+            match Hashtbl.find_opt ctx.ctx_index.word_index lower with
+            | Some node_name -> VString node_name
+            | None -> VNone
+          else VNone)
      | None -> VNone)
 
   | "word-node-compound" ->
@@ -1104,11 +1120,7 @@ let eval_call (k : proof_graph) (e : env) (op : string) (args : expr list) : val
         | "apply-op" ->
           let op_name = as_string (e_eval k e (List.nth args 0)) in
           let op_args_v = as_list (e_eval k e (List.nth args 1)) in
-          let prim_name =
-            let sh = Vidya.raw_shabda_for_node k op_name in
-            (match List.assoc_opt "eval" sh with
-             | Some s -> String.trim s | None -> op_name)
-          in
+          let prim_name = resolve_eval_name k op_name in
           apply_op_vals prim_name op_args_v
         | _ ->
           (match Domain.DLS.get _eval_ctx with

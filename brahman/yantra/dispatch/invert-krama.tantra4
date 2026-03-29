@@ -25,12 +25,11 @@
     let op-name  = nth step 0
     let arg-idx  = nth step 1
     let sib-val  = nth step 2
-    let arity    = shabda op-name "arity"
-    let inv-name = shabda op-name "inverse"
-    let inv-eval = shabda inv-name "eval"
-    let op-eval  = shabda op-name "eval"
-    -- unary: apply inverse
-    cond (eq arity "1")
+    let inv-name = nth (walk op-name "pratipaksha") 0
+    let inv-eval = nth (walk inv-name "ganana") 0
+    let op-eval  = nth (walk op-name "ganana") 0
+    -- unary (no sibling): apply inverse
+    cond (not (has-text sib-val))
       (apply-op inv-eval [acc])
     otherwise
       -- binary: use evaluated sibling value directly

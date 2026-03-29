@@ -26,29 +26,34 @@
   (abheda sama-vishama)
   (siddha sign-rahita)
   (yukta viparita norm max min)
-  (sthita real))
+  (sthita real)
+  (ganana abs))
 
 (mantra addition
   (karma number-varga)
   (abheda sankalana plus)
   (kriya matra arithmetic vriddhi)
   (yukta equation)
-  (pratipaksha subtraction))
+  (pratipaksha subtraction)
+  (ganana add))
 
 (mantra arccosine
   (karma number-varga)
   (vishesa trigonometry-varga)
-  (pratipaksha cosine))
+  (pratipaksha cosine)
+  (ganana acos))
 
 (mantra arcsine
   (karma number-varga)
   (vishesa trigonometry-varga)
-  (pratipaksha sine))
+  (pratipaksha sine)
+  (ganana asin))
 
 (mantra arctangent
   (karma number-varga)
   (vishesa trigonometry-varga)
-  (pratipaksha tangent))
+  (pratipaksha tangent)
+  (ganana atan2))
 
 (mantra ceil
   (karma number-varga)
@@ -58,7 +63,8 @@
   (abheda sama-vishama)
   (siddha vriddhi)
   (yukta float int)
-  (pratipaksha floor))
+  (pratipaksha floor)
+  (ganana ceil))
 
 (mantra complex-magnitude
   (karma number-varga)
@@ -94,7 +100,8 @@
   (karma number-varga)
   (vishesa complex-varga)
   (abheda addition)
-  (krama addition))
+  (krama addition)
+  (ganana add))
 
 (mantra complex-conjugate
   (karma number-varga)
@@ -121,7 +128,8 @@
   (karma number-varga)
   (vishesa complex-varga)
   (abheda negation)
-  (krama neg))
+  (krama neg)
+  (ganana neg))
 
 (mantra complex-square
   (karma number-varga)
@@ -150,13 +158,15 @@
   (kriya arithmetic kshaya matra)
   (yukta equation)
   (phala dharana)
-  (pratipaksha multiplication))
+  (pratipaksha multiplication)
+  (ganana div))
 
 (mantra double
   (karma number-varga)
   (swarupa multiplication)
   (kriya multiplication vriddhi)
-  (pratipaksha half))
+  (pratipaksha half)
+  (ganana double))
 
 (mantra equals
   (karma number-varga)
@@ -169,7 +179,8 @@
   (vishesa transcendental-varga)
   (pratipaksha logarithm)
   (kriya vriddhi)
-  (yukta power euler))
+  (yukta power euler)
+  (ganana exp))
 
 (mantra factorial
   (karma number-varga)
@@ -180,7 +191,8 @@
   (phala int)
   (abheda eka-aneka)
   (siddha parampara)
-  (yukta combination permutation series avrti))
+  (yukta combination permutation series avrti)
+  (ganana factorial))
 
 (mantra floor
   (domain kosha/math/number/operations)
@@ -192,7 +204,8 @@
   (siddha kshaya)
   (yukta float int abs)
   (pratipaksha ceil)
-  (sthita real))
+  (sthita real)
+  (ganana floor))
 
 (mantra gcd
   (karma number-varga)
@@ -212,7 +225,8 @@
   (karma number-varga)
   (swarupa division)
   (kriya division kshaya)
-  (pratipaksha double))
+  (pratipaksha double)
+  (ganana half))
 
 (mantra lcm
   (karma number-varga)
@@ -235,7 +249,8 @@
   (phala ghana-rahita)
   (drishthanta avrti vibhajana)
   (siddha sort)
-  (pratipaksha power))
+  (pratipaksha power)
+  (ganana log))
 
 (mantra max
   (karma number-varga)
@@ -246,7 +261,8 @@
   (ahara number)
   (sthita real)
   (yukta abs)
-  (pratipaksha min))
+  (pratipaksha min)
+  (ganana max))
 
 (mantra mean
   (karma number-varga)
@@ -271,7 +287,8 @@
   (ahara number)
   (sthita real)
   (yukta abs)
-  (pratipaksha max))
+  (pratipaksha max)
+  (ganana min))
 
 (mantra minus
   (karma number-varga)
@@ -285,13 +302,15 @@
   (abheda times feminine)
   (yukta matrix-multiplication equation prashna-amsha)
   (phala womb)
-  (pratipaksha division))
+  (pratipaksha division)
+  (ganana mul))
 
 (mantra neg
   (karma number-varga)
   (abheda negation)
   (swarupa additive-inverse)
-  (pratipaksha neg))
+  (pratipaksha neg)
+  (ganana neg))
 
 (mantra plus
   (karma number-varga)
@@ -308,19 +327,22 @@
   (siddha avrti)
   (yukta multiplication exponent series e polynomial derivative avrti)
   (drishthanta square cube)
-  (pratipaksha logarithm))
+  (pratipaksha logarithm)
+  (ganana power))
 
 (mantra product
   (karma number-varga)
   (vishesa statistics-varga)
   (abheda multiplication)
   (swarupa fold)
-  (krama multiplication))
+  (krama multiplication)
+  (ganana mul))
 
 (mantra reciprocal
   (karma number-varga)
   (kriya arithmetic)
-  (pratipaksha division))
+  (pratipaksha reciprocal)
+  (ganana reciprocal))
 
 (mantra sine
   (domain kosha/math/number/operations)
@@ -334,7 +356,8 @@
   (karma number-varga)
   (abheda sqrt)
   (pratipaksha square)
-  (kriya yantra kshaya))
+  (kriya yantra kshaya)
+  (ganana sqrt))
 
 (mantra square
   (karma number-varga)
@@ -343,7 +366,8 @@
   (kriya vivartana vriddhi power multiplication)
   (abheda kshetra)
   (phala dviguna)
-  (pratipaksha square-root))
+  (pratipaksha square-root)
+  (ganana square))
 
 (mantra std-dev
   (karma number-varga)
@@ -363,14 +387,16 @@
   (kriya kshaya matra arithmetic)
   (abheda minus)
   (yukta equation)
-  (pratipaksha addition))
+  (pratipaksha addition)
+  (ganana sub))
 
 (mantra sum
   (karma number-varga)
   (vishesa statistics-varga)
   (abheda addition)
   (swarupa fold)
-  (krama addition))
+  (krama addition)
+  (ganana add))
 
 (mantra tangent
   (domain kosha/math/number/operations)

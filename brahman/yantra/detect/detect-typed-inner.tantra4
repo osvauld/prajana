@@ -54,7 +54,7 @@
         cond (has-text a2) a2
         (member (nth words i) (walk cand "abheda")) cand
         (member (to-string (shabda-anveshana (nth words i))) (walk cand "abheda")) cand
-        (eq (shabda cand "eval") (nth words i)) cand
+        (eq (nth (walk cand "ganana") 0) (nth words i)) cand
         otherwise a2))))))
 
   (matched-op (cond (has-text op-from-satya) op-from-satya

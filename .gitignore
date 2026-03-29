@@ -1,6 +1,21 @@
+# Build artifacts
 /target
+vyakarana/_build/
+
+# Python
+__pycache__/
+*.pyc
+
+# Test cache
+.pytest_cache/
+
+# Editor
 *.swp
 *.swo
+
+# Environment
 .env
 .agent-workspaces/
+
+# Misc
 upload.png

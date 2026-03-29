@@ -22,7 +22,8 @@
   (phala path))
 
 (mantra ppr-mantra
-  (swarupa graph-walk breadth-first))
+  (swarupa graph-walk breadth-first)
+  (ganana ppr))
 
 (kosha shortest-path
   (karma graph-varga)

@@ -9,10 +9,12 @@
 (mantra conjunction
   (domain kosha/math/logic/operations)
   (karma logic-varga)
-  (yukta dvandva))
+  (yukta dvandva)
+  (ganana and))
 
 (mantra disjunction
-  (karma logic-varga))
+  (karma logic-varga)
+  (ganana or))
 
 (mantra implication
   (karma logic-varga)
@@ -29,7 +31,8 @@
 (mantra negation
   (domain kosha/math/logic/operations)
   (karma logic-varga)
-  (yukta viparita))
+  (yukta viparita)
+  (ganana not))
 
 (mantra quantifier
   (karma logic-varga)

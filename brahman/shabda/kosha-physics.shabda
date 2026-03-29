@@ -313,7 +313,6 @@ done
 
 shabda kilogram
   (word kg kilogram)
-  (concepts-for-unit link-mass mass)
 done
 
 shabda kinematics-varga
@@ -373,12 +372,10 @@ done
 
 shabda metre
   (word m metre meter)
-  (concepts-for-unit link-length displacement distance)
 done
 
 shabda metre-per-second
   (word m/s)
-  (concepts-for-unit velocity)
 done
 
 shabda moment-of-inertia
@@ -407,7 +404,6 @@ done
 
 shabda newton
   (word N newton)
-  (concepts-for-unit force net-force)
 done
 
 shabda newton-second-law-motion
