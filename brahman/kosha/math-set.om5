@@ -161,4 +161,5 @@
   (karma set-varga)
   (swarupa subset)
   (yukta set-intersection)
-  (phala satya))
+  (phala satya)
+  (naama subset))

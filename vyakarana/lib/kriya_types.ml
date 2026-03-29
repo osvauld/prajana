@@ -3,7 +3,7 @@
 
    sections:
      1. tantra params
-     2. expression AST (scan_stmt, scan_branch, expr)
+     2. expression AST (expr)
      3. runtime values + env (StringMap — immutable, zero-cost share)
      4. tantra + tantra_index
      5. binding + session + result
@@ -33,20 +33,7 @@ type tantra_param = {
    2. EXPRESSION AST
    ═══════════════════════════════════════════════════════════════════════════ *)
 
-type scan_stmt =
-  | SEmit    of expr
-  | SSkip
-  | SSet     of string * expr
-  | SClear   of string
-  | SLet     of string * expr
-  | SWhen    of expr * scan_stmt list * scan_stmt list
-
-and scan_branch = {
-  sb_guard : expr option;
-  sb_body  : scan_stmt list;
-}
-
-and expr =
+type expr =
   | Lit      of float
   | Var      of string
   | Call     of string * expr list
@@ -57,7 +44,6 @@ and expr =
   | Cond     of (expr * expr) list * expr
   | LetIn    of string * expr * expr
   | From     of expr * string list * expr list * expr
-  | Scan     of expr * (string * expr) list * scan_branch list
 
 (* ═══════════════════════════════════════════════════════════════════════════
    3. RUNTIME VALUES + ENV
@@ -350,41 +336,6 @@ let rec json_of_expr = function
       (String.concat "," (List.map je pattern))
       (String.concat "," (List.map json_of_expr guards))
       (json_of_expr collect)
-  | Scan (src, state_decls, branches) ->
-    let state_json = String.concat "," (List.map (fun (name, init) ->
-      Printf.sprintf "{\"name\":%s,\"init\":%s}" (je name) (json_of_expr init)
-    ) state_decls) in
-    let branches_json = String.concat "," (List.map json_of_scan_branch branches) in
-    Printf.sprintf "{\"kind\":\"scan\",\"source\":%s,\"state\":[%s],\"branches\":[%s]}"
-      (json_of_expr src) state_json branches_json
-
-and json_of_scan_stmt = function
-  | SEmit e ->
-    Printf.sprintf "{\"kind\":\"emit\",\"expr\":%s}" (json_of_expr e)
-  | SSkip ->
-    "{\"kind\":\"skip\"}"
-  | SSet (name, e) ->
-    Printf.sprintf "{\"kind\":\"set\",\"name\":%s,\"expr\":%s}" (je name) (json_of_expr e)
-  | SClear name ->
-    Printf.sprintf "{\"kind\":\"clear\",\"name\":%s}" (je name)
-  | SLet (name, e) ->
-    Printf.sprintf "{\"kind\":\"slet\",\"name\":%s,\"expr\":%s}" (je name) (json_of_expr e)
-  | SWhen (guard, body, otherwise) ->
-    Printf.sprintf "{\"kind\":\"when\",\"guard\":%s,\"body\":[%s],\"otherwise\":[%s]}"
-      (json_of_expr guard)
-      (String.concat "," (List.map json_of_scan_stmt body))
-      (String.concat "," (List.map json_of_scan_stmt otherwise))
-
-and json_of_scan_branch b =
-  let guard_json = match b.sb_guard with
-    | None   -> "null"
-    | Some g -> json_of_expr g
-  in
-  Printf.sprintf "{\"guard\":%s,\"otherwise\":%s,\"body\":[%s]}"
-    guard_json
-    (if b.sb_guard = None then "true" else "false")
-    (String.concat "," (List.map json_of_scan_stmt b.sb_body))
-
 let json_of_tantra (t : tantra) : string =
   let lets_json = String.concat "," (List.map (fun (name, e) ->
     Printf.sprintf "{\"name\":%s,\"expr\":%s}" (je name) (json_of_expr e)

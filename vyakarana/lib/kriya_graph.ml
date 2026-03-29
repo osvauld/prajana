@@ -16,9 +16,6 @@
 open Prakriti
 open Kriya_types
 
-(* per-thread CPU time in microseconds — excludes Domain contention *)
-external thread_cpu_us : unit -> float = "caml_thread_cpu_us"
-
 (* ganana dimension — computation binding (concept → primitive) *)
 let ganana_dim = Prakriti.register_dimension "ganana"
 
@@ -56,7 +53,55 @@ let call_tantra_opt (k : proof_graph) (name : string)
   | None -> default
 
 (* ═══════════════════════════════════════════════════════════════════════════
-   1b. OM-CONTRACT CACHE — process-level cache for mantra contracts.
+   1b. SHARED KRAMA HELPERS — used by eval-krama, eval-krama-dim, krama-path.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+(* Load float bindings from [[concept, value], ...] pairs *)
+let load_krama_bindings (bindings_v : value list) : (string, float) Hashtbl.t =
+  let binds = Hashtbl.create 8 in
+  List.iter (fun pair ->
+    match pair with
+    | VList [VString concept; VFloat v] -> Hashtbl.replace binds concept v
+    | VList [VString concept; v] -> Hashtbl.replace binds concept (as_float v)
+    | _ -> ()
+  ) bindings_v;
+  binds
+
+(* Bind physics constants from shabda (constants-key → physics-constants lookup) *)
+let bind_krama_constants (k : proof_graph) (mantra_name : string)
+    (n : nigamana) (binds : (string, float) Hashtbl.t) : unit =
+  let janya_names = List.filter_map (fun e ->
+    if e.source = mantra_name && e.relation = janya then Some e.target else None
+  ) n.edges in
+  List.iter (fun jn ->
+    if not (Hashtbl.mem binds jn) then begin
+      let sh = Vidya.read_shabda k jn in
+      match List.assoc_opt "constants-key" sh with
+      | Some ck ->
+        let csh = Vidya.read_shabda k "physics-constants" in
+        (match List.assoc_opt ck csh with
+         | Some vs ->
+           (try Hashtbl.replace binds jn (float_of_string (String.trim vs))
+            with _ -> ())
+         | None -> ())
+      | None -> ()
+    end
+  ) janya_names
+
+(* Resolve op name via eval_index + ganana graph walk fallback *)
+let resolve_krama_op (k : proof_graph) (tok : string) : string =
+  match Domain.DLS.get _eval_ctx with
+  | Some ctx ->
+    (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
+     | Some _ -> tok | None -> resolve_eval_name k tok)
+  | None -> tok
+
+(* Tokenize krama s-expression *)
+let tokenize_krama (krama : string) : string list =
+  String.split_on_char ' ' krama |> List.filter (fun s -> s <> "")
+
+(* ═══════════════════════════════════════════════════════════════════════════
+   1c. OM-CONTRACT CACHE — process-level cache for mantra contracts.
    Proof graph mantra edges are immutable after boot, so contracts
    never change. First call computes + caches, subsequent calls O(1).
    ═══════════════════════════════════════════════════════════════════════════ *)
@@ -220,23 +265,6 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
            else None
          ) edges))
 
-  | "om-janya" | "om-phala" | "om-kriya" | "om-yukta"
-  | "om-sthita" | "om-swarupa" | "om-abheda" ->
-    let node_name = eval_str 0 in
-    let rel_name = String.sub op 3 (String.length op - 3) in
-    Some (match visheshanam_of_string rel_name with
-     | None -> VList []
-     | Some vish ->
-       let edges = edges_of k node_name in
-       let seen = Hashtbl.create 8 in
-       VList (List.filter_map (fun edge ->
-         if edge.relation = vish && edge.source = node_name
-            && not (Hashtbl.mem seen edge.target) then begin
-           Hashtbl.replace seen edge.target true;
-           Some (VNode edge.target)
-         end else None
-       ) edges))
-
   | "om-contract" ->
     let node_name = eval_str 0 in
     Some (om_contract_cached k node_name)
@@ -350,47 +378,9 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
       let krama = n.krama in
       if krama = "" then VNone
       else
-        (* Build bindings map: concept-name → float value (local Hashtbl, not env) *)
-        let binds = Hashtbl.create 8 in
-        List.iter (fun pair ->
-          match pair with
-          | VList [VString concept; VFloat v] ->
-            Hashtbl.replace binds concept v
-          | VList [VString concept; v] ->
-            Hashtbl.replace binds concept (as_float v)
-          | _ -> ()
-        ) bindings_v;
-        (* Also bind constants: check shabda for constants-key *)
-        let janya_names = List.filter_map (fun e ->
-          if e.source = mantra_name && e.relation = janya
-          then Some e.target else None
-        ) n.edges in
-        List.iter (fun jn ->
-          if not (Hashtbl.mem binds jn) then begin
-            let sh = Vidya.read_shabda k jn in
-            match List.assoc_opt "constants-key" sh with
-            | Some ck ->
-              let csh = Vidya.read_shabda k "physics-constants" in
-              (match List.assoc_opt ck csh with
-               | Some vs ->
-                 (try Hashtbl.replace binds jn (float_of_string (String.trim vs))
-                  with _ -> ())
-               | None -> ())
-            | None -> ()
-          end
-        ) janya_names;
-        (* Resolve op name → eval name using eval_index + ganana graph walk *)
-        let resolve_op tok =
-          match Domain.DLS.get _eval_ctx with
-          | Some ctx ->
-            (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
-             | Some _node_name -> tok
-             | None -> resolve_eval_name k tok)
-          | None -> tok
-        in
-        (* Tokenize krama *)
-        let toks = String.split_on_char ' ' krama
-          |> List.filter (fun s -> s <> "") in
+        let binds = load_krama_bindings bindings_v in
+        bind_krama_constants k mantra_name n binds;
+        let toks = tokenize_krama krama in
         (* Recursive evaluator for krama s-expression *)
         let rec eval_krama toks =
           match toks with
@@ -407,7 +397,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
               match float_of_string_opt tok with
               | Some f -> VFloat f, rest
               | None ->
-                let eval_name = resolve_op tok in
+                let eval_name = resolve_krama_op k tok in
                 let arity = arity_of_op eval_name in
                 let args = ref [] in
                 let remaining = ref rest in
@@ -486,10 +476,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
           | Some rule -> String.trim rule
           | None -> "identity"
         in
-        (* Tokenize krama *)
-        let toks = String.split_on_char ' ' krama
-          |> List.filter (fun s -> s <> "") in
-        (* Recursive evaluator — same tree walk as eval-krama, different algebra *)
+        let toks = tokenize_krama krama in
         let rec walk_dim toks =
           match toks with
           | [] -> Array.copy zero_dim, []
@@ -503,15 +490,10 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
               Hashtbl.find binds tok, rest
             else
               match float_of_string_opt tok with
-              | Some _ -> Array.copy zero_dim, rest  (* numeric literal = dimensionless *)
+              | Some _ -> Array.copy zero_dim, rest
               | None ->
-                (* check if this is a known op (has matra-ghata or is in eval_index) *)
                 let ghata = resolve_ghata tok in
-                let eval_name = match Domain.DLS.get _eval_ctx with
-                  | Some ctx ->
-                    (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
-                     | Some _ -> tok | None -> resolve_eval_name k tok)
-                  | None -> tok in
+                let eval_name = resolve_krama_op k tok in
                 let is_op = ghata <> "identity" ||
                   (match Domain.DLS.get _eval_ctx with
                    | Some ctx -> Hashtbl.mem ctx.ctx_index.eval_index eval_name
@@ -554,47 +536,16 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
       let krama = n.krama in
       if krama = "" then VList []
       else
-        (* Build bindings map (local Hashtbl, not env) *)
-        let binds = Hashtbl.create 8 in
-        List.iter (fun pair ->
-          match pair with
-          | VList [VString concept; VFloat v] ->
-            Hashtbl.replace binds concept v
-          | VList [VString concept; v] ->
-            Hashtbl.replace binds concept (as_float v)
-          | _ -> ()
-        ) bindings_v;
+        let binds = load_krama_bindings bindings_v in
+        bind_krama_constants k mantra_name n binds;
         let janya_names = List.filter_map (fun e ->
           if e.source = mantra_name && e.relation = janya
           then Some e.target else None
         ) n.edges in
-        List.iter (fun jn ->
-          if not (Hashtbl.mem binds jn) then begin
-            let sh = Vidya.read_shabda k jn in
-            match List.assoc_opt "constants-key" sh with
-            | Some ck ->
-              let csh = Vidya.read_shabda k "physics-constants" in
-              (match List.assoc_opt ck csh with
-               | Some vs ->
-                 (try Hashtbl.replace binds jn (float_of_string (String.trim vs))
-                  with _ -> ())
-               | None -> ())
-            | None -> ()
-          end
-        ) janya_names;
-        let toks = String.split_on_char ' ' krama
-          |> List.filter (fun s -> s <> "") in
+        let toks = tokenize_krama krama in
         let is_op tok =
           tok <> "(" && tok <> ")" &&
           not (List.mem tok janya_names)
-        in
-        let resolve_op tok =
-          match Domain.DLS.get _eval_ctx with
-          | Some ctx ->
-            (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
-             | Some _ -> tok
-             | None -> resolve_eval_name k tok)
-          | None -> tok
         in
         let rec eval_sub toks =
           match toks with
@@ -611,7 +562,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
               match float_of_string_opt tok with
               | Some f -> VFloat f, rest
               | None ->
-                let eval_name = resolve_op tok in
+                let eval_name = resolve_krama_op k tok in
                 let arity = arity_of_op eval_name in
                 let args = ref [] in
                 let remaining = ref rest in
@@ -643,7 +594,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
             rest3
           | tok :: rest ->
             if is_op tok then
-              let arity = arity_of_op (resolve_op tok) in
+              let arity = arity_of_op (resolve_krama_op k tok) in
               let remaining = ref rest in
               for _ = 1 to arity do
                 remaining := _skip_expr !remaining
@@ -674,7 +625,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
           | tok :: rest ->
             if tok = target then Some [], rest
             else if is_op tok then
-              let arity = arity_of_op (resolve_op tok) in
+              let arity = arity_of_op (resolve_krama_op k tok) in
               if arity = 1 then begin
                 let (found, rest2) = parse_expr rest in
                 match found with
@@ -994,12 +945,9 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
       | _ -> ()
     ) graph_v;
     (* collect all mantras whose phala edges could fire *)
-    let janya_dim = match visheshanam_of_string "janya" with
-      | Some d -> d | None -> register_dimension "janya" in
-    let phala_dim = match visheshanam_of_string "phala" with
-      | Some d -> d | None -> register_dimension "phala" in
-    let swarupa_dim = match visheshanam_of_string "swarupa" with
-      | Some d -> d | None -> register_dimension "swarupa" in
+    let janya_dim = ensure_dim "janya" in
+    let phala_dim = ensure_dim "phala" in
+    let swarupa_dim = ensure_dim "swarupa" in
     (* recursive propagation *)
     let new_triples = ref [] in
     let fired_mantras = Hashtbl.create 8 in
@@ -1096,9 +1044,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     let source   = eval_str 0 in
     let rel_name = eval_str 1 in
     let target   = eval_str 2 in
-    let vish = match visheshanam_of_string rel_name with
-      | Some v -> v
-      | None -> register_dimension rel_name in
+    let vish = ensure_dim rel_name in
     (let vish = vish in
        let overlay = Domain.DLS.get _session_overlay in
        let edge : typed_edge = { source; target; relation = vish } in
@@ -1274,6 +1220,23 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     let elapsed = thread_cpu_us () -. t0 in
     Some (VList [result; VFloat elapsed; VString label])
 
+  (* dynamic om-* dispatch: om-{relation} walks targets by relation name *)
+  | op when String.length op > 3 && String.sub op 0 3 = "om-" ->
+    let node_name = eval_str 0 in
+    let rel_name = String.sub op 3 (String.length op - 3) in
+    Some (match visheshanam_of_string rel_name with
+     | None -> VList []
+     | Some vish ->
+       let edges = edges_of k node_name in
+       let seen = Hashtbl.create 8 in
+       VList (List.filter_map (fun edge ->
+         if edge.relation = vish && edge.source = node_name
+            && not (Hashtbl.mem seen edge.target) then begin
+           Hashtbl.replace seen edge.target true;
+           Some (VNode edge.target)
+         end else None
+       ) edges))
+
   | _ -> None
 
 (* ═══════════════════════════════════════════════════════════════════════════
@@ -1417,13 +1380,11 @@ let register_primitive_arities () =
   r "session-has-edge"     1;
   r "session-subjects"     1;
   r "session-value"        2;
-  r "om-janya"            1;
-  r "om-phala"            1;
-  r "om-kriya"            1;
-  r "om-yukta"            1;
-  r "om-sthita"           1;
-  r "om-swarupa"          1;
-  r "om-abheda"           1;
+  (* dynamic om-* ops: all relation projections are arity 1 *)
+  List.iter (fun rel -> r ("om-" ^ rel) 1)
+    ["janya"; "phala"; "kriya"; "yukta"; "sthita"; "swarupa"; "abheda";
+     "pratipaksha"; "drishthanta"; "siddha"; "varga"; "vishesa";
+     "avastha"; "naama"; "naama-mudra"; "matra"; "ganana"];
   r "om-contract"         1;
   r "shabda"              2;
   r "node-layer"          1;

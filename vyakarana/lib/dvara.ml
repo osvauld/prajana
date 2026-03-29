@@ -16,9 +16,6 @@
 open Prakriti
 open Kriya_types
 
-(* per-thread CPU time in microseconds — excludes Domain contention *)
-external thread_cpu_us : unit -> float = "caml_thread_cpu_us"
-
 (* auto-scale: us / ms / s *)
 let fmt_elapsed us =
   if us < 1000 then Printf.sprintf "%dus" us
@@ -28,21 +25,6 @@ let fmt_elapsed us =
 (* ═══════════════════════════════════════════════════════════════════════════
    1. JSON HELPERS
    ═══════════════════════════════════════════════════════════════════════════ *)
-
-let je s =
-  let buf = Buffer.create (String.length s + 2) in
-  Buffer.add_char buf '"';
-  String.iter (fun c ->
-    match c with
-    | '"'  -> Buffer.add_string buf "\\\""
-    | '\\' -> Buffer.add_string buf "\\\\"
-    | '\n' -> Buffer.add_string buf "\\n"
-    | '\r' -> Buffer.add_string buf "\\r"
-    | '\t' -> Buffer.add_string buf "\\t"
-    | c    -> Buffer.add_char buf c
-  ) s;
-  Buffer.add_char buf '"';
-  Buffer.contents buf
 
 let json_string_field (json : string) (key : string) : string option =
   let pat = "\"" ^ key ^ "\"" in
