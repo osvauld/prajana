@@ -13,7 +13,7 @@
   (swarupa naada)
   (phala spanda)
   (sthita domain-language)
-  (yukta strudel music-ir resonance-ir raylib pratibimba-setu))
+  (yukta music-ir resonance-ir pratibimba-setu))
 
 (bhasha resonance-ir
   (domain bhasha/render)

@@ -6,7 +6,6 @@ include Kriya_graph
 
 let parse_expr_string    = Vakya.parse_expr_string
 let build_index          = Jnana.build_index
-let build_word_index     = Jnana.build_word_index
 
 let eval               = Kriya_eval.eval
 let eval_tantra        = Kriya_eval.eval_tantra

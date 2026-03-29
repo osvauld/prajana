@@ -10,7 +10,7 @@
   (p-assert (profile-step "assertion" (assertion-bandha raw-graph)))
   (asserted (nth p-assert 0))
 
-  (p-refine (profile-step "refine" (avrti-refine-v2 asserted)))
+  (p-refine (profile-step "refine" (avrti-refine asserted)))
   (refined (nth p-refine 0))
 
   -- grade-split

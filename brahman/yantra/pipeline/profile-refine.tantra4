@@ -37,14 +37,14 @@
   (after-ra (nth p-ranuvada 0))
 
   (indexed (index-graph after-ra))
-  (p-sankhya (profile-step "sankhya-bandha-v2" (sankhya-bandha-v2 indexed)))
+  (p-sankhya (profile-step "sankhya-bandha" (sankhya-bandha indexed)))
   (after-sk2 (nth p-sankhya 0))
 
   (p-swarupa (profile-step "swarupa-anuvada" (swarupa-anuvada after-sk2)))
   (after-sw (nth p-swarupa 0))
 
   (indexed2 (index-graph after-sw))
-  (p-shunya (profile-step "shunya-bandha-v2" (shunya-bandha-v2 indexed2)))
+  (p-shunya (profile-step "shunya-bandha" (shunya-bandha indexed2)))
 
   [[(nth p-sandhi-kosha 2), (nth p-sandhi-kosha 1)],
    [(nth p-sandhi-avastha 2), (nth p-sandhi-avastha 1)],

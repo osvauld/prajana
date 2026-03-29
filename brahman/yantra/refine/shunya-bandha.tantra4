@@ -1,24 +1,16 @@
--- shunya-bandha: scan for signal-word nodes and emit zero bindings.
--- a satya node with shabda signal=shunya + signal-concept=X emits [X, sankhya, 0].
--- if apadana (panchami "from") is present, walk the signal node's sthita edges
--- to find the avastha (e.g. aarambham). then walk the concept's abheda edges
--- to find the avastha-qualified variant (e.g. initial-velocity).
--- all composition is graph-driven — no string concatenation.
-(tantra shunya-bandha (graph)
-
-  (satya-nodes (graph | where [s, e, o] | and (eq e "satya") | collect (to-string s)))
-  (already-bound (graph | where [s, e, o] | and (eq e "sankhya") | collect (to-string s)))
-  (has-apadana (has-items (graph | where [s, e, o] | and (eq e "apadana") | collect s)))
+-- shunya-bandha: indexed graph version.
+-- 3 pipe-filter scans → 3 O(1) idx lookups. Pure value, no session state.
+(tantra shunya-bandha (g)
+  (satya-nodes (idx-subjects g "satya"))
+  (already-bound (idx-subjects g "sankhya"))
+  (has-apadana (idx-has-edge g "apadana"))
 
   (new-triples (reduce satya-nodes [] (fn acc nd ->
     let sig      = shabda nd "signal"
     let concept  = shabda nd "signal-concept"
     let is-shunya = eq sig "shunya"
     let has-concept = has-text concept
-    -- walk the signal node's sthita edges to find its avastha (aarambham, antya, etc.)
     let avastha-nodes = cond (and is-shunya has-apadana) (walk nd "sthita") otherwise []
-    -- find which abheda nodes of the concept match the avastha-qualified variant
-    -- e.g. velocity has abheda → initial-velocity, and initial-velocity has sthita → aarambham
     let qualified = reduce avastha-nodes "" (fn found av ->
       cond (has-text found) found
       otherwise (reduce (walk concept "abheda") "" (fn f2 candidate ->
@@ -32,4 +24,4 @@
       (append acc [[target-concept, "satya", target-concept], [target-concept, "sankhya", "0."]])
     otherwise acc)))
 
-  (append graph new-triples))
+  (idx-append g new-triples))

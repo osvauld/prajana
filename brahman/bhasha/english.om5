@@ -111,11 +111,13 @@
   (domain bhasha/english/grammar)
   (swarupa avyaya nipata)
   (sthita english dvandva)
-  (yukta dhatu))
+  (yukta dhatu)
+  (naama both))
 
 (bhasha copula-are
   (swarupa copula)
-  (sthita vartamana-kaala bahu-vachana))
+  (sthita vartamana-kaala bahu-vachana)
+  (naama are))
 
 (bhasha copula-equals
   (swarupa copula)
@@ -131,11 +133,13 @@
 
 (bhasha copula-was
   (swarupa copula)
-  (sthita bhuta-kaala eka-vachana))
+  (sthita bhuta-kaala eka-vachana)
+  (naama was))
 
 (bhasha copula-were
   (swarupa copula)
-  (sthita bhuta-kaala bahu-vachana))
+  (sthita bhuta-kaala bahu-vachana)
+  (naama were))
 
 (bhasha copula
   (swarupa avyaya tinanta)
@@ -179,7 +183,8 @@
 (bhasha prashna
   (swarupa avyaya nipata)
   (sthita english prashna-amsha)
-  (yukta dhatu))
+  (yukta dhatu)
+  (naama what how which when where))
 
 (bhasha prep-at
   (swarupa preposition)
@@ -236,11 +241,13 @@
 
 (bhasha pronoun-its
   (swarupa avyaya)
-  (sthita english naama-pratibodha eka-vachana))
+  (sthita english naama-pratibodha eka-vachana)
+  (naama its))
 
 (bhasha pronoun-their
   (swarupa avyaya)
-  (sthita english naama-pratibodha bahu-vachana))
+  (sthita english naama-pratibodha bahu-vachana)
+  (naama their))
 
 (bhasha sambhavana-kaala
   (domain bhasha/english/grammar)
@@ -294,7 +301,8 @@
   (domain bhasha/english/grammar)
   (swarupa avyaya)
   (sthita english vidhi-kaala)
-  (yukta dhatu))
+  (yukta dhatu)
+  (naama find calculate compute determine solve))
 
 (bhasha growth
   (sthita english vriddhi))
@@ -331,7 +339,8 @@
 
 (bhasha negation
   (domain bhasha/english)
-  (sthita english pratishedha))
+  (sthita english pratishedha)
+  (naama not without absent))
 
 (bhasha one
   (domain bhasha/english)

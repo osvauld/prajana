@@ -1,6 +1,39 @@
 ; ═══════════════════════════════════════════════════════════════════
-; math-set — 19 nodes
+; math-set — 26 nodes
 ; ═══════════════════════════════════════════════════════════════════
+
+; ── relational properties (axioms for relation classification) ────
+
+(kosha symmetric
+  (vishesa set-varga)
+  (sthita sambandha)
+  (pratipaksha antisymmetric))
+
+(kosha antisymmetric
+  (vishesa set-varga)
+  (sthita sambandha)
+  (pratipaksha symmetric))
+
+(kosha transitive
+  (vishesa set-varga)
+  (sthita sambandha))
+
+(kosha reflexive
+  (vishesa set-varga)
+  (sthita sambandha))
+
+(kosha involutive
+  (vishesa set-varga)
+  (sthita sambandha))
+
+(kosha congruence
+  (vishesa set-varga)
+  (sthita sambandha)
+  (siddha symmetric transitive reflexive))
+
+(kosha composable
+  (vishesa set-varga)
+  (sthita sambandha))
 
 (kosha set-complement
   (karma set-varga)

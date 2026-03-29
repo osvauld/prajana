@@ -52,7 +52,7 @@
   (abheda morphism anuvada)
   (sthita proof-graph)
   (ahara shabda)
-  (janya lua ocaml)
+  (janya tantra)
   (phala kriya)
   (yukta visheshanam nigamana))
 
@@ -106,7 +106,7 @@
   (yukta ppr visheshanam))
 
 (kosha vyakarana
-  (swarupa proof-graph tensor ocaml)
+  (swarupa proof-graph tensor)
   (kriya satya-ganana anuvada prayoga avrti beam-search ppr direct-solve inverse-solve chain-solve)
   (yukta om-parser setu socket session visheshanam shabda)
   (janya nigamana)

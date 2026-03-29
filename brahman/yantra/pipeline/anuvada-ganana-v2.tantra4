@@ -1,3 +1,0 @@
--- anuvada-ganana-v2: alias for anuvada-ganana (kept for backward compat).
-(tantra anuvada-ganana-v2 (sentence)
-  (anuvada-ganana sentence))

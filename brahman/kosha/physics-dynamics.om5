@@ -107,6 +107,22 @@
   (phala vector)
   (janaka angular-acceleration))
 
+; ── missing dimensional mantras ────────────────────────────────
+
+(mantra spring-constant-definition
+  (varga unit-mantra)
+  (swarupa spring-constant)
+  (phala spring-constant)
+  (janya force metre)
+  (krama division force metre))
+
+(mantra angular-acceleration-definition
+  (varga unit-mantra)
+  (swarupa angular-acceleration)
+  (phala angular-acceleration)
+  (janya angular-velocity second)
+  (krama division angular-velocity second))
+
 (kosha rotational-force-varga
   (vishesa dynamics-varga)
   (swarupa subanta)

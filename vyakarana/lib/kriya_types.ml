@@ -102,7 +102,6 @@ type tantra_index = {
   constants    : (string, float) Hashtbl.t;
   conversions  : (string * string, tantra) Hashtbl.t;
   all_tantras  : tantra list ref;
-  word_index   : (string, string) Hashtbl.t;
   eval_index   : (string, string) Hashtbl.t;
   compound_word_index : (string, string) Hashtbl.t;
 }
@@ -142,6 +141,7 @@ type yantra_result = {
 type eval_context = {
   ctx_index   : tantra_index;
   ctx_session : session;
+  ctx_ppr     : (string, float) Hashtbl.t;
 }
 
 (* bundled evaluator dispatch — single Atomic ref replaces 4 mutable forward refs *)

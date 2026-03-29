@@ -1,8 +1,0 @@
--- main computation pipeline.
-(tantra anuvada-ganana (sentence)
-  (raw-graph (build-question-graph sentence))
-  (asserted (assertion-bandha raw-graph))
-  (refined (grade-sparsha asserted))
-  (expanded (kosha-expand refined))
-  (signaled (detect-signals expanded))
-  (dispatch-answer signaled refined))

@@ -23,6 +23,9 @@
 (kosha op-asin
   (kriya op-class-projection))
 
+(kosha op-atan
+  (kriya op-class-projection))
+
 (kosha op-atan2
   (kriya op-class-binary))
 
@@ -94,6 +97,9 @@
 (kosha op-div
   (kriya op-class-binary))
 
+(kosha op-double
+  (kriya op-class-projection))
+
 (kosha op-domain-of
   (kriya op-class-projection))
 
@@ -113,6 +119,9 @@
   (kriya op-class-projection))
 
 (kosha op-exists
+  (kriya op-class-projection))
+
+(kosha op-exp
   (kriya op-class-projection))
 
 (kosha op-factorial
@@ -146,6 +155,9 @@
 
 (kosha op-gt
   (kriya op-class-relation))
+
+(kosha op-half
+  (kriya op-class-projection))
 
 (kosha op-has
   (kriya op-class-keyed))
@@ -243,10 +255,23 @@
 (kosha op-pair
   (kriya op-class-constructor))
 
+(kosha op-pfilter
+  (kriya op-class-higher-order))
+
+(kosha op-pmap
+  (kriya op-class-higher-order))
+
 (kosha op-power
   (kriya op-class-binary))
 
+(kosha op-preduce
+  (kriya op-class-higher-order)
+  (swarupa krama))
+
 (kosha op-print
+  (kriya op-class-projection))
+
+(kosha op-range
   (kriya op-class-projection))
 
 (kosha op-reduce
@@ -275,6 +300,9 @@
 (kosha op-resolve-reason
   (kriya op-class-pipeline))
 
+(kosha op-reciprocal
+  (kriya op-class-projection))
+
 (kosha op-role
   (kriya op-class-projection))
 
@@ -290,6 +318,9 @@
 (kosha op-split
   (kriya op-class-keyed))
 
+(kosha op-square
+  (kriya op-class-projection))
+
 (kosha op-sqrt
   (kriya op-class-projection))
 
@@ -301,6 +332,12 @@
 
 (kosha op-sub
   (kriya op-class-binary))
+
+(kosha op-substr
+  (kriya op-class-keyed))
+
+(kosha op-sum
+  (kriya op-class-projection))
 
 (kosha op-tan
   (kriya op-class-projection))
@@ -422,7 +459,7 @@
   (janya asserted-graph)
   (phala refined-graph)
   (krama pipeline-expand)
-  (kriya op-fixpoint grade-sparsha)
+  (kriya op-fixpoint avrti-refine)
   (abheda endomorphism))
 
 (kosha refine-rashi-anuvada
@@ -517,49 +554,59 @@
 (kosha visheshanam-abheda
   (sthita yantra domain-yantra ring group)
   (yukta visheshanam-swarupa)
-  (abheda equivalence-relation quotient))
+  (abheda equivalence-relation quotient)
+  (siddha symmetric transitive congruence composable))
 
 (kosha visheshanam-drishthanta
-  (sthita yantra domain-yantra ring))
+  (sthita yantra domain-yantra ring)
+  (siddha antisymmetric))
 
 (kosha visheshanam-janya
   (sthita yantra domain-yantra ring)
-  (pratipaksha visheshanam-phala))
+  (pratipaksha visheshanam-phala)
+  (siddha antisymmetric))
 
 (kosha visheshanam-kriya
   (sthita yantra domain-yantra ring)
   (abheda multiplication composition morphism)
-  (yukta identity-element))
+  (yukta identity-element)
+  (siddha antisymmetric composable))
 
 (kosha visheshanam-phala
   (sthita yantra domain-yantra ring)
-  (pratipaksha visheshanam-janya))
+  (pratipaksha visheshanam-janya)
+  (siddha antisymmetric))
 
 (kosha visheshanam-pratipaksha
   (sthita yantra domain-yantra ring group)
-  (abheda inverse-element))
+  (abheda inverse-element)
+  (siddha symmetric involutive))
 
 (kosha visheshanam-ring
   (sthita yantra domain-yantra ring group)
-  (yukta visheshanam-swarupa visheshanam-abheda visheshanam-drishthanta visheshanam-sthita visheshanam-yukta visheshanam-siddha visheshanam-kriya visheshanam-phala visheshanam-janya visheshanam-pratipaksha sandhi matra krama kramanusara avastha apeksha ahara dhatu vrnda kala prayoga vachana purusa vishesa amsha dvitiya-vibhakti trtiya-vibhakti chaturthi-vibhakti panchami-vibhakti saptami-vibhakti bhuta-kaala vartamana-kaala bhavishya-kaala satya mithya sankhya shashthi-vibhakti prathama-vibhakti vidhi-kaala naama-mudra asprista-sankhya rashi-bandha viraam dvandva adhikarana naama-pratibodha janaka rahita lakshana karma poorva paschat purva garbha antya nirodha paripurna atita bhanga daatri vibheda atikrama))
+  (yukta visheshanam-swarupa visheshanam-abheda visheshanam-drishthanta visheshanam-sthita visheshanam-yukta visheshanam-siddha visheshanam-kriya visheshanam-phala visheshanam-janya visheshanam-pratipaksha sandhi matra krama kramanusara avastha apeksha ahara dhatu vrnda kala prayoga vachana purusa vishesa amsha dvitiya-vibhakti trtiya-vibhakti chaturthi-vibhakti panchami-vibhakti saptami-vibhakti bhuta-kaala vartamana-kaala bhavishya-kaala satya mithya sankhya shashthi-vibhakti prathama-vibhakti vidhi-kaala naama naama-mudra asprista-sankhya rashi-bandha viraam dvandva adhikarana naama-pratibodha janaka rahita lakshana karma poorva paschat purva garbha antya nirodha paripurna atita bhanga daatri vibheda atikrama))
 
 (kosha visheshanam-siddha
-  (sthita yantra domain-yantra ring))
+  (sthita yantra domain-yantra ring)
+  (siddha antisymmetric))
 
 (kosha visheshanam-sthita
   (sthita yantra domain-yantra ring)
   (abheda partial-order)
-  (janya filtration lattice graded-ring))
+  (janya filtration lattice graded-ring)
+  (siddha antisymmetric transitive composable))
 
 (kosha visheshanam-swarupa
   (sthita yantra domain-yantra ring group)
   (yukta visheshanam-abheda)
-  (abheda multiplicative-identity morphism))
+  (abheda multiplicative-identity morphism)
+  (siddha symmetric transitive reflexive congruence composable))
 
 (kosha visheshanam-yukta
   (sthita yantra domain-yantra ring)
   (abheda addition)
-  (yukta additive-identity))
+  (yukta additive-identity)
+  (siddha symmetric))
 
 (kosha yantra-varga
   (vishesa math-varga)

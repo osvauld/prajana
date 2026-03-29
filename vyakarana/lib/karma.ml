@@ -420,8 +420,7 @@ let reparse_and_replace (k : proof_graph) (path : string) : edit_result =
   | None -> Err (Printf.sprintf "re-parse failed: %s" path)
   | Some n ->
     replace_node k n;
-    init_satya k;
-    materialize_csr k;
+    rebuild_indices k;
     Ok n.name
 
 let path_of_node (k : proof_graph) (name : string) : string option =
@@ -477,8 +476,7 @@ let delete_node (k : proof_graph) (name : string) : edit_result =
   | Some path ->
     delete_file path;
     remove_node k name;
-    init_satya k;
-    materialize_csr k;
+    rebuild_indices k;
     Ok name
 
 let add_edge (k : proof_graph) (source : string) (target : string)

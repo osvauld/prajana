@@ -127,7 +127,7 @@ let rec madakkal (k : Prakriti.proof_graph) (idx : Kriya.tantra_index)
         let tnames = List.map (fun t -> Kriya.VString t.Kriya.t_name)
           !(idx.all_tantras) in
         let env = Kriya.StringMap.add "_tantra_index" (Kriya.VList tnames) Kriya.StringMap.empty in
-        Domain.DLS.set Kriya._eval_ctx (Some { Kriya.ctx_index = idx; ctx_session = session });
+        Domain.DLS.set Kriya._eval_ctx (Some { Kriya.ctx_index = idx; ctx_session = session; ctx_ppr = Hashtbl.create 0 });
         let result = Fun.protect
           ~finally:(fun () -> Domain.DLS.set Kriya._eval_ctx None)
           (fun () -> Kriya.eval k env expr) in
@@ -244,16 +244,14 @@ let () =
   if naama_edges > 0 && not quiet_startup then
     Printf.printf "naama: %d word edges emitted into graph\n%!" naama_edges;
   let yantra_idx = Kriya.build_index ~graph:k0 dirs in
-  Vidya.set_word_index yantra_idx.word_index;
-  Prakriti.materialize_csr k0;
-  Prakriti.compute_visheshanam_entropy_weights k0;
+  Prakriti.rebuild_indices k0;
   let yantra_session = Kriya.new_session () in
   (match Hashtbl.find_opt yantra_idx.Kriya.by_name "reboot" with
    | Some t ->
      ignore (Kriya_eval.eval_tantra ~idx:yantra_idx ~session:yantra_session
                 k0 t [("_", Kriya.VString "boot")])
    | None -> ());
-  Prakriti.materialize_csr k0;
+  Prakriti.rebuild_indices k0;
   if not quiet_startup then begin
     let n_nodes = Hashtbl.length k0.Prakriti.nodes in
     let n_edges = List.length !(k0.Prakriti.all_edges) in

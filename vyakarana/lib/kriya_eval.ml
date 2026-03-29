@@ -100,7 +100,7 @@ let eval_tantra ?(idx : tantra_index option) ?(session : session option)
     (k : proof_graph) (t : tantra) (input_values : (string * value) list) : value =
   let prev_ctx = Domain.DLS.get _eval_ctx in
   (match idx, session with
-   | Some i, Some s -> Domain.DLS.set _eval_ctx (Some { ctx_index = i; ctx_session = s })
+   | Some i, Some s -> Domain.DLS.set _eval_ctx (Some { ctx_index = i; ctx_session = s; ctx_ppr = Hashtbl.create 0 })
    | _ -> ());
   Fun.protect ~finally:(fun () -> Domain.DLS.set _eval_ctx prev_ctx) (fun () ->
     (* build env from inputs using fold *)
@@ -130,7 +130,7 @@ let new_session () : session =
 
 let with_eval_ctx (idx : tantra_index) (ses : session) (f : unit -> 'a) ~(default : 'a) : 'a =
   let prev = Domain.DLS.get _eval_ctx in
-  Domain.DLS.set _eval_ctx (Some { ctx_index = idx; ctx_session = ses });
+  Domain.DLS.set _eval_ctx (Some { ctx_index = idx; ctx_session = ses; ctx_ppr = Hashtbl.create 0 });
   Fun.protect ~finally:(fun () -> Domain.DLS.set _eval_ctx prev)
     (fun () -> try f () with _ -> default)
 
@@ -197,7 +197,7 @@ let run_tantra_by_name (k : proof_graph) (idx : tantra_index) (session : session
   match Hashtbl.find_opt idx.by_name name with
   | None -> None
   | Some t ->
-    Domain.DLS.set _eval_ctx (Some { ctx_index = idx; ctx_session = session });
+    Domain.DLS.set _eval_ctx (Some { ctx_index = idx; ctx_session = session; ctx_ppr = Hashtbl.create 0 });
     Fun.protect ~finally:(fun () -> Domain.DLS.set _eval_ctx None) (fun () ->
       let result = eval_tantra ~idx ~session k t inputs in
       let raw = as_string result in

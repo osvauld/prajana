@@ -58,7 +58,9 @@
   (swarupa float)
   (abheda float)
   (yukta mass ghana)
-  (naama kg kilogram)
+  (janya kilo gram)
+  (naama kilogram)
+  (naama-mudra kg)
   (vishesa physics-varga))
 
 (kosha kinematics
@@ -84,10 +86,12 @@
   (yukta sankhya))
 
 (kosha metre
-  (sthita matra)
+  (sthita matra matra-beeja)
   (swarupa float)
   (abheda float)
   (yukta length space displacement)
+  (naama metre meter)
+  (naama-mudra m)
   (vishesa physics-varga))
 
 (kosha motion
@@ -112,6 +116,8 @@
   (swarupa float)
   (abheda float)
   (yukta force kilogram metre second)
+  (naama newton)
+  (naama-mudra N)
   (vishesa physics-varga))
 
 (kosha nuclear-force
@@ -130,17 +136,21 @@
 
 (kosha radian
   (domain kosha/physics)
-  (sthita matra)
+  (sthita matra matra-beeja)
   (swarupa float)
   (abheda float)
   (yukta kona angle)
+  (naama radian)
+  (naama-mudra rad)
   (vishesa physics-varga))
 
 (kosha second
-  (sthita matra)
+  (sthita matra matra-beeja)
   (swarupa float)
   (abheda float)
   (yukta kaala duration)
+  (naama second)
+  (naama-mudra s sec)
   (vishesa physics-varga))
 
 (kosha space
