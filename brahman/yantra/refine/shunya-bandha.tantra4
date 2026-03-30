@@ -1,24 +1,25 @@
 -- shunya-bandha: indexed graph version.
--- 3 pipe-filter scans → 3 O(1) idx lookups. Pure value, no session state.
+-- signal=shunya nodes get [concept, sankhya, 0.] with avastha qualification.
+-- from-rest compound encodes apadana semantics → no separate apadana edge needed.
 (tantra shunya-bandha (g)
   (satya-nodes (idx-subjects g "satya"))
   (already-bound (idx-subjects g "sankhya"))
-  (has-apadana (idx-has-edge g "apadana"))
 
   (new-triples (reduce satya-nodes [] (fn acc nd ->
     let sig      = shabda nd "signal"
     let concept  = shabda nd "signal-concept"
     let is-shunya = eq sig "shunya"
     let has-concept = has-text concept
-    let avastha-nodes = cond (and is-shunya has-apadana) (walk nd "sthita") otherwise []
-    let qualified = reduce avastha-nodes "" (fn found av ->
+    -- walk sthita of the shunya node to find avastha qualifiers (e.g. "initial")
+    -- then match against the concept's avastha edges to find qualified name
+    let qualifiers = cond is-shunya (walk nd "sthita") otherwise []
+    let avastha-list = cond has-concept (walk concept "avastha") otherwise []
+    let matched-av = reduce qualifiers "" (fn found q ->
       cond (has-text found) found
-      otherwise (reduce (walk concept "abheda") "" (fn f2 candidate ->
-        cond (has-text f2) f2
-        (member av (map (walk (to-string candidate) "sthita") (fn x -> to-string x)))
-          (to-string candidate)
-        otherwise f2)))
-    let target-concept = cond (has-text qualified) qualified otherwise concept
+      (member (to-string q) (map avastha-list (fn a -> to-string a)))
+        (to-string q)
+      otherwise found)
+    let target-concept = cond (has-text matched-av) (concat matched-av "-" concept) otherwise concept
     let already  = member target-concept already-bound
     cond (and is-shunya has-concept (not already))
       (append acc [[target-concept, "satya", target-concept], [target-concept, "sankhya", "0."]])

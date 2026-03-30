@@ -193,7 +193,7 @@
 (kosha from-rest
   (vishesa linear-motion-varga)
   (abheda initial-rest)
-  (sthita shunya))
+  (sthita shunya initial))
 
 ; ── dimensional definitions ────────────────────────────────────
 ; bridge from SI base units to concept dimensions.

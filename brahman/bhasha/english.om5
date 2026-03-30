@@ -310,11 +310,173 @@
   (sthita english vriddhi))
 
 ; ── dhatu (verb roots) ─────────────────────────────────────────────────
-; dhatu = verb root. NO hardcoded kshaya/vriddhi — direction is
-; observer-relative (flow between loci, like system/surroundings).
-; Only non-conflicting dhatu here. Words already in kshaya/vriddhi word
-; lists (flew, gave, came, etc.) will migrate once detect-direction walks
-; sthita edges for flow-based direction resolution.
+; dhatu = verb root. direction is observer-relative (flow between loci).
+; sthita carries DEFAULT subject perspective: kshaya if subject typically
+; loses, vriddhi if subject typically gains. detect-direction walks sthita
+; to find this. Full flow-based entity resolution comes later.
+; form nodes have janya back to dhatu + sthita for grammar features.
+
+; ── departure/loss (default: subject departs/loses) ──────────────────
+
+(bhasha dhatu-fly
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama fly))
+
+(bhasha flew
+  (swarupa tinanta)
+  (janya dhatu-fly)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama flew))
+
+(bhasha dhatu-go
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama go))
+
+(bhasha went
+  (swarupa tinanta)
+  (janya dhatu-go)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama went))
+
+(bhasha dhatu-fall
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama fall))
+
+(bhasha fell
+  (swarupa tinanta)
+  (janya dhatu-fall)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama fell))
+
+(bhasha dhatu-run
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama run))
+
+(bhasha ran
+  (swarupa tinanta)
+  (janya dhatu-run)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama ran))
+
+(bhasha dhatu-walk
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama walk))
+
+(bhasha walked
+  (swarupa tinanta)
+  (janya dhatu-walk)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama walked))
+
+(bhasha dhatu-give
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama give))
+
+(bhasha gave
+  (swarupa tinanta)
+  (janya dhatu-give)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama gave))
+
+(bhasha dhatu-sell
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama sell))
+
+(bhasha sold
+  (swarupa tinanta)
+  (janya dhatu-sell)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama sold))
+
+(bhasha dhatu-take
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama take))
+
+(bhasha took
+  (swarupa tinanta)
+  (janya dhatu-take)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama took))
+
+(bhasha dhatu-throw
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama throw))
+
+(bhasha threw
+  (swarupa tinanta)
+  (janya dhatu-throw)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama threw))
+
+; ── arrival/gain (default: subject arrives/gains) ────────────────────
+
+(bhasha dhatu-come
+  (swarupa tinanta)
+  (sthita dhatu vriddhi)
+  (naama come))
+
+(bhasha came
+  (swarupa tinanta)
+  (janya dhatu-come)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
+  (naama came))
+
+(bhasha dhatu-arrive
+  (swarupa tinanta)
+  (sthita dhatu vriddhi)
+  (naama arrive))
+
+(bhasha arrived
+  (swarupa tinanta)
+  (janya dhatu-arrive)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
+  (naama arrived))
+
+(bhasha dhatu-buy
+  (swarupa tinanta)
+  (sthita dhatu vriddhi)
+  (naama buy))
+
+(bhasha bought
+  (swarupa tinanta)
+  (janya dhatu-buy)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
+  (naama bought))
+
+(bhasha dhatu-get
+  (swarupa tinanta)
+  (sthita dhatu vriddhi)
+  (naama get))
+
+(bhasha got
+  (swarupa tinanta)
+  (janya dhatu-get)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
+  (naama got))
+
+; ── state/position (no default direction) ────────────────────────────
+
+(bhasha dhatu-sit
+  (swarupa tinanta)
+  (sthita dhatu)
+  (naama sit))
+
+(bhasha sat
+  (swarupa tinanta)
+  (janya dhatu-sit)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga)
+  (naama sat))
+
+; ── motion/physics (no default direction) ────────────────────────────
 
 (bhasha dhatu-move
   (swarupa tinanta)
@@ -341,6 +503,28 @@
   (swarupa tinanta)
   (sthita dhatu kartari-prayoga)
   (naama collide))
+
+(bhasha dhatu-eat
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama eat))
+
+(bhasha eaten
+  (swarupa tinanta)
+  (janya dhatu-eat)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama eaten))
+
+(bhasha dhatu-add
+  (swarupa tinanta)
+  (sthita dhatu vriddhi)
+  (naama add))
+
+(bhasha added
+  (swarupa tinanta)
+  (janya dhatu-add)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
+  (naama added))
 
 (bhasha independent
   (domain bhasha/english)

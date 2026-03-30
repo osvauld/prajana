@@ -1,0 +1,49 @@
+-- kriya-nirmana: generate regular verb forms from dhatu seed nodes at startup.
+-- walks all dhatu nodes (sthita: dhatu, swarupa: tinanta), applies English suffix rules,
+-- emits past (-ed) and present-participle (-ing) forms via emit-node + emit-edge.
+-- skips forms that already exist (hand-authored irregulars like flew, went, ate).
+(tantra kriya-nirmana (_)
+  -- all nodes whose sthita includes "dhatu"
+  (dhatu-nodes (walk "dhatu" "sthita"))
+  (reduce dhatu-nodes 0 (fn count nd ->
+    let nd-str = to-string nd
+    let is-tinanta = member "tinanta" (map (walk nd-str "swarupa") (fn x -> to-string x))
+    cond (not is-tinanta) count
+    otherwise
+      let base = reduce (walk nd-str "naama") "" (fn found n ->
+        cond (has-text found) found otherwise (to-string n))
+      cond (not (has-text base)) count
+      otherwise
+        let blen = string-length base
+        let ends-e = ends-with base "e"
+        let stem = cond ends-e (substr base 0 (sub blen 1)) otherwise base
+        -- direction: kshaya, vriddhi, or kartari-prayoga from dhatu sthita
+        let dir = reduce (walk nd-str "sthita") "" (fn found s ->
+          let ss = to-string s
+          cond (has-text found) found
+          (or (eq ss "kshaya") (eq ss "vriddhi")) ss
+          otherwise found)
+        let dir-sthita = cond (has-text dir) (concat dir "-sthita") otherwise ""
+        -- past form: base + ed (or base + d if ends in e)
+        let past-word = cond ends-e (concat base "d") otherwise (concat base "ed")
+        let past-exists = exists (lookup past-word)
+        let past-slokas = cond (has-text dir-sthita)
+          [(concat "tinanta-swarupa " (concat nd-str "-janya") " kta-pratyaya-sthita bhuta-kaala-sthita kartari-prayoga-sthita " dir-sthita)]
+          otherwise
+          ["tinanta-swarupa " (concat nd-str "-janya") " kta-pratyaya-sthita bhuta-kaala-sthita kartari-prayoga-sthita"]
+        let c1 = cond past-exists count otherwise
+          let _ = emit-node past-word "bhasha" past-slokas ""
+          let _ = emit-edge past-word "naama" past-word
+          (add count 1)
+        -- present participle: stem + ing
+        let ing-word = concat stem "ing"
+        let ing-exists = exists (lookup ing-word)
+        let ing-slokas = cond (has-text dir-sthita)
+          [(concat "tinanta-swarupa " (concat nd-str "-janya") " shatr-pratyaya-sthita vartamana-kaala-sthita kartari-prayoga-sthita " dir-sthita)]
+          otherwise
+          ["tinanta-swarupa " (concat nd-str "-janya") " shatr-pratyaya-sthita vartamana-kaala-sthita kartari-prayoga-sthita"]
+        let c2 = cond ing-exists c1 otherwise
+          let _ = emit-node ing-word "bhasha" ing-slokas ""
+          let _ = emit-edge ing-word "naama" ing-word
+          (add c1 1)
+        c2)))
