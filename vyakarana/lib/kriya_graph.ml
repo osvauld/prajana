@@ -90,10 +90,13 @@ let bind_krama_constants (k : proof_graph) (mantra_name : string)
 
 (* Resolve op name via eval_index + ganana graph walk fallback *)
 let resolve_krama_op (k : proof_graph) (tok : string) : string =
-  match Domain.DLS.get _eval_ctx with
+  (* ganana edge takes priority — resolves graph concept names to eval primitives *)
+  let ganana_resolved = resolve_eval_name k tok in
+  if ganana_resolved <> tok then ganana_resolved
+  else match Domain.DLS.get _eval_ctx with
   | Some ctx ->
     (match Hashtbl.find_opt ctx.ctx_index.eval_index tok with
-     | Some _ -> tok | None -> resolve_eval_name k tok)
+     | Some _ -> tok | None -> tok)
   | None -> tok
 
 (* Tokenize krama s-expression *)

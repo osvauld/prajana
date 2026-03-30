@@ -69,7 +69,6 @@ def test_two_entity_ke_first(vy):
     assert "24" in r
 
 
-@pytest.mark.xfail(strict=True, reason="entity_scope: second entity KE uses wrong values")
 def test_two_entity_ke_second(vy):
     """ball-B (m=2, v=5) KE=25. Ask for ball-B specifically."""
     r = vy.answer(

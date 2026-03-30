@@ -134,7 +134,6 @@ def test_physics_count_total_mass(vy):
 # ── per-entity scoped count ───────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="entity_scope: avrti-refine-v2 strips question grade, sankhya bindings leak into final grade")
 def test_entity_scope_apples_sold(vy):
     """10 apples, 3 sold → 7 apples left (not 17)"""
     r = vy.answer("a shop has 10 apples. 3 apples were sold. how many apples are left")

@@ -51,10 +51,6 @@ def test_dvandva_collection(vy):
     assert len(dvandva) == 2
 
 
-@xfail(
-    strict=True,
-    reason="dvandva: total-momentum requires iterating over entity-owned momenta and summing",
-)
 def test_total_momentum_two(vy):
     r = vy.answer(
         "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5. find total momentum"
@@ -62,7 +58,6 @@ def test_total_momentum_two(vy):
     assert "22" in r
 
 
-@xfail(strict=True, reason="dvandva: same pattern, three entities")
 def test_total_momentum_three(vy):
     r = vy.answer(
         "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5. ball-C has mass 5 and velocity 6. find total momentum"
@@ -155,7 +150,7 @@ def test_from_rest(vy):
 
 def test_car_from_rest_force(vy):
     r = vy.answer("a car of mass 1200 accelerates from rest at 3 m/s2. find force")
-    assert "force =" in r and "no match" not in r
+    assert ("force is" in r.lower() or "force =" in r) and "no match" not in r.lower()
 
 
 # ── gate: total_compound ───────────────────────────────────────────────────────
@@ -509,7 +504,6 @@ def test_rank_three_by_ke(vy):
     assert "250000" in r or "200000" in r or "45000" in r
 
 
-@xfail(strict=True, reason="graded_ring: mixed ⊕ and ⊗ with subtraction")
 def test_mixed_multiply_subtract(vy):
     """Multiplication then subtraction in different grades.
     4 bags × 6 apples = 24, then -5 eaten = 19."""

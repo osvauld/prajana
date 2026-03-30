@@ -85,9 +85,31 @@ def cmd_tantra(args):
                 print(f"  {g}: {len(ts)} tantras")
     elif args.action == "callgraph":
         cg = tantra4.call_graph(tantras)
+        rcg = tantra4.reverse_call_graph(cg)
+        callers_count = sum(1 for v in cg.values() if v)
+        callees_count = len(rcg)
+        isolated = sorted(n for n, calls in cg.items() if not calls and n not in rcg)
+        print(f"  {callers_count} callers, {callees_count} callees, {len(isolated)} isolated")
+        print()
         for name, calls in sorted(cg.items()):
             if calls:
                 print(f"  {name} → {', '.join(calls)}")
+        if isolated:
+            print(f"\n  isolated ({len(isolated)}):")
+            for n in isolated:
+                print(f"    {n}")
+    elif args.action == "reachability":
+        r = tantra4.reachability(tantras)
+        print(f"  entry points: {', '.join(r['entry_points'])}")
+        print(f"  reachable: {len(r['reachable'])}, unreachable: {len(r['unreachable'])}")
+        print()
+        for depth, names in sorted(r["layers"].items()):
+            print(f"  depth {depth}: {', '.join(names)}")
+        if r["unreachable"]:
+            print(f"\n  unreachable ({len(r['unreachable'])}):")
+            for n in sorted(r["unreachable"]):
+                g = tantras[n]["group"] if n in tantras else "?"
+                print(f"    {n:40s} [{g}]")
 
 
 # --- Shabda commands ---
@@ -497,7 +519,7 @@ def build_parser():
 
     # tantra
     s = sub.add_parser("tantra", help="Tantra4 queries")
-    s.add_argument("action", choices=["summary", "search", "source", "group", "callgraph"])
+    s.add_argument("action", choices=["summary", "search", "source", "group", "callgraph", "reachability"])
     s.add_argument("name", nargs="?")
     s.add_argument("--pattern", "-p")
 

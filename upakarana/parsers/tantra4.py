@@ -151,13 +151,40 @@ def load_all(root=None):
 
 # --- Call graph ---
 
+# OCaml entry points: tantras invoked from vyakarana.ml / kriya_eval.ml
+_OCAML_ENTRY_POINTS = {
+    "anuvada-ganana",    # kriya_eval.ml — main pipeline
+    "session-anuvada",   # kriya_eval.ml — session-aware pipeline
+    "darshana",          # vyakarana.ml — node inspection
+    "reboot",            # vyakarana.ml — graph reboot
+    "execute-mantra",    # kriya_graph.ml — mantra execution
+    "varga-inheritance", # vyakarana.ml — boot-time generation
+}
+
+
 def call_graph(tantras):
-    """Forward call graph: name → [called tantra names]."""
+    """Forward call graph: name → [called tantra names].
+
+    Uses the loaded tantra name set as the ground truth for what counts as a
+    tantra call, rather than relying on a hand-maintained keyword exclusion list.
+    Also detects dynamic call-tantra invocations with string literals.
+    """
     known = set(tantras.keys())
-    return {
-        name: sorted({c for c in t["calls"] if c in known and c != name})
-        for name, t in tantras.items()
-    }
+    cg = {}
+    for name, t in tantras.items():
+        source = t["source"]
+        # strip comments
+        source_nc = re.sub(r'(?m)\s*--.*$', '', source)
+        # find all identifiers, then keep only known tantra names (minus self)
+        all_ids = set(re.findall(r'\b([a-z][a-z0-9]*(?:-[a-z0-9]+)+)\b', source_nc))
+        calls = {c for c in all_ids if c in known and c != name}
+
+        # also detect dynamic call-tantra "name"
+        dynamic = set(re.findall(r'call-tantra\s+"([a-z][a-z0-9-]*)"', source_nc))
+        calls |= {c for c in dynamic if c in known}
+
+        cg[name] = sorted(calls)
+    return cg
 
 
 def reverse_call_graph(cg):
@@ -167,6 +194,42 @@ def reverse_call_graph(cg):
         for callee in callees:
             rev[callee].append(caller)
     return {k: sorted(v) for k, v in rev.items()}
+
+
+def reachability(tantras):
+    """BFS from OCaml entry points through the call graph.
+
+    Returns dict with:
+      reachable: set of tantra names reachable from entry points
+      unreachable: set of tantra names NOT reachable
+      entry_points: the OCaml entry points that exist
+      layers: dict of depth → [names] (BFS distance from nearest entry)
+    """
+    cg = call_graph(tantras)
+    known = set(tantras.keys())
+    entry = _OCAML_ENTRY_POINTS & known
+
+    visited = set()
+    layers = defaultdict(list)
+    queue = [(name, 0) for name in sorted(entry)]
+    for name, _ in queue:
+        visited.add(name)
+        layers[0].append(name)
+
+    while queue:
+        current, depth = queue.pop(0)
+        for callee in cg.get(current, []):
+            if callee not in visited:
+                visited.add(callee)
+                layers[depth + 1].append(callee)
+                queue.append((callee, depth + 1))
+
+    return {
+        "reachable": visited,
+        "unreachable": known - visited,
+        "entry_points": sorted(entry),
+        "layers": {d: sorted(names) for d, names in sorted(layers.items())},
+    }
 
 
 # --- Grouping ---
