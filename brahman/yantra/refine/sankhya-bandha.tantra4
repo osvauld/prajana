@@ -11,9 +11,9 @@
       let pairs   = nth st 0
       let active  = nth st 1
       let pending = nth st 2
-      let edge = to-string (nth tri 1)
-      let word = to-string (nth tri 0)
-      let val  = to-string (nth tri 2)
+      let edge = str tri 1
+      let word = str tri 0
+      let val  = str tri 2
       let is-signal = has-text (shabda word "signal")
       cond (eq edge "satya")
         (cond is-signal [pairs, active, pending]

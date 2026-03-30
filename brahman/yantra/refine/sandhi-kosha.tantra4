@@ -14,7 +14,7 @@
     let prefix-list = map (range (max 0 (sub n-pend 1))) (fn i -> nth pend i)
     let prefix-out  = flush-pending-mithya prefix-list out
     let full-flush  = flush-pending-mithya pend out
-    let is-subject-now = cond (and (eq edge "shashthi-vibhakti") (eq (to-string obj) "shashthi-vibhakti")) true otherwise is-subject
+    let is-subject-now = cond (and (eq edge "shashthi-vibhakti") (eq obj "shashthi-vibhakti")) true otherwise is-subject
     let cw1    = (cond (and (has-text last-pend) (eq edge "satya"))
       (concat last-pend "-" word) otherwise "")
     let cn1    = (cond (has-text cw1) (lookup cw1) otherwise _none)

@@ -4,13 +4,18 @@
 (tantra count-chain (graph grades)
   (q-concept (question-concept grades))
   (q-direction (detect-direction (question-words grades)))
-  -- concept-filter: when question asks about a specific concept, exclude grades
-  -- about other concepts (e.g. "oranges" grades excluded when asking about "apples")
-  (concept-filtered (cond (has-text q-concept)
-    (filter grades (fn grade ->
+  -- concept-filter: when multiple distinct countable concepts exist (e.g. "apples"
+  -- and "oranges" each with their own numbers), filter grades to only the query concept.
+  -- skip filtering when: no q-concept, multiplication present (cross-concept),
+  -- or only one numbered concept (e.g. "Tom" as recipient has no competing count).
+  (any-mul (reduce grades false (fn found grade ->
+    or found (eq (grade-direction grade) "multiplication"))))
+  (has-dvandva (reduce grades false (fn found grade ->
+    or found (has-items (triples-by-edge grade "dvandva")))))
+  (concept-filtered (cond (or any-mul (not (has-text q-concept)) (not has-dvandva)) grades
+    otherwise (filter grades (fn grade ->
       let gc = grade-concept grade
-      or (not (has-text gc)) (eq gc q-concept) (is-question-grade grade)))
-    otherwise grades))
+      or (not (has-text gc)) (eq gc q-concept) (is-question-grade grade)))))
   (has-matching-nums (reduce concept-filtered false (fn f grade ->
     or f (has-items (grade-numbers grade)))))
   (eff-grades (cond has-matching-nums concept-filtered otherwise grades))
@@ -32,7 +37,7 @@
     let nv = cond is-mul-grade (apply-op "mul" [n0, (to-number n1-raw)]) otherwise n0
     let op-eval = cond (eq eff-dir "kshaya") (nth (walk "subtraction" "ganana") 0) (eq eff-dir "multiplication") (nth (walk "multiplication" "ganana") 0) otherwise (nth (walk "addition" "ganana") 0)
     let new-acc = apply-op (to-string op-eval) [acc, nv]
-    let step = (concat eff-dir " " (to-string nv) ": " (to-string acc) " -> " (to-string new-acc))
+    let step = (concat eff-dir " " nv ": " (to-string acc) " -> " (to-string new-acc))
     cond (or is-q (not has-num)) state
     (not init) [nv, steps, true]
     otherwise [new-acc, (append steps [step]), true])))
@@ -65,8 +70,7 @@
   -- guard: skip if any satya concept has a formula (physics, not counting)
   -- exception: multiplication via "each" is always a count problem, even with physics concepts
   (any-satya-formula (reduce all-satya false (fn found c -> or found (has-items (mantra-select c)))))
-  (has-multiplication (reduce grades false (fn found grade ->
-    or found (eq (grade-direction grade) "multiplication"))))
+  (has-multiplication any-mul)
   (should-count (and found-any (not has-viveka)
     (or has-multiplication (not any-satya-formula))))
   (cond (not should-count) graph otherwise (append base-graph proof)))

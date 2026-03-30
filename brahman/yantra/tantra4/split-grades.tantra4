@@ -4,7 +4,7 @@
     let completed = nth state 0
     let current   = nth state 1
     let e = nth triple 1
-    cond (eq (to-string e) "viraam")
+    cond (eq e "viraam")
       [(append completed [(append current [triple])]), []]
     otherwise
       [completed, (append current [triple])])))

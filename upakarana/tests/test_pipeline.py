@@ -98,7 +98,6 @@ def test_avrti_sankhya_bound(vy):
 # ── rashi: symbolic instances ──────────────────────────────────────────────────
 
 
-@pytest.mark.xfail(strict=True, reason="rashi: symbolic variable names not parsed")
 def test_rashi_instance(vy):
     """'mass m1 of 5' creates rashi instance m1 of mass."""
     g = vy.bqg("ball has mass m1 of 5 and velocity v1 of 10")
@@ -106,7 +105,6 @@ def test_rashi_instance(vy):
     assert vy.has_triple(g, subj="m1", pred="vishesa", obj="rashi")
 
 
-@pytest.mark.xfail(strict=True, reason="rashi: symbolic variable names not parsed")
 def test_rashi_sankhya_bind(vy):
     """Rashi instance gets its numeric value."""
     g = vy.bqg("ball has mass m1 of 5 and velocity v1 of 10")

@@ -2,7 +2,7 @@
 -- does the expensive varga-ops scan, number collection, op matching.
 (tantra detect-typed-inner (graph edges words n type-idx)
 
-  (vals (map graph (fn t -> to-string (nth t 2))))
+  (vals (map graph (fn t -> str t 2)))
   (type-word (nth words type-idx))
   (type-varga (nth (walk type-word "vishesa") 0))
 

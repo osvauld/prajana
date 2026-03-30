@@ -10,7 +10,7 @@
   (scope-entity (nth ctx 2))
   (sought-disp (concept-display sought-sf))
   (cond is-viveka
-    (concat say-sought " which " say-is " " (concept-display (to-string sought-label)))
+    (concat say-sought " which " say-is " " (concept-display sought-label))
     otherwise (cond (has-text sought-sf)
       (cond (has-text scope-entity)
         (concat say-sought " " art-the " " sought-disp " " say-of " " scope-entity)

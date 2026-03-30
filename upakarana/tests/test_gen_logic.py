@@ -4,6 +4,8 @@ Tests computation, inverse computation, and logic reasoning patterns
 that exercise the 33 new nodes (11 logic + 22 space-lift).
 """
 
+import re
+
 import pytest
 
 xfail = pytest.mark.xfail
@@ -81,39 +83,47 @@ def test_at_rest_momentum_zero(vy):
 # ── IS-A transitivity (uses transitive-swarupa node) ────────────────────────
 
 
+@xfail(strict=True, reason="IS-A transitive: resolver checks terminal→terminal ('does animal inherit animal?'), not poodle→animal")
 def test_transitive_two_hop(vy):
     """poodles→dogs→animals: is a poodle an animal"""
     r = vy.answer(
         "poodles are dogs. dogs are mammals. mammals are animals. "
         "is a poodle an animal"
     )
-    assert "yes" in r.lower()
+    rl = r.lower()
+    yes_idx = rl.rfind("yes")
+    assert yes_idx >= 0 and "poodle" in rl[yes_idx:]
 
 
+@xfail(strict=True, reason="IS-A transitive: resolver checks terminal→terminal ('does animal inherit animal?'), not sparrow→animal")
 def test_transitive_is_a_simple(vy):
     """sparrows are birds. birds are animals. is a sparrow an animal"""
     r = vy.answer("sparrows are birds. birds are animals. is a sparrow an animal")
-    assert "yes" in r.lower()
+    rl = r.lower()
+    yes_idx = rl.rfind("yes")
+    assert yes_idx >= 0 and "sparrow" in rl[yes_idx:]
 
 
 # ── modus tollens (uses modus-tollens node pattern) ──────────────────────────
 
 
+@xfail(strict=True, reason="modus-tollens: system returns 'yes — ground has negation' (IS-A negation misfire); 'no' only matches as substring of 'know'")
 def test_modus_tollens_ground_not_wet(vy):
     """if rain→wet, ground not wet → did not rain"""
     r = vy.answer(
         "if it rains the ground is wet. the ground is not wet. did it rain"
     )
-    assert "no" in r.lower() or "not" in r.lower()
+    assert re.search(r'\bno\b', r.lower()) is not None
 
 
 # ── negation / double negation ───────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="negation+at-rest: response says 'no — velocity is absent' (checks velocity, not ball state); 'rest' only matches via 'at-rest' header")
 def test_negation_not_moving_at_rest(vy):
     """the ball is not moving → ball is at rest"""
     r = vy.answer("the ball is not moving. is the ball at rest")
-    assert "yes" in r.lower() or "rest" in r.lower()
+    assert "yes" in r.lower()
 
 
 @xfail(strict=True, reason="double-negation cancellation not built in pipeline")
@@ -153,12 +163,14 @@ def test_hypothetical_chain(vy):
 # ── quantifier reasoning ────────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="IS-A universal: response says 'sparrow has bird' (IS-A confirmed), not 'sparrow can fly'")
 def test_universal_inheritance(vy):
     """all birds fly + sparrow is bird → sparrow flies"""
     r = vy.answer(
         "all birds can fly. a sparrow is a bird. can a sparrow fly"
     )
-    assert "yes" in r.lower() or "fly" in r.lower() or "bird" in r.lower()
+    rl = r.lower()
+    assert re.search(r'\byes\b', rl) is not None and "fly" in rl
 
 
 @xfail(strict=True, reason="existential quantifier reasoning not built in pipeline")

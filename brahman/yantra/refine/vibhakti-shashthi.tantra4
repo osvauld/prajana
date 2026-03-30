@@ -8,9 +8,9 @@
       let label      = nth st 1
       let has-entity = nth st 2
       let cur-entity = nth st 3
-      let edge = to-string (nth tri 1)
-      let word = to-string (nth tri 0)
-      let obj  = to-string (nth tri 2)
+      let edge = str tri 1
+      let word = str tri 0
+      let obj  = str tri 2
       cond (eq edge "vidhi-kaala") [result, "", false, ""]
       (and (eq edge "viraam") (or (eq word ".") (eq word "?") (eq word "!"))) [result, "", false, ""]
       (and (eq edge "shashthi-vibhakti") (eq obj "shashthi-vibhakti") (has-text label))

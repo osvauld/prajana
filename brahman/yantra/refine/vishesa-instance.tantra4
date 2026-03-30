@@ -10,7 +10,7 @@
     let promoted = reduce grade [[], ""] (fn st tri ->
       let result = nth st 0
       let agra   = nth st 1
-      let edge = to-string (nth tri 1)
+      let edge = str tri 1
       let word = nth tri 0
       cond (eq edge "satya") [result, (to-string word)]
       (or (eq edge "sankhya") (eq edge "matra") (eq edge "vishesa")) [result, ""]

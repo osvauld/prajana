@@ -4,4 +4,5 @@
     (eq field "loser") (nth raw 1)
     (eq field "ev-pairs") (nth raw 4)
     (eq field "gt-triples") (nth raw 5)
+    (eq field "is-equal") (nth raw 6)
     otherwise ""))

@@ -1,0 +1,6 @@
+-- test: can we add a cond binding between two other bindings?
+(tantra test-cmp-rel (wval lval)
+  (iseq (eq wval lval))
+  (rel (cond iseq "equal-to" otherwise "greater-than"))
+  (result [["A", rel, "B"]])
+  result)

@@ -3,15 +3,15 @@
   (sep (shabda "anuvada-setu" "speech-strand-separator"))
   (swarupa-pairs (triples-by-edge graph "swarupa"))
   (pratijna-parts (map swarupa-pairs (fn tri ->
-    concat (to-string (nth tri 0)) " IS-A " (to-string (nth tri 2)))))
+    concat (str tri 0) " IS-A " (str tri 2))))
   (pratijna (cond (has-items pratijna-parts)
     (concat "we assert: " (list-join pratijna-parts))
     otherwise ""))
   (hetu (concat "we ask: does " query-entity " inherit " assert-entity "?"))
   (varga-chain-strs (varga-chain query-entity))
   (graph-chain (map (filter swarupa-pairs (fn tri ->
-    eq (to-string (nth tri 0)) query-entity)) (fn tri ->
-      concat query-entity " IS-A " (to-string (nth tri 2)))))
+    eq (str tri 0) query-entity)) (fn tri ->
+      concat query-entity " IS-A " (str tri 2))))
   (udaharana-kosha (cond (has-items varga-chain-strs)
     (concat "we know: " query-entity " → " (list-join varga-chain-strs))
     otherwise ""))

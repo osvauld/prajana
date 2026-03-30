@@ -274,6 +274,22 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
        let lst = as_list container in
        if idx >= 0 && idx < List.length lst then List.nth lst idx else VNone)
 
+  | "str" ->
+    (* str container idx — extract element at idx and coerce to string.
+       Shorthand for (to-string (nth container idx)). *)
+    let container = eval_arg 0 in
+    let idx = eval_int 1 in
+    let v = match container with
+      | VPair (n, v) ->
+        if idx = 0 then VString n else if idx = 1 then v else VNone
+      | VBinding (n, f) ->
+        if idx = 0 then VString n else if idx = 1 then VFloat f else VNone
+      | _ ->
+        let lst = as_list container in
+        if idx >= 0 && idx < List.length lst then List.nth lst idx else VNone
+    in
+    Some (VString (as_string v))
+
   | "flatten" ->
     Some (VList (List.concat_map as_list (eval_lst 0)))
 

@@ -8,4 +8,4 @@
   (label   (shabda op-name "krama-output"))
   (cond (eq label "satya")
     (cond result "yes" otherwise "no")
-    otherwise (concat op-name " = " (to-string result))))
+    otherwise (concat op-name " = " result)))

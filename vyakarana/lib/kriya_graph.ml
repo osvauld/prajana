@@ -1408,6 +1408,7 @@ let register_primitive_arities () =
   r "apply-op"            2;
   r "call-tantra"         2;
   r "split-numeric"       1;
+  r "str"                 2;
   r "concept-display"     1;
   r "capitalize-first"    1;
   r "dim-vector"          1;

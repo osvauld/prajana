@@ -16,4 +16,4 @@
     otherwise (cond (has-items swarupa) (nth swarupa 0)
     otherwise (to-string mantra)))))
 
-  (concat label " = " (to-string val)))
+  (concat label " = " val))

@@ -2,6 +2,6 @@
 (tantra ownership-concepts (graph)
   (reduce graph [] (fn acc tri ->
     cond (and (eq (nth tri 1) "shashthi-vibhakti")
-              (neq (to-string (nth tri 2)) "shashthi-vibhakti"))
-      (append acc [(to-string (nth tri 0))])
+              (neq (nth tri 2) "shashthi-vibhakti"))
+      (append acc [(str tri 0)])
     otherwise acc)))

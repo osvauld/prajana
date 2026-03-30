@@ -3,7 +3,7 @@
   (sought-entries (graph | where [s, e, o] | and (eq e "sought") | collect [s, o]))
   (sf (cond (has-items sought-entries) (to-string (nth (nth sought-entries 0) 0)) otherwise ""))
   (was-derived (cond (has-text sf)
-    (has-items (graph | where [s, e, o] | and (eq (to-string s) sf) | and (eq e "derived-by") | collect o))
+    (has-items (graph | where [s, e, o] | and (eq s sf) | and (eq e "derived-by") | collect o))
     otherwise false))
   (val (cond was-derived (query-edge-of graph sf "sankhya") otherwise _none))
   (cond (and was-derived (exists val)) [sf, (to-string val)] otherwise []))

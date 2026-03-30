@@ -6,8 +6,8 @@
   (state (reduce graph [[], ""] (fn st tri ->
     let result = nth st 0
     let subj   = nth st 1
-    let word = to-string (nth tri 0)
-    let edge = to-string (nth tri 1)
+    let word = str tri 0
+    let edge = str tri 1
     -- track last subject: any satya or mithya word
     let new-subj = cond (or (eq edge "satya") (eq edge "mithya")) word otherwise subj
     -- only process copula and possession verbs
@@ -19,12 +19,12 @@
     let kaala-edges = cond (has-text form-node) (walk form-node "sthita") otherwise []
     let kaala = reduce kaala-edges "" (fn found e ->
       cond (has-text found) found
-      (member (to-string e) ["vartamana-kaala", "bhuta-kaala", "bhavishya-kaala", "vidhi-kaala", "sambhavana-kaala"])
+      (member e ["vartamana-kaala", "bhuta-kaala", "bhavishya-kaala", "vidhi-kaala", "sambhavana-kaala"])
         (to-string e)
       otherwise found)
     let vachana = reduce kaala-edges "" (fn found e ->
       cond (has-text found) found
-      (member (to-string e) ["eka-vachana", "bahu-vachana", "dvi-vachana"])
+      (member e ["eka-vachana", "bahu-vachana", "dvi-vachana"])
         (to-string e)
       otherwise found)
     let new = cond (and (has-text subj) (has-text kaala) (has-text vachana))

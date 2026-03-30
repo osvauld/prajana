@@ -1,30 +1,52 @@
 -- viveka-ganana: comparison — find which entity has the greater/lesser value.
--- relational: joins entities with values through ownership, no positional scan.
+-- derive-or-raw: tries derive-for-entity first (enables KE, momentum, etc.),
+--   falls back to concept-scoped raw value, then first-value if concept unknown.
+-- when all values are equal, emits equal-to instead of greater-than.
 (tantra viveka-ganana (graph concept cw direction)
   (op-eval (nth (walk direction "ganana") 0))
   (opp-eval (nth (walk (nth (walk direction "pratipaksha") 0) "ganana") 0))
 
-  -- relational: for each entity, find its value through entity-scoped vps
   (entities (prathama-sparsha graph))
+
+  -- infer concept from first entity's first owned property when not explicit
+  (first-ent (cond (has-items entities) (to-string (nth entities 0)) otherwise ""))
+  (owned-concepts (cond (has-text first-ent) (shashthi-sparsha graph first-ent) otherwise []))
+  (inferred-concept (cond (has-text concept) concept
+    (has-items owned-concepts) (to-string (nth owned-concepts 0))
+    otherwise ""))
+
+  -- for each entity: try derived value, then concept-scoped raw, then first-raw
   (ev-pairs (reduce entities [] (fn acc ent ->
-    let svps = scope-vps graph (to-string ent)
-    let vps  = nth svps 0
-    let val  = reduce vps "" (fn found kv ->
-      cond (has-text found) found
-      otherwise (to-string (nth kv 1)))
-    cond (has-text val) (append acc [[(to-string ent), val]])
+    let ent-str   = to-string ent
+    let derived   = derive-for-entity graph ent-str inferred-concept
+    let deriv-val = cond (has-items derived) (nth derived 1) otherwise ""
+    let svps      = cond (has-text deriv-val) [] otherwise (nth (scope-vps graph ent-str) 0)
+    let raw-val   = cond (has-text deriv-val) ""
+      otherwise (reduce svps "" (fn found kv ->
+        cond (has-text found) found
+        cond (and (has-text inferred-concept) (eq (nth kv 0) inferred-concept)) (str kv 1)
+        otherwise found))
+    let first-val = cond (or (has-text deriv-val) (has-text raw-val)) ""
+      otherwise (cond (has-items svps) (str (nth svps 0) 1) otherwise "")
+    let val = cond (has-text deriv-val) deriv-val
+      (has-text raw-val) raw-val
+      otherwise first-val
+    cond (has-text val) (append acc [[ent-str, val]])
     otherwise acc)))
 
   (best-pr (select-extremum ev-pairs op-eval))
   (worst-pr (select-extremum ev-pairs opp-eval))
 
-  (winner (cond (has-items best-pr) (to-string (nth best-pr 0)) otherwise ""))
-  (winner-val (cond (has-items best-pr) (to-string (nth best-pr 1)) otherwise ""))
-  (loser (cond (has-items worst-pr) (to-string (nth worst-pr 0)) otherwise ""))
-  (loser-val (cond (has-items worst-pr) (to-string (nth worst-pr 1)) otherwise ""))
+  (winner (cond (has-items best-pr) (str best-pr 0) otherwise ""))
+  (winner-val (cond (has-items best-pr) (str best-pr 1) otherwise ""))
+  (loser (cond (has-items worst-pr) (str worst-pr 0) otherwise ""))
+  (loser-val (cond (has-items worst-pr) (str worst-pr 1) otherwise ""))
+
+  (vals-equal (eq winner-val loser-val))
+  (cmp-rel (cond vals-equal "equal-to" otherwise "greater-than"))
 
   (gt-triples (cond (and (has-text winner) (has-text loser))
-    [[winner, "greater-than", loser],
+    [[winner, cmp-rel, loser],
      [winner, "viveka-concept", concept],
      [winner, "viveka-direction", direction]]
     otherwise []))

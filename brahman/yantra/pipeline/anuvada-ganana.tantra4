@@ -16,7 +16,7 @@
   (typed-label (cond is-typed (shabda (nth typed-raw 1) "krama-output") otherwise ""))
   (typed-answer (cond (not is-typed) _none
     (eq typed-label "satya") (cond typed-result "yes" otherwise "no")
-    otherwise (concat (nth typed-raw 1) " = " (to-string typed-result))))
+    otherwise (concat (nth typed-raw 1) " = " typed-result)))
   -- grade-split + count-chain (skipped if typed)
   (boundary-edge (shabda "graded-ring" "grade-boundary"))
   (intra-boundary (shabda "graded-ring" "intra-grade-boundary"))
@@ -24,7 +24,7 @@
     let completed = nth state 0
     let current   = nth state 1
     let e = nth triple 1
-    cond (or (eq (to-string e) boundary-edge) (eq (to-string e) intra-boundary))
+    cond (or (eq e boundary-edge) (eq e intra-boundary))
       [(append completed [(append current [triple])]), []]
     otherwise
       [completed, (append current [triple])]))))

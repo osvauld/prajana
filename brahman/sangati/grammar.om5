@@ -110,20 +110,32 @@
   (janya viparita))
 
 (sangati kta-pratyaya
-  (amsha pratyaya))
+  (amsha pratyaya)
+  (janya dhatu)
+  (phala tinanta)
+  (sthita bhuta-kaala kartari-prayoga))
 
 (sangati pratyaya
   (sthita bhasha-swarupa)
   (yukta varna))
 
 (sangati shatr-pratyaya
-  (amsha pratyaya))
+  (amsha pratyaya)
+  (janya dhatu)
+  (phala tinanta)
+  (sthita vartamana-kaala kartari-prayoga))
 
 (sangati tumun-pratyaya
-  (amsha pratyaya))
+  (amsha pratyaya)
+  (janya dhatu)
+  (phala tinanta)
+  (sthita vidhi-kaala))
 
 (sangati tvaa-pratyaya
-  (amsha pratyaya))
+  (amsha pratyaya)
+  (janya dhatu)
+  (phala tinanta)
+  (sthita bhuta-kaala))
 
 (sangati bhave-prayoga
   (domain sangati/grammar/prayoga)

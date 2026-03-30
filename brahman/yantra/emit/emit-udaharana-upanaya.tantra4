@@ -17,15 +17,16 @@
      let vk-loser = cond (has-items cmp) (nth cmp 1) otherwise ""
      let sought-label = query-edge graph "sought"
      let known-str = cond (has-text vc-disp)
-       (cond (eq (to-string vk-direction) "max")
-         (concat say-known " that greater " vc-disp " means " (to-string sought-label))
-         otherwise (concat say-known " that lesser " vc-disp " means " (to-string sought-label)))
+       (cond (eq vk-direction "max")
+         (concat say-known " that greater " vc-disp " means " sought-label)
+         otherwise (concat say-known " that lesser " vc-disp " means " sought-label))
        otherwise ""
      let vk-wval = query-edge-of graph vk-winner "viveka-sankhya"
      let vk-lval = query-edge-of graph vk-loser "viveka-sankhya"
-     let cmp-sym = cond (eq (to-string vk-direction) "max") say-gt otherwise say-lt
+     let is-equal = cond (and (exists vk-wval) (exists vk-lval)) (eq vk-wval (to-string vk-lval)) otherwise false
+     let cmp-sym = cond is-equal "=" (eq vk-direction "max") say-gt otherwise say-lt
      let seen-str = cond (and (exists vk-wval) (exists vk-lval))
-       (concat say-seen " that " (to-string vk-wval) " " cmp-sym " " (to-string vk-lval))
+       (concat say-seen " that " vk-wval " " cmp-sym " " (to-string vk-lval))
        otherwise ""
      filter [known-str, seen-str] (fn s -> has-text s))
 
@@ -38,7 +39,7 @@
        (reduce deriving-mantras [] (fn acc mn ->
          let produced = graph | where [s, e, o]
            | and (eq e "derived-by")
-           | and (eq (to-string o) mn)
+           | and (eq o mn)
            | collect (to-string s)
          let vp = cond has-derived-vp derived-vp
            otherwise (sankhya-sparsha graph)

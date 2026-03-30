@@ -14,8 +14,8 @@
       let pending = nth st 1
       let saw-pos = nth st 2
       let entity  = nth st 3
-      let edge = to-string (nth tri 1)
-      let word = to-string (nth tri 0)
+      let edge = str tri 1
+      let word = str tri 0
       cond (or (eq edge "viraam") (eq edge "vidhi-kaala"))
         [result, "", false, ""]
       -- possession verb: activate if entity pending

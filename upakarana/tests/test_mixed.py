@@ -22,13 +22,14 @@ def test_at_rest_momentum(vy):
     assert "0" in r
 
 
+@xfail(strict=True, reason="from-rest chain: '5 seconds' binds acceleration=5 (not time=5); v=0 used instead of v=at=10; KE=0 not 50000")
 def test_from_rest_ke(vy):
     """Starting from rest, accelerate to find KE"""
     r = vy.answer(
         "a car of mass 1000 starts from rest. it accelerates at 2 m/s2 for 5 seconds. "
         "find kinetic energy"
     )
-    assert "50000" in r or "we find" in r.lower()
+    assert "50000" in r
 
 
 # ── physics + logic ───────────────────────────────────────────────────────────
@@ -72,7 +73,7 @@ def test_physics_count_total_ke(vy):
         "ball-A has mass 3 and velocity 4. ball-B has mass 2 and velocity 5. "
         "find total kinetic energy"
     )
-    assert "49" in r or "24" in r or "25" in r
+    assert "49" in r  # total KE; 24 and 25 appear in derivation but 49 is the stated answer
 
 
 # ── chain + inverse ───────────────────────────────────────────────────────────

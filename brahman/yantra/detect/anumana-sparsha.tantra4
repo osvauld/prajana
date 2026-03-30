@@ -3,13 +3,13 @@
   (eligible (anumana-eligible graph))
   (shashthi-pairs (graph | where [sv, se, so]
     | and (eq se "shashthi-vibhakti")
-    | and (neq (to-string so) "shashthi-vibhakti")
+    | and (neq so "shashthi-vibhakti")
     | collect [sv, so]))
-  (shared-preds (filter (unique (map shashthi-pairs (fn p -> to-string (nth p 0)))) (fn pred ->
-    gt (length (filter shashthi-pairs (fn p -> eq (to-string (nth p 0)) pred))) 1)))
+  (shared-preds (filter (unique (map shashthi-pairs (fn p -> str p 0))) (fn pred ->
+    gt (length (filter shashthi-pairs (fn p -> eq (str p 0) pred))) 1)))
   (path-a (and (has-items shared-preds) eligible))
   (path-a-pred (nth shared-preds 0))
-  (path-a-owners (map (filter shashthi-pairs (fn p -> eq (to-string (nth p 0)) path-a-pred)) (fn p -> to-string (nth p 1))))
+  (path-a-owners (map (filter shashthi-pairs (fn p -> eq (str p 0) path-a-pred)) (fn p -> str p 1)))
   (path-a-assert (nth path-a-owners 0))
   (path-a-query (nth path-a-owners (sub (length path-a-owners) 1)))
   (swarupa-in-graph (graph | where [ss, se, so]

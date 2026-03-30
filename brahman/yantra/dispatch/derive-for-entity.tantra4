@@ -6,9 +6,9 @@
   (eff-vps (nth svps 0))
   -- build a minimal graph: scoped sankhya + intent edges only
   (scoped-sankhya (map eff-vps (fn kv ->
-    [(to-string (nth kv 0)), "sankhya", (to-string (nth kv 1))])))
+    [(str kv 0), "sankhya", (str kv 1)])))
   (intent-triples (filter graph (fn tri ->
-    let e = to-string (nth tri 1)
+    let e = str tri 1
     or (eq e "vidhi-kaala") (eq e "satya"))))
   (scoped-graph (append intent-triples scoped-sankhya))
   -- propagate on scoped graph
@@ -19,7 +19,7 @@
   -- extract the derived value for sf directly from vps
   (result-val (reduce vps "" (fn found kv ->
     cond (has-text found) found
-    (eq (to-string (nth kv 0)) sf) (to-string (nth kv 1))
+    (eq (nth kv 0) sf) (str kv 1)
     otherwise found)))
   (cond (has-text result-val)
     [(to-string entity), result-val, enriched, fired]

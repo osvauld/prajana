@@ -17,11 +17,11 @@
     cond (has-items (triples-by-edge g "vidhi-kaala")) g otherwise acc)))
   (grade-sf (reduce q-grade "" (fn found tri ->
     cond (has-text found) found
-    (and (eq (to-string (nth tri 1)) "satya")
-         (neq (to-string (nth tri 0)) "total")
-         (not (starts-with (to-string (nth tri 0)) "total-"))
+    (and (eq (nth tri 1) "satya")
+         (neq (nth tri 0) "total")
+         (not (starts-with (nth tri 0) "total-"))
          (not (member (nth tri 0) entities)))
-      (to-string (nth tri 0))
+      (str tri 0)
     otherwise found)))
   (sf (cond (not has-total) sf-raw
     (has-text compound-sf) compound-sf

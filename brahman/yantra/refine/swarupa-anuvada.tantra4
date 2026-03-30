@@ -7,7 +7,7 @@
     let src = triple-subj kv
     let tgt = triple-obj kv
     let is-dir = (or (eq tgt "kshaya") (eq tgt "vriddhi"))
-    let vals = src-val | where [lbl, v] | and (eq (to-string lbl) src) | collect v
+    let vals = src-val | where [lbl, v] | and (eq lbl src) | collect v
     cond (or (not (has-items vals)) (or (member tgt directly-bound) is-dir)) acc
     otherwise (append acc [[tgt, "sankhya", (nth vals 0)]]))))
   (append-triples graph new-triples))
