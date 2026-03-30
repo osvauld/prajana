@@ -1,21 +1,9 @@
 -- arithmetic count-chain: fold over grades to compute count results.
+-- pure grade-fold: each grade contributes a number, direction determines op.
 -- activates when numbers exist in non-question grades AND question concept has no formula.
 (tantra count-chain (graph grades)
   (q-concept (question-concept grades))
   (q-direction (detect-direction (question-words grades)))
-  (has-swarupa (has-items (filter (non-reflexive (triples-by-edge graph "swarupa")) (fn t -> not (is-direction (triple-obj t))))))
-  (q-vals (cond (and has-swarupa (has-text q-concept))
-    (graph | where [s, e, o] | and (eq (to-string s) q-concept) | and (eq e "sankhya") | collect (to-number o))
-    otherwise []))
-  (use-aggregation (has-items q-vals))
-  (agg-result (sum q-vals))
-  (agg-fold (reduce q-vals [0, []] (fn state v ->
-    let acc = fold-field state "value"
-    let steps = fold-field state "steps"
-    let new-acc = add acc v
-    let step = (concat "vriddhi " (to-string v) ": " (to-string acc) " -> " (to-string new-acc))
-    [new-acc, (append steps [step])])))
-  (agg-steps (nth agg-fold 1))
   (fold-seed (to-number (shabda "graded-ring" "fold-identity")))
   (arith-state (reduce grades [fold-seed, [], false] (fn state grade ->
     let acc   = fold-field state "value"
@@ -38,11 +26,11 @@
     cond (or is-q (not has-num)) state
     (not init) [nv, steps, true]
     otherwise [new-acc, (append steps [step]), true])))
-  (count-result (cond use-aggregation agg-result otherwise (fold-field arith-state "value")))
-  (count-steps (cond use-aggregation agg-steps otherwise (fold-field arith-state "steps")))
-  (found-any (cond use-aggregation true otherwise (fold-field arith-state "started")))
+  (count-result (fold-field arith-state "value"))
+  (count-steps (fold-field arith-state "steps"))
+  (found-any (fold-field arith-state "started"))
   (all-satya (user-concepts graph))
-  (count-entity (cond use-aggregation q-concept otherwise (nth all-satya 0)))
+  (count-entity (cond (has-text q-concept) q-concept otherwise (nth all-satya 0)))
   (count-container (nth all-satya 1))
   (resolved-count (cond (eq q-direction "kshaya") "count-remaining" otherwise "count-total"))
   (base-graph (cond found-any

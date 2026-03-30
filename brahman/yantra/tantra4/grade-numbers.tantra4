@@ -1,3 +1,3 @@
--- extracts numeric values from a grade (asprista-sankhya + sankhya).
+-- extracts raw numeric values from a grade (asprista-sankhya only, not computed bindings).
 (tantra grade-numbers (grade)
-  (map (triples-by-edges grade ["asprista-sankhya", "sankhya"]) (fn t -> nth t 2)))
+  (map (triples-by-edge grade "asprista-sankhya") (fn t -> nth t 2)))

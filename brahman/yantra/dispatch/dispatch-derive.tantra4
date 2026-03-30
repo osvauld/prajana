@@ -1,63 +1,91 @@
 -- derive dispatch: physics computation — propagate bindings, emit reasoning.
 -- multi-entity: runs derive-for-entity per entity, sums if "total" requested.
+-- scoped: "find KE of ball-B" → derive for ball-B only.
 (tantra dispatch-derive (expanded refined)
   (sf-raw (read-signal expanded "solve-for"))
   (scope-entity (read-signal expanded "scope-entity"))
   (entities (prathama-sparsha expanded))
   (multi (gt (length entities) 1))
+  (has-scope (has-text scope-entity))
 
-  -- detect "total" modifier: if sf is "total", find the real concept
-  (has-total (eq sf-raw "total"))
+  -- detect "total" modifier: "total" standalone or "total-X" compound
+  (has-total (or (eq sf-raw "total") (starts-with sf-raw "total-")))
+  -- resolve actual concept: strip "total-" prefix, or find next satya in question grade
+  (compound-sf (cond (starts-with sf-raw "total-") (substr sf-raw 6 (sub (string-length sf-raw) 6)) otherwise ""))
   (q-grades (split-grades expanded))
   (q-grade (reduce q-grades [] (fn acc g ->
     cond (has-items (triples-by-edge g "vidhi-kaala")) g otherwise acc)))
-  (real-sf (reduce q-grade "" (fn found tri ->
+  (grade-sf (reduce q-grade "" (fn found tri ->
     cond (has-text found) found
     (and (eq (to-string (nth tri 1)) "satya")
          (neq (to-string (nth tri 0)) "total")
+         (not (starts-with (to-string (nth tri 0)) "total-"))
          (not (member (nth tri 0) entities)))
       (to-string (nth tri 0))
     otherwise found)))
-  (sf (cond (and has-total (has-text real-sf)) real-sf otherwise sf-raw))
+  (sf (cond (not has-total) sf-raw
+    (has-text compound-sf) compound-sf
+    (has-text grade-sf) grade-sf
+    otherwise sf-raw))
 
-  -- single entity or no entities: original path
-  (single-result (cond (not multi)
+  -- PATH 1: single entity or no entities — original flat path
+  (single-result (cond (or multi has-total)
+    ""
+    otherwise
     (let prop-result = propagate-derive expanded
      let enriched = nth prop-result 0
      let mm = match-mantra enriched
      let result = cond (has-items mm) (execute-matched mm sf) otherwise "no match"
      let proof = pramana-bandha enriched mm result sf scope-entity false [] [] ""
+     emit-reasoning proof)))
+
+  -- PATH 2: multi-entity + scoped query ("find KE of ball-B")
+  (scoped-dr (cond (and multi has-scope (not has-total))
+    (derive-for-entity expanded scope-entity sf)
+    otherwise []))
+  (scoped-result (cond (has-items scoped-dr)
+    (let enriched = nth scoped-dr 2
+     let mm = match-mantra enriched
+     let result = cond (has-items mm) (execute-matched mm sf) otherwise (concat sf " = " (nth scoped-dr 1))
+     let proof = pramana-bandha enriched mm result sf scope-entity false [] [] ""
      emit-reasoning proof)
     otherwise ""))
 
-  -- multi-entity path: derive per entity
-  (per-entity (cond multi
+  -- PATH 3: multi-entity total or unscoped
+  (per-entity (cond (and multi (or has-total (not has-scope)) (not (has-items scoped-dr)))
     (reduce entities [] (fn acc ent ->
       let dr = derive-for-entity expanded (to-string ent) sf
       cond (has-items dr) (append acc [dr]) otherwise acc))
     otherwise []))
 
   -- aggregate: sum if total requested
-  (total-val (cond (and multi has-total (has-items per-entity))
+  (total-val (cond (and has-total (has-items per-entity))
     (reduce per-entity 0 (fn acc dr ->
       add acc (to-number (nth dr 1))))
     otherwise ""))
 
-  -- emit multi-entity result
-  (multi-result (cond (not multi) ""
-    (and has-total (has-items per-entity))
-      (let per-strs = map per-entity (fn dr ->
-             concat (nth dr 0) ": " (concept-display sf) " is " (nth dr 1))
-       let per-joined = reduce per-strs "" (fn a s ->
-             cond (not (has-text a)) s otherwise (concat a ", " s))
-       concat "we have " per-joined ". we find that total " (concept-display sf) " is " (to-string total-val))
-    (has-items per-entity)
-      (let first-dr = nth per-entity 0
-       let enriched = nth first-dr 2
-       let mm = nth first-dr 3
-       let result = concat sf " = " (nth first-dr 1)
-       let proof = pramana-bandha enriched mm result sf (nth first-dr 0) false [] [] ""
-       emit-reasoning proof)
-    otherwise "no match"))
+  -- emit multi-entity total result
+  (total-result (cond (and has-total (has-items per-entity))
+    (let per-strs = map per-entity (fn dr ->
+           concat (nth dr 0) ": " (concept-display sf) " is " (nth dr 1))
+     let per-joined = reduce per-strs "" (fn a s ->
+           cond (not (has-text a)) s otherwise (concat a ", " s))
+     concat "we have " per-joined ". we find that total " (concept-display sf) " is " (to-string total-val))
+    otherwise ""))
 
-  (cond multi multi-result otherwise single-result))
+  -- emit multi-entity unscoped (no total, no scope — use first entity)
+  (unscoped-result (cond (and multi (not has-total) (not has-scope) (has-items per-entity))
+    (let first-dr = nth per-entity 0
+     let enriched = nth first-dr 2
+     let mm = match-mantra enriched
+     let result = concat sf " = " (nth first-dr 1)
+     let proof = pramana-bandha enriched mm result sf (nth first-dr 0) false [] [] ""
+     emit-reasoning proof)
+    otherwise ""))
+
+  -- dispatch: first non-empty result
+  (cond (has-text single-result) single-result
+    (has-text scoped-result) scoped-result
+    (has-text total-result) total-result
+    (has-text unscoped-result) unscoped-result
+    otherwise "no match"))

@@ -150,7 +150,8 @@
   (vishesa trigonometry-varga)
   (yukta kona oscillation)
   (abheda wave)
-  (pratipaksha arccosine))
+  (pratipaksha arccosine)
+  (ganana cos))
 
 (mantra division
   (karma number-varga)
@@ -350,7 +351,8 @@
   (vishesa trigonometry-varga)
   (yukta kona oscillation)
   (abheda wave)
-  (pratipaksha arcsine))
+  (pratipaksha arcsine)
+  (ganana sin))
 
 (mantra square-root
   (karma number-varga)
