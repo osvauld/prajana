@@ -358,6 +358,18 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     Some (match List.find_opt (fun (k, _) -> k = key) pairs with
      | Some (_, v) -> VString v | None -> VNone)
 
+  | "concept-display" ->
+    let name = eval_str 0 in
+    Some (VString (String.concat " " (String.split_on_char '-' name)))
+
+  | "capitalize-first" ->
+    let s = eval_str 0 in
+    let s = String.trim s in
+    if String.length s = 0 then Some (VString "")
+    else
+      let c = Char.uppercase_ascii s.[0] in
+      Some (VString (String.make 1 c ^ String.sub s 1 (String.length s - 1)))
+
   | "node-layer" ->
     let name = eval_str 0 in
     Some (with_node k name (fun n -> VString n.layer) (VString ""))
@@ -1353,40 +1365,32 @@ let register_primitive_arities () =
   let b = Vakya.register_boundary_keyword in
   List.iter b [")" ; "]" ; "," ; "in" ; "done" ; "let" ; "otherwise"];
   List.iter b ["where" ; "collect" ; "with"];
-  r "lookup"              1;
-  r "walk"                2;
-  r "walk-in"             2;
-  r "has"                 2;
-  r "edges"               1;
-  r "neighbors"           1;
+  (* engine-internal graph ops: these have no op-* om nodes, so they can't be
+     picked up by scan_graph_op_arities. Must be registered explicitly.
+     ops with om nodes (lookup, walk, walk-in, has, edges, neighbors, shabda)
+     are handled by scan_graph_op_arities from yantra.om5. *)
   r "ppr"                 3;
   r "emit-node"           4;
   r "emit-edge"           3;
   r "propagate-derive"    1;
-  r "index-graph"          1;
-  r "idx-subjects"         2;
-  r "idx-by-edge"          2;
-  r "idx-has-edge"         2;
-  r "idx-value"            3;
-  r "idx-append"           2;
-  r "mantra-select"        1;
-  r "clock-us"             0;
-  r "clock-ms"             0;
-  r "profile-step"         2;
-  r "session-emit"         3;
-  r "session-by-edge"      1;
-  r "session-triples"      0;
-  r "session-clear"        0;
-  r "session-has-edge"     1;
-  r "session-subjects"     1;
-  r "session-value"        2;
-  (* dynamic om-* ops: all relation projections are arity 1 *)
-  List.iter (fun rel -> r ("om-" ^ rel) 1)
-    ["janya"; "phala"; "kriya"; "yukta"; "sthita"; "swarupa"; "abheda";
-     "pratipaksha"; "drishthanta"; "siddha"; "varga"; "vishesa";
-     "avastha"; "naama"; "naama-mudra"; "matra"; "ganana"];
+  r "index-graph"         1;
+  r "idx-subjects"        2;
+  r "idx-by-edge"         2;
+  r "idx-has-edge"        2;
+  r "idx-value"           3;
+  r "idx-append"          2;
+  r "mantra-select"       1;
+  r "clock-us"            0;
+  r "clock-ms"            0;
+  r "profile-step"        2;
+  r "session-emit"        3;
+  r "session-by-edge"     1;
+  r "session-triples"     0;
+  r "session-clear"       0;
+  r "session-has-edge"    1;
+  r "session-subjects"    1;
+  r "session-value"       2;
   r "om-contract"         1;
-  r "shabda"              2;
   r "node-layer"          1;
   r "node-slokas"         1;
   r "node-krama"          1;
@@ -1401,6 +1405,13 @@ let register_primitive_arities () =
   r "apply-op"            2;
   r "call-tantra"         2;
   r "split-numeric"       1;
-  r "dim-vector"          1
-  (* math/eval ops omitted — registered by scan_graph_op_arities
+  r "concept-display"     1;
+  r "capitalize-first"    1;
+  r "dim-vector"          1;
+  (* om-* relation projections: dynamic — one entry per registered dimension *)
+  let ndims = Prakriti.dimension_count () in
+  for i = 0 to ndims - 1 do
+    r ("om-" ^ Prakriti.string_of_visheshanam i) 1
+  done
+  (* math/string/boolean ops omitted — registered by scan_graph_op_arities
      from op-* nodes in yantra.om5 via kriya → class → parse-arity *)

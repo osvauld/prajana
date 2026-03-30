@@ -1,7 +1,6 @@
--- physics pratijna: "we have: mass=5. and velocity=3."
+-- physics pratijna: "mass 5 and velocity 3"
 -- shows entity-owned props then flat unowned given values.
 (tantra pratijna-physics (graph)
-  (rel-sankhya (shabda "anuvada-setu" "rel-sankhya"))
   (derived-concepts (graph | where [s, e, o] | and (eq e "derived-by") | collect (to-string s)))
   (entities (prathama-sparsha graph))
   (entity-strs (entity-props-str graph entities))
@@ -10,6 +9,6 @@
     cond (eq (nth tri 1) "sankhya")
       (let c = to-string (nth tri 0)
        cond (or (member c owned-concepts) (member c derived-concepts)) acc
-       otherwise (append acc [(concat c rel-sankhya (to-string (nth tri 2)))]))
+       otherwise (append acc [(concat (concept-display c) " " (to-string (nth tri 2)))]))
     otherwise acc)))
   (append entity-strs flat-strs))

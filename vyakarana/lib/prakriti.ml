@@ -133,6 +133,8 @@ type vish_props = {
   vp_involutive    : bool;
   vp_congruence    : bool;
   vp_composable    : bool;
+  vp_reversible    : bool;
+  vp_inheritable   : bool;
   vp_dual          : int option;
   vp_ring_op       : [`Add | `Mul | `None];
   vp_satya_weight  : float;
@@ -159,6 +161,8 @@ let default_vish_props : vish_props = {
   vp_involutive    = false;
   vp_congruence    = false;
   vp_composable    = false;
+  vp_reversible    = false;
+  vp_inheritable   = false;
   vp_dual          = None;
   vp_ring_op       = `None;
   vp_satya_weight  = 0.70;

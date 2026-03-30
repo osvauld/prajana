@@ -1,4 +1,4 @@
--- viveka nigamana: "we find: ball-A is heavier than ball-B"
+-- viveka nigamana: "we find that ball-A is heavier than ball-B"
 (tantra nigamana-viveka (graph)
   (say-found (shabda "anuvada-setu" "speech-found"))
   (say-is (shabda "anuvada-setu" "speech-is"))
@@ -6,8 +6,9 @@
   (cmp (viveka-comparison graph))
   (winner (cond (has-items cmp) (nth cmp 0) otherwise ""))
   (loser (cond (has-items cmp) (nth cmp 1) otherwise ""))
-  (sought-label (query-edge graph "sought"))
+  (sought-raw (query-edge graph "sought"))
+  (sought-label (concept-display (to-string sought-raw)))
   (ev-count (length (graph | where [s, e, o] | and (eq e "viveka-sankhya") | collect s)))
   (cond (eq ev-count 2)
-    (concat say-found ": " winner " " say-is " " (to-string sought-label) " " say-than " " loser)
-    otherwise (concat say-found ": " winner " " say-is " the " (to-string sought-label))))
+    (concat say-found " that " winner " " say-is " " sought-label " " say-than " " loser)
+    otherwise (concat say-found " that " winner " " say-is " the " sought-label)))

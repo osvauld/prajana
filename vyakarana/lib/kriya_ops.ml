@@ -7,6 +7,26 @@
 
 open Kriya_types
 
+(* spawn_chunks: spawn one domain per chunk of arr, run f on each, join all results.
+   Falls back to sequential when n_workers <= 1 or list is tiny. *)
+let spawn_chunks (arr : 'a array) (f : 'a array -> int -> int -> 'b list) : 'b list =
+  let n = Array.length arr in
+  let n_workers = min (max 1 (Domain.recommended_domain_count () - 1)) n in
+  if n_workers <= 1 then f arr 0 n
+  else begin
+    let parent_ctx = Domain.DLS.get _eval_ctx in
+    let chunk_size = (n + n_workers - 1) / n_workers in
+    let domains = List.init n_workers (fun i ->
+      let lo = i * chunk_size in
+      let hi = min ((i + 1) * chunk_size) n in
+      if lo >= n then None
+      else Some (Domain.spawn (fun () ->
+        Domain.DLS.set _eval_ctx parent_ctx;
+        f arr lo hi))
+    ) in
+    List.concat_map (function None -> [] | Some d -> Domain.join d) domains
+  end
+
 type evaluator = Prakriti.proof_graph -> env -> expr -> value
 
 let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op : string) (args : expr list)
@@ -74,7 +94,7 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     end;
     let num_part = String.sub s 0 !i in
     let alpha_part = String.sub s !i (n - !i) in
-    let num_val = match float_of_string_opt num_part with Some f -> string_of_float f | None -> "" in
+    let num_val = match float_of_string_opt num_part with Some f -> Printf.sprintf "%g" f | None -> "" in
     Some (VList [VString num_val; VString alpha_part])
 
   | "to-string" ->
@@ -144,40 +164,16 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     let fn_val = eval_arg 1 in
     (match fn_val with
      | VFn (params, body, captured) ->
-       let n = List.length lst in
-       let n_workers = min (max 1 (Domain.recommended_domain_count () - 1)) n in
-       if n_workers <= 1 then
-         let results = List.map (fun item ->
-           let local = match params with
-             | [p] -> StringMap.add p item captured
-             | _ -> captured in
-           e_eval k local body
-         ) lst in
-         Some (VList results)
-       else
-         let parent_ctx = Domain.DLS.get _eval_ctx in
-         let arr = Array.of_list lst in
-         let chunk_size = (n + n_workers - 1) / n_workers in
-         let domains = List.init n_workers (fun i ->
-           let lo = i * chunk_size in
-           let hi = min ((i + 1) * chunk_size) n in
-           if lo >= n then None
-           else Some (Domain.spawn (fun () ->
-             Domain.DLS.set _eval_ctx parent_ctx;
-             let results = ref [] in
-             for j = hi - 1 downto lo do
-               let item = arr.(j) in
-               let local = match params with
-                 | [p] -> StringMap.add p item captured
-                 | _ -> captured in
-               results := e_eval k local body :: !results
-             done;
-             !results))
-         ) in
-         let results = List.concat_map (fun d ->
-           match d with None -> [] | Some domain -> Domain.join domain
-         ) domains in
-         Some (VList results)
+       let apply item =
+         let local = match params with
+           | [p] -> StringMap.add p item captured | _ -> captured in
+         e_eval k local body in
+       let arr = Array.of_list lst in
+       let results = spawn_chunks arr (fun a lo hi ->
+         let r = ref [] in
+         for j = hi - 1 downto lo do r := apply a.(j) :: !r done;
+         !r) in
+       Some (VList results)
      | _ -> Some (VList []))
 
   | "pfilter" ->
@@ -185,92 +181,43 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     let fn_val = eval_arg 1 in
     (match fn_val with
      | VFn (params, body, captured) ->
-       let n = List.length lst in
-       let n_workers = min (max 1 (Domain.recommended_domain_count () - 1)) n in
-       if n_workers <= 1 then
-         let results = List.filter (fun item ->
-           let local = match params with
-             | [p] -> StringMap.add p item captured
-             | _ -> captured in
-           as_bool (e_eval k local body)
-         ) lst in
-         Some (VList results)
-       else
-         let parent_ctx = Domain.DLS.get _eval_ctx in
-         let arr = Array.of_list lst in
-         let chunk_size = (n + n_workers - 1) / n_workers in
-         let domains = List.init n_workers (fun i ->
-           let lo = i * chunk_size in
-           let hi = min ((i + 1) * chunk_size) n in
-           if lo >= n then None
-           else Some (Domain.spawn (fun () ->
-             Domain.DLS.set _eval_ctx parent_ctx;
-             let results = ref [] in
-             for j = hi - 1 downto lo do
-               let item = arr.(j) in
-               let local = match params with
-                 | [p] -> StringMap.add p item captured
-                 | _ -> captured in
-               if as_bool (e_eval k local body) then
-                 results := item :: !results
-             done;
-             !results))
-         ) in
-         let results = List.concat_map (fun d ->
-           match d with None -> [] | Some domain -> Domain.join domain
-         ) domains in
-         Some (VList results)
+       let test item =
+         let local = match params with
+           | [p] -> StringMap.add p item captured | _ -> captured in
+         as_bool (e_eval k local body) in
+       let arr = Array.of_list lst in
+       let results = spawn_chunks arr (fun a lo hi ->
+         let r = ref [] in
+         for j = hi - 1 downto lo do
+           if test a.(j) then r := a.(j) :: !r
+         done;
+         !r) in
+       Some (VList results)
      | _ -> Some (VList []))
 
   | "preduce" ->
     (* parallel reduce for list-append accumulators.
        (preduce list [] fn) — same signature as reduce.
        Each chunk reduces independently from init, then chunk results
-       are merged by list concatenation (O(1) per chunk, not O(n) re-eval).
-       For non-list init, falls back to sequential reduce. *)
-    let lst     = eval_lst 0 in
-    let init    = eval_arg 1 in
-    let fn_val  = eval_arg 2 in
+       are merged by list concatenation (O(1) per chunk, not O(n) re-eval). *)
+    let lst    = eval_lst 0 in
+    let init   = eval_arg 1 in
+    let fn_val = eval_arg 2 in
     (match fn_val with
      | VFn (params, body, captured) ->
-       let n = List.length lst in
-       let n_workers = min (max 1 (Domain.recommended_domain_count () - 1)) n in
-       if n_workers <= 1 then
-         let acc = List.fold_left (fun acc item ->
-           let local = match params with
-             | [pa; pb] -> captured |> StringMap.add pa acc |> StringMap.add pb item
-             | _ -> captured in
-           e_eval k local body
-         ) init lst in
-         Some acc
-       else
-         let parent_ctx = Domain.DLS.get _eval_ctx in
-         let arr = Array.of_list lst in
-         let chunk_size = (n + n_workers - 1) / n_workers in
-         let domains = List.init n_workers (fun i ->
-           let lo = i * chunk_size in
-           let hi = min ((i + 1) * chunk_size) n in
-           if lo >= n then None
-           else Some (Domain.spawn (fun () ->
-             Domain.DLS.set _eval_ctx parent_ctx;
-             let acc = ref init in
-             for j = lo to hi - 1 do
-               let item = arr.(j) in
-               let local = match params with
-                 | [pa; pb] -> captured |> StringMap.add pa !acc |> StringMap.add pb item
-                 | _ -> captured in
-               acc := e_eval k local body
-             done;
-             !acc))
-         ) in
-         let chunk_results = List.filter_map (fun d ->
-           match d with None -> None | Some domain -> Some (Domain.join domain)
-         ) domains in
-         (* merge: concatenate list results (zero re-evaluation) *)
-         let merged = List.concat_map (fun chunk ->
-           match chunk with VList items -> items | _ -> [chunk]
-         ) chunk_results in
-         Some (VList merged)
+       let fold item acc =
+         let local = match params with
+           | [pa; pb] -> captured |> StringMap.add pa acc |> StringMap.add pb item
+           | _ -> captured in
+         e_eval k local body in
+       let arr = Array.of_list lst in
+       let chunk_results = spawn_chunks arr (fun a lo hi ->
+         let acc = ref init in
+         for j = lo to hi - 1 do acc := fold a.(j) !acc done;
+         [!acc]) in
+       let merged = List.concat_map (function
+         | VList items -> items | v -> [v]) chunk_results in
+       Some (VList merged)
      | _ -> Some init)
 
   | "reduce" ->

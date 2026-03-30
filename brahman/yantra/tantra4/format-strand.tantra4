@@ -1,3 +1,3 @@
--- formats "label: content" if content non-empty, "" otherwise.
+-- formats "label content" if content non-empty, "" otherwise.
 (tantra format-strand (label content)
-  (cond (has-text content) (concat (to-string label) ": " content) otherwise ""))
+  (cond (has-text content) (concat (to-string label) " " content) otherwise ""))

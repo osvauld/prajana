@@ -248,7 +248,7 @@ def test_zero_initial_velocity_suvat(vy):
 def test_missing_data_no_match(vy):
     """Only mass given, no velocity → can't compute KE"""
     r = vy.answer("mass is 5. find kinetic energy")
-    assert "no match" in r or "we seek" in r
+    assert "no match" in r.lower() or "we seek" in r.lower()
 
 
 # ── reasoning strands ────────────────────────────────────────────────────────
@@ -257,8 +257,9 @@ def test_missing_data_no_match(vy):
 def test_strands_complete(vy):
     """Full proof has all four strands"""
     r = vy.answer("mass is 5 and velocity is 10. find kinetic energy")
+    rl = r.lower()
     for strand in ("we have", "we seek", "we know", "we find"):
-        assert strand in r
+        assert strand in rl
 
 
 def test_chain_strand_intermediate(vy):
@@ -266,4 +267,4 @@ def test_chain_strand_intermediate(vy):
     r = vy.answer(
         "initial velocity is 0. acceleration is 4. time is 5. mass is 10. find kinetic energy"
     )
-    assert "we find" in r
+    assert "we find" in r.lower()

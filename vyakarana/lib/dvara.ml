@@ -26,161 +26,115 @@ let fmt_elapsed us =
    1. JSON HELPERS
    ═══════════════════════════════════════════════════════════════════════════ *)
 
-let json_string_field (json : string) (key : string) : string option =
+(* shared: find position right after "key": whitespace in json, or -1 if not found *)
+let json_value_start (json : string) (key : string) : int =
   let pat = "\"" ^ key ^ "\"" in
   let len = String.length json in
   let pat_len = String.length pat in
   let rec scan i =
-    if i + pat_len > len then None
+    if i + pat_len > len then -1
     else if String.sub json i pat_len = pat then begin
       let j = ref (i + pat_len) in
       while !j < len && (json.[!j] = ' ' || json.[!j] = ':' || json.[!j] = '\t') do incr j done;
-      if !j < len && json.[!j] = '"' then begin
-        incr j;
-        let buf = Buffer.create 64 in
-        let escape = ref false in
-        let found = ref false in
-        while !j < len && not !found do
-          let c = json.[!j] in
-          if !escape then begin
-            (match c with
-            | '"' -> Buffer.add_char buf '"' | '\\' -> Buffer.add_char buf '\\'
-            | 'n' -> Buffer.add_char buf '\n' | 'r' -> Buffer.add_char buf '\r'
-            | 't' -> Buffer.add_char buf '\t' | _ -> Buffer.add_char buf c);
-            escape := false
-          end else if c = '\\' then escape := true
-          else if c = '"' then found := true
-          else Buffer.add_char buf c;
-          incr j
-        done;
-        if !found then Some (Buffer.contents buf) else None
-      end else None
+      !j
     end else scan (i + 1)
   in
   scan 0
+
+(* parse a JSON-escaped string starting at j (pointing at opening quote), advance j *)
+let read_json_string (json : string) (len : int) (j : int ref) : string option =
+  if !j >= len || json.[!j] <> '"' then None
+  else begin
+    incr j;
+    let buf = Buffer.create 64 in
+    let escape = ref false in
+    let found = ref false in
+    while !j < len && not !found do
+      let c = json.[!j] in
+      if !escape then begin
+        (match c with
+        | '"'  -> Buffer.add_char buf '"'  | '\\' -> Buffer.add_char buf '\\'
+        | 'n'  -> Buffer.add_char buf '\n' | 'r'  -> Buffer.add_char buf '\r'
+        | 't'  -> Buffer.add_char buf '\t' | _    -> Buffer.add_char buf c);
+        escape := false
+      end else if c = '\\' then escape := true
+      else if c = '"' then found := true
+      else Buffer.add_char buf c;
+      incr j
+    done;
+    if !found then Some (Buffer.contents buf) else None
+  end
+
+(* parse a JSON string array starting at j (pointing at '['), advance j *)
+let read_json_string_array (json : string) (len : int) (j : int ref) : string list =
+  if !j >= len || json.[!j] <> '[' then []
+  else begin
+    incr j;
+    let items = ref [] in
+    let stop = ref false in
+    while !j < len && not !stop do
+      let c = json.[!j] in
+      if c = ']' then (stop := true; incr j)
+      else if c = '"' then
+        (match read_json_string json len j with
+         | Some s -> items := s :: !items
+         | None -> ())
+      else incr j
+    done;
+    List.rev !items
+  end
+
+let json_string_field (json : string) (key : string) : string option =
+  let pos = json_value_start json key in
+  if pos < 0 then None
+  else read_json_string json (String.length json) (ref pos)
 
 let json_int_field (json : string) (key : string) : int option =
-  let pat = "\"" ^ key ^ "\"" in
+  let pos = json_value_start json key in
   let len = String.length json in
-  let pat_len = String.length pat in
-  let rec scan i =
-    if i + pat_len > len then None
-    else if String.sub json i pat_len = pat then begin
-      let j = ref (i + pat_len) in
-      while !j < len && (json.[!j] = ' ' || json.[!j] = ':' || json.[!j] = '\t') do incr j done;
-      let start = !j in
-      while !j < len && json.[!j] >= '0' && json.[!j] <= '9' do incr j done;
-      if !j > start then int_of_string_opt (String.sub json start (!j - start))
-      else None
-    end else scan (i + 1)
-  in
-  scan 0
+  if pos < 0 then None
+  else begin
+    let j = ref pos in
+    let start = !j in
+    while !j < len && json.[!j] >= '0' && json.[!j] <= '9' do incr j done;
+    if !j > start then int_of_string_opt (String.sub json start (!j - start))
+    else None
+  end
 
 let json_string_array_field (json : string) (key : string) : string list =
-  let pat = "\"" ^ key ^ "\"" in
-  let len = String.length json in
-  let pat_len = String.length pat in
-  let rec scan i =
-    if i + pat_len > len then []
-    else if String.sub json i pat_len = pat then begin
-      let j = ref (i + pat_len) in
-      while !j < len && (json.[!j] = ' ' || json.[!j] = ':' || json.[!j] = '\t') do incr j done;
-      if !j < len && json.[!j] = '[' then begin
-        incr j;
-        let items = ref [] in
-        let done_ = ref false in
-        while !j < len && not !done_ do
-          let c = json.[!j] in
-          if c = ']' then done_ := true
-          else if c = '"' then begin
-            incr j;
-            let buf = Buffer.create 32 in
-            let escape = ref false in
-            let found = ref false in
-            while !j < len && not !found do
-              let ch = json.[!j] in
-              if !escape then begin
-                (match ch with '"' -> Buffer.add_char buf '"'
-                | '\\' -> Buffer.add_char buf '\\' | 'n' -> Buffer.add_char buf '\n'
-                | _ -> Buffer.add_char buf ch); escape := false
-              end else if ch = '\\' then escape := true
-              else if ch = '"' then found := true
-              else Buffer.add_char buf ch;
-              incr j
-            done;
-            if !found then items := Buffer.contents buf :: !items
-          end else incr j
-        done;
-        List.rev !items
-      end else []
-    end else scan (i + 1)
-  in
-  scan 0
+  let pos = json_value_start json key in
+  if pos < 0 then []
+  else read_json_string_array json (String.length json) (ref pos)
 
 (* Parse a JSON object of string→string-array pairs:
    {"swarupa": ["base"], "sthita": ["ctx"]} → [("swarupa", ["base"]); ("sthita", ["ctx"])]
    Used for the "edges" field in create-node. *)
 let json_edges_object (json : string) (key : string) : (string * string list) list =
-  let pat = "\"" ^ key ^ "\"" in
+  let pos = json_value_start json key in
   let len = String.length json in
-  let pat_len = String.length pat in
-  let rec scan i =
-    if i + pat_len > len then []
-    else if String.sub json i pat_len = pat then begin
-      let j = ref (i + pat_len) in
-      (* skip whitespace and colon *)
-      while !j < len && (json.[!j] = ' ' || json.[!j] = ':' || json.[!j] = '\t') do incr j done;
-      if !j < len && json.[!j] = '{' then begin
-        incr j;
-        let result = ref [] in
-        let done_ = ref false in
-        while !j < len && not !done_ do
-          let c = json.[!j] in
-          if c = '}' then done_ := true
-          else if c = '"' then begin
-            (* parse key *)
-            incr j;
-            let buf = Buffer.create 32 in
-            while !j < len && json.[!j] <> '"' do
-              Buffer.add_char buf json.[!j]; incr j
-            done;
-            if !j < len then incr j; (* skip closing quote *)
-            let rel_name = Buffer.contents buf in
-            (* skip to array *)
-            while !j < len && json.[!j] <> '[' do incr j done;
-            if !j < len then begin
-              (* reuse json_string_array_field logic inline *)
-              incr j;
-              let items = ref [] in
-              let arr_done = ref false in
-              while !j < len && not !arr_done do
-                let ch = json.[!j] in
-                if ch = ']' then (arr_done := true; incr j)
-                else if ch = '"' then begin
-                  incr j;
-                  let vbuf = Buffer.create 32 in
-                  let esc = ref false in
-                  let found = ref false in
-                  while !j < len && not !found do
-                    let vc = json.[!j] in
-                    if !esc then (Buffer.add_char vbuf vc; esc := false)
-                    else if vc = '\\' then esc := true
-                    else if vc = '"' then found := true
-                    else Buffer.add_char vbuf vc;
-                    incr j
-                  done;
-                  if !found then items := Buffer.contents vbuf :: !items
-                end else incr j
-              done;
-              result := (rel_name, List.rev !items) :: !result
-            end
-          end else incr j
-        done;
-        List.rev !result
-      end else []
-    end else scan (i + 1)
-  in
-  scan 0
+  if pos < 0 then []
+  else begin
+    let j = ref pos in
+    if !j >= len || json.[!j] <> '{' then []
+    else begin
+      incr j;
+      let result = ref [] in
+      let stop = ref false in
+      while !j < len && not !stop do
+        let c = json.[!j] in
+        if c = '}' then stop := true
+        else if c = '"' then begin
+          (match read_json_string json len j with
+           | None -> ()
+           | Some rel_name ->
+             while !j < len && json.[!j] <> '[' do incr j done;
+             let items = read_json_string_array json len j in
+             result := (rel_name, items) :: !result)
+        end else incr j
+      done;
+      List.rev !result
+    end
+  end
 
 let opt_field ?(default="") (json : string) (key : string) : string =
   Option.value ~default (json_string_field json key)
@@ -656,7 +610,7 @@ let handle_client (k : proof_graph) (yantra_idx : tantra_index) (yantra_session 
                 | n -> Printf.printf "[session %s / %s ← parampara: prashna-%d]\n%!"
                          ses_id entry.se_turn_id (n - 1));
                 let prior = List.map (fun b ->
-                  (b.b_name, "sankhya", string_of_float b.b_value)
+                  (b.b_name, "sankhya", Printf.sprintf "%g" b.b_value)
                 ) entry.se_yantra.bindings in
                 (entry.se_yantra, prior, true)
               else (yantra_session, [], false)

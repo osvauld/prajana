@@ -215,53 +215,44 @@ let shabda_get (pairs : (string * string) list) (key : string) : string option =
    3. CLASSIFICATION — token_role, grammar, number words
    ═══════════════════════════════════════════════════════════════════════════ *)
 
+(* generic once-loaded string→string cache factory *)
+let make_string_cache node_name sz =
+  let cache : (string, string) Hashtbl.t = Hashtbl.create sz in
+  let loaded = ref false in
+  let load k =
+    if not !loaded then begin
+      loaded := true;
+      List.iter (fun (k2, v) -> Hashtbl.replace cache k2 v) (read_shabda k node_name)
+    end
+  in
+  (cache, load)
+
+let (english_token_roles_cache, load_english_token_roles) =
+  make_string_cache "english-token-roles" 64
+
+let (english_number_words_cache, load_english_number_words) =
+  make_string_cache "english-number-words" 32
+
+let english_number_word (k : proof_graph) (n : string) : string option =
+  load_english_number_words k;
+  Hashtbl.find_opt english_number_words_cache n
+
 let grammar_of_english_cache : (string, visheshanam option) Hashtbl.t = Hashtbl.create 64
 let grammar_of_english_loaded = ref false
 
 let load_grammar_of_english (k : proof_graph) : unit =
   if not !grammar_of_english_loaded then begin
     grammar_of_english_loaded := true;
-    let pairs = read_shabda k "english-grammar" in
     List.iter (fun (word, vish_str) ->
-      let v = visheshanam_of_string vish_str in
-      Hashtbl.replace grammar_of_english_cache word v
-    ) pairs
+      Hashtbl.replace grammar_of_english_cache word (visheshanam_of_string vish_str)
+    ) (read_shabda k "english-grammar")
   end
 
 let grammar_of_english (k : proof_graph) word =
   load_grammar_of_english k;
-  let w = String.lowercase_ascii word in
-  match Hashtbl.find_opt grammar_of_english_cache w with
+  match Hashtbl.find_opt grammar_of_english_cache (String.lowercase_ascii word) with
   | Some v -> v
   | None   -> None
-
-let english_token_roles_cache : (string, string) Hashtbl.t = Hashtbl.create 64
-let english_token_roles_loaded = ref false
-
-let load_english_token_roles (k : proof_graph) : unit =
-  if not !english_token_roles_loaded then begin
-    english_token_roles_loaded := true;
-    let pairs = read_shabda k "english-token-roles" in
-    List.iter (fun (token, role) ->
-      Hashtbl.replace english_token_roles_cache token role
-    ) pairs
-  end
-
-let english_number_words_cache : (string, string) Hashtbl.t = Hashtbl.create 32
-let english_number_words_loaded = ref false
-
-let load_english_number_words (k : proof_graph) : unit =
-  if not !english_number_words_loaded then begin
-    english_number_words_loaded := true;
-    let pairs = read_shabda k "english-number-words" in
-    List.iter (fun (n, word) ->
-      Hashtbl.replace english_number_words_cache n word
-    ) pairs
-  end
-
-let english_number_word (k : proof_graph) (n : string) : string option =
-  load_english_number_words k;
-  Hashtbl.find_opt english_number_words_cache n
 
 type token_role =
   | Article

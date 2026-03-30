@@ -2,7 +2,7 @@
 (tantra mantra-coverage (graph)
   (bcs (nth (bound-state graph) 0))
   (all-mantras (mantra-select ""))
-  (map all-mantras (fn m ->
+  (pmap all-mantras (fn m ->
     let ms      = to-string m
     let janya   = nth (om-contract ms) 0
     let covered = filter janya (fn r -> member r bcs)

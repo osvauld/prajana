@@ -28,7 +28,7 @@ def test_from_rest_ke(vy):
         "a car of mass 1000 starts from rest. it accelerates at 2 m/s2 for 5 seconds. "
         "find kinetic energy"
     )
-    assert "50000" in r or "we find" in r
+    assert "50000" in r or "we find" in r.lower()
 
 
 # ── physics + logic ───────────────────────────────────────────────────────────
@@ -93,7 +93,7 @@ def test_chain_inverse_find_initial_velocity(vy):
         "kinetic energy is 200. mass is 4. find velocity. "
         "acceleration is 5. time is 4. find initial velocity"
     )
-    assert "10" in r or "we find" in r
+    assert "10" in r or "we find" in r.lower()
 
 
 # ── tense + physics ────────────────────────────────────────────────────────────

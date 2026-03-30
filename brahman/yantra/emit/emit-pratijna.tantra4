@@ -4,5 +4,5 @@
   (all-given (cond is-viveka (pratijna-viveka graph)
     otherwise (pratijna-physics graph)))
   (cond (has-items all-given)
-    (concat say-given ": " (list-join all-given))
+    (concat say-given " " (list-join all-given))
     otherwise ""))

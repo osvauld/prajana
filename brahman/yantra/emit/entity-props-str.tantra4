@@ -1,15 +1,16 @@
--- builds "entity (concept=val, concept=val)" strings for entities with owned properties.
+-- builds "entity with prop val and prop val" strings for entities with owned properties.
 (tantra entity-props-str (graph entities)
-  (rel-sankhya (shabda "anuvada-setu" "rel-sankhya"))
+  (say-and (shabda "conj-and" "word"))
+  (prep (shabda "prep-with" "word"))
   (reduce entities [] (fn acc entity ->
     let owned = shashthi-sparsha graph entity
     let props = reduce owned [] (fn pacc concept ->
       let val = query-edge-of graph (to-string concept) "sankhya"
       cond (exists val)
-        (append pacc [(concat (to-string concept) rel-sankhya (to-string val))])
+        (append pacc [(concat (concept-display (to-string concept)) " " (to-string val))])
       otherwise pacc)
     cond (has-items props)
       (let props-str = reduce props "" (fn a p ->
-         cond (not (has-text a)) p otherwise (concat a ", " p))
-       append acc [(concat (to-string entity) " (" props-str ")")])
+         cond (not (has-text a)) p otherwise (concat a " " say-and " " p))
+       append acc [(concat (to-string entity) " " prep " " props-str)])
     otherwise acc)))
