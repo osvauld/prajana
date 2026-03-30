@@ -7,7 +7,7 @@ from pathram2.types import Node, Edge
 from pathram2.storage import Storage
 from pathram2.graph.crud import (
     add_node, get_node, update_node, delete_node, all_nodes,
-    link, unlink, get_edge, edges_of,
+    link, unlink, get_edge, edges_of, resolve_id,
 )
 from pathram2.graph.walk import walk, walk_in, chain, ancestors, descendants, neighbors
 from pathram2.graph.query import by_type, by_tag, by_shabda, search, since, between, stale
@@ -119,6 +119,10 @@ class Graph:
         if node_id:
             return Query(self.store, [node_id])
         return Query(self.store)
+
+    def resolve(self, id_or_name: str) -> str | None:
+        """Resolve a slug or ID to a confirmed node ID."""
+        return resolve_id(self.store, id_or_name)
 
     # --- Lifecycle ---
 

@@ -82,12 +82,13 @@ def test_modus_ponens(vy):
     assert "yes" in r.lower() or "wet" in r.lower()
 
 
-@xfail(strict=True, reason="modus-tollens: system returns 'yes — ground has negation' (IS-A negation misfire); 'no' only matches as substring of 'know'")
+@xfail(strict=True, reason="modus-tollens: returns 'no match' not real inference; pratishedha edge exists but contrapositive logic not wired")
 def test_modus_tollens(vy):
     """if it rains the ground is wet. the ground is not wet. did it rain"""
     r = vy.answer(
         "if it rains the ground is wet. the ground is not wet. did it rain"
     )
+    assert r.lower() != "no match", "must be real inference, not 'no match'"
     assert re.search(r'\bno\b', r.lower()) is not None
 
 

@@ -269,7 +269,8 @@ shabda motion
 done
 
 shabda negation
-  (word not without absent)
+  (word not no without never absent)
+  (role grammar)
   (name logical-not)
   (desc "logical-operation-that-inverts-the-truth-value-of-a-proposition")
 done

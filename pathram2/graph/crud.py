@@ -22,6 +22,8 @@ def _index_node(store, node: Node):
     store.put("idx_type", f"{node.type}:{node.id}")
     store.put("idx_tag", f"{node.tag}:{node.id}")
     store.put("idx_time", f"{node.created_at}:{node.id}")
+    if node.shabda.get("name"):
+        store.put("idx_name", node.shabda["name"], {"id": node.id})
 
 
 def _deindex_node(store, node: Node):
@@ -29,6 +31,8 @@ def _deindex_node(store, node: Node):
     store.delete("idx_type", f"{node.type}:{node.id}")
     store.delete("idx_tag", f"{node.tag}:{node.id}")
     store.delete("idx_time", f"{node.created_at}:{node.id}")
+    if node.shabda.get("name"):
+        store.delete("idx_name", node.shabda["name"])
 
 
 def _index_edge(store, edge: Edge):
@@ -115,6 +119,28 @@ def delete_node(store, id: str):
 def all_nodes(store) -> list[Node]:
     """Return all nodes."""
     return [Node.from_dict(d) for d in store.scan_values("nodes")]
+
+
+def resolve_id(store, id_or_name: str) -> str | None:
+    """Resolve a node ID or slug to a confirmed node ID.
+
+    Resolution order:
+    1. Direct ID match (exact node exists)
+    2. idx_name lookup (slug registered at add time)
+    3. Linear scan of shabda["name"] (backcompat for nodes created before idx_name)
+    """
+    if store.exists("nodes", id_or_name):
+        return id_or_name
+    # idx_name lookup
+    d = store.get("idx_name", id_or_name)
+    if d and "id" in d:
+        if store.exists("nodes", d["id"]):
+            return d["id"]
+    # Fallback: scan (covers nodes created before idx_name existed)
+    for nd in store.scan_values("nodes"):
+        if nd.get("shabda", {}).get("name") == id_or_name:
+            return nd["id"]
+    return None
 
 
 # --- Edge CRUD ---

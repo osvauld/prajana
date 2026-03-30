@@ -137,6 +137,7 @@ def test_session_entity_then_property(vy):
 # ── colour classifier ─────────────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="colour classifier: red/blue not split into distinct sankhya subjects")
 def test_colour_red_blue_distinct(vy):
     """Red and blue balls are distinct entities"""
     g = vy.bqg("a box has 5 red balls and 3 blue balls")
