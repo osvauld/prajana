@@ -42,6 +42,7 @@
     let is-ablative = has-grammar-sthita nd rl "panchami-vibhakti"
     let is-dative   = has-grammar-sthita nd rl "chaturthi-vibhakti"
     let is-instrumental = has-grammar-sthita nd rl "trtiya-vibhakti"
+    let is-pratishedha = has-grammar-sthita nd rl "pratishedha"
     let is-vibhakti = or is-locative (or is-ablative (or is-dative is-instrumental))
     let vibhakti-edge = cond is-locative "adhikarana" is-ablative "apadana" is-dative "sampradana" is-instrumental "karana" otherwise ""
     let current-grade = reduce g [] (fn a t -> cond (or (eq (nth t 1) "viraam") (eq (nth t 1) "dvandva")) [] otherwise (append a [t]))
@@ -50,7 +51,7 @@
     let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "apadana") (eq (nth t 1) "sampradana") (eq (nth t 1) "karana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala")))
     let subgraphs = [current-grade, entity-reg, bind-ledger, grammar-trail]
     let info      = [(to-string nd), rl, ly, nv, (to-string un), candidates]
-    let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]] is-vibhakti [[clean, vibhakti-edge, clean]] otherwise (emit-triples clean info subgraphs)
+    let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]] is-pratishedha [[clean, "pratishedha", clean]] is-vibhakti [[clean, vibhakti-edge, clean]] otherwise (emit-triples clean info subgraphs)
     let with-word = (append g triples)
     (cond (has-text punct) (append with-word [[punct, "viraam", punct]]) otherwise with-word))))
   (sandhi-viveka graph))

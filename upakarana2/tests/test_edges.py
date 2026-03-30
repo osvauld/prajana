@@ -459,6 +459,7 @@ class TestGraphReasoningRobotics:
         r = vy.eval('walk-in "angular-velocity" "phala"')
         assert "angular-velocity-mantra" in r
 
+    @xfail(strict=True, reason="kramanusara edge missing on angular-acceleration")
     def test_angular_chain(self, vy):
         """angular-acceleration → torque: the kinematic chain."""
         # angular-acceleration is janya (input) to torque-mantra

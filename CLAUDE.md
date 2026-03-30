@@ -5,11 +5,11 @@
 Always use the project venv for all Python commands:
 
 ```bash
-.venv/bin/python3 -m upakarana [cmd] [action] [args]
+.venv/bin/python3 -m upakarana2 [cmd] [action] [args]
 .venv/bin/python3 -m pathram2 [cmd] [args]
 ```
 
-Never use system python. Never use `python3 -m tools` or `python3 -m patra` — those are deprecated.
+Never use system python. Never use `python3 -m upakarana`, `python3 -m tools`, or `python3 -m patra` — those are deprecated.
 
 ## Build
 
@@ -19,9 +19,21 @@ cd vyakarana && dune build && cd ..
 
 ---
 
-## Tooling: upakarana (analysis + engine)
+## Starting a session
 
-All graph analysis, tantra inspection, shabda queries, live engine interaction, and testing goes through upakarana. Usage is tracked automatically — every CLI call increments counters in `upakarana/data/usage.json`. Always use the CLI; do not read .om/.tantra files directly with cat/Read when upakarana can surface the same information. This keeps usage data accurate.
+**Always run this first** at the start of any non-trivial conversation:
+
+```bash
+.venv/bin/python3 -m pathram2 context
+```
+
+This gives you: current open session, open branches (tangents in progress), pending steps, recent sessions, and recent discoveries — everything needed to orient yourself before doing any work.
+
+---
+
+## Tooling: upakarana2 (analysis + engine)
+
+All graph analysis, tantra inspection, shabda queries, live engine interaction, and testing goes through upakarana2. Usage is tracked automatically. Always use the CLI; do not read .om/.tantra files directly with cat/Read when upakarana2 can surface the same information.
 
 ### Commands
 
@@ -37,6 +49,7 @@ All graph analysis, tantra inspection, shabda queries, live engine interaction, 
 | `tantra search PATTERN` | Regex across all tantras |
 | `tantra group [NAME]` | Tantras grouped by function |
 | `tantra callgraph` | Full call graph + hub tantras |
+| `tantra reachability NAME` | What a tantra can reach |
 | `shabda summary` | Word index, keys, collisions |
 | `shabda node NAME` | Full shabda metadata for one node |
 | `shabda search PATTERN` | Search words + shabda files |
@@ -49,10 +62,14 @@ All graph analysis, tantra inspection, shabda queries, live engine interaction, 
 | `vy ask QUESTION` | Ask a natural language question |
 | `vy walk NODE REL` | Walk edges from a node |
 | `vy inspect NODE` | Full node: satya, shabda, edges |
-| `test summary` | Test counts by layer |
+| `vy drift` | Live drift detection |
+| `vy pratipaksha` | Live pratipaksha analysis |
+| `vy signal-trace` | Live signal tracing |
+| `vy panchaavayava` | Live panchaavayava check |
 | `test list` | All tests with xfail gates |
+| `test summary` | Test counts by layer |
 | `test run [FILTER]` | Run tests (layer, gate:NAME, test name) |
-| `test failed` | Show failures |
+| `test failed` | Show last run failures |
 | `cache summary` | Pass/fail/xfail + gates + slow calls |
 | `cache gates [NAME]` | Xfail gates breakdown |
 | `cache slow` | Slowest calls and tests |
@@ -66,38 +83,19 @@ All graph analysis, tantra inspection, shabda queries, live engine interaction, 
 | `a flow` | Cross-layer edge flow |
 | `a ring` | Visheshanam ring axiom verification |
 | `a components` | Connected components |
-| `a signals` | Signal flow tracing |
-| `a patterns` | Pattern classification |
 | `a swarupa` | Swarupa chain analysis |
-| `a fingerprint` | Graph fingerprint |
-| `a vocabulary` | Vocabulary coverage |
-| `a grounding` | Grounding analysis |
-| `a siblings` | Sibling node analysis |
-| `a compose` | Composition overview (compounds, bases, chains) |
-| `a compose-gen` | Generatability: auto/semi/manual classification |
-| `a compose-curated` | Curated validity matrix for generation |
-| `a compose-inherit` | Edge inheritance analysis per compound |
-| `a compose-rules` | Which relations inherit vs override |
-| `a compose-words` | Shabda/word coverage gaps |
-| `a compose-logic` | Logic node generation plan |
-| `a compose-lift` | Space-lift analysis (scalar→vec/mat/complex) |
+| `a signals` | Signal producer/consumer map |
+| `a signals-gap` | Dead signals (dispatch wiring gaps) |
+| `a compose` | Compound node overview |
+| `a compose-gen` | Generatability: auto/semi/manual |
 | `a compose-inverse` | Pratipaksha pair completeness |
+| `a gen-gaps [DOMAIN]` | Missing compound nodes |
+| `a gen-validate NAME` | Validate one compound vs expected |
 | `ocaml report` | OCaml codebase analysis |
 | `ocaml darshana` | Darshana analysis |
 | `ocaml patterns` | Pattern detection |
 | `ocaml coupling` | Module coupling |
 | `ocaml functions` | Function listing |
-| `q op NAME` | Operation metadata |
-| `q ops` | All operations |
-| `q node NAME` | Graph node details |
-| `q dispatch` | Dispatch table |
-| `q missing` | Missing mappings |
-| `q overview` | System overview |
-| `q eval EXPR` | Evaluate expression |
-| `live drift` | Live drift detection |
-| `live pratipaksha` | Live pratipaksha analysis |
-| `live signal-trace` | Live signal tracing |
-| `live panchaavayava` | Live panchaavayava check |
 | `usage report` | Usage statistics |
 | `usage never` | Commands never used |
 
@@ -105,91 +103,137 @@ All graph analysis, tantra inspection, shabda queries, live engine interaction, 
 
 ## Tooling: pathram2 (documentation + journaling)
 
-pathram2 is a graph-native knowledge tracker. Use it to document analysis sessions, record discoveries, track steps, and maintain a living journal of work. Its usage is also tracked in the shared usage.json.
+pathram2 is a graph-native knowledge tracker. Use it to document sessions, record discoveries, track steps, and maintain a living journal. Node IDs and name slugs are interchangeable in all commands that take a node argument.
+
+### Naming convention
+
+Prefer descriptive IDs for important nodes. Use `--name slug` (or `--id slug`) when creating nodes that will be referenced repeatedly:
+
+```bash
+.venv/bin/python3 -m pathram2 add step "Migrate shabda to graph" --name step-shabda-migration --status pending
+.venv/bin/python3 -m pathram2 show step-shabda-migration   # works by slug
+```
 
 ### Commands
 
 | command | what it does |
 |---------|-------------|
-| `add TYPE TITLE [--body] [--tag] [--parent] [--session] [--status]` | Create a node (types: philosophy, discovery, session, step, branch, note, quirk, report, doc) |
-| `show ID` | Display node + edges |
-| `update ID [--title] [--body] [--tag] [--status]` | Modify a node |
-| `delete ID` | Remove node and edges |
-| `link SRC TGT REL [--reason]` | Create an edge |
+| `context [--json]` | **LLM startup dump**: session + branches + pending steps + recent discoveries |
+| `cleanup [--json]` | **Workflow health**: open sessions, tangent branches in flight, pending steps, steps missing status |
+| `usage [report\|reset] [--json]` | Command usage statistics (which commands are called, how often) |
+| `glance [--json]` | Quick summary: node counts, pending steps, open branches |
+| `add TYPE TITLE [--name SLUG] [--body] [--tag] [--parent] [--session] [--status]` | Create a node. Types: `discovery` (non-obvious finding), `step` (action item, add `--status pending\|done`), `quirk` (gotcha), `note` (detail, attach with `--parent`), `doc` (container) |
+| `show ID\_OR\_NAME [--json]` | Display node + edges |
+| `update ID\_OR\_NAME [--title] [--body] [--tag] [--status] [--name]` | Modify a node |
+| `delete ID\_OR\_NAME` | Remove node and edges |
+| `resolve NAME [--json]` | Resolve a slug → node ID |
+| `link SRC TGT REL [--reason]` | Create an edge (src/tgt accept slugs) |
 | `unlink SRC TGT [REL]` | Remove edge(s) |
-| `walk ID REL [--incoming]` | Follow edges |
-| `search PATTERN` | Regex on titles/bodies |
-| `steps [--status] [--tag]` | List steps |
+| `walk ID\_OR\_NAME REL [--incoming] [--json]` | Follow edges |
+| `search PATTERN [--json]` | Regex on titles/bodies |
+| `steps [--pending] [--done] [--status S] [--tag T] [--json] [--verbose]` | List steps |
 | `session-start TITLE [--id]` | Begin a session |
-| `session-end [ID]` | End current session |
-| `journal [-n N]` | Last N sessions |
-| `today` | Nodes created/updated today |
-| `branch FROM REASON TITLE` | Create tangent from a node |
-| `return ID [--session-id]` | Mark return to original task |
-| `branches` | Show open branches |
+| `session-end [ID\_OR\_NAME]` | End current session |
+| `journal [-n N] [--json]` | Last N sessions |
+| `today [--json]` | Nodes created/updated today |
+| `branch FROM REASON TITLE` | Create tangent from a node (from accepts slug) |
+| `return ID\_OR\_NAME [--session-id]` | Mark return to original task |
+| `branches [--json]` | Show open branches |
 | `tree [ROOT]` | Visualize branch DAG |
 | `merge IDS... --into TYPE --title TITLE` | Consolidate nodes |
-| `stale DAYS` | Untouched nodes |
-| `abandoned [--days N]` | Stale pending steps |
-| `glance` | Quick summary |
+| `stale DAYS [--json]` | Untouched nodes |
+| `abandoned [--days N] [--json]` | Stale pending steps |
 | `query EXPRS... [--json] [--count] [--ids] [--verbose]` | Composable query |
 | `relations` | List all 16 relation types |
 | `types` | List node types + tags |
 
 ### Relations
 
-Core 10 visheshanam: swarupa, abheda, drishthanta, sthita, yukta, siddha, kriya, phala, janya, pratipaksha
-Extensions: krama, branches-from, returns-to, fixes, references, depends-on
+Core 10 visheshanam: `swarupa`, `abheda`, `drishthanta`, `sthita`, `yukta`, `siddha`, `kriya`, `phala`, `janya`, `pratipaksha`
+
+Extensions: `krama`, `branches-from`, `returns-to`, `fixes`, `references`, `depends-on`
 
 ### Node types
 
-philosophy, discovery, session, step, branch, note, quirk, report, doc
+`philosophy`, `discovery`, `session`, `step`, `branch`, `note`, `quirk`, `report`, `doc`
 
 ### Tags
 
-active, done, consolidated, abandoned, wrong, deferred
+`active`, `done`, `consolidated`, `abandoned`, `wrong`, `deferred`
+
+### `query` expression syntax
+
+```bash
+.venv/bin/python3 -m pathram2 query type=step shabda.status=pending sort=created_at --json
+.venv/bin/python3 -m pathram2 query type=discovery search=vibhakti rsort=created_at limit=5
+.venv/bin/python3 -m pathram2 query type=step node=plan-nlp descendants=sthita --count
+```
+
+Supported keys: `type`, `tag`, `shabda.KEY`, `search`, `since`, `before`, `stale`, `walk`, `walk_in`, `descendants`, `ancestors`, `sort`, `rsort`, `limit`, `node`
 
 ---
 
+## Protocol: session start
+
+```bash
+# 1. Get full context (open branches, pending steps, recent work)
+.venv/bin/python3 -m pathram2 context
+
+# 2. Start a session with a descriptive title
+.venv/bin/python3 -m pathram2 session-start "topic: what you are doing"
+```
+
 ## Protocol: analyzing .om files
 
-When examining an om node, follow these steps:
-
-1. **Read the node**: `.venv/bin/python3 -m upakarana om source <name>`
-2. **Check edges** (if relevant): `.venv/bin/python3 -m upakarana om with-relation <rel>`
-3. **Check shabda metadata**: `.venv/bin/python3 -m upakarana shabda node <name>`
-4. **Live inspection** (if server running): `.venv/bin/python3 -m upakarana vy inspect <name>`
+1. **Read the node**: `.venv/bin/python3 -m upakarana2 om source <name>`
+2. **Check edges** (if relevant): `.venv/bin/python3 -m upakarana2 om with-relation <rel>`
+3. **Check shabda metadata**: `.venv/bin/python3 -m upakarana2 shabda node <name>`
+4. **Live inspection** (if server running): `.venv/bin/python3 -m upakarana2 vy inspect <name>`
 5. **Document** if the analysis reveals something non-obvious:
    `.venv/bin/python3 -m pathram2 add discovery "<title>" --body "<finding>"`
 
 ## Protocol: analyzing .tantra files
 
-When examining a tantra, follow these steps:
-
-1. **Read the tantra**: `.venv/bin/python3 -m upakarana tantra source <name>`
-2. **Understand dependencies**: `.venv/bin/python3 -m upakarana tantra callgraph` or use callers/callees for one tantra
-3. **Test live** (if server running): `.venv/bin/python3 -m upakarana vy eval '<expr>'`
+1. **Read the tantra**: `.venv/bin/python3 -m upakarana2 tantra source <name>`
+2. **Understand dependencies**: `.venv/bin/python3 -m upakarana2 tantra callgraph`
+3. **Test live** (if server running): `.venv/bin/python3 -m upakarana2 vy eval '<expr>'`
 4. **Document** if modifying: `.venv/bin/python3 -m pathram2 add step "<what>" --body "<why>"`
 
 ## Protocol: documentation during work
 
-- **Before starting a non-trivial session**: `.venv/bin/python3 -m pathram2 session-start "<topic>"`
-- **Record discoveries**: `.venv/bin/python3 -m pathram2 add discovery "<title>" --body "<details>"`
-- **Record quirks/gotchas**: `.venv/bin/python3 -m pathram2 add quirk "<title>" --body "<details>"`
-- **Branching to a tangent**: `.venv/bin/python3 -m pathram2 branch <from> "<reason>" "<title>"`
-- **End session**: `.venv/bin/python3 -m pathram2 session-end`
-- **Quick status**: `.venv/bin/python3 -m pathram2 glance`
-- **What happened today**: `.venv/bin/python3 -m pathram2 today`
-- **Review journal**: `.venv/bin/python3 -m pathram2 journal`
+**Node type decision guide** — use the right type, not just `discovery`:
+
+| What happened | Type to use | Example |
+|---|---|---|
+| Starting work | `session-start` | The session IS the journal entry |
+| Found something non-obvious about the codebase | `discovery` | "shunya-bandha walks sthita not abheda" |
+| Work to be done | `step --status pending` | "migrate shabda keys" |
+| Work just completed | `step --status done` | update existing step |
+| A gotcha to avoid repeating | `quirk` | "nested cond causes parse_expr:empty" |
+| Implementation detail on a node | `note --parent <id>` | attach to the node it describes |
+| Status update / what happened | **session title + body** | `session-start "fixed X by doing Y"` |
+
+**DO NOT** use `discovery` as a catch-all journal entry. A discovery is a finding — something that would surprise someone reading the codebase. Session titles and bodies are the journal.
+
+- **Before starting a non-trivial session**: `pathram2 session-start "<what you're doing>"`
+- **Record non-obvious codebase findings**: `pathram2 add discovery "<title>" --body "<details>" --session <id>`
+- **Record gotchas**: `pathram2 add quirk "<title>" --body "<details>"`
+- **Branching to a tangent**: `pathram2 branch <from-id-or-name> "<reason>" "<title>"`
+- **Returning from tangent**: `pathram2 return <origin-id>`
+- **End session**: `pathram2 session-end`
+- **Workflow health check**: `pathram2 cleanup`
+- **Quick status**: `pathram2 glance`
+- **Full LLM context**: `pathram2 context`
+- **Review journal**: `pathram2 journal`
 
 ## Protocol: running tests
 
 ```bash
-.venv/bin/python3 -m upakarana test run                 # full suite
-.venv/bin/python3 -m upakarana test run pipeline         # one layer
-.venv/bin/python3 -m upakarana test run gate:arithmetic  # xfails for a gate
-.venv/bin/python3 -m upakarana test run test_ke_basic    # one test
-.venv/bin/python3 -m upakarana cache summary             # results analysis
+.venv/bin/python3 -m upakarana2 test run                 # full suite
+.venv/bin/python3 -m upakarana2 test run pipeline         # one layer
+.venv/bin/python3 -m upakarana2 test run gate:arithmetic  # xfails for a gate
+.venv/bin/python3 -m upakarana2 test run test_ke_basic    # one test
+.venv/bin/python3 -m upakarana2 cache summary             # results analysis
 ```
 
 ---
@@ -197,33 +241,36 @@ When examining a tantra, follow these steps:
 ## Typical workflow
 
 ```bash
-# 1. start a session
+# 0. Orient yourself
+.venv/bin/python3 -m pathram2 context
+
+# 1. Start a session
 .venv/bin/python3 -m pathram2 session-start "investigating X"
 
-# 2. understand what you're about to change
-.venv/bin/python3 -m upakarana tantra source derive-chain
-.venv/bin/python3 -m upakarana shabda node addition
-.venv/bin/python3 -m upakarana vy inspect momentum
+# 2. Understand what you're about to change
+.venv/bin/python3 -m upakarana2 tantra source derive-chain
+.venv/bin/python3 -m upakarana2 shabda node addition
+.venv/bin/python3 -m upakarana2 vy inspect momentum
 
-# 3. run relevant tests before changing anything
-.venv/bin/python3 -m upakarana test run pipeline
-.venv/bin/python3 -m upakarana cache summary
+# 3. Run relevant tests before changing anything
+.venv/bin/python3 -m upakarana2 test run pipeline
+.venv/bin/python3 -m upakarana2 cache summary
 
-# 4. make your change (tantra, om, or OCaml)
-#    for OCaml: dune build from vyakarana/ then reload
+# 4. Make your change (tantra, om, or OCaml)
+#    for OCaml: cd vyakarana && dune build && cd .. then vy reload
 
-# 5. document what you found/changed
+# 5. Document what you found/changed
 .venv/bin/python3 -m pathram2 add discovery "title" --body "details"
 
-# 6. run targeted tests
-.venv/bin/python3 -m upakarana test run test_ke_basic
+# 6. Run targeted tests
+.venv/bin/python3 -m upakarana2 test run test_ke_basic
 
-# 7. full suite
-.venv/bin/python3 -m upakarana test run
+# 7. Full suite
+.venv/bin/python3 -m upakarana2 test run
 
-# 8. end session
+# 8. End session
 .venv/bin/python3 -m pathram2 session-end
 
-# 9. check usage
-.venv/bin/python3 -m upakarana usage report
+# 9. Check usage
+.venv/bin/python3 -m upakarana2 usage report
 ```

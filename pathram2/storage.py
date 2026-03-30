@@ -21,6 +21,7 @@ TABLES = [
     "idx_edges_in",   # target:edge_key → b""
     "idx_edges_rel",  # relation:edge_key → b""
     "idx_time",       # created_at:id → b""
+    "idx_name",       # slug → node_id  (O(1) name resolution)
 ]
 
 

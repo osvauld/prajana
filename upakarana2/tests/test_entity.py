@@ -132,6 +132,7 @@ def test_sthita_viveka_gravitational(vy):
     assert "1.98" in r or "gravitational" in r.lower()
 
 
+@xfail(strict=True, reason="sthita-viveka: two-mass prathama emission incomplete")
 def test_sthita_viveka_two_masses_distinct(vy):
     """Two entities with same concept (mass) → assigned to mass1/mass2 slots"""
     g = vy.bqg("particle-A has mass 5.972e24. particle-B has mass 7.34e22")

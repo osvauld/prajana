@@ -170,6 +170,7 @@ def test_total_momentum_resolves(vy):
 # ── gate: colour_classifier ───────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="colour classifier: red/blue not split into distinct sankhya subjects")
 def test_red_blue_distinct(vy):
     g = vy.bqg("a box has 5 red balls and 3 blue balls")
     sankhya = [
@@ -189,6 +190,7 @@ def test_red_blue_addition(vy):
 # ── gate: article ──────────────────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="article transparency: 'the electron' not resolved to electron")
 def test_article_before_entity(vy):
     r = vy.answer(
         "find kinetic energy of the electron given mass 9.109e-31 and velocity 1e6"

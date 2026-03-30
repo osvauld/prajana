@@ -35,5 +35,10 @@
     (let say-no-match = shabda "anuvada-setu" "speech-no-match"
      let dv = derived-value graph
      cond (has-items dv)
-       (concat say-found " that " (concept-display (nth dv 0)) " is " (str dv 1))
+       (let concept = nth dv 0
+        let val     = str dv 1
+        let unit-nd = unit-of-concept concept
+        let symbols = cond (exists unit-nd) (walk (to-string unit-nd) "naama-mudra") otherwise []
+        let unit-str = cond (has-items symbols) (concat " " (to-string (nth symbols 0))) otherwise ""
+        concat say-found " that " (concept-display concept) " is " val unit-str)
        otherwise (to-string say-no-match))))
