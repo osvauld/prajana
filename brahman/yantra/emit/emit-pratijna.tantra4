@@ -1,8 +1,46 @@
--- the given is the viveka given or the physics given.
+-- pratijna: the given facts.
+-- viveka: "ball-A with mass 5 and ball-B with mass 3"
+-- physics: "mass 5 and velocity 3"
 (tantra emit-pratijna (graph is-viveka)
   (say-given (shabda "anuvada-setu" "speech-given"))
-  (all-given (cond is-viveka (pratijna-viveka graph)
-    otherwise (pratijna-physics graph)))
+
+  -- viveka path: entity + prep + concept + value per entity
+  (viveka-given (cond is-viveka
+    (let say-and = shabda "conj-and" "word"
+     let prep = shabda "prep-with" "word"
+     let entities = prathama-sparsha graph
+     let vc-raw = query-edge graph "viveka-concept"
+     let vc-disp = cond (exists vc-raw) (concept-display (to-string vc-raw)) otherwise ""
+     reduce entities [] (fn acc ent ->
+       let vs = graph | where [s, e, o]
+         | and (eq (to-string s) (to-string ent))
+         | and (eq e "viveka-sankhya")
+         | collect o
+       let owned = shashthi-sparsha graph ent
+       let concept-name = cond (has-text vc-disp) vc-disp
+         otherwise (cond (has-items owned) (concept-display (to-string (nth owned 0)))
+           otherwise "")
+       cond (has-items vs)
+         (append acc [(concat (to-string ent) " " prep " " concept-name " " (to-string (nth vs 0)))])
+       otherwise acc))
+    otherwise []))
+
+  -- physics path: entity-owned props + flat unowned given values
+  (physics-given (cond is-viveka []
+    otherwise
+    (let derived-concepts = graph | where [s, e, o] | and (eq e "derived-by") | collect (to-string s)
+     let entities = prathama-sparsha graph
+     let entity-strs = entity-props-str graph entities
+     let owned-concepts = ownership-concepts graph
+     let flat-strs = reduce graph [] (fn acc tri ->
+       cond (eq (nth tri 1) "sankhya")
+         (let c = to-string (nth tri 0)
+          cond (or (member c owned-concepts) (member c derived-concepts)) acc
+          otherwise (append acc [(concat (concept-display c) " " (to-string (nth tri 2)))]))
+       otherwise acc)
+     append entity-strs flat-strs)))
+
+  (all-given (cond is-viveka viveka-given otherwise physics-given))
   (cond (has-items all-given)
     (concat say-given " " (list-join all-given))
     otherwise ""))

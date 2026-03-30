@@ -1,6 +1,0 @@
--- detects whether a word is a plural form.
-(tantra is-plural (w)
-  (direct (word-node w))
-  (exact (cond (exists direct) (lookup w) otherwise _none))
-  (resolved (shabda-anveshana w))
-  (and (exists resolved) (not (exists exact)) (neq w (to-string resolved))))

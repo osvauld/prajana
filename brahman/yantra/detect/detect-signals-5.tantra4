@@ -1,8 +1,0 @@
--- detect-signals phase 5: derive / none fallthrough.
--- typed is handled early in anuvada-ganana/session-anuvada (on raw-graph, fast).
--- detect-typed NOT here — expanded graph is too large for its O(n²) scan.
-(tantra detect-signals-5 (expanded base-signals)
-  (cond (has-items base-signals)
-    (write-signals expanded (append [["dispatch-mode", "derive"]] base-signals))
-    otherwise
-    (write-signals expanded [["dispatch-mode", "none"]])))

@@ -4,8 +4,18 @@
 (tantra count-chain (graph grades)
   (q-concept (question-concept grades))
   (q-direction (detect-direction (question-words grades)))
+  -- concept-filter: when question asks about a specific concept, exclude grades
+  -- about other concepts (e.g. "oranges" grades excluded when asking about "apples")
+  (concept-filtered (cond (has-text q-concept)
+    (filter grades (fn grade ->
+      let gc = grade-concept grade
+      or (not (has-text gc)) (eq gc q-concept) (is-question-grade grade)))
+    otherwise grades))
+  (has-matching-nums (reduce concept-filtered false (fn f grade ->
+    or f (has-items (grade-numbers grade)))))
+  (eff-grades (cond has-matching-nums concept-filtered otherwise grades))
   (fold-seed (to-number (shabda "graded-ring" "fold-identity")))
-  (arith-state (reduce grades [fold-seed, [], false] (fn state grade ->
+  (arith-state (reduce eff-grades [fold-seed, [], false] (fn state grade ->
     let acc   = fold-field state "value"
     let steps = fold-field state "steps"
     let init  = fold-field state "started"
@@ -53,6 +63,10 @@
   (has-viveka (has-items (filter (triples-by-edge graph "satya")
     (fn t -> or (eq (triple-subj t) "viveka-max") (eq (triple-subj t) "viveka-min")))))
   -- guard: skip if any satya concept has a formula (physics, not counting)
+  -- exception: multiplication via "each" is always a count problem, even with physics concepts
   (any-satya-formula (reduce all-satya false (fn found c -> or found (has-items (mantra-select c)))))
-  (should-count (and found-any (not has-viveka) (not any-satya-formula)))
+  (has-multiplication (reduce grades false (fn found grade ->
+    or found (eq (grade-direction grade) "multiplication"))))
+  (should-count (and found-any (not has-viveka)
+    (or has-multiplication (not any-satya-formula))))
   (cond (not should-count) graph otherwise (append base-graph proof)))

@@ -1,6 +1,7 @@
 -- detect-signals: cascading intent detection.
--- checks detectors one at a time (cheapest first), returns on first match.
+-- checks detectors cheapest first, returns on first match.
 -- detect-typed is NOT here — callers handle typed before calling detect-signals.
+-- phases: shunya (~0ms) → anumana (~34ms) → viveka (~57ms) → count → derive/none.
 (tantra detect-signals (expanded)
   (sf-raw (extract-solve-for expanded))
   (has-intent (solve-for-result sf-raw "has-intent"))
@@ -8,9 +9,32 @@
     [["solve-for", (solve-for-result sf-raw "solve-for")],
      ["scope-entity", (solve-for-result sf-raw "scope-entity")]]
     otherwise []))
+
   -- phase 1: shunya (cheapest — ~0ms)
   (shunya-signals (detect-shunya expanded))
-  (cond (and (has-items shunya-signals) (not has-intent))
+  (shunya-match (and (has-items shunya-signals) (not has-intent)))
+
+  -- phase 2: anumana (~34ms) — skip if shunya matched
+  (anumana-signals (cond shunya-match [] otherwise (detect-anumana expanded)))
+
+  -- phase 3: viveka (~57ms) — skip if earlier matched
+  (viveka-signals (cond (or shunya-match (has-items anumana-signals))
+    [] otherwise (detect-viveka expanded)))
+
+  -- phase 4: count — skip if earlier matched
+  (count-signals (cond (or shunya-match (has-items anumana-signals) (has-items viveka-signals))
+    [] otherwise (detect-count expanded)))
+
+  -- dispatch: first match wins
+  (cond shunya-match
     (write-signals expanded (append [["dispatch-mode", "shunya"]] shunya-signals))
+    (has-items anumana-signals)
+    (write-signals expanded (append [["dispatch-mode", "anumana"]] (append base-signals anumana-signals)))
+    (has-items viveka-signals)
+    (write-signals expanded (append [["dispatch-mode", "viveka"]] (append base-signals viveka-signals)))
+    (has-items count-signals)
+    (write-signals expanded (append [["dispatch-mode", "count"]] (append base-signals count-signals)))
+    (has-items base-signals)
+    (write-signals expanded (append [["dispatch-mode", "derive"]] base-signals))
     otherwise
-    (detect-signals-2 expanded base-signals)))
+    (write-signals expanded [["dispatch-mode", "none"]])))

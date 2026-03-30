@@ -1,4 +1,27 @@
--- the conclusion is the viveka conclusion or the physics conclusion.
+-- nigamana: the conclusion.
+-- viveka: "we find that ball-A is heavier than ball-B"
+-- physics: "we find that kinetic energy is 22.5"
 (tantra emit-nigamana (graph is-viveka)
-  (cond is-viveka (nigamana-viveka graph)
-    otherwise (nigamana-physics graph)))
+  (say-found (shabda "anuvada-setu" "speech-found"))
+
+  (cond is-viveka
+    -- viveka nigamana
+    (let say-is = shabda "anuvada-setu" "speech-is"
+     let say-than = shabda "anuvada-setu" "speech-than"
+     let cmp = viveka-comparison graph
+     let winner = cond (has-items cmp) (nth cmp 0) otherwise ""
+     let loser = cond (has-items cmp) (nth cmp 1) otherwise ""
+     let sought-raw = query-edge graph "sought"
+     let sought-label = concept-display (to-string sought-raw)
+     let ev-count = length (graph | where [s, e, o] | and (eq e "viveka-sankhya") | collect s)
+     cond (eq ev-count 2)
+       (concat say-found " that " winner " " say-is " " sought-label " " say-than " " loser)
+       otherwise (concat say-found " that " winner " " say-is " the " sought-label))
+
+    otherwise
+    -- physics nigamana
+    (let say-no-match = shabda "anuvada-setu" "speech-no-match"
+     let dv = derived-value graph
+     cond (has-items dv)
+       (concat say-found " that " (concept-display (nth dv 0)) " is " (to-string (nth dv 1)))
+       otherwise (to-string say-no-match))))

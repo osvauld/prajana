@@ -1,5 +1,0 @@
--- unpacks a split-numeric result by field name.
-(tantra split-result (parts field)
-  (cond (eq field "number") (nth parts 0)
-    (eq field "unit") (nth parts 1)
-    otherwise ""))

@@ -1,4 +1,0 @@
--- spreading activation over a tightly scoped word frontier.
-(tantra avrti (seeds)
-  (fixpoint seeds (fn frontier ->
-    unique (flatten (map frontier (fn nd -> neighbors nd))))))

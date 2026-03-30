@@ -1,9 +1,0 @@
--- detect-signals phase 2: anumana check (~34ms).
--- called only when shunya did not match.
-(tantra detect-signals-2 (expanded base-signals)
-  (anumana-signals (detect-anumana expanded))
-  (cond (has-items anumana-signals)
-    (write-signals expanded (append [["dispatch-mode", "anumana"]]
-      (append base-signals anumana-signals)))
-    otherwise
-    (detect-signals-3 expanded base-signals)))
