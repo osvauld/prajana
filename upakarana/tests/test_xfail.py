@@ -457,7 +457,6 @@ def test_proportional_ke_doubled(vy):
 # these test compositions of multiple ring operations.
 
 
-@xfail(strict=True, reason="graded_ring: three-entity derive + sum")
 def test_total_ke_three_entities(vy):
     """3 entities, compute KE for each, sum all.
     A: 0.5*2*3²=9, B: 0.5*4*5²=50, C: 0.5*1*10²=50. total=109."""

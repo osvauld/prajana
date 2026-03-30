@@ -555,11 +555,11 @@
   (sthita yantra domain-yantra ring group)
   (yukta visheshanam-swarupa)
   (abheda equivalence-relation quotient)
-  (siddha symmetric transitive congruence composable))
+  (siddha symmetric transitive congruence composable inheritable))
 
 (kosha visheshanam-drishthanta
   (sthita yantra domain-yantra ring)
-  (siddha antisymmetric))
+  (siddha antisymmetric reversible))
 
 (kosha visheshanam-janya
   (sthita yantra domain-yantra ring)
@@ -570,7 +570,7 @@
   (sthita yantra domain-yantra ring)
   (abheda multiplication composition morphism)
   (yukta identity-element)
-  (siddha antisymmetric composable))
+  (siddha antisymmetric composable reversible))
 
 (kosha visheshanam-phala
   (sthita yantra domain-yantra ring)
@@ -588,13 +588,13 @@
 
 (kosha visheshanam-siddha
   (sthita yantra domain-yantra ring)
-  (siddha antisymmetric))
+  (siddha antisymmetric reversible inheritable))
 
 (kosha visheshanam-sthita
   (sthita yantra domain-yantra ring)
   (abheda partial-order)
   (janya filtration lattice graded-ring)
-  (siddha antisymmetric transitive composable))
+  (siddha antisymmetric transitive composable inheritable))
 
 (kosha visheshanam-swarupa
   (sthita yantra domain-yantra ring group)
@@ -606,7 +606,7 @@
   (sthita yantra domain-yantra ring)
   (abheda addition)
   (yukta additive-identity)
-  (siddha symmetric))
+  (siddha symmetric inheritable))
 
 (kosha yantra-varga
   (vishesa math-varga)

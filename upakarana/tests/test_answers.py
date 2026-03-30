@@ -45,7 +45,7 @@ def test_chain_ke_via_suvat(vy):
     r = vy.answer(
         "find kinetic energy given initial velocity 0 acceleration 4 time 5 mass 10"
     )
-    assert "we find" in r  # chain completed
+    assert "we find" in r.lower()  # chain completed
 
 
 def test_chain_force_via_suvat(vy):
@@ -53,7 +53,7 @@ def test_chain_force_via_suvat(vy):
     r = vy.answer(
         "find force given initial velocity 0 final velocity 20 time 4 mass 10"
     )
-    assert "50" in r or "we find" in r
+    assert "50" in r or "we find" in r.lower()
 
 
 # ── two entity scope ──────────────────────────────────────────────────────────
@@ -86,8 +86,9 @@ def test_two_entity_ke_second(vy):
 def test_strands_present(vy):
     """Full answer has all four reasoning strands."""
     r = vy.answer("mass is 5 and velocity is 10. find kinetic energy")
+    rl = r.lower()
     for strand in ("we have", "we seek", "we know", "we find"):
-        assert strand in r, f"missing '{strand}': {r}"
+        assert strand in rl, f"missing '{strand}': {r}"
 
 
 def test_strand_entity_names(vy):
@@ -123,7 +124,7 @@ def test_session_entity_persists(vy):
 def test_no_match_missing_data(vy):
     """Not enough data → no match."""
     r = vy.answer("mass is 5. find kinetic energy")
-    assert "no match" in r or "we seek" in r  # either no-match or incomplete
+    assert "no match" in r.lower() or "we seek" in r.lower()  # either no-match or incomplete
 
 
 # ── comparison / viveka ───────────────────────────────────────────────────────

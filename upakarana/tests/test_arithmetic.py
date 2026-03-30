@@ -138,7 +138,7 @@ def test_physics_count_total_mass(vy):
 def test_entity_scope_apples_sold(vy):
     """10 apples, 3 sold → 7 apples left (not 17)"""
     r = vy.answer("a shop has 10 apples. 3 apples were sold. how many apples are left")
-    assert " 7 " in r or r.endswith("7") or "= 7" in r
+    assert " 7 " in r or r.endswith(" 7") or "is 7" in r
 
 
 @xfail(strict=True, reason="entity_scope: per-entity scoped count two fruits")

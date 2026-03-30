@@ -1,0 +1,26 @@
+-- derive-for-entity: run propagate-derive with entity-scoped sankhya values.
+-- returns [entity, result-value, enriched-graph, fired-matches] or [] if no match.
+(tantra derive-for-entity (graph entity sf)
+  -- get entity-scoped bindings
+  (svps (scope-vps graph entity))
+  (eff-vps (nth svps 0))
+  -- build a minimal graph: scoped sankhya + intent edges only
+  (scoped-sankhya (map eff-vps (fn kv ->
+    [(to-string (nth kv 0)), "sankhya", (to-string (nth kv 1))])))
+  (intent-triples (filter graph (fn tri ->
+    let e = to-string (nth tri 1)
+    or (eq e "vidhi-kaala") (eq e "satya"))))
+  (scoped-graph (append intent-triples scoped-sankhya))
+  -- propagate on scoped graph
+  (prop-result (propagate-derive scoped-graph))
+  (enriched (nth prop-result 0))
+  (fired (nth prop-result 1))
+  (vps (nth prop-result 2))
+  -- extract the derived value for sf directly from vps
+  (result-val (reduce vps "" (fn found kv ->
+    cond (has-text found) found
+    (eq (to-string (nth kv 0)) sf) (to-string (nth kv 1))
+    otherwise found)))
+  (cond (has-text result-val)
+    [(to-string entity), result-val, enriched, fired]
+    otherwise []))

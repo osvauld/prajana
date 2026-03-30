@@ -255,20 +255,25 @@ class Client:
 
     @staticmethod
     def strand(answer, name):
-        parts = answer.split(name)
+        lower = answer.lower()
+        parts = lower.split(name)
         if len(parts) < 2:
             return ""
-        tail = parts[-1]
+        # find the position in the original string
+        pos = lower.rfind(name)
+        tail = answer[pos + len(name):]
+        lower_tail = tail.lower()
         for boundary in ("we have", "we seek", "we know", "we see", "we find"):
-            if boundary != name and boundary in tail:
-                tail = tail[:tail.index(boundary)]
+            if boundary != name and boundary in lower_tail:
+                tail = tail[:lower_tail.index(boundary)]
                 break
         return tail
 
     @staticmethod
     def strands(answer):
         result = {}
+        lower = answer.lower()
         for name in ("we have", "we seek", "we know", "we see", "we find"):
-            if name in answer:
+            if name in lower:
                 result[name] = Client.strand(answer, name)
         return result

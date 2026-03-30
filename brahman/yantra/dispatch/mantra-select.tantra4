@@ -7,7 +7,7 @@
   -- when no solve-for, return all
   (cond (not (exists solve-for))
     mantra-nodes
-    otherwise (filter mantra-nodes (fn m ->
+    otherwise (pfilter mantra-nodes (fn m ->
       let ms       = to-string m
       let contract = om-contract ms
       let janya    = map (nth contract 0) (fn j -> to-string j)

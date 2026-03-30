@@ -256,6 +256,8 @@ let scan_visheshanam_properties (k : proof_graph) : unit =
         vp_involutive    = has "involutive";
         vp_congruence    = has "congruence";
         vp_composable    = has "composable";
+        vp_reversible    = has "reversible";
+        vp_inheritable   = has "inheritable";
         vp_dual          = dual;
         vp_ring_op       = ring_op;
         vp_satya_weight  = default_vish_props.vp_satya_weight;
@@ -407,74 +409,76 @@ let expand_avastha (k : proof_graph) : int =
   !generated
 
 (* ═══════════════════════════════════════════════════════════════════════════
+   5a2. GENERIC REVERSE EDGE COMBINATOR
+   For any relation dim: if A→B via dim, add B→A if absent.
+   Optional filter: (source_node, target_node) → bool.
+   Used by reciprocals, swarupa_reverse, sthita_reverse, awareness, yukta.
+   ═══════════════════════════════════════════════════════════════════════════ *)
+
+let generate_reverse_for_dim (k : proof_graph) (dim : visheshanam)
+    ?(filter : nigamana -> nigamana -> bool = fun _ _ -> true) () : int =
+  let generated = ref 0 in
+  let work = ref [] in
+  Hashtbl.iter (fun source_name node ->
+    List.iter (fun e ->
+      if e.source = source_name && e.relation = dim then begin
+        match Hashtbl.find_opt k.nodes e.target with
+        | None -> ()
+        | Some target_node ->
+          if filter node target_node then begin
+            let has = List.exists (fun re ->
+              re.source = e.target && re.target = source_name && re.relation = dim
+            ) target_node.edges in
+            if not has then
+              work := (e.target, source_name, dim) :: !work
+          end
+      end
+    ) node.edges
+  ) k.nodes;
+  List.iter (fun (src, tgt, rel) ->
+    commit_edge k { source = src; target = tgt; relation = rel } generated
+  ) !work;
+  !generated
+
+(* ═══════════════════════════════════════════════════════════════════════════
    5b. RECIPROCAL EDGE GENERATORS
-   Automatically mirror edges that should be symmetric or reciprocal:
-   - abheda: A≡B → B≡A
-   - pratipaksha: A↔B → B↔A
-   - janya/phala: A-janya→B → B-phala→A (and vice versa)
+   Graph-driven: symmetric from vp_symmetric, duals from vp_dual.
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let generate_reciprocals (k : proof_graph) : int =
   let generated = ref 0 in
-  (* symmetric relations: if A→B exists, add B→A *)
-  let symmetric_rels = ["abheda"; "pratipaksha"] in
-  List.iter (fun rel_name ->
-    match visheshanam_of_string rel_name with
+  let ndims = dimension_count () in
+  (* symmetric relations (from vish_props): if A→B exists, add B→A *)
+  for dim = 0 to ndims - 1 do
+    let props = vish_props_of dim in
+    if props.vp_symmetric then
+      generated := !generated + generate_reverse_for_dim k dim ()
+  done;
+  (* dual pairs (from vish_props): if A-dim→B, add B-dual→A and vice versa *)
+  for dim = 0 to ndims - 1 do
+    let props = vish_props_of dim in
+    match props.vp_dual with
     | None -> ()
-    | Some rel_dim ->
+    | Some dual_dim ->
       let work = ref [] in
       Hashtbl.iter (fun source_name node ->
         List.iter (fun e ->
-          if e.source = source_name && e.relation = rel_dim then begin
-            (* check if reverse exists *)
+          if e.source = source_name && e.relation = dim then begin
             match Hashtbl.find_opt k.nodes e.target with
             | None -> ()
-            | Some target_node ->
-              let has_reverse = List.exists (fun re ->
-                re.source = e.target && re.target = source_name && re.relation = rel_dim
-              ) target_node.edges in
-              if not has_reverse then
-                work := (e.target, source_name, rel_dim) :: !work
+            | Some tn ->
+              let has = List.exists (fun re ->
+                re.source = e.target && re.target = source_name && re.relation = dual_dim
+              ) tn.edges in
+              if not has then
+                work := (e.target, source_name, dual_dim) :: !work
           end
         ) node.edges
       ) k.nodes;
       List.iter (fun (src, tgt, rel) ->
         commit_edge k { source = src; target = tgt; relation = rel } generated
       ) !work
-  ) symmetric_rels;
-  (* reciprocal pairs: janya/phala — if A-janya→B, add B-phala→A *)
-  (match visheshanam_of_string "janya", visheshanam_of_string "phala" with
-  | Some janya_dim, Some phala_dim ->
-    let work = ref [] in
-    Hashtbl.iter (fun source_name node ->
-      List.iter (fun e ->
-        if e.source = source_name then begin
-          if e.relation = janya_dim then begin
-            match Hashtbl.find_opt k.nodes e.target with
-            | None -> ()
-            | Some tn ->
-              let has = List.exists (fun re ->
-                re.source = e.target && re.target = source_name && re.relation = phala_dim
-              ) tn.edges in
-              if not has then
-                work := (e.target, source_name, phala_dim) :: !work
-          end else if e.relation = phala_dim then begin
-            match Hashtbl.find_opt k.nodes e.target with
-            | None -> ()
-            | Some tn ->
-              let has = List.exists (fun re ->
-                re.source = e.target && re.target = source_name && re.relation = janya_dim
-              ) tn.edges in
-              if not has then
-                work := (e.target, source_name, janya_dim) :: !work
-          end
-        end
-      ) node.edges
-    ) k.nodes;
-    List.iter (fun (src, tgt, rel) ->
-      commit_edge k { source = src; target = tgt; relation = rel } generated
-    ) !work
-  | _ -> ());
+  done;
   !generated
 
 (* ═══════════════════════════════════════════════════════════════════════════
@@ -505,38 +509,6 @@ let generate_varga_membership (k : proof_graph) : int =
           ) varga_node.edges in
           if not has then
             work := (varga_name, member_name, swarupa_dim) :: !work
-      end
-    ) node.edges
-  ) k.nodes;
-  List.iter (fun (src, tgt, rel) ->
-    commit_edge k { source = src; target = tgt; relation = rel } generated
-  ) !work;
-  !generated
-
-(* ═══════════════════════════════════════════════════════════════════════════
-   5d. GENERIC REVERSE EDGE COMBINATOR
-   For any relation dim: if A→B via dim, add B→A if absent.
-   Optional filter: (source_node, target_node) → bool.
-   Used by swarupa_reverse, sthita_reverse, awareness_reverse, yukta_same_layer.
-   ═══════════════════════════════════════════════════════════════════════════ *)
-
-let generate_reverse_for_dim (k : proof_graph) (dim : visheshanam)
-    ?(filter : nigamana -> nigamana -> bool = fun _ _ -> true) () : int =
-  let generated = ref 0 in
-  let work = ref [] in
-  Hashtbl.iter (fun source_name node ->
-    List.iter (fun e ->
-      if e.source = source_name && e.relation = dim then begin
-        match Hashtbl.find_opt k.nodes e.target with
-        | None -> ()
-        | Some target_node ->
-          if filter node target_node then begin
-            let has = List.exists (fun re ->
-              re.source = e.target && re.target = source_name && re.relation = dim
-            ) target_node.edges in
-            if not has then
-              work := (e.target, source_name, dim) :: !work
-          end
       end
     ) node.edges
   ) k.nodes;
@@ -599,11 +571,13 @@ let generate_matra_inheritance (k : proof_graph) : int =
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let generate_awareness_reverse (k : proof_graph) : int =
-  List.fold_left (fun acc rel_name ->
-    match visheshanam_of_string rel_name with
-    | None -> acc
-    | Some dim -> acc + generate_reverse_for_dim k dim ()
-  ) 0 ["siddha"; "kriya"; "drishthanta"]
+  let acc = ref 0 in
+  let ndims = dimension_count () in
+  for dim = 0 to ndims - 1 do
+    if (vish_props_of dim).vp_reversible then
+      acc := !acc + generate_reverse_for_dim k dim ()
+  done;
+  !acc
 
 (* ═══════════════════════════════════════════════════════════════════════════
    5h. YUKTA SAME-LAYER RECIPROCAL
@@ -628,8 +602,10 @@ let generate_yukta_same_layer (k : proof_graph) : int =
 let generate_edge_inheritance (k : proof_graph) : int =
   let generated = ref 0 in
   let swarupa_dim = ensure_dim "swarupa" in
-  let inherit_rels = List.filter_map visheshanam_of_string
-    ["yukta"; "sthita"; "siddha"; "abheda"] in
+  let inherit_rels =
+    let ndims = dimension_count () in
+    List.init ndims Fun.id
+    |> List.filter (fun d -> (vish_props_of d).vp_inheritable) in
   let work = ref [] in
   Hashtbl.iter (fun child_name node ->
     (* skip mantra nodes *)
