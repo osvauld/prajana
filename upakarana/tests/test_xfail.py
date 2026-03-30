@@ -211,10 +211,6 @@ def test_relative_velocity(vy):
 # ── gate: compute_compare ──────────────────────────────────────────────────────
 
 
-@xfail(
-    strict=True,
-    reason="compute-then-compare not implemented: viveka compares raw values, not derived",
-)
 def test_which_more_ke_computed(vy):
     r = vy.answer(
         "ball-A has mass 2 and velocity 3. ball-B has mass 2 and velocity 5. which has more kinetic energy."
@@ -327,7 +323,6 @@ def test_dvandva_count_three(vy):
 # per-entity scoped count — paragraph answer
 
 
-@xfail(strict=True, reason="entity_scope: per-entity count after subtraction")
 def test_entity_scope_each_fruit(vy):
     """10 apples, 8 oranges, 3 apples sold → 7 apples, 8 oranges."""
     r = vy.answer(
@@ -489,19 +484,16 @@ def test_compare_total_per_group(vy):
     assert "box-A" in r or "box-a" in r.lower() or "8" in r
 
 
-@xfail(strict=True, reason="graded_ring: per-entity compute then rank by derived value")
 def test_rank_three_by_ke(vy):
     """Three entities, compute KE, find maximum.
-    car: 0.5*1000*20²=200000, bike: 0.5*100*30²=45000, truck: 0.5*5000*10²=250000.
-    Must compute KE (not compare raw masses) and identify truck as max."""
+    car: 0.5*1000*20²=200000, bike: 0.5*100*30²=45000, truck: 0.5*5000*10²=250000."""
     r = vy.answer(
         "car has mass 1000 and velocity 20. "
         "bike has mass 100 and velocity 30. "
         "truck has mass 5000 and velocity 10. "
         "which has the most kinetic energy"
     )
-    # must have computed at least one KE value, not just compared masses
-    assert "250000" in r or "200000" in r or "45000" in r
+    assert "truck" in r.lower() and "250000" in r
 
 
 def test_mixed_multiply_subtract(vy):

@@ -10,24 +10,24 @@
       let result   = nth st 0
       let agra-map = nth st 1
       let saw-gate = nth st 2
-      let word = to-string (nth tri 0)
-      let edge = to-string (nth tri 1)
-      let obj  = to-string (nth tri 2)
+      let word = str tri 0
+      let edge = str tri 1
+      let obj  = str tri 2
       let triple = [(nth tri 0), (nth tri 1), (nth tri 2)]
       cond (and (eq edge anchor-edge) (cond has-exclude (neq obj exclude-obj) otherwise true))
         (let k = cond (eq anchor-obj "obj") obj otherwise word
          let v = cond (eq anchor-val "word") word otherwise obj
-         let new-map = append (agra-map | where [mk, mv] | and (neq (to-string mk) k) | collect [mk, mv]) [[k, v]]
+         let new-map = (append (agra-map | where [mk, mv] | and (neq mk k) | collect [mk, mv]) [[k, v]])
          [(append result [triple]), new-map, false])
       (and has-gate (eq edge gate-edge))
         [result, agra-map, true]
       (member edge bind-edges)
         (let concept = word
-         let agra = nth (agra-map | where [mk, mv] | and (eq (to-string mk) concept) | collect mv) 0
+         let agra = nth (agra-map | where [mk, mv] | and (eq mk concept) | collect mv) 0
          let gated = cond has-gate saw-gate otherwise true
          let allowed = (and gated (exists agra) (has-text (to-string agra))
                             (not (member concept exclude-bind))
-                            (not (member (to-string agra) skip-bound))
+                            (not (member agra skip-bound))
                             (cond has-require (member concept require-key) otherwise true))
          [(append result [cond allowed [(to-string agra), (nth tri 1), (nth tri 2)] otherwise triple]), agra-map, false])
       otherwise [(append result [triple]), agra-map, saw-gate])

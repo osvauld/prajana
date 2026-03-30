@@ -83,7 +83,8 @@
   (domain bhasha/english/grammar)
   (swarupa avyaya)
   (sthita english bhavishya-kaala)
-  (yukta dhatu))
+  (yukta dhatu)
+  (naama will))
 
 (bhasha bhuta-kaala
   (domain bhasha/english/grammar)
@@ -163,10 +164,10 @@
   (yukta dhatu))
 
 (bhasha english-kta-ed
-  (sthita english kta-pratyaya))
+  (sthita english kta-pratyaya bhuta-kaala))
 
 (bhasha english-kta-ied
-  (sthita english kta-pratyaya))
+  (sthita english kta-pratyaya bhuta-kaala))
 
 (bhasha english-plural-es
   (sthita english vachana-bahu))
@@ -178,7 +179,7 @@
   (sthita english vachana-bahu))
 
 (bhasha english-shatr-ing
-  (sthita english shatr-pratyaya))
+  (sthita english shatr-pratyaya vartamana-kaala))
 
 (bhasha prashna
   (swarupa avyaya nipata)
@@ -253,7 +254,8 @@
   (domain bhasha/english/grammar)
   (swarupa avyaya)
   (sthita english sambhavana-kaala)
-  (yukta dhatu))
+  (yukta dhatu)
+  (naama can may could would should))
 
 (bhasha some
   (swarupa amsha)
@@ -302,10 +304,43 @@
   (swarupa avyaya)
   (sthita english vidhi-kaala)
   (yukta dhatu)
-  (naama find calculate compute determine solve))
+  (naama find calculate compute determine solve must shall))
 
 (bhasha growth
   (sthita english vriddhi))
+
+; ── dhatu (verb roots) ─────────────────────────────────────────────────
+; dhatu = verb root. NO hardcoded kshaya/vriddhi — direction is
+; observer-relative (flow between loci, like system/surroundings).
+; Only non-conflicting dhatu here. Words already in kshaya/vriddhi word
+; lists (flew, gave, came, etc.) will migrate once detect-direction walks
+; sthita edges for flow-based direction resolution.
+
+(bhasha dhatu-move
+  (swarupa tinanta)
+  (sthita dhatu kartari-prayoga)
+  (naama move))
+
+(bhasha moved
+  (swarupa tinanta)
+  (janya dhatu-move)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga)
+  (naama moved))
+
+(bhasha dhatu-travel
+  (swarupa tinanta)
+  (sthita dhatu kartari-prayoga)
+  (naama travel))
+
+(bhasha dhatu-accelerate
+  (swarupa tinanta)
+  (sthita dhatu kartari-prayoga)
+  (naama accelerate))
+
+(bhasha dhatu-collide
+  (swarupa tinanta)
+  (sthita dhatu kartari-prayoga)
+  (naama collide))
 
 (bhasha independent
   (domain bhasha/english)

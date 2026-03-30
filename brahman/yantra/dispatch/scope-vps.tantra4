@@ -20,11 +20,11 @@
           (query-edge-of graph (to-string owned) "sankhya")
           otherwise ""
         -- concept path: index into ordered sankhya values
-        let all-sankhyas = graph | where [i, e, v] | and (eq (to-string i) (to-string owned)) | and (eq e "sankhya") | collect v
-        let owners       = concept-entity-order | where [c, ent] | and (eq (to-string c) (to-string owned)) | collect ent
+        let all-sankhyas = graph | where [i, e, v] | and (eq i owned) | and (eq e "sankhya") | collect v
+        let owners       = concept-entity-order | where [c, ent] | and (eq c owned) | collect ent
         let owner-idx    = nth (reduce owners [0, false] (fn st ent ->
                              cond (nth st 1) st
-                             otherwise (cond (eq (to-string ent) (to-string entity))
+                             otherwise (cond (eq ent entity)
                                [(nth st 0), true]
                                otherwise [(add (nth st 0) 1), false]))) 0
         let direct-val   = cond (lt owner-idx (length all-sankhyas))
@@ -40,7 +40,7 @@
   (eff-vps (cond (exists entity)
     (reduce vps scoped-vps (fn acc kv ->
       let concept = nth kv 0
-      let already = acc | where [c, v] | and (eq (to-string c) (to-string concept)) | collect c
+      let already = acc | where [c, v] | and (eq c concept) | collect c
       cond (has-items already) acc otherwise (append acc [kv])))
     otherwise vps))
 

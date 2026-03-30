@@ -14,8 +14,8 @@
     otherwise (preduce sc [] (fn acc seed ->
       let results  = ppr seed-pairs seed []
       let filtered = reduce results [] (fn facc pr ->
-        let nm    = to-string (nth pr 0)
-        let score = to-number (to-string (nth pr 1))
+        let nm    = str pr 0
+        let score = to-number (str pr 1)
         (cond (and (gt score threshold) (not (member nm existing)) (lt (length facc) top-k))
           (append facc [[seed, "kosha-janya", nm]])
           otherwise facc))

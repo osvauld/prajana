@@ -7,10 +7,10 @@
     let props = reduce owned [] (fn pacc concept ->
       let val = query-edge-of graph (to-string concept) "sankhya"
       cond (exists val)
-        (append pacc [(concat (concept-display (to-string concept)) " " (to-string val))])
+        (append pacc [(concat (concept-display concept) " " (to-string val))])
       otherwise pacc)
     cond (has-items props)
       (let props-str = reduce props "" (fn a p ->
          cond (not (has-text a)) p otherwise (concat a " " say-and " " p))
-       append acc [(concat (to-string entity) " " prep " " props-str)])
+       append acc [(concat entity " " prep " " props-str)])
     otherwise acc)))

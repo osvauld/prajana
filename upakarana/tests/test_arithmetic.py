@@ -139,22 +139,25 @@ def test_entity_scope_apples_sold(vy):
     assert " 7 " in r or r.endswith(" 7") or "is 7" in r
 
 
-@xfail(strict=True, reason="entity_scope: per-entity scoped count two fruits")
+@xfail(strict=True, reason="entity-scope: scope bug produces '77' (8 mixed into apple count); '7' and '8' only appear as intermediate values not as the stated answers")
 def test_entity_scope_two_fruits(vy):
     """10 apples, 8 oranges, 3 apples sold → 7 apples, 8 oranges"""
     r = vy.answer(
         "a shop has 10 apples and 8 oranges. 3 apples were sold. how many of each are left"
     )
-    assert "7" in r and "8" in r
+    assert "7" in r and "8" in r and "77" not in r
 
 
 # ── multiple questions ────────────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="multi-question: only answers last question with wrong value (8 not 7); '4' and '7' only appear as intermediate derivation values, not stated answers")
 def test_multi_question_two_answers(vy):
     """Two questions in one paragraph → two answers"""
     r = vy.answer(
         "Tom has 7 apples. he gave 3 to Mary. Mary had 4 apples. "
         "how many apples does Tom have. how many apples does Mary have"
     )
-    assert "4" in r and "7" in r
+    # must contain two separate answer sections (two "we find" or two answer lines)
+    rl = r.lower()
+    assert rl.count("we find") >= 2, f"expected two answers but got: {r}"

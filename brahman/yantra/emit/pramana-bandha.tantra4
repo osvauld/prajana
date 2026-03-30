@@ -10,7 +10,7 @@
     otherwise []))
   (result-triples (cond (and (not is-viveka)
                              (exists result)
-                             (neq (to-string result) "no match")
+                             (neq result "no match")
                              (exists sf))
     (append
       [[(to-string sf), "sankhya", result],

@@ -12,24 +12,24 @@
   -- solve-for: first non-entity satya concept in question grade
   (solve-for (reduce q-grade "" (fn found tri ->
     cond (has-text found) found
-    (and (eq (to-string (nth tri 1)) "satya") (not (member (nth tri 0) entities)))
-      (to-string (nth tri 0))
+    (and (eq (nth tri 1) "satya") (not (member (nth tri 0) entities)))
+      (str tri 0)
     otherwise found)))
 
   -- fallback: if no question grade, first non-entity satya in whole graph
   (fallback (cond (has-text solve-for) solve-for
     otherwise (reduce graph "" (fn found tri ->
       cond (has-text found) found
-      (and (eq (to-string (nth tri 1)) "satya") (not (member (nth tri 0) entities)))
-        (to-string (nth tri 0))
+      (and (eq (nth tri 1) "satya") (not (member (nth tri 0) entities)))
+        (str tri 0)
       otherwise found))))
 
   -- scope entity: entity in question grade (mithya or satya that is an entity)
   (scope-entity (reduce q-grade "" (fn found tri ->
     cond (has-text found) found
-    (and (or (eq (to-string (nth tri 1)) "mithya") (eq (to-string (nth tri 1)) "satya"))
+    (and (or (eq (nth tri 1) "mithya") (eq (nth tri 1) "satya"))
          (member (nth tri 0) entities))
-      (to-string (nth tri 0))
+      (str tri 0)
     otherwise found)))
 
   [has-intent, fallback, scope-entity])

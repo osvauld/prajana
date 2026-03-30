@@ -13,11 +13,11 @@
     otherwise janya))
   (bindings (reduce concepts-to-show [] (fn acc c ->
     let v = reduce valpairs "" (fn a2 kv ->
-      cond (eq (to-string (nth kv 0)) (to-string c))
-        (to-string (nth kv 1))
+      cond (eq (nth kv 0) c)
+        (str kv 1)
       otherwise a2)
     cond (has-text v)
-      (append acc [(concat (concept-display (to-string c)) " is " v)])
+      (append acc [(concat (concept-display c) " is " v)])
     otherwise acc)))
   (bind-str (reduce bindings "" (fn acc s ->
     cond (not (has-text acc)) s

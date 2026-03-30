@@ -3,6 +3,8 @@ taxonomy IS-A, syllogism, modus ponens/tollens, transitivity,
 negation, disjunction, conditional chain, quantifiers.
 """
 
+import re
+
 import pytest
 
 xfail = pytest.mark.xfail
@@ -11,10 +13,12 @@ xfail = pytest.mark.xfail
 # ── taxonomy: IS-A direct ─────────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="IS-A: resolver checks wrong-subject (wings inherit bird?) instead of sparrow inherit wings")
 def test_is_a_direct(vy):
     """a sparrow is a bird. birds have wings. does a sparrow have wings"""
     r = vy.answer("a sparrow is a bird. birds have wings. does a sparrow have wings")
-    assert "yes" in r.lower() or "wing" in r.lower()
+    rl = r.lower()
+    assert re.search(r'\byes\b', rl) is not None and "sparrow" in rl
 
 
 def test_is_a_property_inheritance(vy):
@@ -28,33 +32,44 @@ def test_is_a_property_inheritance(vy):
 # ── transitive IS-A ───────────────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="IS-A transitive: resolver asks 'does animal inherit animal?' instead of 'does sparrow inherit animal?'")
 def test_transitive_is_a(vy):
     """sparrows are birds. birds are animals. is a sparrow an animal"""
     r = vy.answer("sparrows are birds. birds are animals. is a sparrow an animal")
-    assert "yes" in r.lower()
+    rl = r.lower()
+    # "yes" must appear AND conclusion must mention sparrow (not just input echo)
+    yes_idx = rl.rfind("yes")
+    assert yes_idx >= 0 and "sparrow" in rl[yes_idx:]
 
 
+@xfail(strict=True, reason="IS-A transitive: resolver asks 'does animal inherit animal?' instead of 'does poodle inherit animal?'")
 def test_transitive_is_a_three_hop(vy):
     """poodles are dogs. dogs are mammals. mammals are animals. is a poodle an animal"""
     r = vy.answer(
         "poodles are dogs. dogs are mammals. mammals are animals. is a poodle an animal"
     )
-    assert "yes" in r.lower()
+    rl = r.lower()
+    yes_idx = rl.rfind("yes")
+    assert yes_idx >= 0 and "poodle" in rl[yes_idx:]
 
 
 # ── syllogism / classical modus ponens (assertion chain) ─────────────────────
 
 
+@xfail(strict=True, reason="IS-A syllogism: resolver checks terminal→terminal ('animal has animal'), not cat→breathe")
 def test_syllogism_breathe(vy):
     """all cats are animals. all animals breathe. do cats breathe"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")
-    assert "yes" in r.lower()
+    rl = r.lower()
+    assert re.search(r'\byes\b', rl) is not None and "cat" in rl and "breathe" in rl
 
 
+@xfail(strict=True, reason="IS-A syllogism: response says 'animal has animal', does not cite cat premise")
 def test_syllogism_cites_rule(vy):
     """Answer cites both premises"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")
-    assert "cat" in r.lower() or "animal" in r.lower()
+    rl = r.lower()
+    assert "cat" in rl and "breathe" in rl
 
 
 # ── modus ponens / implication ────────────────────────────────────────────────
@@ -67,12 +82,13 @@ def test_modus_ponens(vy):
     assert "yes" in r.lower() or "wet" in r.lower()
 
 
+@xfail(strict=True, reason="modus-tollens: system returns 'yes — ground has negation' (IS-A negation misfire); 'no' only matches as substring of 'know'")
 def test_modus_tollens(vy):
     """if it rains the ground is wet. the ground is not wet. did it rain"""
     r = vy.answer(
         "if it rains the ground is wet. the ground is not wet. did it rain"
     )
-    assert "no" in r.lower() or "not" in r.lower()
+    assert re.search(r'\bno\b', r.lower()) is not None
 
 
 # ── transitivity: comparison chain ────────────────────────────────────────────
@@ -104,10 +120,11 @@ def test_transitive_three_step(vy):
 # ── negation ──────────────────────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="negation+at-rest: response says 'no — velocity is absent' (checks velocity existence, not ball state); 'rest' only matches via 'at-rest' header")
 def test_negation_not_moving(vy):
     """the ball is not moving → ball is at rest"""
     r = vy.answer("the ball is not moving. is the ball at rest")
-    assert "yes" in r.lower() or "rest" in r.lower()
+    assert "yes" in r.lower()
 
 
 def test_negation_blocks_inheritance(vy):
@@ -133,10 +150,13 @@ def test_disjunctive_syllogism(vy):
     assert "blue" in r.lower()
 
 
+@xfail(strict=True, reason="neither-nor: system returns 'no match' (pattern not parsed); passes only because 'no' is a substring of 'no match'")
 def test_neither_nor(vy):
     """neither A nor B is true. is A true"""
     r = vy.answer("neither the ball is red nor is it blue. is the ball red")
-    assert "no" in r.lower()
+    rl = r.lower()
+    assert "no match" not in rl, "should reason about neither/nor, not fall through to no-match"
+    assert re.search(r'\bno\b', rl) is not None
 
 
 # ── conditional chain ─────────────────────────────────────────────────────────
@@ -156,10 +176,12 @@ def test_conditional_chain(vy):
 # ── quantifiers ───────────────────────────────────────────────────────────────
 
 
+@xfail(strict=True, reason="IS-A universal: response says 'sparrow has bird' (sparrow IS-A bird confirmed), not 'sparrow can fly'")
 def test_universal_all_fly(vy):
     """all birds can fly. is a sparrow able to fly"""
     r = vy.answer("all birds can fly. a sparrow is a bird. can a sparrow fly")
-    assert "yes" in r.lower()
+    rl = r.lower()
+    assert re.search(r'\byes\b', rl) is not None and "fly" in rl
 
 
 @xfail(strict=True, reason="quantifier: universal with exception override not built")
@@ -208,11 +230,12 @@ def test_shunya_frictionless_no_friction(vy):
     assert "no" in r.lower()
 
 
+@xfail(strict=True, reason="stationary: uses IS-A reasoning ('velocity does not have verb-have') instead of shunya signal; first assertion intent violated")
 def test_shunya_stationary_no_velocity(vy):
     """the car is stationary. does it have velocity → no"""
     r = vy.answer("the car is stationary. does the car have velocity")
-    assert "no match" not in r.lower(), "should reason about shunya, not fall through"
-    assert "no" in r.lower()
+    assert "shunya" in r.lower() or "stationary" in r.lower(), "should reason about stationary → shunya"
+    assert re.search(r'\bno\b', r.lower()) is not None
 
 
 def test_shunya_rest_compute_momentum_zero(vy):

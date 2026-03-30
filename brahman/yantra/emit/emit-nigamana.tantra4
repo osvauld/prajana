@@ -1,5 +1,6 @@
 -- nigamana: the conclusion.
 -- viveka: "we find that ball-A is heavier than ball-B"
+-- viveka equal: "we find that ball-A and ball-B are equal in mass"
 -- physics: "we find that kinetic energy is 22.5"
 (tantra emit-nigamana (graph is-viveka)
   (say-found (shabda "anuvada-setu" "speech-found"))
@@ -9,12 +10,23 @@
     (let say-is = shabda "anuvada-setu" "speech-is"
      let say-than = shabda "anuvada-setu" "speech-than"
      let cmp = viveka-comparison graph
+     let is-equal = cond (gt (length cmp) 2) (eq (nth cmp 2) "equal") otherwise false
      let winner = cond (has-items cmp) (nth cmp 0) otherwise ""
      let loser = cond (has-items cmp) (nth cmp 1) otherwise ""
      let sought-raw = query-edge graph "sought"
      let sought-label = concept-display (to-string sought-raw)
-     let ev-count = length (graph | where [s, e, o] | and (eq e "viveka-sankhya") | collect s)
-     cond (eq ev-count 2)
+     let vc-raw = query-edge graph "viveka-concept"
+     let vs-entities = graph | where [s, e, o] | and (eq e "viveka-sankhya") | collect (to-string s)
+     let ev-count = length vs-entities
+     let first-ent = cond (has-items vs-entities) (nth vs-entities 0) otherwise ""
+     let owned = cond (has-text first-ent) (shashthi-sparsha graph first-ent) otherwise []
+     let prop-disp = cond (has-items owned) (concept-display (str owned 0)) otherwise ""
+     let vc-disp = cond (exists vc-raw) (concept-display (to-string vc-raw))
+       (has-text prop-disp) prop-disp
+       otherwise sought-label
+     cond is-equal
+       (concat say-found " that " (list-join vs-entities) " are equal in " vc-disp)
+       (eq ev-count 2)
        (concat say-found " that " winner " " say-is " " sought-label " " say-than " " loser)
        otherwise (concat say-found " that " winner " " say-is " the " sought-label))
 
@@ -23,5 +35,5 @@
     (let say-no-match = shabda "anuvada-setu" "speech-no-match"
      let dv = derived-value graph
      cond (has-items dv)
-       (concat say-found " that " (concept-display (nth dv 0)) " is " (to-string (nth dv 1)))
+       (concat say-found " that " (concept-display (nth dv 0)) " is " (str dv 1))
        otherwise (to-string say-no-match))))

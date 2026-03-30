@@ -6,7 +6,7 @@
 
   -- parents of query-entity (level 1)
   (l1-kosha (map (walk query-entity "swarupa") (fn x -> to-string x)))
-  (l1-graph (map (filter gsp (fn tri -> eq (to-string (nth tri 0)) query-entity)) (fn tri -> to-string (nth tri 2))))
+  (l1-graph (map (filter gsp (fn tri -> eq (str tri 0) query-entity)) (fn tri -> str tri 2)))
   (l1-varga (map (walk query-entity "varga") (fn x -> to-string x)))
   (l1 (append l1-kosha (append l1-graph l1-varga)))
   (hit1 (member assert-entity l1))
@@ -14,7 +14,7 @@
   -- parents of level-1 nodes (level 2)
   (l2 (reduce l1 [] (fn acc nd ->
     let ksp = map (walk nd "swarupa") (fn x -> to-string x)
-    let gsp2 = map (filter gsp (fn tri -> eq (to-string (nth tri 0)) nd)) (fn tri -> to-string (nth tri 2))
+    let gsp2 = map (filter gsp (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
     let kvp  = map (walk nd "varga")   (fn x -> to-string x)
     append acc (append ksp (append gsp2 kvp)))))
   (hit2 (member assert-entity l2))
@@ -22,7 +22,7 @@
   -- parents of level-2 nodes (level 3)
   (l3 (reduce l2 [] (fn acc nd ->
     let ksp = map (walk nd "swarupa") (fn x -> to-string x)
-    let gsp3 = map (filter gsp (fn tri -> eq (to-string (nth tri 0)) nd)) (fn tri -> to-string (nth tri 2))
+    let gsp3 = map (filter gsp (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
     let kvp  = map (walk nd "varga")   (fn x -> to-string x)
     append acc (append ksp (append gsp3 kvp)))))
   (hit3 (member assert-entity l3))
@@ -30,7 +30,7 @@
   -- parents of level-3 nodes (level 4)
   (l4 (reduce l3 [] (fn acc nd ->
     let ksp = map (walk nd "swarupa") (fn x -> to-string x)
-    let gsp4 = map (filter gsp (fn tri -> eq (to-string (nth tri 0)) nd)) (fn tri -> to-string (nth tri 2))
+    let gsp4 = map (filter gsp (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
     let kvp  = map (walk nd "varga")   (fn x -> to-string x)
     append acc (append ksp (append gsp4 kvp)))))
   (hit4 (member assert-entity l4))

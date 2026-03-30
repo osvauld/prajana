@@ -46,7 +46,9 @@
     is-viveka-after-num [[word, "mithya", word]]
     is-rashi-label [[word, "mithya", word]]
     is-verb-form [[word, "mithya", word]]
-    is-concept [[nd-str, "satya", nd-str]]
+    is-concept (cond (or (eq nd-str "viveka-max") (eq nd-str "viveka-min"))
+      [[nd-str, "satya", nd-str], [nd-str, "query-word", word]]
+      otherwise [[nd-str, "satya", nd-str]])
     is-dravya [[word, "satya", word]]
     otherwise [[word, "mithya", word]]))
   -- when multiple candidates, emit candidate edges for downstream disambiguation

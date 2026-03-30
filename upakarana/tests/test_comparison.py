@@ -35,7 +35,9 @@ def test_viveka_slower(vy):
 def test_viveka_equal(vy):
     """Equal values: both should be mentioned or tied response"""
     r = vy.answer("ball-A has mass 5. ball-B has mass 5. which is heavier")
-    assert "ball-A" in r or "ball-B" in r or "equal" in r.lower() or "same" in r.lower()
+    rl = r.lower()
+    assert "equal" in rl
+    assert "ball-a" in rl and "ball-b" in rl
 
 
 # ── superlative: three entities ───────────────────────────────────────────────
@@ -69,17 +71,16 @@ def test_compute_compare_ke(vy):
         "ball-A has mass 2 and velocity 3. ball-B has mass 2 and velocity 5. "
         "which has more kinetic energy"
     )
-    assert "ball-B" in r
+    assert "ball-B" in r and "kinetic" in r.lower()
 
 
-@xfail(strict=True, reason="compute-then-compare: viveka needs derived values not raw")
 def test_compute_compare_ke_values_present(vy):
     """Both KE values appear in the answer"""
     r = vy.answer(
         "ball-A has mass 2 and velocity 3. ball-B has mass 2 and velocity 5. "
         "which has more kinetic energy"
     )
-    assert "9" in r or "25" in r
+    assert "9" in r and "25" in r
 
 
 def test_compute_compare_momentum(vy):
@@ -100,12 +101,15 @@ def test_count_compare_jars(vy):
     assert "jar-B" in r
 
 
+@xfail(strict=True, reason="count-then-compare: doesn't integrate the +3 change before comparing; returns box-B as winner; 'box-A' only appears as the loser")
 def test_count_compare_after_change(vy):
     """box-A: 5+3=8, box-B: 6 → box-A has more"""
     r = vy.answer(
         "box-A has 5 items. 3 more were added to box-A. box-B has 6 items. which has more items"
     )
-    assert "box-A" in r or "box-a" in r.lower()
+    # box-A should be the winner (8 > 6), not just mentioned as the loser
+    rl = r.lower()
+    assert "box-a" in rl and "than box-a" not in rl
 
 
 # ── proportional reasoning ────────────────────────────────────────────────────

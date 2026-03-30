@@ -9,7 +9,7 @@
   (count-entity (query-edge graph "count-entity"))
   (count-steps (graph | where [s, e, o] | and (eq e "count-step") | collect (to-string o)))
   (result-val (nth (graph | where [s, e, o] | and (eq e "sankhya")
-    | and (or (eq (to-string s) "count-total") (eq (to-string s) "count-remaining"))
+    | and (or (eq s "count-total") (eq s "count-remaining"))
     | collect (to-string o)) 0))
   (all-grades (split-grades graph))
   (grade0 (nth all-grades 0))
@@ -30,9 +30,9 @@
     let num = substr num-colon 0 (sub (string-length num-colon) 1)
     let before = nth parts 2
     let after = nth parts 4
-    (concat num " " (to-string op-word) " (" before " " (to-string say-arrow) " " after ")"))))
+    (concat num " " op-word " (" before " " (to-string say-arrow) " " after ")"))))
   (found-str (cond (exists result-val)
-    (concat (to-string result-val) " " (words-to-str q-words-raw))
+    (concat result-val " " (words-to-str q-words-raw))
     otherwise ""))
   (weave-strands [
     (format-strand say-given given-str),

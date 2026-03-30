@@ -11,5 +11,11 @@
   (ev-pairs (viveka-result viveka-raw "ev-pairs"))
   (gt-triples (viveka-result viveka-raw "gt-triples"))
   (result (cond (exists winner) (to-string winner) otherwise "no match"))
-  (proof-graph (pramana-bandha expanded [] result sf scope-entity true ev-pairs gt-triples comp-word))
+  -- compose sought phrase: "heavier" stays as-is, "more" + concept → "more kinetic energy"
+  (concept-disp (cond (exists comp-concept) (concept-display (to-string comp-concept)) otherwise ""))
+  (sought-phrase (cond (and (has-text concept-disp) (has-text comp-word))
+    (concat comp-word " " concept-disp)
+    (has-text comp-word) comp-word
+    otherwise ""))
+  (proof-graph (pramana-bandha expanded [] result sf scope-entity true ev-pairs gt-triples sought-phrase))
   (emit-reasoning proof-graph))

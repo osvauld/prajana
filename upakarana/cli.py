@@ -21,7 +21,7 @@ def cmd_om(args):
     elif args.action == "search":
         results = om5.search(nodes, args.pattern or args.name)
         if not results:
-            track_miss("om", "search")
+            track_miss("om", "search", args.pattern or args.name)
         for r in results:
             print(f"  {r['name']:30s} [{r['layer']}] {r['domain']}")
             for m in r["matches"][:3]:
@@ -31,7 +31,7 @@ def cmd_om(args):
         if node:
             print(node["source"])
         else:
-            track_miss("om", "source")
+            track_miss("om", "source", args.name)
             print(f"Not found: {args.name}", file=sys.stderr)
     elif args.action == "domain":
         info = om5.by_domain(nodes, depth=args.depth)
@@ -42,7 +42,7 @@ def cmd_om(args):
     elif args.action == "with-relation":
         results = om5.with_relation(nodes, args.relation)
         if not results:
-            track_miss("om", "with-relation")
+            track_miss("om", "with-relation", args.relation)
         print(f"{len(results)} nodes with {args.relation}:")
         for n in results[:20]:
             print(f"  {n['name']}")
@@ -60,7 +60,7 @@ def cmd_tantra(args):
     elif args.action == "search":
         results = tantra4.search(tantras, args.pattern or args.name)
         if not results:
-            track_miss("tantra", "search")
+            track_miss("tantra", "search", args.pattern or args.name)
         for r in results:
             print(f"  {r['name']:30s} [{r['group']}]")
             for m in r["matches"][:3]:
@@ -70,14 +70,14 @@ def cmd_tantra(args):
         if t:
             print(t["source"])
         else:
-            track_miss("tantra", "source")
+            track_miss("tantra", "source", args.name)
             print(f"Not found: {args.name}", file=sys.stderr)
     elif args.action == "group":
         groups = tantra4.by_group(tantras)
         if args.name:
             gs = groups.get(args.name, [])
             if not gs:
-                track_miss("tantra", "group")
+                track_miss("tantra", "group", args.name)
             for t in gs:
                 print(f"  {t['name']:30s} {t['lines']}L")
         else:
@@ -124,7 +124,7 @@ def cmd_shabda(args):
     elif args.action == "search":
         results = shabda.search(nodes, args.pattern or args.name)
         if not results:
-            track_miss("shabda", "search")
+            track_miss("shabda", "search", args.pattern or args.name)
         for r in results:
             print(f"  {r['name']}")
     elif args.action == "node":
@@ -132,7 +132,7 @@ def cmd_shabda(args):
         if node:
             _print_json({"name": node["name"], "fields": node["fields"]})
         else:
-            track_miss("shabda", "node")
+            track_miss("shabda", "node", args.name)
             print(f"Not found: {args.name}", file=sys.stderr)
     elif args.action == "gaps":
         from upakarana.analysis.static import shabda_gaps
@@ -200,27 +200,40 @@ def cmd_vy(args):
         else:
             print("Server not running.", file=sys.stderr)
     elif args.action == "eval":
-        from upakarana.engine.client import Client
+        from upakarana.engine.client import Client, VyakaranaError
+        from upakarana.usage import track_miss
         c = Client()
         try:
             expr = args.expr or args.name
             if not expr:
                 print("usage: upakarana vy eval '<expr>'", file=sys.stderr); return
-            result = c.eval(expr)
-            if isinstance(result, (list, dict)):
-                _print_json(result)
-            else:
-                print(result)
+            try:
+                result = c.eval(expr)
+                if isinstance(result, (list, dict)):
+                    _print_json(result)
+                else:
+                    print(result)
+            except VyakaranaError as e:
+                track_miss("vy", "eval", expr, error_type=e.code)
+                print(f"Error [{e.code}]: {e.message}", file=sys.stderr)
         finally:
             c.close()
     elif args.action == "ask":
-        from upakarana.engine.client import Client
+        from upakarana.engine.client import Client, VyakaranaError
+        from upakarana.usage import track_miss
         c = Client()
         try:
             question = args.question or args.name
             if not question:
                 print("usage: upakarana vy ask '<question>'", file=sys.stderr); return
-            print(c.ask(question))
+            try:
+                answer = c.ask(question)
+                if not answer:
+                    track_miss("vy", "ask", question)
+                print(answer)
+            except VyakaranaError as e:
+                track_miss("vy", "ask", question, error_type=e.code)
+                print(f"Error [{e.code}]: {e.message}", file=sys.stderr)
         finally:
             c.close()
     elif args.action == "walk":
@@ -233,16 +246,21 @@ def cmd_vy(args):
             else:
                 result = c.walk(args.node, args.relation)
             if not result:
-                track_miss("vy", "walk")
+                track_miss("vy", "walk", f"{args.node}:{args.relation}")
             for r in result:
                 print(f"  {r}")
         finally:
             c.close()
     elif args.action == "inspect":
-        from upakarana.engine.client import Client
+        from upakarana.engine.client import Client, VyakaranaError
+        from upakarana.usage import track_miss
         c = Client()
         try:
-            _print_json(c.inspect(args.name))
+            try:
+                _print_json(c.inspect(args.name))
+            except VyakaranaError as e:
+                track_miss("vy", "inspect", args.name, error_type=e.code)
+                print(f"Error [{e.code}]: {e.message}", file=sys.stderr)
         finally:
             c.close()
 
@@ -394,7 +412,7 @@ def cmd_search(args):
 
     if not results:
         from upakarana.usage import track_miss
-        track_miss("search")
+        track_miss("search", arg=args.pattern)
     print(f"{len(results)} matches:")
     for kind, name, ctx in results:
         print(f"  [{kind:8s}] {name:30s} {ctx}")
@@ -450,7 +468,7 @@ def cmd_query(args):
             print("usage: upakarana query op <name>", file=sys.stderr); return
         result = q.op(args.name)
         if not result or result.get("error"):
-            track_miss("q", "op")
+            track_miss("q", "op", args.name)
         _print_json(result)
     elif args.action == "ops":
         ops = q.ops(args.pattern)
@@ -491,7 +509,7 @@ def cmd_query(args):
             print("usage: upakarana query node <name>", file=sys.stderr); return
         result = q.node(args.name)
         if not result or result.get("error"):
-            track_miss("q", "node")
+            track_miss("q", "node", args.name)
         _print_json(result)
     elif args.action == "eval":
         if not args.expr:
@@ -652,7 +670,7 @@ def cmd_analyze(args):
         edges = incoming(args.name)
         if not edges:
             from upakarana.usage import track_miss
-            track_miss("a", "incoming")
+            track_miss("a", "incoming", args.name)
         print(f"{len(edges)} incoming edges for {args.name}:")
         for e in edges:
             print(f"  {e['source']:30s} --{e['relation']:20s} [{e['source_layer']}]")
@@ -1825,6 +1843,10 @@ def cmd_usage(args):
             print(f"\nNo-match commands:")
             for m in sorted(r["misses"], key=lambda x: -x["misses"]):
                 print(f"  {m['command']:30s} {m['misses']:5d}/{m['count']} ({m['rate']}%)")
+                for etype, cnt in m.get("error_types", []):
+                    print(f"    [err] {cnt:4d}x  {etype}")
+                for arg, cnt in m["top_args"]:
+                    print(f"          {cnt:4d}x  {arg}")
     elif args.action == "never":
         all_cmds = _all_possible_commands()
         unused = never_used(all_cmds)
@@ -1832,9 +1854,10 @@ def cmd_usage(args):
         for c in unused:
             print(f"  {c}")
     elif args.action == "reset":
-        from upakarana.usage import USAGE_FILE
-        if USAGE_FILE.exists():
-            USAGE_FILE.unlink()
+        import shutil
+        from upakarana.usage import USAGE_DIR
+        if USAGE_DIR.exists():
+            shutil.rmtree(USAGE_DIR)
             print("Usage data reset.")
         else:
             print("No usage data to reset.")

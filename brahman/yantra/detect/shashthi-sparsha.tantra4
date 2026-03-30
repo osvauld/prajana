@@ -2,5 +2,5 @@
 (tantra shashthi-sparsha (graph entity)
   (has-entity (exists entity))
   (cond has-entity
-    (graph | where [s, e, o] | and (eq e "shashthi-vibhakti") | and (eq (to-string o) (to-string entity)) | collect s)
-    otherwise (graph | where [s, e, o] | and (eq e "shashthi-vibhakti") | and (neq (to-string o) "shashthi-vibhakti") | collect [s, o])))
+    (graph | where [s, e, o] | and (eq e "shashthi-vibhakti") | and (eq o entity) | collect s)
+    otherwise (graph | where [s, e, o] | and (eq e "shashthi-vibhakti") | and (neq o "shashthi-vibhakti") | collect [s, o])))

@@ -13,15 +13,15 @@
      let vc-disp = cond (exists vc-raw) (concept-display (to-string vc-raw)) otherwise ""
      reduce entities [] (fn acc ent ->
        let vs = graph | where [s, e, o]
-         | and (eq (to-string s) (to-string ent))
+         | and (eq s ent)
          | and (eq e "viveka-sankhya")
          | collect o
        let owned = shashthi-sparsha graph ent
        let concept-name = cond (has-text vc-disp) vc-disp
-         otherwise (cond (has-items owned) (concept-display (to-string (nth owned 0)))
+         otherwise (cond (has-items owned) (concept-display (str owned 0))
            otherwise "")
        cond (has-items vs)
-         (append acc [(concat (to-string ent) " " prep " " concept-name " " (to-string (nth vs 0)))])
+         (append acc [(concat ent " " prep " " concept-name " " (str vs 0))])
        otherwise acc))
     otherwise []))
 
@@ -34,9 +34,9 @@
      let owned-concepts = ownership-concepts graph
      let flat-strs = reduce graph [] (fn acc tri ->
        cond (eq (nth tri 1) "sankhya")
-         (let c = to-string (nth tri 0)
+         (let c = str tri 0
           cond (or (member c owned-concepts) (member c derived-concepts)) acc
-          otherwise (append acc [(concat (concept-display c) " " (to-string (nth tri 2)))]))
+          otherwise (append acc [(concat (concept-display c) " " (str tri 2))]))
        otherwise acc)
      append entity-strs flat-strs)))
 

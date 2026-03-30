@@ -17,7 +17,7 @@
     cond (exists compound)
       let n      = length result
       let prefix = map (range (sub n 1)) (fn i -> nth result i)
-      let final  = cond has-punct (concat (to-string compound) last-ch) otherwise (to-string compound)
+      let final  = cond has-punct (concat compound last-ch) otherwise (to-string compound)
       [(append prefix [final]), ""]
     otherwise
       [(append result [word]), clean])))
