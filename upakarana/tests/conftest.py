@@ -1,11 +1,10 @@
 """conftest.py — pytest fixtures for upakarana integration tests.
 
 Uses upakarana.engine.client directly (no tools/ dependency).
-Records every eval/ask/walk call into .pytest_cache/vyakarana/.
+Records every eval/ask/walk call into the LMDB test store (testing/store.py).
 One socket connection per session, shared across all tests.
 """
 
-import json
 import os
 import re
 import sys
@@ -18,8 +17,9 @@ import pytest
 
 from upakarana.engine.client import Client, DEFAULT_SOCKET
 from upakarana.testing.gates import gate_from_reason, description_from_reason
+import upakarana.testing.store as _store
 
-_CACHE_DIR = Path(__file__).parent / ".pytest_cache" / "vyakarana"
+_run_id: str | None = None
 
 
 # ── options ────────────────────────────────────────────────────────────────────
@@ -182,19 +182,12 @@ class RecordingClient:
         return getattr(self._client, name)
 
 
-# ── cache helpers ──────────────────────────────────────────────────────────────
+# ── helpers ────────────────────────────────────────────────────────────────────
 
 
-def _cache_dir() -> Path:
-    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    return _CACHE_DIR
-
-
-def _safe_node_id(node_id: str) -> str:
-    return (
-        node_id.replace("/", "__").replace("::", "__")
-        .replace("[", "_").replace("]", "")
-    )
+def _layer_from_nodeid(node_id: str) -> str:
+    part = node_id.split("::")[0].split("/")[-1]
+    return part.replace("test_", "").replace(".py", "") if part else "unknown"
 
 
 # ── fixtures ───────────────────────────────────────────────────────────────────
@@ -221,25 +214,33 @@ def vy(request, _vy_session) -> Generator[RecordingClient, None, None]:
     yield _recorder
     duration = time.monotonic() - t0
     if not request.config.getoption("--no-cache", default=False):
-        _write_cache(request, _recorder._calls, duration)
+        _write_store(request, _recorder._calls, duration)
 
 
-# ── cache writer ───────────────────────────────────────────────────────────────
+# ── store writer ───────────────────────────────────────────────────────────────
 
 
-def _write_cache(request, calls: list[dict], duration: float) -> None:
+def _write_store(request, calls: list[dict], duration: float) -> None:
+    global _run_id
+    if not _run_id:
+        return
     node_id = request.node.nodeid
     outcome = getattr(request.node, "_last_outcome", "unknown")
     xfail_meta = getattr(request.node, "_xfail_meta", None)
-    entry = {
-        "test": node_id, "outcome": outcome, "calls": calls,
-        "failure": None, "duration": round(duration, 3),
-    }
-    if xfail_meta:
-        entry["xfail"] = xfail_meta
-    cache_file = _cache_dir() / (_safe_node_id(node_id) + ".json")
+    gate = xfail_meta.get("gate", "") if xfail_meta else ""
+    layer = _layer_from_nodeid(node_id)
+    failure = getattr(request.node, "_failure_info", None)
     try:
-        cache_file.write_text(json.dumps(entry, indent=2, default=str))
+        _store.record_result(
+            run_id=_run_id,
+            test_id=node_id,
+            outcome=outcome,
+            duration=duration,
+            gate=gate,
+            layer=layer,
+            calls=calls,
+            failure=failure,
+        )
     except Exception:
         pass
 
@@ -266,7 +267,6 @@ def _xfail_info(item) -> dict:
 def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
-    cache_file = _CACHE_DIR / (_safe_node_id(item.nodeid) + ".json")
 
     if rep.when == "call":
         if rep.passed and hasattr(rep, "wasxfail"):
@@ -279,15 +279,7 @@ def pytest_runtest_makereport(item, call):
             return
         item._last_outcome = rep.outcome
         if rep.failed and _recorder is not None:
-            failure_info = _extract_failure(rep)
-            if cache_file.exists():
-                try:
-                    entry = json.loads(cache_file.read_text())
-                    entry["outcome"] = "failed"
-                    entry["failure"] = failure_info
-                    cache_file.write_text(json.dumps(entry, indent=2, default=str))
-                except Exception:
-                    pass
+            item._failure_info = _extract_failure(rep)
     elif rep.when == "setup":
         if rep.skipped:
             item._last_outcome = (
@@ -315,62 +307,51 @@ def _extract_failure(rep) -> dict:
     }
 
 
-# ── session summary ────────────────────────────────────────────────────────────
+# ── session lifecycle ──────────────────────────────────────────────────────────
 
 
 def pytest_sessionstart(session):
-    """Wipe stale cache entries so only current-run results remain."""
+    """Begin a new run in the LMDB store.
+
+    xdist workers reuse the controller's run_id rather than creating their own,
+    so all parallel workers accumulate results into a single run entry.
+    """
+    global _run_id
     try:
-        if _CACHE_DIR.exists():
-            for f in _CACHE_DIR.glob("*.json"):
-                f.unlink()
+        import os as _os
+        is_worker = getattr(session.config, "workerinput", None) is not None
+        if is_worker:
+            _run_id = _store.last_run_id()
+        else:
+            partial = _os.environ.get("UPAKARANA_PARTIAL_RUN") == "1"
+            _run_id = _store.begin_run(partial=partial)
     except Exception:
         pass
 
 
 def pytest_sessionfinish(session, exitstatus):
+    """Finalize the run summary in the LMDB store (controller only)."""
+    global _run_id
+    if not _run_id:
+        return
     try:
-        cache_dir = _CACHE_DIR
-        if not cache_dir.exists():
+        # Only the controller finalizes — workers just write results
+        is_worker = getattr(session.config, "workerinput", None) is not None
+        if is_worker:
             return
-        entries = []
-        for f in sorted(cache_dir.glob("*.json")):
-            if f.name == "summary.json":
-                continue
-            try:
-                entries.append(json.loads(f.read_text()))
-            except Exception:
-                pass
-
-        counts = {k: 0 for k in ("passed", "failed", "error", "xfailed", "xpassed", "skipped", "unknown")}
+        entries = _store.load_run_entries(_run_id)
+        counts: dict[str, int] = {}
         for e in entries:
             k = e.get("outcome", "unknown")
             counts[k] = counts.get(k, 0) + 1
-
-        failed_tests = [
-            {
-                "test": e["test"],
-                "failure": e.get("failure") or {},
-                "calls": len(e.get("calls", [])),
-                "duration": e.get("duration", 0),
-            }
-            for e in entries if e.get("outcome") in ("failed", "error")
-        ]
-
-        summary = {
+        stats = {
             "total": len(entries),
-            "passed": counts["passed"],
-            "failed": counts["failed"] + counts["error"],
-            "xfailed": counts["xfailed"],
-            "xpassed": counts["xpassed"],
-            "skipped": counts["skipped"],
-            "failed_tests": failed_tests,
-            "slow_tests": sorted(
-                [{"test": e["test"], "duration": e.get("duration", 0)}
-                 for e in entries if e.get("duration", 0) > 0.5],
-                key=lambda x: x["duration"], reverse=True
-            )[:20],
+            "passed": counts.get("passed", 0),
+            "failed": counts.get("failed", 0) + counts.get("error", 0),
+            "xfailed": counts.get("xfailed", 0),
+            "xpassed": counts.get("xpassed", 0),
+            "skipped": counts.get("skipped", 0),
         }
-        (cache_dir / "summary.json").write_text(json.dumps(summary, indent=2, default=str))
+        _store.finalize_run(_run_id, stats)
     except Exception:
         pass

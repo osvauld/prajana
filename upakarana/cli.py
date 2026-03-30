@@ -295,12 +295,30 @@ def cmd_test(args):
         _print_json(summary(load_all()))
     elif args.action == "run":
         from upakarana.testing.run import run
+        from upakarana.testing.store import query_by_outcome, query_by_gate
         par = None if args.parallel == "off" else args.parallel
-        result = run(layer=args.layer, gate=args.gate, pattern=args.pattern,
-                     last_failed=args.last_failed, verbose=args.verbose,
-                     parallel=par)
-        print(f"passed={result['passed']} failed={result['failed']} "
-              f"xfailed={result.get('xfailed',0)} {result.get('duration','')}")
+        if getattr(args, "failed", False) or getattr(args, "xfailed", False):
+            import os as _os
+            outcome = "failed" if getattr(args, "failed", False) else "xfailed"
+            nodeids = query_by_outcome(outcome)
+            if args.gate:
+                gate_ids = set(query_by_gate(args.gate))
+                nodeids = [t for t in nodeids if t in gate_ids]
+            if not nodeids:
+                print(f"No {outcome} tests found in last run.")
+            else:
+                print(f"Re-running {len(nodeids)} {outcome} test(s)...")
+                _os.environ["UPAKARANA_PARTIAL_RUN"] = "1"
+                result = run(nodeids=nodeids, verbose=args.verbose, parallel=par)
+                _os.environ.pop("UPAKARANA_PARTIAL_RUN", None)
+                print(f"passed={result['passed']} failed={result['failed']} "
+                      f"xfailed={result.get('xfailed',0)} {result.get('duration','')}")
+        else:
+            result = run(layer=args.layer, gate=args.gate, pattern=args.pattern,
+                         last_failed=args.last_failed, verbose=args.verbose,
+                         parallel=par)
+            print(f"passed={result['passed']} failed={result['failed']} "
+                  f"xfailed={result.get('xfailed',0)} {result.get('duration','')}")
     elif args.action == "failed":
         from upakarana.testing.cache import load, failed
         _, entries = load()
@@ -325,6 +343,25 @@ def cmd_cache(args):
     _, entries = load()
     if args.action == "summary":
         _print_json(summarize(entries))
+        from upakarana.testing.cache import history
+        runs = history(5)
+        if len(runs) > 1:
+            print("\n── Last runs ──")
+            for r in runs:
+                rid = r.get("run_id", "?")
+                print(f"  {rid}  passed={r.get('passed',0)} "
+                      f"failed={r.get('failed',0)} xfailed={r.get('xfailed',0)}")
+    elif args.action == "trace":
+        from upakarana.testing.store import get_trace, last_run_id
+        name = getattr(args, "name", None)
+        if not name:
+            print("Usage: cache trace TEST_ID")
+        else:
+            trace = get_trace(name)
+            if trace is None:
+                print(f"No trace found for '{name}' in last run.")
+            else:
+                _print_json(trace)
     elif args.action == "gates":
         gates = by_gate(entries)
         for gate, es in sorted(gates.items()):
@@ -565,13 +602,18 @@ def build_parser():
     s.add_argument("--gate", "-g")
     s.add_argument("--pattern", "-p")
     s.add_argument("--last-failed", action="store_true")
+    s.add_argument("--failed", action="store_true",
+                   help="re-run failed tests from last run")
+    s.add_argument("--xfailed", action="store_true",
+                   help="re-run xfailed tests from last run")
     s.add_argument("--verbose", "-v", action="store_true")
     s.add_argument("--parallel", "-n", default="auto",
                    help="xdist workers: 'auto', a number, or 'off' (default: auto)")
 
     # cache
     s = sub.add_parser("cache", help="Cache analysis")
-    s.add_argument("action", choices=["summary", "gates", "slow"])
+    s.add_argument("action", choices=["summary", "gates", "slow", "trace"])
+    s.add_argument("name", nargs="?", help="test id for trace subcommand")
 
     # lint
     s = sub.add_parser("lint", help="Static lint")

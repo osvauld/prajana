@@ -15,28 +15,33 @@ def _pytest_bin():
     return "pytest"
 
 
-def _build_args(layer=None, gate=None, name=None, pattern=None,
+def _build_args(nodeids=None, layer=None, gate=None, name=None, pattern=None,
                 path=None, last_failed=False, socket_path=None,
                 verbose=False, timeout=120, parallel=None):
-    args = [_pytest_bin(), str(TESTS_DIR)]
+    if nodeids:
+        # Pass specific nodeids directly — exact matching, no -k substring risks
+        args = [_pytest_bin()] + list(nodeids)
+    else:
+        args = [_pytest_bin(), str(TESTS_DIR)]
     if parallel:
         args.extend(["-n", str(parallel)])
     if socket_path:
         args.extend(["--socket", socket_path])
     if verbose:
         args.append("-v")
-    if last_failed:
-        args.append("--lf")
-    if layer:
-        args.extend(["-k", layer])
-    if gate:
-        args.extend(["-k", gate])
-    if name:
-        args.extend(["-k", name])
-    if pattern:
-        args.extend(["-k", pattern])
-    if path:
-        args[-1] = path  # replace TESTS_DIR with specific path
+    if not nodeids:
+        if last_failed:
+            args.append("--lf")
+        if layer:
+            args.extend(["-k", layer])
+        if gate:
+            args.extend(["-k", gate])
+        if name:
+            args.extend(["-k", name])
+        if pattern:
+            args.extend(["-k", pattern])
+        if path:
+            args[-1] = path  # replace TESTS_DIR with specific path
     return args
 
 
@@ -69,10 +74,10 @@ def _parse_output(stdout, stderr, returncode):
     return result
 
 
-def run(**kwargs):
+def run(nodeids=None, **kwargs):
     """Run pytest with filters. Returns result dict."""
     timeout = kwargs.pop("timeout", 120)
-    args = _build_args(**kwargs)
+    args = _build_args(nodeids=nodeids, **kwargs)
     try:
         proc = subprocess.run(args, capture_output=True, text=True, timeout=timeout,
                               cwd=str(_UPAKARANA_DIR))

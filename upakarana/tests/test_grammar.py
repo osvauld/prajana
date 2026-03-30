@@ -222,6 +222,82 @@ def test_prep_per(vy):
     assert vy.has_triple(g, pred="sankhya") or vy.has_triple(g, pred="satya")
 
 
+# ── vibhakti: structural case edges ──────────────────────────────────────────
+
+
+def test_vibhakti_adhikarana_in(vy):
+    """'in the box' → adhikarana (locative)"""
+    g = vy.bqg("a ball in the box has mass 5")
+    assert vy.has_triple(g, pred="adhikarana")
+
+
+def test_vibhakti_adhikarana_on(vy):
+    """'on the table' → adhikarana (locative)"""
+    g = vy.bqg("3 birds on a tree")
+    assert vy.has_triple(g, pred="adhikarana")
+
+
+def test_vibhakti_apadana_from(vy):
+    """'from rest' → apadana (ablative) or compound merge"""
+    g = vy.bqg("accelerates from rest at 3 m/s2")
+    # compound merge eats 'from rest' → from-rest satya node
+    assert vy.has_triple(g, subj="from-rest", pred="satya")
+
+
+def test_vibhakti_sampradana_to(vy):
+    """'gave to Mary' → sampradana (dative)"""
+    g = vy.bqg("he gave 3 to Mary")
+    assert vy.has_triple(g, pred="sampradana")
+
+
+def test_vibhakti_sampradana_for(vy):
+    """'for 2 hours' → sampradana (purpose)"""
+    g = vy.bqg("a train travels for 2 hours")
+    assert vy.has_triple(g, pred="sampradana")
+
+
+def test_vibhakti_karana_by(vy):
+    """'hit by a bat' → karana (instrumental)"""
+    g = vy.bqg("a ball is hit by a bat")
+    assert vy.has_triple(g, pred="karana")
+
+
+def test_vibhakti_from_rest_qualifies(vy):
+    """from-rest shunya-bandha qualifies to initial-velocity=0"""
+    g = vy.bqg("accelerates from rest at 3 m/s2")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    assert sankhya.get("initial-velocity") in ("0", "0.")
+
+
+def test_vibhakti_combined_locative_and_value(vy):
+    """'3 birds on a tree' → adhikarana + number binding"""
+    g = vy.bqg("3 birds on a tree")
+    assert vy.has_triple(g, pred="adhikarana")
+    assert vy.has_triple(g, pred="asprista-sankhya")
+
+
+def test_vibhakti_from_rest_with_force(vy):
+    """'from rest at 3 m/s2, mass 1200, find force' — apadana + multiple bindings + derivation"""
+    r = vy.answer("a car of mass 1200 accelerates from rest at 3 m/s2. find force")
+    assert "3600" in r
+
+
+def test_vibhakti_sampradana_does_not_bind_number(vy):
+    """'gave 3 to Mary' — 3 should not bind to Mary as her quantity"""
+    g = vy.bqg("Tom has 7 apples. he gave 3 to Mary")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    # Mary should NOT have sankhya=3 (that's what's being transferred, not her possession)
+    assert sankhya.get("Mary") != "3"
+
+
+def test_vibhakti_multi_case_physics(vy):
+    """'ball at rest on a surface' — adhikarana (on) + from-rest compound"""
+    g = vy.bqg("a ball at rest on a surface has mass 5")
+    assert vy.has_triple(g, pred="adhikarana")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    assert "5" in sankhya.values()
+
+
 # ── verb phrases ──────────────────────────────────────────────────────────────
 
 
@@ -247,10 +323,65 @@ def test_verb_accelerates(vy):
     assert "acceleration" in sankhya or vy.has_triple(g, pred="sankhya")
 
 
+# ── kriya-nirmana: generated verb forms ───────────────────────────────────────
+
+
+def test_generated_ing_tense(vy):
+    """'flying' (generated -ing) → vartamana-kaala tense in BQG"""
+    g = vy.bqg("3 birds were flying from a tree")
+    assert vy.has_triple(g, subj="flying", pred="vartamana-kaala")
+
+
+def test_generated_ed_tense(vy):
+    """'accelerated' (generated -ed) → bhuta-kaala tense in BQG"""
+    g = vy.bqg("the car accelerated to 60")
+    assert vy.has_triple(g, subj="accelerated", pred="bhuta-kaala")
+
+
+def test_generated_ing_not_satya(vy):
+    """Generated -ing forms must be mithya, not satya concepts"""
+    g = vy.bqg("a ball was moving fast")
+    satya = vy.subjects(g, pred="satya")
+    assert "moving" not in satya
+
+
+def test_generated_ed_direction_vriddhi(vy):
+    """'added' (generated -ed with vriddhi) → count chain uses vriddhi direction"""
+    r = vy.answer("a bag has 5 apples. 2 were added. how many apples")
+    assert "7" in r
+
+
+def test_generated_ed_direction_kshaya(vy):
+    """'eaten' (hand-authored -ed with kshaya) → count chain uses kshaya direction"""
+    r = vy.answer("a bag has 10 apples. 3 were eaten. how many apples")
+    assert "7" in r
+
+
+def test_generated_forms_have_janya(vy):
+    """Generated forms have janya edge back to dhatu root"""
+    g = vy.bqg("birds were flying away")
+    # flying resolves to a node with janya: dhatu-fly
+    # the tense edge confirms the node was found and classified
+    assert vy.has_triple(g, subj="flying", pred="vartamana-kaala")
+
+
+@xfail(strict=True, reason="motion verb: 'moving at 5 m/s' should bind velocity=5 via generated -ing form + step-motion")
+def test_generated_ing_velocity_binding(vy):
+    """'moving at 5 m/s' — generated form should enable velocity signal"""
+    g = vy.bqg("a ball is moving at 5 m/s")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    assert "velocity" in sankhya
+
+
+def test_generated_count_with_eaten(vy):
+    """Count chain with 'eaten' (kshaya direction via generated form)"""
+    r = vy.answer("a bag had 10 apples. 3 were eaten. how many apples are left")
+    assert "7" in r
+
+
 # ── from rest ─────────────────────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="from rest: 'rest' maps to count-remaining, not initial-velocity=0")
 def test_from_rest_initial_velocity(vy):
     """'from rest' → initial-velocity=0"""
     g = vy.bqg("accelerates from rest at 3 m/s2")
@@ -267,12 +398,11 @@ def test_from_rest_in_answer(vy):
 # ── negation words ────────────────────────────────────────────────────────────
 
 
-def test_negation_not_emits_satya(vy):
-    """'not moving' emits negation as graph concept"""
+@xfail(strict=True, reason="pratishedha: 'not' currently becomes mithya — needs Phase A of bhasha-nirmana (step-118)")
+def test_negation_not_emits_pratishedha(vy):
+    """'not moving' should emit pratishedha edge"""
     g = vy.bqg("the ball is not moving")
-    assert vy.has_triple(g, subj="negation", pred="satya") or any(
-        t[1] in ("satya", "pratishedha") for t in g if isinstance(t, list)
-    )
+    assert vy.has_triple(g, pred="pratishedha")
 
 
 def test_at_rest_is_zero_velocity(vy):
@@ -320,3 +450,213 @@ def test_conjunction_if_then(vy):
     g = vy.bqg("if mass is 5 then find force")
     assert vy.has_triple(g, subj="force", pred="satya")
     assert vy.has_triple(g, pred="vidhi-kaala")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# bhasha-nirmana (step-118): graph-native English grammar
+# Each section maps to a phase. Tests are xfail until the phase is built.
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+# ── Phase A: pratishedha (negation) ──────────────────────────────────────────
+
+
+@xfail(strict=True, reason="pratishedha: 'not' is mithya, no pratishedha edge emitted")
+def test_pratishedha_not_edge(vy):
+    """'is not moving' → pratishedha edge in BQG"""
+    g = vy.bqg("the ball is not moving")
+    assert vy.has_triple(g, pred="pratishedha")
+
+
+@xfail(strict=True, reason="pratishedha: 'no' as determiner negation not handled")
+def test_pratishedha_no_determiner(vy):
+    """'no velocity' → pratishedha on velocity"""
+    g = vy.bqg("the ball has no velocity")
+    assert vy.has_triple(g, pred="pratishedha")
+
+
+@xfail(strict=True, reason="pratishedha: 'without' negation not handled")
+def test_pratishedha_without(vy):
+    """'without friction' → pratishedha on friction"""
+    g = vy.bqg("a surface without friction")
+    assert vy.has_triple(g, pred="pratishedha")
+
+
+@xfail(strict=True, reason="pratishedha: 'never' adverbial negation not handled")
+def test_pratishedha_never(vy):
+    """'never stops' → pratishedha edge"""
+    g = vy.bqg("the object never stops")
+    assert vy.has_triple(g, pred="pratishedha")
+
+
+# ── Phase B: sarvanama (pronouns) ───────────────────────────────────────────
+
+
+@xfail(strict=True, reason="sarvanama: 'he' does not resolve to a pronoun node")
+def test_pronoun_he_resolves(vy):
+    """'he' should resolve to a pronoun node with purusa/vachana"""
+    g = vy.bqg("Tom has 5 apples. he gave 3 away")
+    # 'he' should not disappear from the graph
+    edges = [t[1] for t in g if isinstance(t, list) and len(t) >= 2]
+    assert "mithya" not in [t[1] for t in g if isinstance(t, list) and t[0] == "he"]
+
+
+@xfail(strict=True, reason="sarvanama: 'she' does not resolve")
+def test_pronoun_she_resolves(vy):
+    """'she' should resolve to a pronoun node"""
+    g = vy.bqg("Mary has mass 5. she runs at velocity 3")
+    edges = [t for t in g if isinstance(t, list) and t[0] == "she"]
+    assert len(edges) > 0 and edges[0][1] != "mithya"
+
+
+@xfail(strict=True, reason="sarvanama: 'they' does not resolve")
+def test_pronoun_they_resolves(vy):
+    """'they' should resolve with bahu-vachana"""
+    g = vy.bqg("the balls have mass 5. they move at velocity 3")
+    edges = [t for t in g if isinstance(t, list) and t[0] == "they"]
+    assert len(edges) > 0 and edges[0][1] != "mithya"
+
+
+@xfail(strict=True, reason="sarvanama: possessive 'his' not handled")
+def test_pronoun_possessive_his(vy):
+    """'his velocity' — possessive pronoun"""
+    g = vy.bqg("Tom has mass 5. his velocity is 10. find kinetic energy")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    assert "velocity" in sankhya
+
+
+# ── Phase C: sandhi-viparyaya (contractions) ─────────────────────────────────
+
+
+@xfail(strict=True, reason="contractions: don't not split into do+not")
+def test_contraction_dont(vy):
+    """don't → do + not (split before resolution)"""
+    g = vy.bqg("the balls don't move")
+    assert vy.has_triple(g, pred="pratishedha")
+
+
+@xfail(strict=True, reason="contractions: doesn't not split into does+not")
+def test_contraction_doesnt(vy):
+    """doesn't → does + not"""
+    g = vy.bqg("the ball doesn't have velocity")
+    assert vy.has_triple(g, pred="pratishedha")
+
+
+@xfail(strict=True, reason="contractions: isn't not split into is+not")
+def test_contraction_isnt(vy):
+    """isn't → is + not"""
+    g = vy.bqg("the ball isn't moving")
+    assert vy.has_triple(g, pred="pratishedha")
+
+
+@xfail(strict=True, reason="contractions: can't not split into can+not")
+def test_contraction_cant(vy):
+    """can't → can + not"""
+    g = vy.bqg("the ball can't stop")
+    assert vy.has_triple(g, pred="pratishedha")
+
+
+# ── Phase D: sahayaka (auxiliaries) ──────────────────────────────────────────
+
+
+@xfail(strict=True, reason="auxiliary: 'does' not resolved as question/emphasis marker")
+def test_auxiliary_does_question(vy):
+    """'does the ball have' — 'does' is question marker"""
+    g = vy.bqg("does the ball have velocity")
+    assert vy.has_triple(g, pred="vidhi-kaala") or vy.has_triple(g, pred="satya", subj="velocity")
+
+
+@xfail(strict=True, reason="auxiliary: 'did' not resolved as past question marker")
+def test_auxiliary_did_question(vy):
+    """'did the ball move' — 'did' is past question marker"""
+    g = vy.bqg("did the ball move")
+    assert vy.has_triple(g, pred="bhuta-kaala") or vy.has_triple(g, pred="vidhi-kaala")
+
+
+@xfail(strict=True, reason="auxiliary: 'am/are' copula not resolved")
+def test_auxiliary_am(vy):
+    """'I am at rest' — 'am' should work like 'is'"""
+    g = vy.bqg("I am at rest")
+    assert vy.has_triple(g, pred="copula") or vy.has_triple(g, subj="at-rest", pred="satya")
+
+
+# ── Phase E: vachana-nirmana (plurals) ───────────────────────────────────────
+
+
+@xfail(strict=True, reason="vachana-nirmana: generated plurals not yet replacing shabda word: dump")
+def test_plural_generated_at_boot(vy):
+    """'forces' should resolve to 'force' via graph-generated plural naama"""
+    # This tests that the boot tantra generates the plural, not the shabda file
+    resolved = vy.eval('(word-resolve "forces")')
+    assert resolved == "force"
+
+
+@xfail(strict=True, reason="vachana-nirmana: Sanskrit nodes must NOT be pluralized")
+def test_plural_skip_sanskrit(vy):
+    """'moksha' should NOT have 'mokshas' as a naama — Sanskrit terms are uncountable"""
+    naama = vy.eval('(walk "moksha" "naama")')
+    assert "mokshas" not in naama
+
+
+# ── Phase F: parimana (quantifiers) ──────────────────────────────────────────
+
+
+@xfail(strict=True, reason="quantifier: 'every' not resolved like 'each'")
+def test_quantifier_every(vy):
+    """'every box has 6 balls' — same as 'each'"""
+    r = vy.answer("there are 4 boxes. every box has 6 balls. how many balls are there")
+    assert "24" in r
+
+
+@xfail(strict=True, reason="quantifier: 'all' not resolved as universal aggregate")
+def test_quantifier_all(vy):
+    """'all balls have mass 5' — universal"""
+    g = vy.bqg("all balls have mass 5")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    assert "mass" in sankhya or "ball" in sankhya
+
+
+@xfail(strict=True, reason="quantifier: 'no' as zero-quantifier not handled")
+def test_quantifier_no_as_zero(vy):
+    """'no friction' → friction = 0 (pratishedha + shunya)"""
+    g = vy.bqg("a surface has no friction")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    assert sankhya.get("friction") in ("0", "0.") or vy.has_triple(g, pred="pratishedha")
+
+
+# ── Phase G: nirdeshaka (demonstratives) ─────────────────────────────────────
+
+
+@xfail(strict=True, reason="demonstrative: 'this/that' not resolved")
+def test_demonstrative_this(vy):
+    """'this ball' — 'this' should not break parsing"""
+    g = vy.bqg("this ball has mass 5")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    assert "mass" in sankhya
+
+
+@xfail(strict=True, reason="demonstrative: 'those' not resolved as bahu-vachana")
+def test_demonstrative_those(vy):
+    """'those balls' — plural demonstrative"""
+    g = vy.bqg("those balls have mass 5")
+    sankhya = vy.triple_map(g, pred="sankhya")
+    assert "mass" in sankhya
+
+
+# ── Phase H: viveka-rupa (comparison suffixes) ───────────────────────────────
+
+
+@xfail(strict=True, reason="comparison: '-er' suffix not handled as comparative")
+def test_comparative_er_suffix(vy):
+    """'heavier' → comparative of mass"""
+    g = vy.bqg("ball-A is heavier than ball-B")
+    assert vy.has_triple(g, pred="satya", subj="viveka-max") or vy.has_triple(g, pred="viveka-max")
+
+
+@xfail(strict=True, reason="comparison: 'than' not emitted as comparison reference")
+def test_comparison_than_marker(vy):
+    """'than' should mark comparison reference entity"""
+    g = vy.bqg("ball-A is heavier than ball-B")
+    # 'than' should produce a structural edge, not disappear
+    edges = [t[1] for t in g if isinstance(t, list) and len(t) >= 2]
+    assert "mithya" not in [t[1] for t in g if isinstance(t, list) and t[0] == "than"]

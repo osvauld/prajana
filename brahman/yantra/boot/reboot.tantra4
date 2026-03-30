@@ -1,3 +1,4 @@
 -- runs all boot-time graph enrichment passes.
 (tantra reboot (_)
-  (varga-inheritance ""))
+  (varga-inheritance "")
+  (kriya-nirmana ""))

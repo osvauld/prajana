@@ -23,7 +23,8 @@
   -- was always false since both resolve the same word. Kept false to match old behavior.
   (is-rashi-label false)
   (is-direction-word (or (eq nd-str "kshaya") (eq nd-str "vriddhi")))
-  (is-verb-form (or is-direction-word (ends-with word "ed") (ends-with word "ing")))
+  (is-tinanta (and (exists nd) (member "tinanta" (walk nd-str "swarupa"))))
+  (is-verb-form (or is-direction-word is-tinanta (ends-with word "ed") (ends-with word "ing")))
   -- "2 more" = vriddhi, not viveka comparison. Suppress viveka when preceded by number.
   (is-viveka-after-num (and has-pend is-concept (or (eq nd-str "viveka-max") (eq nd-str "viveka-min"))))
   (after-loc (eq prev-edge "adhikarana"))

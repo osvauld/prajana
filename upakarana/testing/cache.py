@@ -1,42 +1,35 @@
-"""cache.py — Pytest result cache analysis.
+"""cache.py — Test result cache analysis.
 
-Reads .pytest_cache/vyakarana/ entries written by conftest.py.
+Reads from the LMDB store (testing/store.py). Analysis functions operate on
+entry lists and are storage-format agnostic — they receive plain dicts.
 """
 
-import json
-import os
 from collections import defaultdict
-from pathlib import Path
 
-from upakarana.paths import TESTS_DIR
 from upakarana.testing.gates import gate_from_reason
 
-DEFAULT_CACHE = TESTS_DIR / ".pytest_cache" / "vyakarana"
 
+def load(run_id=None):
+    """Load entries from LMDB store. Returns (summary_dict, entries_list).
 
-def load(cache_dir=None):
-    """Load cache entries. Returns (summary_dict, entries_list)."""
-    d = Path(cache_dir) if cache_dir else DEFAULT_CACHE
-    if not d.exists():
+    entries_list contains compact records with calls[] attached from traces
+    for timing analysis. Falls back to empty if store has no data yet.
+    """
+    from upakarana.testing.store import (
+        get_run_summary, load_run_entries_with_traces, last_run_id
+    )
+    rid = run_id or last_run_id()
+    if not rid:
         return {}, []
-
-    summary = {}
-    summary_path = d / "summary.json"
-    if summary_path.exists():
-        try:
-            summary = json.loads(summary_path.read_text())
-        except Exception:
-            pass
-
-    entries = []
-    for f in sorted(d.iterdir()):
-        if f.suffix == ".json" and f.name != "summary.json":
-            try:
-                entries.append(json.loads(f.read_text()))
-            except Exception:
-                pass
-
+    summary = get_run_summary(rid) or {}
+    entries = load_run_entries_with_traces(rid)
     return summary, entries
+
+
+def history(n=10):
+    """Return last n run summaries, newest first."""
+    from upakarana.testing.store import history as store_history
+    return store_history(n)
 
 
 def by_outcome(entries):
@@ -64,8 +57,7 @@ def by_gate(entries):
     groups = defaultdict(list)
     for e in entries:
         if e.get("outcome") in ("xfailed", "skipped"):
-            reason = e.get("xfail_reason", "")
-            gate = gate_from_reason(reason)
+            gate = e.get("gate") or gate_from_reason(e.get("xfail_reason", ""))
             groups[gate].append(e)
     return dict(groups)
 
@@ -104,14 +96,15 @@ def slowest_tests(entries, top_n=20):
 
 def timing_by_layer(entries):
     """Aggregate timing by test layer (file)."""
-    from collections import defaultdict
     layers = defaultdict(lambda: {"duration_s": 0, "count": 0, "call_us": 0})
     for e in entries:
-        test_path = e.get("test", "").split("::")[0].split("/")[-1]
-        layer = test_path.replace("test_", "").replace(".py", "") if test_path else "unknown"
+        layer = e.get("layer") or "unknown"
         layers[layer]["duration_s"] += e.get("duration", 0)
         layers[layer]["count"] += 1
-        layers[layer]["call_us"] += sum(c.get("elapsed_us", c.get("elapsed_ms", 0) * 1000) for c in e.get("calls", []))
+        layers[layer]["call_us"] += sum(
+            c.get("elapsed_us", c.get("elapsed_ms", 0) * 1000)
+            for c in e.get("calls", [])
+        )
     return {k: {**v, "duration_s": round(v["duration_s"], 1)}
             for k, v in sorted(layers.items(), key=lambda x: -x[1]["duration_s"])}
 

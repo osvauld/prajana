@@ -71,7 +71,7 @@ shabda kriya
 done
 
 shabda kshaya
-  (word flew away left died lost ate eaten used spent broke broken gone sold dropped gave removed fell disappeared caught went taken stolen sent remaining rest leftover gives give given threw thrown took ran walked hit cut paid lent donated shared passed picked-up got-off went-away went-home ran-away taken-away thrown-out given-away carried-off cut-down knocked-down borrowed damaged destroyed off remain)
+  (word away left remaining rest leftover off)
   (alias decay)
   (desc "the-release-that-makes-space")
 done
@@ -175,7 +175,7 @@ shabda vivartana
 done
 
 shabda vriddhi
-  (word came arrived found added bought received gained got joined returned appeared grew hatched born back collected picked brought earned won saved made built planted cooked baked picked-up got-on came-back went-back put-back brought-back came-in moved-in)
+  (word back)
   (alias growth)
   (desc "the-deepening-that-imprints-leave")
 done
