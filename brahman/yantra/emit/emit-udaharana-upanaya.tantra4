@@ -1,4 +1,51 @@
--- the evidence is the viveka evidence or the physics evidence.
+-- udaharana+upanaya: the evidence and application.
+-- viveka: "we know that greater mass means heavier" + "we see that 5 > 3"
+-- physics: walk derived-by mantras, emit know/see pairs.
 (tantra emit-udaharana-upanaya (graph is-viveka)
-  (cond is-viveka (udaharana-viveka graph)
-    otherwise (udaharana-physics graph)))
+
+  (cond is-viveka
+    -- viveka path
+    (let say-known = shabda "anuvada-setu" "speech-known"
+     let say-seen = shabda "anuvada-setu" "speech-seen"
+     let say-gt = shabda "anuvada-setu" "speech-greater-than"
+     let say-lt = shabda "anuvada-setu" "speech-less-than"
+     let cmp = viveka-comparison graph
+     let vc-raw = query-edge graph "viveka-concept"
+     let vc-disp = cond (exists vc-raw) (concept-display (to-string vc-raw)) otherwise ""
+     let vk-direction = query-edge graph "viveka-direction"
+     let vk-winner = cond (has-items cmp) (nth cmp 0) otherwise ""
+     let vk-loser = cond (has-items cmp) (nth cmp 1) otherwise ""
+     let sought-label = query-edge graph "sought"
+     let known-str = cond (has-text vc-disp)
+       (cond (eq (to-string vk-direction) "max")
+         (concat say-known " that greater " vc-disp " means " (to-string sought-label))
+         otherwise (concat say-known " that lesser " vc-disp " means " (to-string sought-label)))
+       otherwise ""
+     let vk-wval = query-edge-of graph vk-winner "viveka-sankhya"
+     let vk-lval = query-edge-of graph vk-loser "viveka-sankhya"
+     let cmp-sym = cond (eq (to-string vk-direction) "max") say-gt otherwise say-lt
+     let seen-str = cond (and (exists vk-wval) (exists vk-lval))
+       (concat say-seen " that " (to-string vk-wval) " " cmp-sym " " (to-string vk-lval))
+       otherwise ""
+     filter [known-str, seen-str] (fn s -> has-text s))
+
+    otherwise
+    -- physics path
+    (let deriving-mantras = unique (graph | where [s, e, o] | and (eq e "derived-by") | collect (to-string o))
+     let derived-vp = graph | where [s, e, o] | and (eq e "derived-sankhya") | collect [s, o]
+     let has-derived-vp = has-items derived-vp
+     cond (has-items deriving-mantras)
+       (reduce deriving-mantras [] (fn acc mn ->
+         let produced = graph | where [s, e, o]
+           | and (eq e "derived-by")
+           | and (eq (to-string o) mn)
+           | collect (to-string s)
+         let vp = cond has-derived-vp derived-vp
+           otherwise (sankhya-sparsha graph)
+         let mm = [mn, vp, "forward"]
+         let kstr = mantra-known-str mm
+         let sstr = mantra-seen-str mm produced
+         cond (has-text kstr)
+           (append acc [kstr, sstr])
+         otherwise acc))
+       otherwise [])))

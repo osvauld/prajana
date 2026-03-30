@@ -1,5 +1,0 @@
--- attempts to resolve two adjacent words as a compound concept.
-(tantra try-compound (w1 w2)
-  (compound (cond (and (has-text w1) (has-text w2))
-    (concat w1 "-" w2) otherwise ""))
-  (cond (has-text compound) (lookup compound) otherwise _none))

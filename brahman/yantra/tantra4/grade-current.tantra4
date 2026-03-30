@@ -1,4 +1,0 @@
--- triples since last scope boundary (viraam/dvandva).
-(tantra grade-current (graph)
-  (reduce graph [] (fn a t ->
-    cond (is-boundary t) [] otherwise (append a [t]))))

@@ -1,9 +1,0 @@
--- detect-signals phase 3: viveka check (~57ms).
--- called only when shunya and anumana did not match.
-(tantra detect-signals-3 (expanded base-signals)
-  (viveka-signals (detect-viveka expanded))
-  (cond (has-items viveka-signals)
-    (write-signals expanded (append [["dispatch-mode", "viveka"]]
-      (append base-signals viveka-signals)))
-    otherwise
-    (detect-signals-4 expanded base-signals)))

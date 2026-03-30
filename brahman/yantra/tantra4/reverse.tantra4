@@ -1,3 +1,0 @@
--- reverse a list.
-(tantra reverse (lst)
-  (reduce lst [] (fn acc x -> append [x] acc)))

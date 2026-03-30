@@ -1,3 +1,0 @@
--- filters triples matching any of the given edge types.
-(tantra triples-by-edges (triples edge-types)
-  (filter triples (fn t -> member (triple-edge t) edge-types)))

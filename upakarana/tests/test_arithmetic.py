@@ -124,7 +124,6 @@ def test_distribution_per(vy):
 # ── physics + count ───────────────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="multiplication: 'each' + physics total")
 def test_physics_count_total_mass(vy):
     """3 balls each of mass 5 → total mass = 15"""
     r = vy.answer("there are 3 balls. each ball has mass 5. what is the total mass")
