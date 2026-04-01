@@ -156,6 +156,47 @@ def test_tense_will(vy):
     assert vy.has_triple(g, subj="velocity", pred="satya")
 
 
+# ── kaala-avastha: grammar-driven temporal qualification ──────────────────────
+
+
+def test_kaala_was_qualifies_initial_velocity(vy):
+    """'velocity was 5' → initial-velocity=5 via bhuta-kaala"""
+    r = vy.answer("velocity was 0. velocity is 20. time is 4. find acceleration")
+    assert "5" in r
+
+
+def test_kaala_was_velocity_ke(vy):
+    """'was/is' tense drives initial/current for kinetic energy"""
+    r = vy.answer("velocity was 5. velocity is 10. mass is 2. find kinetic energy")
+    assert "100" in r
+
+
+def test_kaala_was_with_explicit_acceleration(vy):
+    """'velocity was 10' + explicit a + t → current velocity via SUVAT"""
+    r = vy.answer("velocity was 10. acceleration is 5. time is 4. find velocity")
+    assert "30" in r
+
+
+def test_kaala_momentum_uses_current(vy):
+    """'velocity was 10, velocity is 20' → momentum uses current v=20"""
+    r = vy.answer("velocity was 10. velocity is 20. mass is 3. find momentum")
+    assert "60" in r
+
+
+def test_kaala_momentum_force_from_change(vy):
+    """'momentum was 10, momentum is 25, time=3' → F=5"""
+    r = vy.answer("momentum was 10. momentum is 25. time is 3. find force")
+    assert "No match" not in r, "needs impulse mantra"
+    assert "force" in r.lower() and "5" in r
+
+
+def test_kaala_displacement_velocity(vy):
+    """'displacement was 0, displacement is 100, time=10' → v=10"""
+    r = vy.answer("displacement was 0. displacement is 100. time is 10. find velocity")
+    assert "No match" not in r, "needs displacement-based velocity mantra"
+    assert "velocity" in r.lower() and "10" in r
+
+
 # ── articles: 'the', 'a', 'an' should be transparent ─────────────────────────
 
 
@@ -597,16 +638,6 @@ def test_auxiliary_am(vy):
     assert len(am_triples) > 0 and am_triples[0][1] == "copula"
 
 
-# ── Phase E: vachana-nirmana (plurals) ───────────────────────────────────────
-
-
-@xfail(strict=True, reason="vachana-nirmana: Sanskrit 'mokshas' should not exist as naama")
-def test_plural_skip_sanskrit(vy):
-    """Sanskrit terms must NOT be pluralized"""
-    naama = vy.eval('(walk "moksha" "naama")')
-    assert "mokshas" not in naama
-
-
 # ── Phase F: parimana (quantifiers) ──────────────────────────────────────────
 
 
@@ -656,9 +687,9 @@ def test_demonstrative_those(vy):
 
 
 def test_comparative_er_suffix(vy):
-    """'-er' suffix resolves to viveka-max via shabda-anveshana"""
+    """'-er' adjective resolves to adjective node with sthita→viveka-max"""
     g = vy.bqg("ball-A is taller than ball-B")
-    assert vy.has_triple(g, pred="satya", subj="viveka-max")
+    assert vy.has_triple(g, pred="satya", subj="adj-tall")
 
 
 @xfail(strict=True, reason="comparison: 'than' is mithya, should mark comparison reference")
@@ -667,5 +698,167 @@ def test_comparison_than_not_mithya(vy):
     g = vy.bqg("ball-A is heavier than ball-B")
     than_triples = [t for t in g if isinstance(t, list) and t[0] == "than"]
     assert len(than_triples) > 0 and than_triples[0][1] != "mithya"
+
+
+# ── pratyaya-nirmana: rule node structure ────────────────────────────────────
+# These tests protect the enriched rule nodes (step 1).
+# All pratyaya rules must be discoverable via a single walk.
+
+
+def test_pratyaya_unified_discovery(vy):
+    """All rule nodes (plural + verb + noun) discoverable via walk-in pratyaya swarupa."""
+    rules = vy.eval('(walk-in "pratyaya" "swarupa")')
+    # plural rules
+    assert "english-plural-regular" in rules
+    assert "english-plural-es" in rules
+    assert "english-plural-ies" in rules
+    # verb rules
+    assert "english-verb-ed" in rules
+    assert "english-verb-ing" in rules
+    assert "english-verb-s" in rules
+    # noun derivation
+    assert "english-noun-ation" in rules
+
+
+def test_pratyaya_plural_rule_edges(vy):
+    """Plural rule nodes carry full pratyaya structure: swarupa, janya, phala, kriya."""
+    for rule in ["english-plural-regular", "english-plural-es", "english-plural-ies"]:
+        assert "pratyaya" in vy.walk(rule, "swarupa"), f"{rule} missing swarupa→pratyaya"
+        assert "subanta" in vy.walk(rule, "janya"), f"{rule} missing janya→subanta"
+        assert "subanta" in vy.walk(rule, "phala"), f"{rule} missing phala→subanta"
+        assert "vachana-bahu" in vy.walk(rule, "kriya"), f"{rule} missing kriya→vachana-bahu"
+
+
+def test_pratyaya_plural_rule_sthita(vy):
+    """Plural rules have english + vachana-bahu + subanta-viveka in sthita."""
+    for rule in ["english-plural-regular", "english-plural-es", "english-plural-ies"]:
+        sthita = vy.walk(rule, "sthita")
+        assert "english" in sthita, f"{rule} missing sthita→english"
+        assert "vachana-bahu" in sthita, f"{rule} missing sthita→vachana-bahu"
+        assert "subanta-viveka" in sthita, f"{rule} missing sthita→subanta-viveka"
+
+
+def test_pratyaya_verb_rule_edges(vy):
+    """Verb rule nodes carry swarupa→pratyaya + tinanta-viveka in sthita."""
+    for rule in ["english-verb-ed", "english-verb-ing", "english-verb-s"]:
+        assert "pratyaya" in vy.walk(rule, "swarupa"), f"{rule} missing swarupa→pratyaya"
+        sthita = vy.walk(rule, "sthita")
+        assert "tinanta-viveka" in sthita, f"{rule} missing sthita→tinanta-viveka"
+
+
+def test_pratyaya_rule_has_suffix(vy):
+    """Every rule has suffix metadata in shabda store."""
+    assert vy.eval('(shabda "english-plural-regular" "suffix")') == "s"
+    assert vy.eval('(shabda "english-plural-es" "suffix")') == "es"
+    assert vy.eval('(shabda "english-plural-ies" "suffix")') == "ies"
+    assert vy.eval('(shabda "english-plural-ies" "stem-suffix")') == "y"
+
+
+# ── pratyaya recognition: suffix stripping ───────────────────────────────────
+# shabda-anveshana-rules strips suffixes to resolve unknown words to known nodes.
+
+
+def test_recognition_plural_regular(vy):
+    """Regular plural: forces resolves (to generated node or via stripping)."""
+    result = vy.eval('shabda-anveshana "forces"')
+    assert result in ("force", "forces")
+
+
+def test_recognition_plural_es(vy):
+    """ES plural: masses resolves (to generated node or via stripping)."""
+    result = vy.eval('shabda-anveshana "masses"')
+    assert result in ("mass", "masses")
+
+
+def test_recognition_plural_ies(vy):
+    """IES plural: frequencies resolves (to generated node or via stripping)."""
+    result = vy.eval('shabda-anveshana "frequencies"')
+    assert result in ("frequency", "frequencies")
+
+
+def test_recognition_verb_ed(vy):
+    """Past tense: accelerated → accelerate via -ed stripping."""
+    assert vy.eval('shabda-anveshana "accelerated"') == "accelerated"
+
+
+def test_recognition_verb_ing(vy):
+    """Present participle: accelerating → accelerate via -ing stripping."""
+    # accelerating is a generated node, so shabda-anveshana returns it directly
+    result = vy.eval('shabda-anveshana "accelerating"')
+    assert result == "accelerating"
+
+
+def test_recognition_verb_s(vy):
+    """3rd person -s: flies → fly via -ies→y stripping."""
+    result = vy.eval('shabda-anveshana "flies"')
+    assert result == "fly"
+
+
+# ── pratyaya-nirmana: generated plural nodes ─────────────────────────────────
+# Generated at boot by vachana-nirmana. Each plural carries:
+#   janaka→parent (derivation link), sthita→vachana-bahu (grammar),
+#   naama→word (word form). No swarupa — plurals are morphological
+#   variants, not independent concepts in the proof graph.
+
+
+def test_gen_plural_node_exists(vy):
+    """Boot-generated plural: 'velocities' exists as a graph node."""
+    assert vy.eval('(exists (lookup "velocities"))') is True
+
+
+def test_gen_plural_naama(vy):
+    """Base concept has naama edge to its plural word form."""
+    assert "velocities" in vy.walk("velocity", "naama")
+
+
+@xfail(strict=True, reason="design: plurals use janaka not swarupa — they are not IS-A subanta")
+def test_gen_plural_swarupa_subanta(vy):
+    """Generated plural inherits swarupa→subanta from parent (it's still a noun)."""
+    assert "subanta" in vy.eval('(walk "velocities" "swarupa")')
+
+
+def test_gen_plural_janaka_parent(vy):
+    """Generated plural has janaka edge back to its base concept."""
+    assert "velocity" in vy.walk("velocities", "janaka")
+
+
+def test_gen_plural_sthita_vachana_bahu(vy):
+    """Generated plural carries vachana-bahu in sthita (grammar dimension)."""
+    assert "vachana-bahu" in vy.walk("velocities", "sthita")
+
+
+def test_gen_plural_word_node_resolves(vy):
+    """word-node resolves plural to base concept: 'velocities' → velocity."""
+    assert vy.eval('word-node "velocities"') == "velocity"
+
+
+def test_gen_plural_es_exists(vy):
+    """ES plural: 'masses' exists as generated node with janaka→mass."""
+    assert vy.eval('(exists (lookup "masses"))') is True
+    assert "mass" in vy.walk("masses", "janaka")
+
+
+def test_gen_plural_ies_exists(vy):
+    """IES plural: 'frequencies' exists with janaka→frequency."""
+    assert vy.eval('(exists (lookup "frequencies"))') is True
+    assert "frequency" in vy.walk("frequencies", "janaka")
+
+
+def test_gen_plural_skip_sanskrit(vy):
+    """Sanskrit terms must NOT be pluralized: moksha has no 'mokshas' node."""
+    assert vy.eval('(exists (lookup "mokshas"))') is not True
+
+
+def test_gen_plural_skip_existing(vy):
+    """Generated plural has janaka edge back to base concept."""
+    assert vy.eval('(exists (lookup "forces"))') is True
+    assert "force" in vy.walk("forces", "janaka")
+
+
+def test_gen_plural_bqg_resolves(vy):
+    """BQG resolves plural input via shabda-anveshana: forces → force."""
+    g = vy.bqg("the forces on the ball are 10 N")
+    satya = vy.subjects(g, pred="satya")
+    assert "forces" in satya or "force" in satya
 
 

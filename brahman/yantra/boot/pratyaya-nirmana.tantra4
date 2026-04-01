@@ -1,0 +1,7 @@
+-- pratyaya-nirmana: orchestrate all grammar generation at boot.
+-- calls kriya-nirmana (verbs), vachana-nirmana (plurals), naama-nirmana (reverse naama).
+(tantra pratyaya-nirmana (_)
+  (let v = kriya-nirmana "" in
+   let p = vachana-nirmana "" in
+   let n = naama-nirmana "" in
+   (add v (add p n))))

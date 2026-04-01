@@ -82,14 +82,16 @@ def test_modus_ponens(vy):
     assert "yes" in r.lower() or "wet" in r.lower()
 
 
-@xfail(strict=True, reason="modus-tollens: returns 'no match' not real inference; pratishedha edge exists but contrapositive logic not wired")
+@xfail(strict=True, reason="modus-tollens: says 'no' via IS-A, not contrapositive; rain/wet not in reasoning")
 def test_modus_tollens(vy):
     """if it rains the ground is wet. the ground is not wet. did it rain"""
     r = vy.answer(
         "if it rains the ground is wet. the ground is not wet. did it rain"
     )
-    assert r.lower() != "no match", "must be real inference, not 'no match'"
-    assert re.search(r'\bno\b', r.lower()) is not None
+    rl = r.lower()
+    assert rl != "no match", "must be real inference, not 'no match'"
+    assert re.search(r'\bno\b', rl) is not None
+    assert "rain" in rl, "reasoning must reference rain"
 
 
 # ── transitivity: comparison chain ────────────────────────────────────────────
@@ -185,13 +187,14 @@ def test_universal_all_fly(vy):
     assert re.search(r'\byes\b', rl) is not None and "fly" in rl
 
 
-@xfail(strict=True, reason="quantifier: universal with exception override not built")
+@xfail(strict=True, reason="universal+exception: says 'yes' via IS-A but ignores penguin exception; 'fly' not in reasoning")
 def test_universal_with_exception(vy):
     """all birds fly. penguins are birds. penguins cannot fly. can sparrows fly"""
     r = vy.answer(
         "all birds can fly. penguins are birds. penguins cannot fly. can sparrows fly"
     )
     assert "yes" in r.lower()
+    assert "fly" in r.lower(), "reasoning must reference flying"
 
 
 def test_existential(vy):
@@ -231,7 +234,6 @@ def test_shunya_frictionless_no_friction(vy):
     assert "no" in r.lower()
 
 
-@xfail(strict=True, reason="stationary: uses IS-A reasoning ('velocity does not have verb-have') instead of shunya signal; first assertion intent violated")
 def test_shunya_stationary_no_velocity(vy):
     """the car is stationary. does it have velocity → no"""
     r = vy.answer("the car is stationary. does the car have velocity")
@@ -259,3 +261,41 @@ def test_pratishedha_not_at_rest_has_velocity(vy):
     """ball is not at rest → it has velocity (negation flips shunya)"""
     r = vy.answer("the ball is not at rest. does the ball have velocity")
     assert "yes" in r.lower()
+
+
+# ── kaala-avastha: temporal state logic ──────────────────────────────────────
+
+
+def test_kaala_past_vs_present_physics(vy):
+    """past tense binds to initial, present to current — acceleration derived"""
+    r = vy.answer("velocity was 0. velocity is 20. time is 4. find acceleration")
+    assert "5" in r
+
+
+@xfail(strict=True, reason="kaala-logic: qualitative state change via tense not built")
+def test_kaala_state_was_now_is(vy):
+    """'was at rest, is moving' — tense flips state"""
+    r = vy.answer("the ball was at rest. the ball is moving. is the ball at rest")
+    assert r.lower() != "no match", "must reason about state, not default no-match"
+    assert "moving" in r.lower() or re.search(r'\bno\b.*at rest', r.lower())
+
+
+@xfail(strict=True, reason="kaala-logic: 'had N, now has M' count mutation via tense")
+def test_kaala_count_had_has(vy):
+    """'had 10 apples, has 7' — how many lost = 3 via tense"""
+    r = vy.answer("he had 10 apples. he has 7 apples. how many apples were lost")
+    assert "3" in r
+
+
+@xfail(strict=True, reason="kaala-logic: boolean state override via tense")
+def test_kaala_boolean_state_override(vy):
+    """'light was off, light is on' → current state is on"""
+    r = vy.answer("the light was off. the light is on. is the light on")
+    assert "on" in r.lower() and "off" not in r.lower(), f"should say on, got: {r}"
+
+
+@xfail(strict=True, reason="kaala-logic: location state change via tense")
+def test_kaala_location_state(vy):
+    """'was in room, is in garden' → current location is garden"""
+    r = vy.answer("he was in the room. he is in the garden. where is he")
+    assert "garden" in r.lower()

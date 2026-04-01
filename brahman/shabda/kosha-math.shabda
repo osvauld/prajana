@@ -21,6 +21,23 @@ shabda addition
   (matra-ghata same)
 done
 
+shabda area
+  (desc measure-of-the-extent-of-a-two-dimensional-surface)
+done
+
+shabda length
+  (desc measure-of-extent-along-one-dimension)
+done
+
+shabda width
+  (desc measure-of-extent-along-the-shorter-dimension)
+done
+
+shabda rectangle-area-mantra
+  (name area)
+  (unit square-metre)
+done
+
 shabda adjacency-matrix
   (alias adjacency-matrix)
   (desc matrix-encoding-which-vertices-are-adjacent)
@@ -496,7 +513,7 @@ shabda inverse-square-law
 done
 
 shabda inversion
-  (word solving-for inverting finding)
+  (word solving-for inverting)
   (name inversion)
 done
 
@@ -1020,12 +1037,12 @@ shabda vector-space
 done
 
 shabda viveka-max
-  (word heavier faster bigger taller stronger greater more higher longer wider deeper larger denser brighter louder warmer hotter colder older newer richer heaviest fastest biggest tallest strongest greatest most highest longest widest largest densest brightest loudest warmest hottest coldest oldest newest richest)
+  (word greater more greatest most)
   (desc comparative-selecting-the-greater-value)
 done
 
 shabda viveka-min
-  (word lighter slower smaller shorter weaker lesser less lower narrower thinner softer quieter cooler dimmer younger poorer lightest slowest smallest shortest weakest least lowest narrowest thinnest softest quietest coolest dimmest youngest poorest)
+  (word lesser less least)
   (desc comparative-selecting-the-lesser-value)
 done
 

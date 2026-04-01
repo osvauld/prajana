@@ -170,7 +170,6 @@ def test_total_momentum_resolves(vy):
 # ── gate: colour_classifier ───────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="colour classifier: red/blue not split into distinct sankhya subjects")
 def test_red_blue_distinct(vy):
     g = vy.bqg("a box has 5 red balls and 3 blue balls")
     sankhya = [
@@ -284,7 +283,6 @@ def test_distance_speed_time(vy):
     assert "120" in r
 
 
-@xfail(strict=True, reason="rectangle area mantra not in pipeline")
 def test_area_rectangle(vy):
     """rectangle area mantra: A = length × width."""
     r = vy.answer("a rectangle has length 8 and width 5. find area")

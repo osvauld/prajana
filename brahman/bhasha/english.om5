@@ -170,13 +170,25 @@
   (sthita english kta-pratyaya bhuta-kaala))
 
 (bhasha english-plural-es
-  (sthita english vachana-bahu))
+  (swarupa pratyaya)
+  (sthita english vachana-bahu subanta-viveka)
+  (janya subanta)
+  (phala subanta)
+  (kriya vachana-bahu))
 
 (bhasha english-plural-ies
-  (sthita english vachana-bahu))
+  (swarupa pratyaya)
+  (sthita english vachana-bahu subanta-viveka)
+  (janya subanta)
+  (phala subanta)
+  (kriya vachana-bahu))
 
 (bhasha english-plural-regular
-  (sthita english vachana-bahu))
+  (swarupa pratyaya)
+  (sthita english vachana-bahu subanta-viveka)
+  (janya subanta)
+  (phala subanta)
+  (kriya vachana-bahu))
 
 (bhasha english-shatr-ing
   (sthita english shatr-pratyaya vartamana-kaala))
@@ -526,6 +538,39 @@
   (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
   (naama added))
 
+; ── direction adverbs (bridge to sangati kshaya/vriddhi) ──────────────
+
+(bhasha adverb-away
+  (swarupa avyaya)
+  (sthita kshaya)
+  (naama away))
+
+(bhasha adverb-off
+  (swarupa avyaya)
+  (sthita kshaya)
+  (naama off))
+
+(bhasha adverb-back
+  (swarupa avyaya)
+  (sthita vriddhi)
+  (naama back))
+
+; ── greetings (bridge to sangati sambodhana/abhisambodhana) ───────────
+
+(bhasha greeting-hello
+  (swarupa sambodhana)
+  (naama hello hi))
+
+(bhasha greeting-hey
+  (swarupa abhisambodhana)
+  (naama hey yo))
+
+(bhasha greeting-formal
+  (swarupa aamantrana)
+  (naama greetings))
+
+; ── English→sangati bridge words ─────────────────────────────────────
+
 (bhasha independent
   (domain bhasha/english)
   (sthita english swatantra))
@@ -637,6 +682,235 @@
 (bhasha zero
   (domain bhasha/english)
   (sthita english shunya))
+
+; ── adjective concept nodes ──────────────────────────────────────────────────
+; swarupa→visheshana marks these as adjectives
+; kramanusara→property: what the adjective measures
+; sthita→viveka-max/min: comparison direction
+; pratipaksha→opposite: antonym pair
+; naama: base + comparative + superlative word forms
+
+; ── mass ────────────────────────────────────────────────────────────────────
+(bhasha adj-heavy
+  (swarupa visheshana)
+  (kramanusara mass)
+  (sthita viveka-max)
+  (pratipaksha adj-light)
+  (naama heavy heavier heaviest))
+
+(bhasha adj-light
+  (swarupa visheshana)
+  (kramanusara mass)
+  (sthita viveka-min)
+  (pratipaksha adj-heavy)
+  (naama light lighter lightest))
+
+; ── speed ───────────────────────────────────────────────────────────────────
+(bhasha adj-fast
+  (swarupa visheshana)
+  (kramanusara speed)
+  (sthita viveka-max)
+  (pratipaksha adj-slow)
+  (naama fast faster fastest))
+
+(bhasha adj-slow
+  (swarupa visheshana)
+  (kramanusara speed)
+  (sthita viveka-min)
+  (pratipaksha adj-fast)
+  (naama slow slower slowest))
+
+; ── volume/size ─────────────────────────────────────────────────────────────
+(bhasha adj-big
+  (swarupa visheshana)
+  (kramanusara volume)
+  (sthita viveka-max)
+  (pratipaksha adj-small)
+  (naama big bigger biggest))
+
+(bhasha adj-large
+  (swarupa visheshana)
+  (kramanusara volume)
+  (sthita viveka-max)
+  (pratipaksha adj-small)
+  (naama large larger largest))
+
+(bhasha adj-small
+  (swarupa visheshana)
+  (kramanusara volume)
+  (sthita viveka-min)
+  (pratipaksha adj-big)
+  (naama small smaller smallest))
+
+; ── height ──────────────────────────────────────────────────────────────────
+(bhasha adj-tall
+  (swarupa visheshana)
+  (kramanusara height)
+  (sthita viveka-max)
+  (pratipaksha adj-short)
+  (naama tall taller tallest))
+
+(bhasha adj-short
+  (swarupa visheshana)
+  (kramanusara height)
+  (sthita viveka-min)
+  (pratipaksha adj-tall)
+  (naama short shorter shortest))
+
+(bhasha adj-high
+  (swarupa visheshana)
+  (kramanusara height)
+  (sthita viveka-max)
+  (pratipaksha adj-low)
+  (naama high higher highest))
+
+(bhasha adj-low
+  (swarupa visheshana)
+  (kramanusara height)
+  (sthita viveka-min)
+  (pratipaksha adj-high)
+  (naama low lower lowest))
+
+; ── length ──────────────────────────────────────────────────────────────────
+(bhasha adj-long
+  (swarupa visheshana)
+  (kramanusara length)
+  (sthita viveka-max)
+  (naama long longer longest))
+
+; ── width ───────────────────────────────────────────────────────────────────
+(bhasha adj-wide
+  (swarupa visheshana)
+  (kramanusara width)
+  (sthita viveka-max)
+  (pratipaksha adj-narrow)
+  (naama wide wider widest))
+
+(bhasha adj-narrow
+  (swarupa visheshana)
+  (kramanusara width)
+  (sthita viveka-min)
+  (pratipaksha adj-wide)
+  (naama narrow narrower narrowest))
+
+; ── temperature ─────────────────────────────────────────────────────────────
+(bhasha adj-hot
+  (swarupa visheshana)
+  (kramanusara temperature)
+  (sthita viveka-max)
+  (pratipaksha adj-cold)
+  (naama hot hotter hottest))
+
+(bhasha adj-cold
+  (swarupa visheshana)
+  (kramanusara temperature)
+  (sthita viveka-min)
+  (pratipaksha adj-hot)
+  (naama cold colder coldest))
+
+(bhasha adj-warm
+  (swarupa visheshana)
+  (kramanusara temperature)
+  (sthita viveka-max)
+  (pratipaksha adj-cool)
+  (naama warm warmer warmest))
+
+(bhasha adj-cool
+  (swarupa visheshana)
+  (kramanusara temperature)
+  (sthita viveka-min)
+  (pratipaksha adj-warm)
+  (naama cool cooler coolest))
+
+; ── force/strength ──────────────────────────────────────────────────────────
+(bhasha adj-strong
+  (swarupa visheshana)
+  (kramanusara force)
+  (sthita viveka-max)
+  (pratipaksha adj-weak)
+  (naama strong stronger strongest))
+
+(bhasha adj-weak
+  (swarupa visheshana)
+  (kramanusara force)
+  (sthita viveka-min)
+  (pratipaksha adj-strong)
+  (naama weak weaker weakest))
+
+; ── common-sense adjectives (no kramanusara yet) ────────────────────────────
+(bhasha adj-deep
+  (swarupa visheshana)
+  (sthita viveka-max)
+  (naama deep deeper deepest))
+
+(bhasha adj-dense
+  (swarupa visheshana)
+  (sthita viveka-max)
+  (naama dense denser densest))
+
+(bhasha adj-bright
+  (swarupa visheshana)
+  (sthita viveka-max)
+  (pratipaksha adj-dim)
+  (naama bright brighter brightest))
+
+(bhasha adj-dim
+  (swarupa visheshana)
+  (sthita viveka-min)
+  (pratipaksha adj-bright)
+  (naama dim dimmer dimmest))
+
+(bhasha adj-loud
+  (swarupa visheshana)
+  (sthita viveka-max)
+  (pratipaksha adj-quiet)
+  (naama loud louder loudest))
+
+(bhasha adj-quiet
+  (swarupa visheshana)
+  (sthita viveka-min)
+  (pratipaksha adj-loud)
+  (naama quiet quieter quietest))
+
+(bhasha adj-old
+  (swarupa visheshana)
+  (sthita viveka-max)
+  (pratipaksha adj-young)
+  (naama old older oldest))
+
+(bhasha adj-young
+  (swarupa visheshana)
+  (sthita viveka-min)
+  (pratipaksha adj-old)
+  (naama young younger youngest))
+
+(bhasha adj-new
+  (swarupa visheshana)
+  (sthita viveka-min)
+  (pratipaksha adj-old)
+  (naama new newer newest))
+
+(bhasha adj-rich
+  (swarupa visheshana)
+  (sthita viveka-max)
+  (pratipaksha adj-poor)
+  (naama rich richer richest))
+
+(bhasha adj-poor
+  (swarupa visheshana)
+  (sthita viveka-min)
+  (pratipaksha adj-rich)
+  (naama poor poorer poorest))
+
+(bhasha adj-thin
+  (swarupa visheshana)
+  (sthita viveka-min)
+  (naama thin thinner thinnest))
+
+(bhasha adj-soft
+  (swarupa visheshana)
+  (sthita viveka-min)
+  (naama soft softer softest))
 
 ; ── verb morphology rules ────────────────────────────────────────────────────
 ; each rule: sthita = tense/aspect category, shabda has suffix + stem-suffix

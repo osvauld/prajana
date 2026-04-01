@@ -136,6 +136,15 @@ shabda diffusion
   (desc the-spreading-of-a-quantity-from-high-to-low-concentration-driven-by-the-laplacian)
 done
 
+shabda distance
+  (desc total-path-length-travelled-by-an-object)
+done
+
+shabda distance-mantra
+  (name distance)
+  (unit metre)
+done
+
 shabda dls-pseudoinverse
   (alias dls-pseudoinverse)
   (desc J-T-times-J-JT-plus-lambda-I-inverse-minimum-norm-IK-step-seema-lambda-guards-singularity-viparita-via-viveka)
@@ -247,6 +256,16 @@ done
 shabda gravity
   (word gravity)
   (constants-key gravitational-acceleration)
+done
+
+shabda impulse-mantra
+  (name force)
+  (unit newton)
+done
+
+shabda average-velocity-mantra
+  (name velocity)
+  (unit metre-per-second)
 done
 
 shabda hard-constraint

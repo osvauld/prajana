@@ -1,0 +1,63 @@
+-- kaala-avastha: temporal qualification via copula tense.
+-- bhuta-kaala → "initial", bhavishya-kaala → "final", vartamana-kaala → no change.
+-- general: works for any concept with initial/final avastha.
+-- walks graph sequentially: when [concept, satya] is followed by a copula with
+-- bhuta-kaala, and concept has "initial" in its avastha, rewrites to initial-concept.
+(tantra kaala-avastha (g)
+  -- pass 1: find [concept, satya-index] → kaala from the copula that follows it.
+  -- track: for each satya triple, what copula follows it in the same grade?
+  (state (reduce g [[], "", -1, 0] (fn st tri ->
+    let marks   = nth st 0
+    let pending = nth st 1
+    let pend-i  = nth st 2
+    let i       = nth st 3
+    let edge = nth tri 1
+    let word = nth tri 0
+    -- new grade boundary: clear pending
+    cond (eq edge "viraam") [marks, "", -1, (add i 1)]
+    -- satya concept: remember it and its index
+    (eq edge "satya") [marks, word, i, (add i 1)]
+    -- copula: extract kaala, mark the pending concept if applicable
+    (eq edge "copula")
+      (let resolved = shabda-anveshana word
+       let kaala-edges = cond (exists resolved) (walk (to-string resolved) "sthita") otherwise []
+       let kaala = reduce kaala-edges "" (fn found e ->
+         cond (has-text found) found
+         (member e ["bhuta-kaala", "bhavishya-kaala"]) (to-string e)
+         otherwise found)
+       cond (and (has-text pending) (has-text kaala))
+         [(append marks [[pending, pend-i, kaala]]), "", -1, (add i 1)]
+       otherwise [marks, pending, pend-i, (add i 1)])
+    otherwise [marks, pending, pend-i, (add i 1)])))
+  (marks (nth state 0))
+  -- pass 2: for each mark, check avastha and compute replacement
+  (replacements (reduce marks [] (fn acc mark ->
+    let concept   = nth mark 0
+    let tri-index = nth mark 1
+    let kaala     = nth mark 2
+    let qualifier = cond (eq kaala "bhuta-kaala") "initial"
+      (eq kaala "bhavishya-kaala") "final"
+      otherwise ""
+    let avasthas = cond (has-text qualifier) (map (walk concept "avastha") (fn a -> to-string a)) otherwise []
+    let has-qual = cond (has-text qualifier) (member qualifier avasthas) otherwise false
+    let compound = cond has-qual (concat qualifier "-" concept) otherwise ""
+    let found    = cond (has-text compound) (lookup compound) otherwise _none
+    cond (and has-qual (exists found))
+      (append acc [[tri-index, (to-string found)]])
+    otherwise acc)))
+  -- pass 3: apply replacements by index
+  (rw-indices (map replacements (fn r -> nth r 0)))
+  (rw-names   (map replacements (fn r -> nth r 1)))
+  (cond (not (has-items replacements)) g
+  otherwise
+    (reduce (range (length g)) [] (fn out i ->
+      let tri = nth g i
+      let idx = reduce (range (length rw-indices)) -1 (fn found j ->
+        cond (neq found -1) found
+        (eq i (nth rw-indices j)) j
+        otherwise found)
+      cond (neq idx -1)
+        (let new-name = nth rw-names idx
+         (append out [[new-name, "satya", new-name]]))
+      otherwise
+        (append out [tri])))))
