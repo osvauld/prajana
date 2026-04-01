@@ -96,6 +96,28 @@
   (yukta apeksha sthira-apeksha kshetrajna group-witness)
   (kriya addition))
 
+(mantra average-velocity-mantra
+  (vishesa linear-motion-varga)
+  (varga physics-mantra)
+  (swarupa velocity)
+  (phala velocity)
+  (janya final-displacement initial-displacement time)
+  (krama division ( subtraction final-displacement initial-displacement ) time))
+
+(kosha distance
+  (vishesa linear-motion-varga)
+  (abheda displacement)
+  (sthita krama kshetrajna)
+  (yukta kshetra speed time))
+
+(mantra distance-mantra
+  (vishesa linear-motion-varga)
+  (varga physics-mantra)
+  (swarupa distance)
+  (phala distance)
+  (janya speed time)
+  (krama multiplication speed time))
+
 (kosha speed
   (vishesa linear-motion-varga)
   (abheda vegam)

@@ -200,52 +200,39 @@
   (swarupa living)
   (yukta sensing moving))
 
-(kosha animal
-  (swarupa living)
-  (yukta breathing)
-  (sthita taxonomy-varga))
+(kosha animal-varga
+  (swarupa living-varga)
+  (yukta breathing sensing moving))
 
 (kosha bird-varga
-  (swarupa animal)
+  (swarupa animal-varga)
   (yukta wings feathers egg-laying))
 
 (kosha breathing
   (sthita taxonomy-varga))
 
 (kosha cat
-  (swarupa mammal)
-  (sthita taxonomy-varga))
+  (swarupa mammal-varga))
 
 (kosha dog
-  (swarupa mammal)
-  (sthita taxonomy-varga))
+  (swarupa mammal-varga))
 
 (kosha heart
   (sthita taxonomy-varga))
 
 (kosha human
-  (swarupa mammal)
-  (sthita taxonomy-varga))
+  (swarupa mammal-varga))
 
 (kosha living-varga
-  (swarupa taxonomy)
+  (swarupa taxonomy-varga)
   (yukta breathing growing))
 
-(kosha living
-  (sthita taxonomy-varga)
-  (yukta breathing))
-
 (kosha mammal-varga
-  (swarupa animal)
+  (swarupa animal-varga)
   (yukta warm-blooded heart))
 
-(kosha mammal
-  (swarupa animal)
-  (sthita taxonomy-varga))
-
 (kosha sparrow
-  (swarupa bird)
-  (sthita taxonomy-varga))
+  (swarupa bird-varga))
 
 (kosha taxonomy-varga
   (sthita domain-common-sense)

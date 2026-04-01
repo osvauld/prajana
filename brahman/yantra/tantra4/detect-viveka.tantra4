@@ -1,9 +1,13 @@
 -- detects viveka (comparison) intent from graph.
+-- adjective nodes (adj-heavy etc.) carry sthita→viveka-max/min + kramanusara→property.
 (tantra detect-viveka (expanded)
   (entities (prathama-sparsha expanded))
   (all-subjects (unique (expanded | where [s, e, o] | collect (to-string s))))
-  (max-word (nth (filter all-subjects (fn w -> eq (to-string (shabda-anveshana w)) "viveka-max")) 0))
-  (min-word (nth (filter all-subjects (fn w -> eq (to-string (shabda-anveshana w)) "viveka-min")) 0))
+  -- find viveka subjects: node IS viveka-max/min OR has sthita→viveka-max/min
+  (max-word (nth (filter all-subjects (fn w ->
+    (or (eq w "viveka-max") (member "viveka-max" (walk w "sthita"))))) 0))
+  (min-word (nth (filter all-subjects (fn w ->
+    (or (eq w "viveka-min") (member "viveka-min" (walk w "sthita"))))) 0))
   (has-max (exists max-word))
   (has-min (exists min-word))
   (is-viveka (and (gt (length entities) 1) (or has-max has-min)))
@@ -11,7 +15,11 @@
   (max-qword (nth (expanded | where [s, e, o] | and (eq s max-word) | and (eq e "query-word") | collect (to-string o)) 0))
   (min-qword (nth (expanded | where [s, e, o] | and (eq s min-word) | and (eq e "query-word") | collect (to-string o)) 0))
   (comp-word (cond (and has-max (exists max-qword)) max-qword has-max max-word (exists min-qword) min-qword otherwise min-word))
-  -- vishesa-based concept (e.g. viveka-max -> vishesa -> mass)
+  -- kramanusara-based concept from adjective node (e.g. adj-heavy → kramanusara → mass)
+  (viveka-src (cond has-max max-word has-min min-word otherwise ""))
+  (krama-concept (cond (has-text viveka-src)
+    (to-string (nth (walk viveka-src "kramanusara") 0)) otherwise ""))
+  -- vishesa-based concept fallback (e.g. viveka-max → vishesa → mass)
   (vishesa-concept (nth (expanded | where [s, e, o]
     | and (eq s comp-word)
     | and (eq e "vishesa")
@@ -24,13 +32,13 @@
   (grade-concept (nth (reduce q-grade [] (fn acc tri ->
     let s = nth tri 0
     let e = nth tri 1
-    cond (and (eq e "satya")
-              (neq s "viveka-max")
-              (neq s "viveka-min")
-              (not (member s entities)))
+    let is-viveka-node = (or (eq s "viveka-max") (eq s "viveka-min")
+      (member "viveka-max" (walk s "sthita")) (member "viveka-min" (walk s "sthita")))
+    cond (and (eq e "satya") (not is-viveka-node) (not (member s entities)))
       (append acc [s])
     otherwise acc)) 0))
-  (comp-concept (cond (exists vishesa-concept) vishesa-concept
+  (comp-concept (cond (has-text krama-concept) krama-concept
+    (exists vishesa-concept) vishesa-concept
     (exists grade-concept) grade-concept
     otherwise ""))
   (cond is-viveka

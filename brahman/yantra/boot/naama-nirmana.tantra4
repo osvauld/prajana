@@ -1,0 +1,37 @@
+-- naama-nirmana: emit reverse naama edges for nominalization rules at boot.
+-- for concepts ending in a rule's stem-suffix (e.g. "ation"),
+-- derives the verb stem (e.g. "accelerate") and adds it as naama on the concept.
+-- this makes word-node "accelerate" → acceleration.
+(tantra naama-nirmana (_)
+  (all-concepts (fixpoint (walk "subanta" "swarupa") (fn current ->
+    (reduce current current (fn acc nd ->
+      let nd-str = to-string nd
+      cond (not (ends-with nd-str "-varga")) acc
+      otherwise
+        let children = walk nd-str "swarupa"
+        (reduce children acc (fn a2 child ->
+          cond (member (to-string child) acc) a2
+          otherwise (append a2 [child]))))))))
+  -- walk nominalization rules (janya→tinanta means: input is a verb)
+  (nom-rules (filter (walk-in "pratyaya" "swarupa")
+    (fn rl -> member "tinanta" (walk (to-string rl) "janya"))))
+  -- for each rule × concept: if concept ends in stem-suffix,
+  -- emit verb-stem AND verb-stem+"s" as naama on the concept.
+  -- e.g. acceleration → naama → accelerate, accelerates
+  (reduce nom-rules 0 (fn total rl ->
+    let rl-str = to-string rl
+    let sf = shabda rl-str "suffix"
+    let ssf = shabda rl-str "stem-suffix"
+    let ssf-len = string-length ssf
+    cond (not (has-text ssf)) total
+    otherwise
+      (add total (reduce all-concepts 0 (fn count nd ->
+        let nd-str = to-string nd
+        cond (not (ends-with nd-str ssf)) count
+        otherwise
+          let base-len = sub (string-length nd-str) ssf-len
+          let verb-stem = concat (substr nd-str 0 base-len) sf
+          let verb-s = concat verb-stem "s"
+          let _ = emit-edge nd-str "naama" verb-stem
+          let _ = emit-edge nd-str "naama" verb-s
+          (add count 1)))))))

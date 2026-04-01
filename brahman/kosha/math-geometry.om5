@@ -403,6 +403,32 @@
   (siddha transformation)
   (sthita set))
 
+(kosha area
+  (vishesa geometry-varga)
+  (swarupa scalar)
+  (abheda kshetra)
+  (yukta length width))
+
+(kosha length
+  (vishesa geometry-varga)
+  (swarupa scalar)
+  (abheda displacement aayaama)
+  (yukta width area))
+
+(kosha width
+  (vishesa geometry-varga)
+  (swarupa scalar)
+  (abheda displacement aayaama)
+  (yukta length area))
+
+(mantra rectangle-area-mantra
+  (vishesa geometry-varga)
+  (varga physics-mantra)
+  (swarupa area)
+  (phala area)
+  (janya length width)
+  (krama multiplication length width))
+
 (kosha volume
   (vishesa geometry-varga)
   (swarupa scalar)

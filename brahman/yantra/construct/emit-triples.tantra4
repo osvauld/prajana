@@ -1,6 +1,8 @@
 -- emit triples for a single word based on its role and context.
 -- nd (resolved node) comes pre-resolved from BQG via info — never re-resolve here.
-(tantra emit-triples (word info subgraphs)
+-- pending: grammar modifier set by preceding word (e.g. "pratishedha", "adhikarana").
+-- concept words use pending as their edge instead of "satya", then pending is cleared.
+(tantra emit-triples (word info subgraphs pending)
   (nd (word-info info "node"))
   (rl (word-info info "role"))
   (ly (word-info info "layer"))
@@ -25,8 +27,11 @@
   (is-direction-word (or (eq nd-str "kshaya") (eq nd-str "vriddhi")))
   (is-tinanta (and (exists nd) (member "tinanta" (walk nd-str "swarupa"))))
   (is-verb-form (or is-direction-word is-tinanta (ends-with word "ed") (ends-with word "ing")))
+  -- is-viveka: node IS viveka-max/min, or adjective with sthita→viveka-max/min
+  (is-viveka (and (exists nd) (or (eq nd-str "viveka-max") (eq nd-str "viveka-min")
+    (member "viveka-max" (walk nd-str "sthita")) (member "viveka-min" (walk nd-str "sthita")))))
   -- "2 more" = vriddhi, not viveka comparison. Suppress viveka when preceded by number.
-  (is-viveka-after-num (and has-pend is-concept (or (eq nd-str "viveka-max") (eq nd-str "viveka-min"))))
+  (is-viveka-after-num (and has-pend is-concept is-viveka))
   (after-loc (eq prev-edge "adhikarana"))
   (active-can-claim (and has-act (neq prev-edge "shashthi-vibhakti") (concept-in-grade ac cur-grade)))
   (is-dravya (and (not (exists nd)) has-pend (not is-verb-form) (not after-loc) (not active-can-claim)))
@@ -36,6 +41,8 @@
   (main-triples (cond (eq rl "intent") [[word, "vidhi-kaala", "solve-for"]]
     is-sambodhana [[word, nd-str, word]]
     is-copula [[word, "copula", word]]
+    -- grammar word with pending modifier: emit pending edge so modifier is consumed
+    (and (eq rl "grammar") (has-text pending)) [[word, pending, word]]
     (eq rl "grammar") []
     (and has-num has-unit has-act)
       [[(to-string ac), "sankhya", nv], [(to-string ac), "matra", (to-string un)]]
@@ -46,12 +53,12 @@
       [[(to-string ac), "sankhya", pn], [(to-string ac), "matra", nd-str]]
     is-viveka-after-num [[word, "mithya", word]]
     is-rashi-label [[word, "mithya", word]]
-    is-verb-form [[word, "mithya", word]]
-    is-concept (cond (or (eq nd-str "viveka-max") (eq nd-str "viveka-min"))
-      [[nd-str, "satya", nd-str], [nd-str, "query-word", word]]
+    is-verb-form (cond (has-text pending) [[word, pending, word]] otherwise [[word, "mithya", word]])
+    is-concept (cond (has-text pending) [[nd-str, pending, nd-str]]
+      is-viveka [[nd-str, "satya", nd-str], [nd-str, "query-word", word]]
       otherwise [[nd-str, "satya", nd-str]])
-    is-dravya [[word, "satya", word]]
-    otherwise [[word, "mithya", word]]))
+    is-dravya (cond (has-text pending) [[word, pending, word]] otherwise [[word, "satya", word]])
+    otherwise (cond (has-text pending) [[word, pending, word]] otherwise [[word, "mithya", word]])))
   -- when multiple candidates, emit candidate edges for downstream disambiguation
   (candidate-triples (cond (gt (length candidates) 1)
     (map candidates (fn c -> [word, "candidate", (to-string c)]))

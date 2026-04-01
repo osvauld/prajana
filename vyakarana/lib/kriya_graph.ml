@@ -88,6 +88,23 @@ let bind_krama_constants (k : proof_graph) (mantra_name : string)
     end
   ) janya_names
 
+(* Swarupa fallback: if a janya concept is unbound, check swarupa parents.
+   e.g. final-momentum has swarupa → momentum; if momentum is bound, use its value. *)
+let bind_swarupa_fallbacks (k : proof_graph) (mantra_name : string)
+    (_n : nigamana) (binds : (string, float) Hashtbl.t) : unit =
+  let janya_names = List.filter_map (fun e ->
+    if e.source = mantra_name && e.relation = janya then Some e.target else None
+  ) _n.edges in
+  List.iter (fun jn ->
+    if not (Hashtbl.mem binds jn) then begin
+      let parents = Vidya.swarupa_of k jn in
+      List.iter (fun parent ->
+        if not (Hashtbl.mem binds jn) && Hashtbl.mem binds parent then
+          Hashtbl.replace binds jn (Hashtbl.find binds parent)
+      ) parents
+    end
+  ) janya_names
+
 (* Resolve op name via eval_index + ganana graph walk fallback *)
 let resolve_krama_op (k : proof_graph) (tok : string) : string =
   (* ganana edge takes priority — resolves graph concept names to eval primitives *)
@@ -395,6 +412,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
       else
         let binds = load_krama_bindings bindings_v in
         bind_krama_constants k mantra_name n binds;
+        bind_swarupa_fallbacks k mantra_name n binds;
         let toks = tokenize_krama krama in
         (* Recursive evaluator for krama s-expression *)
         let rec eval_krama toks =
@@ -553,6 +571,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
       else
         let binds = load_krama_bindings bindings_v in
         bind_krama_constants k mantra_name n binds;
+        bind_swarupa_fallbacks k mantra_name n binds;
         let janya_names = List.filter_map (fun e ->
           if e.source = mantra_name && e.relation = janya
           then Some e.target else None

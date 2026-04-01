@@ -1,0 +1,39 @@
+-- vachana-nirmana: plural forms from concept seeds at boot.
+-- fixpoint seed: recursively expands vargas from subanta → swarupa
+-- until no new nodes found. reaches all depths (cat, dog, etc.).
+-- emits janaka (parent link) + sthita (grammar) + naama (base→plural).
+-- janaka instead of janya: derivation link that doesn't pollute proof graph.
+-- sthita→vachana-bahu is safe now that shabda-anveshana-rules uses
+-- swarupa→pratyaya for rule discovery instead of sthita walks.
+(tantra vachana-nirmana (_)
+  (all-concepts (fixpoint (walk "subanta" "swarupa") (fn current ->
+    (reduce current current (fn acc nd ->
+      let nd-str = to-string nd
+      cond (not (ends-with nd-str "-varga")) acc
+      otherwise
+        let children = walk nd-str "swarupa"
+        (reduce children acc (fn a2 child ->
+          cond (member (to-string child) acc) a2
+          otherwise (append a2 [child]))))))))
+  (reduce all-concepts 0 (fn count nd ->
+    let nd-str = to-string nd
+    cond (ends-with nd-str "-varga") count
+    (ends-with nd-str "-mantra") count
+    (ends-with nd-str "-definition") count
+    (ends-with nd-str "-kramanusara") count
+    otherwise
+      let base = nd-str
+      let blen = string-length base
+      let ends-y = ends-with base "y"
+      let needs-es = (or (ends-with base "s") (or (ends-with base "x") (or (ends-with base "z") (or (ends-with base "ch") (ends-with base "sh")))))
+      let plural-word = cond ends-y
+        (concat (substr base 0 (sub blen 1)) "ies")
+        needs-es (concat base "es")
+        otherwise (concat base "s")
+      let already = exists (lookup plural-word)
+      cond already count
+      otherwise
+        let slokas = [(concat nd-str "-janaka vachana-bahu-sthita")]
+        let _ = emit-node plural-word "bhasha" slokas ""
+        let _ = emit-edge nd-str "naama" plural-word
+        (add count 1))))

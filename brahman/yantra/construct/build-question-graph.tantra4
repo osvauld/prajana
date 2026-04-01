@@ -1,4 +1,8 @@
 -- build question graph from sentence words.
+-- accumulator is [triples, pending-modifier] — grammar words (pratishedha, vibhakti)
+-- set pending instead of emitting self-loops; next concept consumes the pending
+-- as its edge type. This makes the graded ring structure explicit: negated concepts
+-- get edge "pratishedha", located concepts get edge "adhikarana", etc.
 (tantra build-question-graph (sentence)
   (sent-punct [".", "?", "!", ","])
   (raw-words (split sentence " "))
@@ -22,7 +26,9 @@
     otherwise
       [(append result [word]), clean])))
   (words (nth merged 0))
-  (graph (reduce words [] (fn g word ->
+  (graph (reduce words [[], ""] (fn acc word ->
+    let g       = nth acc 0
+    let pending = nth acc 1
     let wlen      = string-length word
     let last-ch   = (cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise "")
     let has-punct = member last-ch sent-punct
@@ -37,21 +43,37 @@
     let uni-str   = nth parts 1
     let nv        = (cond (has-text num-str) num-str otherwise "")
     let un        = (cond (has-text uni-str) (shabda-anveshana uni-str) otherwise "")
-    let is-dvandva  = has-grammar-sthita nd rl "dvandva"
-    let is-locative = has-grammar-sthita nd rl "saptami-vibhakti"
-    let is-ablative = has-grammar-sthita nd rl "panchami-vibhakti"
-    let is-dative   = has-grammar-sthita nd rl "chaturthi-vibhakti"
+    let is-dvandva     = has-grammar-sthita nd rl "dvandva"
+    let is-locative    = has-grammar-sthita nd rl "saptami-vibhakti"
+    let is-ablative    = has-grammar-sthita nd rl "panchami-vibhakti"
+    let is-dative      = has-grammar-sthita nd rl "chaturthi-vibhakti"
     let is-instrumental = has-grammar-sthita nd rl "trtiya-vibhakti"
     let is-pratishedha = has-grammar-sthita nd rl "pratishedha"
-    let is-vibhakti = or is-locative (or is-ablative (or is-dative is-instrumental))
-    let vibhakti-edge = cond is-locative "adhikarana" is-ablative "apadana" is-dative "sampradana" is-instrumental "karana" otherwise ""
+    let is-vibhakti    = or is-locative (or is-ablative (or is-dative is-instrumental))
+    let vibhakti-edge  = cond is-locative "adhikarana" is-ablative "apadana" is-dative "sampradana" is-instrumental "karana" otherwise ""
+    -- pratishedha uses pending accumulator: sets pending="pratishedha", next content
+    -- word emits [word, pratishedha, word] instead of mithya/satya. This makes
+    -- negated concepts directly findable via idx-subjects g "pratishedha".
+    -- vibhakti keeps self-loop emission: phrasal verbs and article-concept gaps
+    -- make pending too fragile for case relations.
+    let next-pending = cond is-pratishedha "pratishedha" otherwise ""
     let current-grade = reduce g [] (fn a t -> cond (or (eq (nth t 1) "viraam") (eq (nth t 1) "dvandva")) [] otherwise (append a [t]))
     let entity-reg = triples-by-edge g "satya"
     let bind-ledger = filter g (fn t -> (or (eq (nth t 1) "sankhya") (eq (nth t 1) "matra")))
-    let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "apadana") (eq (nth t 1) "sampradana") (eq (nth t 1) "karana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala")))
+    let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "apadana") (eq (nth t 1) "sampradana") (eq (nth t 1) "karana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala") (eq (nth t 1) "pratishedha")))
     let subgraphs = [current-grade, entity-reg, bind-ledger, grammar-trail]
     let info      = [(to-string nd), rl, ly, nv, (to-string un), candidates]
-    let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]] is-pratishedha [[clean, "pratishedha", clean]] is-vibhakti [[clean, vibhakti-edge, clean]] otherwise (emit-triples clean info subgraphs)
+    let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]]
+      is-pratishedha []
+      is-vibhakti [[clean, vibhakti-edge, clean]]
+      otherwise (emit-triples clean info subgraphs pending)
     let with-word = (append g triples)
-    (cond (has-text punct) (append with-word [[punct, "viraam", punct]]) otherwise with-word))))
-  (sandhi-viveka graph))
+    -- clear pending only when content triples were emitted; grammar words (the, a)
+    -- emit [] and must not consume pending.
+    let new-pending = cond is-pratishedha next-pending
+      (and (has-text pending) (has-items triples)) ""
+      otherwise pending
+    let result = (cond (has-text punct) (append with-word [[punct, "viraam", punct]]) otherwise with-word)
+    -- grade boundary clears pending
+    [(result), (cond (has-text punct) "" otherwise new-pending)])))
+  (sandhi-viveka (nth graph 0)))

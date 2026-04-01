@@ -107,7 +107,27 @@
   (phala vector)
   (janaka angular-acceleration))
 
+(mantra impulse-mantra
+  (vishesa dynamics-varga)
+  (varga physics-mantra)
+  (swarupa force)
+  (phala force)
+  (janya final-momentum initial-momentum time)
+  (krama division ( subtraction final-momentum initial-momentum ) time))
+
 ; ── missing dimensional mantras ────────────────────────────────
+
+(mantra initial-momentum-definition
+  (varga unit-mantra)
+  (phala initial-momentum)
+  (janya momentum)
+  (krama momentum))
+
+(mantra final-momentum-definition
+  (varga unit-mantra)
+  (phala final-momentum)
+  (janya momentum)
+  (krama momentum))
 
 (mantra spring-constant-definition
   (varga unit-mantra)

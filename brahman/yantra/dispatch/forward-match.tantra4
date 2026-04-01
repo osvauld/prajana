@@ -7,6 +7,12 @@
     let janya       = nth contract 0
     let sf-is-janya = member solve-for janya
     let all-ok      = reduce janya true (fn a r ->
-      (and a (or (member r bcs) (gt (string-length (shabda (to-string r) "constants-key")) 0))))
+      let direct = member r bcs
+      let is-const = gt (string-length (shabda (to-string r) "constants-key")) 0
+      -- swarupa fallback: final-momentum → swarupa → momentum → check bcs
+      let swarupa-parents = cond (or direct is-const) [] otherwise (walk r "swarupa")
+      let via-swarupa = reduce swarupa-parents false (fn f p ->
+        or f (member (to-string p) bcs))
+      (and a (or direct is-const via-swarupa)))
     cond (or (has-items acc) (not all-ok) sf-is-janya) acc
     otherwise [m, vps, "forward"])))

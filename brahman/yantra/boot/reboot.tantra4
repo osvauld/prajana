@@ -1,4 +1,4 @@
 -- runs all boot-time graph enrichment passes.
 (tantra reboot (_)
-  (varga-inheritance "")
-  (kriya-nirmana ""))
+  (let _ = varga-inheritance "" in
+   (pratyaya-nirmana "")))

@@ -1,13 +1,32 @@
 -- resolve a mantra's janya concepts to numeric values from bindings or constants.
+-- swarupa fallback: if final-momentum not bound, walk swarupa → momentum → use its value.
 (tantra resolve-janya-args (mantra bindings)
 
   (janya (walk mantra "janya"))
 
-  (reduce janya [] (fn acc concept ->
+  -- pre-compute: for each janya, find a swarupa parent that exists in bindings
+  (binding-keys (map bindings (fn kv -> nth kv 0)))
+  (swarupa-map (map janya (fn concept ->
+    let parents = walk concept "swarupa"
+    reduce parents "" (fn found p ->
+      cond (has-text found) found
+      (member (to-string p) binding-keys) (to-string p)
+      otherwise found))))
+
+  (reduce (range (length janya)) [] (fn acc idx ->
+    let concept = nth janya idx
     let ck = shabda concept "constants-key"
+    let direct = reduce bindings "" (fn a2 kv ->
+      cond (eq (nth kv 0) concept) (nth kv 1) otherwise a2)
+    -- swarupa fallback: check parent in bindings
+    let parent = nth swarupa-map idx
+    let via-parent = cond (and (not (has-text direct)) (has-text parent))
+      (reduce bindings "" (fn a2 kv ->
+        cond (eq (nth kv 0) parent) (nth kv 1) otherwise a2))
+      otherwise ""
     let v  = cond (has-text ck)
       (nth (split-numeric (shabda "physics-constants" ck)) 0)
-      otherwise
-        (reduce bindings "" (fn a2 kv ->
-          cond (eq (nth kv 0) concept) (nth kv 1) otherwise a2))
+      (has-text direct) direct
+      (has-text via-parent) via-parent
+      otherwise ""
     append acc [v])))

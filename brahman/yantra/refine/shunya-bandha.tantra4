@@ -1,29 +1,20 @@
 -- shunya-bandha: indexed graph version.
 -- signal=shunya nodes get [concept, sankhya, 0.] with avastha qualification.
 -- from-rest compound encodes apadana semantics → no separate apadana edge needed.
--- pratishedha guard: if a pratishedha triple immediately precedes a satya triple
--- in the same grade, that satya node is negated — skip its zero binding.
+-- pratishedha guard: BQG now emits negated concepts with edge "pratishedha" instead
+-- of "satya", so idx-subjects g "pratishedha" directly gives negated concept names.
 (tantra shunya-bandha (g)
   (satya-nodes (idx-subjects g "satya"))
   (already-bound (idx-subjects g "sankhya"))
-
-  -- collect negated satya subjects: walk triples pairwise, when pratishedha
-  -- is immediately followed by satya, mark that satya subject as negated.
-  -- g used directly as list — VGraph.gi_triples exposed via as_list.
-  (negated-satya (reduce (range (sub (length g) 1)) [] (fn acc i ->
-    let cur  = nth g i
-    let nxt  = nth g (add i 1)
-    cond (and (eq (nth cur 1) "pratishedha") (eq (nth nxt 1) "satya"))
-      (append acc [(nth nxt 0)])
-    otherwise acc)))
+  (negated-nodes (idx-subjects g "pratishedha"))
 
   (new-triples (reduce satya-nodes [] (fn acc nd ->
     let sig      = shabda nd "signal"
     let concept  = shabda nd "signal-concept"
     let is-shunya = eq sig "shunya"
     let has-concept = has-text concept
-    -- skip zero binding if this node is directly negated
-    let is-negated = member (to-string nd) negated-satya
+    -- skip zero binding if this node is negated (pratishedha edge in graph)
+    let is-negated = member (to-string nd) negated-nodes
     -- walk sthita of the shunya node to find avastha qualifiers (e.g. "initial")
     -- then match against the concept's avastha edges to find qualified name
     let qualifiers = cond is-shunya (walk nd "sthita") otherwise []

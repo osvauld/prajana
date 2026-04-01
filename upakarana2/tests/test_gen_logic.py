@@ -107,14 +107,16 @@ def test_transitive_is_a_simple(vy):
 # ── modus tollens (uses modus-tollens node pattern) ──────────────────────────
 
 
-@xfail(strict=True, reason="modus-tollens: returns 'no match' not real inference; pratishedha edge exists but contrapositive logic not wired")
+@xfail(strict=True, reason="modus-tollens: says 'no' via IS-A, not contrapositive; rain/wet not in reasoning")
 def test_modus_tollens_ground_not_wet(vy):
     """if rain→wet, ground not wet → did not rain"""
     r = vy.answer(
         "if it rains the ground is wet. the ground is not wet. did it rain"
     )
-    assert r.lower() != "no match", "must be real inference, not 'no match'"
-    assert re.search(r'\bno\b', r.lower()) is not None
+    rl = r.lower()
+    assert rl != "no match", "must be real inference, not 'no match'"
+    assert re.search(r'\bno\b', rl) is not None
+    assert "rain" in rl, "reasoning must reference rain"
 
 
 # ── negation / double negation ───────────────────────────────────────────────
@@ -289,13 +291,11 @@ class TestSetOps:
         r = vy.eval('(call-tantra "eval-typed" ["set-membership", 5, [1, 2, 3]])')
         assert r is False
 
-    @xfail(strict=True, reason="eval-typed set-subset not implemented")
     def test_subset_true(self, vy):
         """{1,2} ⊆ {1,2,3,4}"""
         r = vy.eval('(call-tantra "eval-typed" ["set-subset", [1, 2], [1, 2, 3, 4]])')
         assert r is True
 
-    @xfail(strict=True, reason="eval-typed set-subset not implemented")
     def test_subset_false(self, vy):
         """{1,5} ⊄ {1,2,3,4}"""
         r = vy.eval('(call-tantra "eval-typed" ["set-subset", [1, 5], [1, 2, 3, 4]])')
