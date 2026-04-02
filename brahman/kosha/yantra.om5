@@ -395,6 +395,20 @@
   (abheda endomorphism)
   (kriya execute-matched match-mantra derive-chain))
 
+(kosha dispatch-typed
+  (swarupa pipeline-dispatch)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala typed-result)
+  (kriya eval-typed))
+
+(kosha dispatch-shunya
+  (swarupa pipeline-dispatch)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala shunya-answer)
+  (kriya dispatch-shunya))
+
 (kosha dispatch-viveka
   (swarupa pipeline-dispatch)
   (sthita domain-yantra)

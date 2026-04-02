@@ -1,3 +1,0 @@
--- object of a triple, as string.
-(tantra triple-obj (t)
-  (str t 2))

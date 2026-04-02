@@ -1,3 +1,0 @@
--- extracts mithya (unresolved) word names from a grade.
-(tantra grade-mithya (grade)
-  (map (triples-by-edge grade "mithya") (fn t -> triple-subj t)))

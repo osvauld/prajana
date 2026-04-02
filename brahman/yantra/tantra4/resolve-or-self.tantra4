@@ -1,4 +1,0 @@
--- resolves a word to its graph node name, or falls back to the word itself.
-(tantra resolve-or-self (w)
-  (resolved (word-resolve w))
-  (cond (has-text resolved) resolved otherwise w))

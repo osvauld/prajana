@@ -1,6 +1,0 @@
--- joins non-empty strings with a separator.
-(tantra join-with (items sep)
-  (non-empty (filter items (fn s -> has-text s)))
-  (reduce non-empty "" (fn acc item ->
-    cond (is-empty acc) item
-    otherwise (concat acc sep item))))

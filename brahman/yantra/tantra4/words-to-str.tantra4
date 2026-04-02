@@ -1,3 +1,0 @@
--- joins a list of word strings with spaces.
-(tantra words-to-str (words)
-  (join-with words " "))

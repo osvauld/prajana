@@ -18,7 +18,9 @@
 
 (mantra implication
   (karma logic-varga)
-  (yukta sambandha krama))
+  (yukta sambandha krama)
+  (sthita niyama)
+  (ganana implies))
 
 (mantra inversion
   (swarupa inference)
@@ -26,7 +28,8 @@
 
 (mantra modus-ponens
   (swarupa inference)
-  (janya implication))
+  (janya implication)
+  (ganana imply-forward))
 
 (mantra negation
   (domain kosha/math/logic/operations)
@@ -104,23 +107,27 @@
   (swarupa inference)
   (janya implication)
   (pratipaksha modus-ponens)
-  (kriya pratishedha))
+  (kriya pratishedha)
+  (ganana contrapose))
 
 (mantra disjunctive-syllogism
   (swarupa inference)
   (janya disjunction)
-  (kriya pratishedha))
+  (kriya pratishedha)
+  (ganana disjunct-eliminate))
 
 (mantra hypothetical-syllogism
   (swarupa inference)
   (janya implication)
-  (kriya krama))
+  (kriya krama)
+  (ganana chain-imply))
 
 (mantra contrapositive
   (swarupa inference)
   (janya implication)
   (abheda modus-tollens)
-  (kriya pratishedha))
+  (kriya pratishedha)
+  (ganana contrapose))
 
 ; ── boolean laws (generated) ─────────────────────────────────────────────────
 
@@ -128,19 +135,22 @@
   (swarupa inference)
   (janya conjunction)
   (abheda disjunction)
-  (kriya pratishedha))
+  (kriya pratishedha)
+  (ganana de-morgan))
 
 (mantra de-morgan-or
   (swarupa inference)
   (janya disjunction)
   (abheda conjunction)
-  (kriya pratishedha))
+  (kriya pratishedha)
+  (ganana de-morgan))
 
 (mantra double-negation
   (swarupa inference)
   (janya negation)
   (kriya pratishedha)
-  (pratipaksha negation))
+  (pratipaksha negation)
+  (ganana double-negate))
 
 ; ── quantifiers (generated) ──────────────────────────────────────────────────
 
@@ -161,9 +171,11 @@
 (mantra transitive-swarupa
   (swarupa krama)
   (janya swarupa)
-  (kriya swarupa-walk))
+  (kriya swarupa-walk)
+  (ganana chain-walk))
 
 (mantra transitive-comparison
   (swarupa krama)
   (janya viveka)
-  (kriya viveka))
+  (kriya viveka)
+  (ganana chain-walk))
