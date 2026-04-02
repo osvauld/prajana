@@ -521,11 +521,57 @@
   (sthita dhatu kshaya)
   (naama eat))
 
+(bhasha ate
+  (swarupa tinanta)
+  (janya dhatu-eat)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama ate))
+
 (bhasha eaten
   (swarupa tinanta)
   (janya dhatu-eat)
   (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
   (naama eaten))
+
+(bhasha taken
+  (swarupa tinanta)
+  (janya dhatu-take)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama taken))
+
+;; kshaya dhatus: remove, lose, leave
+(bhasha dhatu-remove
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama remove))
+
+(bhasha removed
+  (swarupa tinanta)
+  (janya dhatu-remove)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama removed))
+
+(bhasha dhatu-lose
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama lose))
+
+(bhasha lost
+  (swarupa tinanta)
+  (janya dhatu-lose)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama lost))
+
+(bhasha dhatu-leave
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama leave))
+
+(bhasha left
+  (swarupa tinanta)
+  (janya dhatu-leave)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (naama left))
 
 (bhasha dhatu-add
   (swarupa tinanta)

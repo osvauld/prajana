@@ -26,7 +26,8 @@ def test_is_a_property_inheritance(vy):
     r = vy.answer(
         "metals conduct electricity. copper is a metal. does copper conduct electricity"
     )
-    assert "yes" in r.lower() or "copper" in r.lower()
+    rl = r.lower()
+    assert re.search(r'\byes\b', rl) is not None and "conduct" in rl
 
 
 # ── transitive IS-A ───────────────────────────────────────────────────────────
@@ -56,7 +57,7 @@ def test_transitive_is_a_three_hop(vy):
 # ── syllogism / classical modus ponens (assertion chain) ─────────────────────
 
 
-@xfail(strict=True, reason="IS-A syllogism: resolver checks terminal→terminal ('animal has animal'), not cat→breathe")
+@xfail(strict=True, reason="IS-A syllogism: says 'cat has breathing' — logic correct but nigamana uses node name 'breathing' not question word 'breathe'")
 def test_syllogism_breathe(vy):
     """all cats are animals. all animals breathe. do cats breathe"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")
@@ -64,7 +65,7 @@ def test_syllogism_breathe(vy):
     assert re.search(r'\byes\b', rl) is not None and "cat" in rl and "breathe" in rl
 
 
-@xfail(strict=True, reason="IS-A syllogism: response says 'animal has animal', does not cite cat premise")
+@xfail(strict=True, reason="IS-A syllogism: says 'cat has breathing' — cites cat but uses node name 'breathing' not word 'breathe'")
 def test_syllogism_cites_rule(vy):
     """Answer cites both premises"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")
@@ -130,10 +131,12 @@ def test_negation_not_moving(vy):
     assert "yes" in r.lower()
 
 
+@xfail(strict=True, reason="negation+IS-A: returns 'no match' (not real reasoning); 'no' passes as substring of 'no match'")
 def test_negation_blocks_inheritance(vy):
     """a cat is not a fish. fish live in water. does a cat live in water"""
     r = vy.answer("a cat is not a fish. fish live in water. does a cat live in water")
-    assert "no" in r.lower()
+    assert "no match" not in r.lower(), "should reason about negation, not fall through to no-match"
+    assert re.search(r'\bno\b', r.lower()) is not None
 
 
 @xfail(strict=True, reason="negation: double negation cancellation not built")
@@ -200,7 +203,9 @@ def test_universal_with_exception(vy):
 def test_existential(vy):
     """some metals are magnetic. iron is a magnetic metal. is iron a metal"""
     r = vy.answer("some metals are magnetic. iron is a magnetic metal. is iron a metal")
-    assert "yes" in r.lower()
+    rl = r.lower()
+    yes_idx = rl.rfind("yes")
+    assert yes_idx >= 0 and "metal" in rl[yes_idx:]
 
 
 # ── shunya: absence signal ───────────────────────────────────────────────────
@@ -280,7 +285,6 @@ def test_kaala_state_was_now_is(vy):
     assert "moving" in r.lower() or re.search(r'\bno\b.*at rest', r.lower())
 
 
-@xfail(strict=True, reason="kaala-logic: 'had N, now has M' count mutation via tense")
 def test_kaala_count_had_has(vy):
     """'had 10 apples, has 7' — how many lost = 3 via tense"""
     r = vy.answer("he had 10 apples. he has 7 apples. how many apples were lost")

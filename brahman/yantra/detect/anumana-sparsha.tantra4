@@ -1,6 +1,17 @@
--- reads categorical question structure: [is-anumana, query, assert, mode].
+-- reads categorical question structure: [is-anumana, query, assert, mode, predicate].
+-- query/assert extracted from question grade (last sentence), not all grades.
 (tantra anumana-sparsha (graph)
   (eligible (anumana-eligible graph))
+  -- question grade: last sentence (after last viraam)
+  (q-grades (split-grades graph))
+  (q-grade (nth q-grades (sub (length q-grades) 1)))
+  (q-satya (unique (q-grade | where [s, e, o] | and (eq e "satya") | collect (to-string s))))
+  (q-mithya (unique (q-grade | where [s, e, o] | and (eq e "mithya") | collect (to-string s))))
+  -- predicate: mithya words from question grade, excluding question markers
+  (q-markers (split "does do is are was were can could will would shall should has have had a an the it" " "))
+  (predicate-words (filter q-mithya (fn w -> not (member w q-markers))))
+  (predicate (join predicate-words " "))
+  -- path-a: shashthi (genitive) — unchanged
   (shashthi-pairs (graph | where [sv, se, so]
     | and (eq se "shashthi-vibhakti")
     | and (neq so "shashthi-vibhakti")
@@ -12,6 +23,7 @@
   (path-a-owners (map (filter shashthi-pairs (fn p -> eq (str p 0) path-a-pred)) (fn p -> str p 1)))
   (path-a-assert (nth path-a-owners 0))
   (path-a-query (nth path-a-owners (sub (length path-a-owners) 1)))
+  -- path-b: swarupa IS-A — query/assert from question grade
   (swarupa-in-graph (graph | where [ss, se, so]
     | and (eq se "swarupa")
     | collect [ss, so]))
@@ -19,8 +31,15 @@
     | and (eq se "satya")
     | collect (to-string ss))))
   (path-b (and (has-items swarupa-in-graph) (and (has-items satya-entities) eligible)))
-  (path-b-query (nth satya-entities (sub (length satya-entities) 1)))
-  (path-b-assert (to-string (nth (nth swarupa-in-graph (sub (length swarupa-in-graph) 1)) 1)))
+  (path-b-query (cond (has-items q-satya) (nth q-satya 0)
+    otherwise (nth satya-entities (sub (length satya-entities) 1))))
+  -- assert: prefer second satya entity in question grade, fallback to swarupa chain target
+  (path-b-assert-from-q (cond (gt (length q-satya) 1)
+    (nth q-satya (sub (length q-satya) 1)) otherwise ""))
+  (path-b-assert (cond (and (has-text path-b-assert-from-q) (neq path-b-assert-from-q path-b-query))
+    path-b-assert-from-q
+    otherwise (to-string (nth (nth swarupa-in-graph (sub (length swarupa-in-graph) 1)) 1))))
+  -- path-c: varga — unchanged
   (mithya-words (graph | where [ms, me, mo]
     | and (eq me "mithya")
     | collect (to-string ms)))
@@ -33,4 +52,4 @@
   (query-entity (cond path-a path-a-query otherwise (cond path-b path-b-query otherwise (to-string path-c-entity))))
   (assert-entity (cond path-a path-a-assert otherwise (cond path-b path-b-assert otherwise path-c-pred)))
   (mode (cond path-a "shashthi" otherwise (cond path-b "swarupa" otherwise "varga")))
-  [is-anumana, query-entity, assert-entity, mode])
+  [is-anumana, query-entity, assert-entity, mode, predicate])

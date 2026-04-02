@@ -335,7 +335,9 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     Some (VBool (not (as_bool (eval_arg 0))))
 
   | "lt" -> Some (VBool (eval_flt 0 <  eval_flt 1))
+  | "le" -> Some (VBool (eval_flt 0 <= eval_flt 1))
   | "gt" -> Some (VBool (eval_flt 0 >  eval_flt 1))
+  | "ge" -> Some (VBool (eval_flt 0 >= eval_flt 1))
 
   (* ---- constructors ---- *)
 

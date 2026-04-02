@@ -4,4 +4,5 @@
     (eq field "query") (nth ctx 1)
     (eq field "assert") (nth ctx 2)
     (eq field "mode") (nth ctx 3)
+    (eq field "predicate") (nth ctx 4)
     otherwise ""))

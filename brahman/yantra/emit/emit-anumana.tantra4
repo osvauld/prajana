@@ -1,5 +1,6 @@
 -- panchaavayava nyaya for categorical inference (anumana).
-(tantra emit-anumana (graph query-entity assert-entity mode answer)
+-- predicate: mithya words from the question (e.g. "conduct electricity").
+(tantra emit-anumana (graph query-entity assert-entity mode answer predicate)
   (sep (shabda "anuvada-setu" "speech-strand-separator"))
   (swarupa-pairs (triples-by-edge graph "swarupa"))
   (pratijna-parts (map swarupa-pairs (fn tri ->
@@ -29,8 +30,11 @@
     otherwise (cond (eq mode "swarupa")
       (concat "we see: chain reaches " assert-entity " via IS-A")
       otherwise (concat "we see: " assert-entity " reachable from " query-entity))))
+  -- nigamana: include predicate for swarupa IS-A "yes" answers only
   (nigamana (cond (eq answer "yes")
-    (concat "yes — " query-entity " has " assert-entity)
+    (cond (and (has-text predicate) (eq mode "swarupa"))
+      (concat "yes — " query-entity " " predicate " (via " assert-entity ")")
+      otherwise (concat "yes — " query-entity " has " assert-entity))
     otherwise (concat "no — " query-entity " does not have " assert-entity)))
   (all-strands (filter [pratijna, hetu, udaharana, upanaya, nigamana]
     (fn s -> has-text s)))
