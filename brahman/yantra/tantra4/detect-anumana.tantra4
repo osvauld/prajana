@@ -5,5 +5,6 @@
   (cond is-anumana
     [["anumana-query", (anumana-field raw "query")],
      ["anumana-assert", (anumana-field raw "assert")],
-     ["anumana-mode", (anumana-field raw "mode")]]
+     ["anumana-mode", (anumana-field raw "mode")],
+     ["anumana-predicate", (anumana-field raw "predicate")]]
     otherwise []))

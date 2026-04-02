@@ -1,7 +1,8 @@
 -- kriya-nirmana: generate regular verb forms from dhatu seed nodes at startup.
 -- walks all dhatu nodes (sthita: dhatu, swarupa: tinanta), applies English suffix rules,
 -- emits past (-ed) and present-participle (-ing) forms via emit-node + emit-edge.
--- skips forms that already exist (hand-authored irregulars like flew, went, ate).
+-- skips past when: (a) generated spelling already exists, or (b) dhatu has a
+-- hand-authored past form (detected via phala walk = janya reverse from .om5).
 (tantra kriya-nirmana (_)
   -- all nodes whose sthita includes "dhatu"
   (dhatu-nodes (walk "dhatu" "sthita"))
@@ -25,8 +26,10 @@
           otherwise found)
         let dir-sthita = cond (has-text dir) (concat dir "-sthita") otherwise ""
         -- past form: base + ed (or base + d if ends in e)
+        -- skip if dhatu already has a hand-authored past form (phala = janya reverse)
+        let has-irregular-past = has-items (walk nd-str "phala")
         let past-word = cond ends-e (concat base "d") otherwise (concat base "ed")
-        let past-exists = exists (lookup past-word)
+        let past-exists = (or (exists (lookup past-word)) has-irregular-past)
         let past-slokas = cond (has-text dir-sthita)
           [(concat "tinanta-swarupa " (concat nd-str "-janya") " kta-pratyaya-sthita bhuta-kaala-sthita kartari-prayoga-sthita " dir-sthita)]
           otherwise
@@ -35,8 +38,17 @@
           let _ = emit-node past-word "bhasha" past-slokas ""
           let _ = emit-edge past-word "naama" past-word
           (add count 1)
-        -- present participle: stem + ing
-        let ing-word = concat stem "ing"
+        -- present participle: stem + ing (with consonant doubling for CVC stems)
+        let slen = string-length stem
+        let last-ch = cond (ge slen 1) (substr stem (sub slen 1) 1) otherwise ""
+        let prev-ch = cond (ge slen 2) (substr stem (sub slen 2) 1) otherwise ""
+        let pprev-ch = cond (ge slen 3) (substr stem (sub slen 3) 1) otherwise ""
+        let is-last-vowel = (or (eq last-ch "a") (eq last-ch "e") (eq last-ch "i") (eq last-ch "o") (eq last-ch "u"))
+        let is-prev-vowel = (or (eq prev-ch "a") (eq prev-ch "e") (eq prev-ch "i") (eq prev-ch "o") (eq prev-ch "u"))
+        let is-pprev-vowel = (or (eq pprev-ch "a") (eq pprev-ch "e") (eq pprev-ch "i") (eq pprev-ch "o") (eq pprev-ch "u"))
+        let needs-double = (and (not ends-e) (ge slen 2) (not is-last-vowel) is-prev-vowel (or (lt slen 3) (not is-pprev-vowel)))
+        let ing-stem = cond needs-double (concat stem last-ch) otherwise stem
+        let ing-word = concat ing-stem "ing"
         let ing-exists = exists (lookup ing-word)
         let ing-slokas = cond (has-text dir-sthita)
           [(concat "tinanta-swarupa " (concat nd-str "-janya") " shatr-pratyaya-sthita vartamana-kaala-sthita kartari-prayoga-sthita " dir-sthita)]

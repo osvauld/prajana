@@ -45,13 +45,14 @@ def test_physics_logic_all_objects(vy):
     assert "yes" in r.lower() or "momentum" in r.lower()
 
 
+@xfail(strict=True, reason="conditional+physics: ignores 'if...it is moving' premise, just computes KE=250; 'moving' never addressed")
 def test_physics_logic_inheritance(vy):
     """if an object has kinetic energy it is moving. this ball has KE=250. is it moving"""
     r = vy.answer(
         "if an object has kinetic energy it is moving. "
         "a ball has mass 5 and velocity 10. find kinetic energy. is the ball moving"
     )
-    assert "250" in r or "moving" in r.lower()
+    assert "250" in r and "moving" in r.lower()
 
 
 # ── logic + count ─────────────────────────────────────────────────────────────
