@@ -462,7 +462,8 @@ shabda imaginary
 done
 
 shabda implication
-  (word if implies therefore)
+  (word if implies therefore then)
+  (role grammar)
   (name logical-implication)
   (desc logical-connective-if-A-then-B)
 done

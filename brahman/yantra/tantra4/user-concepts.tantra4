@@ -1,3 +1,0 @@
--- user-mentioned concept names (excludes system concepts).
-(tantra user-concepts (graph)
-  (unique (map (filter (triples-by-edge graph "satya") (fn t -> not (is-system-concept (triple-subj t)))) (fn t -> triple-subj t))))

@@ -1,0 +1,24 @@
+-- extract antecedent/consequent from a niyama (conditional) grade.
+-- walks triples: after "if" → antecedent zone, after "then"/copula → consequent zone.
+-- returns [[ante, "niyama", cons]] or [] if extraction fails.
+(tantra niyama-extract (grade)
+  (niy-st (reduce grade ["", "", ""] (fn st tri ->
+    let edge = str tri 1
+    let word = str tri 0
+    let zone = nth st 2
+    let ante = nth st 0
+    let cons = nth st 1
+    cond (eq edge "niyama")
+          (cond (eq zone "") [ante, cons, "ante"]
+                (eq zone "ante") [ante, cons, "cons"]
+                otherwise st)
+         (and (eq edge "copula") (eq zone "ante"))
+          [ante, cons, "cons"]
+         (and (eq edge "mithya") (eq zone "ante") (not (has-text ante)))
+          [word, cons, zone]
+         (and (eq edge "mithya") (eq zone "cons") (not (has-text cons)))
+          [ante, word, zone]
+         otherwise st)))
+  (a (nth niy-st 0))
+  (c (nth niy-st 1))
+  (cond (and (has-text a) (has-text c)) [[a, "niyama", c]] otherwise []))

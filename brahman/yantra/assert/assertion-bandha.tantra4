@@ -1,33 +1,38 @@
 -- extract IS-A assertions from subject-copula-object patterns (grade-scoped).
 -- within each grade: subject + copula/quantifier + object → swarupa.
+-- niyama grades: delegates to niyama-extract for implication triples.
 (tantra assertion-bandha (graph)
   (quant-words (split (shabda "quantifier" "word") ","))
   (grades (split-grades graph))
   (new-triples (reduce grades [] (fn acc grade ->
-    let st = reduce grade [[], "", false, false] (fn st tri ->
-      let result  = nth st 0
-      let subj    = nth st 1
-      let subj-ok = nth st 2
-      let saw-cop = nth st 3
-      let edge = str tri 1
-      let word = str tri 0
-      cond (eq edge "viraam") [result, "", false, false]
-      -- quantifier words act as copula
-      (and (eq edge "mithya") (member word quant-words)) [result, "", false, true]
-      (and (eq edge "satya") (eq word "quantifier")) [result, "", false, true]
-      -- object found: emit swarupa
-      (and (eq edge "mithya") (neq subj "") saw-cop (has-text (word-resolve word)))
-        [(append result [[subj, "swarupa", (word-resolve word)]]), "", false, false]
-      -- copula after subject
-      (and (eq edge "copula") subj-ok) [result, subj, subj-ok, true]
-      (eq edge "copula") [result, subj, subj-ok, saw-cop]
-      -- mithya: potential subject
-      (eq edge "mithya") [result, (resolve-or-self word), false, saw-cop]
-      -- satya after copula: object (emit swarupa) or subject
-      (and (eq edge "satya") saw-cop (eq subj "")) [result, (resolve-or-self word), true, saw-cop]
-      (and (eq edge "satya") saw-cop (neq subj ""))
-        [(append result [[subj, "swarupa", word]]), "", false, false]
-      (eq edge "satya") [result, word, true, false]
-      otherwise st)
-    (append acc (nth st 0)))))
+    let has-niy = has-items (triples-by-edge grade "niyama")
+    cond has-niy
+      (append acc (niyama-extract grade))
+    otherwise
+      let st = reduce grade [[], "", false, false] (fn st tri ->
+        let result  = nth st 0
+        let subj    = nth st 1
+        let subj-ok = nth st 2
+        let saw-cop = nth st 3
+        let edge = str tri 1
+        let word = str tri 0
+        cond (eq edge "viraam") [result, "", false, false]
+        -- quantifier words act as copula
+        (and (eq edge "mithya") (member word quant-words)) [result, "", false, true]
+        (and (eq edge "satya") (eq word "quantifier")) [result, "", false, true]
+        -- object found: emit swarupa (unknown nouns ok; skip verb forms)
+        (and (eq edge "mithya") (neq subj "") saw-cop (not (ends-with word "ing")) (not (ends-with word "ed")))
+          [(append result [[subj, "swarupa", (resolve-or-self word)]]), "", false, false]
+        -- copula after subject
+        (and (eq edge "copula") subj-ok) [result, subj, subj-ok, true]
+        (eq edge "copula") [result, subj, subj-ok, saw-cop]
+        -- mithya: potential subject (non-verb unknown nouns can be subjects)
+        (eq edge "mithya") [result, (resolve-or-self word), (and (not (ends-with word "ing")) (not (ends-with word "ed"))), saw-cop]
+        -- satya after copula: object (emit swarupa) or subject
+        (and (eq edge "satya") saw-cop (eq subj "")) [result, (resolve-or-self word), true, saw-cop]
+        (and (eq edge "satya") saw-cop (neq subj ""))
+          [(append result [[subj, "swarupa", word]]), "", false, false]
+        (eq edge "satya") [result, word, true, false]
+        otherwise st)
+      (append acc (nth st 0)))))
   (append-triples graph new-triples))

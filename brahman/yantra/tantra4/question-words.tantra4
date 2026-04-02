@@ -1,5 +1,0 @@
--- finds the mithya words from the question grade.
-(tantra question-words (grades)
-  (q-grade (reduce grades [] (fn acc grade ->
-    cond (is-question-grade grade) grade otherwise acc)))
-  (grade-mithya q-grade))

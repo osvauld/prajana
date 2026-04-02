@@ -1,3 +1,0 @@
--- edge type of a triple.
-(tantra triple-edge (t)
-  (nth t 1))

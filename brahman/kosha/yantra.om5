@@ -395,6 +395,20 @@
   (abheda endomorphism)
   (kriya execute-matched match-mantra derive-chain))
 
+(kosha dispatch-typed
+  (swarupa pipeline-dispatch)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala typed-result)
+  (kriya eval-typed))
+
+(kosha dispatch-shunya
+  (swarupa pipeline-dispatch)
+  (sthita domain-yantra)
+  (janya expanded-graph)
+  (phala shunya-answer)
+  (kriya dispatch-shunya))
+
 (kosha dispatch-viveka
   (swarupa pipeline-dispatch)
   (sthita domain-yantra)
@@ -494,9 +508,36 @@
   (sthita domain-yantra)
   (janya graph)
   (phala graph)
-  (krama refine-vibhakti-shashthi)
+  (krama refine-vyakarana-sparsha)
   (abheda endomorphism)
   (kriya sandhi-bandhana))
+
+(kosha refine-vyakarana-sparsha
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-kaala-avastha)
+  (abheda endomorphism)
+  (kriya vyakarana-sparsha))
+
+(kosha refine-kaala-avastha
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-shashthi-possession)
+  (abheda endomorphism)
+  (kriya kaala-avastha))
+
+(kosha refine-shashthi-possession
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (krama refine-vibhakti-shashthi)
+  (abheda endomorphism)
+  (kriya shashthi-possession))
 
 (kosha refine-sandhi-kosha
   (swarupa pipeline-refine)
@@ -514,6 +555,7 @@
   (phala graph)
   (krama refine-swarupa-anuvada)
   (abheda endomorphism)
+  (yukta fixpoint)
   (kriya sankhya-bandha))
 
 (kosha refine-swarupa-anuvada
@@ -521,8 +563,19 @@
   (sthita domain-yantra)
   (janya graph)
   (phala graph)
+  (krama refine-shunya-bandha)
   (abheda endomorphism)
+  (yukta fixpoint)
   (kriya swarupa-anuvada))
+
+(kosha refine-shunya-bandha
+  (swarupa pipeline-refine)
+  (sthita domain-yantra)
+  (janya graph)
+  (phala graph)
+  (abheda endomorphism)
+  (yukta fixpoint)
+  (kriya shunya-bandha))
 
 (kosha refine-vibhakti-shashthi
   (swarupa pipeline-refine)

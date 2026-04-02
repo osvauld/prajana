@@ -1,6 +1,25 @@
--- reads categorical question structure: [is-anumana, query, assert, mode].
+-- reads categorical question structure: [is-anumana, query, assert, mode, predicate].
+-- query/assert extracted from question grade (last sentence), not all grades.
 (tantra anumana-sparsha (graph)
   (eligible (anumana-eligible graph))
+  -- question grade: last sentence (after last viraam)
+  (q-grades (split-grades graph))
+  (q-grade (nth q-grades (sub (length q-grades) 1)))
+  (q-satya (unique (q-grade | where [s, e, o] | and (eq e "satya") | collect (to-string s))))
+  (q-mithya (unique (q-grade | where [s, e, o] | and (eq e "mithya") | collect (to-string s))))
+  -- swarupa subjects: mithya words that have IS-A edges (inline-defined entities)
+  (swarupa-subjects (unique (graph | where [s, e, o] | and (eq e "swarupa") | collect (to-string s))))
+  -- q-entities: satya + mithya nouns that participate in IS-A chains, in appearance order
+  (q-markers (split "does do is are was were can could will would shall should has have had a an the it" " "))
+  (q-entities (unique (q-grade | where [s, e, o]
+    | and (or (eq e "satya")
+              (and (eq e "mithya") (not (member s q-markers))
+                   (member s swarupa-subjects)))
+    | collect (to-string s))))
+  -- predicate: mithya words from question grade, excluding markers and entities
+  (predicate-words (filter q-mithya (fn w -> and (not (member w q-markers)) (not (member w q-entities)))))
+  (predicate (join predicate-words " "))
+  -- path-a: shashthi (genitive) — unchanged
   (shashthi-pairs (graph | where [sv, se, so]
     | and (eq se "shashthi-vibhakti")
     | and (neq so "shashthi-vibhakti")
@@ -12,6 +31,7 @@
   (path-a-owners (map (filter shashthi-pairs (fn p -> eq (str p 0) path-a-pred)) (fn p -> str p 1)))
   (path-a-assert (nth path-a-owners 0))
   (path-a-query (nth path-a-owners (sub (length path-a-owners) 1)))
+  -- path-b: swarupa IS-A — query/assert from question grade
   (swarupa-in-graph (graph | where [ss, se, so]
     | and (eq se "swarupa")
     | collect [ss, so]))
@@ -19,8 +39,15 @@
     | and (eq se "satya")
     | collect (to-string ss))))
   (path-b (and (has-items swarupa-in-graph) (and (has-items satya-entities) eligible)))
-  (path-b-query (nth satya-entities (sub (length satya-entities) 1)))
-  (path-b-assert (to-string (nth (nth swarupa-in-graph (sub (length swarupa-in-graph) 1)) 1)))
+  (path-b-query (cond (has-items q-entities) (nth q-entities 0)
+    otherwise (nth satya-entities (sub (length satya-entities) 1))))
+  -- assert: prefer last entity in question grade, fallback to swarupa chain target
+  (path-b-assert-from-q (cond (gt (length q-entities) 1)
+    (nth q-entities (sub (length q-entities) 1)) otherwise ""))
+  (path-b-assert (cond (and (has-text path-b-assert-from-q) (neq path-b-assert-from-q path-b-query))
+    path-b-assert-from-q
+    otherwise (to-string (nth (nth swarupa-in-graph (sub (length swarupa-in-graph) 1)) 1))))
+  -- path-c: varga — unchanged
   (mithya-words (graph | where [ms, me, mo]
     | and (eq me "mithya")
     | collect (to-string ms)))
@@ -29,8 +56,57 @@
   (path-c-pred (cond (exists path-c-pred-word) (to-string (shabda-anveshana path-c-pred-word)) otherwise ""))
   (path-c-entity (nth satya-entities 0))
   (path-c (and (exists path-c-entity) (and (has-text path-c-pred) eligible)))
-  (is-anumana (or path-a (or path-b path-c)))
-  (query-entity (cond path-a path-a-query otherwise (cond path-b path-b-query otherwise (to-string path-c-entity))))
-  (assert-entity (cond path-a path-a-assert otherwise (cond path-b path-b-assert otherwise path-c-pred)))
-  (mode (cond path-a "shashthi" otherwise (cond path-b "swarupa" otherwise "varga")))
-  [is-anumana, query-entity, assert-entity, mode])
+  -- path-d: niyama (conditional implication) — modus ponens / tollens
+  -- niyama triples from assertion-bandha: [antecedent, "niyama", consequent]
+  -- excludes BQG self-loops where subject = "if" or "then"
+  (niyama-imply (graph | where [s, e, o]
+    | and (eq e "niyama") | and (neq s "if") | and (neq s "then")
+    | and (neq s (to-string o))
+    | collect [s, o]))
+  -- non-question grades (all but last)
+  (n-grades (sub (length q-grades) 1))
+  -- assertion mithya: mithya words in non-question, non-niyama grades
+  (assert-mithya (reduce (range n-grades) [] (fn acc i ->
+    let g = nth q-grades i
+    cond (has-items (triples-by-edge g "niyama")) acc
+    otherwise (append acc (map (triples-by-edge g "mithya") (fn t -> str t 0))))))
+  -- assertion pratishedha: negated words in non-question, non-niyama grades
+  (assert-prati (reduce (range n-grades) [] (fn acc i ->
+    let g = nth q-grades i
+    cond (has-items (triples-by-edge g "niyama")) acc
+    otherwise (append acc (map (triples-by-edge g "pratishedha") (fn t -> str t 0))))))
+  -- ponens check: antecedent stem-matches assertion mithya → consequent holds
+  (niy-ponens-cons (reduce niyama-imply "" (fn found nt ->
+    cond (has-text found) found
+    otherwise (reduce assert-mithya "" (fn f2 mw ->
+      cond (has-text f2) f2
+      (stems-match mw (str nt 0)) (str nt 1)
+      otherwise f2)))))
+  -- tollens check: consequent stem-matches assertion pratishedha → antecedent denied
+  (niy-tollens-ante (reduce niyama-imply "" (fn found nt ->
+    cond (has-text found) found
+    otherwise (reduce assert-prati "" (fn f2 pw ->
+      cond (has-text f2) f2
+      (stems-match pw (str nt 1)) (str nt 0)
+      otherwise f2)))))
+  (path-d-ponens (has-text niy-ponens-cons))
+  (path-d-tollens (and (not path-d-ponens) (has-text niy-tollens-ante)))
+  (path-d (or path-d-ponens path-d-tollens))
+  -- final output: priority order d > a > b > c
+  (is-anumana (or path-d (or path-a (or path-b path-c))))
+  (query-entity (cond path-d-ponens niy-ponens-cons
+    path-d-tollens niy-tollens-ante
+    path-a path-a-query
+    path-b path-b-query
+    otherwise (to-string path-c-entity)))
+  (assert-entity (cond path-d-ponens (word-stem (reduce niyama-imply "" (fn f nt -> cond (has-text f) f otherwise (str nt 0))))
+    path-d-tollens (word-stem (reduce niyama-imply "" (fn f nt -> cond (has-text f) f otherwise (str nt 1))))
+    path-a path-a-assert
+    path-b path-b-assert
+    otherwise path-c-pred))
+  (mode (cond path-d-ponens "niyama-ponens"
+    path-d-tollens "niyama-tollens"
+    path-a "shashthi"
+    path-b "swarupa"
+    otherwise "varga"))
+  [is-anumana, query-entity, assert-entity, mode, predicate])

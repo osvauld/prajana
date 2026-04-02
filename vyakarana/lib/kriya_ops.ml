@@ -335,7 +335,9 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     Some (VBool (not (as_bool (eval_arg 0))))
 
   | "lt" -> Some (VBool (eval_flt 0 <  eval_flt 1))
+  | "le" -> Some (VBool (eval_flt 0 <= eval_flt 1))
   | "gt" -> Some (VBool (eval_flt 0 >  eval_flt 1))
+  | "ge" -> Some (VBool (eval_flt 0 >= eval_flt 1))
 
   (* ---- constructors ---- *)
 
@@ -386,5 +388,231 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     Some (VFloat (eval_flt 0 *. 2.0))
   | "reciprocal" ->
     Some (VFloat (1.0 /. eval_flt 0))
+
+  (* ═══════════════════════════════════════════════════════════════════
+     migrated tantras — trivial utility ops, formerly interpreted .tantra4
+     ═══════════════════════════════════════════════════════════════════ *)
+
+  (* ---- triple accessors ---- *)
+
+  | "triple-subj" ->
+    let t = as_list (eval_arg 0) in
+    Some (VString (match List.nth_opt t 0 with Some v -> as_string v | None -> ""))
+
+  | "triple-edge" ->
+    Some (match List.nth_opt (as_list (eval_arg 0)) 1 with Some v -> v | None -> VNone)
+
+  | "triple-obj" ->
+    let t = as_list (eval_arg 0) in
+    Some (VString (match List.nth_opt t 2 with Some v -> as_string v | None -> ""))
+
+  | "triples-by-edge" ->
+    let triples = eval_lst 0 in
+    let edge_type = eval_str 1 in
+    Some (VList (List.filter (fun t ->
+      match t with
+      | VList (_ :: VString e :: _) -> e = edge_type
+      | VList (_ :: VNode e :: _)   -> e = edge_type
+      | _ -> false
+    ) triples))
+
+  | "non-reflexive" ->
+    let triples = eval_lst 0 in
+    Some (VList (List.filter (fun t ->
+      match t with
+      | VList (s :: _ :: o :: _) -> as_string s <> as_string o
+      | _ -> true
+    ) triples))
+
+  (* ---- simple predicates ---- *)
+
+  | "has-text" ->
+    Some (VBool (String.length (eval_str 0) > 0))
+
+  | "has-items" ->
+    Some (VBool (List.length (eval_lst 0) > 0))
+
+  | "is-empty" ->
+    Some (VBool (String.length (eval_str 0) = 0))
+
+  | "is-system-concept" ->
+    let w = eval_str 0 in
+    Some (VBool (List.mem w ["count"; "count-total"; "count-remaining";
+                             "viveka-max"; "viveka-min"]))
+
+  (* ---- list / string utilities ---- *)
+
+  | "last-of" ->
+    let xs = eval_lst 0 in
+    Some (match xs with [] -> VList [] | _ -> List.nth xs (List.length xs - 1))
+
+  | "join-with" ->
+    let items = eval_lst 0 in
+    let sep = eval_str 1 in
+    let non_empty = List.filter (fun s ->
+      String.length (as_string s) > 0) items in
+    Some (VString (String.concat sep (List.map as_string non_empty)))
+
+  | "words-to-str" ->
+    let words = eval_lst 0 in
+    let non_empty = List.filter (fun s ->
+      String.length (as_string s) > 0) words in
+    Some (VString (String.concat " " (List.map as_string non_empty)))
+
+  | "format-strand" ->
+    let label = eval_str 0 in
+    let content = eval_str 1 in
+    Some (VString (if String.length content > 0
+      then label ^ " " ^ content else ""))
+
+  | "word-bigrams" ->
+    let words = eval_lst 0 in
+    let arr = Array.of_list words in
+    let n = Array.length arr in
+    Some (VList (List.init (max 0 (n - 1)) (fun i ->
+      VString (as_string arr.(i) ^ "-" ^ as_string arr.(i + 1)))))
+
+  (* ---- grade / graph query utilities ---- *)
+
+  | "grade-mithya" ->
+    let grade = eval_lst 0 in
+    Some (VList (List.filter_map (fun t ->
+      match t with
+      | VList (s :: VString "mithya" :: _) -> Some (VString (as_string s))
+      | VList (s :: VNode "mithya" :: _) -> Some (VString (as_string s))
+      | _ -> None
+    ) grade))
+
+  | "grade-numbers" ->
+    let grade = eval_lst 0 in
+    Some (VList (List.filter_map (fun t ->
+      match t with
+      | VList (_ :: VString "asprista-sankhya" :: o :: _) -> Some o
+      | VList (_ :: VNode "asprista-sankhya" :: o :: _) -> Some o
+      | _ -> None
+    ) grade))
+
+  | "is-question-grade" ->
+    let grade = eval_lst 0 in
+    Some (VBool (List.exists (fun t ->
+      match t with
+      | VList (_ :: VString "vidhi-kaala" :: _) -> true
+      | VList (_ :: VNode "vidhi-kaala" :: _) -> true
+      | _ -> false
+    ) grade))
+
+  | "concept-in-grade" ->
+    let concept = eval_str 0 in
+    let grade = eval_lst 1 in
+    Some (VBool (List.exists (fun t ->
+      match t with
+      | VList (s :: VString "satya" :: _) -> as_string s = concept
+      | VList (s :: VNode "satya" :: _) -> as_string s = concept
+      | _ -> false
+    ) grade))
+
+  | "last-concept" ->
+    let grade = eval_lst 0 in
+    let last = List.fold_left (fun acc t ->
+      match t with
+      | VList (s :: VString "satya" :: _) -> as_string s
+      | VList (s :: VNode "satya" :: _) -> as_string s
+      | _ -> acc
+    ) "" grade in
+    Some (VString last)
+
+  | "user-concepts" ->
+    let graph = eval_lst 0 in
+    let system = ["count"; "count-total"; "count-remaining";
+                   "viveka-max"; "viveka-min"] in
+    let seen = Hashtbl.create 16 in
+    let result = List.filter_map (fun t ->
+      match t with
+      | VList (s :: VString "satya" :: _)
+      | VList (s :: VNode "satya" :: _) ->
+        let name = as_string s in
+        if List.mem name system || Hashtbl.mem seen name then None
+        else (Hashtbl.replace seen name true; Some (VString name))
+      | _ -> None
+    ) graph in
+    Some (VList result)
+
+  (* ---- signal read / write ---- *)
+
+  | "read-signal" ->
+    let graph = eval_lst 0 in
+    let signal_name = eval_str 1 in
+    let found = List.find_map (fun t ->
+      match t with
+      | VList [VString "_signal"; VString e; o] when e = signal_name -> Some o
+      | VList [VString "_signal"; VNode e; o] when e = signal_name -> Some o
+      | _ -> None
+    ) graph in
+    Some (match found with Some v -> v | None -> VNone)
+
+  | "write-signals" ->
+    let graph = eval_lst 0 in
+    let pairs = eval_lst 1 in
+    let signals = List.filter_map (fun kv ->
+      match as_list kv with
+      | [k; v] -> Some (VList [VString "_signal"; VString (as_string k); v])
+      | _ -> None
+    ) pairs in
+    Some (VList (graph @ signals))
+
+  (* ---- word-info field accessor ---- *)
+
+  | "word-info" ->
+    let info = eval_lst 0 in
+    let field = eval_str 1 in
+    let idx = match field with
+      | "node" -> 0 | "role" -> 1 | "layer" -> 2
+      | "num-val" -> 3 | "unit" -> 4 | "candidates" -> 5
+      | _ -> -1 in
+    Some (if idx >= 0 && idx < List.length info
+      then List.nth info idx else VString "")
+
+  (* ---- verb stem matching ---- *)
+
+  | "word-stem" ->
+    (* crude verb stem: strip -ing, -ed, -s for surface-form matching *)
+    let w = eval_str 0 in
+    let n = String.length w in
+    let stem =
+      if n > 4 && String.sub w (n-3) 3 = "ing" then String.sub w 0 (n-3)
+      else if n > 3 && String.sub w (n-2) 2 = "ed" then String.sub w 0 (n-2)
+      else if n > 2 && w.[n-1] = 's' then String.sub w 0 (n-1)
+      else w
+    in
+    Some (VString stem)
+
+  | "stems-match" ->
+    (* true if two words share the same crude stem *)
+    let stem w =
+      let n = String.length w in
+      if n > 4 && String.sub w (n-3) 3 = "ing" then String.sub w 0 (n-3)
+      else if n > 3 && String.sub w (n-2) 2 = "ed" then String.sub w 0 (n-2)
+      else if n > 2 && w.[n-1] = 's' then String.sub w 0 (n-1)
+      else w
+    in
+    Some (VBool (stem (eval_str 0) = stem (eval_str 1)))
+
+  | "question-words" ->
+    (* find question grade (has vidhi-kaala), return its mithya subjects *)
+    let grades = eval_lst 0 in
+    let q_grade = List.fold_left (fun acc grade ->
+      let items = as_list grade in
+      if List.exists (fun t -> match t with
+        | VList (_ :: VString "vidhi-kaala" :: _) -> true
+        | VList (_ :: VNode "vidhi-kaala" :: _) -> true
+        | _ -> false) items
+      then items else acc
+    ) [] grades in
+    Some (VList (List.filter_map (fun t ->
+      match t with
+      | VList (s :: VString "mithya" :: _) -> Some (VString (as_string s))
+      | VList (s :: VNode "mithya" :: _) -> Some (VString (as_string s))
+      | _ -> None
+    ) q_grade))
 
   | _ -> None

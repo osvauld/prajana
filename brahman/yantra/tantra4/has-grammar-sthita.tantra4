@@ -1,4 +1,0 @@
--- true if a word is a grammar word with a specific sthita edge.
-(tantra has-grammar-sthita (nd rl sthita-name)
-  (is-grammar (cond (exists rl) (eq rl "grammar") otherwise false))
-  (cond (and (exists nd) is-grammar) (member sthita-name (walk (to-string nd) "sthita")) otherwise false))

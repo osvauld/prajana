@@ -26,13 +26,13 @@ def test_is_a_property_inheritance(vy):
     r = vy.answer(
         "metals conduct electricity. copper is a metal. does copper conduct electricity"
     )
-    assert "yes" in r.lower() or "copper" in r.lower()
+    rl = r.lower()
+    assert re.search(r'\byes\b', rl) is not None and "conduct" in rl
 
 
 # ── transitive IS-A ───────────────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="IS-A transitive: resolver asks 'does animal inherit animal?' instead of 'does sparrow inherit animal?'")
 def test_transitive_is_a(vy):
     """sparrows are birds. birds are animals. is a sparrow an animal"""
     r = vy.answer("sparrows are birds. birds are animals. is a sparrow an animal")
@@ -56,7 +56,7 @@ def test_transitive_is_a_three_hop(vy):
 # ── syllogism / classical modus ponens (assertion chain) ─────────────────────
 
 
-@xfail(strict=True, reason="IS-A syllogism: resolver checks terminal→terminal ('animal has animal'), not cat→breathe")
+@xfail(strict=True, reason="IS-A syllogism: says 'cat has breathing' — logic correct but nigamana uses node name 'breathing' not question word 'breathe'")
 def test_syllogism_breathe(vy):
     """all cats are animals. all animals breathe. do cats breathe"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")
@@ -64,7 +64,7 @@ def test_syllogism_breathe(vy):
     assert re.search(r'\byes\b', rl) is not None and "cat" in rl and "breathe" in rl
 
 
-@xfail(strict=True, reason="IS-A syllogism: response says 'animal has animal', does not cite cat premise")
+@xfail(strict=True, reason="IS-A syllogism: says 'cat has breathing' — cites cat but uses node name 'breathing' not word 'breathe'")
 def test_syllogism_cites_rule(vy):
     """Answer cites both premises"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")
@@ -75,14 +75,14 @@ def test_syllogism_cites_rule(vy):
 # ── modus ponens / implication ────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="syllogism: modus ponens implication not built")
 def test_modus_ponens(vy):
     """if it rains the ground is wet. it rained. is the ground wet"""
     r = vy.answer("if it rains the ground is wet. it rained. is the ground wet")
-    assert "yes" in r.lower() or "wet" in r.lower()
+    rl = r.lower()
+    assert "yes" in rl or "wet" in rl
+    assert "is-a" not in rl, "must use implication logic, not IS-A"
 
 
-@xfail(strict=True, reason="modus-tollens: says 'no' via IS-A, not contrapositive; rain/wet not in reasoning")
 def test_modus_tollens(vy):
     """if it rains the ground is wet. the ground is not wet. did it rain"""
     r = vy.answer(
@@ -104,13 +104,14 @@ def test_transitive_greater(vy):
     assert "yes" in r.lower()
 
 
-@xfail(strict=True, reason="transitivity: entity ranking via comparison chain")
+@xfail(strict=True, reason="transitivity: comparison chain walk not built; answers 'adj-heavy has adj-heavy'")
 def test_transitive_entities_ranking(vy):
     """ball-A heavier than ball-B. ball-B heavier than ball-C. which is heaviest"""
     r = vy.answer(
         "ball-A is heavier than ball-B. ball-B is heavier than ball-C. which is the heaviest"
     )
     assert "ball-A" in r
+    assert "adj-heavy" not in r.lower(), "must identify entity, not compare abstract property"
 
 
 @xfail(strict=True, reason="transitivity: 3-step comparison chain walk")
@@ -130,36 +131,46 @@ def test_negation_not_moving(vy):
     assert "yes" in r.lower()
 
 
+@xfail(strict=True, reason="negation+IS-A: ignores pratishedha — creates cat IS-A fish despite 'not'")
 def test_negation_blocks_inheritance(vy):
     """a cat is not a fish. fish live in water. does a cat live in water"""
     r = vy.answer("a cat is not a fish. fish live in water. does a cat live in water")
-    assert "no" in r.lower()
+    rl = r.lower()
+    assert "no match" not in rl, "should reason about negation, not fall through to no-match"
+    assert re.search(r'\bno\b', rl) is not None
+    assert "cat is-a fish" not in rl, "must NOT assert cat IS-A fish (negation should block)"
 
 
-@xfail(strict=True, reason="negation: double negation cancellation not built")
+@xfail(strict=True, reason="double-negation: says 'yes' via IS-A nonsense, not real cancellation")
 def test_double_negation(vy):
     """it is not true that the ball is not moving. is the ball moving"""
     r = vy.answer("it is not true that the ball is not moving. is the ball moving")
-    assert "yes" in r.lower() or "moving" in r.lower()
+    rl = r.lower()
+    assert "yes" in rl or "moving" in rl
+    assert "is-a" not in rl, "must use negation logic, not IS-A"
 
 
 # ── disjunction ───────────────────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="disjunctive: disjunctive syllogism not built")
+@xfail(strict=True, reason="disjunctive: 'blue' appears in pratijna not conclusion; no real disjunctive logic")
 def test_disjunctive_syllogism(vy):
     """the ball is red or blue. the ball is not red. what color is the ball"""
     r = vy.answer("the ball is red or blue. the ball is not red. what color is the ball")
-    assert "blue" in r.lower()
+    rl = r.lower()
+    # blue must appear in conclusion (after last separator), not just in pratijna
+    conclusion = rl.split(".")[-1] if "." in rl else rl
+    assert "blue" in conclusion
 
 
-@xfail(strict=True, reason="neither-nor: system returns 'no match' (pattern not parsed); passes only because 'no' is a substring of 'no match'")
+@xfail(strict=True, reason="neither-nor: treats 'nor' as IS-A target, not real neither/nor logic")
 def test_neither_nor(vy):
     """neither A nor B is true. is A true"""
     r = vy.answer("neither the ball is red nor is it blue. is the ball red")
     rl = r.lower()
     assert "no match" not in rl, "should reason about neither/nor, not fall through to no-match"
     assert re.search(r'\bno\b', rl) is not None
+    assert "is-a" not in rl, "must use neither/nor logic, not IS-A"
 
 
 # ── conditional chain ─────────────────────────────────────────────────────────
@@ -173,7 +184,9 @@ def test_conditional_chain(vy):
         "if temperature rises then ice melts. if ice melts then water appears. "
         "temperature rose. is water present"
     )
-    assert "yes" in r.lower() or "water" in r.lower()
+    rl = r.lower()
+    assert "water" in rl, "must conclude about water, not just IS-A"
+    assert "is-a" not in rl, "must use implication logic, not IS-A"
 
 
 # ── quantifiers ───────────────────────────────────────────────────────────────
@@ -200,7 +213,9 @@ def test_universal_with_exception(vy):
 def test_existential(vy):
     """some metals are magnetic. iron is a magnetic metal. is iron a metal"""
     r = vy.answer("some metals are magnetic. iron is a magnetic metal. is iron a metal")
-    assert "yes" in r.lower()
+    rl = r.lower()
+    yes_idx = rl.rfind("yes")
+    assert yes_idx >= 0 and "metal" in rl[yes_idx:]
 
 
 # ── shunya: absence signal ───────────────────────────────────────────────────
@@ -280,7 +295,6 @@ def test_kaala_state_was_now_is(vy):
     assert "moving" in r.lower() or re.search(r'\bno\b.*at rest', r.lower())
 
 
-@xfail(strict=True, reason="kaala-logic: 'had N, now has M' count mutation via tense")
 def test_kaala_count_had_has(vy):
     """'had 10 apples, has 7' — how many lost = 3 via tense"""
     r = vy.answer("he had 10 apples. he has 7 apples. how many apples were lost")
@@ -294,8 +308,10 @@ def test_kaala_boolean_state_override(vy):
     assert "on" in r.lower() and "off" not in r.lower(), f"should say on, got: {r}"
 
 
-@xfail(strict=True, reason="kaala-logic: location state change via tense")
+@xfail(strict=True, reason="kaala-logic: uses IS-A (he IS-A garden), not tense-based state override")
 def test_kaala_location_state(vy):
     """'was in room, is in garden' → current location is garden"""
     r = vy.answer("he was in the room. he is in the garden. where is he")
-    assert "garden" in r.lower()
+    rl = r.lower()
+    assert "garden" in rl
+    assert "is-a" not in rl, "must use tense logic, not IS-A"

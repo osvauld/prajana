@@ -1,3 +1,0 @@
--- filters out self-referential triples (subject = object).
-(tantra non-reflexive (triples)
-  (filter triples (fn t -> neq (triple-subj t) (triple-obj t))))

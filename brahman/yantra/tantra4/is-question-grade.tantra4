@@ -1,3 +1,0 @@
--- true if a grade contains a question signal (vidhi-kaala).
-(tantra is-question-grade (grade)
-  (has-items (triples-by-edge grade "vidhi-kaala")))

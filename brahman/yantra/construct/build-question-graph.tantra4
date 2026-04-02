@@ -49,6 +49,7 @@
     let is-dative      = has-grammar-sthita nd rl "chaturthi-vibhakti"
     let is-instrumental = has-grammar-sthita nd rl "trtiya-vibhakti"
     let is-pratishedha = has-grammar-sthita nd rl "pratishedha"
+    let is-niyama      = has-grammar-sthita nd rl "niyama"
     let is-vibhakti    = or is-locative (or is-ablative (or is-dative is-instrumental))
     let vibhakti-edge  = cond is-locative "adhikarana" is-ablative "apadana" is-dative "sampradana" is-instrumental "karana" otherwise ""
     -- pratishedha uses pending accumulator: sets pending="pratishedha", next content
@@ -65,6 +66,7 @@
     let info      = [(to-string nd), rl, ly, nv, (to-string un), candidates]
     let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]]
       is-pratishedha []
+      is-niyama [[clean, "niyama", clean]]
       is-vibhakti [[clean, vibhakti-edge, clean]]
       otherwise (emit-triples clean info subgraphs pending)
     let with-word = (append g triples)

@@ -211,6 +211,6 @@ let () =
     eval;
     eval_tantra = (fun k t inputs -> eval_tantra k t inputs);
     eval_pure_op = Kriya_ops.eval_pure_op;
-    eval_pipeline_op = eval_pipeline_op;
+    eval_pipeline_op = Kriya_pipeline.eval_pipeline_op;
   };
   register_primitive_arities ()
