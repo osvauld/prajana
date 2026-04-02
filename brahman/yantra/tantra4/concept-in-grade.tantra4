@@ -1,3 +1,0 @@
--- true if a concept appears as a satya subject in the grade.
-(tantra concept-in-grade (concept grade)
-  (has-items (filter (triples-by-edge grade "satya") (fn t -> eq (triple-subj t) concept))))

@@ -1,3 +1,0 @@
--- subject of a triple, as string.
-(tantra triple-subj (t)
-  (str t 0))

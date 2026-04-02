@@ -1,3 +1,0 @@
--- true if string is empty.
-(tantra is-empty (s)
-  (eq (string-length s) 0))

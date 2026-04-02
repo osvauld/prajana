@@ -1,4 +1,0 @@
--- builds hyphenated bigrams: ["flew", "away"] -> ["flew-away"]
-(tantra word-bigrams (words)
-  (reduce (range (sub (length words) 1)) [] (fn acc i ->
-    (append acc [(concat (nth words i) "-" (nth words (add i 1)))]))))

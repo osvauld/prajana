@@ -30,14 +30,23 @@
     otherwise (cond (eq mode "swarupa")
       (concat "we see: chain reaches " assert-entity " via IS-A")
       otherwise (concat "we see: " assert-entity " reachable from " query-entity))))
+  -- niyama path: implication-based reasoning (modus ponens / tollens)
+  (is-niyama (or (eq mode "niyama-ponens") (eq mode "niyama-tollens")))
+  (niyama-nigamana (cond (eq mode "niyama-ponens")
+    (concat "yes — " query-entity " (by modus ponens: if " assert-entity " then " query-entity ", and " assert-entity " holds)")
+    (eq mode "niyama-tollens")
+    (concat "no — not " query-entity " (by modus tollens: if " query-entity " then " assert-entity ", but " assert-entity " is denied)")
+    otherwise ""))
   -- nigamana: include predicate for swarupa IS-A "yes" answers only
-  (nigamana (cond (eq answer "yes")
+  (nigamana (cond is-niyama niyama-nigamana
+    (eq answer "yes")
     (cond (and (has-text predicate) (eq mode "swarupa"))
       (concat "yes — " query-entity " " predicate " (via " assert-entity ")")
       otherwise (concat "yes — " query-entity " has " assert-entity))
     otherwise (concat "no — " query-entity " does not have " assert-entity)))
-  (all-strands (filter [pratijna, hetu, udaharana, upanaya, nigamana]
-    (fn s -> has-text s)))
+  (all-strands (cond is-niyama [nigamana]
+    otherwise (filter [pratijna, hetu, udaharana, upanaya, nigamana]
+      (fn s -> has-text s))))
   (reduce all-strands "" (fn acc strand ->
     cond (not (has-text acc)) strand
     otherwise (concat acc sep " " strand))))

@@ -1,0 +1,89 @@
+-- eval-logic: graph-native logic evaluation.
+-- reads ganana + janya from inference mantra nodes to decide strategy.
+-- the graph declares the inference rule; this tantra reads and executes it.
+--
+-- ganana dispatch:
+--   imply-forward  → P→Q + P, conclude Q (yes)
+--   contrapose     → P→Q + ¬Q, conclude ¬P (no)
+--   chain-walk     → walk edge chain (janya determines edge type)
+--
+-- janya context for chain-walk:
+--   swarupa → walk IS-A swarupa edges
+--   viveka  → walk varga + yukta edges
+(tantra eval-logic (graph query-entity assert-entity mode)
+
+  -- ── select inference mantra by mode ──────────────────────────────
+  (infer-mantra (cond
+    (eq mode "niyama-ponens") "modus-ponens"
+    (eq mode "niyama-tollens") "modus-tollens"
+    (eq mode "swarupa") "transitive-swarupa"
+    (eq mode "varga") "transitive-comparison"
+    otherwise "transitive-swarupa"))
+
+  -- ── read ganana + janya from the mantra node ─────────────────────
+  (ganana-nodes (walk infer-mantra "ganana"))
+  (ganana (cond (has-items ganana-nodes) (to-string (nth ganana-nodes 0)) otherwise ""))
+  (janya-nodes (walk infer-mantra "janya"))
+  (janya (cond (has-items janya-nodes) (to-string (nth janya-nodes 0)) otherwise ""))
+
+  -- ── chain-walk engine (shared by swarupa + varga modes) ──────────
+  -- all swarupa edges from the question graph (inline assertions)
+  (graph-swarupa (triples-by-edge graph "swarupa"))
+
+  -- level 1: direct parents (kosha + graph + varga)
+  (l1-kosha (map (walk query-entity "swarupa") (fn x -> to-string x)))
+  (l1-graph (map (filter graph-swarupa (fn tri -> eq (str tri 0) query-entity)) (fn tri -> str tri 2)))
+  (l1-varga (map (walk query-entity "varga") (fn x -> to-string x)))
+  (l1 (append l1-kosha (append l1-graph l1-varga)))
+  (hit1 (member assert-entity l1))
+
+  -- level 2
+  (l2 (reduce l1 [] (fn acc nd ->
+    let ksp = map (walk nd "swarupa") (fn x -> to-string x)
+    let gsp2 = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let kvp = map (walk nd "varga") (fn x -> to-string x)
+    append acc (append ksp (append gsp2 kvp)))))
+  (hit2 (member assert-entity l2))
+
+  -- level 3
+  (l3 (reduce l2 [] (fn acc nd ->
+    let ksp = map (walk nd "swarupa") (fn x -> to-string x)
+    let gsp3 = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let kvp = map (walk nd "varga") (fn x -> to-string x)
+    append acc (append ksp (append gsp3 kvp)))))
+  (hit3 (member assert-entity l3))
+
+  -- level 4
+  (l4 (reduce l3 [] (fn acc nd ->
+    let ksp = map (walk nd "swarupa") (fn x -> to-string x)
+    let gsp4 = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let kvp = map (walk nd "varga") (fn x -> to-string x)
+    append acc (append ksp (append gsp4 kvp)))))
+  (hit4 (member assert-entity l4))
+
+  (chain-hit (or hit1 (or hit2 (or hit3 hit4))))
+
+  -- ── varga yukta walk: check if predicate is yukta-reachable ──────
+  (all-vargas (append l1-varga (append
+    (reduce l1-varga [] (fn acc nd -> append acc (map (walk nd "varga") (fn x -> to-string x))))
+    (reduce l2 [] (fn acc nd -> append acc (map (walk nd "varga") (fn x -> to-string x)))))))
+  (yukta-hit (reduce all-vargas false (fn matched vnd ->
+    let ys = map (om-yukta vnd) (fn y -> to-string y)
+    (or matched (member assert-entity ys)))))
+  (direct-yukta (member assert-entity (map (om-yukta query-entity) (fn y -> to-string y))))
+  (swarupa-nodes (map (walk query-entity "swarupa") (fn nd -> to-string nd)))
+  (swarupa-yukta (reduce swarupa-nodes false (fn matched nd ->
+    let ys = map (om-yukta nd) (fn y -> to-string y)
+    (or matched (member assert-entity ys)))))
+  (varga-hit (or direct-yukta (or swarupa-yukta yukta-hit)))
+
+  -- ── dispatch on ganana value ─────────────────────────────────────
+  (cond (eq ganana "imply-forward") "yes"
+        (eq ganana "contrapose") "no"
+        (and (eq ganana "chain-walk") (eq janya "swarupa"))
+          (cond chain-hit "yes" otherwise "no")
+        (and (eq ganana "chain-walk") (eq janya "viveka"))
+          (cond varga-hit "yes" otherwise "no")
+        (eq ganana "chain-walk")
+          (cond (or chain-hit varga-hit) "yes" otherwise "no")
+        otherwise (cond chain-hit "yes" otherwise "no")))

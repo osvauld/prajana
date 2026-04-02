@@ -1,4 +1,0 @@
--- resolves a word to its graph node name, or "" if unresolved.
-(tantra word-resolve (w)
-  (wn (shabda-anveshana w))
-  (cond (exists wn) (to-string wn) otherwise ""))

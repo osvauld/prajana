@@ -1,10 +1,11 @@
--- the answer is the typed answer, anumana answer, viveka answer, count answer, or derived answer.
+-- graph-driven dispatch: walks pipeline-dispatch children to find handler.
+-- the graph declares available modes; this tantra just reads and routes.
 (tantra dispatch-answer (expanded refined)
   (mode (read-signal expanded "dispatch-mode"))
-  (cond (eq mode "typed")   (dispatch-typed expanded refined)
-        (eq mode "shunya")  (dispatch-shunya expanded refined)
-        (eq mode "anumana") (dispatch-anumana expanded refined)
-        (eq mode "viveka")  (dispatch-viveka expanded refined)
-        (eq mode "count")   (dispatch-count expanded refined)
-        (eq mode "derive")  (dispatch-derive expanded refined)
-        otherwise "no match"))
+  (dispatch-nodes (walk-in "pipeline-dispatch" "swarupa"))
+  (target-name (concat "dispatch-" mode))
+  (matched (filter dispatch-nodes (fn n -> eq (to-string n) target-name)))
+  (result (cond (has-items matched)
+    (call-tantra (to-string (nth matched 0)) [expanded, refined])
+    otherwise _none))
+  (cond (exists result) result otherwise "no match"))

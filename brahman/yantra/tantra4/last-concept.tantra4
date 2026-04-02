@@ -1,3 +1,0 @@
--- most recent satya subject in a grade.
-(tantra last-concept (grade)
-  (reduce grade "" (fn a t -> cond (eq (triple-edge t) "satya") (triple-subj t) otherwise a)))
