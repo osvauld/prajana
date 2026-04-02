@@ -1,0 +1,45 @@
+-- walk-refine-chain: krama-driven refinement.
+-- reads the refine krama chain from om5 and executes each step's kriya tantra.
+-- phase 1: sequential (idempotent steps, run once)
+-- phase 2: fixpoint loop (nodes marked yukta=fixpoint)
+-- replaces hardcoded step sequence in avrti-refine.
+(tantra walk-refine-chain (g)
+  (graph (cond (exists g) g otherwise []))
+
+  -- ── phase 1: walk krama chain until fixpoint boundary ────────────
+  -- state: [current-graph, current-node-name]
+  -- stops when node has (yukta fixpoint) — that's phase 2 territory
+  (phase1 (reduce (range 20) [graph, "refine-sandhi-kosha"] (fn state step ->
+    let curr-graph = nth state 0
+    let node-name  = nth state 1
+    -- guard: stop if no node or already reached fixpoint
+    cond (not (has-text node-name)) state
+    (member "fixpoint" (map (om-yukta node-name) (fn y -> to-string y))) state
+    otherwise
+      let tantra-name = to-string (nth (walk node-name "kriya") 0)
+      let result = call-tantra tantra-name [curr-graph]
+      let next = node-krama node-name
+      [result, next])))
+
+  (after-phase1 (nth phase1 0))
+  (fixpoint-start (nth phase1 1))
+
+  -- ── phase 2: fixpoint over remaining krama nodes ─────────────────
+  -- collect fixpoint node names by walking krama from fixpoint-start
+  (fp-nodes (reduce (range 10) [[], fixpoint-start] (fn state step ->
+    let nodes = nth state 0
+    let nd    = nth state 1
+    cond (not (has-text nd)) state
+    otherwise
+      let next = node-krama nd
+      [(append nodes [nd]), next])))
+  (fp-names (nth fp-nodes 0))
+
+  -- fixpoint: index → run all fp steps → re-index → check convergence
+  (indexed (index-graph after-phase1))
+  (fixpoint indexed (fn ig ->
+    let result = reduce fp-names ig (fn acc fp-node ->
+      let tantra-name = to-string (nth (walk fp-node "kriya") 0)
+      let stepped = call-tantra tantra-name [acc]
+      index-graph stepped)
+    result)))
