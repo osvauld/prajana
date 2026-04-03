@@ -1,5 +1,6 @@
 -- extract IS-A assertions from subject-copula-object patterns (grade-scoped).
 -- within each grade: subject + copula/quantifier + object → swarupa.
+-- comparative pattern: subject + copula + viveka-adj + "than" + object → viveka.
 -- niyama grades: delegates to niyama-extract for implication triples.
 (tantra assertion-bandha (graph)
   (quant-words (split (shabda "quantifier" "word") ","))
@@ -9,30 +10,58 @@
     cond has-niy
       (append acc (niyama-extract grade))
     otherwise
-      let st = reduce grade [[], "", false, false] (fn st tri ->
-        let result  = nth st 0
-        let subj    = nth st 1
-        let subj-ok = nth st 2
-        let saw-cop = nth st 3
+      -- state: [result, subj, subj-ok, saw-cop, pending-adj, saw-than]
+      -- pending-adj: viveka adjective waiting for "than" + compared-to entity
+      -- saw-than: "than" seen after pending-adj, next mithya is compared-to
+      let st = reduce grade [[], "", false, false, "", false] (fn st tri ->
+        let result      = nth st 0
+        let subj        = nth st 1
+        let subj-ok     = nth st 2
+        let saw-cop     = nth st 3
+        let pending-adj = nth st 4
+        let saw-than    = nth st 5
         let edge = str tri 1
         let word = str tri 0
-        cond (eq edge "viraam") [result, "", false, false]
+        cond
+        -- viraam: flush pending-adj as swarupa if "than" never came
+        (eq edge "viraam")
+          let flushed = cond (and (has-text subj) (has-text pending-adj))
+            (append result [[subj, "swarupa", pending-adj]]) otherwise result
+          [flushed, "", false, false, "", false]
+        -- "than" after pending viveka adjective: advance to awaiting compared-to
+        (and (eq edge "mithya") (eq word "than") (has-text pending-adj))
+          [result, subj, subj-ok, saw-cop, pending-adj, true]
+        -- mithya entity after "than": emit viveka edge
+        -- normalize direction: viveka always means "subject > object".
+        -- "heavier than" (viveka-max): subj beats obj → [subj, viveka, obj]
+        -- "lighter than" (viveka-min): subj < obj → flip → [obj, viveka, subj]
+        (and (eq edge "mithya") saw-than (not (ends-with word "ing")) (not (ends-with word "ed")))
+          let obj = resolve-or-self word
+          let is-min = member "viveka-min" (walk pending-adj "sthita")
+          let viv-subj = cond is-min obj otherwise subj
+          let viv-obj  = cond is-min subj otherwise obj
+          [(append result [[viv-subj, "viveka", viv-obj], [viv-subj, "viveka-adj", pending-adj]]), "", false, false, "", false]
+        -- query-word: skip (carries surface form like "heavier", no state change)
+        (eq edge "query-word") st
         -- quantifier words act as copula
-        (and (eq edge "mithya") (member word quant-words)) [result, "", false, true]
-        (and (eq edge "satya") (eq word "quantifier")) [result, "", false, true]
+        (and (eq edge "mithya") (member word quant-words)) [result, "", false, true, "", false]
+        (and (eq edge "satya") (eq word "quantifier")) [result, "", false, true, "", false]
         -- object found: emit swarupa (unknown nouns ok; skip verb forms)
         (and (eq edge "mithya") (neq subj "") saw-cop (not (ends-with word "ing")) (not (ends-with word "ed")))
-          [(append result [[subj, "swarupa", (resolve-or-self word)]]), "", false, false]
+          [(append result [[subj, "swarupa", (resolve-or-self word)]]), "", false, false, "", false]
         -- copula after subject
-        (and (eq edge "copula") subj-ok) [result, subj, subj-ok, true]
-        (eq edge "copula") [result, subj, subj-ok, saw-cop]
+        (and (eq edge "copula") subj-ok) [result, subj, subj-ok, true, "", false]
+        (eq edge "copula") [result, subj, subj-ok, saw-cop, "", false]
         -- mithya: potential subject (non-verb unknown nouns can be subjects)
-        (eq edge "mithya") [result, (resolve-or-self word), (and (not (ends-with word "ing")) (not (ends-with word "ed"))), saw-cop]
-        -- satya after copula: object (emit swarupa) or subject
-        (and (eq edge "satya") saw-cop (eq subj "")) [result, (resolve-or-self word), true, saw-cop]
+        (eq edge "mithya") [result, (resolve-or-self word), (and (not (ends-with word "ing")) (not (ends-with word "ed"))), saw-cop, "", false]
+        -- satya after copula: viveka adjective → pend; otherwise emit swarupa
+        (and (eq edge "satya") saw-cop (neq subj "")
+             (or (member "viveka-max" (walk word "sthita")) (member "viveka-min" (walk word "sthita"))))
+          [result, subj, subj-ok, saw-cop, word, false]
+        (and (eq edge "satya") saw-cop (eq subj "")) [result, (resolve-or-self word), true, saw-cop, "", false]
         (and (eq edge "satya") saw-cop (neq subj ""))
-          [(append result [[subj, "swarupa", word]]), "", false, false]
-        (eq edge "satya") [result, word, true, false]
+          [(append result [[subj, "swarupa", word]]), "", false, false, "", false]
+        (eq edge "satya") [result, word, true, false, "", false]
         otherwise st)
       (append acc (nth st 0)))))
   (append-triples graph new-triples))

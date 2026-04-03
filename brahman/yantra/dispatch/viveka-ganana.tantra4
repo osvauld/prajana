@@ -1,6 +1,6 @@
 -- viveka-ganana: comparison — find which entity has the greater/lesser value.
--- derive-or-raw: tries derive-for-entity first (enables KE, momentum, etc.),
---   falls back to concept-scoped raw value, then first-value if concept unknown.
+-- two paths: (1) numeric — derive values, select extremum.
+--            (2) viveka-chain — walk transitive viveka edges from assertions.
 -- when all values are equal, emits equal-to instead of greater-than.
 (tantra viveka-ganana (graph concept cw direction)
   (op-eval (nth (walk direction "ganana") 0))
@@ -34,15 +34,39 @@
     cond (has-text val) (append acc [[ent-str, val]])
     otherwise acc)))
 
-  (best-pr (select-extremum ev-pairs op-eval))
-  (worst-pr (select-extremum ev-pairs opp-eval))
+  -- path 2: viveka-chain — transitive walk over assertion viveka edges
+  -- top = no incoming viveka (unbeaten), bottom = no outgoing (beats nobody)
+  (viveka-triples (triples-by-edge graph "viveka"))
+  (has-chain (and (not (has-items ev-pairs)) (has-items viveka-triples)))
+  (viv-subjs (map viveka-triples (fn t -> triple-subj t)))
+  (viv-objs  (map viveka-triples (fn t -> triple-obj t)))
+  (top-entity (cond has-chain
+    (nth (filter viv-subjs (fn s -> not (member s viv-objs))) 0) otherwise ""))
+  (bottom-entity (cond has-chain
+    (nth (filter viv-objs (fn o -> not (member o viv-subjs))) 0) otherwise ""))
+  (chain-winner (cond has-chain
+    (cond (eq direction "min") (to-string bottom-entity)
+          otherwise (to-string top-entity))
+    otherwise ""))
+  (chain-loser (cond has-chain
+    (cond (eq direction "min") (to-string top-entity)
+          otherwise (to-string bottom-entity))
+    otherwise ""))
 
-  (winner (cond (has-items best-pr) (str best-pr 0) otherwise ""))
-  (winner-val (cond (has-items best-pr) (str best-pr 1) otherwise ""))
-  (loser (cond (has-items worst-pr) (str worst-pr 0) otherwise ""))
-  (loser-val (cond (has-items worst-pr) (str worst-pr 1) otherwise ""))
+  -- select winner: numeric path or chain path
+  (best-pr (cond (not has-chain) (select-extremum ev-pairs op-eval) otherwise []))
+  (worst-pr (cond (not has-chain) (select-extremum ev-pairs opp-eval) otherwise []))
 
-  (vals-equal (eq winner-val loser-val))
+  (winner (cond has-chain chain-winner
+    (has-items best-pr) (str best-pr 0) otherwise ""))
+  (winner-val (cond has-chain ""
+    (has-items best-pr) (str best-pr 1) otherwise ""))
+  (loser (cond has-chain chain-loser
+    (has-items worst-pr) (str worst-pr 0) otherwise ""))
+  (loser-val (cond has-chain ""
+    (has-items worst-pr) (str worst-pr 1) otherwise ""))
+
+  (vals-equal (and (not has-chain) (eq winner-val loser-val)))
   (cmp-rel (cond vals-equal "equal-to" otherwise "greater-than"))
 
   (gt-triples (cond (and (has-text winner) (has-text loser))

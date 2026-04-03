@@ -104,7 +104,6 @@ def test_transitive_greater(vy):
     assert "yes" in r.lower()
 
 
-@xfail(strict=True, reason="transitivity: comparison chain walk not built; answers 'adj-heavy has adj-heavy'")
 def test_transitive_entities_ranking(vy):
     """ball-A heavier than ball-B. ball-B heavier than ball-C. which is heaviest"""
     r = vy.answer(
