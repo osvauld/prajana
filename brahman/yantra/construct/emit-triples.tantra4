@@ -27,9 +27,8 @@
   (is-direction-word (or (eq nd-str "kshaya") (eq nd-str "vriddhi")))
   (is-tinanta (and (exists nd) (member "tinanta" (walk nd-str "swarupa"))))
   (is-verb-form (or is-direction-word is-tinanta (ends-with word "ed") (ends-with word "ing")))
-  -- is-viveka: node IS viveka-max/min, or adjective with sthita→viveka-max/min
-  (is-viveka (and (exists nd) (or (eq nd-str "viveka-max") (eq nd-str "viveka-min")
-    (member "viveka-max" (walk nd-str "sthita")) (member "viveka-min" (walk nd-str "sthita")))))
+  -- is-viveka: graph-driven — node IS viveka or has sthita→viveka
+  (is-viveka (and (exists nd) (is-viveka-node nd-str)))
   -- "2 more" = vriddhi, not viveka comparison. Suppress viveka when preceded by number.
   (is-viveka-after-num (and has-pend is-concept is-viveka))
   (after-loc (eq prev-edge "adhikarana"))

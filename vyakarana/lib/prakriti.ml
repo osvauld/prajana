@@ -408,6 +408,87 @@ let init_satya (k : proof_graph) : unit =
     Hashtbl.replace k.nodes n.name { n with satya = r }
   ) k.nodes
 
+(* viveka cache: lazily computed set of all nodes that are viveka-related.
+   A node is viveka if it has swarupa→viveka (direct) or sthita→X where X
+   has swarupa→viveka (indirect, e.g. adjectives). O(1) after first build. *)
+let _viveka_cache : (string, bool) Hashtbl.t option ref = ref None
+
+let _viveka_dir_cache : (string, string) Hashtbl.t option ref = ref None
+
+let invalidate_viveka_cache () : unit =
+  _viveka_cache := None;
+  _viveka_dir_cache := None
+
+let get_viveka_cache (k : proof_graph) : (string, bool) Hashtbl.t =
+  match !_viveka_cache with
+  | Some c -> c
+  | None ->
+    let cache = Hashtbl.create 64 in
+    let sw = visheshanam_of_string "swarupa" in
+    let st = visheshanam_of_string "sthita" in
+    (* pass 1: find direct viveka nodes (swarupa→viveka) *)
+    let direct = Hashtbl.create 16 in
+    (match sw with
+     | Some sw_dim ->
+       List.iter (fun (e : typed_edge) ->
+         if e.relation = sw_dim && e.target = "viveka" then begin
+           Hashtbl.replace direct e.source true;
+           Hashtbl.replace cache e.source true
+         end
+       ) !(k.all_edges)
+     | None -> ());
+    (* pass 2: find indirect viveka nodes (sthita→direct_viveka_node) *)
+    (match st with
+     | Some st_dim ->
+       List.iter (fun (e : typed_edge) ->
+         if e.relation = st_dim && Hashtbl.mem direct e.target then
+           Hashtbl.replace cache e.source true
+       ) !(k.all_edges)
+     | None -> ());
+    _viveka_cache := Some cache;
+    cache
+
+(* viveka-direction cache: maps node → "max"/"min" for viveka nodes.
+   Direct: viveka-max → abheda → max. Indirect: adj-heavy → sthita → viveka-max → abheda → max. *)
+let get_viveka_dir_cache (k : proof_graph) : (string, string) Hashtbl.t =
+  match !_viveka_dir_cache with
+  | Some c -> c
+  | None ->
+    let cache = Hashtbl.create 64 in
+    let sw = visheshanam_of_string "swarupa" in
+    let st = visheshanam_of_string "sthita" in
+    let ab = visheshanam_of_string "abheda" in
+    (* pass 1: direct viveka nodes → their abheda *)
+    let direct_dir = Hashtbl.create 16 in
+    (match sw, ab with
+     | Some sw_dim, Some ab_dim ->
+       (* find swarupa→viveka nodes *)
+       let viveka_nodes = Hashtbl.create 8 in
+       List.iter (fun (e : typed_edge) ->
+         if e.relation = sw_dim && e.target = "viveka" then
+           Hashtbl.replace viveka_nodes e.source true
+       ) !(k.all_edges);
+       (* for each, find abheda target *)
+       List.iter (fun (e : typed_edge) ->
+         if e.relation = ab_dim && Hashtbl.mem viveka_nodes e.source then begin
+           Hashtbl.replace direct_dir e.source e.target;
+           Hashtbl.replace cache e.source e.target
+         end
+       ) !(k.all_edges)
+     | _ -> ());
+    (* pass 2: indirect — nodes with sthita→direct_viveka_node inherit its direction *)
+    (match st with
+     | Some st_dim ->
+       List.iter (fun (e : typed_edge) ->
+         if e.relation = st_dim then
+           match Hashtbl.find_opt direct_dir e.target with
+           | Some dir -> Hashtbl.replace cache e.source dir
+           | None -> ()
+       ) !(k.all_edges)
+     | None -> ());
+    _viveka_dir_cache := Some cache;
+    cache
+
 let compute_visheshanam_entropy_weights (k : proof_graph) : unit =
   let target_counts : (int, (string, int) Hashtbl.t) Hashtbl.t =
     Hashtbl.create 16 in

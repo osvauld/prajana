@@ -1,6 +1,7 @@
 -- detects viveka (comparison) intent from graph.
 -- adjective nodes (adj-heavy etc.) carry sthita→viveka-max/min + kramanusara→property.
 -- entities come from prathama-sparsha (numeric) OR viveka edges (comparative assertions).
+-- direction is graph-driven: viveka-direction walks sthita→viveka-X→abheda→max/min.
 (tantra detect-viveka (expanded)
   (num-entities (prathama-sparsha expanded))
   -- viveka-edge entities: subjects and objects of viveka triples from assertion-bandha
@@ -15,31 +16,26 @@
   -- adjective is from the question. Avoids kosha-janya pollution of split-grades.
   (q-query-adj-nodes (expanded | where [s, e, o] | and (eq e "query-word") | collect (to-string s)))
   (last-q-adj (cond (has-items q-query-adj-nodes) (nth q-query-adj-nodes (sub (length q-query-adj-nodes) 1)) otherwise ""))
-  (q-max-word (cond (and (has-text last-q-adj) (or (eq last-q-adj "viveka-max") (member "viveka-max" (walk last-q-adj "sthita")))) last-q-adj otherwise _none))
-  (q-min-word (cond (and (has-text last-q-adj) (or (eq last-q-adj "viveka-min") (member "viveka-min" (walk last-q-adj "sthita")))) last-q-adj otherwise _none))
-  -- all-subjects viveka: fallback when question grade has no adjective
-  (max-word (cond (exists q-max-word) q-max-word otherwise
-    (nth (filter all-subjects (fn w ->
-      (or (eq w "viveka-max") (member "viveka-max" (walk w "sthita"))))) 0)))
-  (min-word (cond (exists q-min-word) q-min-word otherwise
-    (nth (filter all-subjects (fn w ->
-      (or (eq w "viveka-min") (member "viveka-min" (walk w "sthita"))))) 0)))
-  -- direction: question-grade adjective wins; fallback to all-subjects
-  (has-q-max (exists q-max-word))
-  (has-q-min (exists q-min-word))
-  (has-max (or (exists max-word) (and (exists viv-adj-node) (member "viveka-max" (walk (to-string viv-adj-node) "sthita")))))
-  (has-min (or (exists min-word) (and (exists viv-adj-node) (member "viveka-min" (walk (to-string viv-adj-node) "sthita")))))
-  (is-viveka (and (gt (length entities) 1) (or has-max has-min)))
-  -- question-grade direction takes priority: "which is lightest" → min even if assertions use "heavier"
-  (dir (cond has-q-min "min" has-q-max "max" (and has-min (not has-max)) "min" otherwise "max"))
-  (max-qword (nth (expanded | where [s, e, o] | and (eq s max-word) | and (eq e "query-word") | collect (to-string o)) 0))
-  (min-qword (nth (expanded | where [s, e, o] | and (eq s min-word) | and (eq e "query-word") | collect (to-string o)) 0))
-  (comp-word (cond (and has-max (exists max-qword)) max-qword has-max max-word (exists min-qword) min-qword otherwise min-word))
+  -- graph-driven direction: viveka-direction returns "max" or "min" from sthita→abheda walk
+  (q-dir (cond (has-text last-q-adj) (viveka-direction last-q-adj) otherwise ""))
+  (q-viveka-word (cond (has-text q-dir) last-q-adj otherwise _none))
+  -- all-subjects fallback: find any viveka subject when question grade has none
+  (fallback-word (nth (filter all-subjects (fn w -> is-viveka-node w)) 0))
+  (fallback-dir (cond (exists fallback-word) (viveka-direction (to-string fallback-word)) otherwise ""))
+  -- resolved direction and viveka word
+  (has-viveka-signal (or (has-text q-dir) (has-text fallback-dir)
+    (and (exists viv-adj-node) (is-viveka-node (to-string viv-adj-node)))))
+  (is-viveka (and (gt (length entities) 1) has-viveka-signal))
+  -- question-grade direction takes priority
+  (dir (cond (has-text q-dir) q-dir (has-text fallback-dir) fallback-dir otherwise "max"))
+  -- viveka word: the adjective for display (e.g. "heavier", "fastest")
+  (viveka-word (cond (exists q-viveka-word) q-viveka-word (exists fallback-word) fallback-word otherwise ""))
+  (qword (nth (expanded | where [s, e, o] | and (eq s viveka-word) | and (eq e "query-word") | collect (to-string o)) 0))
+  (comp-word (cond (exists qword) qword (has-text viveka-word) viveka-word otherwise ""))
   -- kramanusara-based concept from adjective node (e.g. adj-heavy → kramanusara → mass)
   -- fallback to viveka-adj node when no satya viveka word in question grade
-  (viveka-src (cond has-max (cond (exists max-word) max-word (exists viv-adj-node) (to-string viv-adj-node) otherwise "")
-    has-min (cond (exists min-word) min-word (exists viv-adj-node) (to-string viv-adj-node) otherwise "")
-    otherwise ""))
+  (viveka-src (cond (has-text viveka-word) viveka-word
+    (exists viv-adj-node) (to-string viv-adj-node) otherwise ""))
   (krama-concept (cond (has-text viveka-src)
     (to-string (nth (walk viveka-src "kramanusara") 0)) otherwise ""))
   -- vishesa-based concept fallback (e.g. viveka-max → vishesa → mass)
@@ -55,9 +51,7 @@
   (grade-concept (nth (reduce q-grade [] (fn acc tri ->
     let s = nth tri 0
     let e = nth tri 1
-    let is-viveka-node = (or (eq s "viveka-max") (eq s "viveka-min")
-      (member "viveka-max" (walk s "sthita")) (member "viveka-min" (walk s "sthita")))
-    cond (and (eq e "satya") (not is-viveka-node) (not (member s entities)))
+    cond (and (eq e "satya") (not (is-viveka-node s)) (not (member s entities)))
       (append acc [s])
     otherwise acc)) 0))
   (comp-concept (cond (has-text krama-concept) krama-concept

@@ -37,7 +37,7 @@
         -- "lighter than" (viveka-min): subj < obj → flip → [obj, viveka, subj]
         (and (eq edge "mithya") saw-than (not (ends-with word "ing")) (not (ends-with word "ed")))
           let obj = resolve-or-self word
-          let is-min = member "viveka-min" (walk pending-adj "sthita")
+          let is-min = eq (viveka-direction pending-adj) "min"
           let viv-subj = cond is-min obj otherwise subj
           let viv-obj  = cond is-min subj otherwise obj
           [(append result [[viv-subj, "viveka", viv-obj], [viv-subj, "viveka-adj", pending-adj]]), "", false, false, "", false]
@@ -55,8 +55,7 @@
         -- mithya: potential subject (non-verb unknown nouns can be subjects)
         (eq edge "mithya") [result, (resolve-or-self word), (and (not (ends-with word "ing")) (not (ends-with word "ed"))), saw-cop, "", false]
         -- satya after copula: viveka adjective → pend; otherwise emit swarupa
-        (and (eq edge "satya") saw-cop (neq subj "")
-             (or (member "viveka-max" (walk word "sthita")) (member "viveka-min" (walk word "sthita"))))
+        (and (eq edge "satya") saw-cop (neq subj "") (is-viveka-node word))
           [result, subj, subj-ok, saw-cop, word, false]
         (and (eq edge "satya") saw-cop (eq subj "")) [result, (resolve-or-self word), true, saw-cop, "", false]
         (and (eq edge "satya") saw-cop (neq subj ""))

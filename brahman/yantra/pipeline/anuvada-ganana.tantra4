@@ -33,7 +33,7 @@
   (all-grades (append completed-grades [final-grade]))
   -- viveka check on raw graph (avrti-refine strips question-grade triples)
   (raw-has-viveka (has-items (filter (triples-by-edge raw-graph "satya")
-    (fn t -> or (eq (triple-subj t) "viveka-max") (eq (triple-subj t) "viveka-min")))))
+    (fn t -> is-viveka-node (triple-subj t)))))
   (after-grades (cond is-typed [] raw-has-viveka refined otherwise (count-chain refined all-grades)))
   -- expand + detect + dispatch (skipped if typed)
   (expanded (cond is-typed [] otherwise (kosha-expand after-grades)))

@@ -3,5 +3,5 @@
   (is-numeric (has-items (nth (bound-state graph) 0)))
   (viveka-present (has-items (filter (graph | where [vs, ve, vo]
     | and (eq ve "satya") | collect (to-string vs))
-    (fn w -> (or (eq w "viveka-max") (eq w "viveka-min"))))))
+    (fn w -> is-viveka-node w))))
   (and (not is-numeric) (not viveka-present)))

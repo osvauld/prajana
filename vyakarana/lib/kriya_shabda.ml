@@ -236,4 +236,20 @@ let eval_shabda_op
         ) edges
     else false))
 
+  (* is-viveka-node: graph-driven check with lazy cache.
+     On first call, scans graph for all nodes that are swarupa→viveka (direct)
+     or sthita→(swarupa→viveka) (indirect). Caches the set for O(1) lookups. *)
+  | "is-viveka-node" ->
+    let w = eval_str 0 in
+    let viveka_set = Prakriti.get_viveka_cache k in
+    Some (VBool (Hashtbl.mem viveka_set w))
+
+  (* viveka-direction: returns "max" or "min" via cached viveka-direction map.
+     Built lazily alongside the viveka cache. *)
+  | "viveka-direction" ->
+    let w = eval_str 0 in
+    let dir_map = Prakriti.get_viveka_dir_cache k in
+    let dir = match Hashtbl.find_opt dir_map w with Some d -> d | None -> "" in
+    Some (VString dir)
+
   | _ -> None

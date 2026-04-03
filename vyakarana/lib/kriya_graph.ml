@@ -550,6 +550,8 @@ let register_primitive_arities () =
   r "word-resolve"        1;
   r "resolve-or-self"     1;
   r "has-grammar-sthita"  3;
+  r "is-viveka-node"      1;
+  r "viveka-direction"     1;
   r "word-stem"           1;
   r "stems-match"         2;
   (* om-* relation projections: dynamic — one entry per registered dimension *)
