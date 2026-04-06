@@ -1,0 +1,6 @@
+-- expand-grade: convert a grade (list of triples) to an English word list.
+-- skips structural triples (sankhya, kaala, vachana, vibhakti, derived-by).
+(tantra expand-grade (grade cop)
+  (reduce grade [] (fn acc tri ->
+    let w = expand-triple tri cop
+    cond (has-text w) (append acc [w]) otherwise acc)))

@@ -107,9 +107,9 @@ def test_count_compare_after_change(vy):
     r = vy.answer(
         "box-A has 5 items. 3 more were added to box-A. box-B has 6 items. which has more items"
     )
-    # box-A should be the winner (8 > 6), not just mentioned as the loser
+    # box-A should be the winner (8 > 6) — must appear as the subject of "is more"
     rl = r.lower()
-    assert "box-a" in rl and "than box-a" not in rl
+    assert "box-a" in rl and "box-a is more" in rl, f"box-A should be winner, got: {r}"
 
 
 # ── proportional reasoning ────────────────────────────────────────────────────

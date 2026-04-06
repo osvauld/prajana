@@ -1,5 +1,0 @@
--- weaves non-empty strands into a single sentence-capped utterance.
-(tantra weave-strands (strands)
-  (non-empty (filter strands (fn s -> has-text s)))
-  (capped (map non-empty (fn s -> capitalize-first s)))
-  (join-with capped ". "))

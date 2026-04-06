@@ -6,5 +6,4 @@
   (mode (read-signal expanded "anumana-mode"))
   (predicate (read-signal expanded "anumana-predicate"))
   (answer (eval-logic refined query assert mode))
-  (reasoning (emit-anumana refined query assert mode answer predicate))
-  reasoning)
+  (nam-anuvada refined expanded answer "anumana"))

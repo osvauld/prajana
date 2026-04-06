@@ -1,0 +1,24 @@
+-- expand-triple: convert a single [subj, edge, obj] triple to its English word.
+-- returns "" for structural triples that should be skipped.
+(tantra expand-triple (tri cop)
+  (subj (str tri 0))
+  (edge (str tri 1))
+  (obj  (str tri 2))
+  (cond
+    (eq edge "satya") (concept-display subj)
+    (eq edge "mithya") subj
+    (eq edge "copula") cop
+    (eq edge "dvandva") "and"
+    (eq edge "adhikarana") subj
+    (eq edge "apadana") subj
+    (eq edge "sampradana") subj
+    (eq edge "karana") subj
+    (eq edge "asprista-sankhya") subj
+    (eq edge "pratishedha") subj
+    (eq edge "matra") (let mudra = walk obj "naama-mudra"
+      cond (has-items mudra) (to-string (nth mudra 0))
+      otherwise (let nm = walk obj "naama"
+        cond (has-items nm) (to-string (nth nm 0))
+        otherwise obj))
+    (eq edge "vidhi-kaala") ""
+    otherwise ""))

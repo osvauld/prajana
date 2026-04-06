@@ -1,5 +1,5 @@
 -- viveka dispatch: comparison — which entity has the greater/lesser value.
--- runs viveka-ganana, builds proof graph, emits reasoning.
+-- runs viveka-ganana, builds proof graph, emits via nam-anuvada.
 (tantra dispatch-viveka (expanded refined)
   (sf (read-signal expanded "solve-for"))
   (scope-entity (read-signal expanded "scope-entity"))
@@ -11,11 +11,6 @@
   (ev-pairs (viveka-result viveka-raw "ev-pairs"))
   (gt-triples (viveka-result viveka-raw "gt-triples"))
   (result (cond (exists winner) (to-string winner) otherwise "no match"))
-  -- compose sought phrase: "heavier" stays as-is, "more" + concept → "more kinetic energy"
-  (concept-disp (cond (exists comp-concept) (concept-display (to-string comp-concept)) otherwise ""))
-  (sought-phrase (cond (and (has-text concept-disp) (has-text comp-word))
-    (concat comp-word " " concept-disp)
-    (has-text comp-word) comp-word
-    otherwise ""))
+  (sought-phrase (cond (has-text comp-word) comp-word otherwise ""))
   (proof-graph (pramana-bandha expanded [] result sf scope-entity true ev-pairs gt-triples sought-phrase))
-  (emit-reasoning proof-graph))
+  (nam-anuvada refined proof-graph result "viveka"))

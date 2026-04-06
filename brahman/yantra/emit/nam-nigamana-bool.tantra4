@@ -1,0 +1,67 @@
+-- nam-nigamana-bool: transform a question grade into a yes/no answer.
+-- "does sparrow have wings" + yes → "yes, sparrow has wings"
+-- "does sparrow have wings" + no  → "no, sparrow does not have wings"
+(tantra nam-nigamana-bool (grade answer cop)
+  -- collect word-bearing triples, skipping structural ones + dedup satya
+  (wt-state (reduce grade [[], []] (fn st tri ->
+    let acc = nth st 0
+    let seen = nth st 1
+    let edge = str tri 1
+    let subj = str tri 0
+    let is-word = or (eq edge "satya") (eq edge "mithya") (eq edge "copula")
+    let is-dup = and (eq edge "satya") (member subj seen)
+    let include = and is-word (not is-dup)
+    let new-seen = cond (eq edge "satya") (append seen [subj]) otherwise seen
+    cond include [(append acc [tri]), new-seen]
+      otherwise st)))
+  (word-triples (nth wt-state 0))
+
+  -- first word: check if it's an interrogative
+  (first-word (cond (has-items word-triples) (str (nth word-triples 0) 0) otherwise ""))
+  (first-edge (cond (has-items word-triples) (str (nth word-triples 0) 1) otherwise ""))
+  (is-interrogative (and (eq first-edge "mithya")
+    (or (eq first-word "does") (eq first-word "do") (eq first-word "did")
+        (eq first-word "can") (eq first-word "will"))))
+  (is-copula-q (and (eq first-edge "copula")
+    (or (eq first-word "is") (eq first-word "are") (eq first-word "was") (eq first-word "were"))))
+  (skip-first (or is-interrogative is-copula-q))
+
+  -- expand content words (skip the leading interrogative)
+  (content-st (reduce word-triples [[], false] (fn st tri ->
+    let acc = nth st 0
+    let past-first = nth st 1
+    let subj = str tri 0
+    let edge = str tri 1
+    -- skip leading interrogative
+    cond (and (not past-first) skip-first) [acc, true]
+    otherwise
+      (let w = cond
+        (and (eq edge "satya") (starts-with subj "pronoun-")) (substr subj 8 (sub (string-length subj) 8))
+        (eq edge "satya") (concept-display subj)
+        (eq edge "mithya") subj
+        (eq edge "copula") cop
+        otherwise ""
+       cond (has-text w) [(append acc [w]), true] otherwise [acc, true]))))
+  (content (nth content-st 0))
+
+  -- for "no": insert negation after subject
+  (is-yes (eq answer "yes"))
+  (result-words (cond is-yes content
+    -- "no" + interrogative: "[subject] [aux] not [rest]"
+    (and (not is-yes) is-interrogative (gt (length content) 1))
+      (let subj-w = nth content 0
+       let rest = reduce content [[], false] (fn st w ->
+         cond (not (nth st 1)) [[], true]
+         otherwise [(append (nth st 0) [w]), true])
+       append [subj-w, first-word, "not"] (nth rest 0))
+    -- "no" + copula-q: "[subject] [cop] not [rest]"
+    (and (not is-yes) is-copula-q (gt (length content) 1))
+      (let subj-w = nth content 0
+       let rest = reduce content [[], false] (fn st w ->
+         cond (not (nth st 1)) [[], true]
+         otherwise [(append (nth st 0) [w]), true])
+       append [subj-w, cop, "not"] (nth rest 0))
+    otherwise content))
+
+  (words-str (words-to-str result-words))
+  (cond (has-text words-str) (concat answer ", " words-str) otherwise answer))

@@ -1,7 +1,4 @@
--- count dispatch: arithmetic word problem — read count-result signal, emit reasoning.
+-- count dispatch: arithmetic word problem — read count-result signal, emit via nam-anuvada.
 (tantra dispatch-count (expanded refined)
-  (sf (read-signal expanded "solve-for"))
-  (scope-entity (read-signal expanded "scope-entity"))
   (result (to-string (read-signal expanded "count-result")))
-  (proof-graph (pramana-bandha expanded [] result sf scope-entity false [] [] ""))
-  (emit-reasoning proof-graph))
+  (nam-anuvada refined expanded result "count"))

@@ -480,7 +480,8 @@ def test_compare_total_per_group(vy):
         "box-B has 4 red balls and 2 blue balls. "
         "which box has more balls in total"
     )
-    assert "box-A" in r or "box-a" in r.lower() or "8" in r
+    # box-A must be the winner (8 > 6), not just mentioned in pratijna
+    assert "box-a is more" in r.lower() or "8" in r, f"box-A should win, got: {r}"
 
 
 def test_rank_three_by_ke(vy):

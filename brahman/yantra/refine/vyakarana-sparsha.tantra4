@@ -1,15 +1,30 @@
 -- vyakarana-sparsha: extract grammatical signals from word forms.
 -- reads copula and verb form nodes, emits tense (kaala) and number (vachana)
--- edges onto the preceding subject.
--- O(n) single pass: tracks last subject incrementally, no nested reduce.
+-- edges onto the subject — preceding in statements, following in questions.
+-- state: [result, subj, pending-kaala, pending-vachana]
+-- when copula precedes subject (question word order), kaala/vachana are deferred
+-- and flushed onto the next satya concept.
 (tantra vyakarana-sparsha (graph)
-  (state (reduce graph [[], ""] (fn st tri ->
+  (state (reduce graph [[], "", "", ""] (fn st tri ->
     let result = nth st 0
     let subj   = nth st 1
+    let pend-k = nth st 2
+    let pend-v = nth st 3
     let word = str tri 0
     let edge = str tri 1
+    -- flush pending kaala/vachana onto first satya concept after a subjectless copula
+    let is-concept = or (eq edge "satya") (eq edge "mithya")
+    let flush = cond (and is-concept (or (has-text pend-k) (has-text pend-v)))
+      (cond (and (has-text pend-k) (has-text pend-v))
+        [[word, "kaala", pend-k], [word, "vachana", pend-v]]
+        (has-text pend-k) [[word, "kaala", pend-k]]
+        otherwise [[word, "vachana", pend-v]])
+      otherwise []
+    let result = cond (has-items flush) (append result flush) otherwise result
+    let pend-k = cond (has-items flush) "" otherwise pend-k
+    let pend-v = cond (has-items flush) "" otherwise pend-v
     -- track last subject: any satya or mithya word
-    let new-subj = cond (or (eq edge "satya") (eq edge "mithya")) word otherwise subj
+    let new-subj = cond is-concept word otherwise subj
     -- only process copula and possession verbs
     let is-copula = eq edge "copula"
     let resolved = cond (or is-copula (eq edge "mithya")) (shabda-anveshana word) otherwise _none
@@ -27,12 +42,15 @@
       (member e ["eka-vachana", "bahu-vachana", "dvi-vachana"])
         (to-string e)
       otherwise found)
-    let new = cond (and (has-text subj) (has-text kaala) (has-text vachana))
-      [[subj, "kaala", kaala], [subj, "vachana", vachana]]
-      (and (has-text subj) (has-text kaala))
-        [[subj, "kaala", kaala]]
-      (and (has-text subj) (has-text vachana))
-        [[subj, "vachana", vachana]]
+    -- if subject available, emit immediately; otherwise defer to pending
+    let new = cond (and (has-text new-subj) (has-text kaala) (has-text vachana))
+      [[new-subj, "kaala", kaala], [new-subj, "vachana", vachana]]
+      (and (has-text new-subj) (has-text kaala))
+        [[new-subj, "kaala", kaala]]
+      (and (has-text new-subj) (has-text vachana))
+        [[new-subj, "vachana", vachana]]
       otherwise []
-    [(append result new), new-subj])))
+    let new-pend-k = cond (and (has-text kaala) (not (has-text new-subj))) kaala otherwise pend-k
+    let new-pend-v = cond (and (has-text vachana) (not (has-text new-subj))) vachana otherwise pend-v
+    [(append result new), new-subj, new-pend-k, new-pend-v])))
   (append-triples graph (nth state 0)))

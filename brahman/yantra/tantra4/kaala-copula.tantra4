@@ -1,0 +1,20 @@
+-- kaala-copula: graph-driven copula selection from kaala + vachana triples.
+-- walks proof graph for kaala/vachana on solved concept, then finds matching
+-- copula node via sthita edges. returns the surface word (is/was/are/were/will be).
+-- if no kaala found, returns default "is".
+(tantra kaala-copula (graph)
+  (kaala-triples (graph | where [s, e, o] | and (eq e "kaala") | collect [s, o]))
+  (vachana-triples (graph | where [s, e, o] | and (eq e "vachana") | collect [s, o]))
+  (kaala (cond (has-items kaala-triples) (str (nth kaala-triples 0) 1) otherwise ""))
+  (vachana (cond (has-items vachana-triples) (str (nth vachana-triples 0) 1) otherwise "eka-vachana"))
+  -- find copula nodes with matching kaala via sthita
+  (kaala-nodes (cond (has-text kaala) (walk-in kaala "sthita") otherwise []))
+  (copula-nodes (filter kaala-nodes (fn n -> starts-with (to-string n) "copula-")))
+  -- narrow by vachana: find copula that also has the right vachana in sthita
+  (matched (filter copula-nodes (fn c -> member vachana (walk (to-string c) "sthita"))))
+  -- extract naama (surface word) from the matched copula
+  (cop-node (cond (has-items matched) (to-string (nth matched 0))
+    (has-items copula-nodes) (to-string (nth copula-nodes 0))
+    otherwise ""))
+  (cop-naama (cond (has-text cop-node) (walk cop-node "naama") otherwise []))
+  (cond (has-items cop-naama) (to-string (nth cop-naama 0)) otherwise "is"))

@@ -1,0 +1,148 @@
+-- nam-anuvada: unified panchaavayava emission via ring-walk + proof-walk.
+-- 5 limbs:
+--   pratijna  (given)   → ring-walk non-question grades (question's own words)
+--   hetu      (seek)    → mode-aware sought description
+--   udaharana (rule)    → mode-dispatched proof-walk (nam-udaharana)
+--   upanaya   (apply)   → mode-dispatched proof-walk (nam-upanaya)
+--   nigamana  (conclude)→ mode-aware answer with kaala-copula
+--
+-- refined: the original refined question graph (the ring)
+-- proof: the proof graph (ring + derived edges + signals)
+-- result-val: the computed answer
+-- mode: dispatch mode (derive/viveka/count/anumana/shunya/typed)
+(tantra nam-anuvada (refined proof result-val mode)
+  (grades (split-grades refined))
+  (cop (kaala-copula refined))
+  (say-given (shabda "anuvada-setu" "speech-given"))
+  (say-sought (shabda "anuvada-setu" "speech-sought"))
+  (say-found (shabda "anuvada-setu" "speech-found"))
+
+  -- strip "concept = " prefix from result if present
+  (result-parts (split result-val " = "))
+  (clean-result (cond (gt (length result-parts) 1)
+    (nth result-parts (sub (length result-parts) 1))
+    otherwise result-val))
+
+  -- ── identify question grade ──────────────────────────────────────────────
+  -- for anumana/shunya: last grade is the question (no vidhi-kaala)
+  (has-vidhi (gt (length (triples-by-edge refined "vidhi-kaala")) 0))
+  (q-grade-vidhi (reduce grades [] (fn acc g ->
+    cond (has-items (triples-by-edge g "vidhi-kaala")) g otherwise acc)))
+  (last-grade (nth grades (sub (length grades) 1)))
+  (q-grade (cond has-vidhi q-grade-vidhi otherwise last-grade))
+
+  -- solved-for concept
+  (q-concept (cond has-vidhi
+    (reduce q-grade "" (fn found tri ->
+      cond (has-text found) found
+      (eq (str tri 1) "satya") (str tri 0)
+      otherwise found))
+    otherwise ""))
+  (q-concept-disp (cond (has-text q-concept) (concept-display q-concept) otherwise ""))
+
+  -- mode-specific signals
+  (comp-word (cond (eq mode "viveka") (read-signal proof "comp-word") otherwise ""))
+
+  -- unit for result
+  (unit-nd (cond (has-text q-concept) (unit-of-concept q-concept) otherwise _none))
+  (unit-symbols (cond (exists unit-nd) (walk (to-string unit-nd) "naama-mudra") otherwise []))
+  (unit-str (cond (has-items unit-symbols) (to-string (nth unit-symbols 0)) otherwise ""))
+
+  -- ── 1. PRATIJNA: echo given grades in question's own words ────────────────
+  (is-single (and has-vidhi (eq (length grades) 1)))
+
+  -- single-grade: given = words after sought concept
+  (single-given-words (cond is-single
+    (let st = reduce q-grade [[], false] (fn st tri ->
+      let acc = nth st 0
+      let past-sought = nth st 1
+      let edge = str tri 1
+      let subj = str tri 0
+      cond (eq edge "vidhi-kaala") st
+      (eq edge "copula") st
+      (and (not past-sought) (eq edge "satya")) [acc, true]
+      (and past-sought (eq edge "mithya") (eq subj "of")) st
+      past-sought (let w = expand-triple tri cop
+        cond (has-text w) [(append acc [w]), true] otherwise st)
+      otherwise st)
+     nth st 0)
+    otherwise []))
+  (single-given (cond (has-items single-given-words)
+    (concat say-given " " (words-to-str single-given-words))
+    otherwise ""))
+
+  -- multi-grade: expand each non-question grade
+  (multi-given-strs (cond is-single []
+    otherwise (reduce grades [] (fn acc g ->
+      let is-q = cond has-vidhi (has-items (triples-by-edge g "vidhi-kaala"))
+        otherwise (eq (length acc) (sub (length grades) 1))
+      cond is-q acc
+      otherwise (let words = expand-grade g cop
+        let raw = words-to-str words
+        cond (has-text raw) (append acc [(concat say-given " " raw)])
+        otherwise acc)))))
+
+  (pratijna-strs (cond is-single
+    (cond (has-text single-given) [single-given] otherwise [])
+    otherwise multi-given-strs))
+
+  -- ── 2. HETU: mode-aware "what we seek" ───────────────────────────────────
+  (hetu (cond
+    (eq mode "viveka") (cond (has-text comp-word)
+      (concat say-sought " which " cop " " comp-word)
+      otherwise "")
+    (or (eq mode "anumana") (eq mode "shunya")) ""
+    (eq mode "count") ""
+    (eq mode "typed") ""
+    (has-text q-concept-disp) (concat say-sought " " q-concept-disp)
+    otherwise ""))
+
+  -- ── 3. UDAHARANA: mode-dispatched rule citation ──────────────────────────
+  (udaharana-strs (nam-udaharana proof mode))
+
+  -- ── 4. UPANAYA: mode-dispatched value display ────────────────────────────
+  (upanaya-strs (nam-upanaya proof mode))
+
+  -- ── 5. NIGAMANA: mode-aware answer ───────────────────────────────────────
+  (nigamana (cond
+    -- derive: "we find that [concept] [copula] [value] [unit]"
+    (eq mode "derive")
+    (concat say-found " that " (words-to-str (filter [q-concept-disp, cop, clean-result, unit-str] (fn s -> has-text s))))
+
+    -- viveka: "we find that [winner] [copula] [comp-word]" or "equal"
+    (eq mode "viveka")
+    (let cmp = viveka-comparison proof
+     let is-equal = cond (gt (length cmp) 2) (eq (nth cmp 2) "equal") otherwise false
+     let vs-entities = proof | where [s, e, o] | and (eq e "viveka-sankhya") | collect (to-string s)
+     cond is-equal
+       (concat say-found " that " (list-join vs-entities) " are equal")
+       otherwise (concat say-found " that " clean-result " " cop " " comp-word))
+
+    -- count: "we find [value] [question-grade-words]" (skip system concept "count")
+    (eq mode "count")
+    (let q-words = reduce q-grade [] (fn acc tri ->
+       let edge = str tri 1
+       let subj = str tri 0
+       cond (eq edge "vidhi-kaala") acc
+       (and (eq edge "satya") (eq subj "count")) acc
+       otherwise (let w = expand-triple tri cop
+         cond (has-text w) (append acc [w]) otherwise acc))
+     concat say-found " " clean-result " " (words-to-str q-words))
+
+    -- anumana/shunya: "yes/no, [declarative answer]"
+    (or (eq mode "anumana") (eq mode "shunya"))
+    (nam-nigamana-bool q-grade clean-result cop)
+
+    -- typed: "[op] = [value]"
+    (eq mode "typed")
+    (concat say-found " " clean-result)
+
+    -- fallback
+    otherwise (concat say-found " that " clean-result)))
+
+  -- ── weave all limbs (capitalize each) ───────────────────────────────────
+  (all-strs (reduce [pratijna-strs, [hetu], udaharana-strs, upanaya-strs, [nigamana]] [] (fn acc limb ->
+    reduce limb acc (fn a s ->
+      cond (has-text s) (append a [(capitalize-first s)]) otherwise a))))
+
+  (join-with all-strs ". "))

@@ -163,8 +163,10 @@ def test_hypothetical_chain(vy):
         "temperature rose. is water present"
     )
     rl = r.lower()
-    assert "water" in rl, "must conclude about water, not just IS-A"
+    # must show chain reasoning, not just echo question words
+    assert "water" in rl, "must conclude about water"
     assert "is-a" not in rl, "must use implication logic, not IS-A"
+    assert "we know" in rl or "we see" in rl, f"must show chain reasoning, not just echo: {r}"
 
 
 # ── quantifier reasoning ────────────────────────────────────────────────────

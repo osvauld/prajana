@@ -1,0 +1,66 @@
+-- nam-udaharana: mode-dispatched rule citation (the "we know" limb).
+-- reads the proof graph for mode-specific reasoning edges.
+-- returns a list of strings, one per rule applied.
+(tantra nam-udaharana (proof mode)
+  (say-known (shabda "anuvada-setu" "speech-known"))
+
+  (cond
+    -- derive: walk derived-by → mantra → janya/phala → "KE arises from velocity and mass"
+    (eq mode "derive")
+    (let mantras = unique (proof | where [s, e, o] | and (eq e "derived-by") | collect (to-string o))
+     map mantras (fn mn ->
+       let janya = walk mn "janya"
+       let phala = nth (walk mn "phala") 0
+       let phala-disp = concept-display (to-string (cond (exists phala) phala otherwise mn))
+       let janya-disp = reduce janya "" (fn a j ->
+         let d = concept-display (to-string j)
+         cond (not (has-text a)) d otherwise (concat a " and " d))
+       concat say-known " that " phala-disp " arises from " janya-disp))
+
+    -- viveka: viveka-concept + direction → "greater mass means heavier"
+    (eq mode "viveka")
+    (let vc-raw = query-edge proof "viveka-concept"
+     let vk-dir = query-edge proof "viveka-direction"
+     let sought-raw = query-edge proof "sought"
+     let vc-disp = cond (exists vc-raw) (concept-display (to-string vc-raw)) otherwise ""
+     let sought-disp = cond (exists sought-raw) (concept-display (to-string sought-raw)) otherwise ""
+     let dir-word = cond (eq vk-dir "max") "greater" otherwise "lesser"
+     cond (has-text vc-disp)
+       [(concat say-known " that " dir-word " " vc-disp " means " sought-disp)]
+       otherwise [])
+
+    -- count: count-step edges → "2 minus (5 → 3)"
+    (eq mode "count")
+    (let count-steps = proof | where [s, e, o] | and (eq e "count-step") | collect (to-string o)
+     let op-plus = shabda "addition" "word"
+     let op-minus = shabda "subtraction" "word"
+     let say-arrow = shabda "anuvada-setu" "speech-arrow"
+     let lines = map count-steps (fn step ->
+       let parts = split step " "
+       let dir = nth parts 0
+       let op-word = cond (eq dir "kshaya") op-minus otherwise op-plus
+       let num-colon = nth parts 1
+       let num = substr num-colon 0 (sub (string-length num-colon) 1)
+       let before = nth parts 2
+       let after = nth parts 4
+       concat num " " op-word " (" before " " (to-string say-arrow) " " after ")")
+     cond (has-items lines) [(concat say-known " " (words-to-str lines))] otherwise [])
+
+    -- anumana: swarupa chain → "sparrow IS-A bird"
+    (eq mode "anumana")
+    (let swarupa-pairs = triples-by-edge proof "swarupa"
+     let chain-strs = map swarupa-pairs (fn tri ->
+       concat (str tri 0) " IS-A " (str tri 2))
+     cond (has-items chain-strs)
+       [(concat say-known " " (list-join chain-strs))]
+       otherwise [])
+
+    -- shunya: source declares concept = shunya
+    (eq mode "shunya")
+    (let source = read-signal proof "shunya-source"
+     let concept = read-signal proof "shunya-concept"
+     cond (exists source)
+       [(concat say-known " that " source " declares " concept " is shunya")]
+       otherwise [])
+
+    otherwise []))

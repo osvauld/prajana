@@ -184,8 +184,11 @@ def test_conditional_chain(vy):
         "temperature rose. is water present"
     )
     rl = r.lower()
-    assert "water" in rl, "must conclude about water, not just IS-A"
+    # must show chain reasoning: temperature→ice→water, not just keyword match
+    assert "yes" in rl and "water" in rl, f"must conclude yes + water via chain, got: {r}"
     assert "is-a" not in rl, "must use implication logic, not IS-A"
+    # must show the intermediate step (ice melts) in reasoning, not just echo pratijna
+    assert "we know" in rl or "we see" in rl, f"must show chain reasoning, not just echo: {r}"
 
 
 # ── quantifiers ───────────────────────────────────────────────────────────────
@@ -291,6 +294,9 @@ def test_kaala_state_was_now_is(vy):
     """'was at rest, is moving' — tense flips state"""
     r = vy.answer("the ball was at rest. the ball is moving. is the ball at rest")
     assert r.lower() != "no match", "must reason about state, not default no-match"
+    # must mention "moving" or reason about the current state, not just shunya
+    assert "moving" in r.lower() or "no" in r.lower(), f"must reason about state change, got: {r}"
+    assert "shunya" not in r.lower(), f"should use tense logic, not shunya: {r}"
     assert "moving" in r.lower() or re.search(r'\bno\b.*at rest', r.lower())
 
 

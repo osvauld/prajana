@@ -20,5 +20,15 @@
   (proof-graph (cond is-viveka
     (append (append base-graph viveka-gt-triples) viveka-sankhya-triples)
     otherwise (append base-graph result-triples)))
+  -- inline sought-bandha: add [sf, "sought", label] to proof graph
   (sought-cw (cond is-viveka (to-string comp-word) otherwise ""))
-  (sought-bandha proof-graph sf scope-entity sought-cw))
+  (already-has-sought (gt (length (proof-graph | where [s, e, o] | and (eq e "sought") | collect s)) 0))
+  (sought-label (cond (has-text sought-cw) sought-cw otherwise (to-string sf)))
+  (sought-triples (cond (and (exists sf) (not already-has-sought))
+    (append
+      [[(to-string sf), "sought", sought-label]]
+      (cond (exists scope-entity)
+        [[(to-string sf), "sought-of", (to-string scope-entity)]]
+        otherwise []))
+    otherwise []))
+  (append proof-graph sought-triples))
