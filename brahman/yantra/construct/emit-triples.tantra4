@@ -24,9 +24,22 @@
   -- is-rashi-label was dead code: old second check (neq (word-resolve word) nd-str)
   -- was always false since both resolve the same word. Kept false to match old behavior.
   (is-rashi-label false)
-  (is-direction-word (or (eq nd-str "kshaya") (eq nd-str "vriddhi")))
+  (is-direction-word (or (eq nd-str "kshaya") (eq nd-str "vriddhi")
+    (and (exists nd) (or
+      (member "multiplication" (walk nd-str "sthita"))
+      (member "kshaya" (walk nd-str "sthita"))
+      (member "vriddhi" (walk nd-str "sthita"))))))
   (is-tinanta (and (exists nd) (member "tinanta" (walk nd-str "swarupa"))))
   (is-verb-form (or is-direction-word is-tinanta (ends-with word "ed") (ends-with word "ing")))
+  -- verb-concept: walk janya→dhatu→naama→base→word-node to extract concept from verb form.
+  -- e.g. "accelerates" → dhatu-accelerate → "accelerate" → acceleration
+  (verb-dhatu (cond is-tinanta (nth (walk nd-str "janya") 0) otherwise ""))
+  (verb-base (cond (has-text verb-dhatu) (nth (walk (to-string verb-dhatu) "naama") 0) otherwise ""))
+  (verb-concept (cond (has-text verb-base)
+    (let vc = word-node (to-string verb-base)
+      cond (and (exists vc) (neq (to-string vc) (to-string verb-dhatu))) (to-string vc)
+      otherwise "")
+    otherwise ""))
   -- is-viveka: graph-driven — node IS viveka or has sthita→viveka
   (is-viveka (and (exists nd) (is-viveka-node nd-str)))
   -- "2 more" = vriddhi, not viveka comparison. Suppress viveka when preceded by number.
@@ -52,7 +65,9 @@
       [[(to-string ac), "sankhya", pn], [(to-string ac), "matra", nd-str]]
     is-viveka-after-num [[word, "mithya", word]]
     is-rashi-label [[word, "mithya", word]]
-    is-verb-form (cond (has-text pending) [[word, pending, word]] otherwise [[word, "mithya", word]])
+    is-verb-form (cond (has-text pending) [[word, pending, word]]
+      (has-text verb-concept) [[verb-concept, "satya", verb-concept], [word, "mithya", word]]
+      otherwise [[word, "mithya", word]])
     is-concept (cond (has-text pending) [[nd-str, pending, nd-str]]
       is-viveka [[nd-str, "satya", nd-str], [nd-str, "query-word", word]]
       otherwise [[nd-str, "satya", nd-str]])

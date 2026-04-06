@@ -76,7 +76,7 @@ shabda elasticity
 done
 
 shabda falling
-  (word falling falls dropped drop)
+  (word falling dropped drop)
   (desc "gravity-height-to-velocity-KE-collision")
 done
 

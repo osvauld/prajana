@@ -620,7 +620,7 @@ shabda morphism
 done
 
 shabda multiplication
-  (word times each)
+  (word times)
   (per-element no)
   (matra-ghata add)
 done
@@ -731,7 +731,7 @@ shabda proposition
 done
 
 shabda quantifier
-  (word all every some any)
+  (word some any)
   (name logical-quantifier)
   (desc logical-operator-expressing-for-all-or-there-exists)
 done

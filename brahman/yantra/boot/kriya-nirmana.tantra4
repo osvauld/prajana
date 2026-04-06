@@ -1,6 +1,7 @@
 -- kriya-nirmana: generate regular verb forms from dhatu seed nodes at startup.
 -- walks all dhatu nodes (sthita: dhatu, swarupa: tinanta), applies English suffix rules,
--- emits past (-ed) and present-participle (-ing) forms via emit-node + emit-edge.
+-- emits past (-ed), present-participle (-ing), and 3rd-person-singular (-s/-es/-ies)
+-- forms via emit-node + emit-edge.
 -- skips past when: (a) generated spelling already exists, or (b) dhatu has a
 -- hand-authored past form (detected via phala walk = janya reverse from .om5).
 (tantra kriya-nirmana (_)
@@ -58,4 +59,27 @@
           let _ = emit-node ing-word "bhasha" ing-slokas ""
           let _ = emit-edge ing-word "naama" ing-word
           (add c1 1)
-        c2)))
+        -- 3rd person singular present: base + s/es/ies
+        -- rules: -s/-sh/-ch/-x/-z/-o → +es; consonant+y → -y+ies; else → +s
+        let last-base = cond (ge blen 1) (substr base (sub blen 1) 1) otherwise ""
+        let prev-base = cond (ge blen 2) (substr base (sub blen 2) 1) otherwise ""
+        let last2 = cond (ge blen 2) (substr base (sub blen 2) 2) otherwise ""
+        let is-prev-base-vowel = (or (eq prev-base "a") (eq prev-base "e") (eq prev-base "i") (eq prev-base "o") (eq prev-base "u"))
+        let needs-es = (or (eq last-base "s") (eq last-base "x") (eq last-base "z") (eq last-base "o") (eq last2 "sh") (eq last2 "ch"))
+        let needs-ies = (and (eq last-base "y") (not is-prev-base-vowel))
+        let s-word = cond needs-ies (concat (substr base 0 (sub blen 1)) "ies")
+          needs-es (concat base "es")
+          otherwise (concat base "s")
+        -- skip only if a proper verb node (swarupa→tinanta) already exists;
+        -- bare naama targets from legacy shabda are not real verb forms
+        let s-lookup = lookup s-word
+        let s-exists = (and (exists s-lookup) (member "tinanta" (map (walk s-word "swarupa") (fn x -> to-string x))))
+        let s-slokas = cond (has-text dir-sthita)
+          [(concat "tinanta-swarupa " (concat nd-str "-janya") " prathama-purusa-sthita vartamana-kaala-sthita eka-vachana-sthita kartari-prayoga-sthita " dir-sthita)]
+          otherwise
+          ["tinanta-swarupa " (concat nd-str "-janya") " prathama-purusa-sthita vartamana-kaala-sthita eka-vachana-sthita kartari-prayoga-sthita"]
+        let c3 = cond s-exists c2 otherwise
+          let _ = emit-node s-word "bhasha" s-slokas ""
+          let _ = emit-edge s-word "naama" s-word
+          (add c2 1)
+        c3)))

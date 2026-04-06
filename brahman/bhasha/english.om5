@@ -124,9 +124,6 @@
   (swarupa copula)
   (sthita vartamana-kaala formula))
 
-(bhasha copula-gives
-  (swarupa copula)
-  (sthita vartamana-kaala result))
 
 (bhasha copula-is
   (swarupa copula)
@@ -299,8 +296,6 @@
   (swarupa kriya)
   (sthita sambandha shashthi-vibhakti bahu-vachana vartamana-kaala))
 
-(bhasha verb-moves
-  (sthita english kartari-prayoga))
 
 (bhasha verb-moving
   (sthita english kartari-prayoga))
@@ -957,6 +952,13 @@
   (swarupa visheshana)
   (sthita viveka-min)
   (naama soft softer softest))
+
+; ── quantifiers (parimana) ──────────────────────────────────────────────────
+; distributive: "each box" / "every box" → multiplication direction
+(bhasha quant-each
+  (swarupa parimana)
+  (sthita multiplication)
+  (naama each every all))
 
 ; ── verb morphology rules ────────────────────────────────────────────────────
 ; each rule: sthita = tense/aspect category, shabda has suffix + stem-suffix

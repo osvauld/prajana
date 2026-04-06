@@ -3,4 +3,5 @@
   (cond (eq field "value") (nth state 0)
     (eq field "steps") (nth state 1)
     (eq field "started") (nth state 2)
+    (eq field "carry-dir") (nth state 3)
     otherwise ""))

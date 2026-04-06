@@ -121,10 +121,6 @@ shabda copula-equals
   (role grammar)
 done
 
-shabda copula-gives
-  (word gives)
-  (role grammar)
-done
 
 shabda copula-is
   (word is)
@@ -500,10 +496,6 @@ shabda verb-have
   (role possession)
 done
 
-shabda verb-moves
-  (word moves)
-  (role grammar)
-done
 
 shabda verb-moving
   (word moving)

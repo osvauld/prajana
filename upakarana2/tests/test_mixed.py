@@ -35,14 +35,15 @@ def test_from_rest_ke(vy):
 # ── physics + logic ───────────────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="syllogism: universal assertion chain not built")
+@xfail(strict=True, reason="syllogism: universal assertion chain not built — must infer electron has momentum from IS-A chain")
 def test_physics_logic_all_objects(vy):
     """all objects with mass have momentum. electron has mass. does electron have momentum"""
     r = vy.answer(
         "all objects with mass have momentum. electron has mass 9.109e-31. "
         "does the electron have momentum"
     )
-    assert "yes" in r.lower() or "momentum" in r.lower()
+    rl = r.lower()
+    assert "yes" in rl, "must answer 'yes' via universal syllogism, not just echo the word"
 
 
 @xfail(strict=True, reason="conditional+physics: ignores 'if...it is moving' premise, just computes KE=250; 'moving' never addressed")
@@ -58,7 +59,6 @@ def test_physics_logic_inheritance(vy):
 # ── logic + count ─────────────────────────────────────────────────────────────
 
 
-@xfail(strict=True, reason="multiplication: logic + count — 'each' multiply with syllogism")
 def test_logic_count_all_wings(vy):
     """all birds have wings. 3 sparrows are birds. how many wings"""
     r = vy.answer("all birds have wings. birds have 2 wings each. there are 3 sparrows. how many wings")

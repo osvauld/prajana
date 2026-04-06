@@ -20,15 +20,17 @@
     or f (has-items (grade-numbers grade)))))
   (eff-grades (cond has-matching-nums concept-filtered otherwise grades))
   (fold-seed (to-number (shabda "graded-ring" "fold-identity")))
-  (arith-state (reduce eff-grades [fold-seed, [], false] (fn state grade ->
+  (arith-state (reduce eff-grades [fold-seed, [], false, ""] (fn state grade ->
     let acc   = fold-field state "value"
     let steps = fold-field state "steps"
     let init  = fold-field state "started"
+    let carry = fold-field state "carry-dir"
     let is-q  = is-question-grade grade
     let nums  = grade-numbers grade
     let has-num = has-items nums
     let dir   = grade-direction grade
     let eff-dir = cond (has-text dir) dir
+      (has-text carry) carry
       (has-text q-direction) q-direction
       otherwise "vriddhi"
     let n0 = cond has-num (to-number (nth nums 0)) otherwise 0
@@ -38,9 +40,11 @@
     let op-eval = cond (eq eff-dir "kshaya") (nth (walk "subtraction" "ganana") 0) (eq eff-dir "multiplication") (nth (walk "multiplication" "ganana") 0) otherwise (nth (walk "addition" "ganana") 0)
     let new-acc = apply-op (to-string op-eval) [acc, nv]
     let step = (concat eff-dir " " nv ": " (to-string acc) " -> " (to-string new-acc))
+    -- carry: when seeding, pass direction forward for the next grade
+    let next-carry = cond (and (not init) (has-text dir)) dir otherwise ""
     cond (or is-q (not has-num)) state
-    (not init) [nv, steps, true]
-    otherwise [new-acc, (append steps [step]), true])))
+    (not init) [nv, steps, true, next-carry]
+    otherwise [new-acc, (append steps [step]), true, ""])))
   (count-result (fold-field arith-state "value"))
   (count-steps (fold-field arith-state "steps"))
   (found-any (fold-field arith-state "started"))
