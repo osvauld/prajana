@@ -1,9 +1,0 @@
--- anumana dispatch: resolve categorical yes/no via graph-driven logic.
--- eval-logic reads ganana from inference mantras to decide strategy.
-(tantra dispatch-anumana (expanded refined)
-  (query (read-signal expanded "anumana-query"))
-  (assert (read-signal expanded "anumana-assert"))
-  (mode (read-signal expanded "anumana-mode"))
-  (predicate (read-signal expanded "anumana-predicate"))
-  (answer (eval-logic refined query assert mode))
-  (nam-anuvada refined expanded answer "anumana"))

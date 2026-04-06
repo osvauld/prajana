@@ -1,0 +1,19 @@
+-- derive-proof: build proof graph for physics derivation.
+-- adds result sankhya, derived-by, derived-sankhya, and sought edges.
+-- replaces pramana-bandha for derive mode.
+(tantra derive-proof (base-graph mm result sf scope-entity)
+  (result-mantra (cond (has-items mm) (nth mm 0) otherwise ""))
+  (result-valpairs (cond (has-items mm) (nth mm 1) otherwise []))
+  (scoped-triples (cond (has-items result-valpairs)
+    (map result-valpairs (fn kv -> [(nth kv 0), "derived-sankhya", (nth kv 1)]))
+    otherwise []))
+  (result-triples (cond (and (exists result) (neq result "no match") (exists sf))
+    (append [[(to-string sf), "sankhya", result], [(to-string sf), "derived-by", result-mantra]] scoped-triples)
+    otherwise []))
+  (proof (append base-graph result-triples))
+  -- sought edge
+  (sought-triples (cond (exists sf)
+    (append [[(to-string sf), "sought", (to-string sf)]]
+      (cond (has-text scope-entity) [[(to-string sf), "sought-of", scope-entity]] otherwise []))
+    otherwise []))
+  (append proof sought-triples))

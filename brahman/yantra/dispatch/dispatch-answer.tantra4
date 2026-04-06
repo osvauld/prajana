@@ -1,11 +1,31 @@
--- graph-driven dispatch: walks pipeline-dispatch children to find handler.
--- the graph declares available modes; this tantra just reads and routes.
+-- graph-driven dispatch: routes by mode, inlines simple modes.
+-- count/shunya/anumana are inlined (just nam-anuvada calls).
+-- derive/viveka route to their own tantras (complex computation).
 (tantra dispatch-answer (expanded refined)
   (mode (read-signal expanded "dispatch-mode"))
-  (dispatch-nodes (walk-in "pipeline-dispatch" "swarupa"))
-  (target-name (concat "dispatch-" mode))
-  (matched (filter dispatch-nodes (fn n -> eq (to-string n) target-name)))
-  (result (cond (has-items matched)
-    (call-tantra (to-string (nth matched 0)) [expanded, refined])
-    otherwise _none))
-  (cond (exists result) result otherwise "no match"))
+  (cond
+    -- count: read result signal, emit
+    (eq mode "count")
+    (nam-anuvada refined expanded (to-string (read-signal expanded "count-result")) "count")
+
+    -- shunya: always "no"
+    (eq mode "shunya")
+    (nam-anuvada refined expanded "no" "shunya")
+
+    -- anumana: eval-logic then emit
+    (eq mode "anumana")
+    (let query = read-signal expanded "anumana-query"
+     let assert-ent = read-signal expanded "anumana-assert"
+     let amode = read-signal expanded "anumana-mode"
+     let answer = eval-logic refined query assert-ent amode
+     nam-anuvada refined expanded answer "anumana")
+
+    -- derive/viveka: delegate to dedicated tantras
+    otherwise
+    (let dispatch-nodes = walk-in "pipeline-dispatch" "swarupa"
+     let target-name = concat "dispatch-" mode
+     let matched = filter dispatch-nodes (fn n -> eq (to-string n) target-name)
+     let result = cond (has-items matched)
+       (call-tantra (to-string (nth matched 0)) [expanded, refined])
+       otherwise _none
+     cond (exists result) result otherwise "no match")))

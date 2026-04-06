@@ -1,4 +1,0 @@
--- count dispatch: arithmetic word problem — read count-result signal, emit via nam-anuvada.
-(tantra dispatch-count (expanded refined)
-  (result (to-string (read-signal expanded "count-result")))
-  (nam-anuvada refined expanded result "count"))

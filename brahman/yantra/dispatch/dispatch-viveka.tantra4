@@ -11,6 +11,11 @@
   (ev-pairs (viveka-result viveka-raw "ev-pairs"))
   (gt-triples (viveka-result viveka-raw "gt-triples"))
   (result (cond (exists winner) (to-string winner) otherwise "no match"))
-  (sought-phrase (cond (has-text comp-word) comp-word otherwise ""))
-  (proof-graph (pramana-bandha expanded [] result sf scope-entity true ev-pairs gt-triples sought-phrase))
+  -- build viveka proof graph: add viveka-sankhya + gt triples + sought
+  (vs-triples (map ev-pairs (fn kv -> [(nth kv 0), "viveka-sankhya", (nth kv 1)])))
+  (sought-label (cond (has-text comp-word) comp-word otherwise (to-string sf)))
+  (sought-triples (cond (exists sf)
+    [[(to-string sf), "sought", sought-label]]
+    otherwise []))
+  (proof-graph (append (append (append expanded gt-triples) vs-triples) sought-triples))
   (nam-anuvada refined proof-graph result "viveka"))

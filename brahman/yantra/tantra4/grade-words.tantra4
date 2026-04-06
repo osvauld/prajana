@@ -1,9 +1,0 @@
--- extracts word strings from a grade (mithya + asprista-sankhya + satya).
-(tantra grade-words (grade)
-  (reduce grade [] (fn acc t ->
-    let e = triple-edge t
-    let w = triple-subj t
-    cond (eq e "mithya") (append acc [w])
-    (eq e "asprista-sankhya") (append acc [w])
-    (eq e "satya") (append acc [w])
-    otherwise acc)))
