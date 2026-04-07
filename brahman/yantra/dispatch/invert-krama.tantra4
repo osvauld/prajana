@@ -14,8 +14,8 @@
   (phala-concept (cond (has-text phala) phala otherwise swarupa))
 
   -- phala value from bindings (the known result)
-  (phala-val (reduce bindings "" (fn a kv ->
-    cond (eq (nth kv 0) phala-concept) (nth kv 1) otherwise a)))
+  (phala-val (find-map bindings (fn kv ->
+    cond (eq (nth kv 0) phala-concept) (nth kv 1) otherwise _none)))
 
   -- commutative ops from graph
   (comm-ops (walk "commutativity" "drishthanta"))

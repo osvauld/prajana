@@ -6,7 +6,7 @@
   (can-promote (exists (graph | where [_, e, _] | and (eq e "rashi-bandha") | collect _it)))
   (grades (split-grades graph))
   -- within each grade, track last satya concept and promote mithya labels
-  (new-triples (reduce grades [] (fn acc grade ->
+  (new-triples (flat-map grades (fn grade ->
     let promoted = reduce grade [[], ""] (fn st tri ->
       let result = nth st 0
       let agra   = nth st 1
@@ -20,5 +20,5 @@
            (not (member word entities)))
         [(append result [[word, "vishesa", agra], [word, "vishesa", "rashi"]]), ""]
       otherwise st)
-    (append acc (nth promoted 0)))))
+    (nth promoted 0))))
   (append-triples graph new-triples))

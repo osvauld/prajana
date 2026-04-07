@@ -8,17 +8,17 @@
   -- and "oranges" each with their own numbers), filter grades to only the query concept.
   -- skip filtering when: no q-concept, multiplication present (cross-concept),
   -- or only one numbered concept (e.g. "Tom" as recipient has no competing count).
-  (any-mul-or-div (reduce grades false (fn found grade ->
+  (any-mul-or-div (exists (find-first grades (fn grade ->
     let gd = grade-direction grade
-    or found (or (eq gd "multiplication") (eq gd "division")))))
-  (has-dvandva (reduce grades false (fn found grade ->
-    or found (has-items (triples-by-edge grade "dvandva")))))
+    or (eq gd "multiplication") (eq gd "division")))))
+  (has-dvandva (exists (find-first grades (fn grade ->
+    has-items (triples-by-edge grade "dvandva")))))
   (concept-filtered (cond (or any-mul-or-div (not (has-text q-concept)) (not has-dvandva)) grades
     otherwise (filter grades (fn grade ->
       let gc = grade-concept grade
       or (not (has-text gc)) (eq gc q-concept) (is-question-grade grade)))))
-  (has-matching-nums (reduce concept-filtered false (fn f grade ->
-    or f (has-items (grade-numbers grade)))))
+  (has-matching-nums (exists (find-first concept-filtered (fn grade ->
+    has-items (grade-numbers grade)))))
   (eff-grades (cond has-matching-nums concept-filtered otherwise grades))
   (fold-seed (to-number (shabda "graded-ring" "fold-identity")))
   (arith-state (reduce eff-grades [fold-seed, [], false, ""] (fn state grade ->
@@ -75,7 +75,7 @@
     (fn t -> is-viveka-node (triple-subj t)))))
   -- guard: skip if any satya concept has a formula (physics, not counting)
   -- exception: multiplication via "each" is always a count problem, even with physics concepts
-  (any-satya-formula (reduce all-satya false (fn found c -> or found (has-items (mantra-select c)))))
+  (any-satya-formula (exists (find-first all-satya (fn c -> has-items (mantra-select c)))))
   (has-mul-or-div any-mul-or-div)
   (should-count (and found-any (not has-viveka)
     (or has-mul-or-div (not any-satya-formula))))

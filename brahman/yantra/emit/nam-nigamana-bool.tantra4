@@ -3,8 +3,8 @@
 -- "does sparrow have wings" + no  → "no, sparrow does not have wings"
 (tantra nam-nigamana-bool (grade answer cop)
   -- build query-word lookup: concept → original word
-  (qw-map (reduce grade [] (fn acc tri ->
-    cond (eq (str tri 1) "query-word") (append acc [[(str tri 0), (str tri 2)]]) otherwise acc)))
+  (qw-map (map (filter grade (fn tri -> eq (str tri 1) "query-word"))
+    (fn tri -> [(str tri 0), (str tri 2)])))
   -- collect word-bearing triples, skipping structural ones + dedup satya
   (wt-state (reduce grade [[], []] (fn st tri ->
     let acc = nth st 0
@@ -40,7 +40,7 @@
     -- skip leading interrogative
     cond (and (not past-first) skip-first) [acc, true]
     otherwise
-      (let qw = reduce qw-map "" (fn found kv -> cond (has-text found) found (eq (nth kv 0) subj) (nth kv 1) otherwise found)
+      (let qw = find-map qw-map (fn kv -> cond (eq (nth kv 0) subj) (nth kv 1) otherwise _none)
        let w = cond
         (and (eq edge "satya") (has-text qw)) qw
         (and (eq edge "satya") (starts-with subj "pronoun-")) (substr subj 8 (sub (string-length subj) 8))

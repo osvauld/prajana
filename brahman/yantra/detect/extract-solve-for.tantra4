@@ -5,31 +5,28 @@
   (grades (split-grades graph))
 
   -- find the question grade (contains vidhi-kaala)
-  (q-grade (reduce grades [] (fn acc g ->
-    cond (has-items (triples-by-edge g "vidhi-kaala")) g otherwise acc)))
-  (has-intent (has-items (triples-by-edge q-grade "vidhi-kaala")))
+  (q-grade (find-first grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))))
+  (eff-grade (cond (exists q-grade) q-grade otherwise []))
+  (has-intent (has-items (triples-by-edge eff-grade "vidhi-kaala")))
 
   -- solve-for: first non-entity satya concept in question grade
-  (solve-for (reduce q-grade "" (fn found tri ->
-    cond (has-text found) found
-    (and (eq (nth tri 1) "satya") (not (member (nth tri 0) entities)))
+  (solve-for (find-map eff-grade (fn tri ->
+    cond (and (eq (nth tri 1) "satya") (not (member (nth tri 0) entities)))
       (str tri 0)
-    otherwise found)))
+    otherwise _none)))
 
   -- fallback: if no question grade, first non-entity satya in whole graph
-  (fallback (cond (has-text solve-for) solve-for
-    otherwise (reduce graph "" (fn found tri ->
-      cond (has-text found) found
-      (and (eq (nth tri 1) "satya") (not (member (nth tri 0) entities)))
+  (fallback (cond (exists solve-for) solve-for
+    otherwise (find-map graph (fn tri ->
+      cond (and (eq (nth tri 1) "satya") (not (member (nth tri 0) entities)))
         (str tri 0)
-      otherwise found))))
+      otherwise _none))))
 
   -- scope entity: entity in question grade (mithya or satya that is an entity)
-  (scope-entity (reduce q-grade "" (fn found tri ->
-    cond (has-text found) found
-    (and (or (eq (nth tri 1) "mithya") (eq (nth tri 1) "satya"))
+  (scope-entity (find-map eff-grade (fn tri ->
+    cond (and (or (eq (nth tri 1) "mithya") (eq (nth tri 1) "satya"))
          (member (nth tri 0) entities))
       (str tri 0)
-    otherwise found)))
+    otherwise _none)))
 
   [has-intent, fallback, scope-entity])

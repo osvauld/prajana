@@ -38,27 +38,27 @@
   (hit1 (member assert-entity l1))
 
   -- level 2
-  (l2 (reduce l1 [] (fn acc nd ->
-    let ksp = map (walk nd "swarupa") (fn x -> to-string x)
-    let gsp2 = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
-    let kvp = map (walk nd "varga") (fn x -> to-string x)
-    append acc (append ksp (append gsp2 kvp)))))
+  (l2 (flat-map l1 (fn nd ->
+    let ks = map (walk nd "swarupa") (fn x -> to-string x)
+    let gs = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let kv = map (walk nd "varga") (fn x -> to-string x)
+    append ks (append gs kv))))
   (hit2 (member assert-entity l2))
 
   -- level 3
-  (l3 (reduce l2 [] (fn acc nd ->
-    let ksp = map (walk nd "swarupa") (fn x -> to-string x)
-    let gsp3 = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
-    let kvp = map (walk nd "varga") (fn x -> to-string x)
-    append acc (append ksp (append gsp3 kvp)))))
+  (l3 (flat-map l2 (fn nd ->
+    let ks = map (walk nd "swarupa") (fn x -> to-string x)
+    let gs = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let kv = map (walk nd "varga") (fn x -> to-string x)
+    append ks (append gs kv))))
   (hit3 (member assert-entity l3))
 
   -- level 4
-  (l4 (reduce l3 [] (fn acc nd ->
-    let ksp = map (walk nd "swarupa") (fn x -> to-string x)
-    let gsp4 = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
-    let kvp = map (walk nd "varga") (fn x -> to-string x)
-    append acc (append ksp (append gsp4 kvp)))))
+  (l4 (flat-map l3 (fn nd ->
+    let ks = map (walk nd "swarupa") (fn x -> to-string x)
+    let gs = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let kv = map (walk nd "varga") (fn x -> to-string x)
+    append ks (append gs kv))))
   (hit4 (member assert-entity l4))
 
   (chain-hit (or hit1 (or hit2 (or hit3 hit4))))

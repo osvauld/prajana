@@ -22,10 +22,9 @@
     let deriv-val = cond (has-items derived) (nth derived 1) otherwise ""
     let svps      = cond (has-text deriv-val) [] otherwise (nth (scope-vps graph ent-str) 0)
     let raw-val   = cond (has-text deriv-val) ""
-      otherwise (reduce svps "" (fn found kv ->
-        cond (has-text found) found
+      otherwise (find-map svps (fn kv ->
         cond (and (has-text inferred-concept) (eq (nth kv 0) inferred-concept)) (str kv 1)
-        otherwise found))
+        otherwise _none))
     let first-val = cond (or (has-text deriv-val) (has-text raw-val)) ""
       otherwise (cond (has-items svps) (str (nth svps 0) 1) otherwise "")
     let val = cond (has-text deriv-val) deriv-val
@@ -41,9 +40,9 @@
   (viv-subjs (map viveka-triples (fn t -> triple-subj t)))
   (viv-objs  (map viveka-triples (fn t -> triple-obj t)))
   (top-entity (cond has-chain
-    (nth (filter viv-subjs (fn s -> not (member s viv-objs))) 0) otherwise ""))
+    (find-first viv-subjs (fn s -> not (member s viv-objs))) otherwise _none))
   (bottom-entity (cond has-chain
-    (nth (filter viv-objs (fn o -> not (member o viv-subjs))) 0) otherwise ""))
+    (find-first viv-objs (fn o -> not (member o viv-subjs))) otherwise _none))
   (chain-winner (cond has-chain
     (cond (eq direction "min") (to-string bottom-entity)
           otherwise (to-string top-entity))

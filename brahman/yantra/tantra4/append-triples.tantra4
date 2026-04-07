@@ -1,9 +1,0 @@
--- appends new triples to a graph (idempotent: skips duplicates).
-(tantra append-triples (graph new-triples)
-  (reduce new-triples graph (fn g t ->
-    let already = g | where [s, e, o]
-      | and (eq s (nth t 0))
-      | and (eq e (nth t 1))
-      | and (eq o (nth t 2))
-      | collect s
-    cond (has-items already) g otherwise (append g [t]))))

@@ -1,18 +1,16 @@
 -- finds the query concept: first non-system satya in the question grade.
 -- also checks mithya words that match known satya concepts from earlier grades.
 (tantra question-concept (grades)
-  (known-satya (reduce grades [] (fn acc grade ->
-    cond (is-question-grade grade) acc
-    otherwise (reduce grade acc (fn a t ->
-      cond (and (eq (triple-edge t) "satya") (not (is-system-concept (triple-subj t))))
-        (append a [(triple-subj t)])
-      otherwise a)))))
-  (reduce grades "" (fn acc grade ->
-    cond (not (is-question-grade grade)) acc
-    otherwise (reduce grade acc (fn a t ->
-      let e = triple-edge t
-      let s = triple-subj t
-      cond (has-text a) a
-      (and (eq e "satya") (not (is-system-concept s))) s
-      (and (eq e "mithya") (member s known-satya)) s
-      otherwise a)))))
+  (known-satya (flat-map grades (fn grade ->
+    cond (is-question-grade grade) []
+    otherwise (filter grade (fn t ->
+      and (eq (triple-edge t) "satya") (not (is-system-concept (triple-subj t)))))
+      | collect (triple-subj _it))))
+  (q-grade (find-first grades (fn g -> is-question-grade g)))
+  (cond (not (exists q-grade)) ""
+  otherwise (find-map q-grade (fn t ->
+    let e = triple-edge t
+    let s = triple-subj t
+    cond (and (eq e "satya") (not (is-system-concept s))) s
+    (and (eq e "mithya") (member s known-satya)) s
+    otherwise _none))))

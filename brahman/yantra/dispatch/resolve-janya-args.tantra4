@@ -8,21 +8,20 @@
   (binding-keys (map bindings (fn kv -> nth kv 0)))
   (swarupa-map (map janya (fn concept ->
     let parents = walk concept "swarupa"
-    reduce parents "" (fn found p ->
-      cond (has-text found) found
-      (member (to-string p) binding-keys) (to-string p)
-      otherwise found))))
+    find-map parents (fn p ->
+      cond (member (to-string p) binding-keys) (to-string p)
+      otherwise _none))))
 
   (reduce (range (length janya)) [] (fn acc idx ->
     let concept = nth janya idx
     let ck = shabda concept "constants-key"
-    let direct = reduce bindings "" (fn a2 kv ->
-      cond (eq (nth kv 0) concept) (nth kv 1) otherwise a2)
+    let direct = find-map bindings (fn kv ->
+      cond (eq (nth kv 0) concept) (nth kv 1) otherwise _none)
     -- swarupa fallback: check parent in bindings
     let parent = nth swarupa-map idx
     let via-parent = cond (and (not (has-text direct)) (has-text parent))
-      (reduce bindings "" (fn a2 kv ->
-        cond (eq (nth kv 0) parent) (nth kv 1) otherwise a2))
+      (find-map bindings (fn kv ->
+        cond (eq (nth kv 0) parent) (nth kv 1) otherwise _none))
       otherwise ""
     let v  = cond (has-text ck)
       (nth (split-numeric (shabda "physics-constants" ck)) 0)

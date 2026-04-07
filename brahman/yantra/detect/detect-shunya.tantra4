@@ -30,11 +30,8 @@
   -- inherited match: a concept depends on shunya-concept via mantra janya (parallel per concept)
   (dependent-concepts (preduce other-concepts [] (fn acc qc ->
     let mantras-for = mantra-select qc
-    let needs-shunya = reduce mantras-for false (fn found m ->
-      let ms = to-string m
-      let contract = om-contract ms
-      let janya = nth contract 0
-      (or found (member shunya-concept janya)))
+    let needs-shunya = exists (find-first mantras-for (fn m ->
+      member shunya-concept (nth (om-contract (to-string m)) 0)))
     cond needs-shunya (append acc [qc]) otherwise acc)))
 
   (all-query-targets (cond direct-match

@@ -259,6 +259,103 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
     in
     Some (loop state0 20)
 
+  (* ---- structural primitives (reduce tantra repetition) ---- *)
+
+  | "find-first" ->
+    (* (find-first list predicate) → first item where predicate is true, or _none.
+       Replaces: (reduce list "" (fn found x -> cond (has-text found) found (pred x) x otherwise found)) *)
+    let lst = eval_lst 0 in
+    let fn_val = eval_arg 1 in
+    (match fn_val with
+     | VFn (params, body, captured) ->
+       let result = List.find_opt (fun item ->
+         let local = match params with
+           | [p] -> StringMap.add p item captured
+           | _ -> captured in
+         as_bool (e_eval k local body)
+       ) lst in
+       Some (match result with Some v -> v | None -> VNone)
+     | _ -> Some VNone)
+
+  | "find-map" ->
+    (* (find-map list fn) → apply fn to each item, return first non-_none result.
+       Replaces reduce-to-find patterns where the extraction differs from the predicate. *)
+    let lst = eval_lst 0 in
+    let fn_val = eval_arg 1 in
+    (match fn_val with
+     | VFn (params, body, captured) ->
+       let result = List.find_map (fun item ->
+         let local = match params with
+           | [p] -> StringMap.add p item captured
+           | _ -> captured in
+         match e_eval k local body with
+         | VNone -> None
+         | v -> Some v
+       ) lst in
+       Some (match result with Some v -> v | None -> VNone)
+     | _ -> Some VNone)
+
+  | "flat-map" ->
+    (* (flat-map list fn) → concatenate lists returned by fn for each item.
+       Replaces: (reduce list [] (fn acc x -> append acc (f x))) *)
+    let lst = eval_lst 0 in
+    let fn_val = eval_arg 1 in
+    (match fn_val with
+     | VFn (params, body, captured) ->
+       let results = List.concat_map (fun item ->
+         let local = match params with
+           | [p] -> StringMap.add p item captured
+           | _ -> captured in
+         as_list (e_eval k local body)
+       ) lst in
+       Some (VList results)
+     | _ -> Some (VList []))
+
+  | "split-grades" ->
+    (* (split-grades graph) → split triple list at viraam boundaries into sublists.
+       Migrated from tantra — called 13 times, pure list partition. *)
+    let graph = eval_lst 0 in
+    let (completed, current) = List.fold_left (fun (completed, current) triple ->
+      let is_viraam = match triple with
+        | VList (_ :: VString "viraam" :: _) -> true
+        | VList (_ :: VNode "viraam" :: _) -> true
+        | _ -> false in
+      if is_viraam then
+        (completed @ [current @ [triple]], [])
+      else
+        (completed, current @ [triple])
+    ) ([], []) graph in
+    Some (VList (List.map (fun g -> VList g) (completed @ [current])))
+
+  | "append-triples" ->
+    (* (append-triples graph new-triples) → append triples, skipping duplicates. O(n+k).
+       Migrated from tantra — called 9 times, was O(n*k) via linear scan. *)
+    let graph = eval_lst 0 in
+    let new_triples = eval_lst 1 in
+    let seen = Hashtbl.create (List.length graph) in
+    List.iter (fun triple ->
+      let key = match triple with
+        | VList [VString s; VString e; VString o] -> s ^ "\x00" ^ e ^ "\x00" ^ o
+        | VList [VString s; VString e; o] -> s ^ "\x00" ^ e ^ "\x00" ^ as_string o
+        | VList [VString s; VNode e; VString o] -> s ^ "\x00" ^ e ^ "\x00" ^ o
+        | VList [VString s; VNode e; o] -> s ^ "\x00" ^ e ^ "\x00" ^ as_string o
+        | VList items -> String.concat "\x00" (List.map as_string items)
+        | _ -> as_string triple in
+      Hashtbl.replace seen key true
+    ) graph;
+    let new_unique = List.filter (fun triple ->
+      let key = match triple with
+        | VList [VString s; VString e; VString o] -> s ^ "\x00" ^ e ^ "\x00" ^ o
+        | VList [VString s; VString e; o] -> s ^ "\x00" ^ e ^ "\x00" ^ as_string o
+        | VList [VString s; VNode e; VString o] -> s ^ "\x00" ^ e ^ "\x00" ^ o
+        | VList [VString s; VNode e; o] -> s ^ "\x00" ^ e ^ "\x00" ^ as_string o
+        | VList items -> String.concat "\x00" (List.map as_string items)
+        | _ -> as_string triple in
+      if Hashtbl.mem seen key then false
+      else (Hashtbl.replace seen key true; true)
+    ) new_triples in
+    Some (VList (graph @ new_unique))
+
   | "length" ->
     Some (VFloat (Float.of_int (List.length (eval_lst 0))))
 

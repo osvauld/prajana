@@ -20,22 +20,19 @@
     let obj    = nth tri 2
     let gnode  = (cond (eq edge "mithya") (shabda-anveshana word) otherwise _none)
     let slokas = (cond (exists gnode) (node-slokas (to-string gnode)) otherwise [])
-    let toks   = reduce slokas [] (fn acc s -> append acc (split s " "))
+    let toks   = flat-map slokas (fn s -> split s " ")
     -- two-pass: first look for direction roots, then fall back to any ring match
-    let dir-root = reduce toks "" (fn acc w ->
-      (cond (neq acc "") acc
-      otherwise (cond (ends-with w "-sthita")
-        (let candidate = (substr w 0 (sub (string-length w) sthita-len))
-          cond (member candidate direction-roots) candidate otherwise "")
-      otherwise "")))
-    let any-root = reduce toks "" (fn acc w ->
-      (cond (neq acc "") acc
-      otherwise (cond (ends-with w "-sthita")
-        (cond (member "visheshanam-ring"
-                 (map (walk-in (substr w 0 (sub (string-length w) sthita-len)) "yukta")
-                      (fn n -> to-string n)))
-          (substr w 0 (sub (string-length w) sthita-len))
-          otherwise "")
-      otherwise "")))
+    let dir-root = find-map toks (fn w ->
+      cond (ends-with w "-sthita")
+        (let candidate = substr w 0 (sub (string-length w) sthita-len)
+         cond (member candidate direction-roots) candidate otherwise _none)
+      otherwise _none)
+    let any-root = find-map toks (fn w ->
+      cond (ends-with w "-sthita")
+        (let candidate = substr w 0 (sub (string-length w) sthita-len)
+         cond (member "visheshanam-ring"
+                (map (walk-in candidate "yukta") (fn n -> to-string n)))
+           candidate otherwise _none)
+      otherwise _none)
     let root = cond (has-text dir-root) dir-root otherwise any-root
     (cond (and (has-text root) (not (and (eq root "matra") (member word rashi-labels)))) [word, root, root] otherwise [word, edge, obj]))))

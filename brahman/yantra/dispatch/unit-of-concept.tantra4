@@ -17,10 +17,9 @@
 
   -- path 3: sthita
   (sthita-mantras (filter (walk-in concept "sthita") (fn m -> gt (string-length (shabda m "unit")) 0)))
-  (sthita-unit (reduce sthita-mantras _none (fn acc m ->
-    (cond (exists acc) acc
-    otherwise (let direct = filter (walk-in concept "yukta") (fn u -> member "matra" (walk u "sthita"))
-      in (cond (has-items direct) (nth direct 0) otherwise _none))))))
+  (sthita-unit (find-map sthita-mantras (fn m ->
+    let direct = filter (walk-in concept "yukta") (fn u -> member "matra" (walk u "sthita"))
+    cond (has-items direct) (nth direct 0) otherwise _none)))
 
   (cond (exists swarupa-unit) swarupa-unit
     otherwise (cond (exists yukta-unit) yukta-unit

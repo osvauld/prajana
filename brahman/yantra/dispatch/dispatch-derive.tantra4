@@ -13,16 +13,14 @@
   -- resolve actual concept: strip "total-" prefix, or find next satya in question grade
   (compound-sf (cond (starts-with sf-raw "total-") (substr sf-raw 6 (sub (string-length sf-raw) 6)) otherwise ""))
   (q-grades (split-grades expanded))
-  (q-grade (reduce q-grades [] (fn acc g ->
-    cond (has-items (triples-by-edge g "vidhi-kaala")) g otherwise acc)))
-  (grade-sf (reduce q-grade "" (fn found tri ->
-    cond (has-text found) found
-    (and (eq (nth tri 1) "satya")
-         (neq (nth tri 0) "total")
-         (not (starts-with (nth tri 0) "total-"))
-         (not (member (nth tri 0) entities)))
+  (q-grade (find-first q-grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))))
+  (grade-sf (find-map q-grade (fn tri ->
+    cond (and (eq (nth tri 1) "satya")
+              (neq (nth tri 0) "total")
+              (not (starts-with (nth tri 0) "total-"))
+              (not (member (nth tri 0) entities)))
       (str tri 0)
-    otherwise found)))
+    otherwise _none)))
   (sf (cond (not has-total) sf-raw
     (has-text compound-sf) compound-sf
     (has-text grade-sf) grade-sf
@@ -54,9 +52,9 @@
 
   -- PATH 3: multi-entity total or unscoped
   (per-entity (cond (and multi (or has-total (not has-scope)) (not (has-items scoped-dr)))
-    (reduce entities [] (fn acc ent ->
+    (flat-map entities (fn ent ->
       let dr = derive-for-entity expanded (to-string ent) sf
-      cond (has-items dr) (append acc [dr]) otherwise acc))
+      cond (has-items dr) [dr] otherwise []))
     otherwise []))
 
   -- aggregate: sum if total requested
@@ -69,8 +67,7 @@
   (total-result (cond (and has-total (has-items per-entity))
     (let per-strs = map per-entity (fn dr ->
            concat (nth dr 0) ": " (concept-display sf) " is " (nth dr 1))
-     let per-joined = reduce per-strs "" (fn a s ->
-           cond (not (has-text a)) s otherwise (concat a ", " s))
+     let per-joined = join-with per-strs ", "
      let proof = derive-proof expanded [] (to-string total-val) sf ""
      nam-anuvada refined proof (to-string total-val) "derive")
     otherwise ""))

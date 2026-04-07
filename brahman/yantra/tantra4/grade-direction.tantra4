@@ -4,10 +4,9 @@
 (tantra grade-direction (grade)
   (direction-edges ["kshaya", "vriddhi", "multiplication", "division"])
   -- direct: if any triple has a direction as its edge, use that
-  (direct-dir (reduce grade "" (fn acc tri ->
-    cond (has-text acc) acc
-    (member (nth tri 1) direction-edges) (nth tri 1)
-    otherwise acc)))
+  (direct-dir (find-map grade (fn tri ->
+    cond (member (nth tri 1) direction-edges) (nth tri 1)
+    otherwise _none)))
   (mw (grade-mithya grade))
   (bigrams (word-bigrams mw))
   (dir-bi (detect-direction bigrams))

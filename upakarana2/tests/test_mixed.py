@@ -95,7 +95,7 @@ def test_chain_inverse_find_initial_velocity(vy):
         "kinetic energy is 200. mass is 4. find velocity. "
         "acceleration is 5. time is 4. find initial velocity"
     )
-    assert "10" in r, f"should find initial velocity = 10, got: {r}"
+    assert "initial" in r.lower() and "10" in r, f"should find initial velocity = 10, got: {r}"
 
 
 # ── tense + physics ────────────────────────────────────────────────────────────

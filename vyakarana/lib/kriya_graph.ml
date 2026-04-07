@@ -522,6 +522,12 @@ let register_primitive_arities () =
   r "concept-display"     1;
   r "capitalize-first"    1;
   r "dim-vector"          1;
+  (* structural primitives — reduce tantra repetition *)
+  r "find-first"          2;
+  r "find-map"            2;
+  r "flat-map"            2;
+  r "split-grades"        1;
+  r "append-triples"      2;
   (* migrated tantras — formerly trivial .tantra4 files *)
   r "triple-subj"         1;
   r "triple-edge"         1;

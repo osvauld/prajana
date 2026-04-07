@@ -21,10 +21,9 @@
     (eq edge "copula")
       (let resolved = shabda-anveshana word
        let kaala-edges = cond (exists resolved) (walk (to-string resolved) "sthita") otherwise []
-       let kaala = reduce kaala-edges "" (fn found e ->
-         cond (has-text found) found
-         (member e ["bhuta-kaala", "bhavishya-kaala"]) (to-string e)
-         otherwise found)
+       let kaala = find-map kaala-edges (fn e ->
+         cond (member e ["bhuta-kaala", "bhavishya-kaala"]) (to-string e)
+         otherwise _none)
        cond (and (has-text pending) (has-text kaala))
          [(append marks [[pending, pend-i, kaala]]), "", -1, (add i 1)]
        otherwise [marks, pending, pend-i, (add i 1)])
@@ -52,11 +51,10 @@
   otherwise
     (reduce (range (length g)) [] (fn out i ->
       let tri = nth g i
-      let idx = reduce (range (length rw-indices)) -1 (fn found j ->
-        cond (neq found -1) found
-        (eq i (nth rw-indices j)) j
-        otherwise found)
-      cond (neq idx -1)
+      let idx = find-map (range (length rw-indices)) (fn j ->
+        cond (eq i (nth rw-indices j)) j
+        otherwise _none)
+      cond (neq idx _none)
         (let new-name = nth rw-names idx
          (append out [[new-name, "satya", new-name]]))
       otherwise

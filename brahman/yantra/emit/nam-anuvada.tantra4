@@ -26,23 +26,20 @@
   -- ── identify question grade ──────────────────────────────────────────────
   -- for anumana/shunya: last grade is the question (no vidhi-kaala)
   (has-vidhi (gt (length (triples-by-edge refined "vidhi-kaala")) 0))
-  (q-grade-vidhi (reduce grades [] (fn acc g ->
-    cond (has-items (triples-by-edge g "vidhi-kaala")) g otherwise acc)))
+  (q-grade-vidhi (find-first grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))))
   (last-grade (nth grades (sub (length grades) 1)))
   (q-grade (cond has-vidhi q-grade-vidhi otherwise last-grade))
 
   -- solved-for concept
   (q-concept (cond has-vidhi
-    (reduce q-grade "" (fn found tri ->
-      cond (has-text found) found
-      (eq (str tri 1) "satya") (str tri 0)
-      otherwise found))
+    (find-map q-grade (fn tri ->
+      cond (eq (str tri 1) "satya") (str tri 0)
+      otherwise _none))
     otherwise ""))
   -- prefer query-word (original word form from question) over concept-display
-  (q-concept-qw (reduce q-grade "" (fn found tri ->
-    cond (has-text found) found
-    (and (eq (str tri 1) "query-word") (eq (str tri 0) q-concept)) (str tri 2)
-    otherwise found)))
+  (q-concept-qw (find-map q-grade (fn tri ->
+    cond (and (eq (str tri 1) "query-word") (eq (str tri 0) q-concept)) (str tri 2)
+    otherwise _none)))
   (q-concept-disp (cond (has-text q-concept-qw) q-concept-qw
     (has-text q-concept) (concept-display q-concept) otherwise ""))
 
@@ -126,13 +123,13 @@
 
     -- count: "we find [value] [question-grade-words]" (skip system concept "count")
     (eq mode "count")
-    (let q-words = reduce q-grade [] (fn acc tri ->
+    (let q-words = flat-map q-grade (fn tri ->
        let edge = str tri 1
        let subj = str tri 0
-       cond (eq edge "vidhi-kaala") acc
-       (and (eq edge "satya") (eq subj "count")) acc
+       cond (eq edge "vidhi-kaala") []
+       (and (eq edge "satya") (eq subj "count")) []
        otherwise (let w = expand-triple tri cop
-         cond (has-text w) (append acc [w]) otherwise acc))
+         cond (has-text w) [w] otherwise []))
      concat say-found " " clean-result " " (words-to-str q-words))
 
     -- anumana/shunya: "yes/no, [declarative answer]"
@@ -147,8 +144,7 @@
     otherwise (concat say-found " that " clean-result)))
 
   -- ── weave all limbs (capitalize each) ───────────────────────────────────
-  (all-strs (reduce [pratijna-strs, [hetu], udaharana-strs, upanaya-strs, [nigamana]] [] (fn acc limb ->
-    reduce limb acc (fn a s ->
-      cond (has-text s) (append a [(capitalize-first s)]) otherwise a))))
+  (all-strs (flat-map [pratijna-strs, [hetu], udaharana-strs, upanaya-strs, [nigamana]] (fn limb ->
+    filter (map limb (fn s -> capitalize-first s)) (fn s -> has-text s))))
 
   (join-with all-strs ". "))

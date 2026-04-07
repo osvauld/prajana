@@ -5,10 +5,9 @@
 (tantra assertion-bandha (graph)
   (quant-words (split (shabda "quantifier" "word") ","))
   (grades (split-grades graph))
-  (new-triples (reduce grades [] (fn acc grade ->
+  (new-triples (flat-map grades (fn grade ->
     let has-niy = has-items (triples-by-edge grade "niyama")
-    cond has-niy
-      (append acc (niyama-extract grade))
+    cond has-niy (niyama-extract grade)
     otherwise
       -- state: [result, subj, subj-ok, saw-cop, pending-adj, saw-than]
       -- pending-adj: viveka adjective waiting for "than" + compared-to entity
@@ -63,5 +62,5 @@
           [(append result [[subj, "swarupa", word]]), "", false, false, "", false]
         (eq edge "satya") [result, word, true, false, "", false]
         otherwise st)
-      (append acc (nth st 0)))))
+      nth st 0)))
   (append-triples graph new-triples))

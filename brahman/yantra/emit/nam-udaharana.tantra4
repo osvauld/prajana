@@ -12,9 +12,7 @@
        let janya = walk mn "janya"
        let phala = nth (walk mn "phala") 0
        let phala-disp = concept-display (to-string (cond (exists phala) phala otherwise mn))
-       let janya-disp = reduce janya "" (fn a j ->
-         let d = concept-display (to-string j)
-         cond (not (has-text a)) d otherwise (concat a " and " d))
+       let janya-disp = join-with (map janya (fn j -> concept-display (to-string j))) " and "
        concat say-known " that " phala-disp " arises from " janya-disp))
 
     -- viveka: viveka-concept + direction → "greater mass means heavier"

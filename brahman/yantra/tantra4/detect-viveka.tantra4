@@ -46,14 +46,13 @@
     | collect o) 0))
   -- question-grade fallback: explicit concept named in question ("which has more kinetic energy?")
   (q-grades (split-grades expanded))
-  (q-grade (reduce q-grades [] (fn acc g ->
-    cond (has-items (triples-by-edge g "vidhi-kaala")) g otherwise acc)))
-  (grade-concept (nth (reduce q-grade [] (fn acc tri ->
+  (q-grade (find-first q-grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))))
+  (eff-grade (cond (exists q-grade) q-grade otherwise []))
+  (grade-concept (find-map eff-grade (fn tri ->
     let s = nth tri 0
     let e = nth tri 1
-    cond (and (eq e "satya") (not (is-viveka-node s)) (not (member s entities)))
-      (append acc [s])
-    otherwise acc)) 0))
+    cond (and (eq e "satya") (not (is-viveka-node s)) (not (member s entities))) s
+    otherwise _none)))
   (comp-concept (cond (has-text krama-concept) krama-concept
     (exists vishesa-concept) vishesa-concept
     (exists grade-concept) grade-concept
