@@ -1,6 +1,16 @@
 -- expand-grade: convert a grade (list of triples) to an English word list.
 -- skips structural triples (sankhya, kaala, vachana, vibhakti, derived-by).
+-- uses query-word triples to preserve original word form from the question.
 (tantra expand-grade (grade cop)
+  -- build query-word lookup: concept → original word
+  (qw-map (reduce grade [] (fn acc tri ->
+    cond (eq (str tri 1) "query-word") (append acc [[(str tri 0), (str tri 2)]]) otherwise acc)))
   (reduce grade [] (fn acc tri ->
-    let w = expand-triple tri cop
+    let subj = str tri 0
+    let edge = str tri 1
+    -- for satya concepts, check query-word map for original word form
+    let qw = cond (eq edge "satya")
+      (reduce qw-map "" (fn found kv -> cond (has-text found) found (eq (nth kv 0) subj) (nth kv 1) otherwise found))
+      otherwise ""
+    let w = cond (has-text qw) qw otherwise (expand-triple tri cop)
     cond (has-text w) (append acc [w]) otherwise acc)))

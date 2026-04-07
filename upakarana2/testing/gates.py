@@ -58,6 +58,14 @@ GATE_KEYWORDS = {
     "unit parse": ("unit_parse", "unit_parse: unit words in natural language"),
     "chain inverse": ("chain_inverse", "chain_inverse: multi-step inverse solve"),
     "sandhi grammar": ("sandhi_grammar", "sandhi_grammar: grammar word promotion in sandhi-viveka"),
+    "math_L0_arithmetic": ("math_L0_arithmetic", "math_L0: natural phrasing of basic operations"),
+    "math_L0_number": ("math_L0_number", "math_L0: sign, absolute value, mod, floor/ceil, negatives"),
+    "math_L1_coordinate": ("math_L1_coordinate", "math_L1: coordinate pairs, distance, midpoint"),
+    "math_L2_trig": ("math_L2_trig", "math_L2: sine, cosine, tangent, Pythagorean theorem"),
+    "math_L3_line": ("math_L3_line", "math_L3: slope, line equations, parallel, perpendicular"),
+    "math_L4_intersect": ("math_L4_intersect", "math_L4: line-line, segment, line-circle intersection"),
+    "math_L5_vector": ("math_L5_vector", "math_L5: vector add, magnitude, dot/cross product"),
+    "math_L6_apply": ("math_L6_apply", "math_L6: torus distance, composite spatial problems"),
 }
 
 

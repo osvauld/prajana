@@ -243,3 +243,8 @@ def cmd_analyze(args, store):
                         print(f"  {rel:15s} match:   {sorted(e & a)}")
         if client:
             client.close()
+
+    elif args.action == "inherit-gaps":
+        from upakarana2.graph.inheritance import report
+        verbose = getattr(args, "verbose", False)
+        report(verbose=verbose)

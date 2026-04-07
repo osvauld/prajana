@@ -68,9 +68,10 @@
     is-verb-form (cond (has-text pending) [[word, pending, word]]
       (has-text verb-concept) [[verb-concept, "satya", verb-concept], [word, "mithya", word]]
       otherwise [[word, "mithya", word]])
-    is-concept (cond (has-text pending) [[nd-str, pending, nd-str]]
-      is-viveka [[nd-str, "satya", nd-str], [nd-str, "query-word", word]]
-      otherwise [[nd-str, "satya", nd-str]])
+    is-concept (let base = cond (has-text pending) [[nd-str, pending, nd-str]]
+      otherwise [[nd-str, "satya", nd-str]]
+      let has-qw = neq word nd-str
+      cond has-qw (append base [[nd-str, "query-word", word]]) otherwise base)
     is-dravya (cond (has-text pending) [[word, pending, word]] otherwise [[word, "satya", word]])
     otherwise (cond (has-text pending) [[word, pending, word]] otherwise [[word, "mithya", word]])))
   -- when multiple candidates, emit candidate edges for downstream disambiguation

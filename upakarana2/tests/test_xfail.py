@@ -9,7 +9,7 @@ Gates:
   dvandva           — per-entity instance-map, dvandva collection
   inverse_math      — bound-vals / invert-math path
   sthita_viveka     — multi-slot entity assignment (gravitational, coulomb)
-  motion_verb       — 'moves at' / 'moving at' → velocity signal
+  motion_verb       — MOVED to test_motion.py (4-layer verb semantics)
   compound_trigram  — three-word compounds (electric-field-strength)
   from_rest         — 'from rest' → initial-velocity=0
   total_compound    — 'total kinetic energy' compound resolution
@@ -96,28 +96,7 @@ def test_coulomb_force(vy):
     assert "2.3" in r
 
 
-# ── gate: motion_verb ──────────────────────────────────────────────────────────
-
-
-@xfail(strict=True, reason="'moves at' not recognised as velocity signal")
-def test_moves_at_velocity(vy):
-    g = vy.bqg("a proton moves at 2e6 m/s")
-    sankhya = vy.triple_map(g, pred="sankhya")
-    assert "velocity" in sankhya
-
-
-@xfail(strict=True, reason="'moving at' not recognised as velocity signal")
-def test_moving_at_ke(vy):
-    r = vy.answer(
-        "the electron has mass 9.109e-31 kg. it is moving at 1e6 m/s. find kinetic energy"
-    )
-    assert "4.5545e-19" in r
-
-
-@xfail(strict=True, reason="motion verb 'moves' not in sandhi-viveka")
-def test_proton_moves_momentum(vy):
-    r = vy.answer("a proton moves at 2e6 m/s. it has mass 1.67e-27 kg. find momentum")
-    assert "3.34e-21" in r
+# ── gate: motion_verb — MOVED to test_motion.py ──────────────────────────────
 
 
 # ── gate: compound_trigram ─────────────────────────────────────────────────────
@@ -519,10 +498,10 @@ def test_proportional_ratio(vy):
     assert "4" in r
 
 
-@xfail(strict=True, reason="graded_ring: intermediate question + continuation")
 def test_intermediate_then_continue(vy):
     """Answer first question, then continue accumulating.
-    12-4=8 (first), 8-3=5 (second)."""
+    12-4=8 (first), 8-3=5 (second).
+    Fixed: 'gives' (present tense) now carries kshaya via sandhi-viveka."""
     r = vy.answer(
         "Alice has 12 cookies. she gives 4 to Bob. "
         "how many does Alice have. "

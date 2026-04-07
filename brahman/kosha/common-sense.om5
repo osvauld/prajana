@@ -123,10 +123,12 @@
 (kosha falling
   (vishesa common-sense-varga processes-varga)
   (swarupa tinanta bhave-prayoga)
+  (sthita kshaya)
   (janya gravity height mass)
   (phala velocity kinetic-energy collision-varga)
   (abheda velocity)
-  (yukta potential-energy kinetic-energy coefficient-of-restitution normal-force))
+  (yukta potential-energy kinetic-energy coefficient-of-restitution normal-force)
+  (naama fall))
 
 (kosha heating
   (vishesa common-sense-varga processes-varga)

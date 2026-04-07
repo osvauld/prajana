@@ -2,13 +2,16 @@
 -- "does sparrow have wings" + yes → "yes, sparrow has wings"
 -- "does sparrow have wings" + no  → "no, sparrow does not have wings"
 (tantra nam-nigamana-bool (grade answer cop)
+  -- build query-word lookup: concept → original word
+  (qw-map (reduce grade [] (fn acc tri ->
+    cond (eq (str tri 1) "query-word") (append acc [[(str tri 0), (str tri 2)]]) otherwise acc)))
   -- collect word-bearing triples, skipping structural ones + dedup satya
   (wt-state (reduce grade [[], []] (fn st tri ->
     let acc = nth st 0
     let seen = nth st 1
     let edge = str tri 1
     let subj = str tri 0
-    let is-word = or (eq edge "satya") (eq edge "mithya") (eq edge "copula")
+    let is-word = or (eq edge "satya") (eq edge "mithya") (eq edge "copula") (eq edge "prashna")
     let is-dup = and (eq edge "satya") (member subj seen)
     let include = and is-word (not is-dup)
     let new-seen = cond (eq edge "satya") (append seen [subj]) otherwise seen
@@ -19,9 +22,11 @@
   -- first word: check if it's an interrogative
   (first-word (cond (has-items word-triples) (str (nth word-triples 0) 0) otherwise ""))
   (first-edge (cond (has-items word-triples) (str (nth word-triples 0) 1) otherwise ""))
-  (is-interrogative (and (eq first-edge "mithya")
-    (or (eq first-word "does") (eq first-word "do") (eq first-word "did")
-        (eq first-word "can") (eq first-word "will"))))
+  (is-interrogative (or
+    (eq first-edge "prashna")
+    (and (eq first-edge "mithya")
+      (or (eq first-word "does") (eq first-word "do") (eq first-word "did")
+          (eq first-word "can") (eq first-word "will")))))
   (is-copula-q (and (eq first-edge "copula")
     (or (eq first-word "is") (eq first-word "are") (eq first-word "was") (eq first-word "were"))))
   (skip-first (or is-interrogative is-copula-q))
@@ -35,7 +40,9 @@
     -- skip leading interrogative
     cond (and (not past-first) skip-first) [acc, true]
     otherwise
-      (let w = cond
+      (let qw = reduce qw-map "" (fn found kv -> cond (has-text found) found (eq (nth kv 0) subj) (nth kv 1) otherwise found)
+       let w = cond
+        (and (eq edge "satya") (has-text qw)) qw
         (and (eq edge "satya") (starts-with subj "pronoun-")) (substr subj 8 (sub (string-length subj) 8))
         (eq edge "satya") (concept-display subj)
         (eq edge "mithya") subj

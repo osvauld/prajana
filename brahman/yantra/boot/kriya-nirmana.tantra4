@@ -30,7 +30,8 @@
         -- skip if dhatu already has a hand-authored past form (phala = janya reverse)
         let has-irregular-past = has-items (walk nd-str "phala")
         let past-word = cond ends-e (concat base "d") otherwise (concat base "ed")
-        let past-exists = (or (exists (lookup past-word)) has-irregular-past)
+        let past-lookup = lookup past-word
+        let past-exists = (or has-irregular-past (and (exists past-lookup) (member "tinanta" (map (walk past-word "swarupa") (fn x -> to-string x)))))
         let past-slokas = cond (has-text dir-sthita)
           [(concat "tinanta-swarupa " (concat nd-str "-janya") " kta-pratyaya-sthita bhuta-kaala-sthita kartari-prayoga-sthita " dir-sthita)]
           otherwise
@@ -50,7 +51,9 @@
         let needs-double = (and (not ends-e) (ge slen 2) (not is-last-vowel) is-prev-vowel (or (lt slen 3) (not is-pprev-vowel)))
         let ing-stem = cond needs-double (concat stem last-ch) otherwise stem
         let ing-word = concat ing-stem "ing"
-        let ing-exists = exists (lookup ing-word)
+        -- skip only if a proper verb node (swarupa→tinanta) already exists
+        let ing-lookup = lookup ing-word
+        let ing-exists = (and (exists ing-lookup) (member "tinanta" (map (walk ing-word "swarupa") (fn x -> to-string x))))
         let ing-slokas = cond (has-text dir-sthita)
           [(concat "tinanta-swarupa " (concat nd-str "-janya") " shatr-pratyaya-sthita vartamana-kaala-sthita kartari-prayoga-sthita " dir-sthita)]
           otherwise

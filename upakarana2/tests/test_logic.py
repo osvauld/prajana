@@ -56,7 +56,7 @@ def test_transitive_is_a_three_hop(vy):
 # ── syllogism / classical modus ponens (assertion chain) ─────────────────────
 
 
-@xfail(strict=True, reason="IS-A syllogism: says 'cat has breathing' — logic correct but nigamana uses node name 'breathing' not question word 'breathe'")
+@xfail(strict=True, reason="IS-A syllogism: answer is 'no' but should be 'yes' — anumana dispatch inverts result for inheritance queries")
 def test_syllogism_breathe(vy):
     """all cats are animals. all animals breathe. do cats breathe"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")
@@ -64,12 +64,12 @@ def test_syllogism_breathe(vy):
     assert re.search(r'\byes\b', rl) is not None and "cat" in rl and "breathe" in rl
 
 
-@xfail(strict=True, reason="IS-A syllogism: says 'cat has breathing' — cites cat but uses node name 'breathing' not word 'breathe'")
+@xfail(strict=True, reason="IS-A syllogism: answer is 'no' but should be 'yes' — logic finds chain but nigamana inverts")
 def test_syllogism_cites_rule(vy):
     """Answer cites both premises"""
     r = vy.answer("all cats are animals. all animals breathe. do cats breathe")
     rl = r.lower()
-    assert "cat" in rl and "breathe" in rl
+    assert re.search(r'\byes\b', rl) is not None and "cat" in rl and "breathe" in rl
 
 
 # ── modus ponens / implication ────────────────────────────────────────────────

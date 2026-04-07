@@ -38,7 +38,13 @@
       (eq (str tri 1) "satya") (str tri 0)
       otherwise found))
     otherwise ""))
-  (q-concept-disp (cond (has-text q-concept) (concept-display q-concept) otherwise ""))
+  -- prefer query-word (original word form from question) over concept-display
+  (q-concept-qw (reduce q-grade "" (fn found tri ->
+    cond (has-text found) found
+    (and (eq (str tri 1) "query-word") (eq (str tri 0) q-concept)) (str tri 2)
+    otherwise found)))
+  (q-concept-disp (cond (has-text q-concept-qw) q-concept-qw
+    (has-text q-concept) (concept-display q-concept) otherwise ""))
 
   -- mode-specific signals
   (comp-word (cond (eq mode "viveka") (read-signal proof "comp-word") otherwise ""))

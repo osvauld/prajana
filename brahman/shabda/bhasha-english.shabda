@@ -107,7 +107,7 @@ shabda contact
 done
 
 shabda copula
-  (alias is, are, was, were, equals, equaled, gives)
+  (alias is, are, was, were, am, equals, equaled, gives)
   (desc "linking-verb-connecting-subject-to-predicate")
 done
 
@@ -134,6 +134,26 @@ done
 
 shabda copula-were
   (word were)
+  (role grammar)
+done
+
+shabda copula-am
+  (word am)
+  (role grammar)
+done
+
+shabda aux-does
+  (word does)
+  (role grammar)
+done
+
+shabda aux-do
+  (word do)
+  (role grammar)
+done
+
+shabda aux-did
+  (word did)
   (role grammar)
 done
 
@@ -497,20 +517,6 @@ shabda verb-have
 done
 
 
-shabda verb-moving
-  (word moving)
-  (role grammar)
-done
-
-shabda verb-rotates
-  (word rotates)
-  (role grammar)
-done
-
-shabda verb-rotating
-  (word rotating)
-  (role grammar)
-done
 
 shabda vidhi-kaala
   (word find compute calculate determine solve)

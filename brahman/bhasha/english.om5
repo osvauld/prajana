@@ -34,8 +34,22 @@
 (bhasha decay
   (sthita english kshaya))
 
+(bhasha difference
+  (sthita english kshaya))
+
 (bhasha distinction
   (sthita english viveka))
+
+; ── sign modifier: "negative 7" → apply neg → -7 ──────────────────
+; tantra walks: negative-sign.kriya → neg → neg.ganana → "neg" op
+(bhasha negative-sign
+  (swarupa sign-modifier)
+  (sthita negative)
+  (kriya neg)
+  (naama negative))
+
+(bhasha product
+  (sthita english multiplication))
 
 (bhasha dual
   (sthita english dvandva))
@@ -138,6 +152,26 @@
   (swarupa copula)
   (sthita bhuta-kaala bahu-vachana)
   (naama were))
+
+(bhasha copula-am
+  (swarupa copula)
+  (sthita vartamana-kaala eka-vachana)
+  (naama am))
+
+(bhasha aux-does
+  (swarupa avyaya)
+  (sthita english prashna vartamana-kaala)
+  (naama does))
+
+(bhasha aux-do
+  (swarupa avyaya)
+  (sthita english prashna vartamana-kaala)
+  (naama do))
+
+(bhasha aux-did
+  (swarupa avyaya)
+  (sthita english prashna bhuta-kaala)
+  (naama did))
 
 (bhasha copula
   (swarupa avyaya tinanta)
@@ -297,14 +331,6 @@
   (sthita sambandha shashthi-vibhakti bahu-vachana vartamana-kaala))
 
 
-(bhasha verb-moving
-  (sthita english kartari-prayoga))
-
-(bhasha verb-rotates
-  (sthita english kartari-prayoga))
-
-(bhasha verb-rotating
-  (sthita english kartari-prayoga))
 
 (bhasha vidhi-kaala
   (domain bhasha/english/grammar)
@@ -506,6 +532,11 @@
   (sthita dhatu kartari-prayoga)
   (naama accelerate))
 
+(bhasha dhatu-rotate
+  (swarupa tinanta)
+  (sthita dhatu kartari-prayoga)
+  (naama rotate))
+
 (bhasha dhatu-collide
   (swarupa tinanta)
   (sthita dhatu kartari-prayoga)
@@ -565,7 +596,7 @@
 (bhasha left
   (swarupa tinanta)
   (janya dhatu-leave)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya disha)
   (naama left))
 
 (bhasha dhatu-add
@@ -578,6 +609,70 @@
   (janya dhatu-add)
   (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
   (naama added))
+
+; ── spatial directions (disha — left/right/up/down wrt person/object) ─
+
+(bhasha disha-left
+  (swarupa disha)
+  (pratipaksha disha-right))
+
+(bhasha disha-right
+  (swarupa disha)
+  (pratipaksha disha-left))
+
+; ── division verbs (bridge to division via vibhaga direction) ────────
+
+(bhasha dhatu-share
+  (swarupa tinanta)
+  (sthita dhatu division)
+  (naama share))
+
+(bhasha shared
+  (swarupa tinanta)
+  (janya dhatu-share)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division)
+  (naama shared))
+
+(bhasha dhatu-divide
+  (swarupa tinanta)
+  (sthita dhatu division)
+  (naama divide))
+
+(bhasha divided
+  (swarupa tinanta)
+  (janya dhatu-divide)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division)
+  (naama divided))
+
+(bhasha dhatu-distribute
+  (swarupa tinanta)
+  (sthita dhatu division)
+  (naama distribute))
+
+(bhasha distributed
+  (swarupa tinanta)
+  (janya dhatu-distribute)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division)
+  (naama distributed))
+
+(bhasha dhatu-split
+  (swarupa tinanta)
+  (sthita dhatu division)
+  (naama split))
+
+; split past tense = same form (irregular: no -ed suffix)
+(bhasha split-past
+  (swarupa tinanta)
+  (janya dhatu-split)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division)
+  (naama split))
+
+; British spelling alias for traveled
+(bhasha travelled
+  (swarupa tinanta)
+  (janya dhatu-travel)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga)
+  (naama travelled))
 
 ; ── direction adverbs (bridge to sangati kshaya/vriddhi) ──────────────
 
@@ -595,6 +690,40 @@
   (swarupa avyaya)
   (sthita vriddhi)
   (naama back))
+
+(bhasha adverb-down
+  (swarupa avyaya)
+  (sthita kshaya)
+  (naama down))
+
+(bhasha adverb-up
+  (swarupa avyaya)
+  (sthita vriddhi)
+  (naama up))
+
+; ── verbs: rise/descend (missing direction verbs) ──────────────────
+
+(bhasha dhatu-rise
+  (swarupa tinanta)
+  (sthita dhatu vriddhi)
+  (naama rise))
+
+(bhasha risen
+  (swarupa tinanta)
+  (janya dhatu-rise)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
+  (naama risen))
+
+(bhasha rose
+  (swarupa tinanta)
+  (janya dhatu-rise)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
+  (naama rose))
+
+(bhasha dhatu-descend
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama descend))
 
 ; ── greetings (bridge to sangati sambodhana/abhisambodhana) ───────────
 

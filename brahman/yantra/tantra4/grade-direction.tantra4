@@ -1,6 +1,14 @@
 -- resolves arithmetic direction of a grade (bigrams first, then single words).
+-- also checks for direct direction edges (kshaya, vriddhi, multiplication, division)
+-- emitted by sandhi-viveka for verb forms with direction in their sthita.
 (tantra grade-direction (grade)
+  (direction-edges ["kshaya", "vriddhi", "multiplication", "division"])
+  -- direct: if any triple has a direction as its edge, use that
+  (direct-dir (reduce grade "" (fn acc tri ->
+    cond (has-text acc) acc
+    (member (nth tri 1) direction-edges) (nth tri 1)
+    otherwise acc)))
   (mw (grade-mithya grade))
   (bigrams (word-bigrams mw))
   (dir-bi (detect-direction bigrams))
-  (cond (has-text dir-bi) dir-bi otherwise (detect-direction mw)))
+  (cond (has-text direct-dir) direct-dir (has-text dir-bi) dir-bi otherwise (detect-direction mw)))

@@ -1,14 +1,16 @@
--- scans words for first kshaya/vriddhi/multiplication direction.
+-- scans words for first kshaya/vriddhi/multiplication/division direction.
 -- resolves via: (1) direct match if word-resolve returns direction name,
 -- (2) sthita walk on resolved node to find direction in graph.
+-- guard: skip words with disha in sthita (spatial directions like left/right).
 (tantra detect-direction (words)
   (reduce words "" (fn acc w ->
     let wn = word-resolve w
     cond (has-text acc) acc
-    (or (eq wn "kshaya") (eq wn "vriddhi") (eq wn "multiplication")) wn
+    (or (eq wn "kshaya") (eq wn "vriddhi") (eq wn "multiplication") (eq wn "division")) wn
     otherwise (let dirs = walk wn "sthita"
-      let found = reduce dirs "" (fn d node ->
+      let is-disha = member "disha" dirs
+      let found = cond is-disha "" otherwise (reduce dirs "" (fn d node ->
         cond (has-text d) d
-        (or (eq (to-string node) "kshaya") (eq (to-string node) "vriddhi") (eq (to-string node) "multiplication")) (to-string node)
-        otherwise d)
+        (or (eq (to-string node) "kshaya") (eq (to-string node) "vriddhi") (eq (to-string node) "multiplication") (eq (to-string node) "division")) (to-string node)
+        otherwise d))
       cond (has-text found) found otherwise acc))))

@@ -96,6 +96,7 @@ def build_parser():
         "signals", "signals-gap",
         "compose", "compose-gen", "compose-inverse",
         "gen-gaps", "gen-validate",
+        "inherit-gaps",
     ])
     s.add_argument("name", nargs="?")
     s.add_argument("--layer", "-l")

@@ -49,6 +49,7 @@
   (vishesa linear-motion-varga)
   (phala krama velocity-kramanusara)
   (yukta kshetrajna direction viveka)
+  (naama move travel)
   (avastha angular total linear radial tangential initial final average))
 
 (kosha height
@@ -194,6 +195,10 @@
   (phala angular-acceleration)
   (kramanusara kona)
   (sthita sthira-apeksha))
+
+(kosha rotation
+  (vishesa rotational-motion-varga)
+  (naama rotate))
 
 (kosha rotational-motion-varga
   (vishesa kinematics-varga oscillation-varga)

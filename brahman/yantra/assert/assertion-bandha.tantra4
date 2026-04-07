@@ -41,8 +41,9 @@
           let viv-subj = cond is-min obj otherwise subj
           let viv-obj  = cond is-min subj otherwise obj
           [(append result [[viv-subj, "viveka", viv-obj], [viv-subj, "viveka-adj", pending-adj]]), "", false, false, "", false]
-        -- query-word: skip (carries surface form like "heavier", no state change)
+        -- query-word / prashna: skip (surface form / interrogative marker, no state change)
         (eq edge "query-word") st
+        (eq edge "prashna") st
         -- quantifier words act as copula
         (and (eq edge "mithya") (member word quant-words)) [result, "", false, true, "", false]
         (and (eq edge "satya") (eq word "quantifier")) [result, "", false, true, "", false]

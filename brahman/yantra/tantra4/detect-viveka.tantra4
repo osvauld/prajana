@@ -14,7 +14,7 @@
   -- question-grade direction: determined by the LAST query-word adjective.
   -- BQG emits grades in order; question grade is last, so the last query-word
   -- adjective is from the question. Avoids kosha-janya pollution of split-grades.
-  (q-query-adj-nodes (expanded | where [s, e, o] | and (eq e "query-word") | collect (to-string s)))
+  (q-query-adj-nodes (expanded | where [s, e, o] | and (eq e "query-word") (is-viveka-node (to-string s)) | collect (to-string s)))
   (last-q-adj (cond (has-items q-query-adj-nodes) (nth q-query-adj-nodes (sub (length q-query-adj-nodes) 1)) otherwise ""))
   -- graph-driven direction: viveka-direction returns "max" or "min" from sthita→abheda walk
   (q-dir (cond (has-text last-q-adj) (viveka-direction last-q-adj) otherwise ""))

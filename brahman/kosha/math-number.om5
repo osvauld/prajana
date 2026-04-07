@@ -1,6 +1,39 @@
 ; ═══════════════════════════════════════════════════════════════════
-; math-number — 89 nodes
+; math-number — 93 nodes
 ; ═══════════════════════════════════════════════════════════════════
+
+; ── sign: number classification ──────────────────────────────────────
+; sign is a property of numbers (like sama-vishama is even/odd).
+; positive and negative are its two non-zero values.
+; tantras walk: number → sign → positive/negative → rules
+
+(kosha sign
+  (vishesa number-varga)
+  (swarupa dharana)
+  (yukta positive negative zero abs neg)
+  (kriya viveka))
+
+(kosha positive
+  (vishesa number-varga)
+  (swarupa sign)
+  (sthita vriddhi)
+  (siddha gt-shunya)
+  (pratipaksha negative))
+
+(kosha negative
+  (vishesa number-varga)
+  (swarupa sign)
+  (sthita kshaya)
+  (siddha lt-shunya)
+  (pratipaksha positive)
+  (kriya neg))
+
+(kosha number-line
+  (vishesa number-varga)
+  (swarupa krama)
+  (yukta positive negative zero sign)
+  (kriya viveka)
+  (siddha real int))
 
 (kosha count
   (vishesa number-varga math-varga)
@@ -157,6 +190,7 @@
   (karma number-varga)
   (abheda sama-vibhaga polarity)
   (kriya arithmetic kshaya matra)
+  (janya multiplication reciprocal)
   (yukta equation)
   (phala dharana)
   (pratipaksha multiplication)
@@ -310,6 +344,7 @@
   (karma number-varga)
   (abheda negation)
   (swarupa additive-inverse)
+  (phala sign)
   (pratipaksha neg)
   (ganana neg))
 
@@ -388,6 +423,7 @@
   (karma number-varga)
   (kriya kshaya matra arithmetic)
   (abheda minus)
+  (janya addition neg)
   (yukta equation)
   (pratipaksha addition)
   (ganana sub))
@@ -565,7 +601,7 @@
   (domain kosha/math/number/structures)
   (vishesa number-varga)
   (abheda sankhya)
-  (yukta discrete addition subtraction multiplication division factorial prime)
+  (yukta discrete addition subtraction multiplication division factorial prime sign positive negative)
   (sthita matra mula)
   (swarupa sama-vishama))
 

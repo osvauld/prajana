@@ -76,16 +76,27 @@ let eval_shabda_op
       Some (match candidates with
        | [single] -> VString single
        | _ :: _ ->
-         (* multiple candidates: PPR disambiguation *)
+         (* multiple candidates: PPR + layer-priority disambiguation.
+            Layer priority breaks ties: kosha > sangati > bhasha > mantra.
+            This ensures concept nodes win over dhatu roots when both
+            carry naama edges for the same word (e.g. "move"). *)
+         let layer_score name =
+           match Prakriti.find k name with
+           | Some n -> (match n.layer with
+             | "kosha" -> 3 | "sangati" -> 2 | "bhasha" -> 1 | _ -> 0)
+           | None -> 0 in
          (match Domain.DLS.get _eval_ctx with
           | Some ctx ->
-            let best = List.fold_left (fun (best_name, best_score) name ->
+            let best = List.fold_left (fun (best_name, best_ppr, best_layer) name ->
               let ppr_score = match Hashtbl.find_opt ctx.ctx_ppr name with
                 | Some s -> s | None -> 0.0 in
-              if ppr_score > best_score then (name, ppr_score)
-              else (best_name, best_score)
-            ) ("", -1.0) candidates in
-            VString (fst best)
+              let ls = layer_score name in
+              if ppr_score > best_ppr then (name, ppr_score, ls)
+              else if ppr_score = best_ppr && ls > best_layer then (name, ppr_score, ls)
+              else (best_name, best_ppr, best_layer)
+            ) ("", -1.0, -1) candidates in
+            let (best_name, _, _) = best in
+            VString best_name
           | None -> VString (List.hd candidates))
        | [] ->
          (* step 3: direct node name match — fallback when no naama edges *)

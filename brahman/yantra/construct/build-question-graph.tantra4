@@ -1,8 +1,11 @@
 -- build question graph from sentence words.
--- accumulator is [triples, pending-modifier] — grammar words (pratishedha, vibhakti)
+-- accumulator is [triples, pending-modifier, sign-op] — grammar words (pratishedha, vibhakti)
 -- set pending instead of emitting self-loops; next concept consumes the pending
 -- as its edge type. This makes the graded ring structure explicit: negated concepts
 -- get edge "pratishedha", located concepts get edge "adhikarana", etc.
+-- sign-op: when a sign-modifier word (e.g. "negative") precedes a number,
+-- the sign operation (e.g. "neg") is applied to negate the number value.
+-- tantra walks: word → swarupa→sign-modifier → kriya→neg → ganana→"neg" op.
 (tantra build-question-graph (sentence)
   (sent-punct [".", "?", "!", ","])
   (raw-words (split sentence " "))
@@ -10,25 +13,34 @@
   -- uses compound_word_index (reverse of expand_avastha) to check bigrams
   -- BEFORE individual word resolution, so "elastic energy" → "elastic-energy"
   -- even when "elastic" has a solo word mapping to "elasticity".
-  (merged (reduce raw-words [[], ""] (fn acc word ->
+  (merged (reduce raw-words [[], "", []] (fn acc word ->
     let result     = nth acc 0
     let prev-clean = nth acc 1
+    let qw-pairs   = nth acc 2
     let wlen       = string-length word
     let last-ch    = cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise ""
     let has-punct  = member last-ch sent-punct
     let clean      = cond has-punct (substr word 0 (sub wlen 1)) otherwise word
     let compound   = cond (has-text prev-clean) (word-node-compound prev-clean clean) otherwise _none
-    cond (exists compound)
-      let n      = length result
-      let prefix = map (range (sub n 1)) (fn i -> nth result i)
-      let final  = cond has-punct (concat compound last-ch) otherwise (to-string compound)
-      [(append prefix [final]), ""]
-    otherwise
-      [(append result [word]), clean])))
+    -- if direct compound fails, try resolving clean to base form (e.g. "energies" → "energy")
+    let base-wn    = cond (and (not (exists compound)) (has-text prev-clean)) (word-node clean) otherwise _none
+    let base-str   = cond (and (exists base-wn) (neq (to-string base-wn) clean)) (to-string base-wn) otherwise ""
+    let compound2  = cond (has-text base-str) (word-node-compound prev-clean base-str) otherwise _none
+    let use-compound = cond (exists compound) compound (exists compound2) compound2 otherwise _none
+    let is-morph   = and (exists compound2) (not (exists compound))
+    -- compute compound result BEFORE cond to avoid let-in-cond gotcha
+    let n          = length result
+    let prefix     = map (range (sub n 1)) (fn i -> nth result i)
+    let final-w    = cond has-punct (concat use-compound last-ch) otherwise (to-string use-compound)
+    let new-qw     = cond is-morph (append qw-pairs [[(to-string use-compound), (concat prev-clean " " clean)]]) otherwise qw-pairs
+    cond (exists use-compound) [(append prefix [final-w]), "", new-qw]
+    otherwise [(append result [word]), clean, qw-pairs])))
   (words (nth merged 0))
-  (graph (reduce words [[], ""] (fn acc word ->
+  (compound-qw (nth merged 2))
+  (graph (reduce words [[], "", ""] (fn acc word ->
     let g       = nth acc 0
     let pending = nth acc 1
+    let sign-op = nth acc 2
     let wlen      = string-length word
     let last-ch   = (cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise "")
     let has-punct = member last-ch sent-punct
@@ -43,6 +55,14 @@
     let uni-str   = nth parts 1
     let nv        = (cond (has-text num-str) num-str otherwise "")
     let un        = (cond (has-text uni-str) (shabda-anveshana uni-str) otherwise "")
+    -- sign-modifier: "negative 7" → apply neg(7) = -7
+    -- walks: nd.swarupa for sign-modifier, nd.kriya for the operation (neg)
+    let is-sign-modifier = (and (exists nd) (member "sign-modifier" (walk (to-string nd) "swarupa")))
+    let sign-kriya = (cond is-sign-modifier (to-string (nth (walk (to-string nd) "kriya") 0)) otherwise "")
+    -- apply pending sign-op to number: walk sign-op.ganana → compute op → apply
+    let eff-nv = cond (and (has-text nv) (has-text sign-op))
+      (to-string (apply-op (to-string (nth (walk sign-op "ganana") 0)) [(to-number nv)]))
+      otherwise nv
     let is-dvandva     = has-grammar-sthita nd rl "dvandva"
     let is-locative    = has-grammar-sthita nd rl "saptami-vibhakti"
     let is-ablative    = has-grammar-sthita nd rl "panchami-vibhakti"
@@ -50,6 +70,7 @@
     let is-instrumental = has-grammar-sthita nd rl "trtiya-vibhakti"
     let is-pratishedha = has-grammar-sthita nd rl "pratishedha"
     let is-niyama      = has-grammar-sthita nd rl "niyama"
+    let is-prashna     = has-grammar-sthita nd rl "prashna"
     let is-vibhakti    = or is-locative (or is-ablative (or is-dative is-instrumental))
     let vibhakti-edge  = cond is-locative "adhikarana" is-ablative "apadana" is-dative "sampradana" is-instrumental "karana" otherwise ""
     -- pratishedha uses pending accumulator: sets pending="pratishedha", next content
@@ -63,8 +84,10 @@
     let bind-ledger = filter g (fn t -> (or (eq (nth t 1) "sankhya") (eq (nth t 1) "matra")))
     let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "apadana") (eq (nth t 1) "sampradana") (eq (nth t 1) "karana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala") (eq (nth t 1) "pratishedha")))
     let subgraphs = [current-grade, entity-reg, bind-ledger, grammar-trail]
-    let info      = [(to-string nd), rl, ly, nv, (to-string un), candidates]
+    let info      = [(to-string nd), rl, ly, eff-nv, (to-string un), candidates]
     let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]]
+      is-prashna [[clean, "prashna", clean]]
+      is-sign-modifier []
       is-pratishedha []
       is-niyama [[clean, "niyama", clean]]
       is-vibhakti [[clean, vibhakti-edge, clean]]
@@ -76,6 +99,13 @@
       (and (has-text pending) (has-items triples)) ""
       otherwise pending
     let result = (cond (has-text punct) (append with-word [[punct, "viraam", punct]]) otherwise with-word)
-    -- grade boundary clears pending
-    [(result), (cond (has-text punct) "" otherwise new-pending)])))
-  (sandhi-viveka (nth graph 0)))
+    -- sign-op: set by sign-modifier, cleared when consumed by a number or at grade boundary
+    let new-sign-op = cond is-sign-modifier sign-kriya
+      (and (has-text sign-op) (has-text nv)) ""
+      otherwise sign-op
+    -- grade boundary clears pending and sign-op
+    [(result), (cond (has-text punct) "" otherwise new-pending), (cond (has-text punct) "" otherwise new-sign-op)])))
+  (base-graph (nth graph 0))
+  -- inject query-word triples for compounds resolved via morphological forms (e.g. "energies" → "energy")
+  (cqw-triples (map compound-qw (fn kv -> [(nth kv 0), "query-word", (nth kv 1)])))
+  (sandhi-viveka (append base-graph cqw-triples)))

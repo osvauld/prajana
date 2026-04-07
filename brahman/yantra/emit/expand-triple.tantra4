@@ -15,6 +15,7 @@
     (eq edge "karana") subj
     (eq edge "asprista-sankhya") subj
     (eq edge "pratishedha") subj
+    (eq edge "prashna") subj
     (eq edge "matra") (let mudra = walk obj "naama-mudra"
       cond (has-items mudra) (to-string (nth mudra 0))
       otherwise (let nm = walk obj "naama"

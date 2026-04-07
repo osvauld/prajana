@@ -8,11 +8,12 @@
   -- and "oranges" each with their own numbers), filter grades to only the query concept.
   -- skip filtering when: no q-concept, multiplication present (cross-concept),
   -- or only one numbered concept (e.g. "Tom" as recipient has no competing count).
-  (any-mul (reduce grades false (fn found grade ->
-    or found (eq (grade-direction grade) "multiplication"))))
+  (any-mul-or-div (reduce grades false (fn found grade ->
+    let gd = grade-direction grade
+    or found (or (eq gd "multiplication") (eq gd "division")))))
   (has-dvandva (reduce grades false (fn found grade ->
     or found (has-items (triples-by-edge grade "dvandva")))))
-  (concept-filtered (cond (or any-mul (not (has-text q-concept)) (not has-dvandva)) grades
+  (concept-filtered (cond (or any-mul-or-div (not (has-text q-concept)) (not has-dvandva)) grades
     otherwise (filter grades (fn grade ->
       let gc = grade-concept grade
       or (not (has-text gc)) (eq gc q-concept) (is-question-grade grade)))))
@@ -36,8 +37,9 @@
     let n0 = cond has-num (to-number (nth nums 0)) otherwise 0
     let n1-raw = cond (gt (length nums) 1) (nth nums 1) otherwise "1"
     let is-mul-grade = (and (eq eff-dir "multiplication") (gt (length nums) 1))
-    let nv = cond is-mul-grade (apply-op "mul" [n0, (to-number n1-raw)]) otherwise n0
-    let op-eval = cond (eq eff-dir "kshaya") (nth (walk "subtraction" "ganana") 0) (eq eff-dir "multiplication") (nth (walk "multiplication" "ganana") 0) otherwise (nth (walk "addition" "ganana") 0)
+    let is-div-grade = (and (eq eff-dir "division") (gt (length nums) 1))
+    let nv = cond is-mul-grade (apply-op "mul" [n0, (to-number n1-raw)]) is-div-grade (apply-op "div" [n0, (to-number n1-raw)]) otherwise n0
+    let op-eval = cond (eq eff-dir "kshaya") (nth (walk "subtraction" "ganana") 0) (eq eff-dir "multiplication") (nth (walk "multiplication" "ganana") 0) (eq eff-dir "division") (nth (walk "division" "ganana") 0) otherwise (nth (walk "addition" "ganana") 0)
     let new-acc = apply-op (to-string op-eval) [acc, nv]
     let step = (concat eff-dir " " nv ": " (to-string acc) " -> " (to-string new-acc))
     -- carry: when seeding, pass direction forward for the next grade
@@ -51,7 +53,7 @@
   (all-satya (user-concepts graph))
   (count-entity (cond (has-text q-concept) q-concept otherwise (nth all-satya 0)))
   (count-container (nth all-satya 1))
-  (resolved-count (cond (eq q-direction "kshaya") "count-remaining" otherwise "count-total"))
+  (resolved-count (cond (eq q-direction "kshaya") "count-remaining" (eq q-direction "division") "count-per" otherwise "count-total"))
   (base-graph (cond found-any
     (reduce graph [] (fn acc triple ->
       cond (and (eq (triple-subj triple) "count") (eq (triple-edge triple) "satya"))
@@ -74,7 +76,7 @@
   -- guard: skip if any satya concept has a formula (physics, not counting)
   -- exception: multiplication via "each" is always a count problem, even with physics concepts
   (any-satya-formula (reduce all-satya false (fn found c -> or found (has-items (mantra-select c)))))
-  (has-multiplication any-mul)
+  (has-mul-or-div any-mul-or-div)
   (should-count (and found-any (not has-viveka)
-    (or has-multiplication (not any-satya-formula))))
+    (or has-mul-or-div (not any-satya-formula))))
   (cond (not should-count) graph otherwise (append base-graph proof)))

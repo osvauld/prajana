@@ -1,6 +1,12 @@
 -- grammar structure discernment pass.
+-- scans mithya triples for slokas with -sthita tokens that are in visheshanam-ring.
+-- when found, replaces "mithya" edge with the root concept (e.g. vartamana-kaala).
+-- direction priority: if a direction root (kshaya/vriddhi/multiplication/division)
+-- is found alongside a tense root (vartamana-kaala/bhuta-kaala), prefer the direction
+-- so count-chain can detect the arithmetic signal from present-tense verbs.
 (tantra sandhi-viveka (graph)
   (sthita-len (string-length "-sthita"))
+  (direction-roots ["kshaya", "vriddhi", "multiplication", "division"])
   (rashi-label-words (reduce graph ["", []] (fn st tri ->
     let last-e = nth st 0
     let acc    = nth st 1
@@ -15,7 +21,14 @@
     let gnode  = (cond (eq edge "mithya") (shabda-anveshana word) otherwise _none)
     let slokas = (cond (exists gnode) (node-slokas (to-string gnode)) otherwise [])
     let toks   = reduce slokas [] (fn acc s -> append acc (split s " "))
-    let root   = reduce toks "" (fn acc w ->
+    -- two-pass: first look for direction roots, then fall back to any ring match
+    let dir-root = reduce toks "" (fn acc w ->
+      (cond (neq acc "") acc
+      otherwise (cond (ends-with w "-sthita")
+        (let candidate = (substr w 0 (sub (string-length w) sthita-len))
+          cond (member candidate direction-roots) candidate otherwise "")
+      otherwise "")))
+    let any-root = reduce toks "" (fn acc w ->
       (cond (neq acc "") acc
       otherwise (cond (ends-with w "-sthita")
         (cond (member "visheshanam-ring"
@@ -24,4 +37,5 @@
           (substr w 0 (sub (string-length w) sthita-len))
           otherwise "")
       otherwise "")))
+    let root = cond (has-text dir-root) dir-root otherwise any-root
     (cond (and (has-text root) (not (and (eq root "matra") (member word rashi-labels)))) [word, root, root] otherwise [word, edge, obj]))))
