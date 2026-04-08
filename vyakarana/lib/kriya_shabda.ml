@@ -1,7 +1,7 @@
 (* kriya_shabda.ml — word/shabda resolution and unit decomposition.
    Extracted from kriya_graph.ml.
 
-   Handles: word-node, word-node-candidates, word-node-compound,
+   Handles: word-node, word-node-candidates,
    decompose-unit, concept-display, capitalize-first, dim-vector. *)
 
 open Prakriti
@@ -202,18 +202,6 @@ let eval_shabda_op
         Some !result
       end
     end
-
-  | "word-node-compound" ->
-    (* reverse of expand_avastha: check if two words form a known compound.
-       e.g., word-node-compound "elastic" "energy" → "elastic-energy" *)
-    let w1 = eval_str 0 in
-    let w2 = eval_str 1 in
-    let key = w1 ^ " " ^ w2 in
-    Some (match Domain.DLS.get _eval_ctx with
-     | Some ctx ->
-       (match Hashtbl.find_opt ctx.ctx_index.compound_word_index key with
-        | Some compound_name -> VString compound_name | None -> VNone)
-     | None -> VNone)
 
   (* ── migrated tantras: word resolution + grammar check ────────────── *)
 

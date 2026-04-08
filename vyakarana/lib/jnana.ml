@@ -28,7 +28,6 @@ let empty_index () : tantra_index = {
   conversions = Hashtbl.create 16;
   all_tantras = ref [];
   eval_index  = Hashtbl.create 256;
-  compound_word_index = Hashtbl.create 128;
 }
 
 let add_to_list_table tbl key value =
@@ -728,24 +727,6 @@ let build_word_index (k : proof_graph) (idx : tantra_index) : unit =
         if String.length ev > 0 then
           Hashtbl.replace idx.eval_index ev node_name)
     end
-  ) k.nodes;
-  (* compound word index: reverse of expand_avastha.
-     for each base with (avastha q1 q2 ...), register "q1 base" → q1-base.
-     same avastha edges used for generation AND recognition. *)
-  let avastha_dim = ensure_dim "avastha" in
-  Hashtbl.iter (fun _key base_node ->
-    let base_name = base_node.name in
-    List.iter (fun e ->
-      if e.source = base_name && e.relation = avastha_dim then begin
-        let qualifier = e.target in
-        let compound = qualifier ^ "-" ^ base_name in
-        (* only register if compound node actually exists — check both plain and domain-qualified *)
-        if Hashtbl.mem k.nodes compound || find k compound <> None then begin
-          let key = qualifier ^ " " ^ base_name in
-          Hashtbl.replace idx.compound_word_index key compound
-        end
-      end
-    ) base_node.edges
   ) k.nodes
 
 (* ═══════════════════════════════════════════════════════════════════════════

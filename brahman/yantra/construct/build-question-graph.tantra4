@@ -1,46 +1,25 @@
 -- build question graph from sentence words.
--- accumulator is [triples, pending-modifier, sign-op] — grammar words (pratishedha, vibhakti)
--- set pending instead of emitting self-loops; next concept consumes the pending
--- as its edge type. This makes the graded ring structure explicit: negated concepts
--- get edge "pratishedha", located concepts get edge "adhikarana", etc.
+-- accumulator is [triples, pending-modifier, sign-op, prev-word, prev-nd-str, prev-swarupa]
+-- grammar words (pratishedha, vibhakti) set pending instead of emitting self-loops;
+-- next concept consumes the pending as its edge type. This makes the graded ring
+-- structure explicit: negated concepts get edge "pratishedha", located concepts
+-- get edge "adhikarana", etc.
 -- sign-op: when a sign-modifier word (e.g. "negative") precedes a number,
 -- the sign operation (e.g. "neg") is applied to negate the number value.
 -- tantra walks: word → swarupa→sign-modifier → kriya→neg → ganana→"neg" op.
+-- prev-word/prev-nd-str/prev-swarupa: previous word state for intra-grade composition.
+-- cleared at grade boundaries alongside pending and sign-op.
 (tantra build-question-graph (sentence)
   (sent-punct [".", "?", "!", ","])
   (raw-words (split sentence " "))
-  -- compound pre-pass: merge consecutive words that form avastha compounds.
-  -- uses compound_word_index (reverse of expand_avastha) to check bigrams
-  -- BEFORE individual word resolution, so "elastic energy" → "elastic-energy"
-  -- even when "elastic" has a solo word mapping to "elasticity".
-  (merged (reduce raw-words [[], "", []] (fn acc word ->
-    let result     = nth acc 0
-    let prev-clean = nth acc 1
-    let qw-pairs   = nth acc 2
-    let wlen       = string-length word
-    let last-ch    = cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise ""
-    let has-punct  = member last-ch sent-punct
-    let clean      = cond has-punct (substr word 0 (sub wlen 1)) otherwise word
-    let compound   = cond (has-text prev-clean) (word-node-compound prev-clean clean) otherwise _none
-    -- if direct compound fails, try resolving clean to base form (e.g. "energies" → "energy")
-    let base-wn    = cond (and (not (exists compound)) (has-text prev-clean)) (word-node clean) otherwise _none
-    let base-str   = cond (and (exists base-wn) (neq (to-string base-wn) clean)) (to-string base-wn) otherwise ""
-    let compound2  = cond (has-text base-str) (word-node-compound prev-clean base-str) otherwise _none
-    let use-compound = cond (exists compound) compound (exists compound2) compound2 otherwise _none
-    let is-morph   = and (exists compound2) (not (exists compound))
-    -- compute compound result BEFORE cond to avoid let-in-cond gotcha
-    let n          = length result
-    let prefix     = map (range (sub n 1)) (fn i -> nth result i)
-    let final-w    = cond has-punct (concat use-compound last-ch) otherwise (to-string use-compound)
-    let new-qw     = cond is-morph (append qw-pairs [[(to-string use-compound), (concat prev-clean " " clean)]]) otherwise qw-pairs
-    cond (exists use-compound) [(append prefix [final-w]), "", new-qw]
-    otherwise [(append result [word]), clean, qw-pairs])))
-  (words (nth merged 0))
-  (compound-qw (nth merged 2))
-  (graph (reduce words [[], "", ""] (fn acc word ->
-    let g       = nth acc 0
-    let pending = nth acc 1
-    let sign-op = nth acc 2
+  (graph (reduce raw-words [[], "", "", "", "", [], 0] (fn acc word ->
+    let g          = nth acc 0
+    let pending    = nth acc 1
+    let sign-op    = nth acc 2
+    let prev-word  = nth acc 3
+    let prev-nd    = nth acc 4
+    let prev-sw    = nth acc 5
+    let prev-count = nth acc 6
     let wlen      = string-length word
     let last-ch   = (cond (gt wlen 0) (char-at word (sub wlen 1)) otherwise "")
     let has-punct = member last-ch sent-punct
@@ -84,7 +63,8 @@
     let bind-ledger = filter g (fn t -> (or (eq (nth t 1) "sankhya") (eq (nth t 1) "matra")))
     let grammar-trail = filter current-grade (fn t -> (or (eq (nth t 1) "adhikarana") (eq (nth t 1) "apadana") (eq (nth t 1) "sampradana") (eq (nth t 1) "karana") (eq (nth t 1) "bhuta-kaala") (eq (nth t 1) "vartamana-kaala") (eq (nth t 1) "pratishedha")))
     let subgraphs = [current-grade, entity-reg, bind-ledger, grammar-trail]
-    let info      = [(to-string nd), rl, ly, eff-nv, (to-string un), candidates]
+    let nd-str    = (to-string nd)
+    let info      = [nd-str, rl, ly, eff-nv, (to-string un), candidates]
     let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]]
       is-prashna [[clean, "prashna", clean]]
       is-sign-modifier []
@@ -92,20 +72,72 @@
       is-niyama [[clean, "niyama", clean]]
       is-vibhakti [[clean, vibhakti-edge, clean]]
       otherwise (emit-triples clean info subgraphs pending)
-    let with-word = (append g triples)
+    -- ── intra-grade composition (Pattern 1: avastha qualifier + concept) ──────
+    -- check: prev-word is in curr-node's avastha list AND compound node exists.
+    -- use raw prev-word (not prev-nd) because avastha carries surface forms
+    -- (e.g. "elastic" not "elasticity"). Only fires when curr emitted satya triples.
+    -- all values computed BEFORE any cond to avoid let-in-cond gotcha.
+    -- also check surface-word avastha when nd-str differs (e.g. "rest" → initial-rest
+    -- but "rest".avastha has "from"/"at", forming "from-rest"/"at-rest" compounds).
+    let curr-avastha  = (cond (and (has-text prev-word) (exists nd)) (walk nd-str "avastha") otherwise [])
+    let base-avastha  = (cond (and (has-text prev-word) (neq clean nd-str)) (walk clean "avastha") otherwise [])
+    let all-avastha   = (append curr-avastha base-avastha)
+    let in-nd-avastha = (and (has-text prev-word) (member prev-word (map curr-avastha (fn a -> to-string a))))
+    let in-base-avastha = (and (has-text prev-word) (member prev-word (map base-avastha (fn a -> to-string a))))
+    let is-avastha-q  = (or in-nd-avastha in-base-avastha)
+    -- compound name: use clean (surface) as base when match is from base-avastha
+    let compound-base = cond in-nd-avastha nd-str in-base-avastha clean otherwise ""
+    let compound-name = (cond (has-text compound-base) (concat prev-word "-" compound-base) otherwise "")
+    let compound-nd   = (cond (has-text compound-name) (lookup compound-name) otherwise _none)
+    let compound-str  = (cond (exists compound-nd) (to-string compound-nd) otherwise "")
+    -- content check: composition fires on satya OR pratishedha triples
+    let curr-edge     = (cond (has-items triples) (nth (nth triples 0) 1) otherwise "")
+    let curr-is-content = (and (has-items triples) (or (eq curr-edge "satya") (eq curr-edge "pratishedha")))
+    let compose-avastha = (and is-avastha-q (exists compound-nd) curr-is-content)
+    -- g-prefix: strip previous word's triples from g when composition fires.
+    -- prev-count tracks exactly how many triples the previous word added.
+    let g-len    = length g
+    let g-prefix = cond compose-avastha (map (range (sub g-len prev-count)) (fn i -> nth g i)) otherwise g
+    -- composed-triples: compound node + sandhi-rename, preserving edge type (satya or pratishedha)
+    let comp-base    = [[compound-str, curr-edge, compound-str], [compound-str, "sandhi-rename", nd-str]]
+    let comp-qw      = (append comp-base [[compound-str, "query-word", clean]])
+    let composed-triples = cond compose-avastha
+      (cond (neq clean nd-str) comp-qw otherwise comp-base)
+      otherwise triples
+    -- ── intra-grade composition (Pattern 4: visheshana + entity) ──────────────
+    -- prev is adjective (swarupa→visheshana), curr is entity/concept:
+    -- emit [curr, visheshana, prev-nd] to bind the property to the entity.
+    let is-prev-visheshana = (and (has-text prev-nd) (member "visheshana" (map prev-sw (fn s -> to-string s))))
+    let compose-subj = cond (has-text nd-str) nd-str otherwise clean
+    let visheshana-tri = cond (and is-prev-visheshana (has-items composed-triples))
+      [[compose-subj, "visheshana", prev-nd]] otherwise []
+    -- ── intra-grade composition (Pattern 5: parimana + entity) ───────────────
+    -- prev is quantifier (swarupa→parimana), curr is entity/concept:
+    -- emit [curr, parimana, distribution-type] from quantifier's sthita edge.
+    let is-prev-parimana = (and (has-text prev-nd) (member "parimana" (map prev-sw (fn s -> to-string s))))
+    let dist-type = cond is-prev-parimana (to-string (nth (walk prev-nd "sthita") 0)) otherwise ""
+    let parimana-tri = cond (and is-prev-parimana (has-items composed-triples) (has-text dist-type))
+      [[compose-subj, "parimana", dist-type]] otherwise []
+    let with-word = (append (append g-prefix composed-triples) (append visheshana-tri parimana-tri))
     -- clear pending only when content triples were emitted; grammar words (the, a)
-    -- emit [] and must not consume pending.
+    -- emit [] and must not consume pending. vibhakti self-loops are structural
+    -- markers, not content — they must not consume pending either.
     let new-pending = cond is-pratishedha next-pending
-      (and (has-text pending) (has-items triples)) ""
+      (and (has-text pending) (has-items triples) (not is-vibhakti)) ""
       otherwise pending
     let result = (cond (has-text punct) (append with-word [[punct, "viraam", punct]]) otherwise with-word)
     -- sign-op: set by sign-modifier, cleared when consumed by a number or at grade boundary
     let new-sign-op = cond is-sign-modifier sign-kriya
       (and (has-text sign-op) (has-text nv)) ""
       otherwise sign-op
-    -- grade boundary clears pending and sign-op
-    [(result), (cond (has-text punct) "" otherwise new-pending), (cond (has-text punct) "" otherwise new-sign-op)])))
-  (base-graph (nth graph 0))
-  -- inject query-word triples for compounds resolved via morphological forms (e.g. "energies" → "energy")
-  (cqw-triples (map compound-qw (fn kv -> [(nth kv 0), "query-word", (nth kv 1)])))
-  (sandhi-viveka (append base-graph cqw-triples)))
+    -- cache current word swarupa for next iteration's composition check
+    let curr-sw    = (cond (exists nd) (walk nd-str "swarupa") otherwise [])
+    -- new-count: how many triples the current word added (for stripping on next composition)
+    let new-count  = length composed-triples
+    -- grade boundary clears pending, sign-op, and prev-info
+    let new-prev-word = (cond (has-text punct) "" otherwise clean)
+    let new-prev-nd   = (cond (has-text punct) "" otherwise nd-str)
+    let new-prev-sw   = (cond (has-text punct) [] otherwise curr-sw)
+    let new-prev-count = (cond (has-text punct) 0 otherwise new-count)
+    [(result), (cond (has-text punct) "" otherwise new-pending), (cond (has-text punct) "" otherwise new-sign-op), new-prev-word, new-prev-nd, new-prev-sw, new-prev-count])))
+  (sandhi-viveka (nth graph 0)))

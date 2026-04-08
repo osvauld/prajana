@@ -1,12 +1,18 @@
 -- reattribute sankhya/matra from base to compound names, remove rename markers.
+-- grade-aware: renames only apply within the grade they were declared in.
+-- viraam (grade boundary) clears the active rename map to prevent cross-grade bleeding.
 (tantra sandhi-bandhana (graph)
-  (renames (graph | where [compound, e, base] | and (eq e "sandhi-rename") | collect [base, compound]))
-  (cond (not (has-items renames)) graph
-    otherwise (reduce graph [] (fn acc tri ->
-      let edge = str tri 1
-      cond (eq edge "sandhi-rename") acc
-      otherwise (let subj = str tri 0
-        let match = renames | where [f, t] | and (eq f subj) | collect t
-        cond (has-items match)
-          (append acc [[(nth match 0), (nth tri 1), (nth tri 2)]])
-        otherwise (append acc [tri]))))))
+  (nth (reduce graph [[], []] (fn acc tri ->
+    let renames = nth acc 0
+    let out     = nth acc 1
+    let edge    = str tri 1
+    -- grade boundary: clear renames, pass through viraam
+    cond (eq edge "viraam") [[], (append out [tri])]
+    -- collect rename mapping: [base, compound]
+    (eq edge "sandhi-rename") [(append renames [[(str tri 2), (str tri 0)]]), out]
+    -- apply renames for matching subjects
+    otherwise (let subj = str tri 0
+      let match = renames | where [f, t] | and (eq f subj) | collect t
+      cond (has-items match)
+        [renames, (append out [[(nth match 0), (nth tri 1), (nth tri 2)]])]
+      otherwise [renames, (append out [tri])]))) 1))

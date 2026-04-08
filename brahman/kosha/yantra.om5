@@ -494,15 +494,6 @@
   (abheda endomorphism)
   (kriya rashi-viveka))
 
-(kosha refine-sandhi-avastha
-  (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
-  (krama refine-sandhi-bandhana)
-  (abheda endomorphism)
-  (kriya sandhi-avastha))
-
 (kosha refine-sandhi-bandhana
   (swarupa pipeline-refine)
   (sthita domain-yantra)
@@ -544,7 +535,7 @@
   (sthita domain-yantra)
   (janya graph)
   (phala graph)
-  (krama refine-sandhi-avastha)
+  (krama refine-sandhi-bandhana)
   (abheda endomorphism)
   (kriya sandhi-kosha))
 

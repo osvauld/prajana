@@ -89,7 +89,6 @@ type tantra_index = {
   conversions  : (string * string, tantra) Hashtbl.t;
   all_tantras  : tantra list ref;
   eval_index   : (string, string) Hashtbl.t;
-  compound_word_index : (string, string) Hashtbl.t;
 }
 
 (* ═══════════════════════════════════════════════════════════════════════════

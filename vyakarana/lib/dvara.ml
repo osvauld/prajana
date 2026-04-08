@@ -278,7 +278,7 @@ let triples_of_response (k : proof_graph) (name : string) : string =
 let pipeline_trace_response (k : proof_graph) (yantra_idx : tantra_index)
     (yantra_session : session) (sentence : string) : string =
   let stages = [
-    "build-question-graph"; "sandhi-kosha"; "sandhi-avastha"; "sandhi-bandhana";
+    "build-question-graph"; "sandhi-kosha"; "sandhi-bandhana";
     "vibhakti-shashthi"; "vishesa-instance"; "rashi-viveka"; "vishesa-bandhana";
     "rashi-anuvada"; "sankhya-bandha";
   ] in

@@ -512,7 +512,6 @@ let register_primitive_arities () =
   r "krama-path"          3;
   r "word-node"           1;
   r "word-node-candidates" 1;
-  r "word-node-compound"  2;
   r "decompose-unit"      1;
   r "eval-node"           1;
   r "apply-op"            2;

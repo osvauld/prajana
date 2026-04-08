@@ -53,7 +53,6 @@ def test_frequency_from_period(vy):
     assert "2" in r
 
 
-@xfail(strict=True, reason="compound word: 'angular velocity' sandhi merges but value bleeds from velocity")
 def test_angular_velocity_basic(vy):
     """ω = v/r: v=10, r=2 → 5"""
     r = vy.answer("velocity is 10 and radius is 2. find angular velocity")
