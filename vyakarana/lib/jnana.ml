@@ -599,42 +599,51 @@ let generate_yukta_same_layer (k : proof_graph) : int =
    ═══════════════════════════════════════════════════════════════════════════ *)
 
 let generate_edge_inheritance (k : proof_graph) : int =
+  (* Inherit edges from -varga parent nodes to their swarupa/vishesa children.
+     Propagates sthita, janya, phala, abheda from -varga parents.
+     NOT swarupa (reverse pollution), NOT yukta (symmetric explosion). *)
   let generated = ref 0 in
   let swarupa_dim = ensure_dim "swarupa" in
-  let inherit_rels =
-    let ndims = dimension_count () in
-    List.init ndims Fun.id
-    |> List.filter (fun d -> (vish_props_of d).vp_inheritable) in
+  let vishesa_dim = ensure_dim "vishesa" in
+  (* inherit sthita, janya, phala, abheda from varga parents.
+     NOT swarupa (reverse edges pollute), NOT yukta (symmetric → explodes). *)
+  let inherit_rels = List.filter_map (fun name ->
+    try Some (ensure_dim name) with _ -> None
+  ) ["sthita"; "janya"; "phala"; "abheda"] in
+  let is_varga name =
+    let suf = "-varga" in
+    let sl = String.length suf and nl = String.length name in
+    nl > sl && String.sub name (nl - sl) sl = suf in
   let work = ref [] in
   Hashtbl.iter (fun child_name node ->
-    (* skip mantra nodes *)
     if node.layer = "mantra" then ()
     else begin
-      (* find swarupa parents — same layer only to avoid cross-layer pollution *)
+      (* find swarupa OR vishesa parents that are -varga nodes, same layer only *)
       let parents = List.filter_map (fun e ->
-        if e.source = child_name && e.relation = swarupa_dim then
+        if e.source = child_name
+           && (e.relation = swarupa_dim || e.relation = vishesa_dim)
+           && is_varga e.target then
           match Hashtbl.find_opt k.nodes e.target with
           | Some p when p.layer = node.layer -> Some p
           | _ -> None
         else None
       ) node.edges in
       List.iter (fun rel_dim ->
-        (* only inherit if child has NO edges of this relation *)
-        let child_has = List.exists (fun e ->
-          e.source = child_name && e.relation = rel_dim
-        ) node.edges in
-        if not child_has then
-          List.iter (fun parent ->
-            List.iter (fun pe ->
-              if pe.source = parent.name && pe.relation = rel_dim
-                 && pe.target <> child_name && pe.target <> parent.name then
+        List.iter (fun parent ->
+          List.iter (fun pe ->
+            if pe.source = parent.name && pe.relation = rel_dim
+               && pe.target <> child_name && pe.target <> parent.name then begin
+              let child_has_this = List.exists (fun e ->
+                e.source = child_name && e.relation = rel_dim && e.target = pe.target
+              ) node.edges in
+              if not child_has_this then
                 work := (child_name, pe.target, rel_dim) :: !work
-            ) parent.edges
-          ) parents
+            end
+          ) parent.edges
+        ) parents
       ) inherit_rels
     end
   ) k.nodes;
-  (* deduplicate *)
   let seen = Hashtbl.create 64 in
   List.iter (fun (src, tgt, rel) ->
     let key = src ^ "|" ^ tgt ^ "|" ^ (string_of_int rel) in

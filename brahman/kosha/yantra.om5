@@ -476,123 +476,99 @@
   (kriya op-fixpoint avrti-refine)
   (abheda endomorphism))
 
-(kosha refine-rashi-anuvada
+; pipeline-refine-varga: shared edges for all refine sub-stages
+; children inherit sthita:domain-yantra, janya:graph, phala:graph, abheda:endomorphism
+(kosha pipeline-refine-varga
   (swarupa pipeline-refine)
   (sthita domain-yantra)
   (janya graph)
   (phala graph)
-  (krama refine-sankhya-bandha)
-  (abheda endomorphism)
+  (abheda endomorphism))
+
+(kosha refine-rashi-anuvada
+  (vishesa pipeline-refine-varga)
+  (swarupa pipeline-refine)
+  (krama refine-shatamana-bandha)
   (kriya rashi-anuvada))
 
-(kosha refine-rashi-viveka
+(kosha refine-shatamana-bandha
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
+  (krama refine-sankhya-bandha)
+  (kriya shatamana-bandha))
+
+(kosha refine-rashi-viveka
+  (vishesa pipeline-refine-varga)
+  (swarupa pipeline-refine)
   (krama refine-vishesa-bandhana)
-  (abheda endomorphism)
   (kriya rashi-viveka))
 
 (kosha refine-sandhi-bandhana
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-vyakarana-sparsha)
-  (abheda endomorphism)
   (kriya sandhi-bandhana))
 
 (kosha refine-vyakarana-sparsha
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-kaala-avastha)
-  (abheda endomorphism)
   (kriya vyakarana-sparsha))
 
 (kosha refine-kaala-avastha
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-shashthi-possession)
-  (abheda endomorphism)
   (kriya kaala-avastha))
 
 (kosha refine-shashthi-possession
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-vibhakti-shashthi)
-  (abheda endomorphism)
   (kriya shashthi-possession))
 
 (kosha refine-sandhi-kosha
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-sandhi-bandhana)
-  (abheda endomorphism)
   (kriya sandhi-kosha))
 
 (kosha refine-sankhya-bandha
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-swarupa-anuvada)
-  (abheda endomorphism)
   (yukta fixpoint)
   (kriya sankhya-bandha))
 
 (kosha refine-swarupa-anuvada
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-shunya-bandha)
-  (abheda endomorphism)
   (yukta fixpoint)
   (kriya swarupa-anuvada))
 
 (kosha refine-shunya-bandha
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
-  (abheda endomorphism)
   (yukta fixpoint)
   (kriya shunya-bandha))
 
 (kosha refine-vibhakti-shashthi
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-vishesa-instance)
-  (abheda endomorphism)
   (kriya vibhakti-shashthi))
 
 (kosha refine-vishesa-bandhana
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-rashi-anuvada)
-  (abheda endomorphism)
   (kriya vishesa-bandhana))
 
 (kosha refine-vishesa-instance
+  (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
-  (sthita domain-yantra)
-  (janya graph)
-  (phala graph)
   (krama refine-rashi-viveka)
-  (abheda endomorphism)
   (kriya vishesa-instance))
 
 (kosha visheshanam-abheda

@@ -756,6 +756,23 @@
   (janya part-value whole-value)
   (krama multiplication ( division part-value whole-value ) 100))
 
+(kosha initial-value
+  (vishesa number-varga)
+  (swarupa purva)
+  (naama initial))
+
+(kosha final-value
+  (vishesa number-varga)
+  (swarupa uttara)
+  (naama final))
+
+(mantra percent-change-mantra
+  (varga math-mantra)
+  (swarupa percentage)
+  (phala percentage)
+  (janya initial-value final-value)
+  (krama multiplication ( division ( subtraction final-value initial-value ) initial-value ) 100))
+
 ; ── math-mantra varga ────────────────────────────────────────────────
 ; container for math formula nodes — mantra-select walks this
 

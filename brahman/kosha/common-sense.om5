@@ -24,13 +24,11 @@
 (kosha clay
   (vishesa common-sense-varga materials-varga minerals-varga)
   (swarupa clay-mineral inelastic deformable)
-  (sthita solid)
   (yukta water domain-3d pbr))
 
 (kosha glass
   (vishesa common-sense-varga materials-varga minerals-varga)
   (swarupa silica amorphous transparent brittle)
-  (sthita solid)
   (yukta coefficient-of-restitution domain-3d pbr))
 
 (kosha ice
@@ -47,7 +45,6 @@
 
 (kosha metal
   (vishesa common-sense-varga materials-varga metals-varga)
-  (sthita solid)
   (swarupa conductor lustrous malleable)
   (yukta coefficient-of-restitution domain-3d pbr))
 
@@ -90,7 +87,6 @@
 
 (kosha stone
   (vishesa common-sense-varga materials-varga minerals-varga)
-  (sthita solid)
   (swarupa hard brittle dense)
   (yukta coefficient-of-restitution domain-3d pbr))
 
@@ -142,7 +138,6 @@
   (vishesa structures-varga common-sense-varga)
   (swarupa horizontal overhead upper-boundary)
   (yukta normal-force collision-varga domain-3d)
-  (sthita gravity)
   (abheda ceil)
   (pratipaksha floor))
 
@@ -156,20 +151,18 @@
   (vishesa structures-varga common-sense-varga)
   (swarupa horizontal indoor)
   (yukta normal-force collision-varga friction-force domain-3d)
-  (sthita gravity)
   (abheda floor))
 
 (kosha ground
   (vishesa structures-varga common-sense-varga)
   (swarupa horizontal)
   (yukta normal-force collision-varga domain-3d)
-  (sthita gravity potential-energy-reference sthira-apeksha))
+  (sthita potential-energy-reference sthira-apeksha))
 
 (kosha pole
   (vishesa structures-varga common-sense-varga)
   (swarupa rigid elongated)
-  (yukta torque lever domain-3d)
-  (sthita solid))
+  (yukta torque lever domain-3d))
 
 (kosha room
   (vishesa structures-varga common-sense-varga)
@@ -179,8 +172,7 @@
 (kosha shelf
   (vishesa structures-varga common-sense-varga)
   (swarupa horizontal elevated)
-  (yukta normal-force potential-energy height wall domain-3d)
-  (sthita gravity))
+  (yukta normal-force potential-energy height wall domain-3d))
 
 (kosha structures-varga
   (vishesa common-sense-varga)
@@ -237,7 +229,6 @@
   (swarupa bird-varga))
 
 (kosha taxonomy-varga
-  (sthita domain-common-sense)
   (vishesa common-sense-varga)
   (swarupa subanta)
   (yukta swarupa krama viveka))

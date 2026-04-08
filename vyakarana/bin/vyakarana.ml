@@ -242,6 +242,11 @@ let () =
   let varga_edges = Jnana.generate_varga_membership k0 in
   if varga_edges > 0 && not quiet_startup then
     Printf.printf "varga: generated %d membership edges\n%!" varga_edges;
+  (* edge-inherit MUST run before reverse phases so inherited edges
+     participate in sthita-reverse and swarupa-reverse *)
+  let edge_inh = Jnana.generate_edge_inheritance k0 in
+  if edge_inh > 0 && not quiet_startup then
+    Printf.printf "edge-inherit: generated %d inherited edges from parents\n%!" edge_inh;
   let swarupa_rev = Jnana.generate_swarupa_reverse k0 in
   if swarupa_rev > 0 && not quiet_startup then
     Printf.printf "swarupa-reverse: generated %d parent→child edges\n%!" swarupa_rev;
@@ -257,9 +262,6 @@ let () =
   let yukta_sl = Jnana.generate_yukta_same_layer k0 in
   if yukta_sl > 0 && not quiet_startup then
     Printf.printf "yukta-same-layer: generated %d reciprocal edges\n%!" yukta_sl;
-  let edge_inh = Jnana.generate_edge_inheritance k0 in
-  if edge_inh > 0 && not quiet_startup then
-    Printf.printf "edge-inherit: generated %d inherited edges from parents\n%!" edge_inh;
   let varga_pat = Jnana.generate_varga_patterns k0 in
   if varga_pat > 0 && not quiet_startup then
     Printf.printf "varga-patterns: generated %d consensus-replicated edges\n%!" varga_pat;

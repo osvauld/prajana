@@ -31,7 +31,7 @@
   (vishesa collision-varga)
   (swarupa tinanta bhave-prayoga)
   (yukta momentum conservation kinetic-energy)
-  (sthita particle-a particle-b coefficient-of-restitution)
+  (sthita coefficient-of-restitution)
   (janya mass1 mass2 velocity1 velocity2)
   (phala velocity1 velocity2))
 

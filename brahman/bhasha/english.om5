@@ -348,302 +348,157 @@
 ; loses, vriddhi if subject typically gains. detect-direction walks sthita
 ; to find this. Full flow-based entity resolution comes later.
 ; form nodes have janya back to dhatu + sthita for grammar features.
+;
+; VARGAS: shared sthita edges inherited via generate_edge_inheritance at boot.
+; dhatu nodes use (vishesa <dir>-dhatu-varga) for group + (swarupa tinanta) for type.
+; past form nodes use (vishesa <dir>-past-varga) + (swarupa tinanta) + (janya ...).
 
-; ── departure/loss (default: subject departs/loses) ──────────────────
+; ── dhatu varga roots ─────────────────────────────────────────────────
 
-(bhasha dhatu-fly
+(bhasha kshaya-dhatu-varga
   (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama fly))
+  (sthita dhatu kshaya))
 
-(bhasha flew
+(bhasha vriddhi-dhatu-varga
   (swarupa tinanta)
-  (janya dhatu-fly)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama flew))
+  (sthita dhatu vriddhi))
 
-(bhasha dhatu-go
+(bhasha kartari-dhatu-varga
   (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama go))
+  (sthita dhatu kartari-prayoga))
 
-(bhasha went
+(bhasha division-dhatu-varga
   (swarupa tinanta)
-  (janya dhatu-go)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama went))
+  (sthita dhatu division))
 
-(bhasha dhatu-fall
+; ── past-form varga roots ─────────────────────────────────────────────
+
+(bhasha kshaya-past-varga
   (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama fall))
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya))
 
-(bhasha fell
+(bhasha vriddhi-past-varga
   (swarupa tinanta)
-  (janya dhatu-fall)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama fell))
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi))
 
-(bhasha dhatu-run
+(bhasha neutral-past-varga
   (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama run))
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga))
 
-(bhasha ran
+(bhasha division-past-varga
   (swarupa tinanta)
-  (janya dhatu-run)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama ran))
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division))
 
-(bhasha dhatu-walk
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama walk))
+; ── departure/loss dhatus ─────────────────────────────────────────────
 
-(bhasha walked
-  (swarupa tinanta)
-  (janya dhatu-walk)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama walked))
+(bhasha dhatu-fly      (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama fly))
+(bhasha dhatu-go       (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama go))
+(bhasha dhatu-fall     (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama fall))
+(bhasha dhatu-run      (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama run))
+(bhasha dhatu-walk     (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama walk))
+(bhasha dhatu-give     (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama give))
+(bhasha dhatu-sell     (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama sell))
+(bhasha dhatu-take     (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama take))
+(bhasha dhatu-throw    (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama throw))
+(bhasha dhatu-eat      (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama eat))
+(bhasha dhatu-remove   (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama remove))
+(bhasha dhatu-lose     (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama lose))
+(bhasha dhatu-leave    (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama leave))
+(bhasha dhatu-decrease (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama decrease))
+(bhasha dhatu-reduce   (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama reduce))
+(bhasha dhatu-descend  (vishesa kshaya-dhatu-varga) (swarupa tinanta) (naama descend))
 
-(bhasha dhatu-give
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama give))
+; ── arrival/gain dhatus ───────────────────────────────────────────────
 
-(bhasha gave
-  (swarupa tinanta)
-  (janya dhatu-give)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama gave))
+(bhasha dhatu-come     (vishesa vriddhi-dhatu-varga) (swarupa tinanta) (naama come))
+(bhasha dhatu-arrive   (vishesa vriddhi-dhatu-varga) (swarupa tinanta) (naama arrive))
+(bhasha dhatu-buy      (vishesa vriddhi-dhatu-varga) (swarupa tinanta) (naama buy))
+(bhasha dhatu-get      (vishesa vriddhi-dhatu-varga) (swarupa tinanta) (naama get))
+(bhasha dhatu-add      (vishesa vriddhi-dhatu-varga) (swarupa tinanta) (naama add))
+(bhasha dhatu-increase (vishesa vriddhi-dhatu-varga) (swarupa tinanta) (naama increase))
+(bhasha dhatu-grow     (vishesa vriddhi-dhatu-varga) (swarupa tinanta) (naama grow))
+(bhasha dhatu-rise     (vishesa vriddhi-dhatu-varga) (swarupa tinanta) (naama rise))
 
-(bhasha dhatu-sell
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama sell))
+; ── motion/physics dhatus (no default direction) ──────────────────────
 
-(bhasha sold
-  (swarupa tinanta)
-  (janya dhatu-sell)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama sold))
+(bhasha dhatu-move       (vishesa kartari-dhatu-varga) (swarupa tinanta) (naama move))
+(bhasha dhatu-travel     (vishesa kartari-dhatu-varga) (swarupa tinanta) (naama travel))
+(bhasha dhatu-accelerate (vishesa kartari-dhatu-varga) (swarupa tinanta) (naama accelerate))
+(bhasha dhatu-rotate     (vishesa kartari-dhatu-varga) (swarupa tinanta) (naama rotate))
+(bhasha dhatu-collide    (vishesa kartari-dhatu-varga) (swarupa tinanta) (naama collide))
 
-(bhasha dhatu-take
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama take))
-
-(bhasha took
-  (swarupa tinanta)
-  (janya dhatu-take)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama took))
-
-(bhasha dhatu-throw
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama throw))
-
-(bhasha threw
-  (swarupa tinanta)
-  (janya dhatu-throw)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama threw))
-
-; ── arrival/gain (default: subject arrives/gains) ────────────────────
-
-(bhasha dhatu-come
-  (swarupa tinanta)
-  (sthita dhatu vriddhi)
-  (naama come))
-
-(bhasha came
-  (swarupa tinanta)
-  (janya dhatu-come)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
-  (naama came))
-
-(bhasha dhatu-arrive
-  (swarupa tinanta)
-  (sthita dhatu vriddhi)
-  (naama arrive))
-
-(bhasha arrived
-  (swarupa tinanta)
-  (janya dhatu-arrive)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
-  (naama arrived))
-
-(bhasha dhatu-buy
-  (swarupa tinanta)
-  (sthita dhatu vriddhi)
-  (naama buy))
-
-(bhasha bought
-  (swarupa tinanta)
-  (janya dhatu-buy)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
-  (naama bought))
-
-(bhasha dhatu-get
-  (swarupa tinanta)
-  (sthita dhatu vriddhi)
-  (naama get))
-
-(bhasha got
-  (swarupa tinanta)
-  (janya dhatu-get)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
-  (naama got))
-
-; ── state/position (no default direction) ────────────────────────────
+; ── state dhatu (singleton — no varga) ────────────────────────────────
 
 (bhasha dhatu-sit
   (swarupa tinanta)
   (sthita dhatu)
   (naama sit))
 
-(bhasha sat
-  (swarupa tinanta)
-  (janya dhatu-sit)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga)
-  (naama sat))
+; ── division dhatus ───────────────────────────────────────────────────
 
-; ── motion/physics (no default direction) ────────────────────────────
+(bhasha dhatu-share      (vishesa division-dhatu-varga) (swarupa tinanta) (naama share))
+(bhasha dhatu-divide     (vishesa division-dhatu-varga) (swarupa tinanta) (naama divide))
+(bhasha dhatu-distribute (vishesa division-dhatu-varga) (swarupa tinanta) (naama distribute))
+(bhasha dhatu-split      (vishesa division-dhatu-varga) (swarupa tinanta) (naama split))
 
-(bhasha dhatu-move
-  (swarupa tinanta)
-  (sthita dhatu kartari-prayoga)
-  (naama move))
-
-(bhasha moved
-  (swarupa tinanta)
-  (janya dhatu-move)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga)
-  (naama moved))
-
-(bhasha dhatu-travel
-  (swarupa tinanta)
-  (sthita dhatu kartari-prayoga)
-  (naama travel))
-
-(bhasha dhatu-accelerate
-  (swarupa tinanta)
-  (sthita dhatu kartari-prayoga)
-  (naama accelerate))
-
-(bhasha dhatu-rotate
-  (swarupa tinanta)
-  (sthita dhatu kartari-prayoga)
-  (naama rotate))
-
-(bhasha dhatu-collide
-  (swarupa tinanta)
-  (sthita dhatu kartari-prayoga)
-  (naama collide))
-
-(bhasha dhatu-eat
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama eat))
-
-(bhasha ate
-  (swarupa tinanta)
-  (janya dhatu-eat)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama ate))
-
-(bhasha eaten
-  (swarupa tinanta)
-  (janya dhatu-eat)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama eaten))
-
-(bhasha taken
-  (swarupa tinanta)
-  (janya dhatu-take)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama taken))
-
-;; kshaya dhatus: remove, lose, leave
-(bhasha dhatu-remove
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama remove))
-
-(bhasha removed
-  (swarupa tinanta)
-  (janya dhatu-remove)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama removed))
-
-(bhasha dhatu-lose
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama lose))
-
-(bhasha lost
-  (swarupa tinanta)
-  (janya dhatu-lose)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya)
-  (naama lost))
-
-(bhasha dhatu-leave
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama leave))
-
-(bhasha left
-  (swarupa tinanta)
-  (janya dhatu-leave)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga kshaya disha)
-  (naama left))
-
-(bhasha dhatu-add
-  (swarupa tinanta)
-  (sthita dhatu vriddhi)
-  (naama add))
-
-(bhasha added
-  (swarupa tinanta)
-  (janya dhatu-add)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
-  (naama added))
-
-; ── math verbs (increase/decrease/multiply/reduce/grow) ──────────────
-
-(bhasha dhatu-increase
-  (swarupa tinanta)
-  (sthita dhatu vriddhi)
-  (naama increase))
-
-(bhasha dhatu-decrease
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama decrease))
+; ── singleton ─────────────────────────────────────────────────────────
 
 (bhasha dhatu-multiply
   (swarupa tinanta)
   (sthita dhatu multiplication)
   (naama multiply))
 
-(bhasha dhatu-reduce
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama reduce))
+; ── kshaya past forms ─────────────────────────────────────────────────
 
-(bhasha dhatu-grow
+(bhasha flew      (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-fly)  (naama flew))
+(bhasha went      (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-go)   (naama went))
+(bhasha fell      (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-fall) (naama fell))
+(bhasha ran       (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-run)  (naama ran))
+(bhasha walked    (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-walk) (naama walked))
+(bhasha gave      (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-give) (naama gave))
+(bhasha sold      (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-sell) (naama sold))
+(bhasha took      (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-take) (naama took))
+(bhasha threw     (vishesa kshaya-past-varga) (swarupa tinanta) (janya dhatu-throw) (naama threw))
+(bhasha ate       (swarupa kshaya-past-varga) (janya dhatu-eat)  (naama ate))
+(bhasha eaten     (swarupa kshaya-past-varga) (janya dhatu-eat)  (naama eaten))
+(bhasha taken     (swarupa kshaya-past-varga) (janya dhatu-take) (naama taken))
+(bhasha removed   (swarupa kshaya-past-varga) (janya dhatu-remove) (naama removed))
+(bhasha lost      (swarupa kshaya-past-varga) (janya dhatu-lose)  (naama lost))
+; left has extra disha edge (homonym: spatial direction)
+(bhasha left
+  (vishesa kshaya-past-varga)
   (swarupa tinanta)
-  (sthita dhatu vriddhi)
-  (naama grow))
+  (janya dhatu-leave)
+  (sthita disha)
+  (naama left))
+; decreased/reduced: removed — regular forms auto-generated by kriya-nirmana at boot
 
-(bhasha grew
-  (swarupa tinanta)
-  (janya dhatu-grow)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
-  (naama grew))
+; ── vriddhi past forms ────────────────────────────────────────────────
 
-; ── spatial directions (disha — left/right/up/down wrt person/object) ─
+(bhasha came     (vishesa vriddhi-past-varga) (swarupa tinanta) (janya dhatu-come)   (naama came))
+(bhasha arrived  (vishesa vriddhi-past-varga) (swarupa tinanta) (janya dhatu-arrive) (naama arrived))
+(bhasha bought   (vishesa vriddhi-past-varga) (swarupa tinanta) (janya dhatu-buy)    (naama bought))
+(bhasha got      (vishesa vriddhi-past-varga) (swarupa tinanta) (janya dhatu-get)    (naama got))
+(bhasha added    (vishesa vriddhi-past-varga) (swarupa tinanta) (janya dhatu-add)    (naama added))
+(bhasha grew     (vishesa vriddhi-past-varga) (swarupa tinanta) (janya dhatu-grow)   (naama grew))
+(bhasha risen    (vishesa vriddhi-past-varga) (swarupa tinanta) (janya dhatu-rise)   (naama risen))
+(bhasha rose     (vishesa vriddhi-past-varga) (swarupa tinanta) (janya dhatu-rise)   (naama rose))
+
+; ── neutral past forms ────────────────────────────────────────────────
+
+(bhasha sat       (vishesa neutral-past-varga) (swarupa tinanta) (janya dhatu-sit)    (naama sat))
+(bhasha moved     (vishesa neutral-past-varga) (swarupa tinanta) (janya dhatu-move)   (naama moved))
+(bhasha travelled (vishesa neutral-past-varga) (swarupa tinanta) (janya dhatu-travel) (naama travelled))
+
+; ── division past forms ───────────────────────────────────────────────
+
+(bhasha shared      (vishesa division-past-varga) (swarupa tinanta) (janya dhatu-share)    (naama shared))
+(bhasha divided     (vishesa division-past-varga) (swarupa tinanta) (janya dhatu-divide)   (naama divided))
+(bhasha distributed (vishesa division-past-varga) (swarupa tinanta) (janya dhatu-distribute) (naama distributed))
+; split past = same form as present (irregular)
+(bhasha split-past  (vishesa division-past-varga) (swarupa tinanta) (janya dhatu-split)    (naama split))
+
+; ── spatial directions (disha) ────────────────────────────────────────
 
 (bhasha disha-left
   (swarupa disha)
@@ -652,60 +507,6 @@
 (bhasha disha-right
   (swarupa disha)
   (pratipaksha disha-left))
-
-; ── division verbs (bridge to division via vibhaga direction) ────────
-
-(bhasha dhatu-share
-  (swarupa tinanta)
-  (sthita dhatu division)
-  (naama share))
-
-(bhasha shared
-  (swarupa tinanta)
-  (janya dhatu-share)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division)
-  (naama shared))
-
-(bhasha dhatu-divide
-  (swarupa tinanta)
-  (sthita dhatu division)
-  (naama divide))
-
-(bhasha divided
-  (swarupa tinanta)
-  (janya dhatu-divide)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division)
-  (naama divided))
-
-(bhasha dhatu-distribute
-  (swarupa tinanta)
-  (sthita dhatu division)
-  (naama distribute))
-
-(bhasha distributed
-  (swarupa tinanta)
-  (janya dhatu-distribute)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division)
-  (naama distributed))
-
-(bhasha dhatu-split
-  (swarupa tinanta)
-  (sthita dhatu division)
-  (naama split))
-
-; split past tense = same form (irregular: no -ed suffix)
-(bhasha split-past
-  (swarupa tinanta)
-  (janya dhatu-split)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga division)
-  (naama split))
-
-; British spelling alias for traveled
-(bhasha travelled
-  (swarupa tinanta)
-  (janya dhatu-travel)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga)
-  (naama travelled))
 
 ; ── percentage (shatamana — per hundred) ─────────────────────────────
 
@@ -741,29 +542,6 @@
   (sthita vriddhi)
   (naama up))
 
-; ── verbs: rise/descend (missing direction verbs) ──────────────────
-
-(bhasha dhatu-rise
-  (swarupa tinanta)
-  (sthita dhatu vriddhi)
-  (naama rise))
-
-(bhasha risen
-  (swarupa tinanta)
-  (janya dhatu-rise)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
-  (naama risen))
-
-(bhasha rose
-  (swarupa tinanta)
-  (janya dhatu-rise)
-  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
-  (naama rose))
-
-(bhasha dhatu-descend
-  (swarupa tinanta)
-  (sthita dhatu kshaya)
-  (naama descend))
 
 ; ── greetings (bridge to sangati sambodhana/abhisambodhana) ───────────
 

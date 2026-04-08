@@ -1,0 +1,136 @@
+-- shatamana-bandha: bind percentage-mantra slots from shatamana structural markers.
+-- case 1: "25 percent of 200" → percentage=25, whole-value=200, solve-for=part-value.
+-- case 1b: "20 percent of the number" → cross-grade whole-value lookup.
+-- case 2: "40 students, 10 failed, what percent" → whole=40, part=10, forward percentage-mantra.
+-- case 3: "was 80, increased to 100, what percent" → initial=80, final=100, percent-change-mantra.
+-- only the unknown concept gets satya (so extract-solve-for picks it).
+-- runs in phase 1 (sequential), before sankhya-bandha fixpoint.
+(tantra shatamana-bandha (graph)
+  (has-shatamana (has-items (triples-by-edge graph "shatamana")))
+  (cond (not has-shatamana) graph
+  otherwise
+  (let grades = split-grades graph
+   -- find the grade containing shatamana
+   let shat-grade = find-first grades (fn g -> has-items (triples-by-edge g "shatamana"))
+   -- position of shatamana within the grade
+   let shat-idx = cond (exists shat-grade)
+     (nth (reduce shat-grade [0, -1] (fn st t ->
+       let i = nth st 0
+       let found = nth st 1
+       cond (eq (nth t 1) "shatamana") [i, i]
+       otherwise [(add i 1), found])) 1)
+     otherwise -1
+   -- nums before shatamana in its grade
+   let before-list = cond (exists shat-grade)
+     (nth (reduce shat-grade [[], 0] (fn st t ->
+       let acc = nth st 0
+       let i = nth st 1
+       cond (and (eq (nth t 1) "asprista-sankhya") (lt i shat-idx))
+         [(append acc [(nth t 2)]), (add i 1)]
+       otherwise [acc, (add i 1)])) 0)
+     otherwise []
+   -- nums after shatamana in its grade
+   let after-list = cond (exists shat-grade)
+     (nth (reduce shat-grade [[], 0] (fn st t ->
+       let acc = nth st 0
+       let i = nth st 1
+       cond (and (eq (nth t 1) "asprista-sankhya") (gt i shat-idx))
+         [(append acc [(nth t 2)]), (add i 1)]
+       otherwise [acc, (add i 1)])) 0)
+     otherwise []
+   let has-before = has-items before-list
+   let has-after = has-items after-list
+   -- cross-grade: satya concept after shatamana whose number lives in another grade
+   let concept-after = cond (and (not has-after) (exists shat-grade))
+     (find-map (nth (reduce shat-grade [[], 0] (fn st t ->
+       let acc = nth st 0
+       let i = nth st 1
+       cond (and (eq (nth t 1) "satya") (gt i shat-idx))
+         [(append acc [(nth t 0)]), (add i 1)]
+       otherwise [acc, (add i 1)])) 0) (fn c -> c))
+     otherwise _none
+   let concept-after-str = cond (exists concept-after) (to-string concept-after) otherwise ""
+   let cross-grade-num = cond (exists concept-after)
+     (find-map grades (fn g ->
+       cond (has-items (triples-by-edge g "shatamana")) _none
+       otherwise
+         (let concept-here = has-items (filter g (fn t -> and (eq (nth t 0) concept-after-str) (eq (nth t 1) "satya")))
+          let grade-num = find-map g (fn t -> cond (eq (nth t 1) "asprista-sankhya") (nth t 2) otherwise _none)
+          cond (and concept-here (exists grade-num)) grade-num otherwise _none)))
+     otherwise _none
+   let has-cross = exists cross-grade-num
+   -- case 3 detection: bhuta-kaala + direction → percent-change pattern
+   -- "was 80" (bhuta-kaala grade) → initial-value, direction grade → final-value
+   -- triple format: [concept, kaala, bhuta-kaala] — edge is "kaala", object is "bhuta-kaala"
+   let bhuta-concepts = reduce graph [] (fn acc t ->
+     cond (and (eq (nth t 1) "kaala") (eq (nth t 2) "bhuta-kaala"))
+       (append acc [(nth t 0)]) otherwise acc)
+   let has-bhuta = has-items bhuta-concepts
+   let has-direction = has-items (filter graph (fn t ->
+     or (eq (nth t 1) "vriddhi") (eq (nth t 1) "kshaya")))
+   let is-change-pattern = and has-bhuta has-direction
+   let initial-num = cond is-change-pattern
+     (find-map grades (fn g ->
+       cond (has-items (triples-by-edge g "shatamana")) _none
+       otherwise
+         (let has-bhuta-here = has-items (filter g (fn t ->
+           and (member (nth t 0) bhuta-concepts) (or (eq (nth t 1) "satya") (eq (nth t 1) "mithya"))))
+          let gnum = find-map g (fn t -> cond (eq (nth t 1) "asprista-sankhya") (nth t 2) otherwise _none)
+          cond (and has-bhuta-here (exists gnum)) gnum otherwise _none)))
+     otherwise _none
+   -- find final-value: number from grade with direction marker
+   let final-num = cond is-change-pattern
+     (find-map grades (fn g ->
+       cond (has-items (triples-by-edge g "shatamana")) _none
+       otherwise
+         (let has-dir = has-items (filter g (fn t -> or (eq (nth t 1) "vriddhi") (eq (nth t 1) "kshaya")))
+          let gnum = find-map g (fn t -> cond (eq (nth t 1) "asprista-sankhya") (nth t 2) otherwise _none)
+          cond (and has-dir (exists gnum)) gnum otherwise _none)))
+     otherwise _none
+   let has-change = and (exists initial-num) (exists final-num)
+   -- collect numbers from non-question grades for case 2
+   let non-q-nums = cond (and (not has-before) (not has-after) (not has-cross) (not has-change))
+     (reduce grades [] (fn acc g ->
+       cond (has-items (triples-by-edge g "shatamana")) acc
+       otherwise (append acc (reduce g [] (fn a t ->
+         cond (eq (nth t 1) "asprista-sankhya") (append a [(to-number (nth t 2))])
+         otherwise a)))))
+     otherwise []
+   let has-two-nums = ge (length non-q-nums) 2
+   let sorted-nums = cond has-two-nums
+     (cond (ge (nth non-q-nums 0) (nth non-q-nums 1))
+       [(nth non-q-nums 0), (nth non-q-nums 1)]
+       otherwise [(nth non-q-nums 1), (nth non-q-nums 0)])
+     otherwise []
+   -- build bindings by case priority
+   let bindings = cond (and has-before has-after)
+     [["percentage", "sankhya", (nth before-list 0)],
+      ["whole-value", "sankhya", (nth after-list 0)],
+      ["part-value", "satya", "part-value"]]
+   (and has-before has-cross)
+     [["percentage", "sankhya", (nth before-list 0)],
+      ["whole-value", "sankhya", (to-string cross-grade-num)],
+      ["part-value", "satya", "part-value"]]
+   -- case 3: percent change from initial to final
+   has-change
+     [["initial-value", "sankhya", (to-string initial-num)],
+      ["final-value", "sankhya", (to-string final-num)],
+      ["percentage", "satya", "percentage"]]
+   -- case 2: what percent with two numbers
+   has-two-nums
+     [["whole-value", "sankhya", (to-string (nth sorted-nums 0))],
+      ["part-value", "sankhya", (to-string (nth sorted-nums 1))],
+      ["percentage", "satya", "percentage"]]
+   -- fallback: just mark percentage as solve-for
+   (and (not has-before) (not has-after))
+     [["percentage", "satya", "percentage"]]
+   otherwise []
+   -- cross-grade: demote referenced concept from satya to mithya
+   let base = cond (and has-cross (has-text concept-after-str))
+     (reduce graph [] (fn acc t ->
+       cond (and (eq (nth t 0) concept-after-str) (eq (nth t 1) "satya")
+                 (has-items (triples-by-edge shat-grade "shatamana")))
+         (append acc [[(nth t 0), "mithya", (nth t 2)]])
+       otherwise (append acc [t])))
+     otherwise graph
+   append base bindings)))

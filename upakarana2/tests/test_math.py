@@ -254,16 +254,16 @@ def test_xkyu_reduced_to(vy):
 # Needs: percent bhasha node, percentage mantra, count-chain awareness.
 
 
-@xfail(strict=True, reason="math_percentage: basic 'X percent of Y'")
 def test_percent_of_basic(vy):
-    """what is 25 percent of 200? → 25/100 * 200 = 50"""
+    """what is 25 percent of 200? → 25/100 * 200 = 50
+    Works: shatamana-bandha binds percentage=25, whole-value=200 → inverse percentage-mantra."""
     r = vy.answer("what is 25 percent of 200")
     assert "50" in r
 
 
-@xfail(strict=True, reason="math_percentage: 20 percent of a number")
 def test_percent_of_number(vy):
-    """a number is 300. what is 20 percent of the number? → 60"""
+    """a number is 300. what is 20 percent of the number? → 60
+    Works: shatamana-bandha cross-grade binding, percentage=20, whole-value=300 → inverse."""
     r = vy.answer("a number is 300. what is 20 percent of the number")
     assert "60" in r
 
@@ -275,23 +275,23 @@ def test_percent_decrease(vy):
     assert "60" in r
 
 
-@xfail(strict=True, reason="math_percentage: find percentage given part and whole")
 def test_percent_find_percentage(vy):
-    """a class has 40 students. 10 students failed. what percent failed? → 10/40*100 = 25"""
+    """a class has 40 students. 10 students failed. what percent failed? → 10/40*100 = 25
+    Works: shatamana-bandha maps larger→whole-value, smaller→part-value, forward percentage-mantra."""
     r = vy.answer("a class has 40 students. 10 students failed. what percent failed")
     assert "25" in r
 
 
-@xfail(strict=True, reason="math_percentage: percent increase from before/after values")
 def test_percent_increase_from_values(vy):
-    """a price was 80. it increased to 100. what is the percent increase? → (100-80)/80*100 = 25"""
+    """a price was 80. it increased to 100. what is the percent increase? → (100-80)/80*100 = 25
+    Works: shatamana-bandha detects bhuta-kaala+direction → percent-change-mantra(initial=80,final=100)."""
     r = vy.answer("a price was 80. it increased to 100. what is the percent increase")
     assert "25" in r
 
 
-@xfail(strict=True, reason="math_percentage: percent decrease from before/after values")
 def test_percent_decrease_from_values(vy):
-    """a price was 200. it decreased to 150. what is the percent decrease? → (200-150)/200*100 = 25"""
+    """a price was 200. it decreased to 150. what is the percent decrease? → (200-150)/200*100 = 25
+    Works: percent-change-mantra gives -25, assertion matches substring."""
     r = vy.answer("a price was 200. it decreased to 150. what is the percent decrease")
     assert "25" in r
 
