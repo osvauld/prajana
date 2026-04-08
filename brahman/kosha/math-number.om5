@@ -1,5 +1,5 @@
 ; ═══════════════════════════════════════════════════════════════════
-; math-number — 93 nodes
+; math-number — 98 nodes
 ; ═══════════════════════════════════════════════════════════════════
 
 ; ── sign: number classification ──────────────────────────────────────
@@ -728,6 +728,40 @@
   (swarupa additive-identity)
   (sthita int)
   (yukta shunya))
+
+; ── percentage (shatamana — per hundred) ─────────────────────────────
+; percentage = (part / whole) × 100
+; mantra enables: find percentage, find part, find whole (via inversion)
+
+(kosha percentage
+  (vishesa number-varga)
+  (swarupa rashi)
+  (yukta part-value whole-value)
+  (naama percentage))
+
+(kosha part-value
+  (vishesa number-varga)
+  (swarupa amsha)
+  (naama part))
+
+(kosha whole-value
+  (vishesa number-varga)
+  (swarupa purna)
+  (naama whole))
+
+(mantra percentage-mantra
+  (varga math-mantra)
+  (swarupa percentage)
+  (phala percentage)
+  (janya part-value whole-value)
+  (krama multiplication ( division part-value whole-value ) 100))
+
+; ── math-mantra varga ────────────────────────────────────────────────
+; container for math formula nodes — mantra-select walks this
+
+(kosha math-mantra
+  (vishesa number-varga)
+  (swarupa mantra-varga))
 
 (kosha transcendental-varga
   (vishesa number-varga)

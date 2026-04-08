@@ -39,9 +39,12 @@
     let is-mul-grade = (and (eq eff-dir "multiplication") (gt (length nums) 1))
     let is-div-grade = (and (eq eff-dir "division") (gt (length nums) 1))
     let nv = cond is-mul-grade (apply-op "mul" [n0, (to-number n1-raw)]) is-div-grade (apply-op "div" [n0, (to-number n1-raw)]) otherwise n0
+    -- shatamana: "percent" scales the number as a fraction of the accumulator
+    let has-shatamana = has-items (triples-by-edge grade "shatamana")
+    let eff-nv = cond (and has-shatamana init) (apply-op "div" [(apply-op "mul" [acc, nv]), 100]) otherwise nv
     let op-eval = cond (eq eff-dir "kshaya") (nth (walk "subtraction" "ganana") 0) (eq eff-dir "multiplication") (nth (walk "multiplication" "ganana") 0) (eq eff-dir "division") (nth (walk "division" "ganana") 0) otherwise (nth (walk "addition" "ganana") 0)
-    let new-acc = apply-op (to-string op-eval) [acc, nv]
-    let step = (concat eff-dir " " nv ": " (to-string acc) " -> " (to-string new-acc))
+    let new-acc = apply-op (to-string op-eval) [acc, eff-nv]
+    let step = (concat eff-dir " " eff-nv ": " (to-string acc) " -> " (to-string new-acc))
     -- carry: when seeding, pass direction forward for the next grade
     let next-carry = cond (and (not init) (has-text dir)) dir otherwise ""
     cond (or is-q (not has-num)) state

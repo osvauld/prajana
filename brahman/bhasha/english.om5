@@ -1,5 +1,5 @@
 ; ═══════════════════════════════════════════════════════════════════
-; english — 107 nodes
+; english — 114 nodes
 ; ═══════════════════════════════════════════════════════════════════
 
 (bhasha action
@@ -610,6 +610,39 @@
   (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
   (naama added))
 
+; ── math verbs (increase/decrease/multiply/reduce/grow) ──────────────
+
+(bhasha dhatu-increase
+  (swarupa tinanta)
+  (sthita dhatu vriddhi)
+  (naama increase))
+
+(bhasha dhatu-decrease
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama decrease))
+
+(bhasha dhatu-multiply
+  (swarupa tinanta)
+  (sthita dhatu multiplication)
+  (naama multiply))
+
+(bhasha dhatu-reduce
+  (swarupa tinanta)
+  (sthita dhatu kshaya)
+  (naama reduce))
+
+(bhasha dhatu-grow
+  (swarupa tinanta)
+  (sthita dhatu vriddhi)
+  (naama grow))
+
+(bhasha grew
+  (swarupa tinanta)
+  (janya dhatu-grow)
+  (sthita kta-pratyaya bhuta-kaala kartari-prayoga vriddhi)
+  (naama grew))
+
 ; ── spatial directions (disha — left/right/up/down wrt person/object) ─
 
 (bhasha disha-left
@@ -673,6 +706,13 @@
   (janya dhatu-travel)
   (sthita kta-pratyaya bhuta-kaala kartari-prayoga)
   (naama travelled))
+
+; ── percentage (shatamana — per hundred) ─────────────────────────────
+
+(bhasha percent-word
+  (swarupa shatamana)
+  (sthita english)
+  (naama percent))
 
 ; ── direction adverbs (bridge to sangati kshaya/vriddhi) ──────────────
 

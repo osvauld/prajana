@@ -32,16 +32,18 @@
     (let count-steps = proof | where [s, e, o] | and (eq e "count-step") | collect (to-string o)
      let op-plus = shabda "addition" "word"
      let op-minus = shabda "subtraction" "word"
+     let op-times = shabda "multiplication" "word"
+     let op-over = shabda "division" "word"
      let say-arrow = shabda "anuvada-setu" "speech-arrow"
      let lines = map count-steps (fn step ->
        let parts = split step " "
        let dir = nth parts 0
-       let op-word = cond (eq dir "kshaya") op-minus otherwise op-plus
+       let op-word = cond (eq dir "kshaya") op-minus (eq dir "multiplication") op-times (eq dir "division") op-over otherwise op-plus
        let num-colon = nth parts 1
        let num = substr num-colon 0 (sub (string-length num-colon) 1)
        let before = nth parts 2
        let after = nth parts 4
-       concat num " " op-word " (" before " " (to-string say-arrow) " " after ")")
+       concat num " " op-word " " before " " (to-string say-arrow) " " after)
      cond (has-items lines) [(concat say-known " " (words-to-str lines))] otherwise [])
 
     -- anumana: swarupa chain → "sparrow IS-A bird"

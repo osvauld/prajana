@@ -174,6 +174,139 @@ def test_sharing_equally(vy):
     assert "6" in r
 
 
+# ── gate: math_xkyu — verb-connector-quantity binding (x k y u) ──────────────
+# The (x k y u) pattern: verb/action x, connector k (by/to/from/at/into),
+# quantity y, qualifier u. The connector determines HOW y relates to x.
+# Same structure as physics "moves at 5 m/s" but in math domain.
+
+
+def test_xkyu_increases_by(vy):
+    """a number is 5. it increases by 3. what is the number? → 5+3=8
+    Works: count-chain detects vriddhi from 'increases' verb."""
+    r = vy.answer("a number is 5. it increases by 3. what is the number")
+    assert "8" in r
+
+
+def test_xkyu_decreases_by(vy):
+    """a number is 10. it decreases by 4. what is the number? → 10-4=6
+    Works: dhatu-decrease has sthita→kshaya, count-chain uses subtraction."""
+    r = vy.answer("a number is 10. it decreases by 4. what is the number")
+    assert "6" in r
+
+
+def test_xkyu_multiplied_by(vy):
+    """a number is 7. it is multiplied by 3. what is the result? → 7*3=21
+    Works: dhatu-multiply has sthita→multiplication, count-chain uses mul."""
+    r = vy.answer("a number is 7. it is multiplied by 3. what is the result")
+    assert "21" in r
+
+
+def test_xkyu_divided_by(vy):
+    """a number is 20. it is divided by 4. what is the result? → 20/4=5
+    Works: count-chain detects division from 'divided' verb."""
+    r = vy.answer("a number is 20. it is divided by 4. what is the result")
+    assert "5" in r
+
+
+def test_xkyu_divided_into(vy):
+    """a rope of length 12 m is divided into 4 equal parts. what is the length of each part? → 12/4=3
+    Works: count-chain detects division from 'divided' verb."""
+    r = vy.answer(
+        "a rope has length 12. it is divided into 4 equal parts. "
+        "what is the length of each part"
+    )
+    assert "3" in r
+
+
+def test_xkyu_increases_by_percent(vy):
+    """a number is 200. it increases by 10 percent. what is the number? → 200+20=220
+    Works: shatamana scales nv as acc*nv/100, then vriddhi adds."""
+    r = vy.answer("a number is 200. it increases by 10 percent. what is the number")
+    assert "220" in r
+
+
+@xfail(strict=True, reason="math_xkyu: 'from X to Y' — apadana+sampradana range")
+def test_xkyu_from_to_range(vy):
+    """the sum of numbers from 1 to 5 → 1+2+3+4+5=15"""
+    r = vy.answer("what is the sum of numbers from 1 to 5")
+    assert "15" in r
+
+
+@xfail(strict=True, reason="math_xkyu: 'grows by X each step' — karana+parimana iterative")
+def test_xkyu_grows_by_each(vy):
+    """a plant is 10 cm tall. it grows by 2 cm each day. what is the height after 5 days? → 10+2*5=20"""
+    r = vy.answer(
+        "a plant is 10 cm tall. it grows by 2 cm each day. "
+        "what is the height after 5 days"
+    )
+    assert "20" in r
+
+
+def test_xkyu_reduced_to(vy):
+    """a quantity is 50. it is reduced to 30. what is the decrease? → 50-30=20
+    Works: dhatu-reduce has sthita→kshaya, count-chain uses subtraction."""
+    r = vy.answer("a quantity is 50. it is reduced to 30. what is the decrease")
+    assert "20" in r
+
+
+# ── gate: math_percentage — percentage arithmetic ────────────────────────────
+# Percentage is a scaling operation: "X percent of Y" = X/100 * Y.
+# Needs: percent bhasha node, percentage mantra, count-chain awareness.
+
+
+@xfail(strict=True, reason="math_percentage: basic 'X percent of Y'")
+def test_percent_of_basic(vy):
+    """what is 25 percent of 200? → 25/100 * 200 = 50"""
+    r = vy.answer("what is 25 percent of 200")
+    assert "50" in r
+
+
+@xfail(strict=True, reason="math_percentage: 20 percent of a number")
+def test_percent_of_number(vy):
+    """a number is 300. what is 20 percent of the number? → 60"""
+    r = vy.answer("a number is 300. what is 20 percent of the number")
+    assert "60" in r
+
+
+def test_percent_decrease(vy):
+    """a number is 80. it decreases by 25 percent. what is the number? → 80 - 20 = 60
+    Works: shatamana scales nv as acc*nv/100, then kshaya subtracts."""
+    r = vy.answer("a number is 80. it decreases by 25 percent. what is the number")
+    assert "60" in r
+
+
+@xfail(strict=True, reason="math_percentage: find percentage given part and whole")
+def test_percent_find_percentage(vy):
+    """a class has 40 students. 10 students failed. what percent failed? → 10/40*100 = 25"""
+    r = vy.answer("a class has 40 students. 10 students failed. what percent failed")
+    assert "25" in r
+
+
+@xfail(strict=True, reason="math_percentage: percent increase from before/after values")
+def test_percent_increase_from_values(vy):
+    """a price was 80. it increased to 100. what is the percent increase? → (100-80)/80*100 = 25"""
+    r = vy.answer("a price was 80. it increased to 100. what is the percent increase")
+    assert "25" in r
+
+
+@xfail(strict=True, reason="math_percentage: percent decrease from before/after values")
+def test_percent_decrease_from_values(vy):
+    """a price was 200. it decreased to 150. what is the percent decrease? → (200-150)/200*100 = 25"""
+    r = vy.answer("a price was 200. it decreased to 150. what is the percent decrease")
+    assert "25" in r
+
+
+def test_percent_successive(vy):
+    """a number is 100. it increases by 10 percent. it increases by 20 percent. what is the number?
+    → 100 * 1.1 * 1.2 = 132
+    Works: shatamana scales from current accumulator, so chained percentages compound correctly."""
+    r = vy.answer(
+        "a number is 100. it increases by 10 percent. "
+        "it increases by 20 percent. what is the number"
+    )
+    assert "132" in r
+
+
 # ── gate: math_L0_number — sign, absolute value, negative numbers ────────────
 
 
@@ -619,7 +752,7 @@ def test_cross_product(vy):
     → (0, 0, 1)"""
     r = vy.answer("What is the cross product of (1, 0, 0) and (0, 1, 0)?")
     r_lower = r.lower()
-    assert ("0, 0, 1" in r or "(0,0,1)" in r or "cross product" in r_lower) and "plus" not in r_lower
+    assert "0, 0, 1" in r or "(0,0,1)" in r
 
 
 @xfail(strict=True, reason="math_L5_vector: displacement word problem")

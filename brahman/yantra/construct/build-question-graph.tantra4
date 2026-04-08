@@ -38,6 +38,8 @@
     -- walks: nd.swarupa for sign-modifier, nd.kriya for the operation (neg)
     let is-sign-modifier = (and (exists nd) (member "sign-modifier" (walk (to-string nd) "swarupa")))
     let sign-kriya = (cond is-sign-modifier (to-string (nth (walk (to-string nd) "kriya") 0)) otherwise "")
+    -- shatamana: "percent" word — swarupa includes "shatamana"
+    let is-shatamana = (and (exists nd) (member "shatamana" (walk (to-string nd) "swarupa")))
     -- apply pending sign-op to number: walk sign-op.ganana → compute op → apply
     let eff-nv = cond (and (has-text nv) (has-text sign-op))
       (to-string (apply-op (to-string (nth (walk sign-op "ganana") 0)) [(to-number nv)]))
@@ -68,6 +70,7 @@
     let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]]
       is-prashna [[clean, "prashna", clean]]
       is-sign-modifier []
+      is-shatamana [[clean, "shatamana", clean]]
       is-pratishedha []
       is-niyama [[clean, "niyama", clean]]
       is-vibhakti [[clean, vibhakti-edge, clean]]

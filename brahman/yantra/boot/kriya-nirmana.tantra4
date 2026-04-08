@@ -19,17 +19,21 @@
         let blen = string-length base
         let ends-e = ends-with base "e"
         let stem = cond ends-e (substr base 0 (sub blen 1)) otherwise base
-        -- direction: kshaya, vriddhi, or kartari-prayoga from dhatu sthita
+        -- direction: kshaya, vriddhi, multiplication, or division from dhatu sthita
         let dir = reduce (walk nd-str "sthita") "" (fn found s ->
           let ss = to-string s
           cond (has-text found) found
-          (or (eq ss "kshaya") (eq ss "vriddhi")) ss
+          (or (eq ss "kshaya") (eq ss "vriddhi") (eq ss "multiplication") (eq ss "division")) ss
           otherwise found)
         let dir-sthita = cond (has-text dir) (concat dir "-sthita") otherwise ""
-        -- past form: base + ed (or base + d if ends in e)
+        -- past form: base + ed (or base + d if ends in e, or -y → -ied)
         -- skip if dhatu already has a hand-authored past form (phala = janya reverse)
         let has-irregular-past = has-items (walk nd-str "phala")
-        let past-word = cond ends-e (concat base "d") otherwise (concat base "ed")
+        let last-base-ch = cond (ge blen 1) (substr base (sub blen 1) 1) otherwise ""
+        let prev-base-ch = cond (ge blen 2) (substr base (sub blen 2) 1) otherwise ""
+        let is-prev-vowel-past = (or (eq prev-base-ch "a") (eq prev-base-ch "e") (eq prev-base-ch "i") (eq prev-base-ch "o") (eq prev-base-ch "u"))
+        let needs-ied = (and (eq last-base-ch "y") (not is-prev-vowel-past))
+        let past-word = cond needs-ied (concat (substr base 0 (sub blen 1)) "ied") ends-e (concat base "d") otherwise (concat base "ed")
         let past-lookup = lookup past-word
         let past-exists = (or has-irregular-past (and (exists past-lookup) (member "tinanta" (map (walk past-word "swarupa") (fn x -> to-string x)))))
         let past-slokas = cond (has-text dir-sthita)
