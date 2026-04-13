@@ -63,12 +63,12 @@ def build_parser():
     s.add_argument("--xfailed", action="store_true",
                    help="Re-run only xfailed tests from the last run")
     s.add_argument("--verbose", "-v", action="store_true")
-    s.add_argument("--parallel", "-n", default="auto",
-                   help="Pytest-xdist workers: auto|off|N (default: auto)")
+    s.add_argument("--parallel", "-n", default="4",
+                   help="Pytest-xdist workers: auto|off|N (default: 4)")
 
     # cache
     s = sub.add_parser("cache", help="Test result analysis")
-    s.add_argument("action", choices=["summary", "gates", "slow", "trace"])
+    s.add_argument("action", choices=["summary", "gates", "slow", "trace", "compact"])
     s.add_argument("name", nargs="?", help="Test id for trace subcommand")
 
     # lint

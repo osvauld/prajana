@@ -1,0 +1,461 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-sequence — sequences, series, polynomials, cyclic domains
+; ═══════════════════════════════════════════════════════════════════
+;
+; Structure: polynomial is the root — all sequences are polynomial
+; evaluations, all series are polynomial sums. Cyclic domains
+; are modular arithmetic over labeled sets.
+;
+; Hierarchy:
+;   bahupada (polynomial) → degree determines type
+;     degree 1: rekha (linear) → arithmetic sequence
+;     degree 2: varga-bahupada (quadratic) → quadratic sequence
+;     degree n: general polynomial
+;     degree ∞: shreni (power series) → sin, cos, exp
+;
+;   anukrama (sequence) → rule determines type
+;     arithmetic: constant difference
+;     geometric: constant ratio
+;     fibonacci: recursive sum
+;     triangular: summation of 1..n
+;
+;   avrti-krama (cyclic domain) → period + labels
+;     clock, day-of-week, compass, repeating patterns
+
+; ── varga: domain grouping ──────────────────────────────────────────
+
+(kosha sequence-varga
+  (vishesa math-varga)
+  (yukta anukrama shreni bahupada avrti-krama))
+
+; ═══════════════════════════════════════════════════════════════════
+; POLYNOMIALS — bahupada
+; ═══════════════════════════════════════════════════════════════════
+; bahupada = "many-footed" — a polynomial has many terms.
+; The degree (ghana) determines the polynomial type.
+; Every polynomial is a member of the ring of polynomials.
+
+(kosha bahupada
+  (vishesa sequence-varga)
+  (swarupa ring expression)
+  (yukta ghana guna pada sthira-pada)
+  (kriya viveka sandhi)
+  (janya equation)
+  (siddha ring distributivity)
+  (abheda polynomial))
+
+; ── degree 0: constant ──────────────────────────────────────────────
+
+(kosha sthira-bahupada
+  (vishesa sequence-varga)
+  (swarupa bahupada)
+  (siddha ghana-shunya)
+  (yukta sthira-pada)
+  (abheda constant))
+
+; ── degree 1: linear ────────────────────────────────────────────────
+; f(x) = ax + b — one root, straight line graph
+; discrete form: arithmetic sequence
+
+(kosha rekha
+  (vishesa sequence-varga)
+  (swarupa bahupada)
+  (siddha ghana-eka)
+  (yukta slope intercept)
+  (janya equation)
+  (phala root)
+  (kriya viveka)
+  (abheda linear))
+
+(mantra linear-root
+  (varga math-mantra)
+  (swarupa rekha)
+  (phala root)
+  (janya intercept slope)
+  (krama neg ( division intercept slope )))
+
+; ── degree 2: quadratic ─────────────────────────────────────────────
+; f(x) = ax² + bx + c — parabola, discriminant, two roots
+; The first equation type that reveals structure:
+;   discriminant > 0 → two real roots
+;   discriminant = 0 → one repeated root
+;   discriminant < 0 → no real roots
+
+(kosha varga-bahupada
+  (vishesa sequence-varga)
+  (swarupa bahupada)
+  (siddha ghana-dvi)
+  (yukta vivechaka vertex parabola)
+  (janya equation)
+  (phala root)
+  (kriya viveka)
+  (abheda quadratic))
+
+(kosha vivechaka
+  (vishesa sequence-varga)
+  (swarupa matra)
+  (yukta varga-bahupada root)
+  (janya coefficient-a coefficient-b coefficient-c)
+  (kriya viveka)
+  (abheda discriminant))
+
+(mantra vivechaka-mantra
+  (varga math-mantra)
+  (swarupa vivechaka)
+  (phala vivechaka)
+  (janya coefficient-a coefficient-b coefficient-c)
+  (krama subtraction ( square coefficient-b ) ( multiplication 4 ( multiplication coefficient-a coefficient-c ))))
+
+(mantra quadratic-root-positive
+  (varga math-mantra)
+  (swarupa varga-bahupada)
+  (phala root)
+  (janya coefficient-a coefficient-b vivechaka)
+  (krama division ( addition ( neg coefficient-b ) ( sqrt vivechaka ) ) ( multiplication 2 coefficient-a )))
+
+(mantra quadratic-root-negative
+  (varga math-mantra)
+  (swarupa varga-bahupada)
+  (phala root)
+  (janya coefficient-a coefficient-b vivechaka)
+  (krama division ( subtraction ( neg coefficient-b ) ( sqrt vivechaka ) ) ( multiplication 2 coefficient-a )))
+
+(mantra quadratic-vertex-x
+  (varga math-mantra)
+  (swarupa varga-bahupada)
+  (phala vertex)
+  (janya coefficient-a coefficient-b)
+  (krama neg ( division coefficient-b ( multiplication 2 coefficient-a ))))
+
+; ── degree 3: cubic ─────────────────────────────────────────────────
+
+(kosha ghana-bahupada
+  (vishesa sequence-varga)
+  (swarupa bahupada)
+  (siddha ghana-tri)
+  (yukta inflection-point)
+  (abheda cubic))
+
+; ═══════════════════════════════════════════════════════════════════
+; SEQUENCES — anukrama
+; ═══════════════════════════════════════════════════════════════════
+; anukrama = "following in order" — a sequence is a function from
+; position → value. The rule type determines the sequence type.
+
+(kosha anukrama
+  (vishesa sequence-varga)
+  (swarupa krama)
+  (yukta pada sthana niyama)
+  (janya bahupada)
+  (kriya viveka vriddhi)
+  (abheda sequence))
+
+; ── arithmetic sequence: a + (n-1)*d ────────────────────────────────
+; swarupa is rekha (linear) — arithmetic sequence IS the discrete
+; form of a linear polynomial. Same janya: first-term + difference.
+
+(kosha tulya-anukrama
+  (vishesa sequence-varga)
+  (swarupa anukrama rekha)
+  (yukta prathama-pada samanantara)
+  (janya prathama-pada samanantara sthana)
+  (kriya vriddhi kshaya)
+  (abheda arithmetic-sequence))
+
+(mantra tulya-anukrama-pada
+  (varga math-mantra)
+  (swarupa tulya-anukrama)
+  (phala pada)
+  (janya prathama-pada samanantara sthana)
+  (krama addition prathama-pada ( multiplication samanantara ( subtraction sthana 1 ))))
+
+(mantra tulya-anukrama-yoga
+  (varga math-mantra)
+  (swarupa tulya-anukrama)
+  (phala yoga)
+  (janya prathama-pada samanantara sthana)
+  (krama division ( multiplication sthana ( addition ( multiplication 2 prathama-pada ) ( multiplication samanantara ( subtraction sthana 1 )))) 2))
+
+; find common difference from two (position, value) pairs: d = (v2-v1)/(n2-n1)
+(mantra tulya-anukrama-samanantara
+  (varga math-mantra)
+  (swarupa tulya-anukrama)
+  (phala samanantara)
+  (janya pada-prathama pada-dvitiya sthana-prathama sthana-dvitiya)
+  (krama division ( subtraction pada-dvitiya pada-prathama ) ( subtraction sthana-dvitiya sthana-prathama )))
+
+; ── geometric sequence: a * r^(n-1) ─────────────────────────────────
+; growth proportional to current value — exponential, not polynomial.
+; pratipaksha of arithmetic: addition vs multiplication.
+
+(kosha guna-anukrama
+  (vishesa sequence-varga)
+  (swarupa anukrama)
+  (yukta prathama-pada guna-anupata)
+  (janya prathama-pada guna-anupata sthana)
+  (kriya vriddhi kshaya multiplication)
+  (pratipaksha tulya-anukrama)
+  (abheda geometric-sequence))
+
+(mantra guna-anukrama-pada
+  (varga math-mantra)
+  (swarupa guna-anukrama)
+  (phala pada)
+  (janya prathama-pada guna-anupata sthana)
+  (krama multiplication prathama-pada ( power guna-anupata ( subtraction sthana 1 ))))
+
+(mantra guna-anukrama-yoga
+  (varga math-mantra)
+  (swarupa guna-anukrama)
+  (phala yoga)
+  (janya prathama-pada guna-anupata sthana)
+  (krama division ( multiplication prathama-pada ( subtraction ( power guna-anupata sthana ) 1 )) ( subtraction guna-anupata 1 )))
+
+; ═══════════════════════════════════════════════════════════════════
+; ITERATIVE COMPUTATION — avrti-ganana
+; ═══════════════════════════════════════════════════════════════════
+; avrti-ganana = "iterative computation" — repeated application of
+; a transform to accumulated state. Unifies:
+;   - Fibonacci (pair accumulator, addition step)
+;   - any recursive sequence (tribonacci, Lucas, ...)
+;   - graph walks (node accumulator, edge-follow step)
+;   - refine chain (graph accumulator, tantra step)
+;
+; Protocol: 5 edges declare the iteration:
+;   janya  → state shape (what the accumulator holds)
+;   kriya  → transform (what operation per step)
+;   siddha → seed (initial state)
+;   phala  → termination (count, convergence, or target)
+;   yukta  → context gate (when to activate)
+;
+; Step mantras use pada-purva (previous term) and pada-dvitiya
+; (second-previous term) as janya bindings.
+
+(kosha avrti-ganana
+  (vishesa sequence-varga)
+  (swarupa krama)
+  (yukta bija parinamana avarta)
+  (kriya avrti)
+  (janya op-reduce op-iterate op-fixpoint)
+  (abheda iterative-computation))
+
+(kosha pada-purva
+  (vishesa sequence-varga)
+  (swarupa avrti-ganana)
+  (abheda previous-term))
+
+(kosha pada-dvitiya
+  (vishesa sequence-varga)
+  (swarupa avrti-ganana)
+  (abheda second-previous-term))
+
+; ── Fibonacci: f(n) = f(n-1) + f(n-2) ──────────────────────────────
+; recursive definition — each term depends on two predecessors.
+; ratio of consecutive terms converges to phi (golden ratio).
+; connects to golden spiral via continuous limit.
+; kriya avrti = iterative (no closed-form krama — must step).
+; step mantra: addition(pada-purva, pada-dvitiya).
+
+(kosha matsya-anukrama
+  (vishesa sequence-varga)
+  (swarupa anukrama avrti-ganana)
+  (yukta suvarna-anupata)
+  (janya sthana)
+  (kriya avrti addition)
+  (siddha suvarna-anupata)
+  (abheda fibonacci))
+
+(mantra matsya-avrti-pada
+  (varga math-mantra)
+  (swarupa matsya-anukrama)
+  (phala pada)
+  (janya pada-purva pada-dvitiya)
+  (krama addition pada-purva pada-dvitiya))
+
+(kosha suvarna-anupata
+  (vishesa sequence-varga)
+  (swarupa guna-anupata)
+  (yukta matsya-anukrama)
+  (siddha division ( addition 1 ( sqrt 5 )) 2)
+  (abheda golden-ratio phi))
+
+; ── triangular numbers: n*(n+1)/2 ──────────────────────────────────
+; sum of first n natural numbers. discrete form of quadratic.
+; connects: handshakes, bowling pins, stacking.
+
+(kosha trikona-sankhya
+  (vishesa sequence-varga)
+  (swarupa anukrama varga-bahupada)
+  (yukta yoga prathama)
+  (janya sthana)
+  (kriya yoga)
+  (abheda triangular-number))
+
+(mantra trikona-sankhya-pada
+  (varga math-mantra)
+  (swarupa trikona-sankhya)
+  (phala pada)
+  (janya sthana)
+  (krama division ( multiplication sthana ( addition sthana 1 )) 2))
+
+; ── powers of 2: 2^n ────────────────────────────────────────────────
+; special case of geometric with ratio=2. binary, doubling.
+
+(kosha dviguna-anukrama
+  (vishesa sequence-varga)
+  (swarupa guna-anukrama)
+  (siddha guna-anupata-dvi)
+  (yukta dviguna binary)
+  (janya sthana)
+  (abheda powers-of-two))
+
+(mantra dviguna-pada
+  (varga math-mantra)
+  (swarupa dviguna-anukrama)
+  (phala pada)
+  (janya sthana)
+  (krama power 2 sthana))
+
+; ── summation formulas ──────────────────────────────────────────────
+; sum of first n, sum of squares, sum of cubes.
+
+(mantra prathama-yoga
+  (varga math-mantra)
+  (swarupa yoga)
+  (phala yoga)
+  (janya sthana)
+  (krama division ( multiplication sthana ( addition sthana 1 )) 2)
+  (abheda sum-first-n gauss))
+
+(mantra varga-yoga
+  (varga math-mantra)
+  (swarupa yoga)
+  (phala yoga)
+  (janya sthana)
+  (krama division ( multiplication sthana ( multiplication ( addition sthana 1 ) ( addition ( multiplication 2 sthana ) 1 ))) 6)
+  (abheda sum-of-squares))
+
+; ═══════════════════════════════════════════════════════════════════
+; CYCLIC DOMAINS — avrti-krama
+; ═══════════════════════════════════════════════════════════════════
+; avrti = "revolving" — cyclic domains are modular arithmetic
+; over labeled sets. All share: (base + offset) mod period.
+
+(kosha avrti-krama
+  (vishesa sequence-varga)
+  (swarupa krama)
+  (yukta avarta naama-patra)
+  (janya mod)
+  (kriya mod)
+  (abheda cyclic-domain))
+
+; ── clock: mod 24 / mod 12 ──────────────────────────────────────────
+
+(kosha ghati-krama
+  (vishesa sequence-varga)
+  (swarupa avrti-krama)
+  (yukta hora nimisha AM PM madhyahna ardha-ratri)
+  (siddha avarta-chaturvimshati)
+  (janya mod)
+  (abheda clock-arithmetic))
+
+(kosha hora
+  (vishesa sequence-varga)
+  (swarupa ghati-krama)
+  (siddha avarta-chaturvimshati)
+  (abheda hour))
+
+(kosha nimisha
+  (vishesa sequence-varga)
+  (swarupa ghati-krama)
+  (siddha avarta-shashti)
+  (abheda minute))
+
+(kosha madhyahna
+  (vishesa sequence-varga)
+  (swarupa ghati-krama)
+  (siddha hora-dvadasha)
+  (abheda noon))
+
+(kosha ardha-ratri
+  (vishesa sequence-varga)
+  (swarupa ghati-krama)
+  (siddha hora-shunya)
+  (pratipaksha madhyahna)
+  (abheda midnight))
+
+; ── day of week: mod 7 ──────────────────────────────────────────────
+
+(kosha vaara-krama
+  (vishesa sequence-varga)
+  (swarupa avrti-krama)
+  (yukta ravivara somavara mangalavara budhavara guruvara shukravara shanivara)
+  (siddha avarta-sapta)
+  (abheda day-of-week))
+
+; ── compass: mod 360 ────────────────────────────────────────────────
+
+(kosha disha-krama
+  (vishesa sequence-varga)
+  (swarupa avrti-krama)
+  (yukta uttara dakshina purva pashchima)
+  (siddha avarta-360)
+  (abheda compass-arithmetic))
+
+; ── repeating pattern: mod n ────────────────────────────────────────
+
+(kosha avrti-niyama
+  (vishesa sequence-varga)
+  (swarupa avrti-krama)
+  (yukta naama-patra avarta)
+  (janya sthana avarta)
+  (kriya mod)
+  (abheda repeating-pattern))
+
+; ═══════════════════════════════════════════════════════════════════
+; SPIRALS — where rotation meets growth
+; ═══════════════════════════════════════════════════════════════════
+; spiral = parametric curve: r(θ) determines the type.
+; r constant → circle
+; r linear → Archimedean (arithmetic growth per turn)
+; r exponential → logarithmic (geometric growth per turn)
+; r golden-exponential → golden spiral (Fibonacci limit)
+
+(kosha kundalini
+  (vishesa sequence-varga)
+  (swarupa krama avrti)
+  (yukta trijya kona vriddhi)
+  (janya sine cosine)
+  (abheda spiral))
+
+(kosha samavrtti-kundalini
+  (vishesa sequence-varga)
+  (swarupa kundalini tulya-anukrama)
+  (yukta rekha trijya)
+  (abheda archimedean-spiral))
+
+(kosha logarithma-kundalini
+  (vishesa sequence-varga)
+  (swarupa kundalini guna-anukrama)
+  (yukta exponential trijya)
+  (abheda logarithmic-spiral))
+
+(kosha suvarna-kundalini
+  (vishesa sequence-varga)
+  (swarupa logarithma-kundalini)
+  (siddha suvarna-anupata)
+  (yukta matsya-anukrama)
+  (abheda golden-spiral))
+
+; ═══════════════════════════════════════════════════════════════════
+; POWER SERIES — shreni (infinite polynomial)
+; ═══════════════════════════════════════════════════════════════════
+; The bridge from finite polynomials to transcendental functions.
+; sin, cos, exp are all power series — infinite polynomials.
+
+(kosha shreni
+  (vishesa sequence-varga)
+  (swarupa bahupada anukrama)
+  (yukta abhisarana trijya kramagunanam)
+  (janya sine cosine exponential)
+  (abheda power-series))

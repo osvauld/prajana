@@ -45,7 +45,7 @@ def test_chain_ke_via_suvat(vy):
     r = vy.answer(
         "find kinetic energy given initial velocity 0 acceleration 4 time 5 mass 10"
     )
-    assert "we find" in r.lower()  # chain completed
+    assert "2000" in r, f"expected KE=2000 (v=at=20, KE=½·10·400), got: {r}"
 
 
 def test_chain_force_via_suvat(vy):
@@ -53,7 +53,7 @@ def test_chain_force_via_suvat(vy):
     r = vy.answer(
         "find force given initial velocity 0 final velocity 20 time 4 mass 10"
     )
-    assert "50" in r or "we find" in r.lower()
+    assert "50" in r, f"expected F=50 (a=(20-0)/4=5, F=10·5), got: {r}"
 
 
 # ── two entity scope ──────────────────────────────────────────────────────────
@@ -106,7 +106,7 @@ def test_session_accumulate(vy):
     vy.ask("mass is 5", session_id=sid)
     vy.ask("velocity is 10", session_id=sid)
     r = vy.ask("find kinetic energy", session_id=sid)
-    assert "250" in r or "kinetic-energy" in r
+    assert "250" in r, f"expected KE=250 from accumulated session, got: {r}"
 
 
 def test_session_entity_persists(vy):
@@ -114,7 +114,7 @@ def test_session_entity_persists(vy):
     sid = "test-entity-persist-v2"
     vy.ask("electron has mass 9.109e-31", session_id=sid)
     r = vy.ask("find momentum given velocity 1e6", session_id=sid)
-    assert len(r) > 0  # server responded with something
+    assert "9.109e-25" in r, f"expected p=mv=9.109e-25, got: {r}"
 
 
 # ── no match (insufficient data) ──────────────────────────────────────────────
@@ -123,7 +123,7 @@ def test_session_entity_persists(vy):
 def test_no_match_missing_data(vy):
     """Not enough data → no match."""
     r = vy.answer("mass is 5. find kinetic energy")
-    assert "no match" in r.lower() or "we seek" in r.lower()  # either no-match or incomplete
+    assert "no match" in r.lower(), f"expected 'no match' for missing velocity, got: {r}"
 
 
 # ── comparison / viveka ───────────────────────────────────────────────────────
@@ -204,4 +204,4 @@ def test_count_gave_away(vy):
 def test_paragraph_entity_across_sentences(vy):
     """Properties split across sentences bind to same entity."""
     r = vy.answer("ball has mass 5. velocity is 10. find kinetic energy")
-    assert "250" in r or "kinetic-energy" in r
+    assert "250" in r, f"expected KE=250 from cross-sentence binding, got: {r}"

@@ -101,7 +101,7 @@ def _all_possible_commands():
         "vy eval", "vy ask", "vy walk", "vy inspect",
         "vy drift", "vy pratipaksha", "vy signal-trace", "vy panchaavayava",
         "test list", "test summary", "test run", "test failed",
-        "cache summary", "cache gates", "cache slow", "cache trace",
+        "cache summary", "cache gates", "cache slow", "cache trace", "cache compact",
         "lint", "health", "search",
         "ocaml report", "ocaml darshana", "ocaml patterns", "ocaml coupling", "ocaml functions",
         "a ghosts", "a incoming", "a hubs", "a orphans", "a flow", "a ring",

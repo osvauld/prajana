@@ -2,9 +2,9 @@
 -- does the expensive varga-ops scan, number collection, op matching.
 (tantra detect-typed-inner (graph edges words n type-idx)
 
-  (vals (map graph (fn t -> str t 2)))
+  (vals (map graph (fn [s, e, o] -> o)))
   (type-word (nth words type-idx))
-  (type-varga (nth (walk type-word "vishesa") 0))
+  (type-varga (walk-one type-word "vishesa"))
 
   -- collect all number indices
   (num-indices (filter (range n) (fn i -> eq (nth edges i) "asprista-sankhya")))
@@ -54,7 +54,7 @@
         cond (has-text a2) a2
         (member (nth words i) (walk cand "abheda")) cand
         (member (to-string (shabda-anveshana (nth words i))) (walk cand "abheda")) cand
-        (eq (nth (walk cand "ganana") 0) (nth words i)) cand
+        (eq (walk-one cand "ganana") (nth words i)) cand
         otherwise a2))))))
 
   (matched-op (cond (has-text op-from-satya) op-from-satya

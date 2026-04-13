@@ -21,10 +21,8 @@
     otherwise "transitive-swarupa"))
 
   -- ── read ganana + janya from the mantra node ─────────────────────
-  (ganana-nodes (walk infer-mantra "ganana"))
-  (ganana (cond (has-items ganana-nodes) (to-string (nth ganana-nodes 0)) otherwise ""))
-  (janya-nodes (walk infer-mantra "janya"))
-  (janya (cond (has-items janya-nodes) (to-string (nth janya-nodes 0)) otherwise ""))
+  (ganana (walk infer-mantra "ganana" | first-of | to-string))
+  (janya (walk infer-mantra "janya" | first-of | to-string))
 
   -- ── chain-walk engine (shared by swarupa + varga modes) ──────────
   -- all swarupa edges from the question graph (inline assertions)
@@ -32,7 +30,7 @@
 
   -- level 1: direct parents (kosha + graph + varga)
   (l1-kosha (map (walk query-entity "swarupa") (fn x -> to-string x)))
-  (l1-graph (map (filter graph-swarupa (fn tri -> eq (str tri 0) query-entity)) (fn tri -> str tri 2)))
+  (l1-graph (map (filter graph-swarupa (fn [s, e, o] -> eq (to-string s) query-entity)) (fn [s, e, o] -> to-string o)))
   (l1-varga (map (walk query-entity "varga") (fn x -> to-string x)))
   (l1 (append l1-kosha (append l1-graph l1-varga)))
   (hit1 (member assert-entity l1))
@@ -40,7 +38,7 @@
   -- level 2
   (l2 (flat-map l1 (fn nd ->
     let ks = map (walk nd "swarupa") (fn x -> to-string x)
-    let gs = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let gs = map (filter graph-swarupa (fn [s, e, o] -> eq s nd)) (fn [s, e, o] -> to-string o)
     let kv = map (walk nd "varga") (fn x -> to-string x)
     append ks (append gs kv))))
   (hit2 (member assert-entity l2))
@@ -48,7 +46,7 @@
   -- level 3
   (l3 (flat-map l2 (fn nd ->
     let ks = map (walk nd "swarupa") (fn x -> to-string x)
-    let gs = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let gs = map (filter graph-swarupa (fn [s, e, o] -> eq s nd)) (fn [s, e, o] -> to-string o)
     let kv = map (walk nd "varga") (fn x -> to-string x)
     append ks (append gs kv))))
   (hit3 (member assert-entity l3))
@@ -56,7 +54,7 @@
   -- level 4
   (l4 (flat-map l3 (fn nd ->
     let ks = map (walk nd "swarupa") (fn x -> to-string x)
-    let gs = map (filter graph-swarupa (fn tri -> eq (str tri 0) nd)) (fn tri -> str tri 2)
+    let gs = map (filter graph-swarupa (fn [s, e, o] -> eq s nd)) (fn [s, e, o] -> to-string o)
     let kv = map (walk nd "varga") (fn x -> to-string x)
     append ks (append gs kv))))
   (hit4 (member assert-entity l4))
@@ -65,13 +63,13 @@
 
   -- ── varga yukta walk: check if predicate is yukta-reachable ──────
   (all-vargas (append l1-varga (append
-    (reduce l1-varga [] (fn acc nd -> append acc (map (walk nd "varga") (fn x -> to-string x))))
-    (reduce l2 [] (fn acc nd -> append acc (map (walk nd "varga") (fn x -> to-string x)))))))
+    (flat-map l1-varga (fn nd -> map (walk nd "varga") (fn x -> to-string x)))
+    (flat-map l2 (fn nd -> map (walk nd "varga") (fn x -> to-string x))))))
   (yukta-hit (reduce all-vargas false (fn matched vnd ->
     let ys = map (om-yukta vnd) (fn y -> to-string y)
     (or matched (member assert-entity ys)))))
   (direct-yukta (member assert-entity (map (om-yukta query-entity) (fn y -> to-string y))))
-  (swarupa-nodes (map (walk query-entity "swarupa") (fn nd -> to-string nd)))
+  (swarupa-nodes (map (walk query-entity "swarupa") (fn x -> to-string x)))
   (swarupa-yukta (reduce swarupa-nodes false (fn matched nd ->
     let ys = map (om-yukta nd) (fn y -> to-string y)
     (or matched (member assert-entity ys)))))

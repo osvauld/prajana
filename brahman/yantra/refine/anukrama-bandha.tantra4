@@ -1,0 +1,163 @@
+-- anukrama-bandha: pure binder — detects sequence patterns, emits janya bindings.
+-- does NOT compute: emits _derive triples for mantra-derive to handle.
+-- runs in refine phase 1 (before mantra-derive and sankhya-bandha).
+--
+-- detection:
+--   arithmetic: vriddhi/kshaya + anantara → tulya-anukrama
+--   geometric:  multiplication + anantara → guna-anukrama
+--   percentage-growth: shatamana + anantara → guna-anukrama
+--   inverse: sequence signals + no anantara → invert-krama
+--   find-diff: two pada-word grades → tulya-anukrama-samanantara
+--
+-- param extraction delegated to helpers:
+--   anukrama-tulya-extract — samanantara (signed step)
+--   anukrama-guna-extract — guna-anupata (ratio)
+(tantra anukrama-bandha (graph)
+  (grades (split-grades graph))
+
+  -- ── signal detection across all grades ────────────────────────────
+  (anantara-grade (find-first grades (fn g ->
+    has-items (filter g (fn t -> and (eq (nth t 0) "anantara-word") (eq (nth t 1) "satya"))))))
+  (has-anantara (exists anantara-grade))
+  (aarambha-grade (find-first grades (fn g ->
+    has-items (filter g (fn t -> and (eq (nth t 0) "aarambha-word") (eq (nth t 1) "satya"))))))
+  (additive-grade (find-first grades (fn g ->
+    (and (has-items (filter g (fn t -> or (eq (nth t 1) "vriddhi") (eq (nth t 1) "kshaya"))))
+         (has-items (filter g (fn t -> eq (nth t 1) "asprista-sankhya")))))))
+  (has-additive (exists additive-grade))
+  (add-dir (cond has-additive
+    (nth (nth (find-first additive-grade (fn t -> or (eq (nth t 1) "vriddhi") (eq (nth t 1) "kshaya"))) 1) 0)
+    otherwise ""))
+  (mul-grade (find-first grades (fn g ->
+    has-items (filter g (fn t -> eq (nth t 1) "multiplication")))))
+  (has-mul (exists mul-grade))
+  (has-parimana (exists (find-first grades (fn g ->
+    has-items (triples-by-edge g "parimana")))))
+  (pct-grade (find-first grades (fn g ->
+    has-items (triples-by-edge g "shatamana"))))
+  (has-pct (exists pct-grade))
+  (rate-grade (cond (and (not has-additive) (not has-mul))
+    (find-first grades (fn g ->
+      (and (has-items (triples-by-edge g "parimana"))
+           (has-items (filter g (fn t -> eq (nth t 1) "asprista-sankhya")))
+           (not (has-items (triples-by-edge g "vidhi-kaala"))))))
+    otherwise _none))
+  (has-rate (exists rate-grade))
+
+  -- ── sequence type classification ──────────────────────────────────
+  (is-arithmetic-dir (and has-additive has-anantara (not has-pct)))
+  (is-arithmetic-rate (and has-rate has-anantara (not has-pct)))
+  (is-arithmetic-fwd (or is-arithmetic-dir is-arithmetic-rate))
+  (is-geometric-direct (and has-mul has-anantara (not has-additive) (not has-pct)))
+  (is-geometric-pct (and has-pct has-anantara))
+  (is-geometric-fwd (or is-geometric-direct is-geometric-pct))
+  (has-sequence-signal (exists (find-first grades (fn g ->
+    or (has-items (filter g (fn t -> and (eq (nth t 0) "pada-word") (eq (nth t 1) "satya"))))
+       (has-items (filter g (fn t -> eq (nth t 0) "anukrama-word")))))))
+  (is-arith-inv (and has-additive (not has-anantara) (not has-pct) has-sequence-signal))
+  (is-geo-inv (and has-mul (not has-anantara) (not has-additive) (not has-pct) has-sequence-signal))
+  (is-inverse (or is-arith-inv is-geo-inv))
+  (pada-data-grades (filter grades (fn g ->
+    and (has-items (filter g (fn t -> and (eq (nth t 0) "pada-word") (eq (nth t 1) "satya"))))
+        (not (has-items (triples-by-edge g "vidhi-kaala"))))))
+  (is-find-diff (and (gt (length pada-data-grades) 1) has-sequence-signal
+    (not has-anantara) (not has-additive) (not has-mul) (not has-pct)))
+  (is-arithmetic (or is-arithmetic-fwd is-arith-inv is-find-diff))
+  (is-geometric (or is-geometric-fwd is-geo-inv))
+  (is-sequence (or is-arithmetic is-geometric))
+
+  -- ── early exit ────────────────────────────────────────────────────
+  (cond (not is-sequence) graph
+  otherwise
+
+    -- ── common parameter extraction ─────────────────────────────────
+    (let anantara-nums = reduce anantara-grade [] (fn acc t ->
+      cond (eq (nth t 1) "asprista-sankhya") (append acc [(to-number (nth t 2))])
+      otherwise acc)
+    let raw-sthana = cond (has-items anantara-nums) (nth anantara-nums 0) otherwise 0
+    let aarambha-nums = cond (exists aarambha-grade)
+      (reduce aarambha-grade [] (fn acc t ->
+        cond (eq (nth t 1) "asprista-sankhya") (append acc [(to-number (nth t 2))])
+        otherwise acc))
+      otherwise []
+    let fallback-init = cond (not (has-items aarambha-nums))
+      (find-map grades (fn g ->
+        cond (has-items (triples-by-edge g "vidhi-kaala")) _none
+        (eq g anantara-grade) _none
+        (and has-additive (eq g additive-grade)) _none
+        otherwise
+          (find-map g (fn t -> cond (and (eq (nth t 1) "asprista-sankhya") (neq (nth t 0) "_")) (to-number (nth t 2)) otherwise _none))))
+      otherwise _none
+    let prathama-pada = cond (has-items aarambha-nums) (nth aarambha-nums 0)
+      (exists fallback-init) fallback-init otherwise 0
+
+    -- ── type-specific parameters via helpers ────────────────────────
+    let rate-val = cond is-arithmetic-rate
+      (find-map rate-grade (fn t -> cond (eq (nth t 1) "asprista-sankhya") (to-number (nth t 2)) otherwise _none))
+      otherwise _none
+    let prathama-pada = cond (exists rate-val) rate-val otherwise prathama-pada
+    let eff-samanantara = anukrama-tulya-extract additive-grade rate-val add-dir
+    let guna-anupata = anukrama-guna-extract grades mul-grade pct-grade is-geometric-direct is-geometric-pct
+    let sthana = cond is-geometric (add raw-sthana 1) otherwise raw-sthana
+
+    -- ── question grade analysis ─────────────────────────────────────
+    let q-grade = find-first grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))
+    let q-words = cond (exists q-grade) (reduce q-grade [] (fn acc t ->
+      cond (eq (nth t 1) "query-word") (append acc [(nth t 2)])
+      (eq (nth t 1) "mithya") (append acc [(nth t 0)])
+      otherwise acc)) otherwise []
+    let is-sum = exists (find-first q-words (fn w ->
+      or (eq w "saved") (or (eq w "total") (eq w "sum"))))
+    let q-target-nums = cond (and is-inverse (exists q-grade))
+      (reduce q-grade [] (fn acc t ->
+        cond (eq (nth t 1) "asprista-sankhya") (append acc [(to-number (nth t 2))])
+        otherwise acc))
+      otherwise []
+    let inv-target = cond (has-items q-target-nums) (nth q-target-nums 0) otherwise 0
+
+    -- ── find-diff: extract (position, value) pairs from pada-word grades ──
+    let diff-pair1 = cond is-find-diff (nth pada-data-grades 0) otherwise []
+    let diff-pair2 = cond is-find-diff (nth pada-data-grades 1) otherwise []
+    let diff-pos1 = find-map diff-pair1 (fn t -> cond (and (eq (nth t 1) "asprista-sankhya") (eq (nth t 0) "_")) (to-number (nth t 2)) otherwise _none)
+    let diff-val1 = find-map diff-pair1 (fn t -> cond (and (eq (nth t 1) "asprista-sankhya") (neq (nth t 0) "_")) (to-number (nth t 2)) otherwise _none)
+    let diff-pos2 = find-map diff-pair2 (fn t -> cond (and (eq (nth t 1) "asprista-sankhya") (eq (nth t 0) "_")) (to-number (nth t 2)) otherwise _none)
+    let diff-val2 = find-map diff-pair2 (fn t -> cond (and (eq (nth t 1) "asprista-sankhya") (neq (nth t 0) "_")) (to-number (nth t 2)) otherwise _none)
+
+    -- ── unified binding emission ────────────────────────────────────
+    -- select janya names + values by sequence type (arith vs geo)
+    let seq-param-name = cond is-arithmetic "samanantara" otherwise "guna-anupata"
+    let seq-param-val = cond is-arithmetic eff-samanantara otherwise guna-anupata
+    let mantra-name = cond (and is-arithmetic is-sum) "tulya-anukrama-yoga"
+      (and is-geometric is-sum) "guna-anukrama-yoga"
+      is-arithmetic "tulya-anukrama-pada"
+      otherwise "guna-anukrama-pada"
+
+    let derive-triples = cond is-find-diff
+      [["pada-prathama", "sankhya", (to-string (cond (exists diff-val1) diff-val1 otherwise 0))],
+       ["pada-dvitiya", "sankhya", (to-string (cond (exists diff-val2) diff-val2 otherwise 0))],
+       ["sthana-prathama", "sankhya", (to-string (cond (exists diff-pos1) diff-pos1 otherwise 0))],
+       ["sthana-dvitiya", "sankhya", (to-string (cond (exists diff-pos2) diff-pos2 otherwise 0))],
+       ["_derive", "mantra", "tulya-anukrama-samanantara"],
+       ["_derive", "mode", "forward"]]
+      is-inverse
+      [["prathama-pada", "sankhya", (to-string prathama-pada)],
+       [seq-param-name, "sankhya", (to-string seq-param-val)],
+       ["pada", "sankhya", (to-string inv-target)],
+       ["_derive", "mantra", mantra-name],
+       ["_derive", "mode", "inverse"],
+       ["_derive", "solve-for", "sthana"]]
+      otherwise
+      [["prathama-pada", "sankhya", (to-string prathama-pada)],
+       [seq-param-name, "sankhya", (to-string seq-param-val)],
+       ["sthana", "sankhya", (to-string sthana)],
+       ["_derive", "mantra", mantra-name],
+       ["_derive", "mode", "forward"]]
+
+    -- ── emit ────────────────────────────────────────────────────────
+    let cleaned = reduce graph [] (fn acc t ->
+      cond (and (eq (nth t 0) "anantara-word") (eq (nth t 1) "satya"))
+        (append acc [["anantara-word", "mithya", "anantara-word"]])
+      (and (eq (nth t 0) "aarambha-word") (eq (nth t 1) "satya"))
+        (append acc [["aarambha-word", "mithya", "aarambha-word"]])
+      otherwise (append acc [t]))
+    (append cleaned derive-triples))))

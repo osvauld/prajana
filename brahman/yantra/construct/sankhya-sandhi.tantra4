@@ -1,0 +1,65 @@
+-- sankhya-sandhi: compose consecutive number triples into single values.
+-- "two hundred" → 200. "two thousand three hundred fifty" → 2350.
+-- "one third" → 0.333... (cardinal / ordinal = fraction).
+-- runs after BQG, before pipeline. Keeps BQG clean.
+--
+-- two-level accumulator (English number algebra):
+--   main: completed group total (e.g. 2000 after "two thousand")
+--   sub: current digit waiting for a scale (e.g. 3 in "three hundred")
+--   when scale (>=100): main += sub × scale, sub = 0
+--   when digit (<100): sub += digit
+--   when kramanka (ordinal): compose fraction: sub / ordinal
+--   when non-number: flush main + sub as single asprista-sankhya
+(tantra sankhya-sandhi (graph)
+  (state (reduce graph [[], 0, 0, false] (fn st triple ->
+    let out    = nth st 0
+    let main   = nth st 1
+    let sub    = nth st 2
+    let active = nth st 3
+    let edge-type = (nth triple 1)
+    let is-num-edge = (eq edge-type "asprista-sankhya")
+    let is-ord-edge = (eq edge-type "kramanka-sankhya")
+    -- candidate edges must not interrupt number accumulation
+    let is-skip-edge = (eq edge-type "candidate")
+    -- only compose number-WORD triples: subject differs from value.
+    let is-word-num = (and is-num-edge (neq (nth triple 0) (nth triple 2)))
+    let is-num = is-word-num
+    let val    = (cond is-num (to-number (nth triple 2)) otherwise 0)
+    let is-scale = (and is-num (ge val 100))
+    let has-sub = (gt sub 0)
+    let flush-val = (to-string (add main sub))
+    let flushed = (append (append out [["_", "asprista-sankhya", flush-val]]) [triple])
+    -- ordinal after number → fraction: sub / ordinal_value
+    let ord-val = (cond is-ord-edge (to-number (nth triple 2)) otherwise 0)
+    let is-frac = (and is-ord-edge active has-sub (gt ord-val 0))
+    let frac-result = (cond is-frac (apply-op "div" [sub, ord-val]) otherwise 0)
+    cond is-frac
+      -- fraction: emit as guna-sankhya (multiplication direction + factor)
+      -- strip accumulated sub, emit direction + fraction value
+      [(append out [[(nth triple 0), "multiplication", "multiplication"], [(nth triple 0), "asprista-sankhya", (to-string frac-result)]]), main, 0, false]
+    (and (and is-scale active) has-sub)
+      [out, (add main (apply-op "mul" [sub, val])), 0, true]
+    (and (and is-scale active) (not has-sub))
+      [out, (apply-op "mul" [(add main sub), val]), 0, true]
+    (and is-scale (not active))
+      [out, 0, val, true]
+    (and (and is-num (not is-scale)) active)
+      [out, main, (add sub val), true]
+    (and is-num (not active))
+      [out, 0, val, true]
+    -- ordinal without preceding number: pass through as-is
+    is-ord-edge
+      [(append out [triple]), 0, 0, false]
+    -- skip candidate edges — don't flush accumulator
+    is-skip-edge
+      [(append out [triple]), main, sub, active]
+    active
+      [flushed, 0, 0, false]
+    otherwise
+      [(append out [triple]), 0, 0, false])))
+  (base (nth state 0))
+  (has-trail (nth state 3))
+  (trail-val (to-string (add (nth state 1) (nth state 2))))
+  (final (cond has-trail (append base [["_", "asprista-sankhya", trail-val]])
+    otherwise base))
+  final)

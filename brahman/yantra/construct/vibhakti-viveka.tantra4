@@ -14,10 +14,7 @@
     let c-word = nth tri 0
     (cond (and (eq c-edge "mithya") (eq last-e "satya")) [c-edge, (append acc [c-word])] otherwise [c-edge, acc]))))
   (rashi-labels (nth rashi-label-words 1))
-  (map graph (fn tri ->
-    let word   = nth tri 0
-    let edge   = nth tri 1
-    let obj    = nth tri 2
+  (map graph (fn [word, edge, obj] ->
     let gnode  = (cond (eq edge "mithya") (shabda-anveshana word) otherwise _none)
     let slokas = (cond (exists gnode) (node-slokas (to-string gnode)) otherwise [])
     let toks   = flat-map slokas (fn s -> split s " ")

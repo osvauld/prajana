@@ -114,7 +114,33 @@
   (swarupa swa)
   (abheda brahma)
   (kriya samsarga)
-  (siddha abheda))
+  (siddha abheda pramana-pratijna pramana-nigamana)
+  (yukta pramana-pratijna pramana-hetu pramana-udaharana pramana-upanaya pramana-nigamana))
+
+; ── panchaavayava: five limbs of proof, declared on nam ──────────
+; the ordering in nam's yukta IS the proof sequence.
+; siddha limbs (pratijna, nigamana) are required — proof fails without them.
+; yukta limbs (hetu, udaharana, upanaya) enrich but are optional.
+
+(sangati pramana-pratijna
+  (swarupa nam)
+  (abheda pratijna thesis given))
+
+(sangati pramana-hetu
+  (swarupa nam)
+  (abheda hetu reason sought))
+
+(sangati pramana-udaharana
+  (swarupa nam)
+  (abheda udaharana example rule))
+
+(sangati pramana-upanaya
+  (swarupa nam)
+  (abheda upanaya application apply))
+
+(sangati pramana-nigamana
+  (swarupa nam)
+  (abheda nigamana conclusion found))
 
 (sangati pratijnaa
   (swarupa naama-mudra)

@@ -1,0 +1,25 @@
+-- anukrama-tulya-extract: extract arithmetic sequence parameters.
+-- given the additive-grade (vriddhi/kshaya + number), extracts samanantara.
+-- handles three patterns:
+--   direction: number AFTER vriddhi/kshaya signal in the additive grade
+--   rate: constant-rate override (parimana + number, no direction signal)
+--   kshaya: negates samanantara when direction is kshaya
+-- returns: effective samanantara (signed step value)
+(tantra anukrama-tulya-extract (additive-grade rate-val add-dir)
+  -- samanantara: number AFTER direction signal in the additive grade.
+  -- when aarambha and direction share a grade, the pre-direction number
+  -- is prathama-pada, not samanantara. track "seen direction" flag.
+  (raw-samanantara (cond (exists rate-val) rate-val
+    (exists additive-grade)
+    (let dir-st = reduce additive-grade ["", ""] (fn st t ->
+      let seen = nth st 0
+      let found = nth st 1
+      cond (has-text found) st
+      (and (has-text seen) (eq (nth t 1) "asprista-sankhya")) ["y", (nth t 2)]
+      (or (eq (nth t 1) "vriddhi") (eq (nth t 1) "kshaya")) ["y", ""]
+      otherwise st)
+    cond (has-text (nth dir-st 1)) (to-number (nth dir-st 1)) otherwise 0)
+    otherwise 0))
+  -- kshaya → negate the step
+  (cond (eq add-dir "kshaya") (apply-op "neg" [raw-samanantara])
+    otherwise raw-samanantara))

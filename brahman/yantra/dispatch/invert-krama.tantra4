@@ -9,25 +9,22 @@
   (ops (krama-path mantra solve-for bindings))
 
   -- phala concept (what the mantra computes)
-  (phala (nth (walk mantra "phala") 0))
-  (swarupa (nth (walk mantra "swarupa") 0))
+  (phala (walk-one mantra "phala"))
+  (swarupa (walk-one mantra "swarupa"))
   (phala-concept (cond (has-text phala) phala otherwise swarupa))
 
   -- phala value from bindings (the known result)
-  (phala-val (find-map bindings (fn kv ->
-    cond (eq (nth kv 0) phala-concept) (nth kv 1) otherwise _none)))
+  (phala-val (find-map bindings (fn [k, v] ->
+    cond (eq k phala-concept) v otherwise _none)))
 
   -- commutative ops from graph
   (comm-ops (walk "commutativity" "drishthanta"))
 
   -- reduce root-to-leaf: undo outermost op first, work inward
-  (reduce ops phala-val (fn acc step ->
-    let op-name  = nth step 0
-    let arg-idx  = nth step 1
-    let sib-val  = nth step 2
-    let inv-name = nth (walk op-name "pratipaksha") 0
-    let inv-eval = nth (walk inv-name "ganana") 0
-    let op-eval  = nth (walk op-name "ganana") 0
+  (reduce ops phala-val (fn acc [op-name, arg-idx, sib-val] ->
+    let inv-name = walk-one op-name "pratipaksha"
+    let inv-eval = walk-one inv-name "ganana"
+    let op-eval  = walk-one op-name "ganana"
     -- unary (no sibling): apply inverse
     cond (not (has-text sib-val))
       (apply-op inv-eval [acc])

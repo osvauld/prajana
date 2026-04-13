@@ -1,0 +1,157 @@
+-- avrti-bandha: bind cyclic/repeating pattern results from graph signals.
+-- detects three cyclic domains and computes mod arithmetic:
+--   vaara-krama  → day-of-week (mod 7, label lookup)
+--   avrti-krama  → repeating pattern (mod label_count, label lookup)
+--   ghati-krama  → clock arithmetic (mod 24, AM/PM display)
+--
+-- activation: vaara-krama edge, avrti-krama edge, or hour+time context.
+-- emits count-total with result + derived-by=avrti-bandha marker.
+(tantra avrti-bandha (graph)
+  (grades (split-grades graph))
+
+  -- ── signal detection ──────────────────────────────────────────────
+
+  -- vaara-krama: day-of-week
+  (vaara-tri (find-map graph (fn t ->
+    cond (eq (nth t 1) "vaara-krama") t otherwise _none)))
+  (has-vaara (exists vaara-tri))
+
+  -- avrti-krama: repeating pattern
+  (avrti-tri (find-map graph (fn t ->
+    cond (eq (nth t 1) "avrti-krama") t otherwise _none)))
+  (has-avrti (exists avrti-tri))
+
+  -- ghati: clock — "hour" satya + "time" satya
+  (has-hour (exists (find-map graph (fn t ->
+    cond (and (eq (nth t 0) "hour") (eq (nth t 1) "satya")) t otherwise _none))))
+  (has-time (exists (find-map graph (fn t ->
+    cond (and (eq (nth t 0) "time") (eq (nth t 1) "satya")) t otherwise _none))))
+  (has-ghati (and has-hour has-time))
+
+  (is-cyclic (or has-vaara has-avrti has-ghati))
+
+  -- early exit
+  (cond (not is-cyclic) graph
+  otherwise
+    -- ── common: question grade + direction ──────────────────────────
+    (let q-grade = find-first grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))
+    let q-nums = cond (exists q-grade) (reduce q-grade [] (fn acc t ->
+      cond (eq (nth t 1) "asprista-sankhya") (append acc [(to-number (nth t 2))])
+      otherwise acc)) otherwise []
+
+    -- direction: bhavishya-kaala → add, "ago" → subtract
+    let has-future = exists (find-map graph (fn t ->
+      cond (and (eq (nth t 0) "bhavishya-kaala") (eq (nth t 1) "satya")) t otherwise _none))
+    let has-ago = exists (find-map graph (fn t ->
+      cond (and (eq (nth t 0) "ago") (eq (nth t 1) "mithya")) t otherwise _none))
+    let direction = cond has-ago "subtract" otherwise "add"
+
+    -- ── vaara-krama: day-of-week ────────────────────────────────────
+    let result = cond has-vaara
+      (let day-word = nth vaara-tri 0
+       let day-nd = word-node day-word
+       let base-raw = cond (exists day-nd) (walk (to-string day-nd) "siddha") otherwise []
+       let base = cond (has-items base-raw) (to-number (to-string (nth base-raw 0))) otherwise 0
+       let offset = cond (has-items q-nums) (nth q-nums 0) otherwise 0
+       let raw-idx = cond (eq direction "subtract") (sub base offset) otherwise (add base offset)
+       -- ensure positive for mod: add multiple of 7
+       let safe = add raw-idx 700
+       let idx = mod safe 7
+       -- graph-driven: find day bhasha node whose siddha index matches
+       let vaara-nodes = walk-in "vaara-krama" "swarupa"
+       let match-day = find-map vaara-nodes (fn n ->
+         let ns = to-string n
+         let sid-raw = walk ns "siddha"
+         let sid-val = cond (has-items sid-raw) (to-number (to-string (nth sid-raw 0))) otherwise -1
+         let nm-raw = walk ns "naama"
+         let nm-val = cond (has-items nm-raw) (to-string (nth nm-raw 0)) otherwise ""
+         cond (and (neq sid-val -1) (has-text nm-val) (eq sid-val idx)) nm-val
+         otherwise _none)
+       cond (exists match-day) (to-string match-day) otherwise "no match")
+
+    -- ── avrti-krama: repeating pattern ──────────────────────────────
+    has-avrti
+      -- find the avrti-krama grade (store 1-based index to avoid exists-0 bug)
+      (let avrti-grade-pair = reduce grades [0, 0] (fn st g ->
+         let found = nth st 0
+         let i = nth st 1
+         cond (gt found 0) st
+         (has-items (filter g (fn t -> eq (nth t 1) "avrti-krama"))) [(add i 1), (add i 1)]
+         otherwise [0, (add i 1)])
+       let avrti-idx = cond (gt (nth avrti-grade-pair 0) 0) (sub (nth avrti-grade-pair 0) 1) otherwise 0
+       let avrti-g = nth grades avrti-idx
+
+       -- first label: last mithya word or asprista-sankhya in avrti grade
+       let first-label = reduce avrti-g "" (fn acc t ->
+         cond (eq (nth t 1) "mithya") (nth t 0)
+         (eq (nth t 1) "asprista-sankhya") (nth t 2)
+         otherwise acc)
+
+       -- remaining labels: from subsequent non-question grades
+       -- track [labels, grade-index] to correctly compare against avrti-idx
+       let rest-pair = reduce grades [[], 0] (fn st g ->
+         let acc = nth st 0
+         let i = nth st 1
+         -- skip grades up to and including avrti grade, skip question grade
+         cond (le i avrti-idx) [acc, (add i 1)]
+         (has-items (triples-by-edge g "vidhi-kaala")) [acc, (add i 1)]
+         otherwise
+           -- single-item grade: has exactly one mithya or asprista-sankhya
+           (let vals = reduce g [] (fn a t ->
+              cond (eq (nth t 1) "mithya") (append a [(nth t 0)])
+              (eq (nth t 1) "asprista-sankhya") (append a [(nth t 2)])
+              otherwise a)
+            cond (eq (length vals) 1) [(append acc vals), (add i 1)]
+            otherwise [acc, (add i 1)]))
+       let rest-labels = nth rest-pair 0
+
+       let labels = cond (has-text first-label) (append [first-label] rest-labels) otherwise rest-labels
+       let period = length labels
+       let position = cond (has-items q-nums) (nth q-nums 0) otherwise 1
+       -- (position - 1) mod period → 0-indexed lookup
+       let idx = cond (gt period 0) (mod (sub position 1) period) otherwise 0
+       cond (gt period 0) (nth labels idx) otherwise "no match")
+
+    -- ── ghati: clock arithmetic ─────────────────────────────────────
+    has-ghati
+      -- base: number from non-question grade
+      (let base-grade = find-first grades (fn g ->
+         and (not (has-items (triples-by-edge g "vidhi-kaala")))
+             (has-items (filter g (fn t -> eq (nth t 1) "asprista-sankhya"))))
+       let base-num = cond (exists base-grade)
+         (to-number (nth (find-first base-grade (fn t -> eq (nth t 1) "asprista-sankhya")) 2))
+         otherwise 0
+       -- AM/PM detection: PM is satya (unresolved), AM is copula (resolves to copula-am).
+       -- in clock context (has-ghati), copula-am is reinterpreted as AM time marker.
+       let has-pm = exists (find-map graph (fn t ->
+         cond (and (eq (nth t 0) "PM") (eq (nth t 1) "satya")) t otherwise _none))
+       let has-am = exists (find-map graph (fn t ->
+         cond (and (eq (nth t 0) "AM") (eq (nth t 1) "copula")) t otherwise _none))
+       -- proper 12h → 24h: 12AM=0, 1-11AM=1-11, 12PM=12, 1-11PM=13-23
+       let base24 = cond (and has-pm (eq base-num 12)) 12
+         has-pm (add base-num 12)
+         (and has-am (eq base-num 12)) 0
+         otherwise base-num
+       -- offset: number from question grade
+       let offset = cond (has-items q-nums) (nth q-nums 0) otherwise 0
+       let raw = cond (eq direction "subtract") (sub base24 offset) otherwise (add base24 offset)
+       let hour24 = mod (add raw 24) 24
+       -- convert to 12h + AM/PM
+       let is-pm = ge hour24 12
+       let hour12 = cond (eq hour24 0) 12 (gt hour24 12) (sub hour24 12) otherwise hour24
+       let ampm = cond is-pm "PM" otherwise "AM"
+       let hour-str = to-string hour12
+       concat hour-str (concat " " ampm))
+
+    otherwise "no match"
+
+    -- ── emit result ─────────────────────────────────────────────────
+    let result-str = to-string result
+    -- demote signal edges to mithya (consumed by bandha)
+    let cleaned = reduce graph [] (fn acc t ->
+      cond (eq (nth t 1) "avrti-krama") (append acc [[(nth t 0), "mithya", (nth t 2)]])
+      (eq (nth t 1) "vaara-krama") (append acc [[(nth t 0), "mithya", (nth t 2)]])
+      otherwise (append acc [t]))
+    (append cleaned [["count-total", "sankhya", result-str],
+                     ["count-total", "satya", "count-total"],
+                     ["count-total", "derived-by", "avrti-bandha"]]))))

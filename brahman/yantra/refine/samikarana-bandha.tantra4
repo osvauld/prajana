@@ -1,0 +1,135 @@
+-- samikarana-bandha: pure binder for polynomial equations.
+-- activates when samikarana signal (=) present in graph.
+-- detects variable structurally: single unresolved letter (not hardcoded).
+-- extracts coefficients, determines degree, emits _derive triples:
+--   degree 1 (linear):    intercept + slope → _derive linear-root
+--   degree 2 (quadratic): a + b + c → _derive vivechaka + quadratic-roots
+--
+-- term parsing: state-machine reduce over equation-grade triples.
+-- at each +/-/= boundary, finalizes current term as [coefficient, power].
+-- side-sign (-1 for RHS) moves everything to standard form: sum = 0.
+-- computation is deferred to mantra-derive (chained evaluation).
+--
+-- example: "solve 3x + 7 = 22"
+--   BQG:  [3,asprista,3] [x,satya,x] [+,mithya,+] [7,asprista,7] [=,samikarana,=] [22,asprista,22]
+--   terms: [[3,1], [7,0], [-22,0]]
+--   degree 1 → emits slope=3, intercept=-15, _derive linear-root
+(tantra samikarana-bandha (graph)
+  (grades (split-grades graph))
+  -- find grade containing samikarana (=) signal
+  (eq-grade (find-first grades (fn g ->
+    has-items (filter g (fn t -> eq (nth t 1) "samikarana")))))
+  (has-samikarana (exists eq-grade))
+
+  (cond (not has-samikarana) graph
+  otherwise
+
+  -- ── variable detection ──────────────────────────────────────────────
+  -- first single-letter word that is not a number, operator, or signal.
+  -- structural: any letter can be a variable (x, t, n, a, ...).
+  (let var-name = reduce eq-grade "" (fn found t ->
+    let word = nth t 0
+    let edge = nth t 1
+    cond (has-text found) found
+    (eq edge "asprista-sankhya") found
+    (eq edge "samikarana") found
+    (eq edge "vidhi-kaala") found
+    (eq edge "viraam") found
+    (member word ["+" "-" "^" "=" "*" "/"]) found
+    (and (eq (string-length word) 1) (not (member word ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9"]))) word
+    otherwise found)
+
+  -- ── term parsing ────────────────────────────────────────────────────
+  -- state: [terms, cur-num, has-num, var-in, power-val, after-caret, sign, side-sign]
+  -- string flags ("y" / "") avoid the exists-0 gotcha.
+  -- finalization values are pre-computed before the cond to avoid let-in-cond.
+  let parsed = reduce eq-grade [[], 0, "", "", 1, "", 1, 1] (fn st t ->
+    let terms   = nth st 0
+    let cur-num = nth st 1
+    let has-num = nth st 2
+    let var-in  = nth st 3
+    let pwr     = nth st 4
+    let aft-c   = nth st 5
+    let sgn     = nth st 6
+    let side    = nth st 7
+    let word = nth t 0
+    let edge = nth t 1
+    let val  = nth t 2
+    -- pre-compute finalization (used when + - = finalize current term)
+    let eff-coeff = cond (has-text has-num) cur-num otherwise 1
+    let eff-power = cond (not (has-text var-in)) 0 (gt pwr 1) pwr otherwise 1
+    let fc = apply-op "mul" [sgn, (apply-op "mul" [side, eff-coeff])]
+    let has-term = or (has-text has-num) (has-text var-in)
+    let fin-terms = cond has-term (append terms [[fc, eff-power]]) otherwise terms
+    -- dispatch by triple type
+    cond (eq edge "vidhi-kaala") st
+    (eq edge "viraam") st
+    -- number after ^: exponent
+    (and (eq edge "asprista-sankhya") (has-text aft-c))
+      [terms, cur-num, has-num, var-in, (to-number val), "", sgn, side]
+    -- number: coefficient
+    (eq edge "asprista-sankhya")
+      [terms, (to-number val), "y", var-in, pwr, "", sgn, side]
+    -- variable
+    (eq word var-name)
+      [terms, cur-num, has-num, "y", pwr, "", sgn, side]
+    -- caret: next number is exponent
+    (eq word "^")
+      [terms, cur-num, has-num, var-in, pwr, "y", sgn, side]
+    -- plus: finalize term, sign = +1
+    (eq word "+") [fin-terms, 0, "", "", 1, "", 1, side]
+    -- minus: finalize term, sign = -1
+    (eq word "-") [fin-terms, 0, "", "", 1, "", -1, side]
+    -- equals: finalize term, switch to RHS (side = -1)
+    (eq edge "samikarana") [fin-terms, 0, "", "", 1, "", 1, -1]
+    otherwise st)
+
+  -- finalize last term (after last token, no + - = to trigger)
+  let raw-terms = nth parsed 0
+  let ln  = nth parsed 1
+  let lhn = nth parsed 2
+  let lv  = nth parsed 3
+  let lp  = nth parsed 4
+  let ls  = nth parsed 6
+  let lsd = nth parsed 7
+  let le-coeff = cond (has-text lhn) ln otherwise 1
+  let le-power = cond (not (has-text lv)) 0 (gt lp 1) lp otherwise 1
+  let le-fc = apply-op "mul" [ls, (apply-op "mul" [lsd, le-coeff])]
+  let all-terms = cond (or (has-text lhn) (has-text lv))
+    (append raw-terms [[le-fc, le-power]]) otherwise raw-terms
+
+  -- ── degree & coefficients ───────────────────────────────────────────
+  let degree = reduce all-terms 0 (fn mx term ->
+    cond (gt (nth term 1) mx) (nth term 1) otherwise mx)
+  -- sum coefficients by power level
+  let c0 = reduce all-terms 0 (fn s term ->
+    cond (eq (nth term 1) 0) (add s (nth term 0)) otherwise s)
+  let c1 = reduce all-terms 0 (fn s term ->
+    cond (eq (nth term 1) 1) (add s (nth term 0)) otherwise s)
+  let c2 = reduce all-terms 0 (fn s term ->
+    cond (eq (nth term 1) 2) (add s (nth term 0)) otherwise s)
+
+  -- ── pure binder: emit coefficient bindings + _derive triples ─────────
+  -- linear: intercept + slope → single mantra
+  -- quadratic: a + b + c → chained mantras (vivechaka → roots)
+  let derive-triples = cond (eq degree 1)
+    [["intercept", "sankhya", (to-string c0)],
+     ["slope", "sankhya", (to-string c1)],
+     ["_derive", "mantra", "linear-root"],
+     ["_derive", "mode", "forward"]]
+    (eq degree 2)
+    [["coefficient-a", "sankhya", (to-string c2)],
+     ["coefficient-b", "sankhya", (to-string c1)],
+     ["coefficient-c", "sankhya", (to-string c0)],
+     ["_derive", "mantra", "vivechaka-mantra"],
+     ["_derive", "mantra", "quadratic-root-positive"],
+     ["_derive", "mantra", "quadratic-root-negative"],
+     ["_derive", "mode", "forward"]]
+    otherwise []
+
+  -- demote samikarana signal to mithya (consumed by bandha)
+  let cleaned = reduce graph [] (fn acc t ->
+    cond (eq (nth t 1) "samikarana")
+      (append acc [[(nth t 0), "mithya", (nth t 2)]])
+    otherwise (append acc [t]))
+  (append cleaned derive-triples))))

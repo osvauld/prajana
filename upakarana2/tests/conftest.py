@@ -196,10 +196,30 @@ _raw_client: Client | None = None
 _recorder: RecordingClient | None = None
 
 
+def pytest_configure_node(node):
+    """xdist controller hook: assign a dedicated vyakarana socket to each worker.
+
+    Called once per worker before it starts. Worker index is extracted from
+    the worker id (e.g. "gw0" → 0), matching the socket spawned by run.py's
+    _parallel_servers context manager (/tmp/vy-{i}.sock).
+    """
+    worker_id = node.workerinput.get("workerid", "gw0")
+    try:
+        idx = int(worker_id.replace("gw", ""))
+    except ValueError:
+        idx = 0
+    node.workerinput["vy_socket"] = f"/tmp/vy-{idx}.sock"
+
+
 @pytest.fixture(scope="session")
 def _vy_session(request) -> Generator[Client, None, None]:
     global _raw_client, _recorder
-    socket_path = request.config.getoption("--socket") or DEFAULT_SOCKET
+    # xdist workers get their socket assigned via workerinput by pytest_configure_node
+    worker_input = getattr(request.config, "workerinput", None)
+    if worker_input and "vy_socket" in worker_input:
+        socket_path = worker_input["vy_socket"]
+    else:
+        socket_path = request.config.getoption("--socket") or DEFAULT_SOCKET
     _raw_client = Client(socket_path)
     _recorder = RecordingClient(_raw_client)
     yield _raw_client

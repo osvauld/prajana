@@ -13,7 +13,7 @@ xfail = pytest.mark.xfail
 def test_from_rest_force(vy):
     """'accelerates from rest' → u=0, then find force"""
     r = vy.answer("a car of mass 1200 accelerates from rest at 3 m/s2. find force")
-    assert "3600" in r or "force" in r.lower()
+    assert "3600" in r, f"expected F=ma=3600, got: {r}"
 
 
 def test_at_rest_momentum(vy):
@@ -122,7 +122,7 @@ def test_session_three_turns(vy):
     vy.ask("mass is 5", session_id=sid)
     vy.ask("velocity is 10", session_id=sid)
     r = vy.ask("find kinetic energy", session_id=sid)
-    assert "250" in r or "kinetic-energy" in r
+    assert "250" in r, f"expected KE=250 from three-turn session, got: {r}"
 
 
 def test_session_entity_then_property(vy):

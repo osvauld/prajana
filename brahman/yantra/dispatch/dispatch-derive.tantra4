@@ -14,12 +14,12 @@
   (compound-sf (cond (starts-with sf-raw "total-") (substr sf-raw 6 (sub (string-length sf-raw) 6)) otherwise ""))
   (q-grades (split-grades expanded))
   (q-grade (find-first q-grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))))
-  (grade-sf (find-map q-grade (fn tri ->
-    cond (and (eq (nth tri 1) "satya")
-              (neq (nth tri 0) "total")
-              (not (starts-with (nth tri 0) "total-"))
-              (not (member (nth tri 0) entities)))
-      (str tri 0)
+  (grade-sf (find-map q-grade (fn [s, e, o] ->
+    cond (and (eq e "satya")
+              (neq s "total")
+              (not (starts-with s "total-"))
+              (not (member s entities)))
+      s
     otherwise _none)))
   (sf (cond (not has-total) sf-raw
     (has-text compound-sf) compound-sf

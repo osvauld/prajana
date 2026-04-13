@@ -183,7 +183,10 @@ def test_two_entity_same_mass_momentum(vy):
     assert "object-B" in r
 
 
+@xfail(strict=True, reason="entity-name: conclusion says 'jar is more' — entity suffix stripped, should say 'jar-A is more'")
 def test_count_compare_simple(vy):
     """Direct numeric comparison with entities"""
     r = vy.answer("jar-A has 15 marbles. jar-B has 9 marbles. which jar has more marbles")
-    assert "jar-A" in r
+    # jar-A must appear in the conclusion, not just the "we have" echo
+    we_find = r.lower().split("we find")[-1] if "we find" in r.lower() else r.lower()
+    assert "jar-a" in we_find, f"jar-A must be the winner in conclusion, got: {r}"

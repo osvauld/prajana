@@ -3,7 +3,17 @@
 -- activates when numbers exist in non-question grades AND question concept has no formula.
 (tantra count-chain (graph grades)
   (q-concept (question-concept grades))
-  (q-direction (detect-direction (question-words grades)))
+  (q-words (question-words grades))
+  (q-direction (detect-direction q-words))
+  -- shesha detection: meaning emerges from combination.
+  -- "remainder"/"leftover" carry sthita→shesha directly.
+  -- "left" alone = direction/kshaya, but "left" + division context = remainder.
+  -- tantras walk the graph, not hardcode logic.
+  (q-has-shesha-word (exists (find-first q-words (fn w ->
+    let wn = word-node w
+    cond (exists wn) (member "shesha" (map (walk (to-string wn) "sthita") (fn s -> to-string s)))
+    otherwise false))))
+  (q-has-left (member "left" q-words))
   -- concept-filter: when multiple distinct countable concepts exist (e.g. "apples"
   -- and "oranges" each with their own numbers), filter grades to only the query concept.
   -- skip filtering when: no q-concept, multiplication present (cross-concept),
@@ -20,7 +30,8 @@
   (has-matching-nums (exists (find-first concept-filtered (fn grade ->
     has-items (grade-numbers grade)))))
   (eff-grades (cond has-matching-nums concept-filtered otherwise grades))
-  (fold-seed (to-number (shabda "graded-ring" "fold-identity")))
+  (fold-seed-raw (walk "graded-ring" "sankhya"))
+  (fold-seed (cond (has-items fold-seed-raw) (to-number (to-string (nth fold-seed-raw 0))) otherwise 0))
   (arith-state (reduce eff-grades [fold-seed, [], false, ""] (fn state grade ->
     let acc   = fold-field state "value"
     let steps = fold-field state "steps"
@@ -38,11 +49,14 @@
     let n1-raw = cond (gt (length nums) 1) (nth nums 1) otherwise "1"
     let is-mul-grade = (and (eq eff-dir "multiplication") (gt (length nums) 1))
     let is-div-grade = (and (eq eff-dir "division") (gt (length nums) 1))
-    let nv = cond is-mul-grade (apply-op "mul" [n0, (to-number n1-raw)]) is-div-grade (apply-op "div" [n0, (to-number n1-raw)]) otherwise n0
+    let is-shesha-grade = (and is-div-grade (or q-has-shesha-word q-has-left))
+    let nv = cond is-mul-grade (apply-op "mul" [n0, (to-number n1-raw)]) is-shesha-grade (apply-op "mod" [n0, (to-number n1-raw)]) is-div-grade (apply-op "div" [n0, (to-number n1-raw)]) otherwise n0
     -- shatamana: "percent" scales the number as a fraction of the accumulator
     let has-shatamana = has-items (triples-by-edge grade "shatamana")
     let eff-nv = cond (and has-shatamana init) (apply-op "div" [(apply-op "mul" [acc, nv]), 100]) otherwise nv
-    let op-eval = cond (eq eff-dir "kshaya") (nth (walk "subtraction" "ganana") 0) (eq eff-dir "multiplication") (nth (walk "multiplication" "ganana") 0) (eq eff-dir "division") (nth (walk "division" "ganana") 0) otherwise (nth (walk "addition" "ganana") 0)
+    -- shesha: division + ("left" or shesha word) → mod instead of div
+    let is-shesha = and (eq eff-dir "division") (or q-has-shesha-word q-has-left)
+    let op-eval = cond (eq eff-dir "kshaya") (walk-one "subtraction" "ganana") (eq eff-dir "multiplication") (walk-one "multiplication" "ganana") is-shesha (walk-one "mod" "ganana") (eq eff-dir "division") (walk-one "division" "ganana") otherwise (walk-one "addition" "ganana")
     let new-acc = apply-op (to-string op-eval) [acc, eff-nv]
     let step = (concat eff-dir " " eff-nv ": " (to-string acc) " -> " (to-string new-acc))
     -- carry: when seeding, pass direction forward for the next grade
@@ -50,13 +64,25 @@
     cond (or is-q (not has-num)) state
     (not init) [nv, steps, true, next-carry]
     otherwise [new-acc, (append steps [step]), true, ""])))
-  (count-result (fold-field arith-state "value"))
+  (count-raw (fold-field arith-state "value"))
   (count-steps (fold-field arith-state "steps"))
   (found-any (fold-field arith-state "started"))
+  -- purna detection: "whole" in question grade → floor the result.
+  -- walks swarupa of satya concepts in question grade for "purna".
+  (q-grade (find-first grades (fn g -> is-question-grade g)))
+  (q-has-purna (cond (exists q-grade)
+    (exists (find-first q-grade (fn t ->
+      and (eq (nth t 1) "satya")
+        (member "purna" (map (walk (nth t 0) "swarupa") (fn s -> to-string s))))))
+    otherwise false))
+  (count-result (cond (and q-has-purna found-any)
+    (apply-op "floor" [count-raw])
+    otherwise count-raw))
   (all-satya (user-concepts graph))
   (count-entity (cond (has-text q-concept) q-concept otherwise (nth all-satya 0)))
   (count-container (nth all-satya 1))
-  (resolved-count (cond (eq q-direction "kshaya") "count-remaining" (eq q-direction "division") "count-per" otherwise "count-total"))
+  (q-shesha (or q-has-shesha-word q-has-left))
+  (resolved-count (cond (and (eq q-direction "division") q-shesha) "count-shesha" (eq q-direction "kshaya") "count-remaining" (eq q-direction "division") "count-per" otherwise "count-total"))
   (base-graph (cond found-any
     (reduce graph [] (fn acc triple ->
       cond (and (eq (triple-subj triple) "count") (eq (triple-edge triple) "satya"))
@@ -80,6 +106,12 @@
   -- exception: multiplication via "each" is always a count problem, even with physics concepts
   (any-satya-formula (exists (find-first all-satya (fn c -> has-items (mantra-select c)))))
   (has-mul-or-div any-mul-or-div)
-  (should-count (and found-any (not has-viveka)
-    (or has-mul-or-div (not any-satya-formula))))
+  -- guard: skip if anukrama-bandha, avrti-bandha, or samikarana-bandha already computed a result
+  (has-anukrama (has-items (filter graph (fn t -> and (eq (nth t 1) "derived-by") (eq (nth t 2) "anukrama-bandha")))))
+  (has-avrti (has-items (filter graph (fn t -> and (eq (nth t 1) "derived-by") (eq (nth t 2) "avrti-bandha")))))
+  (has-samikarana (has-items (filter graph (fn t -> and (eq (nth t 1) "derived-by") (eq (nth t 2) "samikarana-bandha")))))
+  (has-avrti-ganana (has-items (filter graph (fn t -> and (eq (nth t 1) "derived-by") (eq (nth t 2) "avrti-ganana")))))
+  (has-mantra-derive (has-items (filter graph (fn t -> and (eq (nth t 1) "derived-by") (eq (nth t 2) "mantra-derive")))))
+  (should-count (and found-any (not has-viveka) (not has-anukrama) (not has-avrti) (not has-samikarana) (not has-avrti-ganana) (not has-mantra-derive)
+    (or has-mul-or-div q-has-purna (not any-satya-formula))))
   (cond (not should-count) graph otherwise (append base-graph proof)))

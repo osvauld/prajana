@@ -256,7 +256,6 @@ def test_viveka_after_count(vy):
     assert "box-A" in r or "box-a" in r.lower()
 
 
-@xfail(strict=True, reason="distance = speed * time not in pipeline")
 def test_distance_speed_time(vy):
     r = vy.answer("a train travels at 60 km per hour for 2 hours. how far does it go")
     assert "120" in r

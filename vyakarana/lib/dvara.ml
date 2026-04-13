@@ -354,6 +354,7 @@ let attach_file (k : proof_graph) (_yantra_idx : tantra_index) (path : string) :
 
 let reload_tantras (k : proof_graph) (yantra_idx : tantra_index) (dirs : string list) : string =
   Prakriti.invalidate_viveka_cache ();
+  Vidya.invalidate_shabda_cache ();
   Hashtbl.clear yantra_idx.by_name;
   Hashtbl.clear yantra_idx.by_output;
   Hashtbl.clear yantra_idx.by_input;

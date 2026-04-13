@@ -5,9 +5,11 @@
 -- case 3: "was 80, increased to 100, what percent" → initial=80, final=100, percent-change-mantra.
 -- only the unknown concept gets satya (so extract-solve-for picks it).
 -- runs in phase 1 (sequential), before sankhya-bandha fixpoint.
+-- activation: siddha shatamana (walk-refine-chain skips when no shatamana edges).
 (tantra shatamana-bandha (graph)
-  (has-shatamana (has-items (triples-by-edge graph "shatamana")))
-  (cond (not has-shatamana) graph
+  -- guard: skip if anukrama-bandha already handled this graph
+  (has-anukrama (has-items (filter graph (fn t -> and (eq (nth t 1) "derived-by") (eq (nth t 2) "anukrama-bandha")))))
+  (cond has-anukrama graph
   otherwise
   (let grades = split-grades graph
    -- find the grade containing shatamana

@@ -3,8 +3,8 @@
 -- "does sparrow have wings" + no  → "no, sparrow does not have wings"
 (tantra nam-nigamana-bool (grade answer cop)
   -- build query-word lookup: concept → original word
-  (qw-map (map (filter grade (fn tri -> eq (str tri 1) "query-word"))
-    (fn tri -> [(str tri 0), (str tri 2)])))
+  (qw-map (map (filter grade (fn [s, e, o] -> eq e "query-word"))
+    (fn [s, e, o] -> [s, o])))
   -- collect word-bearing triples, skipping structural ones + dedup satya
   (wt-state (reduce grade [[], []] (fn st tri ->
     let acc = nth st 0
@@ -32,11 +32,9 @@
   (skip-first (or is-interrogative is-copula-q))
 
   -- expand content words (skip the leading interrogative)
-  (content-st (reduce word-triples [[], false] (fn st tri ->
+  (content-st (reduce word-triples [[], false] (fn st [subj, edge, o] ->
     let acc = nth st 0
     let past-first = nth st 1
-    let subj = str tri 0
-    let edge = str tri 1
     -- skip leading interrogative
     cond (and (not past-first) skip-first) [acc, true]
     otherwise

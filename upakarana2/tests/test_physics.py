@@ -247,7 +247,7 @@ def test_zero_initial_velocity_suvat(vy):
 def test_missing_data_no_match(vy):
     """Only mass given, no velocity → can't compute KE"""
     r = vy.answer("mass is 5. find kinetic energy")
-    assert "no match" in r.lower() or "we seek" in r.lower()
+    assert "no match" in r.lower(), f"expected 'no match' for missing velocity, got: {r}"
 
 
 # ── reasoning strands ────────────────────────────────────────────────────────

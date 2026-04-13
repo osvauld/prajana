@@ -1,0 +1,33 @@
+-- anukrama-guna-extract: extract geometric sequence parameters.
+-- handles two sources of ratio:
+--   direct: guna-sankhya value from multiplication grade (subject "_")
+--   percentage: shatamana + kshaya/vriddhi → 1 ± pct/100
+-- returns: guna-anupata (ratio value)
+(tantra anukrama-guna-extract (grades mul-grade pct-grade is-geometric-direct is-geometric-pct)
+  -- direct ratio from guna-sankhya (subject "_" marks the guna-sankhya value)
+  (direct-ratio (cond is-geometric-direct
+    (let guna-num = find-map mul-grade (fn t ->
+      cond (and (eq (nth t 1) "asprista-sankhya") (eq (nth t 0) "_")) (to-number (nth t 2)) otherwise _none)
+    cond (exists guna-num) guna-num otherwise 2)
+    otherwise 0))
+  -- percentage ratio: 1 + pct/100 (vriddhi) or 1 - pct/100 (kshaya)
+  -- extract the number immediately before the shatamana edge (not any number)
+  (pct-val (cond is-geometric-pct
+    (let pct-pair = reduce pct-grade [0, 0] (fn st t ->
+      let last-num = nth st 0
+      let found = nth st 1
+      cond (gt found 0) st
+      (eq (nth t 1) "shatamana") [last-num, 1]
+      (eq (nth t 1) "asprista-sankhya") [(to-number (nth t 2)), 0]
+      otherwise st)
+    nth pct-pair 0)
+    otherwise 0))
+  -- direction for percentage: kshaya in any grade → decay
+  (has-kshaya (exists (find-first grades (fn g ->
+    has-items (filter g (fn t -> eq (nth t 1) "kshaya"))))))
+  (pct-ratio (cond (and is-geometric-pct (gt pct-val 0) has-kshaya)
+    (apply-op "sub" [1, (apply-op "div" [pct-val, 100])])
+    (and is-geometric-pct (gt pct-val 0))
+    (apply-op "add" [1, (apply-op "div" [pct-val, 100])])
+    otherwise 1))
+  (cond is-geometric-direct direct-ratio otherwise pct-ratio))

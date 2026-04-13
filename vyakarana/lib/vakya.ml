@@ -152,6 +152,14 @@ let rec parse_expr (tokens : string list) : expr * string list =
   let (e, rest) = parse_expr_primary tokens in
   parse_pipe_or_infix e rest
 
+(* parse_expr without pipe chaining — for use in arg collection.
+   pipes bind at the call level, not inside individual arguments. *)
+and parse_expr_no_pipe (tokens : string list) : expr * string list =
+  let (e, rest) = parse_expr_primary tokens in
+  match try_parse_infix e rest with
+  | Some (e', rest') -> (e', rest')
+  | None -> (e, rest)
+
 and parse_pipe_or_infix (lhs : expr) (tokens : string list) : expr * string list =
   match tokens with
   | "|" :: "where" :: rest ->
@@ -212,6 +220,28 @@ and parse_pipe_or_infix (lhs : expr) (tokens : string list) : expr * string list
     let (fn_e, rest) = parse_expr_primary rest in
     let e = Call ("reduce", [lhs; init_e; fn_e]) in
     parse_pipe_or_infix e rest
+  (* generalized pipe: | op [args] → Call(op, lhs :: args) *)
+  | "|" :: op :: rest when op <> "where" && op <> "collect"
+      && op <> "and" && not (is_boundary op) ->
+    let arity = op_arity op in
+    let (extra_args, rest') =
+      if arity > 1 then begin
+        (* op expects N args; lhs fills slot 0, parse N-1 more *)
+        let rec collect_args n acc toks =
+          if n = 0 then (List.rev acc, toks)
+          else match toks with
+            | [] | ")" :: _ | "|" :: _ -> (List.rev acc, toks)
+            | t :: _ when is_boundary t -> (List.rev acc, toks)
+            | _ ->
+              let (arg, toks') = parse_expr_primary toks in
+              collect_args (n - 1) (arg :: acc) toks'
+        in
+        collect_args (arity - 1) [] rest
+      end else
+        ([], rest)
+    in
+    let e = Call (op, lhs :: extra_args) in
+    parse_pipe_or_infix e rest'
   | _ ->
     match try_parse_infix lhs tokens with
     | Some (e', rest') -> (e', rest')
@@ -269,8 +299,42 @@ and parse_expr_primary (tokens : string list) : expr * string list =
      | _ -> ());
     (Lambda (params, body'), rest'')
 
+  (* let [a, b, c] = expr — destructuring bind *)
+  | "let" :: "[" :: rest ->
+    let rec collect_names acc = function
+      | "]" :: r -> (List.rev acc, r)
+      | "," :: r -> collect_names acc r
+      | name :: r -> collect_names (name :: acc) r
+      | [] -> (List.rev acc, [])
+    in
+    let (names, rest') = collect_names [] rest in
+    let rest' = match rest' with "=" :: r -> r | r -> r in
+    let (rhs, rest') = parse_expr rest' in
+    let tmp = "_destruct" in
+    let inner_lets body =
+      List.fold_right (fun (i, name) inner ->
+        LetIn (name, Call ("nth", [Var tmp; Lit (float_of_int i)]), inner)
+      ) (List.mapi (fun i n -> (i, n)) names) body
+    in
+    let (body, rest'') = match rest' with
+      | "let" :: _ | "cond" :: _ ->
+        let (b, r) = parse_expr rest' in (b, r)
+      | [] | ")" :: _ | "]" :: _ | "|" :: _ ->
+        let last_name = List.nth names (List.length names - 1) in
+        (Var last_name, rest')
+      | _ -> parse_expr rest'
+    in
+    (LetIn (tmp, rhs, inner_lets body), rest'')
+
   | "let" :: name :: "=" :: rest ->
     let (rhs, rest') = parse_expr rest in
+    (* let x = expr else default — optional binding with fallback *)
+    let (rhs, rest') = match rest' with
+      | "else" :: rest'' ->
+        let (default, rest''') = parse_expr_primary rest'' in
+        (Cond ([(Call ("exists", [rhs]), rhs)], default), rest''')
+      | _ -> (rhs, rest')
+    in
     (match rest' with
      | "in" :: rest'' ->
        let (body, rest''') = parse_expr rest'' in
@@ -310,7 +374,7 @@ and parse_expr_primary (tokens : string list) : expr * string list =
                 collect_args (n - 1) (Var t0 :: acc) rest0
               else
                 (try
-                   let (arg, toks') = parse_expr toks in
+                   let (arg, toks') = parse_expr_no_pipe toks in
                    collect_args (n - 1) (arg :: acc) toks'
                  with Failure _ ->
                    if t0 = "(" || t0 = ")" || is_boundary t0 then

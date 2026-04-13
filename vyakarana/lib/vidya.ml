@@ -199,7 +199,10 @@ let inheritable_keys = [
   "matra"
 ]
 
-let read_shabda (k : proof_graph) (node_name : string) : (string * string) list =
+(* cache for read_shabda: avoids repeated walk_inheritance BFS per node *)
+let _read_shabda_cache : (string, (string * string) list) Hashtbl.t = Hashtbl.create 128
+
+let read_shabda_uncached (k : proof_graph) (node_name : string) : (string * string) list =
   let own = raw_shabda_for_node k node_name in
   let ancestors = walk_inheritance k node_name in
   let ancestor_shabda = List.map (fun a ->
@@ -207,6 +210,17 @@ let read_shabda (k : proof_graph) (node_name : string) : (string * string) list 
       (raw_shabda_for_node k a)
   ) ancestors in
   merge_shabda_priority (own :: ancestor_shabda)
+
+let read_shabda (k : proof_graph) (node_name : string) : (string * string) list =
+  match Hashtbl.find_opt _read_shabda_cache node_name with
+  | Some pairs -> pairs
+  | None ->
+    let pairs = read_shabda_uncached k node_name in
+    Hashtbl.replace _read_shabda_cache node_name pairs;
+    pairs
+
+let invalidate_shabda_cache () : unit =
+  Hashtbl.clear _read_shabda_cache
 
 let shabda_get (pairs : (string * string) list) (key : string) : string option =
   List.assoc_opt key pairs

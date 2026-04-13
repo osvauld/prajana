@@ -8,11 +8,9 @@
     -- derive: show janya concept values → "velocity is 3, mass is 5"
     (eq mode "derive")
     (let derived-concepts = proof | where [s, e, o] | and (eq e "derived-by") | collect (to-string s)
-     let bindings = flat-map proof (fn tri ->
-       let c = str tri 0
-       let e = str tri 1
+     let bindings = flat-map proof (fn [c, e, v] ->
        cond (and (eq e "sankhya") (not (member c derived-concepts)))
-         [(concat (concept-display c) " is " (str tri 2))]
+         [(concat (concept-display c) " is " v)]
        otherwise [])
      cond (has-items bindings)
        [(concat say-seen " that " (join-with bindings ", "))]
@@ -24,8 +22,8 @@
      let say-lt = shabda "anuvada-setu" "speech-less-than"
      let cmp = viveka-comparison proof
      let vk-dir = query-edge proof "viveka-direction"
-     let vk-winner = cond (has-items cmp) (nth cmp 0) otherwise ""
-     let vk-loser = cond (has-items cmp) (nth cmp 1) otherwise ""
+     let vk-winner = first-of cmp else ""
+     let vk-loser = (nth cmp 1) else ""
      let vk-wval = query-edge-of proof vk-winner "viveka-sankhya"
      let vk-lval = query-edge-of proof vk-loser "viveka-sankhya"
      let is-equal = cond (and (exists vk-wval) (exists vk-lval)) (eq vk-wval (to-string vk-lval)) otherwise false

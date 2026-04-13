@@ -8,9 +8,7 @@
       | collect (triple-subj _it))))
   (q-grade (find-first grades (fn g -> is-question-grade g)))
   (cond (not (exists q-grade)) ""
-  otherwise (find-map q-grade (fn t ->
-    let e = triple-edge t
-    let s = triple-subj t
+  otherwise (find-map q-grade (fn [s, e, o] ->
     cond (and (eq e "satya") (not (is-system-concept s))) s
     (and (eq e "mithya") (member s known-satya)) s
     otherwise _none))))

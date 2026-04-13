@@ -1,0 +1,23 @@
+; ═══════════════════════════════════════════════════════════════════
+; math notation — universal symbolic language
+; ═══════════════════════════════════════════════════════════════════
+;
+; Math notation is language-independent: + - * ^ = are the same
+; in every human language. These are NOT English bhasha nodes.
+;
+; Only `=` needs a bhasha node (samikarana signal — equation marker).
+; The other operators (+, -, *, ^) are detected structurally by
+; the samikarana-bandha tantra after BQG tokenization.
+;
+; Variables (x, t, etc.) are NOT declared — they are detected as
+; any unresolved letter in an equation context (has `=`).
+; This keeps the system general: any letter can be a variable.
+
+; ── equation marker ──────────────────────────────────────────────
+; `=` signals samikarana (equation). BQG emits [=, samikarana, =].
+; This is the ONLY math symbol that needs a bhasha node — it tells
+; the pipeline "this is an equation, activate samikarana-bandha."
+
+(bhasha samikarana-chihnah
+  (swarupa samikarana)
+  (naama =))

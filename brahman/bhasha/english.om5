@@ -40,6 +40,416 @@
 (bhasha distinction
   (sthita english viveka))
 
+; ── shesha: remainder after division ─────────────────────────────────
+; "remainder", "leftover" → shesha signal for count-chain mod routing
+
+(bhasha remainder
+  (sthita english shesha)
+  (naama remainder))
+
+(bhasha leftover
+  (sthita english shesha)
+  (naama leftover))
+
+; ── sequence/series structure signals ──────────────────────────────
+; "repeating"/"cycle" → avrti-krama signal (cyclic domain)
+; "pattern" → avrti-krama (often co-occurs with repeating)
+; "sequence"/"series" → anukrama signal (ordered rule-based)
+; "arithmetic" → tulya-anukrama qualifier (constant difference)
+; "geometric" → guna-anukrama qualifier (constant ratio)
+; math notation: see bhasha/math.om5
+
+(bhasha avrti-word
+  (swarupa avrti-krama)
+  (sthita english avrti-krama)
+  (naama repeating repeats cycle cycles cyclic))
+
+(bhasha niyama-word
+  (swarupa avrti-krama)
+  (sthita english avrti-krama)
+  (naama pattern))
+
+; day-of-week: each day name emits vaara-krama signal.
+; siddha = ordinal position in the week (Sunday=0 .. Saturday=6).
+; avrti-bandha reads siddha to get base position for mod 7 arithmetic.
+(bhasha day-sunday    (swarupa vaara-krama) (siddha 0) (naama Sunday))
+(bhasha day-monday    (swarupa vaara-krama) (siddha 1) (naama Monday))
+(bhasha day-tuesday   (swarupa vaara-krama) (siddha 2) (naama Tuesday))
+(bhasha day-wednesday (swarupa vaara-krama) (siddha 3) (naama Wednesday))
+(bhasha day-thursday  (swarupa vaara-krama) (siddha 4) (naama Thursday))
+(bhasha day-friday    (swarupa vaara-krama) (siddha 5) (naama Friday))
+(bhasha day-saturday  (swarupa vaara-krama) (siddha 6) (naama Saturday))
+
+(bhasha anukrama-word
+  (swarupa anukrama)
+  (sthita english anukrama)
+  (naama sequence series))
+
+(bhasha tulya-visheshana
+  (swarupa visheshana)
+  (sthita english tulya-anukrama)
+  (naama arithmetic))
+
+(bhasha guna-visheshana
+  (swarupa visheshana)
+  (sthita english guna-anukrama)
+  (naama geometric))
+
+; ── sequence relationship signals ──────────────────────────────────
+; "starts"/"begins" → prathama-pada signal (marks first term / initial value)
+; "after" → sthana signal (marks position / elapsed count)
+; "term" → pada signal (refers to a sequence element)
+; "common" → samanantara qualifier (e.g. "common difference")
+; NOTE: ordinals (first/1st, second/2nd) deferred — too general-purpose,
+;   would fire in non-sequence contexts ("the first car").
+
+(bhasha aarambha-word
+  (sthita english prathama-pada)
+  (naama starts starting begins beginning))
+
+(bhasha anantara-word
+  (sthita english sthana)
+  (naama after))
+
+(bhasha pada-word
+  (sthita english pada anukrama)
+  (naama term))
+
+(bhasha samanya-word
+  (swarupa visheshana)
+  (sthita english samanantara)
+  (naama common))
+
+; ── result signals: what to compute ────────────────────────────────
+; "maximum" → viveka-max (optimization / vertex of parabola)
+; "minimum"/"fewest" → viveka-min
+; "solution" → root (polynomial root / equation solution)
+; NOTE: "greatest"/"most" already → viveka-max, "root" already → root,
+;   "solve" already → vidhi-kaala. Only unmapped words get bhasha nodes.
+
+(bhasha uchcha-word
+  (sthita english viveka-max)
+  (naama maximum))
+
+(bhasha nichcha-word
+  (sthita english viveka-min)
+  (naama minimum fewest))
+
+(bhasha mula-word
+  (sthita english root)
+  (naama solution))
+
+; ═══════════════════════════════════════════════════════════════════
+; NUMBER WORDS — sankhya-pada
+; ═══════════════════════════════════════════════════════════════════
+; Words that ARE numbers. BQG detects swarupa=sankhya-pada, reads
+; siddha for the value, emits as asprista-sankhya. "twenty" → 20.
+; Kosha atoms live in math-sankhya.om5 (anka-eka, anka-dvi, etc.)
+; These bhasha nodes bridge English words to those universal atoms.
+
+; ── digits: 0-9 ──────────────────────────────────────────────────
+
+(bhasha sankhya-shunya
+  (swarupa sankhya-pada)
+  (sthita english anka-shunya)
+  (siddha 0)
+  (naama zero))
+
+(bhasha sankhya-eka
+  (swarupa sankhya-pada)
+  (sthita english anka-eka)
+  (siddha 1)
+  (naama one))
+
+(bhasha sankhya-dvi
+  (swarupa sankhya-pada)
+  (sthita english anka-dvi)
+  (siddha 2)
+  (naama two))
+
+(bhasha sankhya-tri
+  (swarupa sankhya-pada)
+  (sthita english anka-tri)
+  (siddha 3)
+  (naama three))
+
+(bhasha sankhya-chatur
+  (swarupa sankhya-pada)
+  (sthita english anka-chatur)
+  (siddha 4)
+  (naama four))
+
+(bhasha sankhya-pancha
+  (swarupa sankhya-pada)
+  (sthita english anka-pancha)
+  (siddha 5)
+  (naama five))
+
+(bhasha sankhya-shat
+  (swarupa sankhya-pada)
+  (sthita english anka-shat)
+  (siddha 6)
+  (naama six))
+
+(bhasha sankhya-sapta
+  (swarupa sankhya-pada)
+  (sthita english anka-sapta)
+  (siddha 7)
+  (naama seven))
+
+(bhasha sankhya-ashta
+  (swarupa sankhya-pada)
+  (sthita english anka-ashta)
+  (siddha 8)
+  (naama eight))
+
+(bhasha sankhya-nava
+  (swarupa sankhya-pada)
+  (sthita english anka-nava)
+  (siddha 9)
+  (naama nine))
+
+; ── ten + irregulars ─────────────────────────────────────────────
+
+(bhasha sankhya-dasha
+  (swarupa sankhya-pada)
+  (sthita english dasha)
+  (siddha 10)
+  (naama ten))
+
+(bhasha sankhya-ekadasha
+  (swarupa sankhya-pada)
+  (sthita english ekadasha)
+  (siddha 11)
+  (naama eleven))
+
+(bhasha sankhya-dvadasha
+  (swarupa sankhya-pada)
+  (sthita english dvadasha)
+  (siddha 12)
+  (naama twelve))
+
+; ── teens: compositional (digit + 10) ────────────────────────────
+
+(bhasha sankhya-trayodasha
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 13)
+  (naama thirteen))
+
+(bhasha sankhya-chaturdasha
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 14)
+  (naama fourteen))
+
+(bhasha sankhya-panchadasha
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 15)
+  (naama fifteen))
+
+(bhasha sankhya-shoddasha
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 16)
+  (naama sixteen))
+
+(bhasha sankhya-saptadasha
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 17)
+  (naama seventeen))
+
+(bhasha sankhya-ashtadasha
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 18)
+  (naama eighteen))
+
+(bhasha sankhya-navadasha
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 19)
+  (naama nineteen))
+
+; ── decades: digit × 10 ─────────────────────────────────────────
+
+(bhasha sankhya-vimshati
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 20)
+  (naama twenty))
+
+(bhasha sankhya-trimshati
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 30)
+  (naama thirty))
+
+(bhasha sankhya-chatvarimshat
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 40)
+  (naama forty))
+
+(bhasha sankhya-panchashat
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 50)
+  (naama fifty))
+
+(bhasha sankhya-shashti
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 60)
+  (naama sixty))
+
+(bhasha sankhya-saptati
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 70)
+  (naama seventy))
+
+(bhasha sankhya-ashiti
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 80)
+  (naama eighty))
+
+(bhasha sankhya-navati
+  (swarupa sankhya-pada)
+  (sthita english)
+  (siddha 90)
+  (naama ninety))
+
+; ── place multipliers ────────────────────────────────────────────
+
+; scale words: multiply preceding number. "two hundred" = 2×100.
+; swarupa = sankhya-mana (not sankhya-pada) — BQG composes with prev number.
+
+(bhasha sankhya-shata
+  (swarupa sankhya-mana)
+  (sthita english shata)
+  (siddha 100)
+  (naama hundred hundreds))
+
+(bhasha sankhya-sahasra
+  (swarupa sankhya-mana)
+  (sthita english sahasra)
+  (siddha 1000)
+  (naama thousand thousands))
+
+(bhasha sankhya-niyuta
+  (swarupa sankhya-mana)
+  (sthita english niyuta)
+  (siddha 1000000)
+  (naama million millions))
+
+(bhasha sankhya-arbuda
+  (swarupa sankhya-mana)
+  (sthita english)
+  (siddha 1000000000)
+  (naama billion billions))
+
+; ── multipliers: double, triple, half ────────────────────────────
+; These carry direction (vriddhi/kshaya) + factor value.
+; "doubles" → guna-anupata = 2, direction = multiplication.
+
+(bhasha dviguna-word
+  (swarupa guna-sankhya)
+  (sthita english dviguna vriddhi multiplication)
+  (siddha 2)
+  (naama double doubles doubled doubling twice))
+
+(bhasha triguna-word
+  (swarupa guna-sankhya)
+  (sthita english triguna vriddhi multiplication)
+  (siddha 3)
+  (naama triple triples tripled tripling thrice))
+
+(bhasha chaturguna-word
+  (swarupa guna-sankhya)
+  (sthita english chaturguna vriddhi multiplication)
+  (siddha 4)
+  (naama quadruple quadruples quadrupled))
+
+(bhasha ardha-word
+  (swarupa guna-sankhya)
+  (sthita english ardha kshaya division)
+  (siddha 0.5)
+  (naama half halves halved halving))
+
+(bhasha chaturthaamsha-word
+  (swarupa guna-sankhya)
+  (sthita english chaturthaamsha kshaya division)
+  (siddha 0.25)
+  (naama quarter quarters quartered))
+
+; ── ordinals ─────────────────────────────────────────────────────
+; Dual use: position ("third term" → 3) and fraction denominator
+; ("one third" → 1/3). Context resolves which.
+
+(bhasha kramanka-prathama-word
+  (swarupa kramanka)
+  (sthita english kramanka-prathama)
+  (siddha 1)
+  (naama first 1st))
+
+(bhasha kramanka-dvitiya-word
+  (swarupa kramanka)
+  (sthita english kramanka-dvitiya)
+  (siddha 2)
+  (naama second 2nd))
+
+(bhasha kramanka-tritiya-word
+  (swarupa kramanka)
+  (sthita english kramanka-tritiya)
+  (siddha 3)
+  (naama third thirds 3rd))
+
+(bhasha kramanka-chaturtha-word
+  (swarupa kramanka)
+  (sthita english kramanka-chaturtha)
+  (siddha 4)
+  (naama fourth fourths 4th))
+
+(bhasha kramanka-panchama-word
+  (swarupa kramanka)
+  (sthita english kramanka-panchama)
+  (siddha 5)
+  (naama fifth fifths 5th))
+
+(bhasha kramanka-shashtha-word
+  (swarupa kramanka)
+  (sthita english kramanka-shashtha)
+  (siddha 6)
+  (naama sixth sixths 6th))
+
+(bhasha kramanka-saptama-word
+  (swarupa kramanka)
+  (sthita english kramanka-saptama)
+  (siddha 7)
+  (naama seventh sevenths 7th))
+
+(bhasha kramanka-ashtama-word
+  (swarupa kramanka)
+  (sthita english kramanka-ashtama)
+  (siddha 8)
+  (naama eighth eighths 8th))
+
+(bhasha kramanka-navama-word
+  (swarupa kramanka)
+  (sthita english kramanka-navama)
+  (siddha 9)
+  (naama ninth ninths 9th))
+
+(bhasha kramanka-dashama-word
+  (swarupa kramanka)
+  (sthita english kramanka-dashama)
+  (siddha 10)
+  (naama tenth tenths 10th))
+
 ; ── sign modifier: "negative 7" → apply neg → -7 ──────────────────
 ; tantra walks: negative-sign.kriya → neg → neg.ganana → "neg" op
 (bhasha negative-sign
@@ -263,8 +673,8 @@
   (sthita division))
 
 (bhasha prep-per
-  (swarupa preposition)
-  (sthita matra))
+  (swarupa preposition parimana)
+  (sthita multiplication))
 
 (bhasha prep-to
   (swarupa preposition)
@@ -950,6 +1360,26 @@
   (swarupa pratyaya)
   (sthita english tinanta-viveka vartamana-kaala shatr-pratyaya)
   (kriya shatr-pratyaya))
+
+; ── panchaavayava speech phrases ─────────────────────────────────────
+; bhasha nodes bridge pramana limbs → English speech prefixes.
+; nam-anuvada walks: limb → walk-in swarupa → naama → phrase.
+; to add Hindi: create vachana-pratijna-hi with naama "हमारे पास है".
+
+(bhasha vachana-pratijna
+  (swarupa pramana-pratijna)
+  (sthita english)
+  (naama "we have"))
+
+(bhasha vachana-hetu
+  (swarupa pramana-hetu)
+  (sthita english)
+  (naama "we seek"))
+
+(bhasha vachana-nigamana
+  (swarupa pramana-nigamana)
+  (sthita english)
+  (naama "we find"))
 
 ; back-formation: -ation noun → -ate verb
 (bhasha english-noun-ation

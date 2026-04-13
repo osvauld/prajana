@@ -402,7 +402,6 @@ done
 shabda graded-ring
   (grade-boundary viraam)
   (intra-grade-boundary dvandva)
-  (fold-identity 0)
   (alias graded-ring, grading)
 done
 

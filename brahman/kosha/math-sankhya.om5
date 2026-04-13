@@ -1,0 +1,460 @@
+; ═══════════════════════════════════════════════════════════════════
+; math-sankhya — what IS a number: types, atoms, composition, notation
+; ═══════════════════════════════════════════════════════════════════
+;
+; Sanskrit number names ARE compositional arithmetic:
+;   ekadasha = eka + dasha = 1 + 10 = 11 (the name says the math)
+;   trimshati = tri × dasha = 3 × 10 = 30
+;   dvi-shata = dvi × shata = 2 × 100 = 200
+;
+; The graph encodes numbers in Sanskrit structure. English words
+; are bhasha bridges to these universal concepts. The krama on
+; each composed number IS the arithmetic — derivable, not flat.
+;
+; Layers:
+;   1. TYPE: natural ⊂ whole ⊂ integer ⊂ rational ⊂ real
+;   2. ATOMS: anka (digits 0-9), dasha (10), shata (100), sahasra (1000)
+;   3. COMPOSITION: digit + dasha = teen, digit × dasha = decade
+;   4. NOTATION: decimal, binary, hexadecimal
+;   5. MODULAR: avrti-krama (defined in math-sequence.om5)
+
+; ── varga ─────────────────────────────────────────────────────────
+
+(kosha sankhya-varga
+  (vishesa number-varga)
+  (yukta sankhya-prakar sthana-mana anka sankhya-pada))
+
+; ═══════════════════════════════════════════════════════════════════
+; NUMBER TYPE HIERARCHY
+; ═══════════════════════════════════════════════════════════════════
+; natural ⊂ whole ⊂ integer ⊂ rational ⊂ real ⊂ complex
+; Madhava: irrational = limit of rational series.
+; π = 4(1 − 1/3 + 1/5 − 1/7 + ...) — Madhava-Leibniz.
+
+(kosha prakrti-sankhya
+  (vishesa sankhya-varga)
+  (swarupa sankhya ganana)
+  (yukta eka ananta)
+  (siddha positive dhana)
+  (sthita purna-sankhya)
+  (abheda natural counting-number))
+
+(kosha purna-sankhya
+  (vishesa sankhya-varga)
+  (swarupa sankhya)
+  (yukta prakrti-sankhya shunya)
+  (sthita purnanka)
+  (abheda whole whole-number))
+
+(kosha purnanka
+  (vishesa sankhya-varga)
+  (swarupa sankhya)
+  (yukta purna-sankhya sign positive negative)
+  (sthita parimita)
+  (abheda integer))
+
+; ── bhinna: fraction as structure ─────────────────────────────────
+
+(kosha bhinna
+  (vishesa sankhya-varga)
+  (swarupa parimita rational)
+  (yukta amsha hara)
+  (janya amsha hara)
+  (kriya division)
+  (abheda fraction))
+
+(kosha amsha
+  (vishesa sankhya-varga)
+  (swarupa purnanka)
+  (yukta bhinna)
+  (abheda numerator))
+
+(kosha hara
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (yukta bhinna)
+  (siddha neq-shunya)
+  (abheda denominator))
+
+; ═══════════════════════════════════════════════════════════════════
+; DIGIT ATOMS — anka (irreducible)
+; ═══════════════════════════════════════════════════════════════════
+; These are the axioms — siddha values, no krama needed.
+; Universal: same in every language and every base.
+
+(kosha anka
+  (vishesa sankhya-varga)
+  (swarupa sankhya dashaka)
+  (yukta sthana-mana)
+  (abheda digit))
+
+(kosha anka-shunya  (vishesa sankhya-varga) (swarupa anka) (siddha 0) (abheda zero digit-0))
+(kosha anka-eka     (vishesa sankhya-varga) (swarupa anka) (siddha 1) (abheda one digit-1))
+(kosha anka-dvi     (vishesa sankhya-varga) (swarupa anka) (siddha 2) (abheda two digit-2))
+(kosha anka-tri     (vishesa sankhya-varga) (swarupa anka) (siddha 3) (abheda three digit-3))
+(kosha anka-chatur  (vishesa sankhya-varga) (swarupa anka) (siddha 4) (abheda four digit-4))
+(kosha anka-pancha  (vishesa sankhya-varga) (swarupa anka) (siddha 5) (abheda five digit-5))
+(kosha anka-shat    (vishesa sankhya-varga) (swarupa anka) (siddha 6) (abheda six digit-6))
+(kosha anka-sapta   (vishesa sankhya-varga) (swarupa anka) (siddha 7) (abheda seven digit-7))
+(kosha anka-ashta   (vishesa sankhya-varga) (swarupa anka) (siddha 8) (abheda eight digit-8))
+(kosha anka-nava    (vishesa sankhya-varga) (swarupa anka) (siddha 9) (abheda nine digit-9))
+
+; ═══════════════════════════════════════════════════════════════════
+; PLACE VALUES — sthana-mulya (scale atoms)
+; ═══════════════════════════════════════════════════════════════════
+; Also axioms. Each adds zeros: dasha=10¹, shata=10², sahasra=10³.
+
+(kosha dasha
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana dashaka prakrti-sankhya)
+  (siddha 10)
+  (abheda ten))
+
+(kosha shata
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana dashaka prakrti-sankhya)
+  (siddha 100)
+  (janya dasha)
+  (krama multiplication dasha dasha)
+  (abheda hundred))
+
+(kosha sahasra
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana dashaka prakrti-sankhya)
+  (siddha 1000)
+  (janya dasha shata)
+  (krama multiplication dasha shata)
+  (abheda thousand))
+
+(kosha laksha
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana dashaka prakrti-sankhya)
+  (siddha 100000)
+  (janya shata sahasra)
+  (krama multiplication shata sahasra)
+  (abheda lakh))
+
+(kosha niyuta
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana dashaka prakrti-sankhya)
+  (siddha 1000000)
+  (janya dasha laksha)
+  (krama multiplication dasha laksha)
+  (abheda million))
+
+(kosha koti
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana dashaka prakrti-sankhya)
+  (siddha 10000000)
+  (janya dasha niyuta)
+  (krama multiplication dasha niyuta)
+  (abheda crore))
+
+; ═══════════════════════════════════════════════════════════════════
+; COMPOSED NUMBERS — teens (anka + dasha)
+; ═══════════════════════════════════════════════════════════════════
+; Sanskrit: X-dasha = X + 10. The krama IS the arithmetic.
+; siddha is derivable from krama but cached for efficiency.
+
+(kosha ekadasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-eka dasha)
+  (krama addition anka-eka dasha)
+  (siddha 11)
+  (abheda eleven))
+
+(kosha dvadasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-dvi dasha)
+  (krama addition anka-dvi dasha)
+  (siddha 12)
+  (abheda twelve))
+
+(kosha trayodasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-tri dasha)
+  (krama addition anka-tri dasha)
+  (siddha 13)
+  (abheda thirteen))
+
+(kosha chaturdasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-chatur dasha)
+  (krama addition anka-chatur dasha)
+  (siddha 14)
+  (abheda fourteen))
+
+(kosha panchadasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-pancha dasha)
+  (krama addition anka-pancha dasha)
+  (siddha 15)
+  (abheda fifteen))
+
+(kosha shodasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-shat dasha)
+  (krama addition anka-shat dasha)
+  (siddha 16)
+  (abheda sixteen))
+
+(kosha saptadasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-sapta dasha)
+  (krama addition anka-sapta dasha)
+  (siddha 17)
+  (abheda seventeen))
+
+(kosha ashtadasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-ashta dasha)
+  (krama addition anka-ashta dasha)
+  (siddha 18)
+  (abheda eighteen))
+
+(kosha navadasha
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-nava dasha)
+  (krama addition anka-nava dasha)
+  (siddha 19)
+  (abheda nineteen))
+
+; ═══════════════════════════════════════════════════════════════════
+; COMPOSED NUMBERS — decades (anka × dasha)
+; ═══════════════════════════════════════════════════════════════════
+; Sanskrit: X-ti/X-shat = X × 10. Multiplication, not addition.
+
+(kosha vimshati
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-dvi dasha)
+  (krama multiplication anka-dvi dasha)
+  (siddha 20)
+  (abheda twenty))
+
+(kosha trimshati
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-tri dasha)
+  (krama multiplication anka-tri dasha)
+  (siddha 30)
+  (abheda thirty))
+
+(kosha chatvarimshat
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-chatur dasha)
+  (krama multiplication anka-chatur dasha)
+  (siddha 40)
+  (abheda forty))
+
+(kosha panchashat
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-pancha dasha)
+  (krama multiplication anka-pancha dasha)
+  (siddha 50)
+  (abheda fifty))
+
+(kosha shashti
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-shat dasha)
+  (krama multiplication anka-shat dasha)
+  (siddha 60)
+  (abheda sixty))
+
+(kosha saptati
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-sapta dasha)
+  (krama multiplication anka-sapta dasha)
+  (siddha 70)
+  (abheda seventy))
+
+(kosha ashiti
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-ashta dasha)
+  (krama multiplication anka-ashta dasha)
+  (siddha 80)
+  (abheda eighty))
+
+(kosha navati
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (janya anka-nava dasha)
+  (krama multiplication anka-nava dasha)
+  (siddha 90)
+  (abheda ninety))
+
+; ═══════════════════════════════════════════════════════════════════
+; COMPOSITION MANTRAS — the rules themselves
+; ═══════════════════════════════════════════════════════════════════
+; These declare HOW numbers compose. sankhya-sandhi tantra
+; could evaluate these instead of hardcoding add/mul.
+;
+; sankhya-yoga: small + large → additive (twenty + two = 22)
+; sankhya-guna: digit × scale → multiplicative (two × hundred = 200)
+
+(mantra sankhya-yoga-mantra
+  (varga math-mantra)
+  (swarupa sankhya-yoga)
+  (phala sankhya)
+  (janya uttara apara)
+  (krama addition uttara apara)
+  (abheda number-addition))
+
+(mantra sankhya-guna-mantra
+  (varga math-mantra)
+  (swarupa sankhya-guna)
+  (phala sankhya)
+  (janya anka sthana-mulya)
+  (krama multiplication anka sthana-mulya)
+  (abheda number-scale))
+
+; ═══════════════════════════════════════════════════════════════════
+; MULTIPLICATIVE FACTORS — guna-sankhya
+; ═══════════════════════════════════════════════════════════════════
+; "double" IS multiplication by 2. The krama makes it a real mantra:
+; graph can evaluate AND invert (if result=10, value=5).
+
+(kosha guna-sankhya
+  (vishesa sankhya-varga)
+  (swarupa sankhya)
+  (yukta vriddhi kshaya multiplication division)
+  (abheda multiplier factor))
+
+(mantra dviguna
+  (varga math-mantra)
+  (vishesa sankhya-varga)
+  (swarupa guna-sankhya)
+  (janya value)
+  (krama multiplication value 2)
+  (siddha 2)
+  (yukta vriddhi multiplication)
+  (pratipaksha ardha)
+  (ganana double)
+  (abheda double twice))
+
+(mantra triguna
+  (varga math-mantra)
+  (vishesa sankhya-varga)
+  (swarupa guna-sankhya)
+  (janya value)
+  (krama multiplication value 3)
+  (siddha 3)
+  (yukta vriddhi multiplication)
+  (abheda triple thrice))
+
+(mantra chaturguna
+  (varga math-mantra)
+  (vishesa sankhya-varga)
+  (swarupa guna-sankhya)
+  (janya value)
+  (krama multiplication value 4)
+  (siddha 4)
+  (yukta vriddhi multiplication)
+  (abheda quadruple))
+
+(mantra ardha
+  (varga math-mantra)
+  (vishesa sankhya-varga)
+  (swarupa guna-sankhya bhinna)
+  (janya value)
+  (krama division value 2)
+  (siddha 0.5)
+  (yukta kshaya division)
+  (pratipaksha dviguna)
+  (ganana half)
+  (abheda half))
+
+(mantra chaturthaamsha
+  (varga math-mantra)
+  (vishesa sankhya-varga)
+  (swarupa guna-sankhya bhinna)
+  (janya value)
+  (krama division value 4)
+  (siddha 0.25)
+  (yukta kshaya division)
+  (abheda quarter))
+
+; ═══════════════════════════════════════════════════════════════════
+; ORDINAL POSITIONS — kramanka
+; ═══════════════════════════════════════════════════════════════════
+; Dual: position ("third term" → 3) and fraction denominator
+; ("one third" → bhinna amsha=1 hara=3).
+
+(kosha kramanka
+  (vishesa sankhya-varga)
+  (swarupa sthana prakrti-sankhya)
+  (yukta anukrama bhinna)
+  (abheda ordinal position))
+
+(kosha kramanka-prathama  (vishesa sankhya-varga) (swarupa kramanka) (siddha 1) (abheda first 1st))
+(kosha kramanka-dvitiya   (vishesa sankhya-varga) (swarupa kramanka) (siddha 2) (abheda second 2nd))
+(kosha kramanka-tritiya   (vishesa sankhya-varga) (swarupa kramanka) (siddha 3) (abheda third 3rd))
+(kosha kramanka-chaturtha (vishesa sankhya-varga) (swarupa kramanka) (siddha 4) (abheda fourth 4th))
+(kosha kramanka-panchama  (vishesa sankhya-varga) (swarupa kramanka) (siddha 5) (abheda fifth 5th))
+(kosha kramanka-shashtha  (vishesa sankhya-varga) (swarupa kramanka) (siddha 6) (abheda sixth 6th))
+(kosha kramanka-saptama   (vishesa sankhya-varga) (swarupa kramanka) (siddha 7) (abheda seventh 7th))
+(kosha kramanka-ashtama   (vishesa sankhya-varga) (swarupa kramanka) (siddha 8) (abheda eighth 8th))
+(kosha kramanka-navama    (vishesa sankhya-varga) (swarupa kramanka) (siddha 9) (abheda ninth 9th))
+(kosha kramanka-dashama   (vishesa sankhya-varga) (swarupa kramanka) (siddha 10) (abheda tenth 10th))
+
+; ═══════════════════════════════════════════════════════════════════
+; POSITIONAL NOTATION — sthana-mana
+; ═══════════════════════════════════════════════════════════════════
+; Every positional system: value = Σ digit_i × base^i
+; 255 decimal = 2×10² + 5×10¹ + 5×10⁰
+; FF hex = 15×16¹ + 15×16⁰ = 255
+
+(kosha sthana-mana
+  (vishesa sankhya-varga)
+  (swarupa krama)
+  (yukta aadhaara anka sthana)
+  (janya anka aadhaara sthana)
+  (kriya yoga)
+  (abheda positional-notation place-value))
+
+(kosha aadhaara
+  (vishesa sankhya-varga)
+  (swarupa prakrti-sankhya)
+  (yukta sthana-mana)
+  (abheda base radix))
+
+(kosha dashaka
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana)
+  (siddha 10)
+  (yukta anka-shunya anka-eka anka-dvi anka-tri anka-chatur
+         anka-pancha anka-shat anka-sapta anka-ashta anka-nava)
+  (abheda decimal base-10))
+
+(kosha dvyanka
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana)
+  (siddha 2)
+  (yukta anka-shunya anka-eka)
+  (abheda binary base-2))
+
+(kosha ashtaka
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana)
+  (siddha 8)
+  (abheda octal base-8))
+
+(kosha shodashaka
+  (vishesa sankhya-varga)
+  (swarupa sthana-mana)
+  (siddha 16)
+  (abheda hexadecimal hex base-16))

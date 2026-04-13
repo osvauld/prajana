@@ -7,8 +7,7 @@
   -- build a minimal graph: scoped sankhya + intent edges only
   (scoped-sankhya (map eff-vps (fn kv ->
     [(str kv 0), "sankhya", (str kv 1)])))
-  (intent-triples (filter graph (fn tri ->
-    let e = str tri 1
+  (intent-triples (filter graph (fn [s, e, o] ->
     or (eq e "vidhi-kaala") (eq e "satya"))))
   (scoped-graph (append intent-triples scoped-sankhya))
   -- propagate on scoped graph

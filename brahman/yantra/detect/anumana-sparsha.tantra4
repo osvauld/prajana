@@ -69,12 +69,12 @@
   (assert-mithya (reduce (range n-grades) [] (fn acc i ->
     let g = nth q-grades i
     cond (has-items (triples-by-edge g "niyama")) acc
-    otherwise (append acc (map (triples-by-edge g "mithya") (fn t -> str t 0))))))
+    otherwise (append acc (map (triples-by-edge g "mithya") (fn [s, e, o] -> s))))))
   -- assertion pratishedha: negated words in non-question, non-niyama grades
   (assert-prati (reduce (range n-grades) [] (fn acc i ->
     let g = nth q-grades i
     cond (has-items (triples-by-edge g "niyama")) acc
-    otherwise (append acc (map (triples-by-edge g "pratishedha") (fn t -> str t 0))))))
+    otherwise (append acc (map (triples-by-edge g "pratishedha") (fn [s, e, o] -> s))))))
   -- ponens check: antecedent stem-matches assertion mithya → consequent holds
   (niy-ponens-cons (reduce niyama-imply "" (fn found nt ->
     cond (has-text found) found

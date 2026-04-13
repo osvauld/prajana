@@ -108,6 +108,13 @@ def cmd_cache(args, store):
         for gate, es in sorted(gates.items()):
             print(f"  {gate}: {len(es)}")
 
+    elif args.action == "compact":
+        from upakarana2.store import prune_and_compact
+        stats = prune_and_compact()
+        print(f"Pruned {stats['pruned_runs']} old runs ({stats['pruned_results']} results, {stats['pruned_idx']} index entries)")
+        print(f"Kept {stats['kept_runs']} recent runs")
+        print(f"LMDB: {stats['before_mb']} MB -> {stats['after_mb']} MB (saved {stats['saved_mb']} MB)")
+
     elif args.action == "slow":
         def fmt_time(us):
             if us < 1000:

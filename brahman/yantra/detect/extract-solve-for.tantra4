@@ -10,23 +10,19 @@
   (has-intent (has-items (triples-by-edge eff-grade "vidhi-kaala")))
 
   -- solve-for: first non-entity satya concept in question grade
-  (solve-for (find-map eff-grade (fn tri ->
-    cond (and (eq (nth tri 1) "satya") (not (member (nth tri 0) entities)))
-      (str tri 0)
+  (solve-for (find-map eff-grade (fn [s, e, o] ->
+    cond (and (eq e "satya") (not (member s entities))) s
     otherwise _none)))
 
   -- fallback: if no question grade, first non-entity satya in whole graph
   (fallback (cond (exists solve-for) solve-for
-    otherwise (find-map graph (fn tri ->
-      cond (and (eq (nth tri 1) "satya") (not (member (nth tri 0) entities)))
-        (str tri 0)
+    otherwise (find-map graph (fn [s, e, o] ->
+      cond (and (eq e "satya") (not (member s entities))) s
       otherwise _none))))
 
   -- scope entity: entity in question grade (mithya or satya that is an entity)
-  (scope-entity (find-map eff-grade (fn tri ->
-    cond (and (or (eq (nth tri 1) "mithya") (eq (nth tri 1) "satya"))
-         (member (nth tri 0) entities))
-      (str tri 0)
+  (scope-entity (find-map eff-grade (fn [s, e, o] ->
+    cond (and (or (eq e "mithya") (eq e "satya")) (member s entities)) s
     otherwise _none)))
 
   [has-intent, fallback, scope-entity])

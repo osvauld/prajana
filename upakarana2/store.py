@@ -254,6 +254,97 @@ def _prune_traces(env, dbs, keep_run_ids):
                 txn.delete(k)
 
 
+_KEEP_RUNS = 10  # number of recent runs to retain results for
+
+
+def _recent_run_ids(env, dbs, n=_KEEP_RUNS):
+    """Return the n most recent run_ids (sorted newest-first)."""
+    ids = []
+    with env.begin(db=dbs["runs"]) as txn:
+        cursor = txn.cursor()
+        if cursor.last():
+            while True:
+                ids.append(cursor.key().decode())
+                if len(ids) >= n or not cursor.prev():
+                    break
+    return ids
+
+
+def _prune_keyed_table(env, db, keep_run_ids):
+    """Delete entries from a table keyed by run_id||... that aren't in keep set."""
+    keep = set(keep_run_ids)
+    to_delete = []
+    with env.begin(db=db) as txn:
+        cursor = txn.cursor()
+        if cursor.first():
+            for k, _ in cursor:
+                run_id = k.decode().split(_SEP)[0]
+                if run_id not in keep:
+                    to_delete.append(k)
+    if to_delete:
+        with env.begin(write=True, db=db) as txn:
+            for k in to_delete:
+                txn.delete(k)
+    return len(to_delete)
+
+
+def _prune_index_table(env, db, keep_run_ids):
+    """Delete index entries (outcome||run_id||... or gate||run_id||...) not in keep set."""
+    keep = set(keep_run_ids)
+    to_delete = []
+    with env.begin(db=db) as txn:
+        cursor = txn.cursor()
+        if cursor.first():
+            for k, _ in cursor:
+                parts = k.decode().split(_SEP)
+                # index keys: type||run_id||test_id
+                run_id = parts[1] if len(parts) >= 2 else ""
+                if run_id not in keep:
+                    to_delete.append(k)
+    if to_delete:
+        with env.begin(write=True, db=db) as txn:
+            for k in to_delete:
+                txn.delete(k)
+    return len(to_delete)
+
+
+def _prune_old_runs(env, dbs, keep_run_ids):
+    """Delete run entries not in keep set."""
+    keep = set(keep_run_ids)
+    to_delete = []
+    with env.begin(db=dbs["runs"]) as txn:
+        cursor = txn.cursor()
+        if cursor.first():
+            for k, _ in cursor:
+                if k.decode() not in keep:
+                    to_delete.append(k)
+    if to_delete:
+        with env.begin(write=True, db=dbs["runs"]) as txn:
+            for k in to_delete:
+                txn.delete(k)
+    return len(to_delete)
+
+
+def _prune_results(env, dbs):
+    """Prune all test data older than the last _KEEP_RUNS runs. Returns stats dict."""
+    keep = set(_recent_run_ids(env, dbs, _KEEP_RUNS))
+    if not keep:
+        return {"pruned_runs": 0, "pruned_results": 0, "pruned_idx": 0}
+    pruned_runs = _prune_old_runs(env, dbs, keep)
+    pruned_results = _prune_keyed_table(env, dbs["results"], keep)
+    pruned_traces = _prune_keyed_table(env, dbs["traces"], keep)
+    pruned_idx = (
+        _prune_index_table(env, dbs["idx_outcome"], keep)
+        + _prune_index_table(env, dbs["idx_gate"], keep)
+    )
+    return {
+        "pruned_runs": pruned_runs,
+        "pruned_results": pruned_results + pruned_traces,
+        "pruned_idx": pruned_idx,
+        "kept_runs": len(keep),
+    }
+
+
 class _Tests:
     """Test result store API: store.tests.*"""
 
@@ -281,8 +372,8 @@ class _Tests:
                            "xpassed": 0, "skipped": 0}),
                     db=dbs["runs"],
                 )
-            keep = {r for r in [old_last, new_run_id] if r}
-            _prune_traces(env, dbs, keep)
+            # Prune old results (keeps last _KEEP_RUNS runs)
+            _prune_results(env, dbs)
         finally:
             env.close()
         return new_run_id
@@ -475,6 +566,65 @@ class _Tests:
         finally:
             env.close()
         return summaries
+
+
+# ---------------------------------------------------------------------------
+# Compaction — prune + rewrite LMDB to reclaim disk space
+# ---------------------------------------------------------------------------
+
+def prune_and_compact():
+    """Prune old runs, then copy LMDB env to reclaim freed pages.
+
+    Returns dict with prune stats and before/after file sizes.
+    """
+    import shutil
+    import tempfile
+
+    db_path = STORE_PATH
+
+    # Step 1: prune
+    env, dbs = _open_env()
+    try:
+        stats = _prune_results(env, dbs)
+    finally:
+        env.close()
+
+    before_size = sum(f.stat().st_size for f in db_path.iterdir() if f.is_file())
+
+    # Step 2: LMDB copy_to a temp location then swap
+    tmp_dir = tempfile.mkdtemp(prefix="upakarana_compact_", dir=db_path.parent)
+    try:
+        env = lmdb.open(str(db_path), max_dbs=len(_TABLES), subdir=True, readonly=True)
+        env.copy(tmp_dir, compact=True)
+        env.close()
+
+        # Swap: old → .bak, tmp → live, remove .bak
+        bak = db_path.with_suffix(".lmdb.bak")
+        if bak.exists():
+            shutil.rmtree(bak)
+        db_path.rename(bak)
+        Path(tmp_dir).rename(db_path)
+        shutil.rmtree(bak)
+    except Exception:
+        # Restore on failure
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+        raise
+
+    after_size = sum(f.stat().st_size for f in db_path.iterdir() if f.is_file())
+
+    stats["before_mb"] = round(before_size / 1024 / 1024, 1)
+    stats["after_mb"] = round(after_size / 1024 / 1024, 1)
+    stats["saved_mb"] = round((before_size - after_size) / 1024 / 1024, 1)
+    return stats
+
+
+def prune_only():
+    """Prune old runs without LMDB compaction. Faster but doesn't reclaim disk space."""
+    env, dbs = _open_env()
+    try:
+        return _prune_results(env, dbs)
+    finally:
+        env.close()
 
 
 # ---------------------------------------------------------------------------

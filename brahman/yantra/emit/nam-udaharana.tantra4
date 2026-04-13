@@ -10,8 +10,8 @@
     (let mantras = unique (proof | where [s, e, o] | and (eq e "derived-by") | collect (to-string o))
      map mantras (fn mn ->
        let janya = walk mn "janya"
-       let phala = nth (walk mn "phala") 0
-       let phala-disp = concept-display (to-string (cond (exists phala) phala otherwise mn))
+       let phala = walk-one mn "phala" else mn
+       let phala-disp = concept-display (to-string phala)
        let janya-disp = join-with (map janya (fn j -> concept-display (to-string j))) " and "
        concat say-known " that " phala-disp " arises from " janya-disp))
 
@@ -36,21 +36,17 @@
      let op-over = shabda "division" "word"
      let say-arrow = shabda "anuvada-setu" "speech-arrow"
      let lines = map count-steps (fn step ->
-       let parts = split step " "
-       let dir = nth parts 0
+       let [dir, num-colon, before, _, after] = split step " "
        let op-word = cond (eq dir "kshaya") op-minus (eq dir "multiplication") op-times (eq dir "division") op-over otherwise op-plus
-       let num-colon = nth parts 1
        let num = substr num-colon 0 (sub (string-length num-colon) 1)
-       let before = nth parts 2
-       let after = nth parts 4
        concat num " " op-word " " before " " (to-string say-arrow) " " after)
      cond (has-items lines) [(concat say-known " " (words-to-str lines))] otherwise [])
 
     -- anumana: swarupa chain → "sparrow IS-A bird"
     (eq mode "anumana")
     (let swarupa-pairs = triples-by-edge proof "swarupa"
-     let chain-strs = map swarupa-pairs (fn tri ->
-       concat (str tri 0) " IS-A " (str tri 2))
+     let chain-strs = map swarupa-pairs (fn [s, e, o] ->
+       concat s " IS-A " o)
      cond (has-items chain-strs)
        [(concat say-known " " (list-join chain-strs))]
        otherwise [])

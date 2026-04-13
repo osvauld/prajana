@@ -12,7 +12,48 @@
 (tantra build-question-graph (sentence)
   (sent-punct [".", "?", "!", ","])
   (raw-words (split sentence " "))
-  (graph (reduce raw-words [[], "", "", "", "", [], 0] (fn acc word ->
+  -- expand hyphens ONLY for number words: "twenty-two" → "22" (compute sum).
+  -- preserves entity names like "ball-A", "car-B".
+  (words (reduce raw-words [] (fn acc w ->
+    let parts = split w "-"
+    let p0-nd = (cond (gt (length parts) 1) (word-node (nth parts 0)) otherwise _none)
+    let is-hyphen-num = (and (exists p0-nd) (member "sankhya-pada" (walk (to-string p0-nd) "swarupa")))
+    cond is-hyphen-num
+      (let hval = reduce parts 0 (fn s p ->
+        let pnd = word-node p
+        let pv = cond (and (exists pnd) (member "sankhya-pada" (walk (to-string pnd) "swarupa")))
+          (to-number (to-string (nth (walk (to-string pnd) "siddha") 0)))
+          otherwise 0
+        (add s pv))
+      (append acc [(to-string hval)]))
+    otherwise (append acc [w]))))
+  -- math-token expansion: split compound tokens at digit/letter/operator boundaries.
+  -- "3x" → ["3", "x"], "x^2" → ["x", "^", "2"], "5x^2" → ["5", "x", "^", "2"].
+  -- only activates when "=" is present (equation context).
+  -- normal words are unaffected: "solve" → ["solve"] → 1 token → no expansion.
+  (has-eq (exists (find-first words (fn w -> eq w "="))))
+  (math-words (cond (not has-eq) words
+    otherwise (reduce words [] (fn acc w ->
+      let chars = split w ""
+      let grouped = reduce chars [[], "", ""] (fn st c ->
+        let tokens = nth st 0
+        let current = nth st 1
+        let cur-type = nth st 2
+        let is-num = member c ["0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "."]
+        let is-op = member c ["^" "+" "-"]
+        let c-type = cond is-num "num" is-op "op" otherwise "letter"
+        cond (and (eq c-type cur-type) (neq c-type "op")) [tokens, (concat current c), c-type]
+        (has-text current) [(append tokens [current]), c, c-type]
+        otherwise [tokens, c, c-type])
+      let final-tokens = nth grouped 0
+      let last = nth grouped 1
+      let expanded = cond (has-text last) (append final-tokens [last]) otherwise final-tokens
+      cond (gt (length expanded) 1) (reduce expanded acc (fn a t -> append a [t]))
+      otherwise (append acc [w])))))
+  -- sankhya-sandhi: compose consecutive number triples (digit × scale).
+  -- "two hundred" → 2, 100 → [200]. "two thousand three hundred" → [2000, 300].
+  -- runs AFTER BQG loop, before pipeline. Separate tantra keeps BQG clean.
+  (raw-graph (reduce math-words [[], "", "", "", "", [], 0] (fn acc word ->
     let g          = nth acc 0
     let pending    = nth acc 1
     let sign-op    = nth acc 2
@@ -32,14 +73,39 @@
     let parts     = split-numeric clean
     let num-str   = nth parts 0
     let uni-str   = nth parts 1
-    let nv        = (cond (has-text num-str) num-str otherwise "")
-    let un        = (cond (has-text uni-str) (shabda-anveshana uni-str) otherwise "")
+    -- number words: "twenty" → 20, "hundred" → 100 (transparent numbers).
+    -- scans ALL candidates since kosha nodes (e.g. "one") may shadow bhasha nodes.
+    -- sankhya-sandhi tantra (post-BQG) handles composition: "two hundred" → 200.
+    let num-nd = (cond (not (has-text num-str)) (find-first candidates (fn c -> (or
+      (member "sankhya-pada" (walk (to-string c) "swarupa"))
+      (member "sankhya-mana" (walk (to-string c) "swarupa"))))) otherwise _none)
+    let is-number-word = (exists num-nd)
+    let word-num = (cond is-number-word (to-string (nth (walk (to-string num-nd) "siddha") 0)) otherwise "")
+    let nv        = (cond (has-text num-str) num-str (has-text word-num) word-num otherwise "")
+    let un        = (cond is-number-word "" (has-text uni-str) (shabda-anveshana uni-str) otherwise "")
     -- sign-modifier: "negative 7" → apply neg(7) = -7
     -- walks: nd.swarupa for sign-modifier, nd.kriya for the operation (neg)
     let is-sign-modifier = (and (exists nd) (member "sign-modifier" (walk (to-string nd) "swarupa")))
     let sign-kriya = (cond is-sign-modifier (to-string (nth (walk (to-string nd) "kriya") 0)) otherwise "")
-    -- shatamana: "percent" word — swarupa includes "shatamana"
-    let is-shatamana = (and (exists nd) (member "shatamana" (walk (to-string nd) "swarupa")))
+    -- guna-sankhya: "double" = ×2, "half" = ÷2. Emits direction + factor value.
+    -- scans ALL candidates since abheda nodes may shadow the bhasha node.
+    let guna-nd = (cond (not (has-text num-str)) (find-first candidates (fn c -> member "guna-sankhya" (walk (to-string c) "swarupa"))) otherwise _none)
+    let is-guna = (exists guna-nd)
+    let guna-val = (cond is-guna (to-string (nth (walk (to-string guna-nd) "siddha") 0)) otherwise "")
+    -- guna direction is always multiplication: the factor encodes the direction.
+    -- double=×2 (increase), half=×0.5 (decrease). Both are multiplication.
+    let guna-dir = (cond is-guna "multiplication" otherwise "")
+    -- ordinal detection: "third" → kramanka-tritiya-word → value 3.
+    -- ordinals are transparent numbers like cardinals (sankhya-sandhi handles fraction composition).
+    let ord-nd = (cond (and (not is-number-word) (not is-guna) (not (has-text num-str))) (find-first candidates (fn c -> member "kramanka" (walk (to-string c) "swarupa"))) otherwise _none)
+    let is-ordinal = (exists ord-nd)
+    let ord-val = (cond is-ordinal (to-string (nth (walk (to-string ord-nd) "siddha") 0)) otherwise "")
+    -- general signal: bhasha swarupa matching vakya-signal.yukta → emit as signal edge.
+    -- graph-driven: to add a signal type, add it to vakya-signal.yukta + bhasha swarupa.
+    -- covers shatamana, avrti-krama, anukrama, and any future signal types.
+    let signal-types = (map (walk "vakya-signal" "yukta") (fn s -> to-string s))
+    let signal-swarupa = (cond (exists nd) (find-first (walk (to-string nd) "swarupa") (fn s -> member (to-string s) signal-types)) otherwise _none)
+    let is-signal = (exists signal-swarupa)
     -- apply pending sign-op to number: walk sign-op.ganana → compute op → apply
     let eff-nv = cond (and (has-text nv) (has-text sign-op))
       (to-string (apply-op (to-string (nth (walk sign-op "ganana") 0)) [(to-number nv)]))
@@ -70,7 +136,9 @@
     let triples   = cond is-dvandva [[clean, "dvandva", "dvandva"]]
       is-prashna [[clean, "prashna", clean]]
       is-sign-modifier []
-      is-shatamana [[clean, "shatamana", clean]]
+      is-guna [[clean, guna-dir, guna-dir], [clean, "asprista-sankhya", guna-val]]
+      is-ordinal [[clean, "kramanka-sankhya", ord-val]]
+      is-signal [[clean, (to-string signal-swarupa), clean]]
       is-pratishedha []
       is-niyama [[clean, "niyama", clean]]
       is-vibhakti [[clean, vibhakti-edge, clean]]
@@ -143,4 +211,4 @@
     let new-prev-sw   = (cond (has-text punct) [] otherwise curr-sw)
     let new-prev-count = (cond (has-text punct) 0 otherwise new-count)
     [(result), (cond (has-text punct) "" otherwise new-pending), (cond (has-text punct) "" otherwise new-sign-op), new-prev-word, new-prev-nd, new-prev-sw, new-prev-count])))
-  (sandhi-viveka (nth graph 0)))
+  (sandhi-viveka (sankhya-sandhi (nth raw-graph 0))))

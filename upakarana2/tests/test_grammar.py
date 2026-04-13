@@ -414,7 +414,7 @@ def test_from_rest_initial_velocity(vy):
 def test_from_rest_in_answer(vy):
     """Full sentence using 'from rest'"""
     r = vy.answer("a car of mass 1200 accelerates from rest at 3 m/s2. find force")
-    assert "3600" in r or "force" in r.lower()
+    assert "3600" in r, f"expected F=ma=3600, got: {r}"
 
 
 # ── negation words ────────────────────────────────────────────────────────────

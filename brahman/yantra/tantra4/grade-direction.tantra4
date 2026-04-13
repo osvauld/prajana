@@ -1,13 +1,19 @@
 -- resolves arithmetic direction of a grade (bigrams first, then single words).
 -- also checks for direct direction edges (kshaya, vriddhi, multiplication, division)
 -- emitted by sandhi-viveka for verb forms with direction in their sthita.
+-- parimana edges carry direction in their object (e.g. [hour, parimana, multiplication]).
 (tantra grade-direction (grade)
   (direction-edges ["kshaya", "vriddhi", "multiplication", "division"])
   -- direct: if any triple has a direction as its edge, use that
-  (direct-dir (find-map grade (fn tri ->
-    cond (member (nth tri 1) direction-edges) (nth tri 1)
+  (direct-dir (find-map grade (fn [s, e, o] ->
+    cond (member e direction-edges) e
     otherwise _none)))
+  -- parimana: direction carried in object (e.g. "multiplication" from "per")
+  (parimana-dir (cond (has-text direct-dir) _none
+    otherwise (find-map grade (fn [s, e, o] ->
+      cond (and (eq e "parimana") (member o direction-edges)) o
+      otherwise _none))))
   (mw (grade-mithya grade))
   (bigrams (word-bigrams mw))
   (dir-bi (detect-direction bigrams))
-  (cond (has-text direct-dir) direct-dir (has-text dir-bi) dir-bi otherwise (detect-direction mw)))
+  (cond (has-text direct-dir) direct-dir (exists parimana-dir) parimana-dir (has-text dir-bi) dir-bi otherwise (detect-direction mw)))

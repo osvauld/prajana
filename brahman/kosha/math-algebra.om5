@@ -120,7 +120,8 @@
   (yukta filtration partial-order grade depth)
   (kriya addition multiplication)
   (swarupa direct-sum)
-  (janya monoid))
+  (janya monoid)
+  (sankhya 0))
 
 (kosha group
   (vishesa algebra-varga)

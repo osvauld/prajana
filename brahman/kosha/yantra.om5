@@ -434,6 +434,15 @@
   (kriya materialize-question-graph shabda-anveshana sandhi-viveka emit-triples build-question-graph)
   (abheda transducer))
 
+; ── vakya-signal: swarupa values that BQG emits as structural signal edges ──
+; bhasha nodes with (swarupa X) where X is in this yukta list get emitted
+; as [word, X, word] instead of plain satya. This is fully graph-driven:
+; to add a new signal type, add it here and add (swarupa X) to the bhasha node.
+(kosha vakya-signal
+  (swarupa yantra-varga)
+  (sthita domain-yantra pipeline-construct)
+  (yukta shatamana avrti-krama anukrama vaara-krama samikarana))
+
 (kosha pipeline-detect
   (swarupa yantra-varga)
   (sthita domain-yantra)
@@ -488,26 +497,60 @@
 (kosha refine-rashi-anuvada
   (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
+  (krama refine-anukrama-bandha)
+  (kriya rashi-anuvada)
+  (siddha vishesa))
+
+(kosha refine-anukrama-bandha
+  (vishesa pipeline-refine-varga)
+  (swarupa pipeline-refine)
+  (krama refine-avrti-ganana)
+  (kriya anukrama-bandha))
+
+(kosha refine-avrti-ganana
+  (vishesa pipeline-refine-varga)
+  (swarupa pipeline-refine)
+  (krama refine-avrti-bandha)
+  (kriya avrti-ganana))
+
+(kosha refine-avrti-bandha
+  (vishesa pipeline-refine-varga)
+  (swarupa pipeline-refine)
+  (krama refine-samikarana-bandha)
+  (kriya avrti-bandha))
+
+(kosha refine-samikarana-bandha
+  (vishesa pipeline-refine-varga)
+  (swarupa pipeline-refine)
   (krama refine-shatamana-bandha)
-  (kriya rashi-anuvada))
+  (kriya samikarana-bandha))
 
 (kosha refine-shatamana-bandha
   (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
+  (krama refine-mantra-derive)
+  (kriya shatamana-bandha)
+  (siddha shatamana))
+
+(kosha refine-mantra-derive
+  (vishesa pipeline-refine-varga)
+  (swarupa pipeline-refine)
   (krama refine-sankhya-bandha)
-  (kriya shatamana-bandha))
+  (kriya mantra-derive))
 
 (kosha refine-rashi-viveka
   (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
   (krama refine-vishesa-bandhana)
-  (kriya rashi-viveka))
+  (kriya rashi-viveka)
+  (siddha vishesa))
 
 (kosha refine-sandhi-bandhana
   (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
   (krama refine-vyakarana-sparsha)
-  (kriya sandhi-bandhana))
+  (kriya sandhi-bandhana)
+  (siddha sandhi-rename))
 
 (kosha refine-vyakarana-sparsha
   (vishesa pipeline-refine-varga)
@@ -519,7 +562,8 @@
   (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
   (krama refine-shashthi-possession)
-  (kriya kaala-avastha))
+  (kriya kaala-avastha)
+  (siddha kaala))
 
 (kosha refine-shashthi-possession
   (vishesa pipeline-refine-varga)
@@ -557,13 +601,15 @@
   (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
   (krama refine-vishesa-instance)
-  (kriya vibhakti-shashthi))
+  (kriya vibhakti-shashthi)
+  (siddha prathama-vibhakti))
 
 (kosha refine-vishesa-bandhana
   (vishesa pipeline-refine-varga)
   (swarupa pipeline-refine)
   (krama refine-rashi-anuvada)
-  (kriya vishesa-bandhana))
+  (kriya vishesa-bandhana)
+  (siddha vishesa))
 
 (kosha refine-vishesa-instance
   (vishesa pipeline-refine-varga)

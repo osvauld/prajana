@@ -104,7 +104,7 @@ def test_entity_name_in_we_have(vy):
 def test_cross_sentence_entity(vy):
     """Properties split across sentences bind to same entity"""
     r = vy.answer("ball has mass 5. velocity is 10. find kinetic energy")
-    assert "250" in r or "kinetic-energy" in r
+    assert "250" in r, f"expected KE=250 from cross-sentence binding, got: {r}"
 
 
 def test_period_boundary_entity_preserved(vy):
@@ -117,19 +117,20 @@ def test_period_boundary_entity_preserved(vy):
 def test_pronoun_it_reference(vy):
     """'it' refers back to entity in prior sentence"""
     r = vy.answer("ball has mass 5. it has velocity 10. find kinetic energy")
-    assert "250" in r or "kinetic-energy" in r
+    assert "250" in r, f"expected KE=250 via pronoun reference, got: {r}"
 
 
 # ── sthita-viveka: multi-slot mantras ─────────────────────────────────────────
 
 
+@xfail(strict=True, reason="sthita-viveka: two-mass gravitational force returns 'no match' — mass1/mass2 slot assignment incomplete")
 def test_sthita_viveka_gravitational(vy):
     """Gravitational force needs mass1 and mass2 — two entities"""
     r = vy.answer(
         "particle-A has mass 5.972e24. particle-B has mass 7.34e22. "
         "find gravitational force given radius 3.84e8"
     )
-    assert "1.98" in r or "gravitational" in r.lower()
+    assert "1.98" in r, f"expected gravitational force ≈ 1.98e20, got: {r}"
 
 
 @xfail(strict=True, reason="sthita-viveka: two-mass prathama emission incomplete")
@@ -163,7 +164,7 @@ def test_session_entity_persists(vy):
     sid = "test-entity-persist-v2"
     vy.ask("electron has mass 9.109e-31", session_id=sid)
     r = vy.ask("find momentum given velocity 1e6", session_id=sid)
-    assert len(r) > 0
+    assert "9.109e-25" in r, f"expected p=mv=9.109e-25, got: {r}"
 
 
 def test_session_accumulate_properties(vy):
@@ -172,4 +173,4 @@ def test_session_accumulate_properties(vy):
     vy.ask("mass is 5", session_id=sid)
     vy.ask("velocity is 10", session_id=sid)
     r = vy.ask("find kinetic energy", session_id=sid)
-    assert "250" in r or "kinetic-energy" in r
+    assert "250" in r, f"expected KE=250 from accumulated session, got: {r}"

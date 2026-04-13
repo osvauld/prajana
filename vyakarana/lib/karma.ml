@@ -421,6 +421,7 @@ let reparse_and_replace (k : proof_graph) (path : string) : edit_result =
   | Some n ->
     replace_node k n;
     rebuild_indices k;
+    Vidya.invalidate_shabda_cache ();
     Ok n.name
 
 let path_of_node (k : proof_graph) (name : string) : string option =

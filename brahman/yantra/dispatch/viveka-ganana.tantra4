@@ -3,16 +3,16 @@
 --            (2) viveka-chain — walk transitive viveka edges from assertions.
 -- when all values are equal, emits equal-to instead of greater-than.
 (tantra viveka-ganana (graph concept cw direction)
-  (op-eval (nth (walk direction "ganana") 0))
-  (opp-eval (nth (walk (nth (walk direction "pratipaksha") 0) "ganana") 0))
+  (op-eval (walk-one direction "ganana"))
+  (opp-eval (walk-one (walk-one direction "pratipaksha") "ganana"))
 
   (entities (prathama-sparsha graph))
 
   -- infer concept from first entity's first owned property when not explicit
-  (first-ent (cond (has-items entities) (to-string (nth entities 0)) otherwise ""))
+  (first-ent (first-of entities | to-string))
   (owned-concepts (cond (has-text first-ent) (shashthi-sparsha graph first-ent) otherwise []))
   (inferred-concept (cond (has-text concept) concept
-    (has-items owned-concepts) (to-string (nth owned-concepts 0))
+    (has-items owned-concepts) (first-of owned-concepts | to-string)
     otherwise ""))
 
   -- for each entity: try derived value, then concept-scoped raw, then first-raw
@@ -22,8 +22,8 @@
     let deriv-val = cond (has-items derived) (nth derived 1) otherwise ""
     let svps      = cond (has-text deriv-val) [] otherwise (nth (scope-vps graph ent-str) 0)
     let raw-val   = cond (has-text deriv-val) ""
-      otherwise (find-map svps (fn kv ->
-        cond (and (has-text inferred-concept) (eq (nth kv 0) inferred-concept)) (str kv 1)
+      otherwise (find-map svps (fn [k, v] ->
+        cond (and (has-text inferred-concept) (eq k inferred-concept)) v
         otherwise _none))
     let first-val = cond (or (has-text deriv-val) (has-text raw-val)) ""
       otherwise (cond (has-items svps) (str (nth svps 0) 1) otherwise "")
@@ -37,8 +37,8 @@
   -- top = no incoming viveka (unbeaten), bottom = no outgoing (beats nobody)
   (viveka-triples (triples-by-edge graph "viveka"))
   (has-chain (and (not (has-items ev-pairs)) (has-items viveka-triples)))
-  (viv-subjs (map viveka-triples (fn t -> triple-subj t)))
-  (viv-objs  (map viveka-triples (fn t -> triple-obj t)))
+  (viv-subjs (map viveka-triples (fn [s, e, o] -> s)))
+  (viv-objs  (map viveka-triples (fn [s, e, o] -> o)))
   (top-entity (cond has-chain
     (find-first viv-subjs (fn s -> not (member s viv-objs))) otherwise _none))
   (bottom-entity (cond has-chain

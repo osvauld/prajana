@@ -196,12 +196,21 @@
   (pratipaksha multiplication)
   (ganana div))
 
-(mantra double
+; double/half: operational aliases for dviguna/ardha (math-sankhya.om5).
+; Needed for eval-krama (KE = half(m*v²)) and inverse graph (pratipaksha chain).
+(kosha double
   (karma number-varga)
-  (swarupa multiplication)
-  (kriya multiplication vriddhi)
+  (vishesa number-varga)
+  (swarupa dviguna multiplication)
   (pratipaksha half)
   (ganana double))
+
+(kosha half
+  (karma number-varga)
+  (vishesa number-varga)
+  (swarupa ardha division)
+  (pratipaksha double)
+  (ganana half))
 
 (mantra equals
   (karma number-varga)
@@ -242,6 +251,28 @@
   (sthita real)
   (ganana floor))
 
+; ── shesha: remainder after division ─────────────────────────────────
+; shesha = what is left over after division.
+; mod(a,b) = a - floor(a/b) * b — pure composition of existing ops.
+; but we provide ganana mod as a primitive for efficiency.
+
+(kosha shesha
+  (vishesa number-varga)
+  (swarupa division)
+  (yukta floor quotient divisor dividend)
+  (janya division)
+  (phala int)
+  (kriya viveka))
+
+(mantra mod
+  (karma number-varga)
+  (varga math-mantra)
+  (swarupa shesha)
+  (phala shesha)
+  (janya dividend divisor)
+  (krama mod dividend divisor)
+  (ganana mod))
+
 (mantra gcd
   (karma number-varga)
   (vishesa number-theory-varga)
@@ -256,12 +287,7 @@
   (abheda prime-factorization)
   (drishthanta coprime))
 
-(mantra half
-  (karma number-varga)
-  (swarupa division)
-  (kriya division kshaya)
-  (pratipaksha double)
-  (ganana half))
+; half mantra moved to math-sankhya.om5 as ardha with krama = division value 2.
 
 (mantra lcm
   (karma number-varga)

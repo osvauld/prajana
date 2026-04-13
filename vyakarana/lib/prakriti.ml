@@ -35,7 +35,7 @@ let pratipaksha  = 9   (* inverse — X undoes Y *)
 (* dynamic dimension registry (append-only) *)
 let _dim_name_to_idx : (string, int) Hashtbl.t = Hashtbl.create 32
 let _dim_idx_to_name : (int, string) Hashtbl.t = Hashtbl.create 32
-let _dim_next_idx = ref 10
+let _dim_next_idx = ref 11
 
 let () =
   List.iter (fun (name, idx) ->
@@ -277,6 +277,23 @@ let neighbors (k : proof_graph) (name : string) : string list =
 
 let edges_of (k : proof_graph) (name : string) : typed_edge list =
   List.filter (fun e -> e.source = name || e.target = name) !(k.all_edges)
+
+(* source-indexed edge map: O(1) lookup for outgoing edges by source name.
+   Handles domain-collision nodes whose edges span multiple n.edges entries. *)
+let _source_edge_idx : (string, typed_edge list) Hashtbl.t = Hashtbl.create 256
+
+let rebuild_source_edge_idx (k : proof_graph) : unit =
+  Hashtbl.clear _source_edge_idx;
+  List.iter (fun e ->
+    let prev = match Hashtbl.find_opt _source_edge_idx e.source with
+      | Some l -> l | None -> [] in
+    Hashtbl.replace _source_edge_idx e.source (e :: prev)
+  ) !(k.all_edges)
+
+let outgoing_edges (_k : proof_graph) (name : string) : typed_edge list =
+  match Hashtbl.find_opt _source_edge_idx name with
+  | Some edges -> edges
+  | None -> []
 
 (* — mutation — *)
 
@@ -871,4 +888,5 @@ let rebuild_indices (k : proof_graph) : unit =
     Printf.printf "indices: created %d stub nodes for edge targets\n%!" stubs;
   init_satya k;
   materialize_csr k;
+  rebuild_source_edge_idx k;
   compute_visheshanam_entropy_weights k

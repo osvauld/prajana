@@ -1,0 +1,92 @@
+-- avrti-ganana: pure binder for iterative sequence computation.
+-- detects any satya concept whose abheda chain leads to kriya=avrti.
+-- finds the step mantra via walk-in on the sequence type.
+-- extracts seeds from input (aarambha grades) or defaults to [1, 1].
+-- emits janya bindings + _derive iterate triples.
+-- computation deferred to mantra-derive (iterate mode).
+--
+-- example: "The Fibonacci sequence starts 1, 1, ... What is the 10th?"
+--   detect: fibonacci → abheda → matsya-anukrama → kriya has avrti ✓
+--   mantra: walk-in matsya-anukrama "swarupa" → matsya-avrti-pada
+--   seeds: [1, 1] from aarambha grades
+--   emit: pada-purva=1, pada-dvitiya=1, _derive iterate 8 → mantra-derive → 55
+(tantra avrti-ganana (graph)
+  (grades (split-grades graph))
+
+  -- ── detect iterative sequence via graph walk ────────────────────
+  -- for each satya concept, walk abheda to canonical node,
+  -- then check if canonical node has kriya=avrti.
+  (all-satya-triples (triples-by-edge graph "satya"))
+  (iter-match (find-map all-satya-triples (fn t ->
+    let nd = nth t 0
+    let canon-raw = walk nd "abheda"
+    let canon = cond (has-items canon-raw) (to-string (nth canon-raw 0)) otherwise nd
+    let kriya-list = map (walk canon "kriya") (fn k -> to-string k)
+    cond (member "avrti" kriya-list) canon otherwise _none)))
+  (has-iter (exists iter-match))
+  (seq-type (cond has-iter (to-string iter-match) otherwise ""))
+
+  -- ── find step mantra: swarupa=seq-type, phala=pada ──────────────
+  -- graph-driven: walk incoming swarupa edges on the sequence type,
+  -- find the one that produces pada (term value).
+  (step-mantra-nd (cond (has-text seq-type)
+    (find-map (walk-in seq-type "swarupa") (fn m ->
+      let m-str = to-string m
+      cond (member "pada" (map (walk m-str "phala") (fn p -> to-string p))) m-str
+      otherwise _none))
+    otherwise _none))
+  (has-mantra (exists step-mantra-nd))
+  (should-run (and has-iter has-mantra))
+
+  (cond (not should-run) graph
+  otherwise
+
+  (let mantra-str = to-string step-mantra-nd
+
+  -- ── extract seeds ───────────────────────────────────────────────
+  -- collect numbers from non-question grades (skip guna-sankhya "_" subjects).
+  -- first 2 numbers are the seed pair. default [1, 1] if none found.
+  let all-seeds = reduce grades [] (fn acc g ->
+    cond (has-items (triples-by-edge g "vidhi-kaala")) acc
+    otherwise (reduce g acc (fn a t ->
+      cond (and (eq (nth t 1) "asprista-sankhya") (neq (nth t 0) "_"))
+        (append a [(to-number (nth t 2))])
+      otherwise a)))
+  let seed1 = cond (has-items all-seeds) (nth all-seeds 0) otherwise 1
+  let seed2 = cond (gt (length all-seeds) 1) (nth all-seeds 1) otherwise 1
+
+  -- ── extract position ────────────────────────────────────────────
+  -- number from question grade (ordinal already resolved to cardinal by BQG)
+  let q-grade = find-first grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))
+  let q-nums = cond (exists q-grade) (reduce q-grade [] (fn acc t ->
+    cond (eq (nth t 1) "asprista-sankhya") (append acc [(to-number (nth t 2))])
+    otherwise acc)) otherwise []
+  let position = cond (has-items q-nums) (nth q-nums 0) otherwise 1
+
+  -- ── pure binder: emit janya bindings + _derive triples ──────────
+  -- walk mantra's janya for graph-driven binding names.
+  -- trivial positions (1-2) emit count-total directly (no iteration needed).
+  -- position > 2 emits _derive iterate with seed bindings + iteration count.
+  let janya-nds = walk mantra-str "janya"
+  let j0 = cond (has-items janya-nds) (to-string (nth janya-nds 0)) otherwise ""
+  let j1 = cond (gt (length janya-nds) 1) (to-string (nth janya-nds 1)) otherwise ""
+  let iter-steps = cond (gt position 2) (sub position 2) otherwise 0
+  let trivial-result = cond (le position 1) (to-string seed1) otherwise (to-string seed2)
+
+  let derive-triples = cond (le position 2)
+    [["count-total", "sankhya", trivial-result],
+     ["count-total", "satya", "count-total"],
+     ["count-total", "derived-by", "avrti-ganana"]]
+    otherwise
+    [[j0, "sankhya", (to-string seed2)],
+     [j1, "sankhya", (to-string seed1)],
+     ["_derive", "mantra", mantra-str],
+     ["_derive", "mode", "iterate"],
+     ["_derive", "iterate-count", (to-string iter-steps)]]
+
+  -- demote aarambha-word signal to mithya (consumed)
+  let cleaned = reduce graph [] (fn acc t ->
+    cond (and (eq (nth t 0) "aarambha-word") (eq (nth t 1) "satya"))
+      (append acc [["aarambha-word", "mithya", "aarambha-word"]])
+    otherwise (append acc [t]))
+  (append cleaned derive-triples))))

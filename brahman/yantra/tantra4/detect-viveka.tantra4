@@ -37,7 +37,7 @@
   (viveka-src (cond (has-text viveka-word) viveka-word
     (exists viv-adj-node) (to-string viv-adj-node) otherwise ""))
   (krama-concept (cond (has-text viveka-src)
-    (to-string (nth (walk viveka-src "kramanusara") 0)) otherwise ""))
+    (walk-one viveka-src "kramanusara" | to-string) otherwise ""))
   -- vishesa-based concept fallback (e.g. viveka-max → vishesa → mass)
   (vishesa-concept (nth (expanded | where [s, e, o]
     | and (eq s comp-word)
@@ -48,9 +48,7 @@
   (q-grades (split-grades expanded))
   (q-grade (find-first q-grades (fn g -> has-items (triples-by-edge g "vidhi-kaala"))))
   (eff-grade (cond (exists q-grade) q-grade otherwise []))
-  (grade-concept (find-map eff-grade (fn tri ->
-    let s = nth tri 0
-    let e = nth tri 1
+  (grade-concept (find-map eff-grade (fn [s, e, o] ->
     cond (and (eq e "satya") (not (is-viveka-node s)) (not (member s entities))) s
     otherwise _none)))
   (comp-concept (cond (has-text krama-concept) krama-concept

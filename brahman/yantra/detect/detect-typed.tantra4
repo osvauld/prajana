@@ -5,8 +5,8 @@
 -- returns: [is-typed, op-name, args-a, args-b]
 (tantra detect-typed (graph)
 
-  (edges (map graph (fn t -> str t 1)))
-  (words (map graph (fn t -> str t 0)))
+  (edges (map graph (fn [s, e, o] -> e)))
+  (words (map graph (fn [s, e, o] -> s)))
   (n     (length graph))
 
   -- fast scan: is there a satya word with vishesa → a TYPED varga?

@@ -79,7 +79,7 @@ def test_modus_ponens(vy):
     """if it rains the ground is wet. it rained. is the ground wet"""
     r = vy.answer("if it rains the ground is wet. it rained. is the ground wet")
     rl = r.lower()
-    assert "yes" in rl or "wet" in rl
+    assert "yes" in rl, f"expected 'yes' via modus ponens, got: {r}"
     assert "is-a" not in rl, "must use implication logic, not IS-A"
 
 

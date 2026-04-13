@@ -261,6 +261,11 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
 
   (* ---- structural primitives (reduce tantra repetition) ---- *)
 
+  | "first-of" ->
+    (* (first-of list) → first element or VNone if empty *)
+    let lst = eval_lst 0 in
+    Some (match lst with x :: _ -> x | [] -> VNone)
+
   | "find-first" ->
     (* (find-first list predicate) → first item where predicate is true, or _none.
        Replaces: (reduce list "" (fn found x -> cond (has-text found) found (pred x) x otherwise found)) *)
@@ -475,6 +480,9 @@ let eval_pure_op (e_eval : evaluator) (k : Prakriti.proof_graph) (e : env) (op :
   | "neg"   -> Some (VFloat (-. (eval_flt 0)))
   | "floor" -> Some (VFloat (floor (eval_flt 0)))
   | "ceil"  -> Some (VFloat (ceil  (eval_flt 0)))
+  | "mod"   ->
+    let b = eval_flt 1 in
+    Some (if b = 0.0 then VFloat 0.0 else VFloat (Float.rem (eval_flt 0) b))
   | "min"   -> Some (VFloat (Float.min (eval_flt 0) (eval_flt 1)))
   | "max"   -> Some (VFloat (Float.max (eval_flt 0) (eval_flt 1)))
   | "square" ->

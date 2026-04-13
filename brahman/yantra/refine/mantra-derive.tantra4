@@ -1,0 +1,109 @@
+-- mantra-derive: unified computation from bandha-declared bindings.
+-- reads _derive triples emitted by pure-binder bandhas:
+--   ["_derive", "mantra", mantra-name]  — which mantra(s) to fire
+--   ["_derive", "mode", "forward"|"inverse"|"iterate"]  — computation mode
+--   ["_derive", "solve-for", janya-name]  — inverse: which variable to solve
+--   ["_derive", "iterate-count", N]  — iterate: number of recurrence steps
+-- three evaluation modes:
+--   forward/inverse: single mantra → eval-krama / invert-krama
+--   chain: multiple mantras → fixpoint (fire when janya bound, phala→binding)
+--   iterate: single mantra → recurrence (apply N times, shift 2-element state)
+-- emits count-total with result, strips _derive control triples.
+-- runs after all bandha tantras, before sankhya-bandha fixpoint.
+(tantra mantra-derive (graph)
+  (derive-mantra-triples (filter graph (fn t ->
+    and (eq (nth t 0) "_derive") (eq (nth t 1) "mantra"))))
+  (has-derive (has-items derive-mantra-triples))
+  (cond (not has-derive) graph
+  otherwise
+  (let mantra-names = map derive-mantra-triples (fn t -> nth t 2)
+   let is-chain = gt (length mantra-names) 1
+   let mode-triple = find-first graph (fn t ->
+     and (eq (nth t 0) "_derive") (eq (nth t 1) "mode"))
+   let mode = cond (exists mode-triple) (nth mode-triple 2) otherwise "forward"
+   -- collect sankhya bindings (exclude _derive control triples and count-total)
+   let bindings = reduce graph [] (fn acc t ->
+     cond (and (eq (nth t 1) "sankhya") (neq (nth t 0) "_derive") (neq (nth t 0) "count-total"))
+       (append acc [[(nth t 0), (to-number (nth t 2))]])
+     otherwise acc)
+
+   -- ── single mantra: forward / inverse ───────────────────────────────
+   let sf-triple = find-first graph (fn t ->
+     and (eq (nth t 0) "_derive") (eq (nth t 1) "solve-for"))
+   let solve-for = cond (exists sf-triple) (nth sf-triple 2) otherwise ""
+   let single-result = cond (and (not is-chain) (neq mode "iterate") (eq mode "inverse"))
+     (invert-krama (nth mantra-names 0) bindings solve-for)
+     (and (not is-chain) (neq mode "iterate"))
+     (eval-krama (nth mantra-names 0) bindings)
+     otherwise 0
+
+   -- ── iterate: recurrence relation ───────────────────────────────────
+   -- apply the same mantra N times with shifting 2-element state.
+   -- janya[0] = state[1] (newer), janya[1] = state[0] (older).
+   -- each step: result = eval-krama, state = [older←newer, newer←result].
+   let ic-triple = find-first graph (fn t ->
+     and (eq (nth t 0) "_derive") (eq (nth t 1) "iterate-count"))
+   let iter-count = cond (exists ic-triple) (to-number (nth ic-triple 2)) otherwise 0
+   let iter-m = nth mantra-names 0
+   let iter-janya = cond (eq mode "iterate") (map (walk iter-m "janya") (fn n -> to-string n)) otherwise []
+   let iter-j0 = cond (has-items iter-janya) (nth iter-janya 0) otherwise ""
+   let iter-j1 = cond (gt (length iter-janya) 1) (nth iter-janya 1) otherwise ""
+   -- initial state: [older=j1-binding, newer=j0-binding]
+   let iter-sv0-raw = cond (has-text iter-j1) (find-map bindings (fn b -> cond (eq (nth b 0) iter-j1) (nth b 1) otherwise _none)) otherwise _none
+   let iter-sv1-raw = cond (has-text iter-j0) (find-map bindings (fn b -> cond (eq (nth b 0) iter-j0) (nth b 1) otherwise _none)) otherwise _none
+   let iter-sv0 = cond (exists iter-sv0-raw) iter-sv0-raw otherwise 0
+   let iter-sv1 = cond (exists iter-sv1-raw) iter-sv1-raw otherwise 0
+   let iter-final = cond (eq mode "iterate")
+     (reduce (range iter-count) [iter-sv0, iter-sv1] (fn st _ ->
+       let nv = eval-krama iter-m [[(iter-j0), (nth st 1)], [(iter-j1), (nth st 0)]]
+       [(nth st 1), nv]))
+     otherwise [0, 0]
+   let iterate-result = to-string (nth iter-final 1)
+
+   -- ── chained mantras: fixpoint evaluation ───────────────────────────
+   -- reduce over mantra-names twice (handles depth-2 dependency chains).
+   -- each pass: fire mantras whose janya are all bound, add phala→result.
+   let chain-st = cond is-chain
+     (reduce (append mantra-names mantra-names) [bindings, [], []] (fn st m ->
+       let cur-b = nth st 0
+       let cur-r = nth st 1
+       let fired = nth st 2
+       cond (exists (find-first fired (fn f -> eq f m))) st
+       otherwise
+       (let janya-ns = map (walk m "janya") (fn n -> to-string n)
+        let bound-ct = length (filter janya-ns (fn j ->
+          exists (find-first cur-b (fn b -> eq (nth b 0) j))))
+        cond (neq bound-ct (length janya-ns)) st
+        otherwise
+        (let r = eval-krama m cur-b
+         let ph = (cond (has-items (walk m "phala")) (to-string (nth (walk m "phala") 0)) otherwise m)
+         [(append cur-b [[ph, r]]), (append cur-r [[ph, r]]), (append fired [m])]))))
+     otherwise [[], [], []]
+
+   -- terminal results: phala not consumed as janya by any chain mantra
+   let all-janya = cond is-chain
+     (flat-map mantra-names (fn m -> map (walk m "janya") (fn n -> to-string n)))
+     otherwise []
+   let terminal = filter (nth chain-st 1) (fn r ->
+     not (exists (find-first all-janya (fn j -> eq j (nth r 0)))))
+   -- filter NaN (e.g. sqrt of negative discriminant → "nan" or "-nan")
+   let valid = filter terminal (fn r ->
+     let rs = to-string (nth r 1)
+     and (neq rs "nan") (neq rs "-nan"))
+   -- deduplicate equal terminal results (e.g. repeated root)
+   let deduped = cond (and (eq (length valid) 2)
+     (eq (to-string (nth (nth valid 0) 1)) (to-string (nth (nth valid 1) 1))))
+     [(nth valid 0)] otherwise valid
+
+   -- select result by mode
+   let result-str = cond (eq mode "iterate") iterate-result
+     (not is-chain) (to-string single-result)
+     (eq (length deduped) 0) "no real solution"
+     (eq (length deduped) 1) (to-string (nth (nth deduped 0) 1))
+     otherwise (concat (to-string (nth (nth deduped 0) 1)) " or " (to-string (nth (nth deduped 1) 1)))
+
+   -- strip _derive control triples from graph
+   let cleaned = filter graph (fn t -> neq (nth t 0) "_derive")
+   (append cleaned [["count-total", "sankhya", result-str],
+                    ["count-total", "satya", "count-total"],
+                    ["count-total", "derived-by", "mantra-derive"]]))))

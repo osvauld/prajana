@@ -17,10 +17,9 @@
     cond (neq inst "") (append acc [[concept, entity, inst]]) otherwise acc)))
   -- rewrite shashthi-vibhakti subjects using redirect map
   (redirect-map (map sv-redirects (fn r -> [(nth r 0), (nth r 2)])))
-  (map after-sankhya (fn tri ->
-    let edge = str tri 1
-    cond (neq edge "shashthi-vibhakti") tri
-    otherwise (let concept = nth tri 0
-      let entity = nth tri 2
+  (map after-sankhya (fn [s, edge, o] ->
+    cond (neq edge "shashthi-vibhakti") [s, edge, o]
+    otherwise (let concept = s
+      let entity = o
       let matches = sv-redirects | where [c, e, i] | and (eq c concept) | and (eq e entity) | collect i
-      cond (has-items matches) [(nth matches 0), (nth tri 1), entity] otherwise tri))))
+      cond (has-items matches) [(nth matches 0), edge, entity] otherwise [s, edge, o]))))

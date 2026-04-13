@@ -47,7 +47,7 @@ let call_tantra_opt (k : proof_graph) (name : string)
 let _om_contract_cache : (string, value) Hashtbl.t = Hashtbl.create 64
 
 let om_contract_compute (k : proof_graph) (node_name : string) : value =
-  let edges = edges_of k node_name in
+  let edges = outgoing_edges k node_name in
   let dedup rel_name =
     match visheshanam_of_string rel_name with
     | None -> VList []
@@ -164,11 +164,24 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     Some (match visheshanam_of_string rel_name with
      | None -> VList []
      | Some vish ->
-       let edges = edges_of k node_name in
+       let edges = outgoing_edges k node_name in
        VList (List.filter_map (fun edge ->
          if edge.relation = vish && edge.source = node_name then Some (VNode edge.target)
          else None
        ) edges))
+
+  | "walk-one" ->
+    let node_name = eval_str 0 in
+    let rel_name = eval_str 1 in
+    Some (match visheshanam_of_string rel_name with
+     | None -> VNone
+     | Some vish ->
+       let edges = outgoing_edges k node_name in
+       match List.find_opt (fun edge ->
+         edge.relation = vish && edge.source = node_name
+       ) edges with
+       | Some edge -> VNode edge.target
+       | None -> VNone)
 
   | "walk-in" ->
     let node_name = eval_str 0 in
@@ -200,7 +213,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
   | "has" ->
     let node_name = eval_str 0 in
     let pattern = eval_str 1 in
-    let edges = edges_of k node_name in
+    let edges = outgoing_edges k node_name in
     let parts = String.split_on_char '-' pattern in
     let found = match List.rev parts with
       | rel_str :: target_parts ->
@@ -390,7 +403,7 @@ let eval_graph_op (e_eval : proof_graph -> env -> expr -> value)
     Some (match visheshanam_of_string rel_name with
      | None -> VList []
      | Some vish ->
-       let edges = edges_of k node_name in
+       let edges = outgoing_edges k node_name in
        let seen = Hashtbl.create 8 in
        VList (List.filter_map (fun edge ->
          if edge.relation = vish && edge.source = node_name
@@ -492,6 +505,7 @@ let register_primitive_arities () =
   r "idx-has-edge"        2;
   r "idx-value"           3;
   r "idx-append"          2;
+  r "walk-one"            2;
   r "mantra-select"       1;
   r "clock-us"            0;
   r "clock-ms"            0;
@@ -522,6 +536,7 @@ let register_primitive_arities () =
   r "capitalize-first"    1;
   r "dim-vector"          1;
   (* structural primitives — reduce tantra repetition *)
+  r "first-of"            1;
   r "find-first"          2;
   r "find-map"            2;
   r "flat-map"            2;

@@ -1,10 +1,12 @@
--- nam-anuvada: unified panchaavayava emission via ring-walk + proof-walk.
--- 5 limbs:
---   pratijna  (given)   → ring-walk non-question grades (question's own words)
---   hetu      (seek)    → mode-aware sought description
---   udaharana (rule)    → mode-dispatched proof-walk (nam-udaharana)
---   upanaya   (apply)   → mode-dispatched proof-walk (nam-upanaya)
---   nigamana  (conclude)→ mode-aware answer with kaala-copula
+-- nam-anuvada: graph-driven panchaavayava emission.
+-- walks nam's yukta for ordered limbs. each limb's abheda role
+-- dispatches to the appropriate generator:
+--   given   (pratijna)  → ring-walk non-question grades
+--   sought  (hetu)      → mode-aware sought description
+--   rule    (udaharana) → mode-dispatched proof-walk
+--   apply   (upanaya)   → mode-dispatched proof-walk
+--   found   (nigamana)  → mode-aware answer with kaala-copula
+-- nam's siddha declares required limbs (pratijna, nigamana).
 --
 -- refined: the original refined question graph (the ring)
 -- proof: the proof graph (ring + derived edges + signals)
@@ -13,9 +15,24 @@
 (tantra nam-anuvada (refined proof result-val mode)
   (grades (split-grades refined))
   (cop (kaala-copula refined))
-  (say-given (shabda "anuvada-setu" "speech-given"))
-  (say-sought (shabda "anuvada-setu" "speech-sought"))
-  (say-found (shabda "anuvada-setu" "speech-found"))
+  -- speech phrases from graph: walk limb ← swarupa (bhasha node) → naama
+  -- naama stores quoted strings ("we have"); strip surrounding quotes via substr.
+  -- if raw lookup exists, strip first/last char (quotes). otherwise, use fallback.
+  (say-given-raw (find-map (walk-in "pramana-pratijna" "swarupa") (fn n ->
+    let names = walk (to-string n) "naama"
+    cond (has-items names) (to-string (nth names 0)) otherwise _none)))
+  (say-given-quoted (cond (exists say-given-raw) (to-string say-given-raw) otherwise ""))
+  (say-given (cond (exists say-given-raw) (substr say-given-quoted 1 (sub (string-length say-given-quoted) 2)) otherwise "we have"))
+  (say-sought-raw (find-map (walk-in "pramana-hetu" "swarupa") (fn n ->
+    let names = walk (to-string n) "naama"
+    cond (has-items names) (to-string (nth names 0)) otherwise _none)))
+  (say-sought-quoted (cond (exists say-sought-raw) (to-string say-sought-raw) otherwise ""))
+  (say-sought (cond (exists say-sought-raw) (substr say-sought-quoted 1 (sub (string-length say-sought-quoted) 2)) otherwise "we seek"))
+  (say-found-raw (find-map (walk-in "pramana-nigamana" "swarupa") (fn n ->
+    let names = walk (to-string n) "naama"
+    cond (has-items names) (to-string (nth names 0)) otherwise _none)))
+  (say-found-quoted (cond (exists say-found-raw) (to-string say-found-raw) otherwise ""))
+  (say-found (cond (exists say-found-raw) (substr say-found-quoted 1 (sub (string-length say-found-quoted) 2)) otherwise "we find"))
 
   -- strip "concept = " prefix from result if present
   (result-parts (split result-val " = "))
@@ -32,13 +49,13 @@
 
   -- solved-for concept
   (q-concept (cond has-vidhi
-    (find-map q-grade (fn tri ->
-      cond (eq (str tri 1) "satya") (str tri 0)
+    (find-map q-grade (fn [s, e, o] ->
+      cond (eq e "satya") s
       otherwise _none))
     otherwise ""))
   -- prefer query-word (original word form from question) over concept-display
-  (q-concept-qw (find-map q-grade (fn tri ->
-    cond (and (eq (str tri 1) "query-word") (eq (str tri 0) q-concept)) (str tri 2)
+  (q-concept-qw (find-map q-grade (fn [s, e, o] ->
+    cond (and (eq e "query-word") (eq s q-concept)) o
     otherwise _none)))
   (q-concept-disp (cond (has-text q-concept-qw) q-concept-qw
     (has-text q-concept) (concept-display q-concept) otherwise ""))
@@ -49,7 +66,7 @@
   -- unit for result
   (unit-nd (cond (has-text q-concept) (unit-of-concept q-concept) otherwise _none))
   (unit-symbols (cond (exists unit-nd) (walk (to-string unit-nd) "naama-mudra") otherwise []))
-  (unit-str (cond (has-items unit-symbols) (to-string (nth unit-symbols 0)) otherwise ""))
+  (unit-str (first-of unit-symbols | to-string))
 
   -- ── 1. PRATIJNA: echo given grades in question's own words ────────────────
   (is-single (and has-vidhi (eq (length grades) 1)))
@@ -123,12 +140,10 @@
 
     -- count: "we find [value] [question-grade-words]" (skip system concept "count")
     (eq mode "count")
-    (let q-words = flat-map q-grade (fn tri ->
-       let edge = str tri 1
-       let subj = str tri 0
-       cond (eq edge "vidhi-kaala") []
-       (and (eq edge "satya") (eq subj "count")) []
-       otherwise (let w = expand-triple tri cop
+    (let q-words = flat-map q-grade (fn [s, e, o] ->
+       cond (eq e "vidhi-kaala") []
+       (and (eq e "satya") (eq s "count")) []
+       otherwise (let w = expand-triple [s, e, o] cop
          cond (has-text w) [w] otherwise []))
      concat say-found " " clean-result " " (words-to-str q-words))
 
@@ -143,8 +158,32 @@
     -- fallback
     otherwise (concat say-found " that " clean-result)))
 
-  -- ── weave all limbs (capitalize each) ───────────────────────────────────
-  (all-strs (flat-map [pratijna-strs, [hetu], udaharana-strs, upanaya-strs, [nigamana]] (fn limb ->
-    filter (map limb (fn s -> capitalize-first s)) (fn s -> has-text s))))
+  -- ── siddha certification: nam declares required limbs ──────────────────
+  -- walk nam's siddha for pramana-* limbs. if "found" role is required,
+  -- clean-result must be non-empty — proof needs a conclusion.
+  (nam-siddha-limbs (filter (map (walk "nam" "siddha") (fn n -> to-string n))
+    (fn s -> starts-with s "pramana-")))
+  (found-required (exists (find-first nam-siddha-limbs (fn limb ->
+    member "found" (map (walk limb "abheda") (fn a -> to-string a))))))
+  (is-certified (cond found-required
+    (and (has-text clean-result) (neq clean-result "no match"))
+    otherwise true))
 
-  (join-with all-strs ". "))
+  -- ── weave all limbs via nam's graph structure ──────────────────────────
+  -- walk nam's yukta for ordered limbs, filter to pramana-* concepts.
+  -- each limb's abheda declares its role: given/sought/rule/apply/found.
+  -- dispatch to the appropriate output generator per role.
+  (nam-limbs (filter (map (walk "nam" "yukta") (fn n -> to-string n))
+    (fn s -> starts-with s "pramana-")))
+  (all-strs (flat-map nam-limbs (fn limb ->
+    let roles = map (walk limb "abheda") (fn a -> to-string a)
+    let output = cond (member "given" roles) pratijna-strs
+      (member "sought" roles) (cond (has-text hetu) [hetu] otherwise [])
+      (member "rule" roles) udaharana-strs
+      (member "apply" roles) upanaya-strs
+      (member "found" roles) (cond (has-text nigamana) [nigamana] otherwise [])
+      otherwise []
+    filter (map output (fn s -> capitalize-first s)) (fn s -> has-text s))))
+
+  (cond is-certified (join-with all-strs ". ")
+    otherwise "no match"))

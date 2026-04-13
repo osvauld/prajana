@@ -114,7 +114,6 @@ def test_multiplication_children_coins(vy):
     assert "24" in r
 
 
-@xfail(strict=True, reason="distance = speed * time not in pipeline")
 def test_distribution_per(vy):
     """'per' as distribution: 5 km per hour for 3 hours = 15"""
     r = vy.answer("a train travels at 60 km per hour for 2 hours. how far does it go")

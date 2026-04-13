@@ -30,11 +30,12 @@
       (member "kshaya" (walk nd-str "sthita"))
       (member "vriddhi" (walk nd-str "sthita"))))))
   (is-tinanta (and (exists nd) (member "tinanta" (walk nd-str "swarupa"))))
-  (is-verb-form (or is-direction-word is-tinanta (ends-with word "ed") (ends-with word "ing")))
+  -- suffix heuristic (-ed/-ing) only for unresolved words; resolved nodes use is-tinanta.
+  (is-verb-form (or is-direction-word is-tinanta (and (not (exists nd)) (or (ends-with word "ed") (ends-with word "ing")))))
   -- verb-concept: walk janya→dhatu→naama→base→word-node to extract concept from verb form.
   -- e.g. "accelerates" → dhatu-accelerate → "accelerate" → acceleration
-  (verb-dhatu (cond is-tinanta (nth (walk nd-str "janya") 0) otherwise ""))
-  (verb-base (cond (has-text verb-dhatu) (nth (walk (to-string verb-dhatu) "naama") 0) otherwise ""))
+  (verb-dhatu (cond is-tinanta (walk-one nd-str "janya") otherwise ""))
+  (verb-base (cond (has-text verb-dhatu) (walk-one (to-string verb-dhatu) "naama") otherwise ""))
   (verb-concept (cond (has-text verb-base)
     (let vc = word-node (to-string verb-base)
       cond (and (exists vc) (neq (to-string vc) (to-string verb-dhatu))) (to-string vc)

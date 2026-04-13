@@ -1,23 +1,29 @@
--- walk-refine-chain: krama-driven refinement.
+-- walk-refine-chain: krama-driven refinement with siddha activation.
 -- reads the refine krama chain from om5 and executes each step's kriya tantra.
 -- phase 1: sequential (idempotent steps, run once)
 -- phase 2: fixpoint loop (nodes marked yukta=fixpoint)
--- replaces hardcoded step sequence in avrti-refine.
+-- siddha protocol: if an om node declares (siddha edge1 edge2 ...),
+-- the step only runs when ALL listed edge types are present in the graph.
+-- no siddha declaration = always run (backwards compatible).
 (tantra walk-refine-chain (g)
   (graph (cond (exists g) g otherwise []))
 
   -- ── phase 1: walk krama chain until fixpoint boundary ────────────
   -- state: [current-graph, current-node-name]
   -- stops when node has (yukta fixpoint) — that's phase 2 territory
-  (phase1 (reduce (range 20) [graph, "refine-sandhi-kosha"] (fn state step ->
-    let curr-graph = nth state 0
-    let node-name  = nth state 1
+  (phase1 (reduce (range 20) [graph, "refine-sandhi-kosha"] (fn [curr-graph, node-name] step ->
     -- guard: stop if no node or already reached fixpoint
-    cond (not (has-text node-name)) state
-    (member "fixpoint" (map (om-yukta node-name) (fn y -> to-string y))) state
+    cond (not (has-text node-name)) [curr-graph, node-name]
+    (member "fixpoint" (map (om-yukta node-name) (fn y -> to-string y))) [curr-graph, node-name]
     otherwise
-      let tantra-name = to-string (nth (walk node-name "kriya") 0)
-      let result = call-tantra tantra-name [curr-graph]
+      let tantra-name = walk-one node-name "kriya" | to-string
+      -- siddha activation: check if all required edge types exist in graph
+      let conditions = map (walk node-name "siddha") (fn s -> to-string s)
+      let activated = cond (not (has-items conditions)) true
+        otherwise (reduce conditions true (fn acc edge-type ->
+          and acc (has-items (triples-by-edge curr-graph edge-type))))
+      let result = cond activated (call-tantra tantra-name [curr-graph])
+        otherwise curr-graph
       let next = node-krama node-name
       [result, next])))
 
@@ -26,20 +32,25 @@
 
   -- ── phase 2: fixpoint over remaining krama nodes ─────────────────
   -- collect fixpoint node names by walking krama from fixpoint-start
-  (fp-nodes (reduce (range 10) [[], fixpoint-start] (fn state step ->
-    let nodes = nth state 0
-    let nd    = nth state 1
-    cond (not (has-text nd)) state
+  (fp-nodes (reduce (range 10) [[], fixpoint-start] (fn [nodes, nd] step ->
+    cond (not (has-text nd)) [nodes, nd]
     otherwise
       let next = node-krama nd
       [(append nodes [nd]), next])))
   (fp-names (nth fp-nodes 0))
 
   -- fixpoint: index → run all fp steps → re-index → check convergence
+  -- siddha activation applies here too: skip steps whose conditions aren't met
   (indexed (index-graph after-phase1))
   (fixpoint indexed (fn ig ->
     let result = reduce fp-names ig (fn acc fp-node ->
-      let tantra-name = to-string (nth (walk fp-node "kriya") 0)
-      let stepped = call-tantra tantra-name [acc]
-      index-graph stepped)
+      let tantra-name = walk-one fp-node "kriya" | to-string
+      let conditions = map (walk fp-node "siddha") (fn s -> to-string s)
+      let activated = cond (not (has-items conditions)) true
+        otherwise (reduce conditions true (fn ac edge-type ->
+          and ac (has-items (triples-by-edge acc edge-type))))
+      cond activated
+        (let stepped = call-tantra tantra-name [acc]
+         index-graph stepped)
+        otherwise acc)
     result)))

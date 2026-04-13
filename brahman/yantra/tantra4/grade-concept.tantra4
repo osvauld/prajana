@@ -1,6 +1,5 @@
 -- extracts first user satya concept name from a grade.
 (tantra grade-concept (grade)
-  (find-map grade (fn t ->
-    cond (and (eq (triple-edge t) "satya") (not (is-system-concept (triple-subj t))))
-      (triple-subj t)
+  (find-map grade (fn [s, e, o] ->
+    cond (and (eq e "satya") (not (is-system-concept s))) s
     otherwise _none)))
